@@ -36,20 +36,16 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
         }
     }
 
-    function convertirFecha(fecha) {
-        const partes = fecha.split("-");
-        return partes[2] + "-" + partes[1] + "-" + partes[0];
-    }
 
     function RenderCourseInsideSectionContent(subsection, titulo) {
-        if (new Date(convertirFecha(subsection.fecha_inicio)).toISOString() > new Date().toISOString()) {
+        if (new Date(subsection.attributes.start_date).toISOString() > new Date().toISOString()) {
             return (
                 <div className='flex cursor-pointer my-1 hover:border-l-4 items-center py-3 '>
                     <p className='text-base font-normal ml-4 '>
                         <span>🔒 </span>
                     </p>
-                    <span className='truncate w-2/4 ml-3'>{subsection.titulo}</span>
-                    {selectFaseSectionContent(subsection.fase)}
+                    <span className='truncate w-2/4 ml-3'>{subsection.attributes.title}</span>
+                    {selectFaseSectionContent(subsection.attributes.fase)}
                 </div>
             )
         }
@@ -77,13 +73,13 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
                         <AccordionButton>
                             <div className='container bg-gray-100 rounded py-4 mb-4 flex' >
                                 <h2 className='text-lg font-medium   ml-4'>
-                                    {section.titulo}
+                                    {section.attributes.title}
                                     <AccordionIcon className='absolute right-0 mr-20 ' />
                                 </h2>
                             </div>
                         </AccordionButton>
                         <AccordionPanel>
-                            {section.subsecciones.map(subseccion => RenderCourseInsideSectionContent(subseccion, section.titulo))}
+                            {section.attributes.subsections.data.map(subseccion => RenderCourseInsideSectionContent(subseccion, section.attributes.title))}
                         </AccordionPanel>
                     </AccordionItem>
                 </Accordion>

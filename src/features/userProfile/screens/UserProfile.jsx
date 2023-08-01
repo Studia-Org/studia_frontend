@@ -41,7 +41,7 @@ const UserProfile = () => {
 
 
   function fetchCoursesCards() {
-    fetch(`${API}/users/${user.id}?populate=courses.cover,courses.students,courses.professor,courses.professor.profile_photo&fields[]=courses`)
+    fetch(`${API}/users/${uid}?populate=courses.cover,courses.students,courses.professor,courses.professor.profile_photo&fields[]=courses`)
       .then((res) => res.json())
       .then((data) => {
         setCourses(data);
@@ -50,7 +50,7 @@ const UserProfile = () => {
   }
 
   function fetchUserProfile() {
-    fetch(`${API}/users/${user.id}?populate=*`)
+    fetch(`${API}/users/${uid}?populate=*`)
       .then((res) => res.json())
       .then((data) => {
         setUserProfile(data);

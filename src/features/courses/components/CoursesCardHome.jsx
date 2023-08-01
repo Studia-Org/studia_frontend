@@ -7,9 +7,9 @@ export const CoursesCardHome = ({course}) => {
         <>
             <Link to={`/app/courses/${course.id}`}>
                 <div className="max-w-sm bg-white  rounded-lg shadow cursor-pointer h-[35rem] shadow2">
-                    <img className="rounded-t-lg w-full h-[13rem] object-cover" src={course.cover.url} alt="" />
+                    <img className="rounded-t-lg w-full h-[13rem] object-fill" src={course.cover.url} alt="" />
                     <div className="p-3 flex flex-col justify-center items-center">
-                        <h3>{course.title}</h3>
+                        <h3 className='text-center'>{course.title}</h3>
                         <p className='text-xs  font-normal text-gray-700'>{course.course_type}</p>
                         <div className='container bg-gray-100 py-1.5 my-6 rounded '>
                         </div>
@@ -24,8 +24,8 @@ export const CoursesCardHome = ({course}) => {
                                 <p className='text-base font-normal'>{course.professor['name']}</p>
                             </div>
                         </div>
-                        <div className='container bg-gray-100 rounded my-8'>
-                            <p className='text-sm font-normal px-5 py-5 text-ellipsis overflow-hidden '>{course.description}</p>
+                        <div className='container bg-gray-100 rounded my-8 h-auto'>
+                            <p className='text-sm font-normal px-5 py-5 text-ellipsis overflow-hidden  '>{course.description}</p>
                         </div>
                     </div>
                 </div>
