@@ -50,17 +50,17 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
             )
         }
         return (
-            <div className='flex cursor-pointer my-1 hover:border-l-4 items-center py-3 ' onClick={() => handleSections(titulo, subsection.titulo)}>
+            <div className='flex cursor-pointer my-1 hover:border-l-4 items-center py-3 ' onClick={() => handleSections(titulo, subsection.attributes.title)}>
                 <p className='text-base font-normal ml-4   '>
-                    {subsection.finished === "False" ? (
+                    {subsection.attributes.finished === "False" ? (
                         <span role="img" aria-label="circle">⭕ </span>
                     ) : (
                         <span role="img" aria-label="checkmark">✅ </span>
                     )}
 
                 </p>
-                <span className='truncate w-2/4 ml-3'>{subsection.titulo}</span>
-                {selectFaseSectionContent(subsection.fase)}
+                <span className='truncate w-2/4 ml-3'>{subsection.attributes.title}</span>
+                {selectFaseSectionContent(subsection.attributes.fase)}
             </div>
         )
     }

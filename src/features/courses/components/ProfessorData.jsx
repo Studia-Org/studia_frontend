@@ -15,11 +15,11 @@ export const ProfessorData = ({ professor }) => {
                 </div>
 
                 <div className='flex my-4 items-center space-x-3'>
-                    <img className='w-[3rem] rounded' src={professor.profile_photo} alt="" />
-                    <p className=' font-medium'>{professor.name}</p>
+                    <img className='w-[3rem] rounded' src={professor.attributes.profile_photo.data.attributes.url} alt="" />
+                    <p className=' font-medium'>{professor.attributes.name}</p>
 
                 </div>
-                <p className='text-gray-500 font-normal truncate '>{professor.description}</p>
+                <p className='text-gray-500 font-normal truncate '>{professor.attributes.description}</p>
             </div>
         </div>
     )

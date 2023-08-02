@@ -14,17 +14,19 @@ import { Chatbot } from '../components/ChatBot';
 const CourseInside = () => {
   const [courseInsideSectionType, setcourseInsideSectionType] = useState('course');
   const [files, setFiles] = useState([]);
+
   const [courseSubsection, setCourseSubsection] = useState([]);
-  const[students, setStudents] = useState([])
-  const [courseContentInformation, setCourseContentInformation] = useState([]);
   const [courseSection, setCourseSection] = useState([]);
-  const [courses, setCourses] = useState([]);
   let { courseId } = useParams();
   const navigate = useNavigate();
 
+  const [courseContentInformation, setCourseContentInformation] = useState([]);
+  const [students, setStudents] = useState([])
+  const [professor, setProfessor] = useState([])
+
   const componentMap = {
-    texto: ActivitiesText,
-    entrega: ActivitiesDelivery,
+    paragraph: ActivitiesText,
+    Delivery: ActivitiesDelivery,
     lecture: ActivitiesLecture,
     peer_review: ActivitiesPeerReview,
     cuestionario: ActivitiesQuestionnaire,
@@ -32,12 +34,15 @@ const CourseInside = () => {
 
   const fetchCourseInformation = async () => {
     try {
-      const response = await fetch(`${API}/courses/${courseId}?populate=sections.subsections.activities,students.profile_photo`);
+      const response = await fetch(`${API}/courses/${courseId}?populate=sections.subsections.activities,sections.subsections.paragraphs,students.profile_photo,professor.profile_photo`);
       const data = await response.json();
-      console.log(data.data.attributes.students.data)
       setCourseContentInformation(data?.data?.attributes?.sections?.data ?? []);
       setStudents(data?.data?.attributes?.students ?? []);
-      setCourses(data ?? []);
+      setProfessor(data?.data?.attributes?.professor?.data)
+
+      setCourseSection(data?.data?.attributes?.sections?.data[0].attributes.title)
+      setCourseSubsection(data?.data?.attributes?.sections?.data[0].attributes.subsections?.data[0].attributes.title)
+
     } catch (error) {
       console.error(error);
     } finally {
@@ -49,20 +54,46 @@ const CourseInside = () => {
   }, []);
 
   function renderAllActivities(activities) {
-    const Component = componentMap[activities.tipo];
+    console.log(activities)
+    let Component = null
+    if(activities.type === 'paragraph'){
+      Component = componentMap[activities.type];
+    }else{
+      Component = componentMap[activities.data.attributes.type];
+    }
     if (Component) {
-      return <Component activitie={activities} />;
+      return <Component activitie={activities.data.attributes} />;
     }
     return null;
   }
 
   function RenderTextActivitiesInsideCourse() {
-    //const section_ = courseContentInformation.find(seccion => seccion.titulo === courseSection);
-    //const subsection_ = section_.subsecciones.find(subseccion => subseccion.titulo === courseSubsection);
-    //var contenido = subsection_.contenido;
+    const section_ = courseContentInformation.find(seccion => seccion.attributes.title === courseSection);
+    const subsection_ = section_.attributes.subsections.data.find(subseccion => subseccion.attributes.title === courseSubsection);
+    var contenido = subsection_.attributes;
+
+    const activities = contenido.activities.data.map((activity) => {
+      return {
+        type: 'activity',
+        order: activity.attributes.order,
+        data: activity,
+      };
+    });
+
+    const paragraphs = contenido.paragraphs.data.map((paragraph) => {
+      return {
+        type: 'paragraph',
+        order: paragraph.attributes.order,
+        data: paragraph,
+      };
+    });
+
+    const combinedList = [...activities, ...paragraphs]
+    combinedList.sort((a, b) => a.order - b.order);
+
     return (
       <div className='mb-12'>
-        {/*contenido.map(renderAllActivities)*/}
+        {combinedList.map(renderAllActivities)}
       </div>
     )
   }
@@ -78,7 +109,7 @@ const CourseInside = () => {
   function RenderParticipantsInsideCourseHandler(students) {
     return (
       <button className='bg-white rounded flex p-3 items-center space-x-3 shadow w-[14rem]' onClick={() => navigate(`/app/profile/${students.id}/`)}>
-        <img src={students.attributes.profile_photo.data.attributes.url} alt="" className='rounded w-14 h-14'/>
+        <img src={students.attributes.profile_photo.data.attributes.url} alt="" className='rounded w-14 h-14' />
         <p className='font-medium'>{students.attributes.name}</p>
       </button>
     )
@@ -133,17 +164,13 @@ const CourseInside = () => {
               </button>
             </div>
             <hr className="h-px  bg-gray-600 border-0 mb-6"></hr>
-            {/*courseInsideSectionType === 'course' && courseContentInformation.length > 0 && RenderTextActivitiesInsideCourse()*/}
+            {courseInsideSectionType === 'course' && courseContentInformation.length > 0 && RenderTextActivitiesInsideCourse()}
             {courseInsideSectionType === 'files' && RenderFilesInsideCourse()}
             {courseInsideSectionType === 'participants' && RenderParticipantsInsideCourse()}
           </div>
           <div>
-            
             <AccordionCourseContent {...{ courseContentInformation, setCourseSubsection, setCourseSection }} />
-            
-            {/*courseInformation && courseInformation.professor && (
-              <ProfessorData professor={courseInformation.professor} />
-            )*/}
+            {professor.attributes && <ProfessorData professor={professor} />}
           </div>
         </div>
       </div>
