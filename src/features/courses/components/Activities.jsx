@@ -12,7 +12,7 @@ const convertStringToDate = (dateString) => {
 
 export const ActivitiesText = ({ activitie }) => {
     return (
-        <div className='prose my-5'>
+        <div className='prose max-w-none my-5'>
             <ReactMarkdown>{activitie.text}</ReactMarkdown>
         </div>
     )

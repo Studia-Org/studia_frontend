@@ -10,7 +10,7 @@ export const CoursesCardHome = ({ course }) => {
                     <img className="rounded-t-lg w-full h-[13rem] object-fill" src={course.cover.url} alt="" />
                     <div className="p-3 flex flex-col justify-between h-full">
                         <h3 className='text-center truncate w-full overflow-hidden'>{course.title}</h3>
-                        <p className='text-xs font-normal text-gray-700'>{course.course_type}</p>
+                        <p className='text-xs font-normal text-center mt-2 text-gray-700'>{course.course_type}</p>
                         <div className='container bg-gray-100 py-1.5 my-6 rounded '>
                         </div>
                         <div className='container flex flex-row space-x-20 justify-center'>
