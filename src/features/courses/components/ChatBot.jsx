@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { TbRobot } from 'react-icons/tb'
 import { MdSend } from 'react-icons/md';
 import { IconContext } from "react-icons";
+import { FiChevronDown } from 'react-icons/fi';
 
+
+import '../styles/chatBotStyles.css'
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import {
     MainContainer,
@@ -86,7 +89,6 @@ export const Chatbot = () => {
             }).then((data) => {
                 return data.json();
             }).then((data) => {
-                console.log(data);
                 setMessages([...chatMessages, {
                     message: data.choices[0].message.content,
                     sender: "ChatGPT"
@@ -99,11 +101,11 @@ export const Chatbot = () => {
         <div data-dial-init className="fixed right-10 bottom-10 ">
             <div
                 id="speed-dial-menu-dropdown"
-                className={`bg-white shadow transform scale-0 opacity-0 mb-5 transition-transform  duration-200 ${isExpanded ? 'scale-100 h-96 opacity-100' : ''
+                className={`bg-white shadow rounded-2xl transform scale-0 opacity-0 mb-5  duration-200 ${isExpanded ? 'scale-100 h-[36rem] w-[24rem] opacity-100' : ''
                     }`}
             >
 
-                <MainContainer className=''>
+                <MainContainer className='shadow-2xl rounded-2xl'>
                     <ChatContainer className=''>
                         <MessageList
                             
@@ -123,10 +125,10 @@ export const Chatbot = () => {
                 data-dial-toggle="speed-dial-menu-dropdown"
                 aria-controls="speed-dial-menu-dropdown"
                 aria-expanded={isExpanded}
-                className="flex shadow-lg items-center justify-center ml-auto text-white bg-blue-600 rounded-full w-14 h-14 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none"
+                className="flex shadow-lg items-center transition  justify-center ml-auto text-white bg-blue-600 rounded-full w-14 h-14 hover:bg-blue-600 hover-scale active-scale  "
                 onClick={() => setIsExpanded(!isExpanded)}
             >
-                <TbRobot size={30} />
+                {!isExpanded ? <TbRobot size={26}/> : <FiChevronDown size={26} />  }
                 <span className="sr-only"></span>
             </button>
         </div>
