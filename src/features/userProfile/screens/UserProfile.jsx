@@ -17,6 +17,7 @@ const UserProfile = () => {
   const [userProfile, setUserProfile] = useState([]);
   let { uid } = useParams();
 
+
   const navigate = useNavigate();
   useEffect(() => {
     if (!checkAuthenticated()) {
@@ -34,7 +35,7 @@ const UserProfile = () => {
   function renderCourseCard(course) {
     return (
       <>
-        <CoursesCardsProfile course={course} user={user} />
+        {user && <CoursesCardsProfile course={course} user={user} />}
       </>
     )
   }
@@ -59,11 +60,9 @@ const UserProfile = () => {
   }
 
   useEffect(() => {
-    if (user) {
-      fetchCoursesCards();
-      fetchUserProfile();
-    }
-  }, []);
+    fetchCoursesCards();
+    fetchUserProfile();
+  }, [uid]);
 
   return (
     <div className='h-screen w-full bg-white'>

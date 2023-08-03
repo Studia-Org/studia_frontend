@@ -21,12 +21,14 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.7.1",
     "react-loading-skeleton": "^3.2.0",
+    "react-markdown": "^8.0.7",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.8.1",
     "react-scripts": "5.0.1",
     "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.2",
+    "remarkable": "^2.0.1",
     "rsuite": "^5.33.0",
     "sweetalert2": "^11.7.3",
     "web-vitals": "^2.1.4"
@@ -56,6 +58,7 @@
     ]
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.9",
     "tailwindcss": "^3.2.7"
   }
 }

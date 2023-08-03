@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
 import { FiFolder, FiTrello, FiBook, FiCheckCircle } from "react-icons/fi";
-import mdToHTML from '../../../services/snarkdown';
+import ReactMarkdown from 'react-markdown'
 
 
 const convertStringToDate = (dateString) => {
@@ -12,8 +12,8 @@ const convertStringToDate = (dateString) => {
 
 export const ActivitiesText = ({ activitie }) => {
     return (
-        <div>
-            <p className='my-5' dangerouslySetInnerHTML={{__html: mdToHTML(activitie.text)}} />
+        <div className='prose my-5'>
+            <ReactMarkdown>{activitie.text}</ReactMarkdown>
         </div>
     )
 }

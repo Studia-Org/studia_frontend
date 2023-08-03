@@ -54,7 +54,6 @@ const CourseInside = () => {
   }, []);
 
   function renderAllActivities(activities) {
-    console.log(activities)
     let Component = null
     if(activities.type === 'paragraph'){
       Component = componentMap[activities.type];
