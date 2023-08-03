@@ -59,8 +59,7 @@ const CoursesHome = () => {
       <div className='flex flex-wrap-reverse sm:flex-nowrap bg-white'>
         <Sidebar section={'courses'} />
         <div className='container-fluid w-full rounded-tl-3xl bg-[#e7eaf886] '>
-          <div className='p-9 px-12 font-bold text-2xl'>
-            <h2>My Courses</h2>
+          <div className=' px-12 font-bold text-2xl'>
             <motion.div className='flex flex-wrap py-11 sm:space-y-0 space-y-10  sm:space-x-12 space-x-0' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
               {isLoading && <Spin size="large" />}
               {courses.courses && courses.courses.map(RenderCourse)}

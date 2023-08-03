@@ -71,7 +71,7 @@ const SidebarSetting = ({ setSelectedOption }) => {
             </button>
 
             <div className={`lg:rounded-tl-3xl h-full bg-[#eaedfa] pl-12 p-9 text-base space-y-6 border-r border-[#b7bcd4] ${isOpen ? 'block' : 'hidden sm:block'}`}>
-                <h1 className='text-2xl pb-6'>Settings</h1>
+                
                 <div className='space-y-4'>
                     <h1 className='text-lg pb-1'>User Account</h1>
                     <button className='flex items-center pl-4 gap-2 hover:text-indigo-600 hover:translate-x-[5px] transition-all' onClick={() => handleOptionChange('password')}>

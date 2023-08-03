@@ -10,6 +10,8 @@ import {
     FiBarChart
 } from "react-icons/fi";
 
+import { MdTimeline } from "react-icons/md";
+
 
 export const Sidebar = (props) => {
 
@@ -19,6 +21,7 @@ export const Sidebar = (props) => {
         dashboard: {},
         qualifications: {},
         settings: {},
+        timeline:{},
     };
 
     if (props.section === 'courses') {
@@ -31,6 +34,8 @@ export const Sidebar = (props) => {
         iconProps.qualifications = { color: 'white', size: '25px' };
     } else if (props.section === 'settings') {
         iconProps.settings = { color: 'white', size: '25px' };
+    }else if (props.section === 'timeline') {
+        iconProps.timeline = { color: 'white', size: '25px' };
     }
 
     return (
@@ -49,13 +54,24 @@ export const Sidebar = (props) => {
                             </li>
                         </a>
 
-                        <a href="/app/events/timeline" className=''>
+                        <a href="/app/calendar" className=''>
                             <li className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all  rounded-lg ${Object.keys(iconProps.events).length > 0 ? 'bg-gradient-to-r from-[#657DE9] to-[#6E66D6] rounded-lg py-3' : ''}`}>
                                 <span className='flex font-bold'>
                                     <IconContext.Provider value={iconProps.events}>
                                         <FiCalendar size={25} />
                                     </IconContext.Provider>
-                                    <h2 className={`${Object.keys(iconProps.events).length > 0 ? 'pl-2 text-white' : 'px-4'}`}>Events</h2>
+                                    <h2 className={`${Object.keys(iconProps.events).length > 0 ? 'pl-2 text-white' : 'px-4'}`}>Calendar</h2>
+                                </span>
+                            </li>
+                        </a>
+
+                        <a href="/app/timeline" className=''>
+                            <li className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all  rounded-lg ${Object.keys(iconProps.timeline).length > 0 ? 'bg-gradient-to-r from-[#657DE9] to-[#6E66D6] rounded-lg py-3' : ''}`}>
+                                <span className='flex font-bold'>
+                                    <IconContext.Provider value={iconProps.timeline}>
+                                        <MdTimeline size={25} />
+                                    </IconContext.Provider>
+                                    <h2 className={`${Object.keys(iconProps.timeline).length > 0 ? 'pl-2 text-white' : 'px-4'}`}>Timeline</h2>
                                 </span>
                             </li>
                         </a>
