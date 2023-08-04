@@ -1,6 +1,4 @@
 import { useEffect, React, useState } from 'react';
-import { connect } from 'react-redux';
-import { checkAuthenticated, load_user } from '../../../actions/auth';
 
 import {
     FiArrowRight,
@@ -174,12 +172,5 @@ const TimelineEvents = ({ user, isAuthenticated, checkAuthenticated, load_user }
 }
 
 
-const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated,
-    user: state.auth.user
-});
 
-
-
-
-export default connect(mapStateToProps, { checkAuthenticated, load_user })(TimelineEvents);
+export default TimelineEvents;

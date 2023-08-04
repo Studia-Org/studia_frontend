@@ -1,6 +1,4 @@
 import { useEffect, React, useState } from 'react';
-import { connect } from 'react-redux';
-import { checkAuthenticated, load_user } from '../../../actions/auth';
 
 import { TimelineButtonHandler, CalendarButtonHandler } from '../components/EventHandlers.jsx'
 import { Sidebar } from '../../../shared/elements/Sidebar';
@@ -90,12 +88,4 @@ const NewsEvent = ({ user, isAuthenticated, checkAuthenticated, load_user }) => 
 }
 
 
-const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated,
-    user: state.auth.user
-});
-
-
-
-
-export default connect(mapStateToProps, { checkAuthenticated, load_user })(NewsEvent);
+export default NewsEvent;
