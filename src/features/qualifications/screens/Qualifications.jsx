@@ -4,7 +4,7 @@ import { Navbar } from '../../../shared/elements/Navbar';
 import { API } from "../../../constant";
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
-import {MoonLoader} from "react-spinners";
+import { MoonLoader } from "react-spinners";
 import { Whisper, Button, Popover } from 'rsuite';
 import { useAuthContext } from "../../../context/AuthContext";
 
@@ -19,15 +19,19 @@ const Qualifications = () => {
     const [loading, setLoading] = useState(true);
     const [qualifications, setQualifications] = useState([]);
 
+    
+    useEffect(() => {
+        if (loading) {
+            callQualificationsData();
+        }
+    }, [loading, user]);
 
     const variants = {
         hidden: { opacity: 0, y: 20 },
         visible: { opacity: 1, y: 0 },
     };
     const transition = { duration: 0.3 };
-    useEffect(() => {
-        callQualificationsData();
-    }, [user]);
+
 
     function callQualificationsData() {
         if (user) {
