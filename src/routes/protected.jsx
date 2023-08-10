@@ -2,11 +2,11 @@ import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Spinner } from '../shared/elements/Spinner';
 import { CoursesRoutes } from '../features/courses/screens'; 
-import { EventsRoutes } from '../features/events/screens';
 import { QualificationsRoutes } from '../features/qualifications/screens';
 import { UserProfileRoutes } from '../features/userProfile/screens';
 import { CalendarRoutes } from '../features/calendar/screens';
 import { SettingsRoutes } from '../features/settings/screens';
+import { TimelineRoutes } from '../features/timeline/screens';
 
 const App = () => {
     return (
@@ -29,11 +29,11 @@ const App = () => {
       element: <App />,
       children: [
         { path: 'courses/*', element: <CoursesRoutes /> },
-        { path: 'events/*', element: <EventsRoutes /> },
         { path: 'qualifications/*', element: <QualificationsRoutes /> },
         { path: 'profile/*', element: <UserProfileRoutes /> },
         { path: 'settings/*', element: <SettingsRoutes /> },
         { path: 'calendar/*', element: <CalendarRoutes /> },
+        { path: 'timeline/*', element: <TimelineRoutes /> },
       ],
     },
   ];

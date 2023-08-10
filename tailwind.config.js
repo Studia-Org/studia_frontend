@@ -4,8 +4,9 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {
-    },
+    fontFamily: {
+      'Poppins': ['Poppins'],
+    }
   },
   plugins: [
     require('@tailwindcss/typography'),

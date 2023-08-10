@@ -20,6 +20,6 @@ export const AppRoutes = () => {
     const routes = checkAuthenticated() ? protectedRoutes : publicRoutes;
     const element = useRoutes([...routes, ...commonRoutes]);
 
-    return <>{element}</>;
+    return <div className='font-Poppins'>{element}</div>;
 
 }

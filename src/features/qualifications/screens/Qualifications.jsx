@@ -141,7 +141,7 @@ const Qualifications = () => {
     }
     return (
         <div className='h-screen w-full bg-white'>
-            <Navbar user={user} />
+            <Navbar/>
             <div className='flex flex-wrap-reverse sm:flex-nowrap bg-white'>
                 <Sidebar section={'qualifications'} />
                 <div className='container-fluid h-screen w-full rounded-tl-3xl bg-[#e7eaf886] '>

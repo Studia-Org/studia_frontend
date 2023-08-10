@@ -1,0 +1,31 @@
+.rct-horizontal-lines {
+    visibility: hidden;
+}
+
+.rct-items {
+    pointer-events: none;
+}
+
+.rct-vertical-lines {
+    color: #e4e2e2;
+
+}
+
+.react-calendar-timeline .rct-vertical-lines .rct-vl {
+    border-left: 1px solid;
+}
+
+.react-calendar-timeline .rct-dateHeader {
+    border-left: none;
+    border-bottom: none;
+    background-color: white;
+}
+
+.react-calendar-timeline .rct-header-root {
+    border-bottom: none;
+    background-color: #f7f7f7;
+}
+
+.react-calendar-timeline .rct-calendar-header{
+    border: none;
+}
