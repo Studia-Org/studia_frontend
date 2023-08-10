@@ -88,10 +88,10 @@ const TimelineComponent = () => {
           <div className="w-2  bg-red-500 rounded-md mr-3">
           </div>
           <div className="flex flex-col leading-none justify-center pb-2">
-            <h1 className="font-bold text-base">
+            <h1 className="font-semibold text-base">
               {itemContext.title}
             </h1>
-            <p className="font-normal pt-1 text-gray-500">
+            <p className="font-normal pt-2 text-gray-500">
               Descripcion de test
             </p>
 
@@ -140,7 +140,7 @@ const TimelineComponent = () => {
                   <div className=" bg-[#3573f9] text-white py-2 px-10 rounded-lg">
                     <div className="flex font-normal text-base ">
                       <p className=" whitespace-pre">{dayOfWeek}</p>
-                      <p className="font-medium">, {day}</p>
+                      <p className="font-semibold">, {day}</p>
                     </div>
                   </div>
 
@@ -151,7 +151,7 @@ const TimelineComponent = () => {
                 <div className="h-full bg-white items-center justify-center flex " {...getIntervalProps()}>
                   <div className="flex font-normal text-base">
                     <p className="text-gray-600 whitespace-pre">{dayOfWeek}</p>
-                    <p className="font-medium">, {day}</p>
+                    <p className="font-semibold">, {day}</p>
                   </div>
                 </div>
               );

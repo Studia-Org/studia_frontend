@@ -143,11 +143,11 @@ const CalendarEvents = () => {
         return date.toLocaleTimeString(undefined, options);
     }
     return (
-        <div className='h-screen w-full bg-white'>
+        <div className='h-screen w-screen bg-white'>
             <Navbar />
-            <div className='flex flex-wrap-reverse sm:flex-nowrap bg-white'>
+            <div className='flex flex-wrap-reverse sm:h-[calc(100%-8rem)]   sm:flex-nowrap bg-white'>
                 <Sidebar section={'events'} />
-                <div className='container-fluid w-full rounded-tl-3xl bg-[#e7eaf886] '>
+                <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] '>
                     <div className='p-9 lg:px-12 px-5 font-bold text-2xl'>
                         <div name='maindiv' className='bg-white rounded-xl lg:p-5  mt-3 shadow-lg w-auto flex-grow '>
                             <div className='flex'>

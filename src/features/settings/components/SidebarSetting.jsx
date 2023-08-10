@@ -73,22 +73,22 @@ const SidebarSetting = ({ setSelectedOption }) => {
             <div className={`lg:rounded-tl-3xl h-full bg-[#eaedfa] pl-12 p-9 text-base space-y-6 border-r border-[#b7bcd4] ${isOpen ? 'block' : 'hidden sm:block'}`}>
                 
                 <div className='space-y-4'>
-                    <h1 className='text-lg pb-1'>User Account</h1>
-                    <button className='flex items-center pl-4 gap-2 hover:text-indigo-600 hover:translate-x-[5px] transition-all' onClick={() => handleOptionChange('password')}>
+                    <h1 className='text-lg pb-1 font-semibold'>User Account</h1>
+                    <button className='flex items-center pl-4 gap-3 hover:text-indigo-600 hover:translate-x-[5px] transition-all' onClick={() => handleOptionChange('password')}>
                         <FiLock />
-                        <h2 className='text-gray-700 font-medium hover:text-indigo-600'>Change password</h2>
+                        <h2 className='text-gray-700 font-normal hover:text-indigo-600 text-left'>Change password</h2>
                     </button>
 
-                    <button className='flex items-center pl-4 gap-2 hover:text-indigo-600 hover:translate-x-[5px] transition-all' onClick={() => handleOptionChange('language')}>
+                    <button className='flex items-center pl-4 gap-3 hover:text-indigo-600 hover:translate-x-[5px] transition-all' onClick={() => handleOptionChange('language')}>
                         <FaLanguage />
-                        <h2 className='text-gray-700 font-medium hover:text-indigo-600'>Language</h2>
+                        <h2 className='text-gray-700 font-normal hover:text-indigo-600 text-left'>Language</h2>
                     </button>
                 </div>
                 <div className='space-y-4 '>
-                    <h1 className='text-lg pb-1'>Notifications</h1>
-                    <button className='flex items-center pl-4 gap-2 hover:text-indigo-600 hover:translate-x-[5px] transition-all' onClick={() => handleOptionChange('notification')}>
+                    <h1 className='text-lg pb-1 font-semibold'>Notifications</h1>
+                    <button className='flex items-center pl-4 gap-3 hover:text-indigo-600 hover:translate-x-[5px] transition-all' onClick={() => handleOptionChange('notification')}>
                         <FiBell />
-                        <h2 className='text-gray-700 font-medium hover:text-indigo-600'>Notification preferences</h2>
+                        <h2 className='text-gray-700 font-normal hover:text-indigo-600 text-left'>Notification preferences</h2>
                     </button>
                 </div>
                 <div className='space-y-3'>

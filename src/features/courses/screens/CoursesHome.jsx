@@ -55,17 +55,15 @@ const CoursesHome = () => {
   }
 
   return (
-    <div className='h-screen w-full bg-white'>
+    <div className='h-screen w-screen bg-white '>
       <Navbar />
-      <div className='flex flex-wrap-reverse sm:flex-nowrap bg-white'>
+      <div className='flex flex-wrap-reverse sm:h-[calc(100%-8rem)]   sm:flex-nowrap bg-white'>
         <Sidebar section={'courses'} />
-        <div className='container-fluid w-full rounded-tl-3xl bg-[#e7eaf886] '>
-          <div className=' px-12 font-bold text-2xl'>
-
-
+        <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] '>
+          <div className=' sm:px-12  font-bold text-2xl'>
             {!isLoading ? <motion.div className='flex flex-wrap py-11 sm:space-y-0 space-y-10  sm:space-x-12 space-x-0' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
               {courses.courses && courses.courses.map(RenderCourse)}
-            </motion.div> : <div className='w-full h-screen pb-52 flex items-center justify-center' >
+            </motion.div> : <div className='w-full h-full flex items-center justify-center' >
               <MoonLoader color="#363cd6" size={80} /></div>}
           </div>
         </div>

@@ -13,6 +13,7 @@
 
 .react-calendar-timeline .rct-vertical-lines .rct-vl {
     border-left: 1px solid;
+    
 }
 
 .react-calendar-timeline .rct-dateHeader {
@@ -28,4 +29,8 @@
 
 .react-calendar-timeline .rct-calendar-header{
     border: none;
+}
+
+.react-calendar-timeline .rct-vertical-lines .rct-vl.rct-day-6, .react-calendar-timeline .rct-vertical-lines .rct-vl.rct-day-0{
+    background: none;
 }

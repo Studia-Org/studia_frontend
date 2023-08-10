@@ -20,11 +20,11 @@ const Settings = () => {
 
 
   return (
-    <div className='h-screen w-full bg-white'>
+    <div className='h-screen w-screen bg-white'>
       <Navbar user={user} />
-      <div className='flex flex-wrap-reverse sm:flex-nowrap bg-white'>
+      <div className='flex flex-wrap-reverse sm:h-[calc(100%-8rem)]   sm:flex-nowrap bg-white'>
         <Sidebar section={'settings'} />
-        <div className='container-fluid w-full rounded-tl-3xl bg-[#e7eaf886] '>
+        <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] '>
           <div className=' font-bold text-2xl h-full '>
             <div className='flex h-full  space-x-5'>
               <div className=' w-96 h-full rounded-tl-3xl flex flex-col'>
