@@ -73,33 +73,33 @@ const SidebarSetting = ({ setSelectedOption }) => {
             <div className={`lg:rounded-tl-3xl h-full bg-[#eaedfa] pl-12 p-9 text-base space-y-6 border-r border-[#b7bcd4] ${isOpen ? 'block' : 'hidden sm:block'}`}>
                 
                 <div className='space-y-4'>
-                    <h1 className='text-lg pb-1 font-semibold'>User Account</h1>
+                    <h1 className='text-lg pb-1 font-semibold tracking-tight'>User Account</h1>
                     <button className='flex items-center pl-4 gap-3 hover:text-indigo-600 hover:translate-x-[5px] transition-all' onClick={() => handleOptionChange('password')}>
                         <FiLock />
-                        <h2 className='text-gray-700 font-normal hover:text-indigo-600 text-left'>Change password</h2>
+                        <h2 className='text-gray-700 font-normal hover:text-indigo-600 text-left tracking-tight'>Change password</h2>
                     </button>
 
                     <button className='flex items-center pl-4 gap-3 hover:text-indigo-600 hover:translate-x-[5px] transition-all' onClick={() => handleOptionChange('language')}>
                         <FaLanguage />
-                        <h2 className='text-gray-700 font-normal hover:text-indigo-600 text-left'>Language</h2>
+                        <h2 className='text-gray-700 font-normal hover:text-indigo-600 text-left tracking-tight'>Language</h2>
                     </button>
                 </div>
                 <div className='space-y-4 '>
-                    <h1 className='text-lg pb-1 font-semibold'>Notifications</h1>
+                    <h1 className='text-lg pb-1 font-semibold tracking-tight'>Notifications</h1>
                     <button className='flex items-center pl-4 gap-3 hover:text-indigo-600 hover:translate-x-[5px] transition-all' onClick={() => handleOptionChange('notification')}>
                         <FiBell />
-                        <h2 className='text-gray-700 font-normal hover:text-indigo-600 text-left'>Notification preferences</h2>
+                        <h2 className='text-gray-700 font-normal hover:text-indigo-600 text-left tracking-tight'>Notification preferences</h2>
                     </button>
                 </div>
                 <div className='space-y-3'>
                     <hr className='mt-24 border-[#b7bcd4]' />
                     <button className='flex items-center gap-2 hover:text-indigo-600 hover:translate-x-[5px] transition-all mt-14 pt-2' onClick={() => handleOptionChange('help')}>
                         <BiHelpCircle className='w-5 h-5' />
-                        <h1 className='text-base pb-1 font-medium'>Help</h1>
+                        <h1 className='text-base pb-1 font-medium tracking-tight '>Help</h1>
                     </button>
                     <button className='flex items-center gap-2 hover:text-indigo-600 hover:translate-x-[5px] transition-all' onClick={() => logOut()}>
                         <FiLogOut className='w-5 h-5' />
-                        <h1 className='text-base pb-1 font-medium'>Logout</h1>
+                        <h1 className='text-base pb-1 font-medium tracking-tight'>Logout</h1>
                     </button>
                 </div>
             </div>
