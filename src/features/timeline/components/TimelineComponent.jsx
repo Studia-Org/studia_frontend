@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { API } from "../../../constant";
+import { useAuthContext } from "../../../context/AuthContext";
+
 import Timeline, {
   DateHeader,
   TimelineHeaders,
@@ -7,6 +10,8 @@ import Timeline, {
 } from "react-calendar-timeline";
 import "react-calendar-timeline/lib/Timeline.css";
 import '../styles/timelineStyles.css'
+
+
 
 const keys = {
   groupIdKey: "id",
@@ -22,37 +27,53 @@ const keys = {
 };
 
 const TimelineComponent = () => {
+  const { user } = useAuthContext();
+  const [timelineItems, setTimelineItems] = useState([]);
   const groups = [{ id: '1', bgColor: '#f490e5' }, { id: '2', bgColor: '#f29dd0' }, { id: '3', bgColor: '#f29dd0' }, { id: '4', bgColor: '#f29dd0' }, { id: '5', bgColor: '#f29dd0' }]
-  const items = [
-    {
-      id: '0',
-      group: '2',
-      title: 'Use the optical PCI interface, then you can copy the mobile pixel!',
-      start: new Date('2023-08-07').getTime(),
-      end: new Date('2023-08-10').getTime(),
-      canMove: true,
-      canResize: 'both',
-      itemProps: { 'data-tip': 'We need to compress the open-source DRAM application!' }
-    }, {
-      id: '1',
-      group: '1',
-      title: 'Use the optical PCI interface, then you can copy the mobile pixel!',
-      start: new Date('2023-08-8').getTime(),
-      end: new Date('2023-08-11').getTime(),
-      canMove: true,
-      canResize: 'both',
-      itemProps: { 'data-tip': 'We need to compress the open-source DRAM application!' }
-    }
 
-  ]
+  const fetchCourseInformation = async () => {
+    try {
+      const courseContentInformation = [];
+      var counter = 0;
+      const response = await fetch(`${API}/users/${user.id}?populate=courses.sections.subsections&filter=courses`);
+      const data = await response.json();
+
+      data.courses.forEach(course => {
+        counter++;
+        course.sections.forEach(section => {
+          section.subsections.forEach(subsection => {
+            const info = {
+              id: Math.floor(Math.random() * Math.floor(Math.random() * Date.now())),
+              group: counter.toString(),
+              title: subsection.title,
+              start: new Date(subsection.start_date).getTime(),
+              end: new Date(subsection.end_date).getTime(),
+              description: subsection.description,
+              fase: subsection.fase,
+            };
+            courseContentInformation.push(info);
+          });
+        });
+      });
+      setTimelineItems(courseContentInformation);
+    } catch (error) {
+      console.error(error);
+    } finally {
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      fetchCourseInformation();
+    }
+  }, [user]);
+
 
   const today = new Date();
   const startOfWeek = new Date(today);
   startOfWeek.setDate(today.getDate() - today.getDay());
   const endOfWeek = new Date(today);
   endOfWeek.setDate(today.getDate() - today.getDay() + 9);
-
-  const [timelineItems, setTimelineItems] = useState(items);
 
   const itemRenderer = ({
     item,
@@ -64,6 +85,17 @@ const TimelineComponent = () => {
     const { left: leftResizeProps, right: rightResizeProps } = getResizeProps();
     const backgroundColor = 'white'
     const borderColor = itemContext.resizing ? "red" : item.color;
+    var colorStyle = undefined;
+
+    if (item.fase === 'Performance') {
+      colorStyle = { backgroundColor: '#eab308' }
+    } else if (item.fase === 'Self-reflection') {
+      colorStyle = { backgroundColor: '#ef4444' }
+    } else if (item.fase === 'Forethought') {
+      colorStyle = { backgroundColor: '#166534' }
+    }
+
+    console.log(item)
 
     return (
       <div
@@ -85,14 +117,14 @@ const TimelineComponent = () => {
       >
         {itemContext.useResizeHandle ? <div {...leftResizeProps} /> : null}
         <div className="flex h-full">
-          <div className="w-2  bg-red-500 rounded-md mr-3">
+          <div className="w-2 rounded-md mr-3" style={colorStyle}>
           </div>
           <div className="flex flex-col leading-none justify-center pb-2">
             <h1 className="font-semibold text-base">
               {itemContext.title}
             </h1>
             <p className="font-normal pt-2 text-gray-500">
-              Descripcion de test
+              {item.description}
             </p>
 
           </div>

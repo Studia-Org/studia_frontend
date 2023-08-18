@@ -72,7 +72,7 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
                     <AccordionItem>
                         <AccordionButton>
                             <div className='container bg-gray-100 rounded py-4 mb-4 flex' >
-                                <h2 className='text-lg font-medium   ml-4'>
+                                <h2 className='text-lg font-medium text-left line-clamp-1  ml-4'>
                                     {section.attributes.title}
                                     <AccordionIcon className='absolute right-0 mr-20 ' />
                                 </h2>
