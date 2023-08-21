@@ -95,8 +95,6 @@ const TimelineComponent = () => {
       colorStyle = { backgroundColor: '#166534' }
     }
 
-    console.log(item)
-
     return (
       <div
         {...getItemProps({

@@ -9,9 +9,9 @@ import {
 
 export const AccordionCourseContent = ({ courseContentInformation, setCourseSubsection, setCourseSection }) => {
 
-    function handleSections(tituloSeccion, tituloSubseccion) {
+    function handleSections(tituloSeccion, subsection) {
         setCourseSection(tituloSeccion);
-        setCourseSubsection(tituloSubseccion);
+        setCourseSubsection(subsection);
     }
 
     function selectFaseSectionContent(str) {
@@ -50,7 +50,7 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
             )
         }
         return (
-            <div className='flex cursor-pointer my-1 hover:border-l-4 items-center py-3 ' onClick={() => handleSections(titulo, subsection.attributes.title)}>
+            <div className='flex cursor-pointer my-1 hover:border-l-4 items-center py-3 ' onClick={() => handleSections(titulo, subsection.attributes)}>
                 <p className='text-base font-normal ml-4   '>
                     {subsection.attributes.finished === "False" ? (
                         <span role="img" aria-label="circle">⭕ </span>

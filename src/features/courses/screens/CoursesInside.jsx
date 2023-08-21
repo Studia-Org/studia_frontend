@@ -15,6 +15,7 @@ const CourseInside = () => {
   const [courseInsideSectionType, setcourseInsideSectionType] = useState('course');
   const [files, setFiles] = useState([]);
 
+  const [subsectionsLandscapePhoto, setSubsectionsLandscapePhoto] = useState(null);
   const [courseSubsection, setCourseSubsection] = useState([]);
   const [courseSection, setCourseSection] = useState([]);
   let { courseId } = useParams();
@@ -34,14 +35,13 @@ const CourseInside = () => {
 
   const fetchCourseInformation = async () => {
     try {
-      const response = await fetch(`${API}/courses/${courseId}?populate=sections.subsections.activities,sections.subsections.paragraphs,students.profile_photo,professor.profile_photo`);
+      const response = await fetch(`${API}/courses/${courseId}?populate=sections.subsections.activities,sections.subsections.paragraphs,students.profile_photo,professor.profile_photo,sections.subsections.landscape_photo`);
       const data = await response.json();
       setCourseContentInformation(data?.data?.attributes?.sections?.data ?? []);
       setStudents(data?.data?.attributes?.students ?? []);
       setProfessor(data?.data?.attributes?.professor?.data)
-
       setCourseSection(data?.data?.attributes?.sections?.data[0].attributes.title)
-      setCourseSubsection(data?.data?.attributes?.sections?.data[0].attributes.subsections?.data[0].attributes.title)
+      setCourseSubsection(data?.data?.attributes?.sections?.data[0].attributes.subsections?.data[0].attributes)
 
     } catch (error) {
       console.error(error);
@@ -50,14 +50,18 @@ const CourseInside = () => {
   };
 
   useEffect(() => {
+    setSubsectionsLandscapePhoto(courseSubsection.landscape_photo?.data?.attributes?.url ?? null);
+  },[courseSubsection]);
+
+  useEffect(() => {
     fetchCourseInformation();
   }, []);
 
   function renderAllActivities(activities) {
     let Component = null
-    if(activities.type === 'paragraph'){
+    if (activities.type === 'paragraph') {
       Component = componentMap[activities.type];
-    }else{
+    } else {
       Component = componentMap[activities.data.attributes.type];
     }
     if (Component) {
@@ -68,7 +72,7 @@ const CourseInside = () => {
 
   function RenderTextActivitiesInsideCourse() {
     const section_ = courseContentInformation.find(seccion => seccion.attributes.title === courseSection);
-    const subsection_ = section_.attributes.subsections.data.find(subseccion => subseccion.attributes.title === courseSubsection);
+    const subsection_ = section_.attributes.subsections.data.find(subseccion => subseccion.attributes.title === courseSubsection.title);
     var contenido = subsection_.attributes;
 
     const activities = contenido.activities.data.map((activity) => {
@@ -128,16 +132,19 @@ const CourseInside = () => {
     }
   }
 
-
   return (
     <div className='h-screen w-full bg-white'>
       <Navbar />
       <div className='flex flex-wrap-reverse sm:flex-nowrap bg-white'>
         <Sidebar section={'courses'} />
         <div className='container-fluid min-h-screen w-screen rounded-tl-3xl bg-[#e7eaf886] flex flex-wrap'>
-          <div className='flex-1 min-w-0  sm:w-auto mt-8 ml-8 mr-8'>
-            <img src="https://kinsta.com/wp-content/uploads/2022/03/what-is-postgresql.png" alt="" className='rounded shadow' />
-            <p className='text-xl mt-5 font-semibold'>{courseSubsection}</p>
+          <div className='flex-1 min-w-0  sm:w-auto mt-3 ml-8 mr-8'>
+            {subsectionsLandscapePhoto !== null ? (
+              <img src={subsectionsLandscapePhoto} alt="" className='rounded shadow mt-8' />
+            ) : (
+              null
+            )}
+            <p className='text-xl mt-5 font-semibold'>{courseSubsection.title}</p>
             <div className='flex flex-row mt-8  items-center space-x-8 ml-5'>
               <button
                 className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === 'course' ? 'text-black border-b-2 border-black' : 'text-gray-500'
