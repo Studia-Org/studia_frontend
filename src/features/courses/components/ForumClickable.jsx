@@ -24,7 +24,7 @@ export const ForumClickable = ({ posts }) => {
                 <div className='flex items-center  mt-3 w-full '>
                     <img src={post.autor.profile_photo} className='w-8 rounded-full' alt="" />
                     <p className='font-medium ml-1'>{post.autor.name}</p>
-                    <span className='flex items-center space-x-1 text-gray-900 ml-auto'><FiCornerDownLeft /> <p className='ml-auto'> {post.forum_answers.length} Replies</p></span>
+                    <span className='flex items-center space-x-1 text-black ml-auto font-medium'><FiCornerDownLeft /> <p className='ml-auto'> {post.forum_answers.length} Replies</p></span>
                 </div>
                 <hr className='mt-4' />
             </div>
