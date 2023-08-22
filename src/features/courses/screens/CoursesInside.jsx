@@ -7,6 +7,7 @@ import { Nothing404 } from '../components/Nothing404';
 import { Sidebar } from '../../../shared/elements/Sidebar';
 import { Navbar } from '../../../shared/elements/Navbar';
 import { AccordionCourseContent } from '../components/AccordionCourseContent';
+import { ForumClickable } from '../components/ForumClickable';
 import { Chatbot } from '../components/ChatBot';
 
 
@@ -14,6 +15,63 @@ import { Chatbot } from '../components/ChatBot';
 const CourseInside = () => {
   const [courseInsideSectionType, setcourseInsideSectionType] = useState('course');
   const [files, setFiles] = useState([]);
+
+  const posts = [
+    {
+      id: 1,
+      title: 'UI/UX Design Trends 2023',
+      content: 'Esto es un post de prubea donde miraremos que los paddings sean correctos y comprobaremos otras questiones que sean relevantes para el medio ambiente',
+      lastPublished: '2021-09-20T00:00:00.000Z',
+      autor: {
+        name: 'Marcos Palomino',
+        profile_photo: 'https://thispersondoesnotexist.com/'
+      },
+      forum_answers: [
+        {
+          content: 'Esto es una respuesta de prueba',
+          autor: {
+            name: 'Laura Martinez',
+            profile_photo: 'https://thispersondoesnotexist.com/'
+          }
+        }, {
+          content: 'Otra respuesta de prueba',
+          autor: {
+            name: 'Jose Marquez',
+            profile_photo: 'https://thispersondoesnotexist.com/'
+          }
+        }
+      ]
+    },
+    {
+      id: 2,
+      title: 'What I Learned as a Product Designer at Apple',
+      content: 'No he aprendido nada en los días que he estado en Apple, solo he estado haciendo el vago y mirando como los demás trabajan',
+      lastPublished: '2021-09-20T00:00:00.000Z',
+      autor: {
+        name: 'Dwayne Hand',
+        profile_photo: 'https://thispersondoesnotexist.com/'
+      },
+      forum_answers: [
+        {
+          content: 'Esto es una respuesta de prueba',
+          autor: {
+            name: 'Laura Martinez',
+            profile_photo: 'https://thispersondoesnotexist.com/'
+          }
+        }, {
+          content: 'Otra respuesta de prueba',
+          autor: {
+            name: 'Jose Marquez',
+            profile_photo: 'https://thispersondoesnotexist.com/'
+          }
+        }
+      ]
+    }
+  ]
+
+  const posts2 = [
+    
+  ]
 
   const [subsectionsLandscapePhoto, setSubsectionsLandscapePhoto] = useState(null);
   const [courseSubsection, setCourseSubsection] = useState([]);
@@ -51,7 +109,7 @@ const CourseInside = () => {
 
   useEffect(() => {
     setSubsectionsLandscapePhoto(courseSubsection.landscape_photo?.data?.attributes?.url ?? null);
-  },[courseSubsection]);
+  }, [courseSubsection]);
 
   useEffect(() => {
     fetchCourseInformation();
@@ -176,6 +234,7 @@ const CourseInside = () => {
           </div>
           <div>
             <AccordionCourseContent {...{ courseContentInformation, setCourseSubsection, setCourseSection }} />
+            <ForumClickable posts={posts} />
             {professor.attributes && <ProfessorData professor={professor} />}
           </div>
         </div>
