@@ -48,6 +48,7 @@ export const ActivitiesDelivery = ({ activitie }) => {
     const currentDate = new Date();
     const deliveryDate = new Date(activitie.deadline)
     const isPastDue = deliveryDate > currentDate;
+    console.log(activitie)
 
     const [backgroundColorClass, setBackgroundColorClass] = useState('');
 
@@ -71,8 +72,8 @@ export const ActivitiesDelivery = ({ activitie }) => {
                 <FiFolder size={35} />
                 <p className='font-medium text-lg ml-5 text-'>{activitie.title}</p>
                 <div className={`ml-auto rounded flex space-x-2 mr-5 items-center`}>
-                    {activitie.evaluated === 'true' ? <p className='text-gray-500 font-medium text-sm ml-auto mr-5 italic '> Evaluated</p> : null}
-                    <p className={`text-white font-medium ${backgroundColorClass} p-1 rounded`}>{activitie.deadline}</p>
+                    {activitie.evaluated === 'true' ? <p className='text-gray-500 font-medium text-sm ml-auto mr-5 italic '>Evaluated</p> : null}
+                    <p className={`text-white font-medium ${backgroundColorClass} p-1 rounded`}>{new Date(activitie.deadline).toLocaleString()}</p>
                 </div>
                 <p></p>
             </div>

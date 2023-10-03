@@ -9,69 +9,16 @@ import { Navbar } from '../../../shared/elements/Navbar';
 import { AccordionCourseContent } from '../components/AccordionCourseContent';
 import { ForumClickable } from '../components/ForumClickable';
 import { Chatbot } from '../components/ChatBot';
+import { ForumComponent } from '../components/ForumComponent'
 
 
 
 const CourseInside = () => {
   const [courseInsideSectionType, setcourseInsideSectionType] = useState('course');
   const [files, setFiles] = useState([]);
-
-  const posts = [
-    {
-      id: 1,
-      title: 'UI/UX Design Trends 2023',
-      content: 'Esto es un post de prubea donde miraremos que los paddings sean correctos y comprobaremos otras questiones que sean relevantes para el medio ambiente',
-      lastPublished: '2021-09-20T00:00:00.000Z',
-      autor: {
-        name: 'Marcos Palomino',
-        profile_photo: 'https://thispersondoesnotexist.com/'
-      },
-      forum_answers: [
-        {
-          content: 'Esto es una respuesta de prueba',
-          autor: {
-            name: 'Laura Martinez',
-            profile_photo: 'https://thispersondoesnotexist.com/'
-          }
-        }, {
-          content: 'Otra respuesta de prueba',
-          autor: {
-            name: 'Jose Marquez',
-            profile_photo: 'https://thispersondoesnotexist.com/'
-          }
-        }
-      ]
-    },
-    {
-      id: 2,
-      title: 'What I Learned as a Product Designer at Apple',
-      content: 'No he aprendido nada en los días que he estado en Apple, solo he estado haciendo el vago y mirando como los demás trabajan',
-      lastPublished: '2021-09-20T00:00:00.000Z',
-      autor: {
-        name: 'Dwayne Hand',
-        profile_photo: 'https://thispersondoesnotexist.com/'
-      },
-      forum_answers: [
-        {
-          content: 'Esto es una respuesta de prueba',
-          autor: {
-            name: 'Laura Martinez',
-            profile_photo: 'https://thispersondoesnotexist.com/'
-          }
-        }, {
-          content: 'Otra respuesta de prueba',
-          autor: {
-            name: 'Jose Marquez',
-            profile_photo: 'https://thispersondoesnotexist.com/'
-          }
-        }
-      ]
-    }
-  ]
-
-  const posts2 = [
-    
-  ]
+  const [posts, setPosts] = useState([]);
+  const [forumID, setForumID] = useState([]);
+  const [forumFlag, setForumFlag] = useState(false);
 
   const [subsectionsLandscapePhoto, setSubsectionsLandscapePhoto] = useState(null);
   const [courseSubsection, setCourseSubsection] = useState([]);
@@ -91,6 +38,17 @@ const CourseInside = () => {
     cuestionario: ActivitiesQuestionnaire,
   };
 
+  const fetchPostData = async () => {
+    try {
+      const response = await fetch(`${API}/courses/${courseId}?populate=forum.posts.autor.profile_photo,forum.posts.forum_answers.autor.profile_photo`);
+      const data = await response.json();
+      setForumID(data.data.attributes.forum.data.id);
+      setPosts(data.data.attributes.forum.data.attributes.posts.data.reverse());
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const fetchCourseInformation = async () => {
     try {
       const response = await fetch(`${API}/courses/${courseId}?populate=sections.subsections.activities,sections.subsections.paragraphs,students.profile_photo,professor.profile_photo,sections.subsections.landscape_photo`);
@@ -103,7 +61,6 @@ const CourseInside = () => {
 
     } catch (error) {
       console.error(error);
-    } finally {
     }
   };
 
@@ -113,6 +70,10 @@ const CourseInside = () => {
 
   useEffect(() => {
     fetchCourseInformation();
+  }, []);
+
+  useEffect(() => {
+    fetchPostData();
   }, []);
 
   function renderAllActivities(activities) {
@@ -197,44 +158,49 @@ const CourseInside = () => {
         <Sidebar section={'courses'} />
         <div className='container-fluid min-h-screen w-screen rounded-tl-3xl bg-[#e7eaf886] flex flex-wrap'>
           <div className='flex-1 min-w-0  sm:w-auto mt-3 ml-8 mr-8'>
-            {subsectionsLandscapePhoto !== null ? (
-              <img src={subsectionsLandscapePhoto} alt="" className='rounded shadow mt-8' />
-            ) : (
-              null
-            )}
-            <p className='text-xl mt-5 font-semibold'>{courseSubsection.title}</p>
-            <div className='flex flex-row mt-8  items-center space-x-8 ml-5'>
-              <button
-                className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === 'course' ? 'text-black border-b-2 border-black' : 'text-gray-500'
-                  }`}
-                onClick={() => setcourseInsideSectionType('course')}
-              >
-                Course
-              </button>
-              <button
-                className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === 'files' ? 'text-black border-b-2 border-black' : 'text-gray-500'
-                  }`}
-                onClick={() => setcourseInsideSectionType('files')}
-              >
-                Files
-              </button>
+            {forumFlag === false ? (
+              <div>
+                {subsectionsLandscapePhoto !== null ? (
+                  <img src={subsectionsLandscapePhoto} alt="" className='rounded shadow mt-8' />
+                ) : (
+                  null
+                )}
+                <p className='text-xl mt-5 font-semibold'>{courseSubsection.title}</p>
+                <div className='flex flex-row mt-8  items-center space-x-8 ml-5'>
+                  <button
+                    className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === 'course' ? 'text-black border-b-2 border-black' : 'text-gray-500'
+                      }`}
+                    onClick={() => setcourseInsideSectionType('course')}
+                  >
+                    Course
+                  </button>
+                  <button
+                    className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === 'files' ? 'text-black border-b-2 border-black' : 'text-gray-500'
+                      }`}
+                    onClick={() => setcourseInsideSectionType('files')}
+                  >
+                    Files
+                  </button>
 
-              <button
-                className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === 'participants' ? 'text-black border-b-2 border-black' : 'text-gray-500'
-                  }`}
-                onClick={() => setcourseInsideSectionType('participants')}
-              >
-                Participants
-              </button>
-            </div>
-            <hr className="h-px  bg-gray-600 border-0 mb-6"></hr>
-            {courseInsideSectionType === 'course' && courseContentInformation.length > 0 && RenderTextActivitiesInsideCourse()}
-            {courseInsideSectionType === 'files' && RenderFilesInsideCourse()}
-            {courseInsideSectionType === 'participants' && RenderParticipantsInsideCourse()}
+                  <button
+                    className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === 'participants' ? 'text-black border-b-2 border-black' : 'text-gray-500'
+                      }`}
+                    onClick={() => setcourseInsideSectionType('participants')}
+                  >
+                    Participants
+                  </button>
+                </div>
+                <hr className="h-px  bg-gray-600 border-0 mb-6"></hr>
+                {courseInsideSectionType === 'course' && courseContentInformation.length > 0 && RenderTextActivitiesInsideCourse()}
+                {courseInsideSectionType === 'files' && RenderFilesInsideCourse()}
+                {courseInsideSectionType === 'participants' && RenderParticipantsInsideCourse()}
+              </div>) :
+              <ForumComponent posts={posts} forumID={forumID}/>
+            }
           </div>
           <div>
-            <AccordionCourseContent {...{ courseContentInformation, setCourseSubsection, setCourseSection }} />
-            <ForumClickable posts={posts} />
+            <AccordionCourseContent {...{ courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag }} />
+            <ForumClickable posts={posts} setForumFlag={setForumFlag} />
             {professor.attributes && <ProfessorData professor={professor} />}
           </div>
         </div>

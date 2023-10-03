@@ -6,12 +6,14 @@ import '../styles/utils.css'
 import { useAuthContext } from "../../../context/AuthContext";
 import { Sidebar } from '../../../shared/elements/Sidebar';
 import { CoursesCardHome } from '../components/CoursesCardHome';
+import { FiPlus } from 'react-icons/fi';
 import { Navbar } from '../../../shared/elements/Navbar';
 import { MoonLoader } from "react-spinners";
 import { API } from "../../../constant";
 import { checkAuthenticated } from "../../../helpers";
 
 const CoursesHome = () => {
+  const [open, setOpen] = useState(false);
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
@@ -20,8 +22,14 @@ const CoursesHome = () => {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
   };
+
+  const handleOpen = value => {
+    setOpen(true);
+  };
   const transition = { duration: 0.3 };
   const { user } = useAuthContext();
+
+
 
 
   useEffect(() => {
@@ -67,6 +75,22 @@ const CoursesHome = () => {
               <MoonLoader color="#363cd6" size={80} /></div>}
           </div>
         </div>
+        { user &&
+          user.role_str === 'admin' ? <div className='fixed right-10 bottom-10'>
+            <button
+              type="button"
+              data-dial-toggle="speed-dial-menu-dropdown"
+              aria-controls="speed-dial-menu-dropdown"
+              className="flex shadow-lg items-center transition  justify-center ml-auto text-white bg-blue-600 rounded-full w-14 h-14 hover:bg-blue-600 hover-scale active-scale  "
+              onClick={handleOpen}
+            >
+              <FiPlus size={26} />
+              <span className="sr-only"></span>
+            </button>
+          </div> : <div>
+
+          </div>
+        }
       </div>
     </div>
   )

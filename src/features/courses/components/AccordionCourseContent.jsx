@@ -7,9 +7,10 @@ import {
     AccordionIcon,
 } from '@chakra-ui/accordion'
 
-export const AccordionCourseContent = ({ courseContentInformation, setCourseSubsection, setCourseSection }) => {
+export const AccordionCourseContent = ({ courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag }) => {
 
     function handleSections(tituloSeccion, subsection) {
+        setForumFlag(false);
         setCourseSection(tituloSeccion);
         setCourseSubsection(subsection);
     }
