@@ -10,12 +10,14 @@ import { FiPlus } from 'react-icons/fi';
 import { Navbar } from '../../../shared/elements/Navbar';
 import { MoonLoader } from "react-spinners";
 import { API } from "../../../constant";
+import { FiChevronRight } from 'react-icons/fi';
 import { checkAuthenticated } from "../../../helpers";
 
 const CoursesHome = () => {
   const [open, setOpen] = useState(false);
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
   const navigate = useNavigate();
 
   const variants = {
@@ -28,8 +30,6 @@ const CoursesHome = () => {
   };
   const transition = { duration: 0.3 };
   const { user } = useAuthContext();
-
-
 
 
   useEffect(() => {
@@ -75,20 +75,40 @@ const CoursesHome = () => {
               <MoonLoader color="#363cd6" size={80} /></div>}
           </div>
         </div>
-        { user &&
-          user.role_str === 'admin' ? <div className='fixed right-10 bottom-10'>
+        {
+          user &&
+            user.role_str === 'admin' ? <div className='fixed right-10 bottom-10'>
+            <div
+              id="speed-dial-menu-dropdown"
+              className={`bg-white shadow rounded-2xl transform scale-0 opacity-0 mb-5 h-3 w-[24rem]  duration-200 ${isExpanded ? 'scale-100 h-[12rem] w-[20rem] opacity-100' : ''
+                }`}
+            >
+              <div className='p-4 flex flex-col text-base font-medium space-y-4 '>
+                <button className='flex items-center text-left  hover:border-l-4 border-black transition-all duration-100 ' onClick={() => navigate('create')}>
+                  <p className='ml-2'>Create new course from a template</p>
+                  <FiChevronRight className='ml-auto'/>
+                </button>
+                <button className='flex items-center text-left hover:border-l-4 border-black transition-all duration-100' onClick={() => navigate('create')}>
+                  <p className='ml-2'>Create new course</p>
+                  <FiChevronRight className='ml-auto'/>
+                </button>
+                <div className=''>
+                  <hr />
+                  <button className='font-light text-sm mt-2'>Do you need help?</button>
+                </div>
+              </div>
+            </div>
             <button
               type="button"
               data-dial-toggle="speed-dial-menu-dropdown"
               aria-controls="speed-dial-menu-dropdown"
               className="flex shadow-lg items-center transition  justify-center ml-auto text-white bg-blue-600 rounded-full w-14 h-14 hover:bg-blue-600 hover-scale active-scale  "
-              onClick={handleOpen}
+              onClick={() => setIsExpanded(!isExpanded)}
             >
               <FiPlus size={26} />
               <span className="sr-only"></span>
             </button>
           </div> : <div>
-
           </div>
         }
       </div>
