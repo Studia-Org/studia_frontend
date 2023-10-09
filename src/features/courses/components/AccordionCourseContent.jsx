@@ -38,57 +38,40 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
     }
 
 
+
     function RenderCourseInsideSectionContent(subsection, titulo) {
-        if (new Date(subsection.attributes.start_date).toISOString() > new Date().toISOString()) {
-            return (
-                <div className='flex cursor-pointer my-1  items-center'>
-                    <div className=' hover:translate-x-2 duration-150 py-3 flex'>
-                        <p className='text-base font-normal ml-4 '>
-                            <span>🔒 </span>
-                        </p>
-                        <span className='truncate w-3/4 ml-3'>{subsection.attributes.title}</span>
-                    </div>
-                    {selectFaseSectionContent(subsection.attributes.fase)}
-                </div>
-            )
-        }
         return (
-            <div className='flex cursor-pointer my-1 items-center' onClick={() => handleSections(titulo, subsection.attributes)}>
-                <div className=' hover:translate-x-2 duration-150 py-3 flex '>
-                    <p className='text-base font-normal ml-4   '>
-                        {subsection.attributes.finished === "False" ? (
-                            <span role="img" aria-label="circle">⭕ </span>
-                        ) : (
-                            <span role="img" aria-label="checkmark">✅ </span>
-                        )}
-                    </p>
-                    <span className='truncate w-3/4 ml-3'>{subsection.attributes.title}</span>
-                </div>
-                {selectFaseSectionContent(subsection.attributes.fase)}
-            </div>
+            <li class="mb-10 ml-8 mt-8">
+                <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white ">
+                    <svg class="w-2.5 h-2.5 text-blue-800 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                    </svg>
+                </span>
+                <h3 class="flex items-center mb-1 font-medium text-gray-900"> {subsection.attributes.title}</h3>
+            </li>
+
         )
     }
 
     function RenderCourseContent(section) {
         return (
-            <div>
-                <Accordion allowMultiple>
-                    <AccordionItem>
-                        <AccordionButton>
-                            <div className='container bg-gray-100 rounded py-4 mb-4 flex' >
-                                <h2 className='text-lg font-medium text-left line-clamp-1  ml-4'>
-                                    {section.attributes.title}
-                                    <AccordionIcon className='absolute right-0 mr-20 ' />
-                                </h2>
+            <Accordion allowMultiple className=''>
+                <AccordionItem className='border rounded-3xl my-4'>                   
+                        <AccordionButton className=' rounded-3xl border-b py-5 flex items-center'>
+                            <div>
                             </div>
+                            <h2 className='w-3/4 text-lg font-medium text-left line-clamp-2  ml-4'>
+                                {section.attributes.title}
+                            </h2>
+                            <AccordionIcon fontSize={'24px'} className='ml-auto mr-5' />
                         </AccordionButton>
-                        <AccordionPanel>
-                            {section.attributes.subsections.data.map(subseccion => RenderCourseInsideSectionContent(subseccion, section.attributes.title))}
+                        <AccordionPanel className='  mb-3 '>
+                            <ol class="relative border-l border-dashed border-gray-300 ml-10">
+                                {section.attributes.subsections.data.map(subseccion => RenderCourseInsideSectionContent(subseccion, section.attributes.title))}
+                            </ol>
                         </AccordionPanel>
-                    </AccordionItem>
-                </Accordion>
-            </div>
-
+                </AccordionItem>
+            </Accordion>
         )
     }
 
