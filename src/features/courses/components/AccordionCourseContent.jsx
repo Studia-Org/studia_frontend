@@ -1,4 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 import {
     Accordion,
     AccordionItem,
@@ -8,6 +10,7 @@ import {
 } from '@chakra-ui/accordion'
 
 export const AccordionCourseContent = ({ courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag }) => {
+    const [sectionNumber, setSectionNumber] = useState(1);
 
     function handleSections(tituloSeccion, subsection) {
         setForumFlag(false);
@@ -18,58 +21,98 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
     function selectFaseSectionContent(str) {
         if (str === "Forethought") {
             return (
-
-                <span className="  text-xs absolute right-0 mr-20 font-medium px-2.5 py-0.5 rounded bg-green-800 text-white ">{str}</span>
-
+                <span className="  text-xs  font-medium w-3 h-3 rounded bg-green-400 text-white   ml-auto mr-5 "></span>
             )
         } else if (str === "Performance") {
             return (
-
-                <span className="text-xs absolute right-0 mr-20 font-medium px-2.5 py-0.5 rounded bg-yellow-600 text-white ">{str}</span>
-
+                <span className="text-xs font-medium w-3 h-3 rounded bg-yellow-400 text-white  ml-auto mr-5  "></span>
             )
         } else if (str === "Self-reflection") {
             return (
-
-                <span className="text-xs absolute right-0 mr-20 font-medium px-2.5 py-0.5 rounded bg-red-600 text-white ">{str}</span>
-
+                <span className="text-xs   font-medium w-3 h-3 rounded bg-red-400 text-white ml-auto mr-5 "></span>
             )
         }
     }
 
 
 
-    function RenderCourseInsideSectionContent(subsection, titulo) {
-        return (
-            <li class="mb-10 ml-8 mt-8">
-                <span class="absolute flex items-center justify-center w-6 h-6 bg-blue-100 rounded-full -left-3 ring-8 ring-white ">
-                    <svg class="w-2.5 h-2.5 text-blue-800 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                    </svg>
-                </span>
-                <h3 class="flex items-center mb-1 font-medium text-gray-900"> {subsection.attributes.title}</h3>
-            </li>
+    function RenderCourseInsideSectionContent(subsection, titulo, prevSubsectionFinished) {
+        const dateToday = new Date();
+        const dateTemp = new Date(subsection.attributes.start_date);
 
+        return (
+            <li class="mb-10 ml-8 mt-8 flex items-center">
+                {
+                    subsection.attributes.finished === true ?
+                        <span class="absolute flex items-center justify-center w-8 h-8 bg-indigo-500 rounded-full -left-4  ring-white ">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-white">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                            </svg>
+                        </span> : prevSubsectionFinished === false ?
+                            <span class="absolute flex items-center justify-center w-8 h-8 bg-white rounded-full border border-gray-300 -left-4  ring-black ">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-gray-600">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                                </svg>
+                            </span> :
+                            dateTemp < dateToday ?
+                                <span class="absolute flex items-center justify-center w-8 h-8 bg-indigo-200 rounded-full -left-4  ring-white ">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-indigo-500">
+                                        <path fillRule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clipRule="evenodd" />
+                                    </svg>
+                                </span> :
+                                <span class="absolute flex items-center justify-center w-8 h-8 bg-white rounded-full border border-gray-300 -left-4  ring-black ">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-gray-600">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                                    </svg>
+                                </span>
+                }
+                <button class="flex items-center mb-1 font-medium text-gray-900 line-clamp-2 w-3/4 hover:translate-x-2 duration-200 text-left"> {subsection.attributes.title}</button>
+                {selectFaseSectionContent(subsection.attributes.fase)}
+            </li>
         )
     }
 
-    function RenderCourseContent(section) {
+    function RenderCourseContent({ section, sectionNumber }) {
+        let prevSubsectionFinished = false;
+        const finishedSubsectionsCount = section.attributes.subsections.data.filter(subsection => subsection.attributes.finished).length;
+        let percentageFinished = ((finishedSubsectionsCount / section.attributes.subsections.data.length) * 100).toFixed(0);
+
+        if(isNaN(percentageFinished)){
+            percentageFinished = 0
+        }
+
+        console.log(percentageFinished)
+
         return (
             <Accordion allowMultiple className=''>
-                <AccordionItem className='border rounded-3xl my-4'>                   
-                        <AccordionButton className=' rounded-3xl border-b py-5 flex items-center'>
-                            <div>
+                <AccordionItem className='border rounded-3xl my-4'>
+                    <AccordionButton className='rounded-3xl border-b py-5  '>
+                        <div className='w-20 h-20 ml-5 items-center flex'>
+                            <CircularProgressbar className='font-medium ' value={percentageFinished} text={`${percentageFinished}%`} styles={buildStyles({
+                                textSize: '26px',
+                                pathColor: '#6366f1',
+                                textColor: 'black',
+                            })} />
+                        </div>
+                        <div className='flex flex-col ml-9 w-full text-left'>
+                            <p className='text-sm mb-1'>Section {sectionNumber}</p>
+                            <div className='flex items-center'>
+                                <h2 className='w-3/4 text-lg font-medium text-left line-clamp-2 '>
+                                    {section.attributes.title}
+                                </h2>
+                                <AccordionIcon fontSize={'24px'} className='ml-auto mr-5' />
                             </div>
-                            <h2 className='w-3/4 text-lg font-medium text-left line-clamp-2  ml-4'>
-                                {section.attributes.title}
-                            </h2>
-                            <AccordionIcon fontSize={'24px'} className='ml-auto mr-5' />
-                        </AccordionButton>
-                        <AccordionPanel className='  mb-3 '>
-                            <ol class="relative border-l border-dashed border-gray-300 ml-10">
-                                {section.attributes.subsections.data.map(subseccion => RenderCourseInsideSectionContent(subseccion, section.attributes.title))}
-                            </ol>
-                        </AccordionPanel>
+                        </div>
+                    </AccordionButton>
+                    <AccordionPanel className='  mb-3 '>
+                        <ol className="relative border-l border-dashed border-gray-300 ml-10">
+                            {section.attributes.subsections.data.map((subsection) => {
+                                const content = RenderCourseInsideSectionContent(subsection, section.attributes.title, prevSubsectionFinished);
+                                prevSubsectionFinished = subsection.attributes.finished;
+                                return content;
+                            })}
+                        </ol>
+                    </AccordionPanel>
                 </AccordionItem>
             </Accordion>
         )
@@ -80,7 +123,9 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
             <div className='mt-8 bg-white rounded-lg  px-5 py-5  sm:mr-9 sm:right-0 sm:w-[30rem] w-full shadow-md sm:visible collapse'>
                 <p className='text-xl font-semibold'>Course content</p>
                 <hr className="h-px my-8 bg-gray-400 border-0"></hr>
-                {courseContentInformation.map(RenderCourseContent)}
+                {courseContentInformation.map((section, index) => (
+                    <RenderCourseContent key={index} section={section} sectionNumber={sectionNumber + index} />
+                ))}
             </div>
         </div>
     )
