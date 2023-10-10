@@ -13,6 +13,7 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
     const [sectionNumber, setSectionNumber] = useState(1);
 
     function handleSections(tituloSeccion, subsection) {
+        console.log(tituloSeccion, subsection)
         setForumFlag(false);
         setCourseSection(tituloSeccion);
         setCourseSubsection(subsection);
@@ -66,7 +67,12 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
                                     </svg>
                                 </span>
                 }
-                <button class="flex items-center mb-1 font-medium text-gray-900 line-clamp-2 w-3/4 hover:translate-x-2 duration-200 text-left"> {subsection.attributes.title}</button>
+                {
+                    subsection.attributes.finished === false && prevSubsectionFinished === false ?
+                        <button  class="flex items-center mb-1 font-medium text-gray-500 line-clamp-2 w-3/4  text-left cursor-not-allowed"> {subsection.attributes.title}</button>:
+                        <button onClick={() => handleSections(titulo, subsection.attributes)} class="flex items-center mb-1 font-medium text-gray-900 line-clamp-2 w-3/4 hover:translate-x-2 duration-200 text-left"> {subsection.attributes.title}</button>
+
+                }
                 {selectFaseSectionContent(subsection.attributes.fase)}
             </li>
         )
@@ -77,11 +83,9 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
         const finishedSubsectionsCount = section.attributes.subsections.data.filter(subsection => subsection.attributes.finished).length;
         let percentageFinished = ((finishedSubsectionsCount / section.attributes.subsections.data.length) * 100).toFixed(0);
 
-        if(isNaN(percentageFinished)){
+        if (isNaN(percentageFinished)) {
             percentageFinished = 0
         }
-
-        console.log(percentageFinished)
 
         return (
             <Accordion allowMultiple className=''>
