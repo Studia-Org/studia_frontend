@@ -6,6 +6,7 @@ module.exports = {
   theme: {
     fontFamily: {
       'Poppins': ['Poppins'],
+      'Roboto': ['Roboto'],
     }
   },
   plugins: [

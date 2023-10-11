@@ -10,6 +10,7 @@ import { AccordionCourseContent } from '../components/AccordionCourseContent';
 import { ForumClickable } from '../components/ForumClickable';
 import { Chatbot } from '../components/ChatBot';
 import { ForumComponent } from '../components/ForumComponent'
+import { QuestionnaireComponent } from '../components/QuestionnaireComponent';
 
 
 
@@ -19,10 +20,13 @@ const CourseInside = () => {
   const [posts, setPosts] = useState([]);
   const [forumID, setForumID] = useState([]);
   const [forumFlag, setForumFlag] = useState(false);
+  const [questionnaireFlag, setQuestionnaireFlag] = useState(false);
+
 
   const [subsectionsLandscapePhoto, setSubsectionsLandscapePhoto] = useState(null);
   const [courseSubsection, setCourseSubsection] = useState([]);
   const [courseSection, setCourseSection] = useState([]);
+  const [courseSubsectionQuestionnaire, setCourseSubsectionQuestionnaire] = useState([]);
   let { courseId } = useParams();
   const navigate = useNavigate();
 
@@ -51,8 +55,9 @@ const CourseInside = () => {
 
   const fetchCourseInformation = async () => {
     try {
-      const response = await fetch(`${API}/courses/${courseId}?populate=sections.subsections.activities,sections.subsections.paragraphs,students.profile_photo,professor.profile_photo,sections.subsections.landscape_photo`);
+      const response = await fetch(`${API}/courses/${courseId}?populate=sections.subsections.activities,sections.subsections.paragraphs,students.profile_photo,professor.profile_photo,sections.subsections.landscape_photo,sections.subsections.questionnaire`);
       const data = await response.json();
+      console.log(data?.data?.attributes?.sections?.data[0].attributes.subsections?.data[0].attributes)
       setCourseContentInformation(data?.data?.attributes?.sections?.data ?? []);
       setStudents(data?.data?.attributes?.students ?? []);
       setProfessor(data?.data?.attributes?.professor?.data)
@@ -165,41 +170,50 @@ const CourseInside = () => {
                 ) : (
                   null
                 )}
-                <p className='text-xl mt-5 font-semibold'>{courseSubsection.title}</p>
-                <div className='flex flex-row mt-8  items-center space-x-8 ml-5'>
-                  <button
-                    className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === 'course' ? 'text-black border-b-2 border-black' : 'text-gray-500'
-                      }`}
-                    onClick={() => setcourseInsideSectionType('course')}
-                  >
-                    Course
-                  </button>
-                  <button
-                    className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === 'files' ? 'text-black border-b-2 border-black' : 'text-gray-500'
-                      }`}
-                    onClick={() => setcourseInsideSectionType('files')}
-                  >
-                    Files
-                  </button>
+                {
+                  questionnaireFlag === true ?
+                    <div>                     
+                      <QuestionnaireComponent questionnaire={courseSubsectionQuestionnaire} />
+                    </div>
+                    :
+                    <div>  
+                      <p className='text-xl mt-5 font-semibold'>{courseSubsection.title}</p>
+                      <div className='flex flex-row mt-8  items-center space-x-8 ml-5'>
+                        <button
+                          className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === 'course' ? 'text-black border-b-2 border-black' : 'text-gray-500'
+                            }`}
+                          onClick={() => setcourseInsideSectionType('course')}
+                        >
+                          Course
+                        </button>
+                        <button
+                          className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === 'files' ? 'text-black border-b-2 border-black' : 'text-gray-500'
+                            }`}
+                          onClick={() => setcourseInsideSectionType('files')}
+                        >
+                          Files
+                        </button>
 
-                  <button
-                    className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === 'participants' ? 'text-black border-b-2 border-black' : 'text-gray-500'
-                      }`}
-                    onClick={() => setcourseInsideSectionType('participants')}
-                  >
-                    Participants
-                  </button>
-                </div>
-                <hr className="h-px  bg-gray-600 border-0 mb-6"></hr>
-                {courseInsideSectionType === 'course' && courseContentInformation.length > 0 && RenderTextActivitiesInsideCourse()}
-                {courseInsideSectionType === 'files' && RenderFilesInsideCourse()}
-                {courseInsideSectionType === 'participants' && RenderParticipantsInsideCourse()}
+                        <button
+                          className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === 'participants' ? 'text-black border-b-2 border-black' : 'text-gray-500'
+                            }`}
+                          onClick={() => setcourseInsideSectionType('participants')}
+                        >
+                          Participants
+                        </button>
+                      </div>
+                      <hr className="h-px  bg-gray-600 border-0 mb-6"></hr>
+                      {courseInsideSectionType === 'course' && courseContentInformation.length > 0 && RenderTextActivitiesInsideCourse()}
+                      {courseInsideSectionType === 'files' && RenderFilesInsideCourse()}
+                      {courseInsideSectionType === 'participants' && RenderParticipantsInsideCourse()}
+                    </div>
+                }
               </div>) :
-              <ForumComponent posts={posts} forumID={forumID}/>
+              <ForumComponent posts={posts} forumID={forumID} />
             }
           </div>
           <div>
-            <AccordionCourseContent {...{ courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag }} />
+            <AccordionCourseContent {...{ courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setCourseSubsectionQuestionnaire}} />
             <ForumClickable posts={posts} setForumFlag={setForumFlag} />
             {professor.attributes && <ProfessorData professor={professor} />}
           </div>

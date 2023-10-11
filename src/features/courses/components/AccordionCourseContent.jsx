@@ -9,14 +9,19 @@ import {
     AccordionIcon,
 } from '@chakra-ui/accordion'
 
-export const AccordionCourseContent = ({ courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag }) => {
+export const AccordionCourseContent = ({ courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setCourseSubsectionQuestionnaire }) => {
     const [sectionNumber, setSectionNumber] = useState(1);
 
     function handleSections(tituloSeccion, subsection) {
-        console.log(tituloSeccion, subsection)
-        setForumFlag(false);
-        setCourseSection(tituloSeccion);
+        if (subsection.activities?.data[0]?.attributes.type === 'questionnaire') {
+            setQuestionnaireFlag(true);
+            setCourseSubsectionQuestionnaire(subsection.questionnaire.data)
+        } else {
+            setQuestionnaireFlag(false)
+        }
         setCourseSubsection(subsection);
+        setCourseSection(tituloSeccion);
+        setForumFlag(false);
     }
 
     function selectFaseSectionContent(str) {
@@ -69,9 +74,8 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
                 }
                 {
                     subsection.attributes.finished === false && prevSubsectionFinished === false ?
-                        <button  class="flex items-center mb-1 font-medium text-gray-500 line-clamp-2 w-3/4  text-left cursor-not-allowed"> {subsection.attributes.title}</button>:
+                        <button class="flex items-center mb-1 font-medium text-gray-500 line-clamp-2 w-3/4  text-left cursor-not-allowed"> {subsection.attributes.title}</button> :
                         <button onClick={() => handleSections(titulo, subsection.attributes)} class="flex items-center mb-1 font-medium text-gray-900 line-clamp-2 w-3/4 hover:translate-x-2 duration-200 text-left"> {subsection.attributes.title}</button>
-
                 }
                 {selectFaseSectionContent(subsection.attributes.fase)}
             </li>
@@ -123,8 +127,8 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
     }
 
     return (
-        <div className='flex-shrink-0 w-full sm:w-auto'>
-            <div className='mt-8 bg-white rounded-lg  px-5 py-5  sm:mr-9 sm:right-0 sm:w-[30rem] w-full shadow-md sm:visible collapse'>
+        <div className='flex-shrink-0 w-full sm:w-auto z-20 '>
+            <div className='mt-8 bg-white rounded-lg  p-5  sm:mr-9 sm:right-0 sm:w-[30rem] w-full shadow-md sm:visible collapse'>
                 <p className='text-xl font-semibold'>Course content</p>
                 <hr className="h-px my-8 bg-gray-400 border-0"></hr>
                 {courseContentInformation.map((section, index) => (
