@@ -53,7 +53,7 @@ const CourseInside = () => {
       });
       const data = await response.json();
       setQuestionnaireAnswers(data.user_response_questionnaires)
-      
+
     } catch (error) {
       console.error(error);
     }
@@ -74,12 +74,37 @@ const CourseInside = () => {
     try {
       const response = await fetch(`${API}/courses/${courseId}?populate=sections.subsections.activities,sections.subsections.paragraphs,students.profile_photo,professor.profile_photo,sections.subsections.landscape_photo,sections.subsections.questionnaire`);
       const data = await response.json();
-      console.log(data?.data?.attributes?.sections?.data[0].attributes.subsections?.data[0].attributes)
       setCourseContentInformation(data?.data?.attributes?.sections?.data ?? []);
       setStudents(data?.data?.attributes?.students ?? []);
       setProfessor(data?.data?.attributes?.professor?.data)
-      setCourseSection(data?.data?.attributes?.sections?.data[0].attributes.title)
-      setCourseSubsection(data?.data?.attributes?.sections?.data[0].attributes.subsections?.data[0].attributes)
+
+      let foundFinishedSubsection = false;
+      data.data.attributes.sections.data.forEach(
+        (section) => {
+          section.attributes.subsections.data.some(
+            (subsection) => {
+              if (!subsection.attributes.finished) {
+                setCourseSection(section.attributes.title)
+                setCourseSubsection(subsection.attributes)
+                return true;
+              }
+              return false;
+            }
+          );
+
+          if (!foundFinishedSubsection) {
+            section.attributes.subsections.data.some(
+              (subsection) => {
+                if (subsection.attributes.finished) {
+                  foundFinishedSubsection = true;
+                  return true;
+                }
+                return false;
+              }
+            );
+          }
+        }
+      );
 
     } catch (error) {
       console.error(error);
@@ -194,11 +219,11 @@ const CourseInside = () => {
                 )}
                 {
                   questionnaireFlag === true ?
-                    <div>                     
+                    <div>
                       <QuestionnaireComponent questionnaire={courseSubsectionQuestionnaire} answers={questionnaireAnswers} />
                     </div>
                     :
-                    <div>  
+                    <div>
                       <p className='text-xl mt-5 font-semibold'>{courseSubsection.title}</p>
                       <div className='flex flex-row mt-8  items-center space-x-8 ml-5'>
                         <button
@@ -215,7 +240,6 @@ const CourseInside = () => {
                         >
                           Files
                         </button>
-
                         <button
                           className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === 'participants' ? 'text-black border-b-2 border-black' : 'text-gray-500'
                             }`}
@@ -235,7 +259,7 @@ const CourseInside = () => {
             }
           </div>
           <div>
-            <AccordionCourseContent {...{ courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setCourseSubsectionQuestionnaire}} />
+            <AccordionCourseContent {...{ courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setCourseSubsectionQuestionnaire }} />
             <ForumClickable posts={posts} setForumFlag={setForumFlag} />
             {professor.attributes && <ProfessorData professor={professor} />}
           </div>
