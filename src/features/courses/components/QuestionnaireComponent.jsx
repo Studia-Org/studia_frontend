@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { styled } from '@mui/material/styles';
 import RadioGroup, { useRadioGroup } from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
+import Chip from '@mui/material/Chip';
 import FormControlLabel, {
   FormControlLabelProps,
 } from '@mui/material/FormControlLabel';
@@ -9,7 +10,8 @@ import Radio from '@mui/material/Radio';
 
 export const QuestionnaireComponent = ({ questionnaire, answers }) => {
 
-  console.log(questionnaire)
+  const questionnaireAnswerData = answers.filter((answer) => answer.questionnaire.id === questionnaire.id);
+  const [completed, setCompleted] = useState(questionnaireAnswerData.length > 0);
 
   const StyledFormControlLabel = styled((props) => <FormControlLabel {...props} />)(
     ({ theme, checked }) => ({
@@ -50,31 +52,55 @@ export const QuestionnaireComponent = ({ questionnaire, answers }) => {
     const endIdx = Math.min(startIdx + questionsPerPage, totalQuestions);
     const questionsForPage = questionnaire.attributes.Options.questionnaire.questions.slice(startIdx, endIdx);
 
-    return questionsForPage.map((question, index) => (
-      <div className="bg-white shadow-md rounded-md p-5 border-l-8 border-[#377ddf75]" key={index}>
-        <p className="font-medium">{question.question}</p>
+    return questionsForPage.map((question, index) => {
+      const absoluteIndex = startIdx + index;
 
-        {Array.isArray(question.options) ? (
-          <RadioGroup className="mt-4" name={`use-radio-group-${index}`} defaultValue="first">
-            {question.options.map((option, optionIndex) => (
-              <MyFormControlLabel key={optionIndex} value={option} label={option} control={<Radio />} />
-            ))}
-          </RadioGroup>
-        ) : (
-          <div className='mt-5 flex w-full'>
-            <TextField id="outlined-basic" label="" variant="filled" className='w-full'rows={3} multiline  />
-          </div>
+      return (
+        <div className="bg-white shadow-md rounded-md p-5 border-l-8 border-[#377ddf75]" key={absoluteIndex}>
+          <p className="font-medium">{question.question}</p>
+          {Array.isArray(question.options) ? (
+            <div>
+              {
+                completed === true ?
 
-        )}
-      </div>
-    ));
+                  <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} defaultValue={questionnaireAnswerData[0].responses.responses[absoluteIndex].answer}>
+                    {question.options.map((option, optionIndex) => (
+                      <MyFormControlLabel key={optionIndex} value={option} label={option} control={<Radio disabled readOnly />} />
+                    ))}
+                  </RadioGroup> :
+
+                  <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`}>
+                    {question.options.map((option, optionIndex) => (
+                      <MyFormControlLabel key={optionIndex} value={option} label={option} control={<Radio />} />
+                    ))}
+                  </RadioGroup>
+              }
+            </div>
+          ) : (
+            <div className='mt-5 flex w-full'>
+              {
+                completed === true ?
+                  <TextField id="outlined-basic" label="" disabled defaultValue={questionnaireAnswerData[0].responses.responses[absoluteIndex].answer} variant="filled" className='w-full' rows={3} multiline /> :
+                  <TextField id="outlined-basic" label="" variant="filled" className='w-full' rows={3} multiline />
+              }
+            </div>
+          )}
+        </div>
+      );
+    });
   };
+
 
   return (
     <div className="flex flex-col mt-5">
       <div className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1]">
         <div className="my-7 mx-7">
-          <p className="text-black font-semibold text-3xl">{questionnaire.attributes.Title}</p>
+          <div className='flex items-center'>
+            <p className="text-black font-semibold text-3xl">{questionnaire.attributes.Title}</p>
+            {
+              questionnaireAnswerData && <Chip className='ml-auto' label="Completed" color="success" />
+            }
+          </div>
           <p className="mt-7">{questionnaire.attributes.description}</p>
         </div>
       </div>

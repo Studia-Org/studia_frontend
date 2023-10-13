@@ -1,6 +1,7 @@
 import { useEffect, useState, React } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { API } from "../../../constant";
+import { API, BEARER } from "../../../constant";
+import { getToken } from "../../../helpers";
 import { ActivitiesText, ActivitiesLecture, ActivitiesDelivery, ActivitiesPeerReview, ActivitiesQuestionnaire } from '../components/Activities';
 import { ProfessorData } from '../components/ProfessorData';
 import { Nothing404 } from '../components/Nothing404';
@@ -8,6 +9,7 @@ import { Sidebar } from '../../../shared/elements/Sidebar';
 import { Navbar } from '../../../shared/elements/Navbar';
 import { AccordionCourseContent } from '../components/AccordionCourseContent';
 import { ForumClickable } from '../components/ForumClickable';
+
 import { Chatbot } from '../components/ChatBot';
 import { ForumComponent } from '../components/ForumComponent'
 import { QuestionnaireComponent } from '../components/QuestionnaireComponent';
@@ -21,6 +23,7 @@ const CourseInside = () => {
   const [forumID, setForumID] = useState([]);
   const [forumFlag, setForumFlag] = useState(false);
   const [questionnaireFlag, setQuestionnaireFlag] = useState(false);
+  const [questionnaireAnswers, setQuestionnaireAnswers] = useState([]);
 
 
   const [subsectionsLandscapePhoto, setSubsectionsLandscapePhoto] = useState(null);
@@ -40,6 +43,20 @@ const CourseInside = () => {
     lecture: ActivitiesLecture,
     peer_review: ActivitiesPeerReview,
     cuestionario: ActivitiesQuestionnaire,
+  };
+
+  const fetchUserResponsesData = async () => {
+    const token = getToken();
+    try {
+      const response = await fetch(`${API}/users/me?populate=user_response_questionnaires.questionnaire`, {
+        headers: { Authorization: `${BEARER} ${token}` },
+      });
+      const data = await response.json();
+      setQuestionnaireAnswers(data.user_response_questionnaires)
+      
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const fetchPostData = async () => {
@@ -76,6 +93,11 @@ const CourseInside = () => {
   useEffect(() => {
     fetchCourseInformation();
   }, []);
+
+  useEffect(() => {
+    fetchUserResponsesData();
+  }, []);
+
 
   useEffect(() => {
     fetchPostData();
@@ -173,7 +195,7 @@ const CourseInside = () => {
                 {
                   questionnaireFlag === true ?
                     <div>                     
-                      <QuestionnaireComponent questionnaire={courseSubsectionQuestionnaire} />
+                      <QuestionnaireComponent questionnaire={courseSubsectionQuestionnaire} answers={questionnaireAnswers} />
                     </div>
                     :
                     <div>  
