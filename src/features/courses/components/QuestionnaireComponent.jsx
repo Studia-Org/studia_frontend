@@ -30,6 +30,8 @@ export const QuestionnaireComponent = ({ questionnaire, answers }) => {
   }
 
   const questionnaireAnswerData = answers.filter((answer) => answer.questionnaire.id === questionnaire.id);
+
+  console.log(questionnaireAnswerData)
   const [completed, setCompleted] = useState(questionnaireAnswerData.length > 0);
 
   const StyledFormControlLabel = styled((props) => <FormControlLabel {...props} />)(

@@ -13,6 +13,7 @@ import { ForumClickable } from '../components/ForumClickable';
 import { Chatbot } from '../components/ChatBot';
 import { ForumComponent } from '../components/ForumComponent'
 import { QuestionnaireComponent } from '../components/QuestionnaireComponent';
+import { set, sub } from 'date-fns';
 
 
 
@@ -25,7 +26,7 @@ const CourseInside = () => {
   const [questionnaireFlag, setQuestionnaireFlag] = useState(false);
   const [questionnaireAnswers, setQuestionnaireAnswers] = useState([]);
 
-
+  const [subsectionsCompleted, setSubsectionsCompleted] = useState([])
   const [subsectionsLandscapePhoto, setSubsectionsLandscapePhoto] = useState(null);
   const [courseSubsection, setCourseSubsection] = useState([]);
   const [courseSection, setCourseSection] = useState([]);
@@ -45,19 +46,7 @@ const CourseInside = () => {
     cuestionario: ActivitiesQuestionnaire,
   };
 
-  const fetchUserResponsesData = async () => {
-    const token = getToken();
-    try {
-      const response = await fetch(`${API}/users/me?populate=user_response_questionnaires.questionnaire`, {
-        headers: { Authorization: `${BEARER} ${token}` },
-      });
-      const data = await response.json();
-      setQuestionnaireAnswers(data.user_response_questionnaires)
 
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const fetchPostData = async () => {
     try {
@@ -70,6 +59,38 @@ const CourseInside = () => {
     }
   };
 
+  const fetchUserResponsesData = async () => {
+    const token = getToken();
+    try {
+      const response = await fetch(`${API}/users/me?populate=user_response_questionnaires.questionnaire,subsections_completed`, {
+        headers: { Authorization: `${BEARER} ${token}` },
+      });
+      const data = await response.json();
+      setSubsectionsCompleted(data.subsections_completed)
+      setQuestionnaireAnswers(data.user_response_questionnaires)
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  function obtenerPrimeraSubseccionNoCompletada() {
+    for (const curso of courseContentInformation) {
+      const { id, attributes: { title, subsections: { data: subsecciones } } } = curso;
+      for (const subseccion of subsecciones) {
+        const subseccionId = subseccion.id;
+        const subseccionCompletada = subsectionsCompleted.find(
+          sub => sub.id === subseccionId
+        );
+        if (!subseccionCompletada) {
+          return { subseccion, cursoTitle: title };
+        }
+      }
+    }
+    return null;
+  }
+
+
   const fetchCourseInformation = async () => {
     try {
       const response = await fetch(`${API}/courses/${courseId}?populate=sections.subsections.activities,sections.subsections.paragraphs,students.profile_photo,professor.profile_photo,sections.subsections.landscape_photo,sections.subsections.questionnaire`);
@@ -77,39 +98,31 @@ const CourseInside = () => {
       setCourseContentInformation(data?.data?.attributes?.sections?.data ?? []);
       setStudents(data?.data?.attributes?.students ?? []);
       setProfessor(data?.data?.attributes?.professor?.data)
-
-      let foundFinishedSubsection = false;
-      data.data.attributes.sections.data.forEach(
-        (section) => {
-          section.attributes.subsections.data.some(
-            (subsection) => {
-              if (!subsection.attributes.finished) {
-                setCourseSection(section.attributes.title)
-                setCourseSubsection(subsection.attributes)
-                return true;
-              }
-              return false;
-            }
-          );
-
-          if (!foundFinishedSubsection) {
-            section.attributes.subsections.data.some(
-              (subsection) => {
-                if (subsection.attributes.finished) {
-                  foundFinishedSubsection = true;
-                  return true;
-                }
-                return false;
-              }
-            );
-          }
-        }
-      );
-
     } catch (error) {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    if (courseContentInformation.length > 0 && subsectionsCompleted.length > 0) {
+      const dataFirst = obtenerPrimeraSubseccionNoCompletada(courseContentInformation, subsectionsCompleted);
+      if (dataFirst) {
+        setCourseSection(dataFirst.cursoTitle);
+        setCourseSubsection(dataFirst.subseccion.attributes);
+      }
+    } else if (courseContentInformation.length > 0 && subsectionsCompleted.length === 0) {
+      const { attributes: { title, subsections: { data: subsecciones } } } = courseContentInformation[0];
+      if (subsecciones[0].attributes.activities.data[0].attributes.type === 'questionnaire') {
+        setQuestionnaireFlag(true);
+        setCourseSubsectionQuestionnaire(subsecciones[0].attributes.questionnaire.data)
+
+      } else {
+        setCourseSection(title);
+        setCourseSubsection(subsecciones[0].attributes);
+      }
+
+    }
+  }, [courseContentInformation, subsectionsCompleted]);
 
   useEffect(() => {
     setSubsectionsLandscapePhoto(courseSubsection.landscape_photo?.data?.attributes?.url ?? null);
@@ -145,6 +158,7 @@ const CourseInside = () => {
     const section_ = courseContentInformation.find(seccion => seccion.attributes.title === courseSection);
     const subsection_ = section_.attributes.subsections.data.find(subseccion => subseccion.attributes.title === courseSubsection.title);
     var contenido = subsection_.attributes;
+
 
     const activities = contenido.activities.data.map((activity) => {
       return {
@@ -249,7 +263,7 @@ const CourseInside = () => {
                         </button>
                       </div>
                       <hr className="h-px  bg-gray-600 border-0 mb-6"></hr>
-                      {courseInsideSectionType === 'course' && courseContentInformation.length > 0 && RenderTextActivitiesInsideCourse()}
+                      {courseInsideSectionType === 'course' && courseContentInformation.length > 0 && courseSection.length > 0 && RenderTextActivitiesInsideCourse()}
                       {courseInsideSectionType === 'files' && RenderFilesInsideCourse()}
                       {courseInsideSectionType === 'participants' && RenderParticipantsInsideCourse()}
                     </div>
@@ -259,7 +273,7 @@ const CourseInside = () => {
             }
           </div>
           <div>
-            <AccordionCourseContent {...{ courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setCourseSubsectionQuestionnaire }} />
+            <AccordionCourseContent {...{ courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted }} />
             <ForumClickable posts={posts} setForumFlag={setForumFlag} />
             {professor.attributes && <ProfessorData professor={professor} />}
           </div>

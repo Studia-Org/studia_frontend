@@ -9,7 +9,7 @@ import {
     AccordionIcon,
 } from '@chakra-ui/accordion'
 
-export const AccordionCourseContent = ({ courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setCourseSubsectionQuestionnaire }) => {
+export const AccordionCourseContent = ({ courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted }) => {
     const [sectionNumber, setSectionNumber] = useState(1);
 
     function handleSections(tituloSeccion, subsection) {
@@ -42,40 +42,51 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
 
 
 
-    function RenderCourseInsideSectionContent(subsection, titulo, prevSubsectionFinished) {
+    function RenderCourseInsideSectionContent(subsection, titulo, prevSubsectionFinished, isFirstSubsection) {
         const dateToday = new Date();
         const dateTemp = new Date(subsection.attributes.start_date);
+        const isSubsectionCompleted = subsectionsCompleted.some(subsectionTemp => subsectionTemp.id === subsection.id);
 
         return (
             <li class="mb-10 ml-8 mt-8 flex items-center">
                 {
-                    subsection.attributes.finished === true ?
+
+                    isSubsectionCompleted === true ?
                         <span class="absolute flex items-center justify-center w-8 h-8 bg-indigo-500 rounded-full -left-4  ring-white ">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-white">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                             </svg>
-                        </span> : prevSubsectionFinished === false ?
-                            <span class="absolute flex items-center justify-center w-8 h-8 bg-white rounded-full border border-gray-300 -left-4  ring-black ">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-gray-600">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                        </span> :
+                        isFirstSubsection ?
+                            <span className="absolute flex items-center justify-center w-8 h-8 bg-indigo-200 rounded-full -left-4 ring-white">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-indigo-500">
+                                    <path fillRule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clipRule="evenodd" />
                                 </svg>
                             </span> :
-                            dateTemp < dateToday ?
-                                <span class="absolute flex items-center justify-center w-8 h-8 bg-indigo-200 rounded-full -left-4  ring-white ">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-indigo-500">
-                                        <path fillRule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clipRule="evenodd" />
-                                    </svg>
-                                </span> :
+                            prevSubsectionFinished === false ?
                                 <span class="absolute flex items-center justify-center w-8 h-8 bg-white rounded-full border border-gray-300 -left-4  ring-black ">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-gray-600">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
                                     </svg>
-                                </span>
+                                </span> :
+                                dateTemp < dateToday ?
+                                    <span class="absolute flex items-center justify-center w-8 h-8 bg-indigo-200 rounded-full -left-4  ring-white ">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 text-indigo-500">
+                                            <path fillRule="evenodd" d="M4.5 5.653c0-1.426 1.529-2.33 2.779-1.643l11.54 6.348c1.295.712 1.295 2.573 0 3.285L7.28 19.991c-1.25.687-2.779-.217-2.779-1.643V5.653z" clipRule="evenodd" />
+                                        </svg>
+                                    </span> :
+                                    <span class="absolute flex items-center justify-center w-8 h-8 bg-white rounded-full border border-gray-300 -left-4  ring-black ">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4 text-gray-600">
+                                            <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
+                                        </svg>
+                                    </span>
                 }
                 {
-                    subsection.attributes.finished === false && prevSubsectionFinished === false ?
-                        <button class="flex items-center mb-1 font-medium text-gray-500 line-clamp-2 w-3/4  text-left cursor-not-allowed"> {subsection.attributes.title}</button> :
-                        <button onClick={() => handleSections(titulo, subsection.attributes)} class="flex items-center mb-1 font-medium text-gray-900 line-clamp-2 w-3/4 hover:translate-x-2 duration-200 text-left"> {subsection.attributes.title}</button>
+                    isFirstSubsection === true ?
+                        <button onClick={() => handleSections(titulo, subsection.attributes)} class="flex items-center mb-1 font-medium text-gray-900 line-clamp-2 w-3/4 hover:translate-x-2 duration-200 text-left"> {subsection.attributes.title}</button> :
+                        isSubsectionCompleted === false && prevSubsectionFinished === false ?
+                            <button class="flex items-center mb-1 font-medium text-gray-500 line-clamp-2 w-3/4  text-left cursor-not-allowed"> {subsection.attributes.title}</button> :
+                            <button onClick={() => handleSections(titulo, subsection.attributes)} class="flex items-center mb-1 font-medium text-gray-900 line-clamp-2 w-3/4 hover:translate-x-2 duration-200 text-left"> {subsection.attributes.title}</button>
                 }
                 {selectFaseSectionContent(subsection.attributes.fase)}
             </li>
@@ -84,10 +95,11 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
 
     function RenderCourseContent({ section, sectionNumber }) {
         let prevSubsectionFinished = false;
-        const finishedSubsectionsCount = section.attributes.subsections.data.filter(subsection => subsection.attributes.finished).length;
-        let percentageFinished = ((finishedSubsectionsCount / section.attributes.subsections.data.length) * 100).toFixed(0);
+        const subsectionIdsCompleted = subsectionsCompleted.map(subsection => subsection.id);
+        const filteredSubsections = section.attributes.subsections.data.filter(subsection => subsectionIdsCompleted.includes(subsection.id));
+        let percentageFinished = ((filteredSubsections.length / section.attributes.subsections.data.length) * 100).toFixed(0);
 
-        if (isNaN(percentageFinished)) {
+        if (!isFinite(percentageFinished)) {
             percentageFinished = 0
         }
 
@@ -114,9 +126,10 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
                     </AccordionButton>
                     <AccordionPanel className='  mb-3 '>
                         <ol className="relative border-l border-dashed border-gray-300 ml-10">
-                            {section.attributes.subsections.data.map((subsection) => {
-                                const content = RenderCourseInsideSectionContent(subsection, section.attributes.title, prevSubsectionFinished);
-                                prevSubsectionFinished = subsection.attributes.finished;
+                            {section.attributes.subsections.data.map((subsection, index) => {
+                                const isFirstSubsection = index === 0
+                                const content = RenderCourseInsideSectionContent(subsection, section.attributes.title, prevSubsectionFinished, isFirstSubsection);
+                                prevSubsectionFinished = subsectionsCompleted.some(subsectionTemp => subsectionTemp.id === subsection.id);
                                 return content;
                             })}
                         </ol>

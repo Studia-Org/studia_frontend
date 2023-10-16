@@ -19,7 +19,7 @@ const Qualifications = () => {
     const [loading, setLoading] = useState(true);
     const [qualifications, setQualifications] = useState([]);
 
-    
+
     useEffect(() => {
         if (loading) {
             callQualificationsData();
@@ -36,11 +36,24 @@ const Qualifications = () => {
     function callQualificationsData() {
         if (user) {
             setLoading(true);
-            fetch(`${API}/users/${user.id}?populate=courses.sections.subsections.activities,courses.professor.profile_photo&fields[0]=activities`)
+            fetch(`${API}/users/${user.id}?populate=courses.sections.subsections.activities,qualifications.activity,courses.professor.profile_photo&fields[0]=activities`)
                 .then((res) => res.json())
                 .then((data) => {
                     const coursesWithActivities = []
+
                     data.courses.forEach((course) => {
+                        const filteredQualifications = data.qualifications.filter(qualification => {
+                            return course.sections.some(section => {
+                                return section.subsections.some(subsection => {
+                                    return subsection.activities.some(activity => {
+                                        return activity.id === qualification.activity.id;
+                                    });
+                                });
+                            });
+                        });
+
+                        console.log(filteredQualifications)
+
                         const dateObj = new Date(course.updatedAt);
                         const courseObj = {
                             id: course.id,
@@ -48,14 +61,10 @@ const Qualifications = () => {
                             professor: course.professor.name,
                             professor_photo: course.professor.profile_photo.url,
                             last_update: format(dateObj, "yyyy-MM-dd HH:mm:ss"),
-                            activities: []
+                            activities: filteredQualifications
                         };
-                        course.sections.forEach((section) => {
-                            section.subsections.forEach((subsection) => {
-                                courseObj.activities.push(...subsection.activities);
-                            });
-                        });
                         coursesWithActivities.push(courseObj);
+                        
                     });
                     setQualifications(coursesWithActivities);
                     setLoading(false);
@@ -65,8 +74,9 @@ const Qualifications = () => {
     }
 
     const speaker = (props) => {
+        console.log(props)
         return (
-            <Popover title={props.title}>
+            <Popover title={props.activity.title}>
                 <p className='italic text-gray-400'>Comments </p>
                 {props.comments ? <p>{props.comments}</p> : <p>No comments.</p>}
             </Popover>
@@ -95,6 +105,7 @@ const Qualifications = () => {
     }
 
     const QualificationsTable = ({ qualifications }) => {
+        console.log(qualifications)
         return (
             <div>
                 <div className='flex space-x-6'>
@@ -141,7 +152,7 @@ const Qualifications = () => {
     }
     return (
         <div className='h-screen w-screen bg-white'>
-            <Navbar/>
+            <Navbar />
             <div className='flex flex-wrap-reverse sm:h-[calc(100%-8rem)]  sm:flex-nowrap bg-white'>
                 <Sidebar section={'qualifications'} />
                 <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] '>
