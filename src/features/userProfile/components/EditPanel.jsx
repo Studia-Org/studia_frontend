@@ -3,6 +3,8 @@ import { Modal, Button } from 'rsuite';
 import Swal from 'sweetalert2';
 import { FiEdit } from "react-icons/fi";
 import axios from 'axios';
+import { API } from "../../../constant";
+import { getToken } from "../../../helpers";
 
 import '../styles/userStyles.css';
 
@@ -36,62 +38,51 @@ export const EditPanel = ({ onClose, userProfile, uid }) => {
     })
 
 
-    async function handleUploadImage(file) {
-        if (file) {
-            const formData = new FormData();
-            formData.append('image', file);
-
-            try {
-                const response = await axios.post('http://localhost:8000/api/accounts/users/upload_image/', formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                });
-
-                console.log(response.data.image_url);
-                return response.data.image_url;
-            } catch (error) {
-                console.error('Error al cargar la imagen:', error);
-                return null;
-            }
-        } else {
-            console.warn('No se ha seleccionado una imagen.');
-            return null;
-        }
-    }
-
-
-
     async function handleEdit() {
-        let profilePhotoUrlPromise = null;
-        let landscapePhotoUrlPromise = null;
+        const formData = new FormData();
+        let profilePhotoId = undefined;
+        let landscapePhotoId = undefined;
 
-        if (profilePhoto) {
-            profilePhotoUrlPromise = handleUploadImage(profilePhoto);
+        if (profilePhoto !== undefined) {
+            formData.append('files', profilePhoto);
+            const uploadProfileResponse = await fetch(`${API}/upload`, {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${getToken()}`,
+                },
+                body: formData
+            });
+            const uploadProfileData = await uploadProfileResponse.json();
+            profilePhotoId = uploadProfileData[0].id;
         }
-        if (landscapePhoto) {
-            landscapePhotoUrlPromise = handleUploadImage(landscapePhoto);
+        if (landscapePhoto !== undefined) {
+            formData.delete('files');
+            formData.append('files', landscapePhoto);
+            const uploadLandscapeResponse = await fetch(`${API}/upload`, {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${getToken()}`,
+                },
+                body: formData
+            });
+            const uploadLandscapeData = await uploadLandscapeResponse.json();
+            landscapePhotoId = uploadLandscapeData[0].id;
         }
 
-        const [profilePhotoUrl, landscapePhotoUrl] = await Promise.all([
-            profilePhotoUrlPromise,
-            landscapePhotoUrlPromise,
-        ]);
-
-        console.log(profilePhotoUrl, landscapePhotoUrl)
         const userData = {
             description: description,
             university: university,
-            user_name: username,
+            username: username,
             name: name,
-            profile_photo: profilePhotoUrl,
-            landscape_photo: landscapePhotoUrl,
+            profile_photo: profilePhotoId,
+            landscape_photo: landscapePhotoId,
         };
 
-        fetch(`http://localhost:8000/api/accounts/users/${uid}/update/`, {
+        fetch(`${API}/users/${uid}`, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${getToken()}`,
             },
             body: JSON.stringify(userData)
         })
@@ -178,7 +169,7 @@ export const EditPanel = ({ onClose, userProfile, uid }) => {
                                         style={{ filter: 'brightness(50%)' }}
                                     />
                                 ) : (
-                                    <img className='w-full h-56 object-cover' style={{ filter: 'brightness(50%)' }} src={userProfile.landscape_photo} alt="" />
+                                    <img className='w-full h-56 object-cover' style={{ filter: 'brightness(50%)' }} src={userProfile.landscape_photo.url} alt="" />
                                 )
                             )}
                             <div className='absolute flex ml-auto justify-center items-center w-full h-full'>
@@ -202,7 +193,7 @@ export const EditPanel = ({ onClose, userProfile, uid }) => {
                                 ) : (
                                     <img
                                         className='shadow-xl rounded-full border-none max-w-120-px'
-                                        src={userProfile.profile_photo}
+                                        src={userProfile.profile_photo.url}
                                         alt=''
                                         style={{ filter: 'brightness(50%)' }}
                                     />
@@ -228,7 +219,7 @@ export const EditPanel = ({ onClose, userProfile, uid }) => {
                         <div class="mb-6">
                             <label for="username" class="block mb-2 text-sm font-medium text-gray-900 ">Username</label>
                             <textarea onChange={handleChangeUsername} type="username" id="username" class="shadow-sm  resize-none border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  " >
-                                {userProfile.user_name}
+                                {userProfile.username}
                             </textarea>
                         </div>
                         <div class="mb-6">

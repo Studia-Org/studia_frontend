@@ -10,6 +10,8 @@ import {
     FiBarChart
 } from "react-icons/fi";
 
+import { MdTimeline } from "react-icons/md";
+
 
 export const Sidebar = (props) => {
 
@@ -19,6 +21,7 @@ export const Sidebar = (props) => {
         dashboard: {},
         qualifications: {},
         settings: {},
+        timeline:{},
     };
 
     if (props.section === 'courses') {
@@ -31,16 +34,18 @@ export const Sidebar = (props) => {
         iconProps.qualifications = { color: 'white', size: '25px' };
     } else if (props.section === 'settings') {
         iconProps.settings = { color: 'white', size: '25px' };
+    }else if (props.section === 'timeline') {
+        iconProps.timeline = { color: 'white', size: '25px' };
     }
 
     return (
         <div>
-            <aside id="default-sidebar" className=" top-0 left-0 w-[30vmin] h-screen transition-transform -translate-x-full sm:translate-x-0 z-50" aria-label="Sidebar">
+            <aside id="default-sidebar" className=" top-0 left-0 w-[30vmin] h-full transition-transform -translate-x-full sm:translate-x-0 z-50" aria-label="Sidebar">
                 <div className="h-full px-12 py-4 overflow-y-auto bg-white ">
                     <ul className="space-y-96 font-medium py-12 ">
                         <a href="/app/courses" className='pt-6'>
                             <li className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all  rounded-lg ${Object.keys(iconProps.courses).length > 0 ? 'bg-gradient-to-r from-[#657DE9] to-[#6E66D6] rounded-lg py-3' : ''}`}>
-                                <span className='flex font-bold'>
+                                <span className='flex font-semibold'>
                                     <IconContext.Provider value={iconProps.courses}>
                                         <FiGrid size={25} />
                                     </IconContext.Provider>
@@ -49,20 +54,31 @@ export const Sidebar = (props) => {
                             </li>
                         </a>
 
-                        <a href="/app/events/timeline" className=''>
+                        <a href="/app/calendar" className=''>
                             <li className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all  rounded-lg ${Object.keys(iconProps.events).length > 0 ? 'bg-gradient-to-r from-[#657DE9] to-[#6E66D6] rounded-lg py-3' : ''}`}>
-                                <span className='flex font-bold'>
+                                <span className='flex font-semibold'>
                                     <IconContext.Provider value={iconProps.events}>
                                         <FiCalendar size={25} />
                                     </IconContext.Provider>
-                                    <h2 className={`${Object.keys(iconProps.events).length > 0 ? 'pl-2 text-white' : 'px-4'}`}>Events</h2>
+                                    <h2 className={`${Object.keys(iconProps.events).length > 0 ? 'pl-2 text-white' : 'px-4'}`}>Calendar</h2>
+                                </span>
+                            </li>
+                        </a>
+
+                        <a href="/app/timeline" className=''>
+                            <li className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all  rounded-lg ${Object.keys(iconProps.timeline).length > 0 ? 'bg-gradient-to-r from-[#657DE9] to-[#6E66D6] rounded-lg py-3' : ''}`}>
+                                <span className='flex font-semibold'>
+                                    <IconContext.Provider value={iconProps.timeline}>
+                                        <MdTimeline size={25} />
+                                    </IconContext.Provider>
+                                    <h2 className={`${Object.keys(iconProps.timeline).length > 0 ? 'pl-2 text-white' : 'px-4'}`}>Timeline</h2>
                                 </span>
                             </li>
                         </a>
 
                         <a href="/app/dashboard">
                             <li className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all  rounded-lg ${Object.keys(iconProps.dashboard).length > 0 ? 'bg-gradient-to-r from-[#657DE9] to-[#6E66D6] rounded-lg py-3' : ''}`}>
-                                <span className='flex font-bold'>
+                                <span className='flex font-semibold'>
                                     <IconContext.Provider value={iconProps.dashboard}>
                                         <FiBarChart size={25} />
                                     </IconContext.Provider>
@@ -73,7 +89,7 @@ export const Sidebar = (props) => {
 
                         <a href="/app/qualifications">
                             <li className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all  rounded-lg ${Object.keys(iconProps.qualifications).length > 0 ? 'bg-gradient-to-r from-[#657DE9] to-[#6E66D6] rounded-lg py-3' : ''}`}>
-                                <span className='flex align-middle font-bold'>
+                                <span className='flex align-middle font-semibold'>
                                     <IconContext.Provider value={iconProps.qualifications}>
                                         <FiCheckCircle size={25} />
                                     </IconContext.Provider>
@@ -84,7 +100,7 @@ export const Sidebar = (props) => {
 
                         <a href="/app/settings">
                             <li className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all  rounded-lg ${Object.keys(iconProps.settings).length > 0 ? 'bg-gradient-to-r from-[#657DE9] to-[#6E66D6] rounded-lg py-3' : ''}`}>
-                                <span className='flex font-bold'>
+                                <span className='flex font-semibold'>
                                     <IconContext.Provider value={iconProps.settings}>
                                         <FiSettings size={25} />
                                     </IconContext.Provider>

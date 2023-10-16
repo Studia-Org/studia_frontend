@@ -23,7 +23,7 @@ const Home = () => {
                     <div
                         class="container flex items-center justify-center h-full max-w-6xl px-8 mx-auto sm:justify-between xl:px-0">
                         <a href="/" class="relative flex flex-row items-center h-5 h-full font-black leading-none">
-                            <span class="ml-3 flex flex-row text-xl text-gray-800 "> Studia <span class="text-pink-500">.</span> </span>
+                            <span class="ml-3 flex flex-row text-xl text-gray-800 "> Uptitude <span class="text-pink-500">.</span> </span>
                         </a>
                         <div
                             class="absolute left-0 flex-col items-center justify-center hidden w-full pb-8 mt-48 border-b border-gray-200 md:relative md:w-auto md:bg-transparent md:border-none md:mt-0 md:flex-row md:p-0 md:items-end md:flex md:justify-between">

@@ -17,6 +17,7 @@ const UserProfile = () => {
   const [userProfile, setUserProfile] = useState([]);
   let { uid } = useParams();
 
+
   const navigate = useNavigate();
   useEffect(() => {
     if (!checkAuthenticated()) {
@@ -34,14 +35,14 @@ const UserProfile = () => {
   function renderCourseCard(course) {
     return (
       <>
-        <CoursesCardsProfile course={course} user={user} />
+        {user && <CoursesCardsProfile course={course} user={user} />}
       </>
     )
   }
 
 
   function fetchCoursesCards() {
-    fetch(`${API}/users/${user.id}?populate=courses.cover,courses.students,courses.professor,courses.professor.profile_photo&fields[]=courses`)
+    fetch(`${API}/users/${uid}?populate=courses.cover,courses.students,courses.professor,courses.professor.profile_photo&fields[]=courses`)
       .then((res) => res.json())
       .then((data) => {
         setCourses(data);
@@ -50,7 +51,7 @@ const UserProfile = () => {
   }
 
   function fetchUserProfile() {
-    fetch(`${API}/users/${user.id}?populate=*`)
+    fetch(`${API}/users/${uid}?populate=*`)
       .then((res) => res.json())
       .then((data) => {
         setUserProfile(data);
@@ -59,11 +60,9 @@ const UserProfile = () => {
   }
 
   useEffect(() => {
-    if (user) {
-      fetchCoursesCards();
-      fetchUserProfile();
-    }
-  }, []);
+    fetchCoursesCards();
+    fetchUserProfile();
+  }, [uid]);
 
   return (
     <div className='h-screen w-full bg-white'>

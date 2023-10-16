@@ -1,0 +1,18 @@
+/* CSS personalizado */
+.hover-scale:hover {
+    transform: scale(1.1); /* Aumentar el tamaño al hacer hover */
+  }
+  
+  .active-scale:active {
+    transform: scale(0.90); /* Reducir el tamaño al mantenerlo presionado */
+  }
+  
+
+  .cs-message__content-wrapper{
+    padding-top: 10px;
+  }
+
+
+.cs-button--attachment{
+  visibility: collapse;
+}

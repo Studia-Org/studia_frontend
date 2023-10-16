@@ -1,86 +1,187 @@
 import { useEffect, useState, React } from 'react';
-import { connect } from 'react-redux';
-import { checkAuthenticated, load_user } from '../../../actions/auth';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FiUser } from "react-icons/fi";
-
+import { API, BEARER } from "../../../constant";
+import { getToken } from "../../../helpers";
 import { ActivitiesText, ActivitiesLecture, ActivitiesDelivery, ActivitiesPeerReview, ActivitiesQuestionnaire } from '../components/Activities';
 import { ProfessorData } from '../components/ProfessorData';
 import { Nothing404 } from '../components/Nothing404';
-
 import { Sidebar } from '../../../shared/elements/Sidebar';
 import { Navbar } from '../../../shared/elements/Navbar';
 import { AccordionCourseContent } from '../components/AccordionCourseContent';
+import { ForumClickable } from '../components/ForumClickable';
+
 import { Chatbot } from '../components/ChatBot';
+import { ForumComponent } from '../components/ForumComponent'
+import { QuestionnaireComponent } from '../components/QuestionnaireComponent';
+import { set, sub } from 'date-fns';
 
 
 
-const CourseInside = ({ user, isAuthenticated, checkAuthenticated, load_user }) => {
+const CourseInside = () => {
   const [courseInsideSectionType, setcourseInsideSectionType] = useState('course');
-  const [courseInformation, setCourseInformation] = useState([]);
   const [files, setFiles] = useState([]);
-  const [courseContentInformation, setCourseContentInformation] = useState([]);
+  const [posts, setPosts] = useState([]);
+  const [forumID, setForumID] = useState([]);
+  const [forumFlag, setForumFlag] = useState(false);
+  const [questionnaireFlag, setQuestionnaireFlag] = useState(false);
+  const [questionnaireAnswers, setQuestionnaireAnswers] = useState([]);
+
+  const [subsectionsCompleted, setSubsectionsCompleted] = useState([])
+  const [subsectionsLandscapePhoto, setSubsectionsLandscapePhoto] = useState(null);
   const [courseSubsection, setCourseSubsection] = useState([]);
   const [courseSection, setCourseSection] = useState([]);
+  const [courseSubsectionQuestionnaire, setCourseSubsectionQuestionnaire] = useState([]);
   let { courseId } = useParams();
   const navigate = useNavigate();
 
+  const [courseContentInformation, setCourseContentInformation] = useState([]);
+  const [students, setStudents] = useState([])
+  const [professor, setProfessor] = useState([])
+
   const componentMap = {
-    texto: ActivitiesText,
-    entrega: ActivitiesDelivery,
+    paragraph: ActivitiesText,
+    Delivery: ActivitiesDelivery,
     lecture: ActivitiesLecture,
     peer_review: ActivitiesPeerReview,
     cuestionario: ActivitiesQuestionnaire,
   };
 
+
+
+  const fetchPostData = async () => {
+    try {
+      const response = await fetch(`${API}/courses/${courseId}?populate=forum.posts.autor.profile_photo,forum.posts.forum_answers.autor.profile_photo`);
+      const data = await response.json();
+      setForumID(data.data.attributes.forum.data.id);
+      setPosts(data.data.attributes.forum.data.attributes.posts.data.reverse());
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchUserResponsesData = async () => {
+    const token = getToken();
+    try {
+      const response = await fetch(`${API}/users/me?populate=user_response_questionnaires.questionnaire,subsections_completed`, {
+        headers: { Authorization: `${BEARER} ${token}` },
+      });
+      const data = await response.json();
+      setSubsectionsCompleted(data.subsections_completed)
+      setQuestionnaireAnswers(data.user_response_questionnaires)
+
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  function obtenerPrimeraSubseccionNoCompletada() {
+    for (const curso of courseContentInformation) {
+      const { id, attributes: { title, subsections: { data: subsecciones } } } = curso;
+      for (const subseccion of subsecciones) {
+        const subseccionId = subseccion.id;
+        const subseccionCompletada = subsectionsCompleted.find(
+          sub => sub.id === subseccionId
+        );
+        if (!subseccionCompletada) {
+          return { subseccion, cursoTitle: title };
+        }
+      }
+    }
+    return null;
+  }
+
+
+  const fetchCourseInformation = async () => {
+    try {
+      const response = await fetch(`${API}/courses/${courseId}?populate=sections.subsections.activities,sections.subsections.paragraphs,students.profile_photo,professor.profile_photo,sections.subsections.landscape_photo,sections.subsections.questionnaire`);
+      const data = await response.json();
+      setCourseContentInformation(data?.data?.attributes?.sections?.data ?? []);
+      setStudents(data?.data?.attributes?.students ?? []);
+      setProfessor(data?.data?.attributes?.professor?.data)
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    checkAuthenticated();
-    load_user();
+    if (courseContentInformation.length > 0 && subsectionsCompleted.length > 0) {
+      const dataFirst = obtenerPrimeraSubseccionNoCompletada(courseContentInformation, subsectionsCompleted);
+      if (dataFirst) {
+        setCourseSection(dataFirst.cursoTitle);
+        setCourseSubsection(dataFirst.subseccion.attributes);
+      }
+    } else if (courseContentInformation.length > 0 && subsectionsCompleted.length === 0) {
+      const { attributes: { title, subsections: { data: subsecciones } } } = courseContentInformation[0];
+      if (subsecciones[0].attributes.activities.data[0].attributes.type === 'questionnaire') {
+        setQuestionnaireFlag(true);
+        setCourseSubsectionQuestionnaire(subsecciones[0].attributes.questionnaire.data)
+
+      } else {
+        setCourseSection(title);
+        setCourseSubsection(subsecciones[0].attributes);
+      }
+
+    }
+  }, [courseContentInformation, subsectionsCompleted]);
+
+  useEffect(() => {
+    setSubsectionsLandscapePhoto(courseSubsection.landscape_photo?.data?.attributes?.url ?? null);
+  }, [courseSubsection]);
+
+  useEffect(() => {
+    fetchCourseInformation();
   }, []);
 
-  useEffect(callCourseData, [])
   useEffect(() => {
-    if (courseContentInformation.length === 0) {
-      callCourseSectionData();
-    }
-  });
+    fetchUserResponsesData();
+  }, []);
 
-  function callCourseData() {
-    const link = "http://localhost:8000/api/courses/" + courseId + "/";
-    fetch(link)
-      .then((res) => res.json())
-      .then((data) => {
-        setCourseInformation(data);
-      })
-      .catch((error) => console.error(error));
-  }
 
-  function callCourseSectionData() {
-    const link = "http://localhost:8000/api/courses/" + courseId + "/activities/"
-    fetch(link)
-      .then((res) => res.json())
-      .then((data) => {
-        setCourseContentInformation(data);
-        setCourseSection(data[0].titulo);
-        setCourseSubsection(data[0].subsecciones[0].titulo);
-      })
-  }
+  useEffect(() => {
+    fetchPostData();
+  }, []);
 
   function renderAllActivities(activities) {
-    const Component = componentMap[activities.tipo];
+    let Component = null
+    if (activities.type === 'paragraph') {
+      Component = componentMap[activities.type];
+    } else {
+      Component = componentMap[activities.data.attributes.type];
+    }
     if (Component) {
-      return <Component activitie={activities} />;
+      return <Component activitie={activities.data.attributes} />;
     }
     return null;
   }
 
   function RenderTextActivitiesInsideCourse() {
-    const section_ = courseContentInformation.find(seccion => seccion.titulo === courseSection);
-    const subsection_ = section_.subsecciones.find(subseccion => subseccion.titulo === courseSubsection);
-    var contenido = subsection_.contenido;
+    const section_ = courseContentInformation.find(seccion => seccion.attributes.title === courseSection);
+    const subsection_ = section_.attributes.subsections.data.find(subseccion => subseccion.attributes.title === courseSubsection.title);
+    var contenido = subsection_.attributes;
+
+
+    const activities = contenido.activities.data.map((activity) => {
+      return {
+        type: 'activity',
+        order: activity.attributes.order,
+        data: activity,
+      };
+    });
+
+    const paragraphs = contenido.paragraphs.data.map((paragraph) => {
+      return {
+        type: 'paragraph',
+        order: paragraph.attributes.order,
+        data: paragraph,
+      };
+    });
+
+    const combinedList = [...activities, ...paragraphs]
+    combinedList.sort((a, b) => a.order - b.order);
+
     return (
       <div className='mb-12'>
-        {contenido.map(renderAllActivities)}
+        {combinedList.map(renderAllActivities)}
       </div>
     )
   }
@@ -96,70 +197,85 @@ const CourseInside = ({ user, isAuthenticated, checkAuthenticated, load_user }) 
   function RenderParticipantsInsideCourseHandler(students) {
     return (
       <button className='bg-white rounded flex p-3 items-center space-x-3 shadow w-[14rem]' onClick={() => navigate(`/app/profile/${students.id}/`)}>
-        <img src={students.profile_photo} alt="" className='rounded w-14 h-14'/>
-        <p className='font-medium'>{students.name}</p>
+        <img src={students.attributes.profile_photo.data.attributes.url} alt="" className='rounded w-14 h-14' />
+        <p className='font-medium'>{students.attributes.name}</p>
       </button>
     )
   }
 
   function RenderParticipantsInsideCourse() {
-    if (courseInformation.students.length === 0) {
+    if (students.data.length === 0) {
       return (
         <Nothing404 />
       )
     } else {
       return (
         <div className='flex space-x-8'>
-          {courseInformation.students.map(RenderParticipantsInsideCourseHandler)}
+          {students.data.map(RenderParticipantsInsideCourseHandler)}
         </div>
       )
     }
   }
 
-
   return (
     <div className='h-screen w-full bg-white'>
-      <Navbar user={user} />
+      <Navbar />
       <div className='flex flex-wrap-reverse sm:flex-nowrap bg-white'>
         <Sidebar section={'courses'} />
         <div className='container-fluid min-h-screen w-screen rounded-tl-3xl bg-[#e7eaf886] flex flex-wrap'>
-          <div className='flex-1 min-w-0  sm:w-auto mt-8 ml-8 mr-8'>
-            <img src="https://kinsta.com/wp-content/uploads/2022/03/what-is-postgresql.png" alt="" className='rounded shadow' />
-            <p className='text-xl mt-5 font-semibold'>{courseSubsection}</p>
-            <div className='flex flex-row mt-8  items-center space-x-8 ml-5'>
-              <button
-                className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === 'course' ? 'text-black border-b-2 border-black' : 'text-gray-500'
-                  }`}
-                onClick={() => setcourseInsideSectionType('course')}
-              >
-                Course
-              </button>
-              <button
-                className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === 'files' ? 'text-black border-b-2 border-black' : 'text-gray-500'
-                  }`}
-                onClick={() => setcourseInsideSectionType('files')}
-              >
-                Files
-              </button>
-
-              <button
-                className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === 'participants' ? 'text-black border-b-2 border-black' : 'text-gray-500'
-                  }`}
-                onClick={() => setcourseInsideSectionType('participants')}
-              >
-                Participants
-              </button>
-            </div>
-            <hr className="h-px  bg-gray-600 border-0 mb-6"></hr>
-            {courseInsideSectionType === 'course' && courseContentInformation.length > 0 && RenderTextActivitiesInsideCourse()}
-            {courseInsideSectionType === 'files' && RenderFilesInsideCourse()}
-            {courseInsideSectionType === 'participants' && RenderParticipantsInsideCourse()}
+          <div className='flex-1 min-w-0  sm:w-auto mt-3 ml-8 mr-8'>
+            {forumFlag === false ? (
+              <div>
+                {subsectionsLandscapePhoto !== null ? (
+                  <img src={subsectionsLandscapePhoto} alt="" className='rounded shadow mt-8' />
+                ) : (
+                  null
+                )}
+                {
+                  questionnaireFlag === true ?
+                    <div>
+                      <QuestionnaireComponent questionnaire={courseSubsectionQuestionnaire} answers={questionnaireAnswers} />
+                    </div>
+                    :
+                    <div>
+                      <p className='text-xl mt-5 font-semibold'>{courseSubsection.title}</p>
+                      <div className='flex flex-row mt-8  items-center space-x-8 ml-5'>
+                        <button
+                          className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === 'course' ? 'text-black border-b-2 border-black' : 'text-gray-500'
+                            }`}
+                          onClick={() => setcourseInsideSectionType('course')}
+                        >
+                          Course
+                        </button>
+                        <button
+                          className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === 'files' ? 'text-black border-b-2 border-black' : 'text-gray-500'
+                            }`}
+                          onClick={() => setcourseInsideSectionType('files')}
+                        >
+                          Files
+                        </button>
+                        <button
+                          className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === 'participants' ? 'text-black border-b-2 border-black' : 'text-gray-500'
+                            }`}
+                          onClick={() => setcourseInsideSectionType('participants')}
+                        >
+                          Participants
+                        </button>
+                      </div>
+                      <hr className="h-px  bg-gray-600 border-0 mb-6"></hr>
+                      {courseInsideSectionType === 'course' && courseContentInformation.length > 0 && courseSection.length > 0 && RenderTextActivitiesInsideCourse()}
+                      {courseInsideSectionType === 'files' && RenderFilesInsideCourse()}
+                      {courseInsideSectionType === 'participants' && RenderParticipantsInsideCourse()}
+                    </div>
+                }
+              </div>) :
+              <ForumComponent posts={posts} forumID={forumID} />
+            }
           </div>
           <div>
-            <AccordionCourseContent {...{ courseContentInformation, setCourseSubsection, setCourseSection }} />
-            {courseInformation && courseInformation.professor && (
-              <ProfessorData professor={courseInformation.professor} />
-            )}
+            <AccordionCourseContent {...{ courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted }} />
+            <ForumClickable posts={posts} setForumFlag={setForumFlag} />
+            {professor.attributes && <ProfessorData professor={professor} />}
           </div>
         </div>
       </div>
@@ -168,9 +284,4 @@ const CourseInside = ({ user, isAuthenticated, checkAuthenticated, load_user }) 
   )
 }
 
-const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated,
-  user: state.auth.user
-});
-
-export default connect(mapStateToProps, { checkAuthenticated, load_user })(CourseInside);
+export default CourseInside;
