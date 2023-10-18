@@ -46,7 +46,6 @@ const CalendarEvents = () => {
                 body: JSON.stringify({ data: userData })
             });
             const data = await response.json();
-            console.log(data)
             message.success("Event Added Successfully");
         } catch (error) {
             console.error(error);

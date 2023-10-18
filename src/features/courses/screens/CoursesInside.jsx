@@ -104,28 +104,38 @@ const CourseInside = () => {
   };
 
   useEffect(() => {
+    console.log('4partes')
     if (courseContentInformation.length > 0 && subsectionsCompleted.length > 0) {
+      console.log('4partes')
       const dataFirst = obtenerPrimeraSubseccionNoCompletada(courseContentInformation, subsectionsCompleted);
       if (dataFirst) {
+        console.log('4partes')
         setCourseSection(dataFirst.cursoTitle);
-        setCourseSubsection(dataFirst.subseccion.attributes);
+        setCourseSubsection(dataFirst.subseccion);
       }
     } else if (courseContentInformation.length > 0 && subsectionsCompleted.length === 0) {
       const { attributes: { title, subsections: { data: subsecciones } } } = courseContentInformation[0];
+      console.log('4partes')
       if (subsecciones[0].attributes.activities.data[0].attributes.type === 'questionnaire') {
+        console.log('4partes')
+        setCourseSubsection(subsecciones[0]);
         setQuestionnaireFlag(true);
         setCourseSubsectionQuestionnaire(subsecciones[0].attributes.questionnaire.data)
 
       } else {
         setCourseSection(title);
-        setCourseSubsection(subsecciones[0].attributes);
+        setCourseSubsection(subsecciones[0]);
       }
 
     }
   }, [courseContentInformation, subsectionsCompleted]);
 
+
+
   useEffect(() => {
-    setSubsectionsLandscapePhoto(courseSubsection.landscape_photo?.data?.attributes?.url ?? null);
+    if (courseSubsection.length !== 0) {
+      setSubsectionsLandscapePhoto(courseSubsection.attributes.landscape_photo?.data?.attributes?.url ?? null);
+    }
   }, [courseSubsection]);
 
   useEffect(() => {
@@ -156,7 +166,7 @@ const CourseInside = () => {
 
   function RenderTextActivitiesInsideCourse() {
     const section_ = courseContentInformation.find(seccion => seccion.attributes.title === courseSection);
-    const subsection_ = section_.attributes.subsections.data.find(subseccion => subseccion.attributes.title === courseSubsection.title);
+    const subsection_ = section_.attributes.subsections.data.find(subseccion => subseccion.attributes.title === courseSubsection.attributes.title);
     var contenido = subsection_.attributes;
 
 
@@ -234,11 +244,12 @@ const CourseInside = () => {
                 {
                   questionnaireFlag === true ?
                     <div>
-                      <QuestionnaireComponent questionnaire={courseSubsectionQuestionnaire} answers={questionnaireAnswers} />
+                      <QuestionnaireComponent questionnaire={courseSubsectionQuestionnaire} answers={questionnaireAnswers} subsectionID={courseSubsection.id} />
                     </div>
                     :
                     <div>
-                      <p className='text-xl mt-5 font-semibold'>{courseSubsection.title}</p>
+
+                      {courseSubsection.attributes && <p className='text-xl mt-5 font-semibold'>{courseSubsection.attributes.title}</p>}
                       <div className='flex flex-row mt-8  items-center space-x-8 ml-5'>
                         <button
                           className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === 'course' ? 'text-black border-b-2 border-black' : 'text-gray-500'

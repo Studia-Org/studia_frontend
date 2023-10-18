@@ -13,9 +13,9 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
     const [sectionNumber, setSectionNumber] = useState(1);
 
     function handleSections(tituloSeccion, subsection) {
-        if (subsection.activities?.data[0]?.attributes.type === 'questionnaire') {
+        if (subsection.attributes.activities?.data[0]?.attributes.type === 'questionnaire') {
             setQuestionnaireFlag(true);
-            setCourseSubsectionQuestionnaire(subsection.questionnaire.data)
+            setCourseSubsectionQuestionnaire(subsection.attributes.questionnaire.data)
         } else {
             setQuestionnaireFlag(false)
         }
@@ -83,10 +83,10 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
                 }
                 {
                     isFirstSubsection === true ?
-                        <button onClick={() => handleSections(titulo, subsection.attributes)} class="flex items-center mb-1 font-medium text-gray-900 line-clamp-2 w-3/4 hover:translate-x-2 duration-200 text-left"> {subsection.attributes.title}</button> :
+                        <button onClick={() => handleSections(titulo, subsection)} class="flex items-center mb-1 font-medium text-gray-900 line-clamp-2 w-3/4 hover:translate-x-2 duration-200 text-left"> {subsection.attributes.title}</button> :
                         isSubsectionCompleted === false && prevSubsectionFinished === false ?
                             <button class="flex items-center mb-1 font-medium text-gray-500 line-clamp-2 w-3/4  text-left cursor-not-allowed"> {subsection.attributes.title}</button> :
-                            <button onClick={() => handleSections(titulo, subsection.attributes)} class="flex items-center mb-1 font-medium text-gray-900 line-clamp-2 w-3/4 hover:translate-x-2 duration-200 text-left"> {subsection.attributes.title}</button>
+                            <button onClick={() => handleSections(titulo, subsection)} class="flex items-center mb-1 font-medium text-gray-900 line-clamp-2 w-3/4 hover:translate-x-2 duration-200 text-left"> {subsection.attributes.title}</button>
                 }
                 {selectFaseSectionContent(subsection.attributes.fase)}
             </li>

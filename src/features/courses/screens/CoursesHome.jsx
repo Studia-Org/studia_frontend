@@ -41,7 +41,7 @@ const CoursesHome = () => {
   const fetchCoursesCards = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`${API}/users/${user.id}?populate=courses.cover,courses.students,courses.professor,courses.professor.profile_photo&fields[]=courses`);
+      const response = await fetch(`${API}/users/${user.id}?populate=courses.cover,courses.students,courses.professor,courses.professor.profile_photo`);
       const data = await response.json();
       setCourses(data ?? []);
       setIsLoading(false);

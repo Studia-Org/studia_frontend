@@ -42,7 +42,7 @@ const UserProfile = () => {
 
 
   function fetchCoursesCards() {
-    fetch(`${API}/users/${uid}?populate=courses.cover,courses.students,courses.professor,courses.professor.profile_photo&fields[]=courses`)
+    fetch(`${API}/users/${uid}?populate=courses.cover,courses.students,courses.professor,courses.professor.profile_photo`)
       .then((res) => res.json())
       .then((data) => {
         setCourses(data);
