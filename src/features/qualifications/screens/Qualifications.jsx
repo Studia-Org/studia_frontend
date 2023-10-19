@@ -36,7 +36,7 @@ const Qualifications = () => {
     function callQualificationsData() {
         if (user) {
             setLoading(true);
-            fetch(`${API}/users/${user.id}?populate=courses.sections.subsections.activities,qualifications.activity,courses.professor.profile_photo&fields[0]=activities`)
+            fetch(`${API}/users/${user.id}?populate=courses.sections.subsections.activities,qualifications.activity,courses.professor.profile_photo`)
                 .then((res) => res.json())
                 .then((data) => {
                     const coursesWithActivities = []

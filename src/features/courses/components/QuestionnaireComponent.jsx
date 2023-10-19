@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { styled } from '@mui/material/styles';
 import RadioGroup, { useRadioGroup } from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
@@ -23,6 +23,15 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID })
   const questionsPerPage = 5;
   const totalQuestions = questionnaire.attributes.Options.questionnaire.questions.length;
   const totalPages = Math.ceil(totalQuestions / questionsPerPage);
+
+  useEffect(() => {
+    if (questionnaireAnswerData.length > 0) {
+      setCompleted(true);
+    }else{
+      setCompleted(false);
+    }
+  }, [questionnaireAnswerData.length]);
+
 
 
   const list = {
@@ -126,7 +135,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID })
         const newObject = {
           subsections_completed: [
             ...user.subsections_completed.map(subsection => ({ id: subsection.id })),
-            { id: subsectionID } 
+            { id: subsectionID }
           ]
         };
         const response2 = await fetch(`${API}/users/${user.id}`, {
@@ -170,7 +179,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID })
           {Array.isArray(question.options) ? (
             <div key={absoluteIndex}>
               {
-                completed === true ?
+                questionnaireAnswerData.length > 0 ?
                   <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} defaultValue={questionnaireAnswerData[0].responses.responses[absoluteIndex].answer}>
                     {question.options.map((option, optionIndex) => (
                       <MyFormControlLabel key={optionIndex} value={option} label={option} control={<Radio disabled readOnly />} />
@@ -191,7 +200,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID })
           ) : (
             <div key={absoluteIndex} className='mt-5 flex w-full'>
               {
-                completed === true ?
+                questionnaireAnswerData.length > 0  ?
                   <TextField
                     id="outlined-basic"
                     label=""
@@ -229,7 +238,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID })
           <div className='flex items-center'>
             <p className="text-black font-semibold text-3xl">{questionnaire.attributes.Title}</p>
             {
-              questionnaireAnswerData && <Chip className='ml-auto' label="Completed" color="success" />
+              questionnaireAnswerData.length > 0 && <Chip className='ml-auto' label="Completed" color="success" />
             }
           </div>
           <p className="mt-7">{questionnaire.attributes.description}</p>

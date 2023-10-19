@@ -74,21 +74,40 @@ const CourseInside = () => {
     }
   };
 
-  function obtenerPrimeraSubseccionNoCompletada() {
+  function obtenerPrimeraSubseccion() {
+    const currentDate = new Date();
+    let lastCompletedSubseccion = null;
+    let cursoTitle = null;
+
     for (const curso of courseContentInformation) {
       const { id, attributes: { title, subsections: { data: subsecciones } } } = curso;
+
       for (const subseccion of subsecciones) {
         const subseccionId = subseccion.id;
-        const subseccionCompletada = subsectionsCompleted.find(
-          sub => sub.id === subseccionId
-        );
-        if (!subseccionCompletada) {
+        const subseccionCompletada = subsectionsCompleted.find(sub => sub.id === subseccionId);
+
+        const subseccionStartDate = new Date(subseccion.attributes.start_date);
+        const subseccionEndDate = new Date(subseccion.attributes.end_date);
+
+        if (!subseccionCompletada && currentDate >= subseccionStartDate && currentDate <= subseccionEndDate) {
           return { subseccion, cursoTitle: title };
+        }
+
+        if (subseccionCompletada) {
+          lastCompletedSubseccion = subseccion;
+          cursoTitle = title;
         }
       }
     }
+
+    if (lastCompletedSubseccion) {
+      return { subseccion: lastCompletedSubseccion, cursoTitle };
+    }
+
     return null;
   }
+
+
 
 
   const fetchCourseInformation = async () => {
@@ -104,20 +123,21 @@ const CourseInside = () => {
   };
 
   useEffect(() => {
-    console.log('4partes')
     if (courseContentInformation.length > 0 && subsectionsCompleted.length > 0) {
-      console.log('4partes')
-      const dataFirst = obtenerPrimeraSubseccionNoCompletada(courseContentInformation, subsectionsCompleted);
-      if (dataFirst) {
-        console.log('4partes')
-        setCourseSection(dataFirst.cursoTitle);
-        setCourseSubsection(dataFirst.subseccion);
+      const firstSubsection = obtenerPrimeraSubseccion(courseContentInformation, subsectionsCompleted);
+      if (firstSubsection) {
+        if (firstSubsection.subseccion.attributes.activities.data[0].attributes.type === 'questionnaire') {
+          setCourseSubsection(firstSubsection.subseccion);
+          setQuestionnaireFlag(true);
+          setCourseSubsectionQuestionnaire(firstSubsection.subseccion.attributes.questionnaire.data)
+        } else {
+          setCourseSection(firstSubsection.cursoTitle);
+          setCourseSubsection(firstSubsection.subseccion);
+        }
       }
     } else if (courseContentInformation.length > 0 && subsectionsCompleted.length === 0) {
       const { attributes: { title, subsections: { data: subsecciones } } } = courseContentInformation[0];
-      console.log('4partes')
       if (subsecciones[0].attributes.activities.data[0].attributes.type === 'questionnaire') {
-        console.log('4partes')
         setCourseSubsection(subsecciones[0]);
         setQuestionnaireFlag(true);
         setCourseSubsectionQuestionnaire(subsecciones[0].attributes.questionnaire.data)
@@ -126,7 +146,6 @@ const CourseInside = () => {
         setCourseSection(title);
         setCourseSubsection(subsecciones[0]);
       }
-
     }
   }, [courseContentInformation, subsectionsCompleted]);
 
