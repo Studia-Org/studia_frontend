@@ -23,9 +23,7 @@ export const CoursesCardHome = ({ course }) => {
                                 <p className='text-base font-normal'>{course.professor['name']}</p>
                             </div>
                         </div>
-                        <div className='bg-gray-100 rounded my-8 overflow-hidden'>
-                            <p className='text-sm font-normal px-5 py-5 line-clamp-3'>{course.description}</p>
-                        </div>
+                        
                     </div>
                 </div>
             </Link>
