@@ -67,12 +67,16 @@ const CoursesHome = () => {
       <Navbar />
       <div className='flex flex-wrap-reverse sm:h-[calc(100%-8rem)]   sm:flex-nowrap bg-white'>
         <Sidebar section={'courses'} />
-        <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] '>
+        <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] grid '>
           <div className=' sm:px-12  font-bold text-2xl'>
-            {!isLoading ? <motion.div className='flex flex-wrap py-11 sm:space-y-0 space-y-10  sm:space-x-12 space-x-0' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
-              {courses.courses && courses.courses.map(RenderCourse)}
-            </motion.div> : <div className='w-full h-full flex items-center justify-center' >
-              <MoonLoader color="#363cd6" size={80} /></div>}
+            {!isLoading ?
+              <motion.div className='flex flex-wrap py-11 sm:space-y-0 space-y-10  sm:space-x-12 space-x-0' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
+                {courses.courses && courses.courses.map(RenderCourse)}
+              </motion.div> :
+              <div className='w-full h-full flex items-center justify-center' >
+                <MoonLoader color="#363cd6" size={80} />
+              </div>
+            }
           </div>
         </div>
         {
@@ -86,11 +90,11 @@ const CoursesHome = () => {
               <div className='p-4 flex flex-col text-base font-medium space-y-4 '>
                 <button className='flex items-center text-left  hover:border-l-4 border-black transition-all duration-100 ' onClick={() => navigate('create')}>
                   <p className='ml-2'>Create new course from a template</p>
-                  <FiChevronRight className='ml-auto'/>
+                  <FiChevronRight className='ml-auto' />
                 </button>
                 <button className='flex items-center text-left hover:border-l-4 border-black transition-all duration-100' onClick={() => navigate('create')}>
                   <p className='ml-2'>Create new course</p>
-                  <FiChevronRight className='ml-auto'/>
+                  <FiChevronRight className='ml-auto' />
                 </button>
                 <div className=''>
                   <hr />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { IconContext } from "react-icons";
-
+import { Link } from 'react-router-dom';
 
 import {
     FiGrid,
@@ -21,7 +21,7 @@ export const Sidebar = (props) => {
         dashboard: {},
         qualifications: {},
         settings: {},
-        timeline:{},
+        timeline: {},
     };
 
     if (props.section === 'courses') {
@@ -34,7 +34,7 @@ export const Sidebar = (props) => {
         iconProps.qualifications = { color: 'white', size: '25px' };
     } else if (props.section === 'settings') {
         iconProps.settings = { color: 'white', size: '25px' };
-    }else if (props.section === 'timeline') {
+    } else if (props.section === 'timeline') {
         iconProps.timeline = { color: 'white', size: '25px' };
     }
 
@@ -43,7 +43,7 @@ export const Sidebar = (props) => {
             <aside id="default-sidebar" className=" top-0 left-0 w-[30vmin] h-full transition-transform -translate-x-full sm:translate-x-0 z-50" aria-label="Sidebar">
                 <div className="h-full px-12 py-4 overflow-y-auto bg-white ">
                     <ul className="space-y-96 font-medium py-12 ">
-                        <a href="/app/courses" className='pt-6'>
+                        <Link to={'/app/courses'} style={{ textDecoration: "none" }}>
                             <li className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all  rounded-lg ${Object.keys(iconProps.courses).length > 0 ? 'bg-gradient-to-r from-[#657DE9] to-[#6E66D6] rounded-lg py-3' : ''}`}>
                                 <span className='flex font-semibold'>
                                     <IconContext.Provider value={iconProps.courses}>
@@ -52,9 +52,9 @@ export const Sidebar = (props) => {
                                     <h2 className={`${Object.keys(iconProps.courses).length > 0 ? 'pl-2 text-white' : 'px-4'}`}>My Courses</h2>
                                 </span>
                             </li>
-                        </a>
+                        </Link>
 
-                        <a href="/app/calendar" className=''>
+                        <Link to={'/app/calendar'} style={{ textDecoration: "none" }}>
                             <li className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all  rounded-lg ${Object.keys(iconProps.events).length > 0 ? 'bg-gradient-to-r from-[#657DE9] to-[#6E66D6] rounded-lg py-3' : ''}`}>
                                 <span className='flex font-semibold'>
                                     <IconContext.Provider value={iconProps.events}>
@@ -63,9 +63,9 @@ export const Sidebar = (props) => {
                                     <h2 className={`${Object.keys(iconProps.events).length > 0 ? 'pl-2 text-white' : 'px-4'}`}>Calendar</h2>
                                 </span>
                             </li>
-                        </a>
+                        </Link>
+                        <Link to={'/app/timeline'} style={{ textDecoration: "none" }}>
 
-                        <a href="/app/timeline" className=''>
                             <li className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all  rounded-lg ${Object.keys(iconProps.timeline).length > 0 ? 'bg-gradient-to-r from-[#657DE9] to-[#6E66D6] rounded-lg py-3' : ''}`}>
                                 <span className='flex font-semibold'>
                                     <IconContext.Provider value={iconProps.timeline}>
@@ -74,9 +74,8 @@ export const Sidebar = (props) => {
                                     <h2 className={`${Object.keys(iconProps.timeline).length > 0 ? 'pl-2 text-white' : 'px-4'}`}>Timeline</h2>
                                 </span>
                             </li>
-                        </a>
-
-                        <a href="/app/dashboard">
+                        </Link>
+                        <Link to={'/app/dashboard'} style={{ textDecoration: "none" }}>
                             <li className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all  rounded-lg ${Object.keys(iconProps.dashboard).length > 0 ? 'bg-gradient-to-r from-[#657DE9] to-[#6E66D6] rounded-lg py-3' : ''}`}>
                                 <span className='flex font-semibold'>
                                     <IconContext.Provider value={iconProps.dashboard}>
@@ -85,9 +84,8 @@ export const Sidebar = (props) => {
                                     <h2 className={`${Object.keys(iconProps.dashboard).length > 0 ? 'pl-2 text-white' : 'px-4'}`}>Dashboard</h2>
                                 </span>
                             </li>
-                        </a>
-
-                        <a href="/app/qualifications">
+                        </Link>
+                        <Link to={'/app/qualifications'} style={{ textDecoration: "none" }}>
                             <li className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all  rounded-lg ${Object.keys(iconProps.qualifications).length > 0 ? 'bg-gradient-to-r from-[#657DE9] to-[#6E66D6] rounded-lg py-3' : ''}`}>
                                 <span className='flex align-middle font-semibold'>
                                     <IconContext.Provider value={iconProps.qualifications}>
@@ -96,9 +94,8 @@ export const Sidebar = (props) => {
                                     <h2 className={`${Object.keys(iconProps.qualifications).length > 0 ? 'pl-2 text-white' : 'px-4'}`}>Qualifications</h2>
                                 </span>
                             </li>
-                        </a>
-
-                        <a href="/app/settings">
+                        </Link>
+                        <Link to={'/app/settings'} style={{ textDecoration: "none" }}>
                             <li className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all  rounded-lg ${Object.keys(iconProps.settings).length > 0 ? 'bg-gradient-to-r from-[#657DE9] to-[#6E66D6] rounded-lg py-3' : ''}`}>
                                 <span className='flex font-semibold'>
                                     <IconContext.Provider value={iconProps.settings}>
@@ -107,9 +104,7 @@ export const Sidebar = (props) => {
                                     <h2 className={`${Object.keys(iconProps.settings).length > 0 ? 'pl-2 text-white' : 'px-4'}`}>Settings</h2>
                                 </span>
                             </li>
-                        </a>
-
-
+                        </Link>
                     </ul>
                 </div>
 
