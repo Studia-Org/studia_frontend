@@ -143,7 +143,7 @@ const CalendarEvents = () => {
     return (
         <div className='max-h-full  bg-white '>
             <Navbar />
-            <Sidebar section={'courses'} />
+            <Sidebar section={'events'} />
             <div className='flex min-h-[calc(100vh-8rem)] md:ml-64 md:min-w-[calc(100vw-16rem)] md:flex-nowrap bg-white'>
                 <div className='flex-1 min-h-full max-w-full w-full rounded-tl-3xl bg-[#e7eaf886] '>
                     <div className='p-9 lg:px-12 min-h-full px-5 font-bold text-2xl overflow-y-auto'>
