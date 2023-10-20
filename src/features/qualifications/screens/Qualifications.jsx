@@ -52,8 +52,6 @@ const Qualifications = () => {
                             });
                         });
 
-                        console.log(filteredQualifications)
-
                         const dateObj = new Date(course.updatedAt);
                         const courseObj = {
                             id: course.id,
