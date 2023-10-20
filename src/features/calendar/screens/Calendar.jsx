@@ -56,7 +56,7 @@ const CalendarEvents = () => {
     const fetchEvents = async () => {
         if (user) {
             try {
-                const response = await fetch(`${API}/users/${user.id}?populate=calendar_events&fields[0]=calendar_events`, {
+                const response = await fetch(`${API}/users/${user.id}?populate=calendar_events`, {
                     method: 'GET',
                 });
                 const data = await response.json();
@@ -114,7 +114,6 @@ const CalendarEvents = () => {
                     </Whisper>
                 </li>
             );
-            console.log(displayList[0].date)
             return (
                 <ul className="calendar-todo-list">
 

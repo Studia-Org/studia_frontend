@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { FiBell } from "react-icons/fi";
 import { Tag } from './Tag';
 import { useAuthContext } from "../../context/AuthContext";
@@ -18,7 +18,7 @@ export const Navbar = () => {
                             <path clipRule="evenodd" fillRule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
                         </svg>
                     </button>
-                    <h1 className='p-10 sm:px-16 font-bold text-3xl italic leading-none tracking-tight cursor-pointer'>Uptitude<span className='text-pink-500 text-4xl '>.</span></h1>
+                    <Link to={'/app/courses'}><h1 className='p-10 sm:px-16 font-bold text-3xl italic leading-none tracking-tight cursor-pointer'>Uptitude<span className='text-pink-500 text-4xl '>.</span></h1></Link>
                     <div className=' absolute right-0 flex items-center '>
 
                         <FiBell size={25} className="lg:mr-8 mr-4 cursor-pointer " />

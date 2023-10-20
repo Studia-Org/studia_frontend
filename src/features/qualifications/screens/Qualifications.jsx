@@ -62,7 +62,7 @@ const Qualifications = () => {
                             activities: filteredQualifications
                         };
                         coursesWithActivities.push(courseObj);
-                        
+
                     });
                     setQualifications(coursesWithActivities);
                     setLoading(false);
@@ -154,12 +154,20 @@ const Qualifications = () => {
             <div className='flex flex-wrap-reverse sm:h-[calc(100%-8rem)]  sm:flex-nowrap bg-white'>
                 <Sidebar section={'qualifications'} />
                 <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] '>
-                    <div className='p-9 px-12 font-bold text-2xl'>
-                        {!loading ? <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
-                            {qualifications && <QualificationsTable qualifications={qualifications} />}
-                        </motion.div> : <div className='w-full h-full flex items-center justify-center'>
-                            <MoonLoader color="#363cd6" size={80} /></div>}
-                    </div>
+                    {!loading ?
+                        <div className='p-9 px-12 font-bold text-2xl'>
+                            <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
+                                {qualifications && <QualificationsTable qualifications={qualifications} />}
+                            </motion.div>
+                        </div>
+
+                        :
+                        <div className='w-full h-full flex items-center justify-center'>
+                            <MoonLoader color="#363cd6" size={80} />
+                        </div>
+
+                    }
+
                 </div>
             </div>
         </div>
