@@ -63,14 +63,14 @@ const CoursesHome = () => {
   }
 
   return (
-    <div className='max-h-full max-w-full bg-white '>
+    <div className='max-h-full  bg-white '>
       <Navbar />
-      <div className='flex flex-wrap-reverse  min-h-[calc(100vh-8rem)]  sm:flex-nowrap bg-white'>
-        <Sidebar section={'courses'} />
-        <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] grid '>
+      <Sidebar section={'courses'} />
+      <div className='flex min-h-[calc(100vh-8rem)] md:ml-64 md:min-w-[calc(100vw-16rem)] md:flex-nowrap bg-white'>
+        <div className=' max-h-full rounded-tl-3xl bg-[#e7eaf886] grid w-full'>
           <div className=' sm:px-12  font-bold text-2xl'>
             {!isLoading ?
-              <motion.div className='flex flex-wrap py-11 gap-9 ' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
+              <motion.div id='course-motion-div' className='flex flex-wrap py-11 gap-9 justify-center md:justify-start ' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
                 {courses.courses && courses.courses.map(RenderCourse)}
               </motion.div> :
               <div className='w-full h-full flex items-center justify-center' >
