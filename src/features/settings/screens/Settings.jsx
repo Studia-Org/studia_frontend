@@ -1,6 +1,6 @@
 import { useEffect, useState, React } from 'react';
 import { checkAuthenticated } from "../../../helpers";
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from "../../../context/AuthContext";
 import { Sidebar } from '../../../shared/elements/Sidebar';
 import { Navbar } from '../../../shared/elements/Navbar';
@@ -20,17 +20,17 @@ const Settings = () => {
 
 
   return (
-    <div className='h-screen w-screen bg-white'>
-      <Navbar user={user} />
-      <div className='flex flex-wrap-reverse sm:h-[calc(100%-8rem)]   sm:flex-nowrap bg-white'>
-        <Sidebar section={'settings'} />
+    <div className='max-h-full  bg-white '>
+      <Navbar />
+      <Sidebar section={'settings'} />
+      <div className='flex min-h-[calc(100vh-8rem)] md:ml-64 md:min-w-[calc(100vw-16rem)] md:flex-nowrap bg-white'>
         <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] '>
           <div className=' font-bold text-2xl h-full '>
-            <div className='flex h-full  space-x-5'>
-              <div className=' w-96 h-full rounded-tl-3xl flex flex-col'>
+            <div className='flex h-full '>
+              <div className=' h-full rounded-tl-3xl flex flex-col'>
                 <SidebarSetting selectedOption={selectedOption} setSelectedOption={setSelectedOption} />
               </div>
-              <div className='p-2 w-full'>
+              <div className='p-2 w-full flex justify-center lg:block  '>
                 <SettingContent selectedOption={selectedOption} user={user} setSelectedOption={setSelectedOption} />
               </div>
             </div>

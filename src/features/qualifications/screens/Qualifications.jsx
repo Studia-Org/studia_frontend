@@ -150,10 +150,10 @@ const Qualifications = () => {
         )
     }
     return (
-        <div className='h-screen w-screen bg-white'>
+        <div className='max-h-full  bg-white '>
             <Navbar />
-            <div className='flex flex-wrap-reverse sm:h-[calc(100%-8rem)]  sm:flex-nowrap bg-white'>
-                <Sidebar section={'qualifications'} />
+            <Sidebar section={'qualifications'} />
+            <div className='flex min-h-[calc(100vh-8rem)] md:ml-64 md:min-w-[calc(100vw-16rem)] md:flex-nowrap bg-white'>
                 <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] '>
                     {!loading ?
                         <div className='p-9 px-12 font-bold text-2xl'>
