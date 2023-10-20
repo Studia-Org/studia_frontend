@@ -305,7 +305,7 @@ const CourseInside = () => {
           <div>
             <AccordionCourseContent {...{ courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted }} />
             <ForumClickable posts={posts} setForumFlag={setForumFlag} />
-            {professor.attributes && <ProfessorData professor={professor} />}
+            {professor.attributes && <ProfessorData professor={professor} evaluatorFlag={false}/>}
           </div>
         </div>
       </div>

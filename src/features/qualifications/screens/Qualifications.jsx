@@ -3,6 +3,7 @@ import { Sidebar } from '../../../shared/elements/Sidebar';
 import { Navbar } from '../../../shared/elements/Navbar';
 import { API } from "../../../constant";
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import { MoonLoader } from "react-spinners";
 import { Whisper, Button, Popover } from 'rsuite';
@@ -72,7 +73,6 @@ const Qualifications = () => {
     }
 
     const speaker = (props) => {
-        console.log(props)
         return (
             <Popover title={props.activity.title}>
                 <p className='italic text-gray-400'>Comments </p>
@@ -82,7 +82,7 @@ const Qualifications = () => {
     }
 
 
-    function RenderGradesFromData(grades) {
+    function RenderGradesFromData(grades, courseID) {
         const style = {
             backgroundColor: `rgba(59, 130, 246, ${Math.max(grades.qualification / 10, 0.35)})`,
             borderRadius: '0.5rem',
@@ -96,14 +96,15 @@ const Qualifications = () => {
         return (
             <div>
                 <Whisper placement="top" className='text-sm shadow-md' trigger="hover" controlId="control-id-hover" speaker={speaker(grades)}>
-                    <Button style={style} className='text-sm shadow-md '> {grades.qualification}</Button>
+                    <Link className='no-underline' to={`/app/courses/${courseID}/activity/${grades.activity.id}`}>
+                        <Button style={style} className='text-sm shadow-md '> {grades.qualification}</Button>
+                    </Link>
                 </Whisper>
             </div>
         );
     }
 
     const QualificationsTable = ({ qualifications }) => {
-        console.log(qualifications)
         return (
             <div>
                 <div className='flex space-x-6'>
@@ -139,7 +140,7 @@ const Qualifications = () => {
                         <p className='text-sm font-normal'>{curso_grade.professor}</p>
                     </div>
                     <div className='col-span-2 flex space-x-3'>
-                        {curso_grade.activities.map(RenderGradesFromData)}
+                        {curso_grade.activities.map((activity) => RenderGradesFromData(activity, curso_grade.id))}
                     </div>
                     <div className='text-right mr-5'>
                         <p className='text-base text-gray-600'>{curso_grade.last_update}</p>
@@ -160,14 +161,11 @@ const Qualifications = () => {
                                 {qualifications && <QualificationsTable qualifications={qualifications} />}
                             </motion.div>
                         </div>
-
                         :
                         <div className='w-full h-full flex items-center justify-center'>
                             <MoonLoader color="#363cd6" size={80} />
                         </div>
-
                     }
-
                 </div>
             </div>
         </div>

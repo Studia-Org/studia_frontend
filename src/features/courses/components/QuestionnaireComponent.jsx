@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { styled } from '@mui/material/styles';
 import RadioGroup, { useRadioGroup } from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
+import { Link } from 'react-router-dom';
 import Chip from '@mui/material/Chip';
 import { motion, Variants } from "framer-motion";
 import { useAuthContext } from "../../../context/AuthContext";
@@ -27,7 +28,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID })
   useEffect(() => {
     if (questionnaireAnswerData.length > 0) {
       setCompleted(true);
-    }else{
+    } else {
       setCompleted(false);
     }
   }, [questionnaireAnswerData.length]);
@@ -200,7 +201,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID })
           ) : (
             <div key={absoluteIndex} className='mt-5 flex w-full'>
               {
-                questionnaireAnswerData.length > 0  ?
+                questionnaireAnswerData.length > 0 ?
                   <TextField
                     id="outlined-basic"
                     label=""
