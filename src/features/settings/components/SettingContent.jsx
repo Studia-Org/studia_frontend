@@ -83,7 +83,7 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
             {selectedOption === 'password' && (
                 <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
                     <main className="py-14 text-base">
-                        <div className="max-w-screen-xl px-4 text-gray-600 md:px-8 ">
+                        <div className="px-4 text-gray-600 md:px-8 ">
                             <SettingsBreadcrumb index={'Change password'} />
                             <div className='mt-16 '>
                                 <div className='text-base font-normal flex flex-col space-y-8'>
@@ -214,8 +214,8 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
             {selectedOption === 'help' && (
                 <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
                     <main className="py-14 text-base">
-                        <div className="max-w-screen-xl  px-4 text-gray-600 md:px-8">
-                            <div className="max-w-lg gap-24  lg:flex lg:max-w-none">
+                        <div className=" px-4 text-gray-600 md:px-8">
+                            <div className="max-w-lg gap-24  lg:flex lg:max-w-none flex-wrap ">
                                 <div className="max-w-lg space-y-3">
                                     <h3 className="text-indigo-600 font-semibold">
                                         <SettingsBreadcrumb index={'Help'} />
@@ -244,7 +244,7 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
                                         </ul>
                                     </div>
                                 </div>
-                                <div className="flex-1 mt-20 sm:max-w-lg lg:max-w-md bg-white rounded p-7 shadow-lg ">
+                                <div className="flex-1 mt-20 min-w-[400px] max-w-2xl bg-white rounded p-7 shadow-lg ">
                                     <form
                                         method='POST'
                                         action='https://getform.io/f/f2dc89ec-4d74-4789-a837-8411ebbeb789'

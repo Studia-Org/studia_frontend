@@ -9,8 +9,9 @@ import { removeToken } from "../../../helpers";
 const SidebarSetting = ({ setSelectedOption }) => {
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
+
     const handleOptionChange = (option) => {
-        setSelectedOption(option); 
+        setSelectedOption(option);
     };
 
     const toggleDropdown = () => {
@@ -47,12 +48,17 @@ const SidebarSetting = ({ setSelectedOption }) => {
             }
         })
     }
+    window.addEventListener('resize', () => {   
+        if (window.innerWidth > 1024) {
+            setIsOpen(false);
+        }
+    })
 
     return (
         <>
             <button
                 onClick={toggleDropdown}
-                className='block sm:hidden p-4 text-blue-600'
+                className='absolute lg:hidden p-4 text-blue-600'
             >
                 <svg
                     className={`w-6 h-6 ${isOpen ? 'transform rotate-90' : ''}`}
@@ -70,8 +76,26 @@ const SidebarSetting = ({ setSelectedOption }) => {
                 </svg>
             </button>
 
-            <div className={`lg:rounded-tl-3xl h-full bg-[#eaedfa] pl-12 p-9 text-base space-y-6 border-r border-[#b7bcd4] ${isOpen ? 'block' : 'hidden sm:block'}`}>
-                
+            <div className={`lg:rounded-tl-3xl h-full bg-[#eaedfa] pl-12 p-9 text-base space-y-6 border-r border-[#b7bcd4] ${isOpen ? 'fixed w-96' : 'hidden lg:block'}`}>
+                <button
+                    onClick={toggleDropdown}
+                    className='absolute top-0 right-0 lg:hidden p-4 text-blue-600'
+                >
+                    <svg
+                        className={`w-6 h-6  ${isOpen ? 'transform rotate-90' : ''}`}
+                        fill='none'
+                        stroke='currentColor'
+                        viewBox='0 0 24 24'
+                        xmlns='http://www.w3.org/2000/svg'
+                    >
+                        <path
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            strokeWidth='2'
+                            d='M19 9l-7 7-7-7'
+                        />
+                    </svg>
+                </button>
                 <div className='space-y-4'>
                     <h1 className='text-lg pb-1 font-semibold tracking-tight'>User Account</h1>
                     <button className='flex items-center pl-4 gap-3 hover:text-indigo-600 hover:translate-x-[5px] transition-all' onClick={() => handleOptionChange('password')}>
