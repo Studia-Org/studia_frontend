@@ -74,21 +74,40 @@ const CourseInside = () => {
     }
   };
 
-  function obtenerPrimeraSubseccionNoCompletada() {
+  function obtenerPrimeraSubseccion() {
+    const currentDate = new Date();
+    let lastCompletedSubseccion = null;
+    let cursoTitle = null;
+
     for (const curso of courseContentInformation) {
       const { id, attributes: { title, subsections: { data: subsecciones } } } = curso;
+
       for (const subseccion of subsecciones) {
         const subseccionId = subseccion.id;
-        const subseccionCompletada = subsectionsCompleted.find(
-          sub => sub.id === subseccionId
-        );
-        if (!subseccionCompletada) {
+        const subseccionCompletada = subsectionsCompleted.find(sub => sub.id === subseccionId);
+
+        const subseccionStartDate = new Date(subseccion.attributes.start_date);
+        const subseccionEndDate = new Date(subseccion.attributes.end_date);
+
+        if (!subseccionCompletada && currentDate >= subseccionStartDate && currentDate <= subseccionEndDate) {
           return { subseccion, cursoTitle: title };
+        }
+
+        if (subseccionCompletada) {
+          lastCompletedSubseccion = subseccion;
+          cursoTitle = title;
         }
       }
     }
+
+    if (lastCompletedSubseccion) {
+      return { subseccion: lastCompletedSubseccion, cursoTitle };
+    }
+
     return null;
   }
+
+
 
 
   const fetchCourseInformation = async () => {
@@ -105,27 +124,37 @@ const CourseInside = () => {
 
   useEffect(() => {
     if (courseContentInformation.length > 0 && subsectionsCompleted.length > 0) {
-      const dataFirst = obtenerPrimeraSubseccionNoCompletada(courseContentInformation, subsectionsCompleted);
-      if (dataFirst) {
-        setCourseSection(dataFirst.cursoTitle);
-        setCourseSubsection(dataFirst.subseccion.attributes);
+      const firstSubsection = obtenerPrimeraSubseccion(courseContentInformation, subsectionsCompleted);
+      if (firstSubsection) {
+        if (firstSubsection.subseccion.attributes.activities.data[0].attributes.type === 'questionnaire') {
+          setCourseSubsection(firstSubsection.subseccion);
+          setQuestionnaireFlag(true);
+          setCourseSubsectionQuestionnaire(firstSubsection.subseccion.attributes.questionnaire.data)
+        } else {
+          setCourseSection(firstSubsection.cursoTitle);
+          setCourseSubsection(firstSubsection.subseccion);
+        }
       }
     } else if (courseContentInformation.length > 0 && subsectionsCompleted.length === 0) {
       const { attributes: { title, subsections: { data: subsecciones } } } = courseContentInformation[0];
       if (subsecciones[0].attributes.activities.data[0].attributes.type === 'questionnaire') {
+        setCourseSubsection(subsecciones[0]);
         setQuestionnaireFlag(true);
         setCourseSubsectionQuestionnaire(subsecciones[0].attributes.questionnaire.data)
 
       } else {
         setCourseSection(title);
-        setCourseSubsection(subsecciones[0].attributes);
+        setCourseSubsection(subsecciones[0]);
       }
-
     }
   }, [courseContentInformation, subsectionsCompleted]);
 
+
+
   useEffect(() => {
-    setSubsectionsLandscapePhoto(courseSubsection.landscape_photo?.data?.attributes?.url ?? null);
+    if (courseSubsection.length !== 0) {
+      setSubsectionsLandscapePhoto(courseSubsection.attributes.landscape_photo?.data?.attributes?.url ?? null);
+    }
   }, [courseSubsection]);
 
   useEffect(() => {
@@ -143,20 +172,21 @@ const CourseInside = () => {
 
   function renderAllActivities(activities) {
     let Component = null
+    console.log(activities.data)
     if (activities.type === 'paragraph') {
       Component = componentMap[activities.type];
     } else {
       Component = componentMap[activities.data.attributes.type];
     }
     if (Component) {
-      return <Component activitie={activities.data.attributes} />;
+      return <Component activitie={activities.data.attributes} activitieID={activities.data.id} courseID={courseId}/>;
     }
     return null;
   }
 
   function RenderTextActivitiesInsideCourse() {
     const section_ = courseContentInformation.find(seccion => seccion.attributes.title === courseSection);
-    const subsection_ = section_.attributes.subsections.data.find(subseccion => subseccion.attributes.title === courseSubsection.title);
+    const subsection_ = section_.attributes.subsections.data.find(subseccion => subseccion.attributes.title === courseSubsection.attributes.title);
     var contenido = subsection_.attributes;
 
 
@@ -218,9 +248,9 @@ const CourseInside = () => {
   }
 
   return (
-    <div className='h-screen w-full bg-white'>
+    <div className='min-h-screen w-full bg-white'>
       <Navbar />
-      <div className='flex flex-wrap-reverse sm:flex-nowrap bg-white'>
+      <div className='flex min-h-[calc(100vh-8rem)] md:ml-80 md:min-w-[calc(100vw-20rem)] md:flex-nowrap bg-white'>
         <Sidebar section={'courses'} />
         <div className='container-fluid min-h-screen w-screen rounded-tl-3xl bg-[#e7eaf886] flex flex-wrap'>
           <div className='flex-1 min-w-0  sm:w-auto mt-3 ml-8 mr-8'>
@@ -234,11 +264,12 @@ const CourseInside = () => {
                 {
                   questionnaireFlag === true ?
                     <div>
-                      <QuestionnaireComponent questionnaire={courseSubsectionQuestionnaire} answers={questionnaireAnswers} />
+                      <QuestionnaireComponent questionnaire={courseSubsectionQuestionnaire} answers={questionnaireAnswers} subsectionID={courseSubsection.id} />
                     </div>
                     :
                     <div>
-                      <p className='text-xl mt-5 font-semibold'>{courseSubsection.title}</p>
+
+                      {courseSubsection.attributes && <p className='text-xl mt-5 font-semibold'>{courseSubsection.attributes.title}</p>}
                       <div className='flex flex-row mt-8  items-center space-x-8 ml-5'>
                         <button
                           className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === 'course' ? 'text-black border-b-2 border-black' : 'text-gray-500'
@@ -275,7 +306,7 @@ const CourseInside = () => {
           <div>
             <AccordionCourseContent {...{ courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted }} />
             <ForumClickable posts={posts} setForumFlag={setForumFlag} />
-            {professor.attributes && <ProfessorData professor={professor} />}
+            {professor.attributes && <ProfessorData professor={professor} evaluatorFlag={false}/>}
           </div>
         </div>
       </div>

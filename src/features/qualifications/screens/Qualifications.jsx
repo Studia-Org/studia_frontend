@@ -3,6 +3,7 @@ import { Sidebar } from '../../../shared/elements/Sidebar';
 import { Navbar } from '../../../shared/elements/Navbar';
 import { API } from "../../../constant";
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import { MoonLoader } from "react-spinners";
 import { Whisper, Button, Popover } from 'rsuite';
@@ -36,7 +37,7 @@ const Qualifications = () => {
     function callQualificationsData() {
         if (user) {
             setLoading(true);
-            fetch(`${API}/users/${user.id}?populate=courses.sections.subsections.activities,qualifications.activity,courses.professor.profile_photo&fields[0]=activities`)
+            fetch(`${API}/users/${user.id}?populate=courses.sections.subsections.activities,qualifications.activity,courses.professor.profile_photo`)
                 .then((res) => res.json())
                 .then((data) => {
                     const coursesWithActivities = []
@@ -52,8 +53,6 @@ const Qualifications = () => {
                             });
                         });
 
-                        console.log(filteredQualifications)
-
                         const dateObj = new Date(course.updatedAt);
                         const courseObj = {
                             id: course.id,
@@ -64,7 +63,7 @@ const Qualifications = () => {
                             activities: filteredQualifications
                         };
                         coursesWithActivities.push(courseObj);
-                        
+
                     });
                     setQualifications(coursesWithActivities);
                     setLoading(false);
@@ -74,7 +73,6 @@ const Qualifications = () => {
     }
 
     const speaker = (props) => {
-        console.log(props)
         return (
             <Popover title={props.activity.title}>
                 <p className='italic text-gray-400'>Comments </p>
@@ -84,7 +82,7 @@ const Qualifications = () => {
     }
 
 
-    function RenderGradesFromData(grades) {
+    function RenderGradesFromData(grades, courseID) {
         const style = {
             backgroundColor: `rgba(59, 130, 246, ${Math.max(grades.qualification / 10, 0.35)})`,
             borderRadius: '0.5rem',
@@ -98,14 +96,15 @@ const Qualifications = () => {
         return (
             <div>
                 <Whisper placement="top" className='text-sm shadow-md' trigger="hover" controlId="control-id-hover" speaker={speaker(grades)}>
-                    <Button style={style} className='text-sm shadow-md '> {grades.qualification}</Button>
+                    <Link className='no-underline' to={`/app/courses/${courseID}/activity/${grades.activity.id}`}>
+                        <Button style={style} className='text-sm shadow-md '> {grades.qualification}</Button>
+                    </Link>
                 </Whisper>
             </div>
         );
     }
 
     const QualificationsTable = ({ qualifications }) => {
-        console.log(qualifications)
         return (
             <div>
                 <div className='flex space-x-6'>
@@ -141,7 +140,7 @@ const Qualifications = () => {
                         <p className='text-sm font-normal'>{curso_grade.professor}</p>
                     </div>
                     <div className='col-span-2 flex space-x-3'>
-                        {curso_grade.activities.map(RenderGradesFromData)}
+                        {curso_grade.activities.map((activity) => RenderGradesFromData(activity, curso_grade.id))}
                     </div>
                     <div className='text-right mr-5'>
                         <p className='text-base text-gray-600'>{curso_grade.last_update}</p>
@@ -151,17 +150,22 @@ const Qualifications = () => {
         )
     }
     return (
-        <div className='h-screen w-screen bg-white'>
+        <div className='max-h-full  bg-white '>
             <Navbar />
-            <div className='flex flex-wrap-reverse sm:h-[calc(100%-8rem)]  sm:flex-nowrap bg-white'>
-                <Sidebar section={'qualifications'} />
+            <Sidebar section={'qualifications'} />
+            <div className='flex min-h-[calc(100vh-8rem)] md:ml-80 md:min-w-[calc(100vw-20rem)] md:flex-nowrap bg-white '>
                 <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] '>
-                    <div className='p-9 px-12 font-bold text-2xl'>
-                        {!loading ? <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
-                            {qualifications && <QualificationsTable qualifications={qualifications} />}
-                        </motion.div> : <div className='w-full h-full flex items-center justify-center'>
-                            <MoonLoader color="#363cd6" size={80} /></div>}
-                    </div>
+                    {!loading ?
+                        <div className='p-9 px-12 font-bold text-2xl'>
+                            <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
+                                {qualifications && <QualificationsTable qualifications={qualifications} />}
+                            </motion.div>
+                        </div>
+                        :
+                        <div className='w-full h-full flex items-center justify-center'>
+                            <MoonLoader color="#363cd6" size={80} />
+                        </div>
+                    }
                 </div>
             </div>
         </div>

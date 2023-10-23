@@ -42,7 +42,7 @@ const UserProfile = () => {
 
 
   function fetchCoursesCards() {
-    fetch(`${API}/users/${uid}?populate=courses.cover,courses.students,courses.professor,courses.professor.profile_photo&fields[]=courses`)
+    fetch(`${API}/users/${uid}?populate=courses.cover,courses.students,courses.professor,courses.professor.profile_photo`)
       .then((res) => res.json())
       .then((data) => {
         setCourses(data);
@@ -65,9 +65,9 @@ const UserProfile = () => {
   }, [uid]);
 
   return (
-    <div className='h-screen w-full bg-white'>
+    <div className='min-h-screen bg-white'>
       <Navbar user={user} />
-      <div className='flex flex-wrap-reverse sm:flex-nowrap bg-white'>
+      <div className='flex min-h-[calc(100vh-8rem)] md:ml-80 md:min-w-[calc(100vw-24rem)] md:flex-nowrap bg-white'>
         <Sidebar section={'courses'} />
         <div className='container-fluid w-full  rounded-tl-3xl bg-[#e7eaf886]  '>
           <>

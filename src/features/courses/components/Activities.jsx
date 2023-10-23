@@ -1,5 +1,6 @@
 import React from 'react'
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FiFolder, FiTrello, FiBook, FiCheckCircle } from "react-icons/fi";
 import ReactMarkdown from 'react-markdown'
 
@@ -44,11 +45,11 @@ export const ActivitiesQuestionnaire = ({ activitie }) => {
     )
 }
 
-export const ActivitiesDelivery = ({ activitie }) => {
+export const ActivitiesDelivery = ({ activitie, activitieID, courseID}) => {
     const currentDate = new Date();
     const deliveryDate = new Date(activitie.deadline)
     const isPastDue = deliveryDate > currentDate;
-    console.log(activitie)
+    const navigate = useNavigate();
 
     const [backgroundColorClass, setBackgroundColorClass] = useState('');
 
@@ -62,7 +63,7 @@ export const ActivitiesDelivery = ({ activitie }) => {
 
 
     return (
-        <div className='cursor-pointer pl-5 pt-3 rounded py-4 border-t-8 border-blue-800 border bg-white'>
+        <button onClick={() => navigate(`/app/courses/${courseID}/activity/${activitieID}`)} className='cursor-pointer pl-5 pt-3 rounded py-4 border-t-8 border-blue-800 border bg-white'>
             <div className='flex items-center'>
                 <p className='font-base text-lg '>Delivery</p>
                 {activitie.delivered === 'true' ? <p className='text-black font-medium text-xl ml-auto mr-5'> <FiCheckCircle size={22} /></p> : <p className='text-black font-medium ml-auto mr-5'>⭕</p>}
@@ -77,7 +78,7 @@ export const ActivitiesDelivery = ({ activitie }) => {
                 </div>
                 <p></p>
             </div>
-        </div>
+        </button>
     )
 }
 

@@ -8,8 +8,8 @@ import { getToken } from "../helpers";
 const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const authToken = getToken()
 
-  const authToken = getToken();
 
   const fetchLoggedInUser = async (token) => {
     setIsLoading(true);
@@ -34,10 +34,11 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (authToken) {
+      console.log("fetching user")
       fetchLoggedInUser(authToken);
     }
   }, [authToken]);
-  
+
   return (
     <AuthContext.Provider
       value={{ user: userData, setUser: handleUser, isLoading }}

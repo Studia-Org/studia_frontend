@@ -46,7 +46,6 @@ const CalendarEvents = () => {
                 body: JSON.stringify({ data: userData })
             });
             const data = await response.json();
-            console.log(data)
             message.success("Event Added Successfully");
         } catch (error) {
             console.error(error);
@@ -57,7 +56,7 @@ const CalendarEvents = () => {
     const fetchEvents = async () => {
         if (user) {
             try {
-                const response = await fetch(`${API}/users/${user.id}?populate=calendar_events&fields[0]=calendar_events`, {
+                const response = await fetch(`${API}/users/${user.id}?populate=calendar_events`, {
                     method: 'GET',
                 });
                 const data = await response.json();
@@ -115,7 +114,6 @@ const CalendarEvents = () => {
                     </Whisper>
                 </li>
             );
-            console.log(displayList[0].date)
             return (
                 <ul className="calendar-todo-list">
 
@@ -143,13 +141,13 @@ const CalendarEvents = () => {
         return date.toLocaleTimeString(undefined, options);
     }
     return (
-        <div className='h-screen w-screen bg-white flex flex-col'>
+        <div className='min-h-screen  bg-white '>
             <Navbar />
-            <div className='flex flex-wrap-reverse sm:flex-nowrap flex-1 '>
-                <Sidebar section={'events'} />
-                <div className='flex-1 min-h-0 max-w-full w-full rounded-tl-3xl bg-[#e7eaf886] '>
-                    <div className='p-9 lg:px-12 px-5 font-bold text-2xl overflow-y-auto'>
-                        <div className='h-full bg-white rounded-xl lg:p-5 mt-3 shadow-lg w-auto flex-grow'>
+            <Sidebar section={'events'} />
+            <div className='flex min-h-[calc(100vh-8rem)] md:ml-80 md:min-w-[calc(100vw-20rem)] md:flex-nowrap bg-white'>
+                <div className='flex-1 min-h-full max-w-full w-full rounded-tl-3xl bg-[#e7eaf886] '>
+                    <div className='p-9 lg:px-12 min-h-full px-5 font-bold text-2xl overflow-y-auto'>
+                        <div className='min-h-full bg-white rounded-xl shadow-lg '>
                             <div className='flex'>
                                 <Modal size='sm' open={open} onClose={handleClose}>
                                     <Modal.Header>
@@ -176,8 +174,8 @@ const CalendarEvents = () => {
                                 </Modal>
                             </div>
 
-                            <div className='font-normal'>
-                                <Calendar bordered renderCell={renderCell} />
+                            <div className='font-normal '>
+                                <Calendar compact={window.innerWidth < 690} bordered renderCell={renderCell} />
                             </div>
 
                         </div>
