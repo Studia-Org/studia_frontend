@@ -63,7 +63,7 @@ const CoursesHome = () => {
   }
 
   return (
-    <div className='max-h-full  bg-white '>
+    <div className='min-h-screen  bg-white '>
       <Navbar />
       <Sidebar section={'courses'} />
       <div className='flex min-h-[calc(100vh-8rem)] md:ml-80 md:min-w-[calc(100vw-20rem)] md:flex-nowrap bg-white'>

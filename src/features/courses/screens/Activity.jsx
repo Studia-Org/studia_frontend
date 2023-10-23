@@ -37,10 +37,9 @@ const Activity = () => {
   }, [user]);
 
   return (
-    <div>
-      <div className='max-h-full  bg-white '>
+      <div className='min-h-screen  bg-white '>
         <Navbar />
-        <div className='flex min-h-[calc(100vh-8rem)] md:ml-64 md:min-w-[calc(100vw-20rem)] md:flex-nowrap bg-white'>
+        <div className='flex min-h-[calc(100vh-8rem)] md:ml-80 md:min-w-[calc(100vw-20rem)] md:flex-nowrap bg-white'>
           <Sidebar section={'courses'} />
           <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] grid '>
             <div className='md:ml-12 ml-8 '>
@@ -51,8 +50,6 @@ const Activity = () => {
           </div>
         </div>
       </div>
-
-    </div>
   )
 }
 

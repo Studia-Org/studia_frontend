@@ -23,7 +23,7 @@ const Settings = () => {
     <div className='max-h-full  bg-white '>
       <Navbar />
       <Sidebar section={'settings'} />
-      <div className='flex min-h-[calc(100vh-8rem)] md:ml-80 md:min-w-[calc(100vw-20rem)] md:flex-nowrap bg-white'>
+      <div className='flex min-h-[calc(100vh-8rem)] md:ml-80 md:min-w-[calc(100vw-20rem)] md:flex-nowrap bg-white '>
         <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] '>
           <div className=' font-bold text-2xl h-full '>
             <div className='flex h-full '>
