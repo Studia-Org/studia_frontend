@@ -12,7 +12,7 @@ export const ProfessorData = ({ professor, evaluatorFlag }) => {
     }
     return (
         <div className='flex-shrink-0 w-full sm:w-auto'>
-            <div className={`${evaluatorFlag ? 'mt-0' : 'mt-4' } bg-white rounded-lg  px-5 py-5  sm:mr-9 sm:right-0 sm:w-[30rem] w-full shadow-md sm:visible collapse`}>
+            <div className={`${evaluatorFlag ? 'mt-0' : 'mt-4 collapse' } bg-white rounded-lg  px-5 py-5  sm:mr-9 sm:right-0 sm:w-[30rem] w-full shadow-md sm:visible `}>
                 <div className='flex items-center'>
                     {
                         evaluatorFlag === true ?

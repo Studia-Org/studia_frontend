@@ -9,14 +9,24 @@ import { useAuthContext } from '../../../context/AuthContext';
 const Activity = () => {
   const { courseId, activityId } = useParams();
   const [userQualification, setUserQualification] = useState([]);
+
   const { user } = useAuthContext();
 
   const fetchUserQualificationsData = async () => {
     try {
       const response = await fetch(`${API}/users/${user.id}?populate=qualifications.activity,qualifications.evaluator.profile_photo,qualifications.file`);
       const data = await response.json();
-      console.log((data.qualifications.filter(qualification => qualification.activity.id === Number(activityId))[0]))
-      setUserQualification((data.qualifications.filter(qualification => qualification.activity.id === Number(activityId))[0]))
+      console.log(activityId)
+      const dataFiltered = (data.qualifications.filter(qualification => qualification.activity.id === Number(activityId))[0])
+      console.log(dataFiltered)
+      if (dataFiltered !== undefined) {
+        setUserQualification(dataFiltered)
+      } else {
+        const activityData = await fetch(`${API}/activities/${activityId}?populate=*`);
+        const data = await activityData.json();
+        setUserQualification({activity: data.data.attributes})
+      }
+
     } catch (error) {
       console.error(error);
     }
@@ -28,12 +38,12 @@ const Activity = () => {
 
   return (
     <div>
-      <div className='max-h-full max-w-full bg-white '>
+      <div className='max-h-full  bg-white '>
         <Navbar />
-        <div className='flex flex-wrap-reverse  min-h-[calc(100vh-8rem)]  sm:flex-nowrap bg-white'>
+        <div className='flex min-h-[calc(100vh-8rem)] md:ml-64 md:min-w-[calc(100vw-20rem)] md:flex-nowrap bg-white'>
           <Sidebar section={'courses'} />
           <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] grid '>
-            <div className='ml-12 '>
+            <div className='md:ml-12 ml-8 '>
               {userQualification.activity && (
                 <ActivityComponent activityData={userQualification} />
               )}

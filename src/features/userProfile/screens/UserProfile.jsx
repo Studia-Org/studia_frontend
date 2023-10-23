@@ -65,9 +65,9 @@ const UserProfile = () => {
   }, [uid]);
 
   return (
-    <div className='h-screen w-full bg-white'>
+    <div className='h-screen bg-white'>
       <Navbar user={user} />
-      <div className='flex flex-wrap-reverse sm:flex-nowrap bg-white'>
+      <div className='flex min-h-[calc(100vh-8rem)] md:ml-64 md:min-w-[calc(100vw-16rem)] md:flex-nowrap bg-white'>
         <Sidebar section={'courses'} />
         <div className='container-fluid w-full  rounded-tl-3xl bg-[#e7eaf886]  '>
           <>
