@@ -248,9 +248,9 @@ const CourseInside = () => {
   }
 
   return (
-    <div className='h-screen  bg-white'>
+    <div className='min-h-screen w-full bg-white'>
       <Navbar />
-      <div className='flex min-h-[calc(100vh-8rem)] md:ml-64 md:min-w-[calc(100vw-16rem)] md:flex-nowrap bg-white'>
+      <div className='flex min-h-[calc(100vh-8rem)] md:ml-80 md:min-w-[calc(100vw-20rem)] md:flex-nowrap bg-white'>
         <Sidebar section={'courses'} />
         <div className='container-fluid min-h-screen w-screen rounded-tl-3xl bg-[#e7eaf886] flex flex-wrap'>
           <div className='flex-1 min-w-0  sm:w-auto mt-3 ml-8 mr-8'>

@@ -43,6 +43,14 @@ export const Sidebar = (props) => {
         sidebar.style.backgroundColor = 'white'
         sidebar.classList.toggle('-translate-x-full');
     }
+    window.addEventListener('resize', function (event) {
+        const sidebar = document.getElementById('default-sidebar');
+        if (window.innerWidth > 768) {
+            sidebar.style.height = 'fit-content'
+            sidebar.style.backgroundColor = 'transparent'
+            sidebar.classList.add('-translate-x-full');
+        }
+    });
     window.addEventListener('click', function (event) {
         if (event.target.matches('#button-sidebar') ||
             event.target.matches('#svg-sidebar') ||
@@ -66,10 +74,10 @@ export const Sidebar = (props) => {
                 </svg>
             </button>
 
-            <aside id="default-sidebar" class="absolute top-0 left-0  z-40 w-64 md:mt-10 transition-transform -translate-x-full md:translate-x-0" aria-label="Sidebar">
-                <div class="h-full px-3 py-4 overflow-y-auto ">
+            <aside id="default-sidebar" class="absolute pl-10 sm:pl-16 top-0 left-0 z-40 w-80 md:mt-10 transition-transform -translate-x-full md:translate-x-0" aria-label="Sidebar">
+                <div class="h-full py-4 overflow-y-auto ">
 
-                    <ul className="space-y-96 font-medium py-12 ">
+                    <ul className="space-y-96 font-medium w-48 py-12 ">
                         <Link to={'/app/courses'} style={{ textDecoration: "none" }}>
                             <li className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all  rounded-lg ${Object.keys(iconProps.courses).length > 0 ? 'bg-gradient-to-r from-[#657DE9] to-[#6E66D6] rounded-lg py-3' : ''}`}>
                                 <span className='flex font-semibold'>

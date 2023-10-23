@@ -26,7 +26,7 @@ const CreateCourse = () => {
     return (
         <div className='h-screen w-screen bg-white '>
             <Navbar />
-            <div className='flex flex-wrap-reverse h-[calc(100%-8rem)] w-full sm:flex-nowrap bg-white'>
+            <div className='flex min-h-[calc(100vh-8rem)] md:ml-80 md:min-w-[calc(100vw-20rem)] md:flex-nowrap bg-white'>
                 <Sidebar section={'courses'} />
                 <div className='rounded-tl-3xl bg-[#e7eaf886] w-full max-h-full'>
                     <div className='pt-9 pl-12 h-full font-bold text-2xl w-full'>

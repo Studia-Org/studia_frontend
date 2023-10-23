@@ -66,7 +66,7 @@ const CoursesHome = () => {
     <div className='max-h-full  bg-white '>
       <Navbar />
       <Sidebar section={'courses'} />
-      <div className='flex min-h-[calc(100vh-8rem)] md:ml-64 md:min-w-[calc(100vw-16rem)] md:flex-nowrap bg-white'>
+      <div className='flex min-h-[calc(100vh-8rem)] md:ml-80 md:min-w-[calc(100vw-20rem)] md:flex-nowrap bg-white'>
         <div className=' max-h-full rounded-tl-3xl bg-[#e7eaf886] grid w-full'>
           <div className=' sm:px-12  font-bold text-2xl'>
             {!isLoading ?
