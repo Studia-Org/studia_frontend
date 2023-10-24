@@ -84,7 +84,7 @@ export const Sidebar = (props) => {
                                     <IconContext.Provider value={iconProps.courses}>
                                         <FiGrid size={25} />
                                     </IconContext.Provider>
-                                    <h2 className={`${Object.keys(iconProps.courses).length > 0 ? 'pl-2 text-white' : 'px-4'}`}>My Courses</h2>
+                                    <h2 className={`${Object.keys(iconProps.courses).length > 0 ? 'pl-2 text-white' : 'px-4'}`}>Home</h2>
                                 </span>
                             </li>
                         </Link>
