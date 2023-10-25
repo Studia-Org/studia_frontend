@@ -24,22 +24,18 @@ const CreateCourse = () => {
     }
 
     return (
-        <div className='h-screen w-screen bg-white '>
-            <Navbar />
-            <div className='flex min-h-[calc(100vh-8rem)] md:ml-80 md:min-w-[calc(100vw-20rem)] md:flex-nowrap bg-white'>
-                <Sidebar section={'courses'} />
-                <div className='rounded-tl-3xl bg-[#e7eaf886] w-full max-h-full'>
-                    <div className='pt-9 pl-12 h-full font-bold text-2xl w-full'>
-                        <h1>Create new Course</h1>
-                        <CreateCourseBreadcrumb createCourseOption={createCourseOption} />
-                        <div className='flex justify-between mr-16 mt-5'>
-                            {RenderCreateCourse()}
-                            <img src={draw2} alt="" />
-                        </div>
-                    </div>
+
+        <div className='rounded-tl-3xl bg-[#e7eaf886] w-full max-h-full'>
+            <div className='pt-9 pl-12 h-full font-bold text-2xl w-full'>
+                <h1>Create new Course</h1>
+                <CreateCourseBreadcrumb createCourseOption={createCourseOption} />
+                <div className='flex justify-between mr-16 mt-5'>
+                    {RenderCreateCourse()}
+                    <img src={draw2} alt="" />
                 </div>
             </div>
-        </div >
+        </div>
+
     )
 }
 

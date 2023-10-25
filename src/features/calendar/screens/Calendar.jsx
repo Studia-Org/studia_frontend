@@ -141,60 +141,55 @@ const CalendarEvents = () => {
         return date.toLocaleTimeString(undefined, options);
     }
     return (
-        <div className='max-h-full  bg-white '>
-            <Navbar />
-            <Sidebar section={'events'} />
-            <div className='flex min-h-[calc(100vh-8rem)] md:ml-80 md:min-w-[calc(100vw-20rem)] md:flex-nowrap bg-white'>
-                <div className='flex-1 min-h-full max-w-full w-full rounded-tl-3xl bg-[#e7eaf886] '>
-                    <div className='p-9 lg:px-12 min-h-full px-5 font-bold text-2xl overflow-y-auto'>
-                        <div className='min-h-full bg-white rounded-xl lg:p-5 mt-3 shadow-lg '>
-                            <div className='flex'>
-                                <Modal size='sm' open={open} onClose={handleClose}>
-                                    <Modal.Header>
-                                        <Modal.Title>Add Event</Modal.Title>
-                                    </Modal.Header>
-                                    <Modal.Body>
-                                        <Form.Group >
-                                            <Form.ControlLabel>Title</Form.ControlLabel>
-                                            <Input value={title} onChange={handleTitleChange} />
-                                        </Form.Group >
-                                        <Form.Group >
-                                            <Form.ControlLabel>Date</Form.ControlLabel>
-                                            <Input type='datetime-local' value={date} onChange={handleDateChange} />
-                                        </Form.Group >
-                                    </Modal.Body>
-                                    <Modal.Footer>
-                                        <Button onClick={handleClose} appearance="subtle">
-                                            Cancel
-                                        </Button>
-                                        <Button onClick={handleAddEvent} appearance="primary">
-                                            Add Event
-                                        </Button>
-                                    </Modal.Footer>
-                                </Modal>
-                            </div>
-
-                            <div className='font-normal '>
-                                <Calendar compact={window.innerWidth < 690} bordered renderCell={renderCell} />
-                            </div>
-
-                        </div>
+        <div className='flex-1 min-h-full max-w-full w-full rounded-tl-3xl bg-[#e7eaf886] '>
+            <div className='p-9 lg:px-12 min-h-full px-5 font-bold text-2xl overflow-y-auto'>
+                <div className='min-h-full bg-white rounded-xl lg:p-5 mt-3 shadow-lg '>
+                    <div className='flex'>
+                        <Modal size='sm' open={open} onClose={handleClose}>
+                            <Modal.Header>
+                                <Modal.Title>Add Event</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <Form.Group >
+                                    <Form.ControlLabel>Title</Form.ControlLabel>
+                                    <Input value={title} onChange={handleTitleChange} />
+                                </Form.Group >
+                                <Form.Group >
+                                    <Form.ControlLabel>Date</Form.ControlLabel>
+                                    <Input type='datetime-local' value={date} onChange={handleDateChange} />
+                                </Form.Group >
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button onClick={handleClose} appearance="subtle">
+                                    Cancel
+                                </Button>
+                                <Button onClick={handleAddEvent} appearance="primary">
+                                    Add Event
+                                </Button>
+                            </Modal.Footer>
+                        </Modal>
                     </div>
-                    <div className='fixed right-10 bottom-10'>
-                        <button
-                            type="button"
-                            data-dial-toggle="speed-dial-menu-dropdown"
-                            aria-controls="speed-dial-menu-dropdown"
-                            className="flex shadow-lg items-center transition  justify-center ml-auto text-white bg-blue-600 rounded-full w-14 h-14 hover:bg-blue-600 hover-scale active-scale  "
-                            onClick={handleOpen}
-                        >
-                            <FiPlus size={26} />
-                            <span className="sr-only"></span>
-                        </button>
+
+                    <div className='font-normal '>
+                        <Calendar compact={window.innerWidth < 690} bordered renderCell={renderCell} />
                     </div>
+
                 </div>
             </div>
+            <div className='fixed right-10 bottom-10'>
+                <button
+                    type="button"
+                    data-dial-toggle="speed-dial-menu-dropdown"
+                    aria-controls="speed-dial-menu-dropdown"
+                    className="flex shadow-lg items-center transition  justify-center ml-auto text-white bg-blue-600 rounded-full w-14 h-14 hover:bg-blue-600 hover-scale active-scale  "
+                    onClick={handleOpen}
+                >
+                    <FiPlus size={26} />
+                    <span className="sr-only"></span>
+                </button>
+            </div>
         </div>
+
     )
 }
 

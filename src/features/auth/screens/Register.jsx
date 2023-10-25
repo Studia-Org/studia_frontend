@@ -2,7 +2,7 @@ import { React, useState } from 'react'
 import { BsFillArrowLeftSquareFill } from 'react-icons/bs'
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthContext } from "../../../context/AuthContext";
-import {Spin} from "antd";
+import { Spin } from "antd";
 import { API } from "../../../constant";
 import { Toast } from "../../../shared/elements/Toasts";
 import { setToken } from "../../../helpers";
@@ -60,7 +60,11 @@ const Register = () => {
     }
   };
 
-
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      registerAccount();
+    }
+  });
   return (
     <div class="">
       <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script>
