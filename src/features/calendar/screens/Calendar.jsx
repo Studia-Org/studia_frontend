@@ -126,9 +126,11 @@ const CalendarEvents = () => {
 
                         <li onClick={() => { setInfoModal(true); setInfoModalData(list) }} className={`text-left ${innerWidth < 690 ? "text-center" : ""}`} key={index}>
                             {innerWidth < 690 ? <Badge /> :
-                                <> <Badge />
-                                    <b>{formatTime(item.date)}</b> - {item.title}
-                                </>}
+                                <>
+                                    <Badge />
+                                    <b className='pl-1'>{formatTime(item.date)}</b> - {item.title}
+                                </>
+                            }
 
                         </li>
                     ))}
