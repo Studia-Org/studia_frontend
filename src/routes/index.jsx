@@ -28,7 +28,7 @@ export const AppRoutes = () => {
 
     else if (authenticated)
         return (
-            <div className='max-h-full  bg-white '>
+            <div className='max-h-full font-Poppins  bg-white '>
                 <Navbar />
                 <Sidebar section={path} />
                 <div className='flex min-h-[calc(100vh-8rem)] md:ml-80 md:min-w-[calc(100vw-20rem)] md:flex-nowrap bg-white'>

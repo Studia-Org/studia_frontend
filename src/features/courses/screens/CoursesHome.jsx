@@ -71,25 +71,25 @@ const CoursesHome = () => {
 
   const fetchDailyTasks = async () => {
     try {
-      const response = await fetch(`${API}/users/${user.id}?populate=courses.sections.subsections`);
+      const response = await fetch(`${API}/users/${user.id}?populate=courses.sections.subsections,courses.cover`);
       const data = await response.json();
 
       let newDailyTasks = [...dailyTasks];
 
       data.courses.forEach((course) => {
+        console.log(course.cover)
         course.sections.forEach((section) => {
           section.subsections.forEach((subsection) => {
             const fechaActual = new Date();
             if (fechaActual >= new Date(subsection.start_date) && fechaActual <= new Date(subsection.end_date)) {
               if (!newDailyTasks.some((task) => task.id === subsection.id)) {
-                newDailyTasks.push(subsection);
+                newDailyTasks.push({subsection, cover: course.cover.url});
               }
             }
           });
         });
       });
       setDailyTasks(newDailyTasks);
-
     } catch (error) {
       console.error(error);
     }
@@ -123,12 +123,12 @@ const CoursesHome = () => {
 
   function RenderDailyTasks(subsection) {
     var colorStyle = undefined;
-    const warningDate = new Date(subsection.end_date).getDay() - 2 <= new Date().getDay();
-    if (subsection.fase === 'Performance') {
+    const warningDate = new Date(subsection.subsection.end_date).getDay() - 2 <= new Date().getDay();
+    if (subsection.subsection.fase === 'Performance') {
       colorStyle = { backgroundColor: '#eab308' }
-    } else if (subsection.fase === 'Self-reflection') {
+    } else if (subsection.subsection.fase === 'Self-reflection') {
       colorStyle = { backgroundColor: '#ef4444' }
-    } else if (subsection.fase === 'Forethought') {
+    } else if (subsection.subsection.fase === 'Forethought') {
       colorStyle = { backgroundColor: '#166534' }
     }
 
@@ -136,25 +136,21 @@ const CoursesHome = () => {
       <div className='relative bg-white rounded-2xl shadow-md flex p-3 mr-16 w-[30rem] h-[5rem]'>
         <div className="w-2 rounded-md mr-3" style={colorStyle}></div>
         <div className='flex-col flex justify-center'>
-          <p className=' font-semibold text-base'>{subsection.title}</p>
-          <p className='font-normal text-sm  text-gray-500'>{subsection.description}</p>
+          <p className=' font-semibold text-base'>{subsection.subsection.title}</p>
+          <p className='font-normal text-sm  text-gray-500'>{subsection.subsection.description}</p>
         </div>
         {
           warningDate === true ?
             <div className='flex items-center mr-3'>
-              <Whisper placement="top" className='text-sm shadow-md' trigger="hover" controlId="control-id-hover" speaker={speaker(subsection.end_date)}>
+              <Whisper placement="top" className='text-sm shadow-md' trigger="hover" controlId="control-id-hover" speaker={speaker(subsection.subsection.end_date)}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-red-500">
                   <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z" clipRule="evenodd" />
                 </svg>
               </Whisper>
             </div> : null
-
         }
-
-        <img className='object-cover w-24 top-0 right-0 h-[5rem] absolute rounded-r-lg opacity-90' src="https://res.cloudinary.com/dnmlszkih/image/upload/v1696604080/Fiesta_en_la_Plaza_Mayor_Museo_de_Historia_de_Madrid_cropped_085d40b729.jpg" alt="" />
-
+        <img className='object-cover w-24 top-0 right-0 h-[5rem] absolute rounded-r-lg opacity-90' src={subsection.cover} alt="" />
       </div>
-
     )
   }
   function renderConfeti() {
@@ -237,68 +233,71 @@ const CoursesHome = () => {
   }
 
   return (
-    <div>
+    <>
       <div className=' max-h-full rounded-tl-3xl bg-[#e7eaf886] grid w-full'>
         <div className=' sm:px-12  font-bold text-2xl flex'>
-          <div className='w-3/4 '>
-            <p className='py-11 pb-6 font-bold text-xl'>Recent Courses</p>
-            {!isLoading ?
-              <motion.div id='course-motion-div' className='flex flex-wrap  justify-center md:justify-start ' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
-                {courses.courses && courses.courses.map(RenderCourse)}
-              </motion.div> :
+          {
+            isLoading ?
               <div className='w-full h-full flex items-center justify-center' >
                 <MoonLoader color="#363cd6" size={80} />
-              </div>
-            }
-          </div>
+              </div> :
+              <>
+                <div className='w-3/4 '>
+                  <p className='py-11 pb-6 font-bold text-xl'>Recent Courses</p>
+                  <motion.div id='course-motion-div' className='flex flex-wrap  justify-center md:justify-start ' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
+                    {courses.courses && courses.courses.map(RenderCourse)}
+                  </motion.div>
+                </div>
 
-          <div className='flex flex-col mt-12 '>
-            <div className=''>
-              <p className=' pb-6 font-bold text-xl'>Daily Tasks</p>
-              {
-                dailyTasks.length > 0 ?
-
-                  <div className='flex flex-col space-y-5 mb-10'>
-                    {dailyTasks.map(RenderDailyTasks)}
-                  </div>
-
-                  :
-                  <div className='flex'>
-                    <div className='bg-white shadow-md rounded-2xl p-5 flex mb-10 items-center space-x-7'>
-                      <p className='font-medium text-gray-400 text-base '>There are no tasks for today</p>
-                      <img className='opacity-50 w-36' src="https://liferay-support.zendesk.com/hc/article_attachments/360032795211/empty_state.gif" alt="" />
-                    </div>
-                  </div>
-              }
-            </div>
-            <div className=''>
-              <p className=' pb-6 font-bold text-xl'>Your Objectives</p>
-              {
-                user ?
-                  <div className='space-y-5 flex flex-col mb-5'>
+                <div className='flex flex-col mt-12 '>
+                  <div className=''>
+                    <p className=' pb-6 font-bold text-xl'>Daily Tasks</p>
                     {
-                      user.objectives !== undefined ?
-                        user.objectives.map(renderObjectives)
-                        :
-                        null
-                    }
-                    {
-                      confettiExplode === true ?
-                        renderConfeti()
-                        :
-                        null
-                    }
+                      dailyTasks.length > 0 ?
 
-                  </div> :
-                  <div className='flex'>
-                    <div className='bg-white shadow-md rounded-2xl p-5 flex mb-10 items-center space-x-7'>
-                      <p className='font-medium text-gray-400 text-base '>You did not set any objective yet!</p>
-                      <img className='opacity-50 w-36' src="https://liferay-support.zendesk.com/hc/article_attachments/360032795211/empty_state.gif" alt="" />
-                    </div>
+                        <div className='flex flex-col space-y-5 mb-10'>
+                          {dailyTasks.map(RenderDailyTasks)}
+                        </div>
+
+                        :
+                        <div className='flex'>
+                          <div className='bg-white shadow-md rounded-2xl p-5 flex mb-10 items-center space-x-7'>
+                            <p className='font-medium text-gray-400 text-base '>There are no tasks for today</p>
+                            <img className='opacity-50 w-36' src="https://liferay-support.zendesk.com/hc/article_attachments/360032795211/empty_state.gif" alt="" />
+                          </div>
+                        </div>
+                    }
                   </div>
-              }
-            </div>
-          </div>
+                  <div className=''>
+                    <p className=' pb-6 font-bold text-xl'>Your Objectives</p>
+                    {
+                      user ?
+                        <div className='space-y-5 flex flex-col mb-5'>
+                          {
+                            user.objectives !== undefined ?
+                              user.objectives.map(renderObjectives)
+                              :
+                              null
+                          }
+                          {
+                            confettiExplode === true ?
+                              renderConfeti()
+                              :
+                              null
+                          }
+
+                        </div> :
+                        <div className='flex'>
+                          <div className='bg-white shadow-md rounded-2xl p-5 flex mb-10 items-center space-x-7'>
+                            <p className='font-medium text-gray-400 text-base '>You did not set any objective yet!</p>
+                            <img className='opacity-50 w-36' src="https://liferay-support.zendesk.com/hc/article_attachments/360032795211/empty_state.gif" alt="" />
+                          </div>
+                        </div>
+                    }
+                  </div>
+                </div>
+              </>
+          }
         </div>
       </div>
       {
@@ -334,11 +333,9 @@ const CoursesHome = () => {
               <span className="sr-only"></span>
             </button>
           </div>
-          :
-          <div>
-          </div>
+          : null
       }
-    </div>
+    </>
   )
 }
 
