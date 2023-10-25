@@ -20,13 +20,13 @@ export const CoursesCardHome = ({ course }) => {
                 <div className="w-[24rem] h-[26rem] bg-white rounded-3xl shadow-md cursor-pointer shadow2 relative flex flex-col mb-10 mr-10">
                     <img className="rounded-t-3xl w-full h-[13rem] object-fill" src={course.cover.url} alt="" />
                     <div className="p-3 flex flex-col ml-5 mr-5 h-full">
-                        <div className='flex flex-wrap flex-grow'>
+                        <div className='flex flex-wrap flex-grow '>
                             {course.tags.tags.map(renderCourseTags)}
                         </div>
                         <h3 className='text-left text-xl font-bold w-full overflow-hidden line-clamp-2 mt-2 items-center'>{course.title}</h3>
                         <div className='flex items-center flex-grow mt-3' name='studentData'>
                             <img src={course.professor.profile_photo.url} className='w-8 h-8 rounded-full' alt="" />
-                            <p className='font-normal text-xs ml-2'>by {course.professor.name}</p>
+                            <p className='font-normal text-xs ml-2'>{course.professor.name}</p>
                             <div className='ml-auto pb-3 flex items-center '>
                                 <AvatarGroup stack>
                                     {course.students
