@@ -18,7 +18,7 @@ export const CoursesCardsProfile = ({ course, user }) => {
     }
 
     return (
-        <div className="p-3 " onClick={() => handleCourseNavigation()}>
+        <div className="w-full p-3 " onClick={() => handleCourseNavigation()}>
             <div className={`w-full lg:max-w-full lg:flex ${isUserMember ? 'shadow2' : ''} cursor-pointer`}>
                 <div
                     className="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-l text-center overflow-hidden"
@@ -26,7 +26,7 @@ export const CoursesCardsProfile = ({ course, user }) => {
                     title=""
                 >
                 </div>
-                <div className="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+                <div className="w-full border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
                     <div className="mb-8">
                         {!isUserMember && (
                             <p className="text-sm text-gray-600 flex items-center">
