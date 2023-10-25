@@ -60,6 +60,11 @@ const Login = () => {
         }
     };
 
+    window.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            loginAccount();
+        }
+    });
 
     return (
         <div className="">

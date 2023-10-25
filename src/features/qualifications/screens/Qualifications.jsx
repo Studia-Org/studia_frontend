@@ -150,25 +150,23 @@ const Qualifications = () => {
         )
     }
     return (
-        <div className='max-h-full  bg-white '>
-            <Navbar />
-            <Sidebar section={'qualifications'} />
-            <div className='flex min-h-[calc(100vh-8rem)] md:ml-80 md:min-w-[calc(100vw-20rem)] md:flex-nowrap bg-white '>
-                <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] '>
-                    {!loading ?
-                        <div className='p-9 px-12 font-bold text-2xl'>
-                            <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
-                                {qualifications && <QualificationsTable qualifications={qualifications} />}
-                            </motion.div>
-                        </div>
-                        :
-                        <div className='w-full h-full flex items-center justify-center'>
-                            <MoonLoader color="#363cd6" size={80} />
-                        </div>
-                    }
+
+        <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] '>
+            {!loading ?
+                <div className='p-9 px-12 font-bold text-2xl'>
+                    <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
+                        {qualifications && <QualificationsTable qualifications={qualifications} />}
+                    </motion.div>
                 </div>
-            </div>
+
+                :
+                <div className='w-full h-full flex items-center justify-center'>
+                    <MoonLoader color="#363cd6" size={80} />
+                </div>
+
+            }
         </div>
+
     )
 }
 

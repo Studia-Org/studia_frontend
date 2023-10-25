@@ -151,7 +151,7 @@ const CoursesHome = () => {
 
         }
 
-        <img className='object-cover w-24 top-0 right-0 h-[5rem] absolute rounded-r-lg opacity-90' src="https://res.cloudinary.com/dnmlszkih/image/upload/v1696604080/Fiesta_en_la_Plaza_Mayor_Museo_de_Historia_de_Madrid_cropped_085d40b729.jpg"  alt="" />
+        <img className='object-cover w-24 top-0 right-0 h-[5rem] absolute rounded-r-lg opacity-90' src="https://res.cloudinary.com/dnmlszkih/image/upload/v1696604080/Fiesta_en_la_Plaza_Mayor_Museo_de_Historia_de_Madrid_cropped_085d40b729.jpg" alt="" />
 
       </div>
 
@@ -237,114 +237,109 @@ const CoursesHome = () => {
   }
 
   return (
-    <div className='min-h-screen  bg-white '>
-      <Navbar />
-      <Sidebar section={'courses'} />
-      <div className='flex min-h-[calc(100vh-8rem)] md:ml-80 md:min-w-[calc(100vw-20rem)] md:flex-nowrap bg-white'>
-        <div className=' max-h-full rounded-tl-3xl bg-[#e7eaf886] grid w-full'>
-          <div className=' sm:px-12  font-bold text-2xl flex'>
-            <div className='w-3/4 '>
-              <p className='py-11 pb-6 font-bold text-xl'>Recent Courses</p>
-              {!isLoading ?
-                <motion.div id='course-motion-div' className='flex flex-wrap  justify-center md:justify-start ' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
-                  {courses.courses && courses.courses.map(RenderCourse)}
-                </motion.div> :
-                <div className='w-full h-full flex items-center justify-center' >
-                  <MoonLoader color="#363cd6" size={80} />
-                </div>
+    <div>
+      <div className=' max-h-full rounded-tl-3xl bg-[#e7eaf886] grid w-full'>
+        <div className=' sm:px-12  font-bold text-2xl flex'>
+          <div className='w-3/4 '>
+            <p className='py-11 pb-6 font-bold text-xl'>Recent Courses</p>
+            {!isLoading ?
+              <motion.div id='course-motion-div' className='flex flex-wrap  justify-center md:justify-start ' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
+                {courses.courses && courses.courses.map(RenderCourse)}
+              </motion.div> :
+              <div className='w-full h-full flex items-center justify-center' >
+                <MoonLoader color="#363cd6" size={80} />
+              </div>
+            }
+          </div>
+
+          <div className='flex flex-col mt-12 '>
+            <div className=''>
+              <p className=' pb-6 font-bold text-xl'>Daily Tasks</p>
+              {
+                dailyTasks.length > 0 ?
+
+                  <div className='flex flex-col space-y-5 mb-10'>
+                    {dailyTasks.map(RenderDailyTasks)}
+                  </div>
+
+                  :
+                  <div className='flex'>
+                    <div className='bg-white shadow-md rounded-2xl p-5 flex mb-10 items-center space-x-7'>
+                      <p className='font-medium text-gray-400 text-base '>There are no tasks for today</p>
+                      <img className='opacity-50 w-36' src="https://liferay-support.zendesk.com/hc/article_attachments/360032795211/empty_state.gif" alt="" />
+                    </div>
+                  </div>
               }
             </div>
+            <div className=''>
+              <p className=' pb-6 font-bold text-xl'>Your Objectives</p>
+              {
+                user ?
+                  <div className='space-y-5 flex flex-col mb-5'>
+                    {
+                      user.objectives !== undefined ?
+                        user.objectives.map(renderObjectives)
+                        :
+                        null
+                    }
+                    {
+                      confettiExplode === true ?
+                        renderConfeti()
+                        :
+                        null
+                    }
 
-            <div className='flex flex-col mt-12 '>
-              <div className=''>
-                <p className=' pb-6 font-bold text-xl'>Daily Tasks</p>
-                {
-                  dailyTasks.length > 0 ?
-
-                    <div className='flex flex-col space-y-5 mb-10'>
-                      {dailyTasks.map(RenderDailyTasks)}
+                  </div> :
+                  <div className='flex'>
+                    <div className='bg-white shadow-md rounded-2xl p-5 flex mb-10 items-center space-x-7'>
+                      <p className='font-medium text-gray-400 text-base '>You did not set any objective yet!</p>
+                      <img className='opacity-50 w-36' src="https://liferay-support.zendesk.com/hc/article_attachments/360032795211/empty_state.gif" alt="" />
                     </div>
-
-                    :
-                    <div className='flex'>
-                      <div className='bg-white shadow-md rounded-2xl p-5 flex mb-10 items-center space-x-7'>
-                        <p className='font-medium text-gray-400 text-base '>There are no tasks for today</p>
-                        <img className='opacity-50 w-36' src="https://liferay-support.zendesk.com/hc/article_attachments/360032795211/empty_state.gif" alt="" />
-                      </div>
-                    </div>
-                }
-              </div>
-              <div className=''>
-                <p className=' pb-6 font-bold text-xl'>Your Objectives</p>
-                {
-                  user ?
-                    <div className='space-y-5 flex flex-col mb-5'>
-                      {
-                        user.objectives !== undefined ?
-                          user.objectives.map(renderObjectives)
-                          :
-                          null
-                      }
-                      {
-                        confettiExplode === true ?
-                          renderConfeti()
-                          :
-                          null
-                      }
-
-                    </div> :
-                    <div className='flex'>
-                      <div className='bg-white shadow-md rounded-2xl p-5 flex mb-10 items-center space-x-7'>
-                        <p className='font-medium text-gray-400 text-base '>You did not set any objective yet!</p>
-                        <img className='opacity-50 w-36' src="https://liferay-support.zendesk.com/hc/article_attachments/360032795211/empty_state.gif" alt="" />
-                      </div>
-                    </div>
-                }
-              </div>
+                  </div>
+              }
             </div>
           </div>
         </div>
-        {
-          user && user.role_str === 'admin' ?
-            <div className='fixed right-10 bottom-10'>
-              <div
-                id="speed-dial-menu-dropdown"
-                className={`bg-white shadow rounded-2xl transform scale-0 opacity-0 mb-5 h-3 w-[24rem]  duration-200 ${isExpanded ? 'scale-100 h-[12rem] w-[20rem] opacity-100' : ''}`}
-              >
-                <div className='p-4 flex flex-col text-base font-medium space-y-4 '>
-                  <button className='flex items-center text-left  hover:border-l-4 border-black transition-all duration-100 ' onClick={() => navigate('create')}>
-                    <p className='ml-2'>Create new course from a template</p>
-                    <FiChevronRight className='ml-auto' />
-                  </button>
-                  <button className='flex items-center text-left hover:border-l-4 border-black transition-all duration-100' onClick={() => navigate('create')}>
-                    <p className='ml-2'>Create new course</p>
-                    <FiChevronRight className='ml-auto' />
-                  </button>
-                  <div className=''>
-                    <hr />
-                    <button className='font-light text-sm mt-2'>Do you need help?</button>
-                  </div>
+      </div>
+      {
+        user && user.role_str === 'admin' ?
+          <div className='fixed right-10 bottom-10'>
+            <div
+              id="speed-dial-menu-dropdown"
+              className={`bg-white shadow rounded-2xl transform scale-0 opacity-0 mb-5 h-3 w-[24rem]  duration-200 ${isExpanded ? 'scale-100 h-[12rem] w-[20rem] opacity-100' : ''}`}
+            >
+              <div className='p-4 flex flex-col text-base font-medium space-y-4 '>
+                <button className='flex items-center text-left  hover:border-l-4 border-black transition-all duration-100 ' onClick={() => navigate('create')}>
+                  <p className='ml-2'>Create new course from a template</p>
+                  <FiChevronRight className='ml-auto' />
+                </button>
+                <button className='flex items-center text-left hover:border-l-4 border-black transition-all duration-100' onClick={() => navigate('create')}>
+                  <p className='ml-2'>Create new course</p>
+                  <FiChevronRight className='ml-auto' />
+                </button>
+                <div className=''>
+                  <hr />
+                  <button className='font-light text-sm mt-2'>Do you need help?</button>
                 </div>
               </div>
-              <button
-                type="button"
-                data-dial-toggle="speed-dial-menu-dropdown"
-                aria-controls="speed-dial-menu-dropdown"
-                className="flex shadow-lg items-center transition  justify-center ml-auto text-white bg-blue-600 rounded-full w-14 h-14 hover:bg-blue-600 hover-scale active-scale  "
-                onClick={() => setIsExpanded(!isExpanded)}
-              >
-                <FiPlus size={26} />
-                <span className="sr-only"></span>
-              </button>
             </div>
-            :
-            <div>
-            </div>
-        }
-      </div>
+            <button
+              type="button"
+              data-dial-toggle="speed-dial-menu-dropdown"
+              aria-controls="speed-dial-menu-dropdown"
+              className="flex shadow-lg items-center transition  justify-center ml-auto text-white bg-blue-600 rounded-full w-14 h-14 hover:bg-blue-600 hover-scale active-scale  "
+              onClick={() => setIsExpanded(!isExpanded)}
+            >
+              <FiPlus size={26} />
+              <span className="sr-only"></span>
+            </button>
+          </div>
+          :
+          <div>
+          </div>
+      }
     </div>
   )
-
 }
 
 
