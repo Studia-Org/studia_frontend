@@ -1,0 +1,3 @@
+.rs-calendar-table{
+    min-height: calc(100vh - 8rem - 0.15*(100vh - 8rem));
+}

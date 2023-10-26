@@ -11,9 +11,29 @@
 
 }
 
+
 .react-calendar-timeline .rct-vertical-lines .rct-vl {
     border-left: 1px solid;
-    
+
+}
+
+.react-calendar-timeline {
+    height: 100% !important;
+}
+
+.rct-outer {
+    height: calc(100% - 55px) !important;
+}
+
+.rct-scroll {
+    height: 100% !important;
+    overflow-x: hidden !important;
+}
+.rct-scroll:hover {
+    cursor: move !important;
+}
+.rct-vl{
+    height: 100% !important;
 }
 
 .react-calendar-timeline .rct-dateHeader {
@@ -27,10 +47,11 @@
     background-color: #f7f7f7;
 }
 
-.react-calendar-timeline .rct-calendar-header{
+.react-calendar-timeline .rct-calendar-header {
     border: none;
 }
 
-.react-calendar-timeline .rct-vertical-lines .rct-vl.rct-day-6, .react-calendar-timeline .rct-vertical-lines .rct-vl.rct-day-0{
+.react-calendar-timeline .rct-vertical-lines .rct-vl.rct-day-6,
+.react-calendar-timeline .rct-vertical-lines .rct-vl.rct-day-0 {
     background: none;
 }

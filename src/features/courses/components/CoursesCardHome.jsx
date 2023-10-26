@@ -1,31 +1,50 @@
 import React from 'react'
 import { FiUser } from "react-icons/fi";
 import { Link } from 'react-router-dom';
+import Chip from '@mui/material/Chip';
+import { AvatarGroup, Avatar } from 'rsuite';
 
 export const CoursesCardHome = ({ course }) => {
+
+    function renderCourseTags(tag) {
+        return (
+            <div className=' bg-blue-200 p-1 h-6 rounded-lg text-blue-800 my-1 mr-3'>
+                <p className='font-medium text-xs'>{tag}</p>
+            </div>
+        )
+    }
+
     return (
         <>
             <Link to={`/app/courses/${course.id}`}>
-                <div className="max-w-sm bg-white rounded-lg shadow cursor-pointer shadow2">
-                    <img className="rounded-t-lg w-full h-[13rem] object-fill" src={course.cover.url} alt="" />
-                    <div className="p-3 flex flex-col justify-between h-full">
-                        <h3 className='text-center truncate w-full overflow-hidden'>{course.title}</h3>
-                        <p className='text-xs font-normal text-center mt-2 text-gray-700'>{course.course_type}</p>
-                        <div className='container bg-gray-100 py-1.5 my-6 rounded '>
+                <div className="w-[24rem] h-[26rem] bg-white rounded-3xl shadow-md cursor-pointer shadow2 relative flex flex-col mb-10 mr-10">
+                    <img className="rounded-t-3xl w-full h-[13rem] object-fill" src={course.cover.url} alt="" />
+                    <div className="p-3 flex flex-col ml-5 mr-5 h-full">
+                        <div className='flex flex-wrap flex-grow '>
+                            {course.tags.tags.map(renderCourseTags)}
                         </div>
-                        <div className='container flex flex-row space-x-20 justify-center'>
-                            <div className=' px-2 bg-gray-100 h-[3rem] flex justify-center text-center align-middle space-x-1 rounded items-center'>
-                                <FiUser size={19} className='my-1 justify-center text-center align-middle' />
-                                <p className=' text-base font-normal'>{course.students.length}</p>
-                            </div>
-                            <div className=' flex bg-gray-100 h-[3rem] rounded space-x-1 px-3 items-center'>
-                                <img class="w-8 h-8 rounded-full mr-3" src={course.professor['profile_photo'].url} alt="Rounded avatar" />
-                                <p className='text-base font-normal'>{course.professor['name']}</p>
+                        <h3 className='text-left text-xl font-bold w-full overflow-hidden line-clamp-2 mt-2 items-center'>{course.title}</h3>
+                        <div className='flex items-center flex-grow mt-3' name='studentData'>
+                            <img src={course.professor.profile_photo.url} className='w-8 h-8 rounded-full' alt="" />
+                            <p className='font-normal text-xs ml-2'>{course.professor.name}</p>
+                            <div className='ml-auto pb-3 flex items-center '>
+                                <AvatarGroup stack>
+                                    {course.students
+                                        .filter((user, i) => i < 3)
+                                        .map(user => (
+                                            <Avatar circle key={user.name} src={user.profile_photo.url} alt={user.name} style={{ width: '2rem', height: '2rem' }} />
+                                        ))}
+                                    {course.students.length > 3 && (
+                                        <Avatar circle style={{ background: '#3730a3', width: '2rem', height: '2rem', fontSize: '0.75rem', fontWeight: '400' }}>
+                                            +{course.students.length - 3}
+                                        </Avatar>
+                                    )}
+                                </AvatarGroup>
                             </div>
                         </div>
-                        
                     </div>
                 </div>
+
             </Link>
         </>
     )
