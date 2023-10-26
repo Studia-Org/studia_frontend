@@ -20,8 +20,10 @@ import { Whisper, Button, Popover } from 'rsuite';
 import { Chip } from '@mui/material';
 
 const CoursesHome = () => {
+  const { user } = useAuthContext();
   const [confettiActive, setConfettiActive] = useState(false);
   const [open, setOpen] = useState(false);
+  const [objectives, setObjectives] = useState([]);
   const [confettiExplode, setConfettiExplode] = useState(false);
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -38,7 +40,6 @@ const CoursesHome = () => {
     setOpen(true);
   };
   const transition = { duration: 0.3 };
-  const { user } = useAuthContext();
 
   useEffect(() => {
     const confettiDuration = 5000;
@@ -60,7 +61,7 @@ const CoursesHome = () => {
   const fetchCoursesCards = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`${API}/users/${user.id}?populate=courses.cover,courses.students.profile_photo,courses.professor,courses.professor.profile_photo,courses.tags`);
+      const response = await fetch(`${API}/users/${user.id}?populate=courses.cover,courses.students.profile_photo,courses.professor,courses.professor.profile_photo,courses.course_tags`);
       const data = await response.json();
       setCourses(data ?? []);
       setIsLoading(false);
@@ -68,22 +69,31 @@ const CoursesHome = () => {
       console.error(error);
     }
   };
+  const fetchUserObjectives = async () => {
+    try {
+      const response = await fetch(`${API}/users/${user.id}?populate=user_objectives`);
+      const data = await response.json();
+      setObjectives(data.user_objectives)
+    } catch (error) {
+      console.error(error);
+    }
+
+  }
 
   const fetchDailyTasks = async () => {
     try {
       const response = await fetch(`${API}/users/${user.id}?populate=courses.sections.subsections,courses.cover`);
       const data = await response.json();
 
-      let newDailyTasks = [...dailyTasks];
+      let newDailyTasks = [];
 
       data.courses.forEach((course) => {
-        console.log(course.cover)
         course.sections.forEach((section) => {
           section.subsections.forEach((subsection) => {
             const fechaActual = new Date();
             if (fechaActual >= new Date(subsection.start_date) && fechaActual <= new Date(subsection.end_date)) {
               if (!newDailyTasks.some((task) => task.id === subsection.id)) {
-                newDailyTasks.push({subsection, cover: course.cover.url});
+                newDailyTasks.push({ subsection, cover: course.cover.url });
               }
             }
           });
@@ -96,10 +106,16 @@ const CoursesHome = () => {
   };
 
   useEffect(() => {
-    if (isLoading) {
+    if (user) {
+      fetchUserObjectives()
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user) {
       fetchDailyTasks();
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (isLoading) {
@@ -123,7 +139,12 @@ const CoursesHome = () => {
 
   function RenderDailyTasks(subsection) {
     var colorStyle = undefined;
-    const warningDate = new Date(subsection.subsection.end_date).getDay() - 2 <= new Date().getDay();
+    const endDate = new Date(subsection.subsection.end_date); 
+    const today = new Date(); 
+    const twoDaysBeforeEndDate = new Date(endDate); 
+    twoDaysBeforeEndDate.setDate(endDate.getDate() - 2); 
+    const isDateDangerous = twoDaysBeforeEndDate <= today;
+
     if (subsection.subsection.fase === 'Performance') {
       colorStyle = { backgroundColor: '#eab308' }
     } else if (subsection.subsection.fase === 'Self-reflection') {
@@ -136,19 +157,23 @@ const CoursesHome = () => {
       <div className='relative bg-white rounded-2xl shadow-md flex p-3 mr-16 w-[30rem] h-[5rem]'>
         <div className="w-2 rounded-md mr-3" style={colorStyle}></div>
         <div className='flex-col flex justify-center'>
-          <p className=' font-semibold text-base'>{subsection.subsection.title}</p>
+          <div className='flex'>
+            <p className=' font-semibold text-base'>{subsection.subsection.title}</p>
+            {
+              isDateDangerous === true ?
+                <div className='flex items-center mr-3'>
+                  <Whisper placement="top" className='text-sm shadow-md' trigger="hover" controlId="control-id-hover" speaker={speaker(subsection.subsection.end_date)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-red-500 ml-2">
+                      <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z" clipRule="evenodd" />
+                    </svg>
+                  </Whisper>
+                </div> : null
+            }
+          </div>
+
           <p className='font-normal text-sm  text-gray-500'>{subsection.subsection.description}</p>
         </div>
-        {
-          warningDate === true ?
-            <div className='flex items-center mr-3'>
-              <Whisper placement="top" className='text-sm shadow-md' trigger="hover" controlId="control-id-hover" speaker={speaker(subsection.subsection.end_date)}>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-red-500">
-                  <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z" clipRule="evenodd" />
-                </svg>
-              </Whisper>
-            </div> : null
-        }
+
         <img className='object-cover w-24 top-0 right-0 h-[5rem] absolute rounded-r-lg opacity-90' src={subsection.cover} alt="" />
       </div>
     )
@@ -156,14 +181,16 @@ const CoursesHome = () => {
   function renderConfeti() {
     return (
       <div>
-        {confettiActive && <Confetti width={width} height={height} />}
+        {confettiActive && (
+          <Confetti width={width} height={height} />
+        )}
       </div>
-    )
+    );
   }
 
 
+
   const handleObjectiveCompleted = async (props) => {
-    const goalToUpdate = props;
     const textSwal = props.completed === true ? 'not completed' : 'completed';
     Swal.fire({
       title: 'Are you sure?',
@@ -175,21 +202,22 @@ const CoursesHome = () => {
       confirmButtonText: 'Yes'
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const updatedObjectives = [...user.objectives];
-        const index = updatedObjectives.findIndex((objective) => objective.goal === goalToUpdate.goal);
-        if (index !== -1) {
-          updatedObjectives[index].completed = !updatedObjectives[index].completed;
-        }
-        const updateUserObjectives = await fetch(`${API}/users/${user.id}`, {
+        const updateUserObjectives = await fetch(`${API}/user-objectives/${props.id}`, {
           method: 'PUT',
           headers: {
             Authorization: `Bearer ${getToken()}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ objectives: updatedObjectives }),
+          body: JSON.stringify({ data: { completed: !props.completed } }),
         });
         const data = await updateUserObjectives.json();
-        if (props.completed === true) {
+        const updatedObjective = { ...props, completed: !props.completed };
+        setObjectives((prevObjectives) => {
+          return prevObjectives.map((obj) =>
+            obj.id === updatedObjective.id ? updatedObjective : obj
+          );
+        });
+        if (props.completed === false) {
           setConfettiExplode(true);
         }
         Swal.mixin({
@@ -216,7 +244,7 @@ const CoursesHome = () => {
     return (
       <div>
         <div className='bg-white rounded-2xl shadow-md flex  p-5 mr-16 w-[30rem]'>
-          <p className='font-medium text-base'>{objective.goal}</p>
+          <p className='font-medium text-base'>{objective.objective}</p>
           {
             objective.completed === true ?
               <div className='ml-auto'>
@@ -274,8 +302,8 @@ const CoursesHome = () => {
                       user ?
                         <div className='space-y-5 flex flex-col mb-5'>
                           {
-                            user.objectives !== undefined ?
-                              user.objectives.map(renderObjectives)
+                            user.user_objectives !== undefined ?
+                              objectives.map(renderObjectives)
                               :
                               null
                           }
