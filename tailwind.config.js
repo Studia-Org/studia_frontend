@@ -3,6 +3,7 @@ module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
+  
   theme: {
     fontFamily: {
       'Poppins': ['Poppins'],
@@ -21,10 +22,15 @@ module.exports = {
       'xl': '1280px',
       // => @media (min-width: 1280px) { ... }
 
-      '2xl': '1536px',
+      '2xl': '1980px',
       // => @media (min-width: 1536px) { ... }
       'grid-home': '1340px',
       // => @media (min-width: 1280px) { ... }
+    },
+  },
+  variants: {
+    extend: {
+      backgroundImage: ['hover'],
     },
   },
   plugins: [

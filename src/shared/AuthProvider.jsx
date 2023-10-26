@@ -7,12 +7,11 @@ import { getToken } from "../helpers";
 
 const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const authToken = getToken()
 
 
   const fetchLoggedInUser = async (token) => {
-    setIsLoading(true);
     try {
       const response = await fetch(`${API}/users/me?populate=*`, {
         headers: { Authorization: `${BEARER} ${token}` },

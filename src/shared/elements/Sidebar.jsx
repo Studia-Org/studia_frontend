@@ -76,7 +76,7 @@ export const Sidebar = (props) => {
                 </svg>
             </button>
 
-            <aside id="default-sidebar" class="absolute  sm:pl-16 top-0 left-0 z-40 w-80 md:mt-20 transition-transform -translate-x-full md:translate-x-0" aria-label="Sidebar">
+            <aside id="default-sidebar" class="absolute   sm:pl-16 top-0 left-0 z-40 w-80 md:mt-20 transition-transform -translate-x-full md:translate-x-0" aria-label="Sidebar">
                 <div class="h-full py-4 overflow-y-auto ">
 
                     <ul className="space-y-96 font-medium w-48 py-12 ">
