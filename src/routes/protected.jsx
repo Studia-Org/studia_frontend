@@ -7,6 +7,7 @@ import { UserProfileRoutes } from '../features/userProfile/screens';
 import { CalendarRoutes } from '../features/calendar/screens';
 import { SettingsRoutes } from '../features/settings/screens';
 import { TimelineRoutes } from '../features/timeline/screens';
+import { DashboardRoutes } from '../features/dashboard/screens';
 
 const App = () => {
     return (
@@ -34,6 +35,7 @@ const App = () => {
         { path: 'settings/*', element: <SettingsRoutes /> },
         { path: 'calendar/*', element: <CalendarRoutes /> },
         { path: 'timeline/*', element: <TimelineRoutes /> },
+        { path: 'dashboard/*', element: <DashboardRoutes/> },
       ],
     },
   ];
