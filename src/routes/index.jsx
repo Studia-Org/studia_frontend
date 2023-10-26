@@ -23,7 +23,7 @@ export const AppRoutes = () => {
     const routes = authenticated ? protectedRoutes : publicRoutes;
     const element = useRoutes([...routes, ...commonRoutes]);
     const pathSegments = new URL(window.location.href).pathname.split('/');
-    const path = pathSegments[pathSegments.length - 1];
+    const path = pathSegments[2];
     if (element.props.match.route.path === '*') return <div className='font-Poppins'>{element}</div>;
 
     else if (authenticated)

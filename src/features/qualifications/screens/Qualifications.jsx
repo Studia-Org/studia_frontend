@@ -3,27 +3,25 @@ import { Sidebar } from '../../../shared/elements/Sidebar';
 import { Navbar } from '../../../shared/elements/Navbar';
 import { API } from "../../../constant";
 import { motion } from 'framer-motion';
+import kasscloud from '../../../assets/kasscloud.png'
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import { MoonLoader } from "react-spinners";
 import { Whisper, Button, Popover } from 'rsuite';
 import { useAuthContext } from "../../../context/AuthContext";
-
-const variants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-};
-const transition = { duration: 0.3 };
+import { ProfessorQualificationsCard } from '../components/ProfessorQualificationsCard';
 
 const Qualifications = () => {
     const { user } = useAuthContext();
     const [loading, setLoading] = useState(true);
     const [qualifications, setQualifications] = useState([]);
+    const [qualificationsProfessor, setQualificationsProfessor] = useState([]);
 
 
     useEffect(() => {
         if (loading) {
             callQualificationsData();
+            fetchProfessorQualificationsData();
         }
     }, [loading, user]);
 
@@ -33,11 +31,27 @@ const Qualifications = () => {
     };
     const transition = { duration: 0.3 };
 
+    const fetchProfessorQualificationsData = async () => {
+        try {
+            const response = await fetch(`${API}/courses?populate=cover,professor.profile_photo`);
+            const data = await response.json();
+            const professorCourses = []
+            data.data.forEach((course) => {
+                if (course.attributes.professor.data.id === user.id) {
+                    professorCourses.push(course)
+                }
+            })
+            setQualificationsProfessor(professorCourses);
+        } catch (error) {
+
+        }
+    }
+
 
     function callQualificationsData() {
         if (user) {
             setLoading(true);
-            fetch(`${API}/users/${user.id}?populate=courses.sections.subsections.activities,qualifications.activity,courses.professor.profile_photo`)
+            fetch(`${API}/users/${user.id}?populate=courses.sections.subsections.activities,qualifications.activity,courses.professor.profile_photo,courses.cover`)
                 .then((res) => res.json())
                 .then((data) => {
                     const coursesWithActivities = []
@@ -59,6 +73,7 @@ const Qualifications = () => {
                             title: course.title,
                             professor: course.professor.name,
                             professor_photo: course.professor.profile_photo.url,
+                            cover: course.cover.url,
                             last_update: format(dateObj, "yyyy-MM-dd HH:mm:ss"),
                             activities: filteredQualifications
                         };
@@ -102,6 +117,15 @@ const Qualifications = () => {
                 </Whisper>
             </div>
         );
+    }
+
+    function renderProfessorQualificationsCard(qualification) {
+        return (
+            <>
+                <ProfessorQualificationsCard qualification={qualification} />
+            </>
+        )
+
     }
 
     const QualificationsTable = ({ qualifications }) => {
@@ -154,11 +178,23 @@ const Qualifications = () => {
         <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] '>
             {!loading ?
                 <div className='p-9 px-12 font-bold text-2xl'>
-                    <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
-                        {qualifications && <QualificationsTable qualifications={qualifications} />}
-                    </motion.div>
-                </div>
+                    {
+                        user !== undefined && user?.role_str === 'professor' ?
+                            <div className='flex'>
+                                <motion.div className='flex flex-wrap w-3/4 gap-8 ' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
+                                    {qualificationsProfessor && qualificationsProfessor.map(renderProfessorQualificationsCard)}
+                                </motion.div>
+                                <div className='absolute right-0  '>
+                                    <img src={kasscloud} className=' w-[40rem] ' alt="" />
+                                </div>
+                            </div>
+                            :
+                            <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
+                                {qualifications && <QualificationsTable qualifications={qualifications} />}
+                            </motion.div>
+                    }
 
+                </div>
                 :
                 <div className='w-full h-full flex items-center justify-center'>
                     <MoonLoader color="#363cd6" size={80} />
