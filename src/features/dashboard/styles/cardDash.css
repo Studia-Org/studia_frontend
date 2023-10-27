@@ -1,9 +1,24 @@
 .cardDash:hover {
     background: linear-gradient(to right, #657DE9, #6E66D6);
+    cursor: pointer;
+    scale: 1.02;
 
 }
+
 .cardDash {
     background: linear-gradient(to right, #a0afee, #9088fa);
+}
+
+.active {
+    background: linear-gradient(to right, #0027d8, #6E66D6);
+    pointer-events: none;
+}
 
 
+li>svg {
+    margin-right: 10px;
+}
+
+* {
+    box-sizing: border-box;
 }
