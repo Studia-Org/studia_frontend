@@ -3,7 +3,8 @@
 module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
-    "../node_modules/@tremor/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/flowbite-react/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     transparent: "transparent",
@@ -154,5 +155,6 @@ module.exports = {
     require("@headlessui/tailwindcss"),
     require("@tailwindcss/typography"),
     require("@tailwindcss/line-clamp"),
+    require('flowbite/plugin')
   ],
 };

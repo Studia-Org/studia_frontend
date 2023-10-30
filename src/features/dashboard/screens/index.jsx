@@ -5,7 +5,7 @@ export const DashboardRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Dashboard />} />
-      <Route path="/:id" element={<CourseDashboard />} />
+      <Route path="/:courseId" element={<CourseDashboard />} />
     </Routes>
   );
 };
