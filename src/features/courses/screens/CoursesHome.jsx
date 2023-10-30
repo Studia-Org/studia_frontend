@@ -6,11 +6,9 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import '../styles/utils.css'
 import { getToken } from '../../../helpers';
 import { useAuthContext } from "../../../context/AuthContext";
-import { Sidebar } from '../../../shared/elements/Sidebar';
 import { CoursesCardHome } from '../components/CoursesCardHome';
 import { FiPlus } from 'react-icons/fi';
 import Swal from 'sweetalert2'
-import { Navbar } from '../../../shared/elements/Navbar';
 import { MoonLoader } from "react-spinners";
 import { API } from "../../../constant";
 import Confetti from 'react-confetti'
@@ -35,11 +33,12 @@ const CoursesHome = () => {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
   };
+  const transition = { duration: 0.3 };
 
   const handleOpen = value => {
     setOpen(true);
   };
-  const transition = { duration: 0.3 };
+  
 
   useEffect(() => {
     const confettiDuration = 5000;
@@ -155,7 +154,7 @@ const CoursesHome = () => {
 
     return (
       <div className='relative bg-white rounded-2xl shadow-md flex p-3 mr-16 w-[30rem] h-[5rem]'>
-        <div className="w-2 rounded-md mr-3" style={colorStyle}></div>
+        <div className="px-1 rounded-md mr-3" style={colorStyle}></div>
         <div className='flex-col flex justify-center'>
           <div className='flex'>
             <p className=' font-semibold text-base'>{subsection.subsection.title}</p>
@@ -171,7 +170,7 @@ const CoursesHome = () => {
             }
           </div>
 
-          <p className='font-normal text-sm  text-gray-500'>{subsection.subsection.description}</p>
+          <p className='font-normal text-sm w-3/4 line-clamp-1 text-gray-500'>{subsection.subsection.description}</p>
         </div>
 
         <img className='object-cover w-24 top-0 right-0 h-[5rem] absolute rounded-r-lg opacity-90' src={subsection.cover} alt="" />

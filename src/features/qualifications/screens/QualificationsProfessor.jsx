@@ -1,85 +1,83 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
+import { API } from '../../../constant'
+import { MoonLoader } from 'react-spinners'
+import { motion } from 'framer-motion';
+import { QualificationsTable } from '../components/QualificationsTable'
+import { set, sub } from 'date-fns'
 
 const QualificationsProfessor = () => {
+    const [activities, setActivities] = useState([])
+    const [students, setStudents] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
+    const [course, setCourse] = useState([])
+    const [cover, setCover] = useState()
+    let { courseID } = useParams();
+
+    const variants = {
+        hidden: { opacity: 0, y: 10 },
+        visible: { opacity: 1, y: 0 },
+    };
+    const transition = { duration: 0.3 };
+
+    const fetchCourseData = async () => {
+        try {
+            const response = await fetch(`${API}/courses/${courseID}?populate=sections.subsections.activities,cover,students.profile_photo,students.qualifications.activity,students.qualifications.file`);
+            const data = await response.json();
+            const evaluableActivities = []
+            data.data.attributes.sections.data.forEach(
+                section => {
+                    section.attributes.subsections.data.forEach(
+                        subsection => {
+                            subsection.attributes.activities.data.forEach(
+                                activity => {
+                                    if (activity.attributes.evaluable === true) {
+                                        evaluableActivities.push(activity)
+                                    }
+                                }
+                            )
+                        }
+                    )
+                }
+            )
+            setActivities(evaluableActivities)
+            setStudents(data.data.attributes.students.data)
+            setCover(data.data.attributes.cover.data.attributes.url)
+            setIsLoading(false)
+        } catch (error) {
+            throw new Error(error)
+        }
+    }
+
+    useEffect(() => {
+        fetchCourseData();
+    }, [])
+
     return (
-        <div className='w-full rounded-tl-3xl bg-[#e7eaf886] p-10'>
-            <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <div class="flex items-center justify-between pb-4 bg-white  p-5">
-                    <div>
-                        <button id="dropdownActionButton" data-dropdown-toggle="dropdownAction" class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5 " type="button">
-                            <span class="sr-only">Action button</span>
-                            Action
-                            <svg class="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4" />
-                            </svg>
-                        </button>
+        <div className='w-full relative rounded-tl-3xl bg-[#e7eaf886] p-10'>
+            {
+                isLoading === false ?
+                    <>
+                        <section className='absolute block top-0 left-0 w-full'>
+                            {
+                                cover && <img alt='' src={`${cover}`}
+                                    className="absolute top-0 left-0 w-full h-[20rem] object-cover lg:rounded-tl-3xl" />
+                            }
+                            <span
+                                id="blackOverlay"
+                                className="absolute block top-0 left-0 h-[20rem] w-full opacity-40 bg-black lg:rounded-tl-3xl"
+                            />
+                        </section>
+                        <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
+                            <QualificationsTable students={students} activities={activities} />
+                        </motion.div>
 
+                    </>
+                    :
+                    <div className='w-full h-full flex items-center justify-center' >
+                        <MoonLoader color="#363cd6" size={80} />
                     </div>
-                    <label for="table-search" class="sr-only">Search</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <svg class="w-4 h-4 text-gray-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                            </svg>
-                        </div>
-                        <input type="text" id="table-search-users" class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 " placeholder="Search for users"/>
-                    </div>
-                </div>
-                <table class="w-full text-sm text-left text-gray-500 ">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50  ">
-                        <tr>
-                            <th scope="col" class="p-4">
-                                <div class="flex items-center">
-                                    <input id="checkbox-all-search" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                                        <label for="checkbox-all-search" class="sr-only">checkbox</label>
-                                </div>
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Name
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Position
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Status
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Action
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="bg-white border-b  hover:bg-gray-50 ">
-                            <td class="w-4 p-4">
-                                <div class="flex items-center">
-                                    <input id="checkbox-table-search-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"/>
-                                        <label for="checkbox-table-search-1" class="sr-only">checkbox</label>
-                                </div>
-                            </td>
-                            <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap ">
-                                <img class="w-10 h-10 rounded-full" src="/docs/images/people/profile-picture-1.jpg" alt="Jese image"/>
-                                    <div class="pl-3">
-                                        <div class="text-base font-semibold">Neil Sims</div>
-                                        <div class="font-normal text-gray-500">neil.sims@flowbite.com</div>
-                                    </div>
-                            </th>
-                            <td class="px-6 py-4">
-                                React Developer
-                            </td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center">
-                                    <div class="h-2.5 w-2.5 rounded-full bg-green-500 mr-2"></div> Online
-                                </div>
-                            </td>
-                            <td class="px-6 py-4">
-                                <a href="#" class="font-medium text-blue-600  hover:underline">Edit user</a>
-                            </td>
-                        </tr>
-
-                    </tbody>
-                </table>
-            </div>
-
+            }
         </div>
     )
 }

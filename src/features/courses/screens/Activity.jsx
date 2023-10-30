@@ -24,7 +24,7 @@ const Activity = () => {
       } else {
         const activityData = await fetch(`${API}/activities/${activityId}?populate=*`);
         const data = await activityData.json();
-        setUserQualification({activity: data.data.attributes})
+        setUserQualification({ activity: data.data.attributes })
       }
 
     } catch (error) {
@@ -37,19 +37,13 @@ const Activity = () => {
   }, [user]);
 
   return (
-      <div className='min-h-screen  bg-white '>
-        <Navbar />
-        <div className='flex min-h-[calc(100vh-8rem)] md:ml-80 md:min-w-[calc(100vw-20rem)] md:flex-nowrap bg-white'>
-          <Sidebar section={'courses'} />
-          <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] grid '>
-            <div className='md:ml-12 ml-8 '>
-              {userQualification.activity && (
-                <ActivityComponent activityData={userQualification} />
-              )}
-            </div>
-          </div>
-        </div>
+    <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] grid '>
+      <div className='md:ml-12 ml-8 '>
+        {userQualification.activity && (
+          <ActivityComponent activityData={userQualification} />
+        )}
       </div>
+    </div>
   )
 }
 

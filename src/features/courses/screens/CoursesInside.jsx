@@ -5,15 +5,12 @@ import { getToken } from "../../../helpers";
 import { ActivitiesText, ActivitiesLecture, ActivitiesDelivery, ActivitiesPeerReview, ActivitiesQuestionnaire } from '../components/Activities';
 import { ProfessorData } from '../components/ProfessorData';
 import { Nothing404 } from '../components/Nothing404';
-import { Sidebar } from '../../../shared/elements/Sidebar';
-import { Navbar } from '../../../shared/elements/Navbar';
 import { AccordionCourseContent } from '../components/AccordionCourseContent';
 import { ForumClickable } from '../components/ForumClickable';
 
 import { Chatbot } from '../components/ChatBot';
 import { ForumComponent } from '../components/ForumComponent'
 import { QuestionnaireComponent } from '../components/QuestionnaireComponent';
-import { set, sub } from 'date-fns';
 
 
 
