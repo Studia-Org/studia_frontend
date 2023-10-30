@@ -100,10 +100,10 @@ export const ActivityComponent = ({ activityData }) => {
 
 
   return (
-    <div className='flex flex-col md:flex-row mt-10 md:space-x-24  mx-5'>
-      <div className='md:w-2/4'>
+    <div className='flex flex-col 1.5xl:flex-row items-start 1.5xl:items-start 1.5xl:space-x-24 p-5 sm:p-10'>
+      <div className='1.5xl:w-2/4 lg:w-10/12 w-full'>
         <div className='relative flex items-center mb-6 bg-white rounded-md p-5 shadow-md mt-5'>
-          <div className='flex items-center space-x-3'>
+          <div className='flex items-center space-x-3 '>
             {
               activityData.activity.type === 'Delivery' ?
                 <div className='w-14 h-14 bg-red-500 rounded-md items-center flex justify-center'>
@@ -120,11 +120,11 @@ export const ActivityComponent = ({ activityData }) => {
                   :
                   <div className='w-14 h-14 bg-red-800 rounded-md'></div>
             }
-            <h3 className='font-semibold text-2xl'>{activityData.activity.title}</h3>
+            <h3 className='font-semibold text-2xl max-w-[calc(100%-7rem)] sm:max-w-[calc(100%-9.5rem)]'>{activityData.activity.title}</h3>
           </div>
           {
             evaluated ?
-              <div className='absolute right-0 bg-green-700 rounded-r-md w-[6rem]  ml-auto flex flex-col h-full justify-center text-center'>
+              <div className='absolute right-0 bg-green-700 rounded-r-md w-14 sm:w-[6rem]  ml-auto flex flex-col h-full justify-center text-center'>
 
                 <p className='text-white font-semibold text-xl'>{activityData.qualification}/10</p>
               </div>
@@ -136,7 +136,7 @@ export const ActivityComponent = ({ activityData }) => {
         {
           evaluated ?
             <>
-           
+
               <p className='text-xs text-gray-400 mb-1 mt-5'>Comments</p>
               <div className='w-full bg-white rounded-md shadow-md p-5'>
                 {activityData.comments}
@@ -145,16 +145,16 @@ export const ActivityComponent = ({ activityData }) => {
             :
             null
         }
-         <p className='text-xs text-gray-400 mb-1 mt-5'>Task description</p>
-         <hr  />
-        <div className='prose my-3 text-gray-600 ml-5 w-full'>
+        <p className='text-xs text-gray-400 mb-1 mt-5'>Task description</p>
+        <hr />
+        <div className='prose my-3 text-gray-600 ml-5 w-full box-content'>
           <ReactMarkdown>{activityData.activity.description}</ReactMarkdown>
         </div>
 
       </div>
       {
         evaluated ?
-          <div className='flex flex-col'>
+          <div className='flex flex-col '>
             <p className='text-xs text-gray-400 mb-1'>Evaluator</p>
             <ProfessorData professor={{ attributes: activityData.evaluator }} evaluatorFlag={true} />
             <p className='text-xs text-gray-400 mb-1 mt-5'>Your submission</p>

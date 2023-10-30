@@ -43,11 +43,9 @@ const Activity = () => {
 
   return (
     <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] grid '>
-      <div className='md:ml-12 ml-8 '>
-        {userQualification.activity && (
-          <ActivityComponent activityData={userQualification} />
-        )}
-      </div>
+      {userQualification.activity && (
+        <ActivityComponent activityData={userQualification} />
+      )}
     </div>
   )
 }
