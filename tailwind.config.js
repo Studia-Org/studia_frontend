@@ -20,7 +20,7 @@ module.exports = {
 
       'xl': '1280px',
       // => @media (min-width: 1280px) { ... }
-
+      "1.5xl": "1440px",
       '2xl': '1536px',
       // => @media (min-width: 1536px) { ... }
       'grid-home': '1340px',

@@ -11,8 +11,8 @@ export const ProfessorData = ({ professor, evaluatorFlag }) => {
         link = '/app/profile/' + professor.id + '/';
     }
     return (
-        <div className='flex-shrink-0 w-full sm:w-auto'>
-            <div className={`${evaluatorFlag ? 'mt-0' : 'mt-4 collapse' } bg-white rounded-lg  px-5 py-5  sm:mr-9 sm:right-0 sm:w-[30rem] w-full shadow-md sm:visible `}>
+        <div className='flex-shrink-0 w-full '>
+            <div className={`${evaluatorFlag ? 'mt-0' : 'mt-4 collapse'} flex flex-col bg-white rounded-lg  px-5 py-5  sm:mr-9 sm:right-0 max-w-[30rem] shadow-md sm:visible `}>
                 <div className='flex items-center'>
                     {
                         evaluatorFlag === true ?
@@ -32,7 +32,7 @@ export const ProfessorData = ({ professor, evaluatorFlag }) => {
                     }
                     <p className='text-base font-medium'>{professor.attributes.name}</p>
                 </div>
-                <p className={`text-gray-700 text-sm  ${evaluatorFlag ? '' : 'truncate' }`}>{professor.attributes.description}</p>
+                <p className={`text-gray-700 text-sm  ${evaluatorFlag ? '' : 'truncate'}`}>{professor.attributes.description}</p>
             </div>
         </div>
     )

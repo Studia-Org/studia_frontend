@@ -6,11 +6,9 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import '../styles/utils.css'
 import { getToken } from '../../../helpers';
 import { useAuthContext } from "../../../context/AuthContext";
-import { Sidebar } from '../../../shared/elements/Sidebar';
 import { CoursesCardHome } from '../components/CoursesCardHome';
 import { FiPlus } from 'react-icons/fi';
 import Swal from 'sweetalert2'
-import { Navbar } from '../../../shared/elements/Navbar';
 import { MoonLoader } from "react-spinners";
 import { API } from "../../../constant";
 import Confetti from 'react-confetti'
@@ -37,11 +35,12 @@ const CoursesHome = () => {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
   };
+  const transition = { duration: 0.3 };
 
   const handleOpen = value => {
     setOpen(true);
   };
-  const transition = { duration: 0.3 };
+  
 
   useEffect(() => {
     const confettiDuration = 5000;
@@ -153,7 +152,7 @@ const CoursesHome = () => {
 
     return (
       <div className='relative bg-white rounded-2xl shadow-md flex p-3 min-w-[450px] md:w-[28rem] lg:w-[30rem] h-[5rem]'>
-        <div className="w-2 rounded-md mr-3" style={colorStyle}></div>
+        <div className="px-1 rounded-md mr-3" style={colorStyle}></div>
         <div className='flex-col flex justify-center'>
           <div className='flex'>
             <p className=' font-semibold text-base'>{subsection.subsection.title}</p>
@@ -169,7 +168,7 @@ const CoursesHome = () => {
             }
           </div>
 
-          <p className='font-normal text-sm  text-gray-500'>{subsection.subsection.description}</p>
+          <p className='font-normal text-sm w-3/4 line-clamp-1 text-gray-500'>{subsection.subsection.description}</p>
         </div>
 
         <img className='object-cover w-24 top-0 right-0 h-[5rem] absolute rounded-r-lg opacity-90' src={subsection.cover} alt="" />
@@ -276,47 +275,55 @@ const CoursesHome = () => {
 
                 <div className='flex flex-col md:w-[480px] min-w-3/4 mt-12 grid-home:absolute right-16 '>
                   <div className=''>
-                    <p className=' pb-6 font-bold text-xl'>Daily Tasks</p>
                     {
-                      dailyTasks.length > 0 ?
+                      user.role_str !== 'professor' && user.role_str !== 'admin' ?
+                        <>
+                          <p className=' pb-6 font-bold text-xl'>Daily Tasks</p>
+                          {
+                            dailyTasks.length > 0 ?
 
-                        <div className='flex flex-col space-y-5 mb-10'>
-                          {dailyTasks.map(RenderDailyTasks)}
-                        </div>
+                              <div className='flex flex-col space-y-5 mb-10'>
+                                {dailyTasks.map(RenderDailyTasks)}
+                              </div>
 
-                        :
-                        <div className='flex'>
-                          <div className='bg-white shadow-md rounded-2xl p-5 flex mb-10 items-center space-x-7'>
-                            <p className='font-medium text-gray-400 text-base '>There are no tasks for today</p>
-                            <img className='opacity-50 w-36' src="https://liferay-support.zendesk.com/hc/article_attachments/360032795211/empty_state.gif" alt="" />
-                          </div>
-                        </div>
+                              :
+                              <div className='flex'>
+                                <div className='bg-white shadow-md rounded-2xl p-5 flex mb-10 items-center space-x-7'>
+                                  <p className='font-medium text-gray-400 text-base '>There are no tasks for today</p>
+                                  <img className='opacity-50 w-36' src="https://liferay-support.zendesk.com/hc/article_attachments/360032795211/empty_state.gif" alt="" />
+                                </div>
+                              </div>
+                          }
+                        </> : null
                     }
-
-                    <p className=' pb-6 font-bold text-xl'>Your Objectives</p>
+                  </div>
+                  <div className=''>
                     {
-                      user !== undefined ?
-                        <div className='space-y-5 flex flex-col mb-5'>
-                          {
-                            objectives !== undefined && objectives?.length > 0 ?
-                              objectives.map(renderObjectives)
-                              :
-                              null
-                          }
-                          {
-                            confettiExplode === true ?
-                              renderConfeti()
-                              :
-                              null
-                          }
-
-                        </div> :
-                        <div className='flex'>
-                          <div className='bg-white shadow-md rounded-2xl p-5 flex mb-10 items-center space-x-7'>
-                            <p className='font-medium text-gray-400 text-base '>You did not set any objective yet!</p>
-                            <img className='opacity-50 w-36' src="https://liferay-support.zendesk.com/hc/article_attachments/360032795211/empty_state.gif" alt="" />
+                      user.role_str !== 'professor' && user.role_str !== 'admin' ?
+                        <>
+                          <p className=' pb-6 font-bold text-xl'>Your Objectives</p>
+                          <div className='space-y-5 flex flex-col mb-5'>
+                            {
+                              objectives !== undefined && objectives.length > 0 ?
+                                objectives.map(renderObjectives)
+                                :
+                                <div className='flex'>
+                                  <div className='bg-white shadow-md rounded-2xl p-5 flex mb-10 items-center space-x-7'>
+                                    <p className='font-medium text-gray-400 text-base '>You did not set any objective yet!</p>
+                                    <img className='opacity-50 w-36' src="https://liferay-support.zendesk.com/hc/article_attachments/360032795211/empty_state.gif" alt="" />
+                                  </div>
+                                </div>
+                            }
+                            {
+                              confettiExplode === true ?
+                                renderConfeti()
+                                :
+                                null
+                            }
                           </div>
-                        </div>
+                        </>
+                        :
+                        null
                     }
                   </div>
                 </div>
@@ -325,7 +332,7 @@ const CoursesHome = () => {
         </div>
       </div>
       {
-        user && user.role_str === 'admin' ?
+        user && (user.role_str === 'admin' || user.role_str === 'professor') ?
           <div className='fixed right-10 bottom-10'>
             <div
               id="speed-dial-menu-dropdown"
