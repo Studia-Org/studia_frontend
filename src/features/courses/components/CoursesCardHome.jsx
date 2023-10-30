@@ -17,7 +17,7 @@ export const CoursesCardHome = ({ course }) => {
     return (
         <>
             <Link to={`/app/courses/${course.id}`}>
-                <div className="w-[24rem] h-[26rem] bg-white rounded-3xl shadow-md cursor-pointer shadow2 relative flex flex-col mb-10 mr-10">
+                <div className="2xl:w-[24rem] 2xl:h-[26rem] lg:w-[20rem] lg:h-[24rem] md:w-[16rem] md:h-[22rem] w-[22rem] h-[24rem] bg-white rounded-3xl shadow-md cursor-pointer shadow2 relative flex flex-col">
                     <img className="rounded-t-3xl w-full h-[13rem] object-fill" src={course.cover.url} alt="" />
                     <div className="p-3 flex flex-col ml-5 mr-5 h-full">
                         <div className='flex flex-wrap flex-grow '>

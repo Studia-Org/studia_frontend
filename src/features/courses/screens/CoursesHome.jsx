@@ -27,6 +27,8 @@ const CoursesHome = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
   const [dailyTasks, setDailyTasks] = useState([]);
+
+
   const navigate = useNavigate();
   const { width, height } = useWindowSize();
   const variants = {
@@ -60,7 +62,7 @@ const CoursesHome = () => {
   const fetchCoursesCards = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`${API}/users/${user.id}?populate=courses.cover,courses.students.profile_photo,courses.professor,courses.professor.profile_photo,courses.course_tags`);
+      const response = await fetch(`${API}/users/${user?.id}?populate=courses.cover,courses.students.profile_photo,courses.professor,courses.professor.profile_photo,courses.course_tags`);
       const data = await response.json();
       setCourses(data ?? []);
       setIsLoading(false);
@@ -80,6 +82,7 @@ const CoursesHome = () => {
   }
 
   const fetchDailyTasks = async () => {
+    console.log(user.id);
     try {
       const response = await fetch(`${API}/users/${user.id}?populate=courses.sections.subsections,courses.cover`);
       const data = await response.json();
@@ -105,19 +108,14 @@ const CoursesHome = () => {
   };
 
   useEffect(() => {
-    if (user) {
+    if (user !== undefined) {
       fetchUserObjectives()
-    }
-  }, [user]);
-
-  useEffect(() => {
-    if (user) {
       fetchDailyTasks();
     }
   }, [user]);
 
   useEffect(() => {
-    if (isLoading) {
+    if (isLoading && user !== undefined) {
       fetchCoursesCards();
     }
   }, [isLoading, user]);
@@ -153,7 +151,7 @@ const CoursesHome = () => {
     }
 
     return (
-      <div className='relative bg-white rounded-2xl shadow-md flex p-3 mr-16 w-[30rem] h-[5rem]'>
+      <div className='relative bg-white rounded-2xl shadow-md flex p-3 min-w-[450px] md:w-[28rem] lg:w-[30rem] h-[5rem]'>
         <div className="px-1 rounded-md mr-3" style={colorStyle}></div>
         <div className='flex-col flex justify-center'>
           <div className='flex'>
@@ -186,8 +184,6 @@ const CoursesHome = () => {
       </div>
     );
   }
-
-
 
   const handleObjectiveCompleted = async (props) => {
     const textSwal = props.completed === true ? 'not completed' : 'completed';
@@ -242,7 +238,7 @@ const CoursesHome = () => {
   function renderObjectives(objective) {
     return (
       <div>
-        <div className='bg-white rounded-2xl shadow-md flex  p-5 mr-16 w-[30rem]'>
+        <div className='bg-white rounded-2xl shadow-md flex  min-w-[450px] p-5 md:w-[28rem] lg:w-[30rem]'>
           <p className='font-medium text-base'>{objective.objective}</p>
           {
             objective.completed === true ?
@@ -258,25 +254,26 @@ const CoursesHome = () => {
       </div>
     )
   }
-
   return (
     <>
       <div className=' max-h-full rounded-tl-3xl bg-[#e7eaf886] grid w-full'>
-        <div className=' sm:px-12  font-bold text-2xl flex'>
+        <div className=' sm:px-12 px-6  font-bold text-2xl flex flex-wrap min-w-full relative flex-col grid-home:flex-row '>
           {
             isLoading ?
               <div className='w-full h-full flex items-center justify-center' >
                 <MoonLoader color="#363cd6" size={80} />
               </div> :
               <>
-                <div className='w-3/4 '>
+                <div className='flex flex-col grid-home:max-w-[calc(100%-500px)] w-full '>
                   <p className='py-11 pb-6 font-bold text-xl'>Recent Courses</p>
-                  <motion.div id='course-motion-div' className='flex flex-wrap  justify-center md:justify-start ' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
+                  <motion.div id='course-motion-div'
+                    className='flex flex-wrap gap-x-[5%] gap-y-[16px]  max-w-full justify-center md:justify-start '
+                    initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
                     {courses.courses && courses.courses.map(RenderCourse)}
                   </motion.div>
                 </div>
 
-                <div className='flex flex-col mt-12 '>
+                <div className='flex flex-col md:w-[480px] min-w-3/4 mt-12 grid-home:absolute right-16 '>
                   <div className=''>
                     {
                       user.role_str !== 'professor' && user.role_str !== 'admin' ?
@@ -342,11 +339,13 @@ const CoursesHome = () => {
               className={`bg-white shadow rounded-2xl transform scale-0 opacity-0 mb-5 h-3 w-[24rem]  duration-200 ${isExpanded ? 'scale-100 h-[12rem] w-[20rem] opacity-100' : ''}`}
             >
               <div className='p-4 flex flex-col text-base font-medium space-y-4 '>
-                <button className='flex items-center text-left  hover:border-l-4 border-black transition-all duration-100 ' onClick={() => navigate('create')}>
+                <button className='flex items-center text-left  hover:border-l-4 border-black transition-all duration-100 '
+                  onClick={() => navigate('create')}>
                   <p className='ml-2'>Create new course from a template</p>
                   <FiChevronRight className='ml-auto' />
                 </button>
-                <button className='flex items-center text-left hover:border-l-4 border-black transition-all duration-100' onClick={() => navigate('create')}>
+                <button className='flex items-center text-left hover:border-l-4 border-black transition-all duration-100'
+                  onClick={() => navigate('create')}>
                   <p className='ml-2'>Create new course</p>
                   <FiChevronRight className='ml-auto' />
                 </button>
