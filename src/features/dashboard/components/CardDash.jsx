@@ -7,12 +7,12 @@ export function CardDash({ courseName, courseId }) {
   const path = pathSegments[pathSegments.length - 1];
   return (
     <div
+      key={courseId}
       onClick={() => {
         navigate(`/app/dashboard/${courseId}`);
       }}
-      className={`px-7 shadow-md w-full ${
-        parseInt(path) === courseId ? "active" : "cardDash"
-      }
+      className={`px-7 shadow-md w-full ${parseInt(path) === courseId ? "active" : "cardDash"
+        }
       md2:min-w-[49%] md2:max-w-[49%] 2xl:min-w-[30%] 2xl:max-w-[30%] flex  items-center 
          rounded-lg py-3 relative
        transition-all `}
@@ -45,7 +45,7 @@ export function SectionCoursesCards({ courses, styles }) {
     >
       <div className="flex flex-wrap gap-y-2 gap-x-2 ">
         {courses.map((course) => {
-          return <CardDash courseName={course.title} courseId={course.id} />;
+          return <CardDash key={course.id} courseName={course.title} courseId={course.id} />;
         })}
       </div>
     </section>

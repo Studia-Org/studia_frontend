@@ -1,5 +1,5 @@
 .cardDash:hover {
-    background: linear-gradient(to right, #657DE9, #6E66D6);
+    background: linear-gradient(to right, #1d46ff, #6E66D6);
     cursor: pointer;
     scale: 1.02;
 
@@ -10,7 +10,7 @@
 }
 
 .active {
-    background: linear-gradient(to right, #0027d8, #6E66D6);
+    background: linear-gradient(to right, #1d46ff, #6E66D6);
     pointer-events: none;
 }
 

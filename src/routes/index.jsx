@@ -31,7 +31,7 @@ export const AppRoutes = () => {
             <div className='font-Poppins  bg-white '>
                 <Navbar />
                 <Sidebar section={path} />
-                <div className='flex min-h-[calc(100vh-8rem)] md:ml-80 md:min-w-[calc(100vw-20rem)] bg-white'>
+                <div className='flex min-h-[calc(100vh-8rem)] md:ml-80 md:min-w-[calc(100vw-21rem)] bg-white'>
                     {element}
                 </div>
             </div>
