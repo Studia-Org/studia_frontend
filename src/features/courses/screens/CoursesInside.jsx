@@ -11,6 +11,7 @@ import { ForumClickable } from '../components/ForumClickable';
 import { Chatbot } from '../components/ChatBot';
 import { ForumComponent } from '../components/ForumComponent'
 import { QuestionnaireComponent } from '../components/QuestionnaireComponent';
+import { fi } from 'date-fns/locale';
 
 
 
@@ -123,7 +124,7 @@ const CourseInside = () => {
     if (courseContentInformation.length > 0 && subsectionsCompleted.length > 0) {
       const firstSubsection = obtenerPrimeraSubseccion(courseContentInformation, subsectionsCompleted);
       if (firstSubsection) {
-        if (firstSubsection.subseccion.attributes.activities.data[0].attributes.type === 'questionnaire') {
+        if (firstSubsection?.subseccion?.attributes?.activities?.data[0]?.attributes?.type === 'questionnaire') {
           setCourseSubsection(firstSubsection.subseccion);
           setQuestionnaireFlag(true);
           setCourseSubsectionQuestionnaire(firstSubsection.subseccion.attributes.questionnaire.data)
