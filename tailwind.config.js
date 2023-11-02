@@ -116,7 +116,7 @@ module.exports = {
       xl: "1280px",
       // => @media (min-width: 1280px) { ... }
 
-      "2xl": "1980px",
+      "2xl": "2000px",
       // => @media (min-width: 1536px) { ... }
       "grid-home": "1340px",
       // => @media (min-width: 1280px) { ... }

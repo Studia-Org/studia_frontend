@@ -45,6 +45,9 @@ export function SectionCoursesCards({ courses, styles }) {
     >
       <div className="flex flex-wrap gap-y-2 gap-x-2 ">
         {courses.map((course) => {
+          if (course.title === undefined) {
+            return <CardDash key={course.id} courseName={course.attributes.title} courseId={course.id} />;
+          }
           return <CardDash key={course.id} courseName={course.title} courseId={course.id} />;
         })}
       </div>
