@@ -154,8 +154,8 @@ const CoursesHome = () => {
     return (
       <div className='relative bg-white rounded-2xl shadow-md flex p-3 min-w-[450px] md:w-[28rem] lg:w-[30rem] min-h-[5rem]'>
         <div className="w-2 rounded-md mr-3" style={colorStyle}></div>
-        <div className='flex-col flex justify-center'>
-          <div className='flex'>
+        <div className='flex-col flex justify-center max-w-[calc(100%-6rem)]'>
+          <div className='flex w-full'>
             <p className=' font-semibold text-base'>{subsection.subsection.title}</p>
             {
               isDateDangerous === true ?
@@ -169,7 +169,7 @@ const CoursesHome = () => {
             }
           </div>
 
-          <p className='font-normal text-sm max-w-[calc(100%-6rem)] text-gray-500'>{subsection.subsection.description}</p>
+          <p className='font-normal text-sm  text-gray-500'>{subsection.subsection.description}</p>
         </div>
 
         <img className='object-cover w-24 top-0 right-0 h-full absolute rounded-r-lg opacity-90' src={subsection.cover} alt="" />

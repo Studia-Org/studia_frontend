@@ -47,7 +47,7 @@ export const Sidebar = (props) => {
   window.addEventListener("resize", function (event) {
     const sidebar = document.getElementById("default-sidebar");
     if (sidebar === null || sidebar === undefined) return;
-    if (window.innerWidth > 768) {
+    if (window.innerWidth > 1280) {
       sidebar.style.height = "fit-content";
       sidebar.style.backgroundColor = "transparent";
       sidebar.classList.add("-translate-x-full");
@@ -77,7 +77,7 @@ export const Sidebar = (props) => {
         aria-controls="default-sidebar"
         type="button"
         onClick={handleClick}
-        className="inline-flex z-10 items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 
+        className="inline-flex z-10 items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg xl:hidden hover:bg-gray-100 
                 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
       >
         <span className="sr-only">Open sidebar</span>
@@ -100,7 +100,7 @@ export const Sidebar = (props) => {
 
       <aside
         id="default-sidebar"
-        className="absolute   sm:pl-16 top-0 left-0 z-40 w-80 md:mt-20 transition-transform -translate-x-full md:translate-x-0"
+        className="absolute z-[1000] sm:pl-16 top-0 left-0 w-80 md:mt-20 transition-transform -translate-x-full xl:translate-x-0"
         aria-label="Sidebar"
       >
         <div className="h-full py-4 overflow-y-auto ">
