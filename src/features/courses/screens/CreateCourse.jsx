@@ -33,7 +33,7 @@ const CreateCourse = () => {
                 {
                     editCourseSectionFlag ?
                         <>
-                            <EditCreateCourseSection  setEditCourseSectionFlag={setEditCourseSectionFlag} setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit}/>
+                            <EditCreateCourseSection  setEditCourseSectionFlag={setEditCourseSectionFlag} setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} createCourseSectionsList={createCourseSectionsList}/>
                         </>
 
                         :

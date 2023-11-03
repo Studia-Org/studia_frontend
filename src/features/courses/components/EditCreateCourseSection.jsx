@@ -1,6 +1,68 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { DndContext, closestCenter } from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from '@dnd-kit/sortable';
+import { CreateCourseSubsectionsList } from './CreateCourseSubsectionsList';
+import { SubsectionItems } from './SubsectionItems';
 
-export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCourseSectionsList, sectionToEdit }) => {
+export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCourseSectionsList, sectionToEdit, createCourseSectionsList }) => {
+    const [addSubSectionFlag, setAddSubSectionFlag] = useState(true)
+    const [subsectionName, setSubsectionName] = useState('')
+    const [subsectionsToEdit, setSubsectionsToEdit] = useState((createCourseSectionsList.filter((section) => section.id === sectionToEdit.id)[0]))
+
+    useEffect(() => {
+        setSubsectionsToEdit((createCourseSectionsList.filter((section) => section.id === sectionToEdit.id)[0]))
+    }, [createCourseSectionsList])
+
+    const handleDragEnd = (event) => {
+        const { active, over } = event
+        setCreateCourseSectionsList((courses) => {
+            const updatedCourses = createCourseSectionsList.map((course) => {
+                if (course.id === sectionToEdit.id) {
+                    const sectionCopy = { ...course };
+                    const oldIndex = sectionCopy.subsections.findIndex(c => c.id === active.id);
+                    const newIndex = sectionCopy.subsections.findIndex(c => c.id === over.id);
+
+                    if (oldIndex !== -1 && newIndex !== -1) {
+                        sectionCopy.subsections = arrayMove(sectionCopy.subsections, oldIndex, newIndex);
+                    }
+                    return sectionCopy;
+                }
+                return course;
+            });
+            return updatedCourses;
+        });
+    }
+
+    function createSubsection() {
+        const newSubsection = {
+            id: Math.floor(Math.random() * 1000),
+            title: subsectionName,
+            fase: null,
+            finished: false,
+            start_date: null,
+            end_date: null,
+            activities: [],
+            paragraphs: [],
+            description: null,
+            landscape_photo: null,
+            questionnaire: null,
+            users: null
+        }
+        setCreateCourseSectionsList(prevSections => {
+            return prevSections.map(section => {
+                if (section.id === sectionToEdit.id) {
+                    return {
+                        ...section,
+                        subsections: [...section.subsections, newSubsection],
+                    };
+                }
+                return section;
+            });
+        });
+        setAddSubSectionFlag(true)
+        setSubsectionName('')
+    }
+
     return (
         <div className='text-base font-normal'>
             <button onClick={() => setEditCourseSectionFlag(false)} className='flex items-center hover:-translate-x-1 duration-100'>
@@ -13,12 +75,36 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCou
                 <div className='w-1/2 pr-10 pl-5'>
                     <h1 className='font-bold text-2xl mt-5'>Edit Section</h1>
                     <h2 className='font-medium text-xl mt-5'>{sectionToEdit.name}</h2>
-                    <p className='text-xs font-normal text-gray-400 mt-4 mb-2'>Course subsections</p>
-                    <div className='bg-white p-5 rounded-md shadow-md'>
+                    <div className='bg-white rounded-md shadow-md p-5 font-medium text-base mb-5 mt-5'>
+                        <div className='flex items-center'>
+                            <h3 className=''>Course sequence</h3>
+                        </div>
+                        {
+                            subsectionsToEdit.subsections.length > 0 ?
+                                <div className='mt-6 space-y-3'>
+                                    <DndContext
+                                        collisionDetection={closestCenter}
+                                        onDragEnd={handleDragEnd}>
+                                        <SortableContext
+                                            items={subsectionsToEdit.subsections}
+                                            strategy={verticalListSortingStrategy}>
+                                            <ol className="relative border-l border-dashed border-gray-300 ml-10">
+                                                {subsectionsToEdit.subsections.map((subsection) => (
+                                                    <CreateCourseSubsectionsList subsection={subsection} key={subsection.id} />
+                                                ))}
+                                            </ol>
+                                        </SortableContext>
+                                    </DndContext>
+                                </div> :
+                                <div>
+                                    <p className='text-sm font-normal italic text-gray-500 mt-6'>Start defining the sequence!</p>
+                                </div>
+                        }
+                        <p className='text-xs font-normal  text-gray-400 mt-8'>Drag and drop to reorder the sequence</p>
                     </div>
                 </div>
                 <div className='w-1/2'>
-                    <p>Edit subsection</p>
+                        <SubsectionItems />           
                 </div>
             </div>
         </div>

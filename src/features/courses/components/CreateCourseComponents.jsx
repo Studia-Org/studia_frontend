@@ -120,7 +120,7 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
     const newSection = {
       id: Math.random().toString(16).slice(2),
       name: sectionName,
-      data: []
+      subsections: []
     }
     setCreateCourseSectionsList([...createCourseSectionsList, newSection])
     setAddSectionFlag(true)
