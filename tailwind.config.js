@@ -5,6 +5,7 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
     "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}",
     "./node_modules/flowbite-react/**/*.{js,ts,jsx,tsx}",
+    "./node_modules/tailwind-datepicker-react/dist/**/*.js",
   ],
   theme: {
     transparent: "transparent",
@@ -117,7 +118,8 @@ module.exports = {
       // => @media (min-width: 1280px) { ... }
 
       "2xl": "2000px",
-      // => @media (min-width: 1536px) { ... }
+      "1.5xl": "1440px",
+
       "grid-home": "1340px",
       // => @media (min-width: 1280px) { ... }
     },

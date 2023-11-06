@@ -16,9 +16,11 @@ import { Navbar } from "../../../shared/elements/Navbar";
 import { AccordionCourseContent } from "../components/AccordionCourseContent";
 import { ForumClickable } from "../components/ForumClickable";
 
-import { Chatbot } from "../components/ChatBot";
-import { ForumComponent } from "../components/ForumComponent";
-import { QuestionnaireComponent } from "../components/QuestionnaireComponent";
+import { Chatbot } from '../components/ChatBot';
+import { ForumComponent } from '../components/ForumComponent'
+import { QuestionnaireComponent } from '../components/QuestionnaireComponent';
+import { fi } from 'date-fns/locale';
+
 import { set, sub } from "date-fns";
 
 const CourseInside = () => {
@@ -152,10 +154,7 @@ const CourseInside = () => {
         subsectionsCompleted
       );
       if (firstSubsection) {
-        if (
-          firstSubsection.subseccion.attributes.activities.data[0].attributes
-            .type === "questionnaire"
-        ) {
+        if (firstSubsection?.subseccion?.attributes?.activities?.data[0]?.attributes?.type === 'questionnaire') {
           setCourseSubsection(firstSubsection.subseccion);
           setQuestionnaireFlag(true);
           setCourseSubsectionQuestionnaire(
@@ -196,7 +195,7 @@ const CourseInside = () => {
     if (courseSubsection.length !== 0) {
       setSubsectionsLandscapePhoto(
         courseSubsection.attributes.landscape_photo?.data?.attributes?.url ??
-          null
+        null
       );
     }
   }, [courseSubsection]);
@@ -329,31 +328,28 @@ const CourseInside = () => {
                   )}
                   <div className="flex flex-row mt-8  items-center space-x-8 ml-5">
                     <button
-                      className={`font-medium hover:text-black pb-3 ${
-                        courseInsideSectionType === "course"
-                          ? "text-black border-b-2 border-black"
-                          : "text-gray-500"
-                      }`}
+                      className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === "course"
+                        ? "text-black border-b-2 border-black"
+                        : "text-gray-500"
+                        }`}
                       onClick={() => setcourseInsideSectionType("course")}
                     >
                       Course
                     </button>
                     <button
-                      className={`font-medium hover:text-black pb-3 ${
-                        courseInsideSectionType === "files"
-                          ? "text-black border-b-2 border-black"
-                          : "text-gray-500"
-                      }`}
+                      className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === "files"
+                        ? "text-black border-b-2 border-black"
+                        : "text-gray-500"
+                        }`}
                       onClick={() => setcourseInsideSectionType("files")}
                     >
                       Files
                     </button>
                     <button
-                      className={`font-medium hover:text-black pb-3 ${
-                        courseInsideSectionType === "participants"
-                          ? "text-black border-b-2 border-black"
-                          : "text-gray-500"
-                      }`}
+                      className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === "participants"
+                        ? "text-black border-b-2 border-black"
+                        : "text-gray-500"
+                        }`}
                       onClick={() => setcourseInsideSectionType("participants")}
                     >
                       Participants
