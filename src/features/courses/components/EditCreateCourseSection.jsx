@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react'
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from '@dnd-kit/sortable';
 import { CreateCourseSubsectionsList } from './CreateCourseSubsectionsList';
+import { CreateCourseEditSubsection } from './CreateCourseEditSubsection';
 import { SubsectionItems } from './SubsectionItems';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCourseSectionsList, sectionToEdit, createCourseSectionsList }) => {
     const [addSubSectionFlag, setAddSubSectionFlag] = useState(true)
     const [subsectionName, setSubsectionName] = useState('')
     const [subsectionsToEdit, setSubsectionsToEdit] = useState((createCourseSectionsList.filter((section) => section.id === sectionToEdit.id)[0]))
+    const [editSubsectionFlag, setEditSubsectionFlag] = useState(false)
+    const [subsectionEditing, setSubsectionEditing] = useState()
 
     useEffect(() => {
         setSubsectionsToEdit((createCourseSectionsList.filter((section) => section.id === sectionToEdit.id)[0]))
@@ -21,7 +25,6 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCou
                     const sectionCopy = { ...course };
                     const oldIndex = sectionCopy.subsections.findIndex(c => c.id === active.id);
                     const newIndex = sectionCopy.subsections.findIndex(c => c.id === over.id);
-
                     if (oldIndex !== -1 && newIndex !== -1) {
                         sectionCopy.subsections = arrayMove(sectionCopy.subsections, oldIndex, newIndex);
                     }
@@ -90,12 +93,20 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCou
                                             strategy={verticalListSortingStrategy}>
                                             <ol className="relative border-l border-dashed border-gray-300 ml-10">
                                                 {subsectionsToEdit.subsections.map((subsection) => (
-                                                    <CreateCourseSubsectionsList subsection={subsection} key={subsection.id} />
+                                                    <motion.li
+                                                        key={subsection.id}
+                                                        initial={{ opacity: 0, x: -50 }}
+                                                        animate={{ opacity: 1, x: 0 }}
+                                                        exit={{ opacity: 0, x: 50 }}
+                                                    >
+                                                        <CreateCourseSubsectionsList subsection={subsection} setCreateCourseSectionsList={setCreateCourseSectionsList} sectionId={sectionToEdit.id} setEditSubsectionFlag={setEditSubsectionFlag} setSubsectionEditing={setSubsectionEditing} key={subsection.id} />
+                                                    </motion.li>
                                                 ))}
                                             </ol>
                                         </SortableContext>
                                     </DndContext>
-                                </div> :
+                                </div>
+                                :
                                 <div>
                                     <p className='text-sm font-normal italic text-gray-500 mt-6'>Start defining the sequence!</p>
                                 </div>
@@ -104,7 +115,12 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCou
                     </div>
                 </div>
                 <div className='w-1/2'>
-                        <SubsectionItems />           
+                    {
+                        editSubsectionFlag ?
+                            <CreateCourseEditSubsection subsection={subsectionEditing} setEditSubsectionFlag={setEditSubsectionFlag}/>
+                            :
+                            <SubsectionItems setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} />
+                    }
                 </div>
             </div>
         </div>
