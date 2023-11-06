@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import "../styles/cardDash.css";
+import "../../styles/cardDash.css";
 
 export function CardDash({ courseName, courseId }) {
   const navigate = useNavigate();

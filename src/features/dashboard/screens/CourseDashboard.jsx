@@ -1,8 +1,8 @@
 import { useAuthContext } from "../../../context/AuthContext";
 import { MoonLoader } from "react-spinners";
-import { SectionCoursesCards } from "../components/CardDash";
-import { ActivitiesDash } from "../components/ActivitiesDash";
-import { ForumDash } from "../components/ForumDash";
+import { SectionCoursesCards } from "../components/DashBoard/CardDash";
+import { ActivitiesDash } from "../components/CourseDashBoard/ActivitiesDash/ActivitiesDash";
+import { ForumDash } from "../components/CourseDashBoard/ForumDash";
 import { useEffect, useState } from "react";
 import { fetchCourseInformation } from "../../../fetches/fetchCourseInformation";
 import { useParams } from "react-router-dom";
