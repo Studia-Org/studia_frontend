@@ -78,6 +78,7 @@ const CourseInside = () => {
         }
       );
       const data = await response.json();
+      console.log({ data });
       setSubsectionsCompleted(data.subsections_completed);
       setQuestionnaireAnswers(data.user_response_questionnaires);
     } catch (error) {
@@ -311,7 +312,7 @@ const CourseInside = () => {
                   className="rounded shadow mt-8"
                 />
               ) : null}
-              {questionnaireFlag === true ? (
+              {questionnaireFlag === true && questionnaireAnswers !== undefined ? (
                 <div>
                   <QuestionnaireComponent
                     questionnaire={courseSubsectionQuestionnaire}
