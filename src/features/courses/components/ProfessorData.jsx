@@ -4,6 +4,7 @@ import { FiChevronRight } from "react-icons/fi";
 
 export const ProfessorData = ({ professor, evaluatorFlag }) => {
     const navigate = useNavigate();
+    console.log(professor)
     let link = null
     if (evaluatorFlag === true) {
         link = '/app/profile/' + professor.attributes.id + '/';

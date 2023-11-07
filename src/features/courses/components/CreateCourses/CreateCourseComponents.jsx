@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import 'filepond/dist/filepond.min.css';
-import '../styles/filepondStyles.css'
+import '../../styles/filepondStyles.css'
 import { message } from "antd";
 import { FilePond, registerPlugin } from 'react-filepond';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';

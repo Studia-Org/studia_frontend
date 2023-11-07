@@ -3,7 +3,8 @@ import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from '@dnd-kit/sortable';
 import { CreateCourseSubsectionsList } from './CreateCourseSubsectionsList';
 import { CreateCourseEditSubsection } from './CreateCourseEditSubsection';
-import { SubsectionItems } from './SubsectionItems';
+import { SubsectionItems } from '../SubsectionItems';
+import { CreateCourseTimelineSubsection } from './CreateCourseTimelineSubsection';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCourseSectionsList, sectionToEdit, createCourseSectionsList }) => {
@@ -113,11 +114,12 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCou
                         }
                         <p className='text-xs font-normal  text-gray-400 mt-8'>Drag and drop to reorder the sequence</p>
                     </div>
+                    <CreateCourseTimelineSubsection />
                 </div>
                 <div className='w-1/2'>
                     {
                         editSubsectionFlag ?
-                            <CreateCourseEditSubsection subsection={subsectionEditing} setEditSubsectionFlag={setEditSubsectionFlag}/>
+                            <CreateCourseEditSubsection subsection={subsectionEditing} setEditSubsectionFlag={setEditSubsectionFlag} />
                             :
                             <SubsectionItems setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} />
                     }

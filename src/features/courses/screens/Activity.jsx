@@ -18,6 +18,7 @@ const Activity = () => {
         `${API}/users/${user.id}?populate=qualifications.activity,qualifications.evaluator.profile_photo,qualifications.file`
       );
       const data = await response.json();
+      console.log(data)
       console.log(activityId);
       const dataFiltered = data.qualifications.filter(
         (qualification) => qualification.activity.id === Number(activityId)

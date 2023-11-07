@@ -2,9 +2,9 @@ import React, { useState } from 'react'
 import { Sidebar } from '../../../shared/elements/Sidebar';
 import { Navbar } from '../../../shared/elements/Navbar';
 import draw2 from '../../../assets/draw2.png'
-import { CreateCourseBreadcrumb } from '../components/CreateCourseBreadcrumb';
-import { EditCreateCourseSection } from '../components/EditCreateCourseSection';
-import { CreateConfirmation, CreateCourseInfo, CreateCourseSections } from '../components/CreateCourseComponents';
+import { CreateCourseBreadcrumb } from '../components/CreateCourses/CreateCourseBreadcrumb';
+import { EditCreateCourseSection } from '../components/CreateCourses/EditCreateCourseSection';
+import { CreateConfirmation, CreateCourseInfo, CreateCourseSections } from '../components/CreateCourses/CreateCourseComponents';
 
 
 

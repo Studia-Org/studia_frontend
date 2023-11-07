@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { PageContent, SequenceDevelop, SequenceDevelopNoMSLQForum } from './ConstantsSubsectionItems';
+import { PageContent, SequenceDevelop, SequenceDevelopNoMSLQForum } from './CreateCourses/ConstantsSubsectionItems';
 import { motion } from 'framer-motion';
-import { ForethoughtPage, PerformancePage, SelfReflectionPage } from './ConstantsSubsectionItems'
+import { ForethoughtPage, PerformancePage, SelfReflectionPage } from './CreateCourses/ConstantsSubsectionItems'
 
 
 export const SubsectionItems = ({ setCreateCourseSectionsList, sectionToEdit}) => {
