@@ -8,8 +8,6 @@ import { CreateCourseTimelineSubsection } from './CreateCourseTimelineSubsection
 import { motion, AnimatePresence } from 'framer-motion';
 
 export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCourseSectionsList, sectionToEdit, createCourseSectionsList }) => {
-    const [addSubSectionFlag, setAddSubSectionFlag] = useState(true)
-    const [subsectionName, setSubsectionName] = useState('')
     const [subsectionsToEdit, setSubsectionsToEdit] = useState((createCourseSectionsList.filter((section) => section.id === sectionToEdit.id)[0]))
     const [editSubsectionFlag, setEditSubsectionFlag] = useState(false)
     const [subsectionEditing, setSubsectionEditing] = useState()
@@ -35,36 +33,6 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCou
             });
             return updatedCourses;
         });
-    }
-
-    function createSubsection() {
-        const newSubsection = {
-            id: Math.floor(Math.random() * 1000),
-            title: subsectionName,
-            fase: null,
-            finished: false,
-            start_date: null,
-            end_date: null,
-            activities: [],
-            paragraphs: [],
-            description: null,
-            landscape_photo: null,
-            questionnaire: null,
-            users: null
-        }
-        setCreateCourseSectionsList(prevSections => {
-            return prevSections.map(section => {
-                if (section.id === sectionToEdit.id) {
-                    return {
-                        ...section,
-                        subsections: [...section.subsections, newSubsection],
-                    };
-                }
-                return section;
-            });
-        });
-        setAddSubSectionFlag(true)
-        setSubsectionName('')
     }
 
     return (
@@ -119,7 +87,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCou
                 <div className='w-1/2'>
                     {
                         editSubsectionFlag ?
-                            <CreateCourseEditSubsection subsection={subsectionEditing} setEditSubsectionFlag={setEditSubsectionFlag} />
+                            <CreateCourseEditSubsection subsection={subsectionEditing} setEditSubsectionFlag={setEditSubsectionFlag}  setCreateCourseSectionsList={setCreateCourseSectionsList} createCourseSectionsList={createCourseSectionsList} setSubsectionEditing={setSubsectionEditing}/>
                             :
                             <SubsectionItems setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} />
                     }

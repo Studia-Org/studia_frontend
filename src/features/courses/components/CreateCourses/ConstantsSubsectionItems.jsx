@@ -1,5 +1,19 @@
+import { fetchDataEmptyQuestionnaire, fetchDataPlannificationQuestionnaire, fetchDataMSLQuestionnaire } from './ItemData'
+import React from 'react'
 
 
+function magicalFetcher(switcher) {
+    switch (switcher) {
+        case 'mslq':
+            return fetchDataMSLQuestionnaire()
+        case 'plannification':
+            return fetchDataPlannificationQuestionnaire()
+        case 'empty':
+            return fetchDataEmptyQuestionnaire()
+        default:
+            return null
+    }
+}
 
 export const SequenceDevelop = () => {
     return (
@@ -230,7 +244,18 @@ export const PerformancePage = ({ setCreateCourseSectionsList, sectionToEdit }) 
 }
 
 export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit }) => {
-    function createSubsection(subsectionName, fase) {
+
+    function fetchDataAndCreateSubsection(subsectionName, fase, switcher) {
+        magicalFetcher(switcher)
+            .then(data => {
+                createSubsection(subsectionName, fase, data);
+            })
+            .catch(error => {
+                console.error('Error al obtener datos:', error);
+            });
+    }
+
+    function createSubsection(subsectionName, fase, data) {
         const newSubsection = {
             id: Math.floor(Math.random() * 1000),
             title: subsectionName,
@@ -242,7 +267,7 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit }) 
             paragraphs: [],
             description: null,
             landscape_photo: null,
-            questionnaire: null,
+            questionnaire: data?.data,
             users: null
         }
         setCreateCourseSectionsList(prevSections => {
@@ -257,6 +282,7 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit }) 
             });
         });
     }
+
     return (
         <>
             <p className='mt-20 mb-5'>Forethought</p>
@@ -271,7 +297,7 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit }) 
                     <p className='text-base font-normal'>Plannification questionnaire</p>
                     <p className='text-sm text-gray-500 font-normal'>A planning questionnaire is a valuable tool for gathering essential information to create effective plans. This questionnaire helps individuals or teams define goals, identify resources, and establish a roadmap for successful execution. </p>
                 </div>
-                <button onClick={() => createSubsection('Plannification questionnaire', 'forethought')} className='mx-3  ml-3 pl-3'>
+                <button onClick={() => fetchDataAndCreateSubsection('Plannification questionnaire', 'forethought', 'plannification')} className='mx-3  ml-3 pl-3'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6  text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -287,7 +313,23 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit }) 
                     <p className='text-base font-normal'>MSLQ Questionnaire</p>
                     <p className='text-sm text-gray-500 font-normal'>The Motivated Strategies for Learning Questionnaire (MSLQ) is a widely-used tool in education for assessing students' motivation and learning strategies. This questionnaire aims to understand the factors that influence students' engagement and achievement.</p>
                 </div>
-                <button onClick={() => createSubsection('MSLQ Questionnaire', 'forethought')} className='mx-3 ml-auto pl-3'>
+                <button onClick={() => fetchDataAndCreateSubsection('MSLQ Questionnaire', 'forethought', 'mslq')} className='mx-3 ml-auto pl-3'>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
+                        <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+            <div className='flex items-center p-5 border rounded-xl bg-gray-50 mt-5'>
+                <div className='px-3 py-3 bg-[#15803d] rounded-md flex items-center justify-center '>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 text-white">
+                        <path d="M5.625 3.75a2.625 2.625 0 100 5.25h12.75a2.625 2.625 0 000-5.25H5.625zM3.75 11.25a.75.75 0 000 1.5h16.5a.75.75 0 000-1.5H3.75zM3 15.75a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75zM3.75 18.75a.75.75 0 000 1.5h16.5a.75.75 0 000-1.5H3.75z" />
+                    </svg>
+                </div>
+                <div className='ml-5'>
+                    <p className='text-base font-normal'>Empty Questionnaire</p>
+                    <p className='text-sm text-gray-500 font-normal'>Create a new questionnaire from scratch.</p>
+                </div>
+                <button onClick={() => fetchDataAndCreateSubsection('Questionnaire', 'forethought', 'empty')} className='mx-3 ml-auto pl-3'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -304,7 +346,7 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit }) 
                     <p className='text-base font-normal'>Task statement</p>
                     <p className='text-sm text-gray-500 font-normal'>Define the essential details of the task, including its objectives, scope, and expected outcomes. Task statements are designed to provide clear guidance to individuals or teams, ensuring that they understand their responsibilities and can execute the task effectively. </p>
                 </div>
-                <button onClick={() => createSubsection('Task statement', 'forethought')} className='mx-3 ml-auto pl-3 '>
+                <button onClick={() => fetchDataAndCreateSubsection('Task statement', 'forethought', null)} className='mx-3 ml-auto pl-3 '>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -320,7 +362,7 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit }) 
                     <p className='text-base font-normal'>Custom field</p>
                     <p className='text-sm text-gray-500 font-normal'>Add a custom field if you need to introduce any theorical subsection between phases.</p>
                 </div>
-                <button onClick={() => createSubsection('Custom field', 'forethought')} className='mx-3 ml-auto pl-3'>
+                <button onClick={() => fetchDataAndCreateSubsection('Custom field', 'forethought', null)} className='mx-3 ml-auto pl-3'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
