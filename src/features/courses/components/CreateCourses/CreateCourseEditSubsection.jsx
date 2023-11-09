@@ -5,9 +5,25 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { QuestionnaireComponentEditable } from './QuestionnaireComponentEditable';
 import TextField from '@mui/material/TextField';
+import { CreateTask } from './CreateTask';
+import { Collapse } from 'antd';
+import MDEditor from '@uiw/react-md-editor';
 
-export const CreateCourseEditSubsection = ({ subsection, setEditSubsectionFlag, setCreateCourseSectionsList, createCourseSectionsList, setSubsectionEditing }) => {
-    
+import { FilePond, registerPlugin } from 'react-filepond'
+import 'filepond/dist/filepond.min.css'
+import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation'
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
+import '../../styles/filePondNoBoxshadow.css'
+
+
+registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview)
+const { Panel } = Collapse;
+
+export const CreateCourseEditSubsection = ({ subsection, setEditSubsectionFlag, setCreateCourseSectionsList, createCourseSectionsList, setSubsectionEditing, task, setTask, sectionId }) => {
+    const [content, setContent] = useState();
+    const [isPanelOpen, setIsPanelOpen] = useState(true);
+
     useEffect(() => {
         const matchingSubsection = createCourseSectionsList
             .flatMap(section => section.subsections)
@@ -27,13 +43,13 @@ export const CreateCourseEditSubsection = ({ subsection, setEditSubsectionFlag, 
                 <p className='ml-1'>Add items to the sequence</p>
             </button>
             {
-                subsection?.questionnaire !== null ?
+                subsection?.questionnaire ?? false ?
                     <>
                         <QuestionnaireComponentEditable subsection={subsection} setCreateCourseSectionsList={setCreateCourseSectionsList} createCourseSectionsList={createCourseSectionsList} />
                     </> :
                     <>
                         <h2 className='font-medium text-lg'>{subsection.title}</h2>
-                        <div className='bg-white rounded-md shadow-md p-5 mt-4 '>
+                        <div className='bg-white rounded-md shadow-md p-5 mt-4 mb-10 '>
                             <div className='flex items-center justify-between w-full '>
                                 <div>
                                     <label className='text-sm text-gray-500' htmlFor="" >Start Date</label>
@@ -52,15 +68,34 @@ export const CreateCourseEditSubsection = ({ subsection, setEditSubsectionFlag, 
                                     </LocalizationProvider>
                                 </div>
                             </div>
-                            <div className='mt-7'>
-                                <label className='text-sm text-gray-500 mt-7' htmlFor="" >Description</label>
+                            <div className='mt-7 space-y-2'>
+                                <label className='text-sm text-gray-500 mt-7 ' htmlFor="" >Subsection description</label>
                                 <div className='flex w-full'>
-                                    <TextField className='mt-5 flex w-full' id="outlined-basic" label={subsection.description} variant="outlined" />
+                                    <TextField className=' flex w-full' id="outlined-basic" label={subsection.description} variant="outlined" />
                                 </div>
                             </div>
-                        </div>F
+                            <div className='mt-3 space-y-2'>
+                                <label className='text-sm text-gray-500 ' htmlFor="" >Background Photo</label>
+                                <FilePond
+                                    allowMultiple={true}
+                                    maxFiles={1} />
+                            </div>
+                            <label className='text-sm text-gray-500' htmlFor="" >Subsection content</label>
+                            <MDEditor
+                                className='mt-2 mb-8'
+                                data-color-mode="light"
+                                onChange={setContent}
+                                value={content} />
+                            <Collapse
+                                onChange={() => setIsPanelOpen(!isPanelOpen)}
+                            >
+                                <Panel key="1" header="Task detail">
+                                    <CreateTask task={task} setTask={setTask} sectionId={sectionId} subsection={subsection} setCreateCourseSectionsList={setCreateCourseSectionsList} />
+                                </Panel>
+                            </Collapse>
+                        </div>
                     </>
             }
-        </div>
+        </div >
     )
 }

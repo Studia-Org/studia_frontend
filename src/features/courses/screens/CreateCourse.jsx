@@ -13,13 +13,14 @@ const CreateCourse = () => {
     const [createCourseSectionsList, setCreateCourseSectionsList] = useState([])
     const [editCourseSectionFlag, setEditCourseSectionFlag] = useState(false)
     const [sectionToEdit, setSectionToEdit] = useState({})
+    const [task, setTask] = useState({})
 
     function RenderCreateCourse() {
         switch (createCourseOption) {
             case 0:
                 return <CreateCourseInfo createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} />
             case 1:
-                return <CreateCourseSections createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} setCreateCourseSectionsList={setCreateCourseSectionsList} createCourseSectionsList={createCourseSectionsList} setEditCourseSectionFlag={setEditCourseSectionFlag} setSectionToEdit={setSectionToEdit} />
+                return <CreateCourseSections createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} setCreateCourseSectionsList={setCreateCourseSectionsList} createCourseSectionsList={createCourseSectionsList} setEditCourseSectionFlag={setEditCourseSectionFlag} setSectionToEdit={setSectionToEdit} task={task} setTask={setTask}/>
             case 2:
                 return <CreateConfirmation createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} />
             default:
@@ -33,9 +34,8 @@ const CreateCourse = () => {
                 {
                     editCourseSectionFlag ?
                         <>
-                            <EditCreateCourseSection  setEditCourseSectionFlag={setEditCourseSectionFlag} setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} createCourseSectionsList={createCourseSectionsList}/>
+                            <EditCreateCourseSection  setEditCourseSectionFlag={setEditCourseSectionFlag} setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} createCourseSectionsList={createCourseSectionsList} task={task} setTask={setTask}/>
                         </>
-
                         :
                         <>
                             <h1>Create new Course</h1>

@@ -1,39 +1,90 @@
 import React, { useState, useEffect } from 'react'
 import { DndContext, closestCenter } from '@dnd-kit/core';
-import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from '@dnd-kit/sortable';
+import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { CreateCourseSubsectionsList } from './CreateCourseSubsectionsList';
 import { CreateCourseEditSubsection } from './CreateCourseEditSubsection';
-import { SubsectionItems } from '../SubsectionItems';
+import { SubsectionItems } from '../CreateCourses/SubsectionItems';
 import { CreateCourseTimelineSubsection } from './CreateCourseTimelineSubsection';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { message } from 'antd';
 
-export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCourseSectionsList, sectionToEdit, createCourseSectionsList }) => {
+export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCourseSectionsList, sectionToEdit, createCourseSectionsList, task, setTask }) => {
+    console.log(createCourseSectionsList)
     const [subsectionsToEdit, setSubsectionsToEdit] = useState((createCourseSectionsList.filter((section) => section.id === sectionToEdit.id)[0]))
     const [editSubsectionFlag, setEditSubsectionFlag] = useState(false)
     const [subsectionEditing, setSubsectionEditing] = useState()
+
 
     useEffect(() => {
         setSubsectionsToEdit((createCourseSectionsList.filter((section) => section.id === sectionToEdit.id)[0]))
     }, [createCourseSectionsList])
 
     const handleDragEnd = (event) => {
-        const { active, over } = event
-        setCreateCourseSectionsList((courses) => {
-            const updatedCourses = createCourseSectionsList.map((course) => {
-                if (course.id === sectionToEdit.id) {
-                    const sectionCopy = { ...course };
-                    const oldIndex = sectionCopy.subsections.findIndex(c => c.id === active.id);
-                    const newIndex = sectionCopy.subsections.findIndex(c => c.id === over.id);
-                    if (oldIndex !== -1 && newIndex !== -1) {
-                        sectionCopy.subsections = arrayMove(sectionCopy.subsections, oldIndex, newIndex);
+        const { active, over } = event;
+
+        try {
+            setCreateCourseSectionsList((courses) => {
+                const updatedCourses = createCourseSectionsList.map((course) => {
+                    if (course.id === sectionToEdit.id) {
+                        const sectionCopy = { ...course };
+                        const oldIndex = sectionCopy.subsections.findIndex(c => c.id === active.id);
+                        const newIndex = sectionCopy.subsections.findIndex(c => c.id === over.id);
+
+                        // Check if the move is valid based on your ordering logic
+                        if (!isValidMove(sectionCopy.subsections, oldIndex, newIndex)) {
+                            message.error('Invalid move. Subsection needs to follow the course sequence order');
+                        } else {
+                            // Perform the move
+                            sectionCopy.subsections = arrayMove(sectionCopy.subsections, oldIndex, newIndex);
+                            return sectionCopy;
+                        }
                     }
-                    return sectionCopy;
-                }
-                return course;
+                    return course;
+                });
+
+                return updatedCourses;
             });
-            return updatedCourses;
-        });
+        } catch (error) {
+            message.error(error.message);
+        }
     }
+
+
+
+    const isValidMove = (subsections, oldIndex, newIndex) => {
+        const movedSubsection = subsections[oldIndex];
+
+        if (newIndex < 0 || newIndex >= subsections.length) {
+            return false;
+        }
+
+        const validFasesOrder = ['forethought', 'performance', 'self-reflection'];
+
+        const currentFase = movedSubsection.fase;
+        const targetFase = subsections[newIndex].fase;
+
+        const currentIndex = validFasesOrder.indexOf(currentFase);
+        const targetIndex = validFasesOrder.indexOf(targetFase);
+
+        // Asegurarse de que la fase de destino esté en la posición correcta
+        if (currentIndex < targetIndex && newIndex !== targetIndex - 1) {
+            return false;
+        }
+
+        if (currentIndex > targetIndex && newIndex !== targetIndex + 1) {
+            return false;
+        }
+
+        // Evitar mover "self-reflection" entre "forethought" y "performance"
+        if (currentFase === 'self-reflection' && (targetFase === 'forethought' || targetFase === 'performance')) {
+            return false;
+        }
+
+        return true;
+    };
+
+
+
 
     return (
         <div className='text-base font-normal'>
@@ -87,7 +138,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCou
                 <div className='w-1/2'>
                     {
                         editSubsectionFlag ?
-                            <CreateCourseEditSubsection subsection={subsectionEditing} setEditSubsectionFlag={setEditSubsectionFlag}  setCreateCourseSectionsList={setCreateCourseSectionsList} createCourseSectionsList={createCourseSectionsList} setSubsectionEditing={setSubsectionEditing}/>
+                            <CreateCourseEditSubsection subsection={subsectionEditing} setEditSubsectionFlag={setEditSubsectionFlag} setCreateCourseSectionsList={setCreateCourseSectionsList} createCourseSectionsList={createCourseSectionsList} setSubsectionEditing={setSubsectionEditing} task={task} setTask={setTask} sectionId={sectionToEdit.id} />
                             :
                             <SubsectionItems setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} />
                     }
