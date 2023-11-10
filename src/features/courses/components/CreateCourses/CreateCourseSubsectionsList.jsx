@@ -3,7 +3,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
 export const CreateCourseSubsectionsList = ({ subsection, setCreateCourseSectionsList, sectionId, setEditSubsectionFlag, setSubsectionEditing }) => {
-
+    console.log(subsection)
     function deleteSubsection(subsection) {
         setCreateCourseSectionsList(prevSections => {
             return prevSections.map(section => {
@@ -59,9 +59,9 @@ export const CreateCourseSubsectionsList = ({ subsection, setCreateCourseSection
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v4.59L7.3 9.24a.75.75 0 00-1.1 1.02l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V6.75z" clipRule="evenodd" />
                 </svg>
             </span>
-            <div className='relative flex flex-col justify-center'>
-                <p className='ml-5'>{subsection.title}</p>
-                <p className='text-xs'>{subsection.description}</p>
+            <div className='relative flex flex-col justify-center ml-5'>
+                <p className=''>{subsection.title}</p>
+                <p className=' text-xs line-clamp-1 w-[30rem]'>{subsection.description}</p>
             </div>
             <svg onClick={(event) => {
                 event.stopPropagation();

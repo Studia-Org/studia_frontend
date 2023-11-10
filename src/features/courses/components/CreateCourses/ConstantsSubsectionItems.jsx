@@ -25,6 +25,7 @@ function createSubsection(subsectionName, fase, data, setCreateCourseSectionsLis
         start_date: null,
         end_date: null,
         activities: [],
+        content: '',
         paragraphs: [],
         description: null,
         landscape_photo: null,
@@ -67,11 +68,19 @@ function magicalFetcher(switcher) {
     }
 }
 
-export const SequenceDevelop = () => {
+export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit }) => {
+    function addSequence() {
+        fetchDataAndCreateSubsection('MSLQ Questionnaire', 'forethought', 'mslq', setCreateCourseSectionsList, sectionToEdit)
+        fetchDataAndCreateSubsection('Task statement', 'forethought', null, setCreateCourseSectionsList, sectionToEdit)
+        fetchDataAndCreateSubsection('Plannification questionnaire', 'forethought', 'plannification', setCreateCourseSectionsList, sectionToEdit)
+        fetchDataAndCreateSubsection('Task implementation', 'performance', null, setCreateCourseSectionsList, sectionToEdit)
+        fetchDataAndCreateSubsection('Peer review', 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit)
+        fetchDataAndCreateSubsection('Final delivery', 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit)
+    }
     return (
         <div className='flex relative items-center p-5 border rounded-xl bg-gray-50'>
             <div className="absolute top-0 right-0">
-                <button className="mr-10 mt-10 bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150">
+                <button onClick={() => addSequence()} className="mr-10 mt-10 bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
                     </svg>
@@ -141,11 +150,23 @@ export const SequenceDevelop = () => {
 }
 
 
-export const SequenceDevelopNoMSLQForum = () => {
+export const SequenceDevelopNoMSLQForum = ({ setCreateCourseSectionsList, sectionToEdit }) => {
+
+    function addSequence() {
+        fetchDataAndCreateSubsection('Task statement', 'forethought', null, setCreateCourseSectionsList, sectionToEdit)
+        fetchDataAndCreateSubsection('Plannification questionnaire', 'forethought', 'plannification', setCreateCourseSectionsList, sectionToEdit)
+        fetchDataAndCreateSubsection('Task implementation', 'performance', null, setCreateCourseSectionsList, sectionToEdit)
+        fetchDataAndCreateSubsection('Forum Doubts', 'performance', null, setCreateCourseSectionsList, sectionToEdit)
+        fetchDataAndCreateSubsection('Peer review', 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit)
+        fetchDataAndCreateSubsection('Feedback refactor', 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit)
+        fetchDataAndCreateSubsection('Final delivery', 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit)
+    }
+
+
     return (
         <div className='relative flex items-center p-5 border rounded-xl bg-gray-50'>
             <div className="absolute top-0 right-0">
-                <button className="mr-10 mt-10 bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150">
+                <button onClick={() => addSequence()} className="mr-10 mt-10 bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
                     </svg>
@@ -225,12 +246,15 @@ export const SequenceDevelopNoMSLQForum = () => {
     )
 }
 
-export const PerformancePage = ({ setCreateCourseSectionsList, sectionToEdit }) => {
+export const PerformancePage = ({ setCreateCourseSectionsList, sectionToEdit, handleBack, handleContinue }) => {
 
 
     return (
         <>
-            <p className='mt-20 mb-5'>Performance</p>
+            <div className='flex mt-20 mb-5 '>
+                <p className=''>Performance</p>
+                {buttonGroup({ handleBack, handleContinue })}
+            </div>
             <div className='flex items-center p-5 border rounded-xl bg-gray-50 mt-5'>
                 <div className='px-3 py-3 bg-[#f59e0b] rounded-md flex items-center justify-center '>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-8 h-8 text-white">
@@ -269,12 +293,33 @@ export const PerformancePage = ({ setCreateCourseSectionsList, sectionToEdit }) 
 
 }
 
-export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit }) => {
+export const buttonGroup = ({ handleBack, handleContinue }) => {
+    return (
+        <div className='ml-auto space-x-3'>
+            <button onClick={() => handleBack()} className='bg-[#45406f] p-1 text-white rounded-md hover:bg-indigo-900 duration-150'>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+                    <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
+                </svg>
+
+            </button>
+            <button onClick={() => handleContinue()} className='bg-[#45406f] p-1 text-white rounded-md hover:bg-indigo-900 duration-150'>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+                    <path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" />
+                </svg>
+            </button>
+        </div>
+    )
+}
+
+export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, handleBack, handleContinue }) => {
 
 
     return (
         <>
-            <p className='mt-20 mb-5'>Forethought</p>
+            <div className='flex mt-20 mb-5 '>
+                <p className=''>Forethought</p>
+                {buttonGroup({ handleBack, handleContinue })}
+            </div>
             <div className='flex items-center p-5 border rounded-xl bg-gray-50'>
                 <div className='px-3 py-3 bg-[#15803d] rounded-md flex items-center justify-center '>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 text-white">
@@ -302,7 +347,7 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit }) 
                     <p className='text-base font-normal'>MSLQ Questionnaire</p>
                     <p className='text-sm text-gray-500 font-normal'>The Motivated Strategies for Learning Questionnaire (MSLQ) is a widely-used tool in education for assessing students' motivation and learning strategies. This questionnaire aims to understand the factors that influence students' engagement and achievement.</p>
                 </div>
-                <button onClick={() => fetchDataAndCreateSubsection('MSLQ Questionnaire', 'forethought', 'mslq' , setCreateCourseSectionsList, sectionToEdit)} className='mx-3 ml-auto pl-3'>
+                <button onClick={() => fetchDataAndCreateSubsection('MSLQ Questionnaire', 'forethought', 'mslq', setCreateCourseSectionsList, sectionToEdit)} className='mx-3 ml-auto pl-3'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -361,11 +406,14 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit }) 
     )
 }
 
-export const SelfReflectionPage = ({ setCreateCourseSectionsList, sectionToEdit }) => {
+export const SelfReflectionPage = ({ setCreateCourseSectionsList, sectionToEdit, handleBack, handleContinue }) => {
 
     return (
         <>
-            <p className='mt-20 mb-5'>Self-Reflection</p>
+            <div className='flex mt-20 mb-5 '>
+                <p className=''>Self-Reflection</p>
+                {buttonGroup({ handleBack, handleContinue })}
+            </div>
             <div className='flex items-center p-5 border rounded-xl bg-gray-50 mt-5'>
                 <div className='px-3 py-3 bg-[#dc2626] rounded-md flex items-center justify-center '>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-8 h-8 text-white">
@@ -393,7 +441,7 @@ export const SelfReflectionPage = ({ setCreateCourseSectionsList, sectionToEdit 
                     <p className='text-base font-normal'>Final delivery</p>
                     <p className='text-sm text-gray-500 font-normal'>Final delivery of the task.</p>
                 </div>
-                <button onClick={() => fetchDataAndCreateSubsection('Final delivery', 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit)}  className='mx-3 ml-auto pl-3'>
+                <button onClick={() => fetchDataAndCreateSubsection('Final delivery', 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit)} className='mx-3 ml-auto pl-3'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f] ">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -409,7 +457,7 @@ export const SelfReflectionPage = ({ setCreateCourseSectionsList, sectionToEdit 
                     <p className='text-base font-normal'>Custom field</p>
                     <p className='text-sm text-gray-500 font-normal'>Add a custom field if you need to introduce any theorical subsection between phases.</p>
                 </div>
-                <button onClick={() => fetchDataAndCreateSubsection('Custom field', 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit)}  className='mx-3 ml-auto pl-3'>
+                <button onClick={() => fetchDataAndCreateSubsection('Custom field', 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit)} className='mx-3 ml-auto pl-3'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>

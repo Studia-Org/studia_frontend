@@ -30,11 +30,9 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCou
                         const oldIndex = sectionCopy.subsections.findIndex(c => c.id === active.id);
                         const newIndex = sectionCopy.subsections.findIndex(c => c.id === over.id);
 
-                        // Check if the move is valid based on your ordering logic
                         if (!isValidMove(sectionCopy.subsections, oldIndex, newIndex)) {
                             message.error('Invalid move. Subsection needs to follow the course sequence order');
                         } else {
-                            // Perform the move
                             sectionCopy.subsections = arrayMove(sectionCopy.subsections, oldIndex, newIndex);
                             return sectionCopy;
                         }
@@ -133,7 +131,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCou
                         }
                         <p className='text-xs font-normal  text-gray-400 mt-8'>Drag and drop to reorder the sequence</p>
                     </div>
-                    <CreateCourseTimelineSubsection />
+                    <CreateCourseTimelineSubsection createCourseSectionsList={createCourseSectionsList} sectionId={sectionToEdit.id} />
                 </div>
                 <div className='w-1/2'>
                     {

@@ -4,7 +4,9 @@
 
 .rct-items {
     pointer-events: none;
+    top: 40px;
 }
+
 
 .rct-vertical-lines {
     color: #e4e2e2;
@@ -28,6 +30,7 @@
 .rct-scroll {
     height: 100% !important;
     overflow-x: hidden !important;
+    width: 100% !important;
 }
 .rct-scroll:hover {
     cursor: move !important;

@@ -45,7 +45,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
     const totalPages = Math.ceil(totalQuestions / questionsPerPage);
     const [description, setDescription] = useState(subsection.questionnaire.attributes.description);
 
-    useEffect(() => { 
+    useEffect(() => {
         setDescription(subsection.questionnaire.attributes.description)
     }, [subsection]);
 
@@ -192,35 +192,35 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
         })
     }
     const handleChangeDescription = (value) => {
-        setDescription(value);
-        setCreateCourseSectionsList(prevSections => {
-            const updatedSections = prevSections.map(section => {
-                if (section.subsections) {
-                    const updatedSubsections = section.subsections.map(sub => {
-                        if (sub.id === subsection.id) {
-                            return {
-                                ...sub,
-                                questionnaire: {
-                                    ...sub.questionnaire,
-                                    attributes: {
-                                        ...sub.questionnaire.attributes,
-                                        description: value
-                                    }
-                                }
-                            };
-                        }
-                        return sub;
-                    });
+        setCreateCourseSectionsList((courses) => {
+            return courses.map((course) => {
+                if (course.subsections) {
                     return {
-                        ...section,
-                        subsections: updatedSubsections
+                        ...course,
+                        subsections: course.subsections.map((sub) => {
+                            if (sub.id === subsection.id) {
+                                return {
+                                    ...sub,
+                                    questionnaire: {
+                                        ...sub.questionnaire,
+                                        attributes: {
+                                            ...sub.questionnaire.attributes,
+                                            description: value,
+                                        },
+                                    },
+                                    description: value,
+                                };
+                            }
+                            return sub;
+                        }),
                     };
                 }
-                return section;
+                return course;
             });
-            return updatedSections;
-        })
+        });
     };
+
+
 
     function deleteQuestion(index) {
         setCreateCourseSectionsList(prevSections => {
