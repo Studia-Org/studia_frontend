@@ -20,7 +20,6 @@ const AuthProvider = ({ children }) => {
       const data = await response.json();
 
       setUserData(data);
-
       fetchLogUserLogging({ data, token })
 
 

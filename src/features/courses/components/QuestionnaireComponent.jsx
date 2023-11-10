@@ -14,6 +14,8 @@ import FormControlLabel, {
   FormControlLabelProps,
 } from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
+import { useTimer } from "../../../shared/elements/useTimer";
+
 
 export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID }) => {
   const MotionDiv = motion.div;
@@ -24,6 +26,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID })
   const questionsPerPage = 5;
   const totalQuestions = questionnaire.attributes.Options.questionnaire.questions.length;
   const totalPages = Math.ceil(totalQuestions / questionsPerPage);
+  const { minutes, seconds } = useTimer({ testCompleted: questionnaireAnswerData.length > 0 });
 
   useEffect(() => {
     if (questionnaireAnswerData.length > 0) {
@@ -118,12 +121,22 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID })
             question: questionnaire.attributes.Options.questionnaire.questions[questionIndex].question
           }))
         };
+        // format time to has expected HH:mm:ss.SSS with just having minutes and seconds
+        const hour = Math.floor(minutes / 60) < 10 ? "0" + Math.floor(minutes / 60) : Math.floor(minutes / 60)
+        const minutesLeft = minutes % 60;
+        const minutesFormat = minutesLeft < 10 ? "0" + minutesLeft : minutesLeft
+        const secondsFormat = seconds < 10 ? "0" + seconds : seconds
+        const timeToComplete = `${hour}:${minutesFormat}:${secondsFormat}:000`
+
         const userData = {
           user: user.id,
           questionnaire: questionnaire.id,
           responses: formattedObject,
           finished: true,
+          timeToComplete: timeToComplete
         };
+        console.log(userData)
+
         const response = await fetch(`${API}/user-response-questionnaires`, {
           method: 'POST',
           headers: {
@@ -132,31 +145,42 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID })
           },
           body: JSON.stringify({ data: userData })
         });
-
-        const newObject = {
-          subsections_completed: [
-            ...user.subsections_completed.map(subsection => ({ id: subsection.id })),
-            { id: subsectionID }
-          ]
-        };
-        const response2 = await fetch(`${API}/users/${user.id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${getToken()}`,
-          },
-          body: JSON.stringify(newObject)
-        });
-        const temp = await response2.json();
-        if (response2.ok) {
-          Swal.fire(
-            'Completed!',
-            'The questionnaire has been completed, refresh the page to see your results',
-            'success'
-          )
-        } else {
-          message.error('Error al actualizar el usuario:', response2.statusText);
+        if (response.ok) {
+          const newObject = {
+            subsections_completed: [
+              ...user.subsections_completed.map(subsection => ({ id: subsection.id })),
+              { id: subsectionID }
+            ]
+          };
+          const response2 = await fetch(`${API}/users/${user.id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${getToken()}`,
+            },
+            body: JSON.stringify(newObject)
+          });
+          const temp = await response2.json();
+          if (response2.ok) {
+            Swal.fire(
+              'Completed!',
+              'The questionnaire has been completed, refresh the page to see your results',
+              'success'
+            ).then(() => {
+              window.location.reload();
+            })
+          } else {
+            message.error('Error al actualizar el usuario:', response2.statusText);
+          }
         }
+        else {
+          Swal.fire(
+            'Error!',
+            'Error sending the questionnaire, please try again later',
+            'error'
+          )
+        }
+
       }
     } else {
       message.error('Please, answer all the questions')
@@ -229,9 +253,24 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID })
       );
     });
   };
+  function format(ms) {
+    console.log({ ms });
+    const date = new Date('1970-01-01 ' + ms);
+    let formattedTime = undefined;
+    console.log(date.getHours());
+
+    if (date.getHours() > 0) {
+      formattedTime = date.toLocaleTimeString('en-US', { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+      formattedTime = formattedTime + " hr"
+    } else {
+      formattedTime = date.toLocaleTimeString('en-US', { minute: "2-digit", second: "2-digit" });
+      formattedTime = formattedTime + " min"
+    }
+
+    return formattedTime;
+  }
 
   const isLastPage = currentPage === totalPages;
-
   return (
     <div className="flex flex-col mt-5">
       <div className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1]">
@@ -239,10 +278,17 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID })
           <div className='flex items-center'>
             <p className="text-black font-semibold text-3xl">{questionnaire.attributes.Title}</p>
             {
-              questionnaireAnswerData.length > 0 && <Chip className='ml-auto' label="Completed" color="success" />
+              questionnaireAnswerData.length > 0 &&
+              <div className='flex   justify-between'>
+                <Chip className='ml-auto' label="Completed" color="success" />
+              </div>
             }
           </div>
-          <p className="mt-7">{questionnaire.attributes.description}</p>
+          <div className='flex justify-between mt-7'>
+            <p >{questionnaire.attributes.description}</p>
+            <span className='text-gray-500'>{"Completed in: " + format(answers[0].timeToComplete)}</span>
+          </div>
+
         </div>
       </div>
       <motion.ul
@@ -253,11 +299,17 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID })
         <div className="space-y-5 mt-5 ">{renderQuestionsForPage()}</div>
       </motion.ul>
       {isLastPage && (
-        <div className="mt-5">
+        <div className="mt-5 flex justify-end">
           {
-            completed === false ? <button onClick={handleSubmission} className="bg-blue-500 text-white font-semibold py-2 px-4 rounded ml-auto flex hover:bg-blue-800 duration-150">
-              Submit
-            </button>
+            completed === false ?
+              <div>
+                <span className='inline-flex w-[60px] text-gray-500'>{minutes}:{seconds < 10 ? "0" + seconds : seconds}</span>
+                <button onClick={handleSubmission}
+                  className="bg-blue-500 text-white font-semibold py-2 px-4 
+                            rounded ml-auto hover:bg-blue-800 duration-150">
+                  Submit
+                </button>
+              </div>
               :
               null
           }
