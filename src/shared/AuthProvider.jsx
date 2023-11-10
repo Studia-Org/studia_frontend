@@ -4,6 +4,7 @@ import { message } from "antd";
 import { API, BEARER } from "../constant";
 import { useEffect } from "react";
 import { getToken } from "../helpers";
+import { fetchLogUserLogging } from "../fetches/fetchLogUserLogging";
 
 const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState();
@@ -19,6 +20,11 @@ const AuthProvider = ({ children }) => {
       const data = await response.json();
 
       setUserData(data);
+
+      fetchLogUserLogging({ data, token })
+
+
+
     } catch (error) {
       console.error(error);
       message.error("Error While Getting Logged In User Details");
@@ -33,7 +39,6 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (authToken) {
-      console.log("fetching user")
       fetchLoggedInUser(authToken);
     }
   }, [authToken]);

@@ -17,7 +17,6 @@ registerPlugin(FilePondPluginImagePreview);
 
 
 export const ActivityComponent = ({ activityData }) => {
-  console.log(activityData)
   const evaluated = activityData.qualification ? true : false;
   const { user } = useAuthContext();
 

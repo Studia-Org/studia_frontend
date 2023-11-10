@@ -60,12 +60,6 @@ const Login = () => {
         }
     };
 
-    window.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-            loginAccount();
-        }
-    });
-
     return (
         <div className="">
             <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script>
@@ -143,7 +137,7 @@ const Login = () => {
                                                 Login
                                             </span>
                                         </button>
-                                        
+
                                     </div>
                                 </div>
                                 <div className='flex flex-col text-center items-center'>

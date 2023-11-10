@@ -202,14 +202,8 @@ const CourseInside = () => {
   }, [courseSubsection]);
 
   useEffect(() => {
-    fetchCourseInformation();
-  }, []);
-
-  useEffect(() => {
     fetchUserResponsesData();
-  }, []);
-
-  useEffect(() => {
+    fetchCourseInformation();
     fetchPostData();
   }, []);
 
