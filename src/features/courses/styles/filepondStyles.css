@@ -3,7 +3,7 @@
 }
 
 .filepond--item-panel {
-   
+
     background-color: white;
 }
 
@@ -12,12 +12,14 @@
     box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
-.filepond--item{
+.filepond--item {}
+
+.filepond--file {
+    color: black;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 
 }
 
-.filepond--file{
-    color: black;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    
+.filepond--credits {
+    display: none;
 }

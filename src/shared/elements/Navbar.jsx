@@ -7,7 +7,6 @@ import { useAuthContext } from "../../context/AuthContext";
 export const Navbar = () => {
     const navigate = useNavigate();
     const { user } = useAuthContext();
-    console.log({ user })
     return (
         <nav className="h-[8rem] w-full bg-white">
             <div className="container flex flex-wrap items-center ">

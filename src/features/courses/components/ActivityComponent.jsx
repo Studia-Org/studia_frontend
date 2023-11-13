@@ -1,30 +1,74 @@
-import React, { useEffect } from 'react'
+import { useState } from 'react'
 import { ProfessorData } from './ProfessorData';
-import TextField from '@mui/material/TextField';
 import { getToken } from '../../../helpers';
 import ReactMarkdown from 'react-markdown';
-import { Link } from 'react-router-dom';
 import { API } from '../../../constant';
 import { useAuthContext } from '../../../context/AuthContext';
-
+import { useParams } from "react-router-dom";
 import 'filepond/dist/filepond.min.css';
 import '../styles/filepondStyles.css'
 import { FilePond, registerPlugin } from 'react-filepond';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import Chip from '@mui/material/Chip';
+import { json } from 'react-router-dom';
 registerPlugin(FilePondPluginImagePreview);
 
 
 export const ActivityComponent = ({ activityData }) => {
   const evaluated = activityData.qualification ? true : false;
+  const [formData, setFormData] = useState(new FormData());
   const { user } = useAuthContext();
+  const { activityId } = useParams();
 
-  const handleFileUpload = async (file) => {
-    const formData = new FormData();
-    formData.append('files', file);
+  function handleFileUpload(file) {
+    const dataCopy = formData;
+    dataCopy.append('files', file);
+    setFormData(dataCopy);
 
+  }
+  async function sendFile(result) {
     try {
+
+      console.log({ activityData });
+      const qualificationData = {
+        data: {
+          activity: activityId,
+          file: result.id,
+          user: user.id,
+          delivered: true,
+          delivered_data: new Date(),
+          evaluator: activityData.evaluator.data.id,
+        }
+      };
+      if (activityData.delivered && !evaluated) {
+        const response2 =
+          await fetch(`${API}/qualifications/${activityId}`, {
+            method: 'PUT',
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${getToken()}`,
+            },
+            body: JSON.stringify(qualificationData),
+          });
+      } else if (!activityData.delivered && !evaluated) {
+        const response2 =
+          await fetch(`${API}/qualifications`, {
+            method: 'POST',
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${getToken()}`,
+            },
+            body: JSON.stringify(qualificationData),
+          });
+      }
+    } catch (error) {
+      // Manejar errores aquí
+    }
+  }
+  async function sendData() {
+    try {
+
       const response = await fetch(`${API}/upload`, {
         method: 'POST',
         headers: {
@@ -35,33 +79,14 @@ export const ActivityComponent = ({ activityData }) => {
 
       if (response.ok) {
         const result = await response.json();
-        const qualificationData = {
-          activity: activityData.activity.id,
-          file: result[0].id,
-          user: user.id
-        }
-        if (activityData.delivered && !evaluated) {
-          const response2 = await fetch(`${API}/qualifications/${activityData.id}`, {
-            method: 'PUT',
-            headers: {
-              Authorization: `Bearer ${getToken()}`,
-            },
-            body: JSON.stringify({ data: qualificationData }),
-          });
-        } else if (!activityData.delivered && !evaluated) {
-          const response2 = await fetch(`${API}/qualifications`, {
-            method: 'POST',
-            headers: {
-              Authorization: `Bearer ${getToken()}`,
-            },
-            body: JSON.stringify({ data: qualificationData }),
-          });
-        }
+
+        const uploadPromises = result.map(sendFile);
+        await Promise.all(uploadPromises);
       }
     } catch (error) {
-
+      // Manejar errores aquí
     }
-  };
+  }
 
   function renderFiles(file) {
     return (
@@ -104,13 +129,13 @@ export const ActivityComponent = ({ activityData }) => {
         <div className='relative flex items-center mb-6 bg-white rounded-md p-5 shadow-md mt-5'>
           <div className='flex items-center space-x-3 '>
             {
-              activityData.activity.type === 'Delivery' ?
+              activityData.activity.data.attributes.type === 'Delivery' ?
                 <div className='w-14 h-14 bg-red-500 rounded-md items-center flex justify-center'>
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                   </svg>
                 </div>
-                : activityData.activity.type === 'Lecture' ?
+                : activityData.activity.data.attributes.type === 'Lecture' ?
                   <div className='w-14 h-14 bg-blue-500 rounded-md items-center flex justify-center'>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52000-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
@@ -119,7 +144,7 @@ export const ActivityComponent = ({ activityData }) => {
                   :
                   <div className='w-14 h-14 bg-red-800 rounded-md'></div>
             }
-            <h3 className='font-semibold text-2xl max-w-[calc(100%-7rem)] sm:max-w-[calc(100%-9.5rem)]'>{activityData.activity.title}</h3>
+            <h3 className='font-semibold text-2xl max-w-[calc(100%-7rem)] sm:max-w-[calc(100%-9.5rem)]'>{activityData.activity.data.attributes.title}</h3>
           </div>
           {
             evaluated ?
@@ -147,7 +172,7 @@ export const ActivityComponent = ({ activityData }) => {
         <p className='text-xs text-gray-400 mb-1 mt-5'>Task description</p>
         <hr />
         <div className='prose my-3 text-gray-600 ml-5 w-full box-content'>
-          <ReactMarkdown>{activityData.activity.description}</ReactMarkdown>
+          <ReactMarkdown>{activityData.activity.data.attributes.description}</ReactMarkdown>
         </div>
 
       </div>
@@ -155,7 +180,7 @@ export const ActivityComponent = ({ activityData }) => {
         evaluated ?
           <div className='flex flex-col '>
             <p className='text-xs text-gray-400 mb-1'>Evaluator</p>
-            <ProfessorData professor={{ attributes: activityData.evaluator }} evaluatorFlag={true} />
+            <ProfessorData professor={{ attributes: activityData.evaluator.data.attributes }} evaluatorFlag={true} />
             <p className='text-xs text-gray-400 mb-1 mt-5'>Your submission</p>
             <div className='mb-14 '>
               {
@@ -174,7 +199,6 @@ export const ActivityComponent = ({ activityData }) => {
                     }}
                   />
               }
-
             </div>
           </div> :
           <div className='flex flex-col w-[30rem] mt-5'>
@@ -187,6 +211,11 @@ export const ActivityComponent = ({ activityData }) => {
                 }
               }}
             />
+            <button onClick={() => { sendData() }}
+              className="bg-blue-500 text-white font-semibold py-2 px-4 
+                            rounded ml-auto hover:bg-blue-800 duration-150">
+              Submit
+            </button>
           </div>
       }
     </div>

@@ -3,8 +3,7 @@ import { useState, useEffect } from 'react';
 export function useTimer({ testCompleted }) {
     const [seconds, setSeconds] = useState(0);
     const [minutes, setMinutes] = useState(0);
-    const [completed] = useState(testCompleted);
-    console.log({ completed });
+    const [completed, setCompleted] = useState(testCompleted);
     useEffect(() => {
         if (!completed) {
             const interval = setInterval(() => {
@@ -13,11 +12,12 @@ export function useTimer({ testCompleted }) {
                     setSeconds(0);
                     setMinutes((prevMinutes) => prevMinutes + 1);
                 }
+                console.log('seconds: ', seconds);
             }, 1000);
 
             return () => clearInterval(interval);
         }
     }, [completed, seconds]);
 
-    return { seconds, minutes, }
+    return { seconds, minutes, stopTimer: () => { setCompleted(true) } }
 }

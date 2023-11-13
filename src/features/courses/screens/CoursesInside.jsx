@@ -78,7 +78,6 @@ const CourseInside = () => {
         }
       );
       const data = await response.json();
-      console.log({ data });
       setSubsectionsCompleted(data.subsections_completed);
       setQuestionnaireAnswers(data.user_response_questionnaires);
     } catch (error) {
@@ -209,7 +208,6 @@ const CourseInside = () => {
 
   function renderAllActivities(activities) {
     let Component = null;
-    console.log(activities.data);
     if (activities.type === "paragraph") {
       Component = componentMap[activities.type];
     } else {

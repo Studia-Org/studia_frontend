@@ -5,7 +5,7 @@ export function fetchLogUserLogging({ data, token }) {
     const logData = log.logins;
     const currentDate = new Date().toLocaleString();
     logData[currentDate] = navigator.userAgent;
-    console.log(logData);
+
     fetch(`${API}/logs/${log.id}`, {
         method: "PUT",
         headers: {

@@ -190,7 +190,7 @@ const CoursesHome = () => {
     return (
       <div className='relative bg-white rounded-2xl shadow-md flex p-3 min-w-[450px] md:w-[28rem] lg:w-[30rem] min-h-[5rem]'>
         <div className="w-2 rounded-md mr-3" style={colorStyle}></div>
-        <div className='flex-col flex justify-center max-w-[calc(100%-6rem)]'>
+        <div className='flex-col flex justify-center w-full max-w-[calc(100%-6rem)]'>
           <div className='flex w-full'>
             <p className=' font-semibold text-base'>{subsection.subsection.title}</p>
             {

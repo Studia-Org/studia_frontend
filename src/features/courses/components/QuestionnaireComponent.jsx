@@ -26,11 +26,12 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID })
   const questionsPerPage = 5;
   const totalQuestions = questionnaire.attributes.Options.questionnaire.questions.length;
   const totalPages = Math.ceil(totalQuestions / questionsPerPage);
-  const { minutes, seconds } = useTimer({ testCompleted: questionnaireAnswerData.length > 0 });
+  const { minutes, seconds, stopTimer } = useTimer({ testCompleted: questionnaireAnswerData.length > 0 });
 
   useEffect(() => {
     if (questionnaireAnswerData.length > 0) {
       setCompleted(true);
+      stopTimer()
     } else {
       setCompleted(false);
     }
@@ -135,7 +136,6 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID })
           finished: true,
           timeToComplete: timeToComplete
         };
-        console.log(userData)
 
         const response = await fetch(`${API}/user-response-questionnaires`, {
           method: 'POST',
@@ -253,18 +253,17 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID })
       );
     });
   };
+
   function format(ms) {
-    console.log({ ms });
     const date = new Date('1970-01-01 ' + ms);
     let formattedTime = undefined;
-    console.log(date.getHours());
 
     if (date.getHours() > 0) {
       formattedTime = date.toLocaleTimeString('en-US', { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-      formattedTime = formattedTime + " hr"
+      formattedTime = formattedTime + "hr"
     } else {
       formattedTime = date.toLocaleTimeString('en-US', { minute: "2-digit", second: "2-digit" });
-      formattedTime = formattedTime + " min"
+      formattedTime = formattedTime + "min"
     }
 
     return formattedTime;
@@ -284,9 +283,13 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID })
               </div>
             }
           </div>
+
           <div className='flex justify-between mt-7'>
             <p >{questionnaire.attributes.description}</p>
-            <span className='text-gray-500'>{"Completed in: " + format(answers[0].timeToComplete)}</span>
+            {
+              completed === true ?
+                <span className='text-gray-500 pl-2'>{"Completed in: " + format(questionnaireAnswerData[0]?.timeToComplete)}</span>
+                : null}
           </div>
 
         </div>
