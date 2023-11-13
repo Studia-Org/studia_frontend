@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import { PageContent, SequenceDevelop, SequenceDevelopNoMSLQForum } from './ConstantsSubsectionItems';
+import { SequenceDevelop, SequenceDevelopNoMSLQForum, SequenceDevelopEducation1, SequenceDevelopEducation2 } from './ConstantsSubsectionItems';
 import { motion } from 'framer-motion';
 import { ForethoughtPage, PerformancePage, SelfReflectionPage } from './ConstantsSubsectionItems'
 
 
 export const SubsectionItems = ({ setCreateCourseSectionsList, sectionToEdit }) => {
     const [currentPage, setCurrentPage] = useState('first');
+    const [currentPageSequence, setCurrentPageSequence] = useState(0);
     const [addItemsOrPreMade, setAddItemsOrPreMade] = useState('addItems');
 
     const variants = {
@@ -40,6 +41,46 @@ export const SubsectionItems = ({ setCreateCourseSectionsList, sectionToEdit }) 
         }
     }
 
+    function renderSequencesPage() {
+        switch (currentPageSequence) {
+            case 0:
+                return (
+                    <>
+                        <SequenceDevelop setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} />
+                        <SequenceDevelopNoMSLQForum setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} />
+                    </>
+                )
+            case 1:
+                return (
+                    <SequenceDevelopEducation1 setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} />
+                )
+            case 2:
+                return (
+                    <SequenceDevelopEducation2 setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} />
+                )
+            default:
+                return (
+                    <>
+                        <SequenceDevelop setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} />
+                        <SequenceDevelopNoMSLQForum setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} />
+                    </>
+                )
+        }
+    }
+
+
+    const handleContinueSequence = () => {
+        if (currentPageSequence !== 2) {
+            setCurrentPageSequence(currentPageSequence + 1)
+        }
+    }
+
+    const handleBackSequence = () => {
+        if (currentPageSequence !== 0) {
+            setCurrentPageSequence(currentPageSequence - 1)
+        }
+    }
+
     const handleContinue = () => {
         if (currentIndex < pages.length - 1) {
             handlePageChange(pages[currentIndex + 1]);
@@ -67,13 +108,13 @@ export const SubsectionItems = ({ setCreateCourseSectionsList, sectionToEdit }) 
                             <div className='flex mt-20 '>
                                 <p className='mb-5'>Sequences</p>
                                 <div className='ml-auto space-x-3'>
-                                    <button onClick={() => handleBack()} className='bg-[#45406f] p-1 text-white rounded-md hover:bg-indigo-900 duration-150'>
+                                    <button onClick={() => handleBackSequence()} className='bg-[#45406f] p-1 text-white rounded-md hover:bg-indigo-900 duration-150'>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                                             <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
                                         </svg>
 
                                     </button>
-                                    <button onClick={() => handleContinue()} className='bg-[#45406f] p-1 text-white rounded-md hover:bg-indigo-900 duration-150'>
+                                    <button onClick={() => handleContinueSequence()} className='bg-[#45406f] p-1 text-white rounded-md hover:bg-indigo-900 duration-150'>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                                             <path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" />
                                         </svg>
@@ -84,8 +125,7 @@ export const SubsectionItems = ({ setCreateCourseSectionsList, sectionToEdit }) 
                             <motion.div id='course-motion-div'
                                 className='space-y-5'
                                 initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
-                                <SequenceDevelop setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} />
-                                <SequenceDevelopNoMSLQForum setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} />
+                                {renderSequencesPage()}
                             </motion.div>
                             <p className='text-xs font-normal  text-gray-400 mt-5 ml-1'>You can edit all the sequences for customization when they are added on a section.</p>
                         </>

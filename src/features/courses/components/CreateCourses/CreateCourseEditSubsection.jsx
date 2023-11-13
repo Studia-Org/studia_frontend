@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
@@ -85,8 +85,10 @@ export const CreateCourseEditSubsection = ({
     <div>
       <label className='text-sm text-gray-500'>{label}</label>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DemoContainer components={['DatePicker']}>
-          <DatePicker value={dayjs(date)} onChange={onChange} />
+        <DemoContainer components={['DateTimePicker']}>
+          <DateTimePicker
+            value={dayjs(date)} onChange={onChange}
+          />
         </DemoContainer>
       </LocalizationProvider>
     </div>

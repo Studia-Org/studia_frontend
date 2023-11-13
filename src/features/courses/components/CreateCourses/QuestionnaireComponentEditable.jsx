@@ -5,7 +5,6 @@ import dayjs from 'dayjs';
 import { styled } from '@mui/material/styles';
 import RadioGroup, { useRadioGroup } from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -13,7 +12,8 @@ import Radio from '@mui/material/Radio';
 import { message } from 'antd';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 
 const list = {
@@ -44,10 +44,18 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
     const totalQuestions = subsection?.questionnaire?.attributes?.Options?.questionnaire?.questions.length;
     const totalPages = Math.ceil(totalQuestions / questionsPerPage);
     const [description, setDescription] = useState(subsection.questionnaire.attributes.description);
+    const [editQuestionFlags, setEditQuestionFlags] = useState(Array(totalQuestions).fill(false));
 
     useEffect(() => {
         setDescription(subsection.questionnaire.attributes.description)
     }, [subsection]);
+
+    const handleEditQuestionClick = (index) => {
+        const newFlags = [...editQuestionFlags];
+        console.log(editQuestionFlags)
+        newFlags[index] = !newFlags[index];
+        setEditQuestionFlags(newFlags);
+    };
 
 
     const StyledFormControlLabel = styled((props) => <FormControlLabel {...props} />)(
@@ -180,7 +188,47 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
             setNewOption('')
             setAddQuestionText({ question: '', options: null })
         }
+    }
 
+    function handleOnChangeQuestion(newTitle, absoluteIndex){
+        setCreateCourseSectionsList(prevSections => {
+            const updatedSections = prevSections.map(section => {
+                if (section.subsections) {
+                    const updatedSubsections = section.subsections.map(sub => {
+                        if (sub.id === subsection.id) {
+                            const originalQuestions = sub.questionnaire.attributes.Options.questionnaire.questions;
+                            const updatedQuestions = Array.from(originalQuestions);
+                            updatedQuestions[absoluteIndex].question = newTitle;
+                            return {
+                                ...sub,
+                                questionnaire: {
+                                    ...sub.questionnaire,
+                                    attributes: {
+                                        ...sub.questionnaire.attributes,
+                                        Options: {
+                                            ...sub.questionnaire.attributes.Options,
+                                            questionnaire: {
+                                                ...sub.questionnaire.attributes.Options.questionnaire,
+                                                questions: updatedQuestions
+                                            }
+                                        }
+                                    }
+                                }
+                            };
+                        }
+                        return sub;
+                    });
+
+                    return {
+                        ...section,
+                        subsections: updatedSubsections
+                    };
+                }
+                return section;
+            });
+            return updatedSections;
+
+        })
     }
 
     function addOptionToList() {
@@ -272,7 +320,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                             if (sub.id === subsection.id) {
                                 return {
                                     ...sub,
-                                    start_date: date.format('MM-DD-YYYY')
+                                    start_date: date.format('MM-DD-YYYY HH:mm:ss')
                                 };
                             }
                             return sub;
@@ -298,7 +346,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                             if (sub.id === subsection.id) {
                                 return {
                                     ...sub,
-                                    end_date: date.format('MM-DD-YYYY')
+                                    end_date: date.format('MM-DD-YYYY HH:mm:ss')
                                 };
                             }
                             return sub;
@@ -328,10 +376,31 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                     className='bg-white shadow-md rounded-md p-5 border-l-8 border-[#377ddf75]'
                     variants={item}>
                     <div className='flex items-center'>
-                        <p className="font-medium">{question.question}</p>
-                        <svg onClick={() => deleteQuestion(absoluteIndex)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 ml-auto cursor-pointer">
-                            <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z" clipRule="evenodd" />
-                        </svg>
+                        {editQuestionFlags[absoluteIndex] ? (
+                            <TextField
+                                id="outlined-basic"
+                                label=""
+                                variant="outlined"
+                                className='w-full'
+                                rows={1}
+                                onChange={(e) => handleOnChangeQuestion(e.target.value, absoluteIndex)}
+                                value={question.question}
+                                multiline
+                            />
+                        ) : (
+                            <p className="font-medium">{question.question}</p>
+                        )}
+
+                        <div className='flex ml-auto space-x-2'>
+                            <svg onClick={() => handleEditQuestionClick(absoluteIndex)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="ml-5 w-5 h-5 cursor-pointer">
+                                <path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z" />
+                                <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z" />
+                            </svg>
+                            <svg onClick={() => deleteQuestion(absoluteIndex)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 cursor-pointer">
+                                <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z" clipRule="evenodd" />
+                            </svg>
+                        </div>
+
                     </div>
                     {Array.isArray(question.options) ? (
                         <div key={absoluteIndex}>
@@ -384,16 +453,24 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                         <div>
                             <label className='text-sm text-gray-500' htmlFor="" >Start Date</label>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DemoContainer components={['DatePicker']}>
-                                    <DatePicker value={dayjs(subsection?.start_date)} onChange={handleStartDateChange} />
+                                <DemoContainer components={['DateTimePicker']}>
+                                    <DateTimePicker
+                                        value={dayjs(subsection?.start_date)}
+                                        onChange={handleStartDateChange}
+                                    />
                                 </DemoContainer>
                             </LocalizationProvider>
+
                         </div>
                         <div>
                             <label className='text-sm text-gray-500' htmlFor="" >End Date</label>
+                            <label className='text-sm text-gray-500' htmlFor="" >Start Date</label>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DemoContainer components={['DatePicker']}>
-                                    <DatePicker value={dayjs(subsection?.end_date)} onChange={handleEndDateChange} />
+                                <DemoContainer components={['DateTimePicker']}>
+                                    <DateTimePicker
+                                        value={dayjs(subsection?.end_date)}
+                                        onChange={handleEndDateChange}
+                                    />
                                 </DemoContainer>
                             </LocalizationProvider>
                         </div>

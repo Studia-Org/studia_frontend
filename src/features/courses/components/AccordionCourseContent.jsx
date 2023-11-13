@@ -1,15 +1,7 @@
 import React, { useState } from 'react'
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import {
-    Accordion,
-    AccordionItem,
-    AccordionButton,
-    AccordionPanel,
-    AccordionIcon,
-} from '@chakra-ui/accordion'
-
-import { Collapse, Progress } from 'antd';
+import { Collapse } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 import '../styles/utils.css'
 
@@ -119,7 +111,6 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
                 className='mt-5 bg-gray-50'
                 expandIconPosition="right"
             >
-                
                 <Panel
                     header={
                         <div className='flex items-center py-4 '>

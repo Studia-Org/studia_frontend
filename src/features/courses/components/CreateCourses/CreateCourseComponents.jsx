@@ -9,7 +9,9 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import { CreateCourseSectionsList } from './CreateCourseSectionsList';
+import { AccordionCourse } from './AccordionCourse';
 import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from '@dnd-kit/sortable';
+import { CourseContent } from './CourseContent';
 
 registerPlugin(FilePondPluginImagePreview);
 
@@ -23,7 +25,7 @@ const CreateCourseButtons = (createCourseOption, setCreateCourseOption) => {
   const navigate = useNavigate();
 
   return (
-    <div className='flex w-full mt-8 justify-between mb-10'>
+    <div className='flex w-full mt-8 mb-10'>
       {
         createCourseOption === 0 ?
           <button onClick={() => navigate('/app/courses')} type="button" class="text-white duration-150  bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center mr-2 ">
@@ -102,7 +104,7 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption }) 
   )
 }
 
-export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption, createCourseSectionsList, setCreateCourseSectionsList, setEditCourseSectionFlag, setSectionToEdit}) => {
+export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption, createCourseSectionsList, setCreateCourseSectionsList, setEditCourseSectionFlag, setSectionToEdit }) => {
   const [sectionName, setSectionName] = useState('');
   const [addSectionFlag, setAddSectionFlag] = useState(true);
 
@@ -128,7 +130,7 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
     message.success("Section created successfully")
   }
 
-  function deleteSection(section){
+  function deleteSection(section) {
     const newSections = createCourseSectionsList.filter(item => item.id !== section.id)
     setCreateCourseSectionsList(newSections)
   }
@@ -194,10 +196,17 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
   )
 }
 
-export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption }) => {
+export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption, createCourseSectionsList }) => {
   return (
-    <motion.div className='w-2/4 flex flex-col' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
-      div 34
+    <motion.div className='w-full' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
+      <div className='flex flex-row'>
+        <div className='w-full mr-5'>
+          <CourseContent />
+        </div>
+        <div style={{ width: '45rem' }} className=' ml-auto'>
+          <AccordionCourse  createCourseSectionsList={createCourseSectionsList} />
+        </div>
+      </div>
       {CreateCourseButtons(createCourseOption, setCreateCourseOption)}
     </motion.div>
   )

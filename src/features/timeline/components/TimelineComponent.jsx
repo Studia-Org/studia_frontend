@@ -27,22 +27,9 @@ const keys = {
 };
 
 const TimelineComponent = ({ groups, timelineItems, createCourseFlag }) => {
+  let alturaElemento = (5 * groups.length) + 5
   const lineHeight = createCourseFlag ? 60 : 153;
   const itemHeightRatio = createCourseFlag ? 0.8 : 0.70;
-  const calculateTimelineHeight = () => {
-    // Debes calcular la altura en base a la cantidad de elementos en el timeline
-    // Puedes utilizar timelineItems u otras propiedades según tus necesidades
-
-    // Ejemplo: 60 es la altura estimada de un elemento en el timeline
-    const estimatedItemHeight = 60;
-    const numberOfItems = timelineItems.length;
-
-    // Calcula la altura total
-    const totalHeight = estimatedItemHeight * numberOfItems;
-
-    return totalHeight;
-  };
-
 
   const today = new Date();
   const startOfWeek = new Date(today);
@@ -115,7 +102,8 @@ const TimelineComponent = ({ groups, timelineItems, createCourseFlag }) => {
     );
   };
 
-  return (
+  function TimelineComponentStructure() {
+    return (
       <Timeline
         groups={groups}
         items={timelineItems}
@@ -182,7 +170,15 @@ const TimelineComponent = ({ groups, timelineItems, createCourseFlag }) => {
           ) : null}
         </TimelineMarkers>
       </Timeline>
+    )
+  }
 
+  return (
+    createCourseFlag ?
+      <div style={{ height: alturaElemento + 'rem' }}>
+        <TimelineComponentStructure />
+      </div> :
+      <TimelineComponentStructure />
   );
 };
 

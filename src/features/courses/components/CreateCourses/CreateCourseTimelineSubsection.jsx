@@ -10,7 +10,7 @@ export const CreateCourseTimelineSubsection = ({ createCourseSectionsList, secti
   let counter = 1;
   let timelineItems = []
 
-  let alturaElemento = (5 * groups.length) + 5
+  let alturaElemento = (5 * groups.length) + 6
 
   sectionFiltered.subsections.forEach(subsection => {
     const info = {
@@ -35,8 +35,13 @@ export const CreateCourseTimelineSubsection = ({ createCourseSectionsList, secti
         <p className='text-gray-400'>Add your first item!</p>
       </div> :
       alturaElemento &&
-      <div style={{ height: alturaElemento + 'rem' }} className={`bg-white shadow-md rounded-md p-5  mb-10  `}>
-        {timelineItems.length > 0 && <TimelineComponent groups={groups} timelineItems={timelineItems} createCourseFlag={true} />}
+      <div
+        style={{ height: alturaElemento > 35 ? '35rem' : alturaElemento + 'rem' }}
+        className={`bg-white shadow-md rounded-md p-5 duration-150  mb-10 ${alturaElemento > 35 && 'overflow-y-scroll'} `}
+      >
+        {timelineItems.length > 0 && (
+          <TimelineComponent groups={groups} timelineItems={timelineItems} createCourseFlag={true} />
+        )}
       </div>
   )
 }

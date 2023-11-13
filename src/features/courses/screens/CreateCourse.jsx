@@ -22,7 +22,7 @@ const CreateCourse = () => {
             case 1:
                 return <CreateCourseSections createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} setCreateCourseSectionsList={setCreateCourseSectionsList} createCourseSectionsList={createCourseSectionsList} setEditCourseSectionFlag={setEditCourseSectionFlag} setSectionToEdit={setSectionToEdit} task={task} setTask={setTask}/>
             case 2:
-                return <CreateConfirmation createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} />
+                return <CreateConfirmation createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} createCourseSectionsList={createCourseSectionsList}  />
             default:
                 return <CreateCourseInfo createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} />
         }
@@ -42,7 +42,14 @@ const CreateCourse = () => {
                             <CreateCourseBreadcrumb createCourseOption={createCourseOption} />
                             <div className='flex justify-between mr-16 mt-5'>
                                 {RenderCreateCourse()}
-                                <img src={draw2} className='w-[30rem] h-[30rem]' alt="" />
+                                {
+                                    createCourseOption !== 2 ?
+                                        <div className='w-[30rem] h-[30rem]'>
+                                            <img src={draw2} className='w-[30rem] h-[30rem]' alt="" />
+                                        </div>
+                                        :
+                                        null
+                                }                        
                             </div>
                         </>
                 }

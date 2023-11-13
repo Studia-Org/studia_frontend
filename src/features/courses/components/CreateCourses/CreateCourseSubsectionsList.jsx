@@ -3,7 +3,6 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 
 export const CreateCourseSubsectionsList = ({ subsection, setCreateCourseSectionsList, sectionId, setEditSubsectionFlag, setSubsectionEditing }) => {
-    console.log(subsection)
     function deleteSubsection(subsection) {
         setCreateCourseSectionsList(prevSections => {
             return prevSections.map(section => {

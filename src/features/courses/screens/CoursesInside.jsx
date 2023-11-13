@@ -170,7 +170,6 @@ const CourseInside = () => {
 
   function renderAllActivities(activities) {
     let Component = null
-    console.log(activities.data)
     if (activities.type === 'paragraph') {
       Component = componentMap[activities.type];
     } else {
