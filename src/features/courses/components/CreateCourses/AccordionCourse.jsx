@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Collapse, Progress } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 
-export const AccordionCourse = ({ createCourseSectionsList }) => {
+export const AccordionCourse = ({ createCourseSectionsList, setSectionContentSelector }) => {
     const { Panel } = Collapse;
     const [sectionNumber, setSectionNumber] = useState(1);
 
@@ -23,7 +23,7 @@ export const AccordionCourse = ({ createCourseSectionsList }) => {
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v4.59L7.3 9.24a.75.75 0 00-1.1 1.02l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V6.75z" clipRule="evenodd" />
                     </svg>
                 </span>
-                <button className="flex items-center mb-1 font-medium text-gray-900 line-clamp-2 w-3/4 hover:translate-x-2 duration-200 text-left"> {subsection.title}</button>
+                <button onClick={() => setSectionContentSelector(subsection.id)} className="flex items-center mb-1 font-medium text-gray-900 line-clamp-2 w-3/4 hover:translate-x-2 duration-200 text-left"> {subsection.title}</button>
             </li>
         )
     }
@@ -33,8 +33,7 @@ export const AccordionCourse = ({ createCourseSectionsList }) => {
             <Collapse
                 expandIcon={({ isActive }) => <CaretRightOutlined className='absolute top-0 bottom-0 right-5 ' rotate={isActive ? 90 : 0} />}
                 className='mt-5 bg-gray-50'
-                expandIconPosition="right"
-            >
+                expandIconPosition="right">
                 <Panel
                     header={
                         <div className='flex items-center py-4 '>

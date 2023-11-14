@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import 'filepond/dist/filepond.min.css';
@@ -11,7 +11,8 @@ import { DndContext, closestCenter } from '@dnd-kit/core';
 import { CreateCourseSectionsList } from './CreateCourseSectionsList';
 import { AccordionCourse } from './AccordionCourse';
 import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from '@dnd-kit/sortable';
-import { CourseContent } from './CourseContent';
+import { CourseContent } from './CourseConfirmation/CourseContent';
+import { TaskContent } from './CourseConfirmation/TaskContent';
 
 registerPlugin(FilePondPluginImagePreview);
 
@@ -197,15 +198,36 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
 }
 
 export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption, createCourseSectionsList }) => {
+  const [sectionContentSelector, setSectionContentSelector] = useState('course');
+  const [visibilityTask, setVisibilityTask] = useState(false);
+  const [selectedSubsection, setSelectedSubsection] = useState();
+
+  useEffect(() => {
+    createCourseSectionsList.map((section) => {
+      section.subsections.map((subsection) => {
+        if (subsection.id === sectionContentSelector) {
+          setSelectedSubsection(subsection)
+        }
+      })
+    })
+  }, [sectionContentSelector])
+
   return (
     <motion.div className='w-full' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
       <div className='flex flex-row'>
-        <div className='w-full mr-5'>
-          <CourseContent />
-        </div>
-        <div style={{ width: '45rem' }} className=' ml-auto'>
-          <AccordionCourse  createCourseSectionsList={createCourseSectionsList} />
-        </div>
+        {!visibilityTask ?
+          <>
+            <div className='w-full mr-5'>
+              <CourseContent sectionContentSelector={sectionContentSelector} setVisibilityTask={setVisibilityTask}  selectedSubsection={selectedSubsection}/>
+            </div>
+            <div style={{ width: '45rem' }} className=' ml-auto'>
+              <AccordionCourse createCourseSectionsList={createCourseSectionsList} setSectionContentSelector={setSectionContentSelector} />
+            </div>
+          </> :
+          <div className='w-full mr-5'>
+            {selectedSubsection?.task && <TaskContent setVisibilityTask={setVisibilityTask} task={selectedSubsection.task} />}
+          </div>
+        }
       </div>
       {CreateCourseButtons(createCourseOption, setCreateCourseOption)}
     </motion.div>

@@ -26,8 +26,6 @@ export const CreateCourseTimelineSubsection = ({ createCourseSectionsList, secti
     timelineItems.push(info);
   });
 
-
-
   return (
     groups.length === 0 ?
       <div className='bg-white shadow-md rounded-md p-5 mb-10 flex items-center justify-center flex-col'>
@@ -36,7 +34,7 @@ export const CreateCourseTimelineSubsection = ({ createCourseSectionsList, secti
       </div> :
       alturaElemento &&
       <div
-        style={{ height: alturaElemento > 35 ? '35rem' : alturaElemento + 'rem' }}
+        style={{ height: alturaElemento > 25 ? '25rem' : alturaElemento + 'rem' }}
         className={`bg-white shadow-md rounded-md p-5 duration-150  mb-10 ${alturaElemento > 35 && 'overflow-y-scroll'} `}
       >
         {timelineItems.length > 0 && (

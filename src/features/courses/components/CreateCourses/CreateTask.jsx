@@ -59,34 +59,29 @@ export const CreateTask = ({ task, setTask, sectionId, subsection, setCreateCour
                 ...prevTask,
                 ...newTask,
             }));
-
-            setCreateCourseSectionsList(prevSections => {
-                const newSections = prevSections.map(section => {
+            setCreateCourseSectionsList((prevSections) => {
+                const newSections = prevSections.map((section) => {
                     if (section.id === sectionId) {
                         return {
                             ...section,
-                            subsections: section.subsections.map(subsectionList => {
-                                if (subsectionList.id === subsection.id) {
-                                    return {
-                                        ...subsectionList,
-                                        activities: [
-                                            ...subsectionList.activities,
-                                            activity,
-                                        ],
-                                    }
-                                }
-                                return subsectionList;
+                            subsections: section.subsections.map((subsectionList) => {
+                                return {
+                                    ...subsectionList,
+                                    task: activity
+                                };
                             }),
-                        }
+                        };
                     }
                     return section;
                 });
                 return newSections;
             });
+            message.success('Task created successfully');
+
         } catch (error) {
             message.error(error.message);
         }
-       
+
     }
     return (
         <>

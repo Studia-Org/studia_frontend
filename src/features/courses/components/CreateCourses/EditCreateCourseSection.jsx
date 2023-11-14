@@ -93,7 +93,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCou
                 <p className='text-sm ml-1 '>Back to course setup</p>
             </button>
             <div className='flex'>
-                <div className='w-1/2 pr-10 pl-5'>
+                <div className='w-1/2 pr-10 pl-5 '>
                     <h1 className='font-bold text-2xl mt-5'>Edit Section</h1>
                     <h2 className='font-medium text-xl mt-5'>{sectionToEdit.name}</h2>
                     <div className='bg-white rounded-md shadow-md p-5 font-medium text-base mb-5 mt-5'>
@@ -102,7 +102,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCou
                         </div>
                         {
                             subsectionsToEdit.subsections.length > 0 ?
-                                <div className='mt-6 space-y-3'>
+                                <div className='mt-6 space-y-3 h-[20rem] overflow-y-auto'>
                                     <DndContext
                                         collisionDetection={closestCenter}
                                         onDragEnd={handleDragEnd}>
