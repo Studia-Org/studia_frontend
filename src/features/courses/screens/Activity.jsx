@@ -12,10 +12,8 @@ const Activity = () => {
 
   const fetchUserQualificationsData = async () => {
     try {
-      // Importa Axios
-
-      // Realiza la solicitud con Axios
-      const response = await fetch(`${API}/qualifications?qualification&populate[activity][fields][0]=*&filters[activity][id]=${activityId}&populate[user][fields][0]=*&populate[evaluator][populate][profile_photo][fields][0]=*&filters[user][id]=${user.id}`);
+      if (!user) return;
+      const response = await fetch(`${API}/qualifications?qualification&populate[activity][populate][evaluators][fields][0]=*&filters[activity][id]=${activityId}&populate[user][fields][0]=*&populate[evaluator][populate][profile_photo][fields][0]=*&filters[user][id]=${user.id}`);
       const data = await response.json();
 
       if (data.data.length > 0) {

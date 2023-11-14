@@ -11,11 +11,12 @@ import { FilePond, registerPlugin } from 'react-filepond';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import Chip from '@mui/material/Chip';
-import { json } from 'react-router-dom';
+import Swal from 'sweetalert2';
 registerPlugin(FilePondPluginImagePreview);
 
 
 export const ActivityComponent = ({ activityData }) => {
+  console.log({ activityData });
   const evaluated = activityData.qualification ? true : false;
   const [formData, setFormData] = useState(new FormData());
   const { user } = useAuthContext();
@@ -28,9 +29,9 @@ export const ActivityComponent = ({ activityData }) => {
 
   }
   async function sendFile(result) {
-    try {
 
-      console.log({ activityData });
+    try {
+      let response2 = undefined;
       const qualificationData = {
         data: {
           activity: activityId,
@@ -38,11 +39,13 @@ export const ActivityComponent = ({ activityData }) => {
           user: user.id,
           delivered: true,
           delivered_data: new Date(),
-          evaluator: activityData.evaluator.data.id,
+          evaluator: activityData.activity.data.attributes.evaluators.data[0].id
         }
       };
+      console.log(activityData?.delivered && !evaluated);
       if (activityData.delivered && !evaluated) {
-        const response2 =
+        console.log('put');
+         response2 =
           await fetch(`${API}/qualifications/${activityId}`, {
             method: 'PUT',
             headers: {
@@ -51,8 +54,10 @@ export const ActivityComponent = ({ activityData }) => {
             },
             body: JSON.stringify(qualificationData),
           });
-      } else if (!activityData.delivered && !evaluated) {
-        const response2 =
+      } 
+      else if (!evaluated) {
+        console.log('post');
+         response2 =
           await fetch(`${API}/qualifications`, {
             method: 'POST',
             headers: {
@@ -61,9 +66,11 @@ export const ActivityComponent = ({ activityData }) => {
             },
             body: JSON.stringify(qualificationData),
           });
+         
       }
+      return response2;
     } catch (error) {
-      // Manejar errores aquí
+      console.error(error);
     }
   }
   async function sendData() {
@@ -79,12 +86,30 @@ export const ActivityComponent = ({ activityData }) => {
 
       if (response.ok) {
         const result = await response.json();
-
         const uploadPromises = result.map(sendFile);
-        await Promise.all(uploadPromises);
+        const response_upload = await Promise.all(uploadPromises);
+        console.log({ response_upload });
+        if(response_upload.ok){
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Files uploaded successfully',
+          })
+        }
       }
+      else {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Something went wrong!',
+        })
+      }	
     } catch (error) {
-      // Manejar errores aquí
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: error.message,
+      })
     }
   }
 
