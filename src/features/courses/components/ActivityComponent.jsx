@@ -208,34 +208,23 @@ export const ActivityComponent = ({ activityData }) => {
             <ProfessorData professor={{ attributes: activityData.evaluator.data.attributes }} evaluatorFlag={true} />
             <p className='text-xs text-gray-400 mb-1 mt-5'>Your submission</p>
             <div className='mb-14 '>
-              {
-                evaluated ?
-                  <div className='bg-white rounded-md shadow-md p-5 space-y-3 md:w-[30rem]' >
-                    {activityData.file && activityData.file.map(renderFiles)}
-                  </div>
-                  :
-                  <FilePond
-                    allowMultiple={true}
-                    maxFiles={5}
-                    onaddfile={(err, item) => {
-                      if (!err) {
-                        handleFileUpload(item.file);
-                      }
-                    }}
-                  />
-              }
+              
             </div>
           </div> :
           <div className='flex flex-col w-[30rem] mt-5'>
-            <FilePond
-              allowMultiple={true}
-              maxFiles={5}
-              onaddfile={(err, item) => {
-                if (!err) {
-                  handleFileUpload(item.file);
-                }
-              }}
-            />
+            
+              <div className='bg-white rounded-md shadow-md p-5 space-y-3 md:w-[30rem]' >
+                {activityData.file && activityData.file.map(renderFiles)}
+              </div>
+              <FilePond
+                allowMultiple={true}
+                maxFiles={5}
+                onaddfile={(err, item) => {
+                  if (!err) {
+                    handleFileUpload(item.file);
+                  }
+                }}
+              />
             <button onClick={() => { sendData() }}
               className="bg-blue-500 text-white font-semibold py-2 px-4 
                             rounded ml-auto hover:bg-blue-800 duration-150">
