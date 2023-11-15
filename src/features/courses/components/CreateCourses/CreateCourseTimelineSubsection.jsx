@@ -1,4 +1,5 @@
 import React from 'react'
+import { Empty } from 'antd'
 import TimelineComponent from '../../../timeline/components/TimelineComponent'
 
 export const CreateCourseTimelineSubsection = ({ createCourseSectionsList, sectionId }) => {
@@ -29,9 +30,13 @@ export const CreateCourseTimelineSubsection = ({ createCourseSectionsList, secti
   return (
     groups.length === 0 ?
       <div className='bg-white shadow-md rounded-md p-5 mb-10 flex items-center justify-center flex-col'>
-        <img className='my-5 w-52 opacity-60' src="https://liferay-support.zendesk.com/hc/article_attachments/360032795211/empty_state.gif" alt="" />
-        <p className='text-gray-400'>Add your first item!</p>
-      </div> :
+        <Empty description={
+          <span className='text-gray-400 font-normal '>
+            Add your first item
+          </span>
+        } />
+      </div>
+      :
       alturaElemento &&
       <div
         style={{ height: alturaElemento > 25 ? '25rem' : alturaElemento + 'rem' }}

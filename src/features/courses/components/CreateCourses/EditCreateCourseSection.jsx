@@ -64,7 +64,6 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCou
         const currentIndex = validFasesOrder.indexOf(currentFase);
         const targetIndex = validFasesOrder.indexOf(targetFase);
 
-        // Asegurarse de que la fase de destino esté en la posición correcta
         if (currentIndex < targetIndex && newIndex !== targetIndex - 1) {
             return false;
         }
@@ -72,9 +71,13 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCou
         if (currentIndex > targetIndex && newIndex !== targetIndex + 1) {
             return false;
         }
+        console.log(currentFase, targetFase)
 
-        // Evitar mover "self-reflection" entre "forethought" y "performance"
         if (currentFase === 'self-reflection' && (targetFase === 'forethought' || targetFase === 'performance')) {
+            return false;
+        }
+
+        if (currentFase === 'performance' && targetFase === 'forethought') {
             return false;
         }
 
@@ -102,7 +105,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCou
                         </div>
                         {
                             subsectionsToEdit.subsections.length > 0 ?
-                                <div className='mt-6 space-y-3 h-[20rem] overflow-y-auto'>
+                                <div className='mt-6 space-y-3 h-[20rem] duration-700 overflow-y-auto overflow-x-hidden'>
                                     <DndContext
                                         collisionDetection={closestCenter}
                                         onDragEnd={handleDragEnd}>

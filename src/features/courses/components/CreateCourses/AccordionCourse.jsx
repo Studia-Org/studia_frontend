@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import { Collapse, Progress } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 
-export const AccordionCourse = ({ createCourseSectionsList, setSectionContentSelector }) => {
+export const AccordionCourse = ({ createCourseSectionsList, setSectionContentSelector, setSectionId }) => {
     const { Panel } = Collapse;
     const [sectionNumber, setSectionNumber] = useState(1);
 
-    function RenderCourseSubsections({ subsection }) {
+    function RenderCourseSubsections({ subsection, sectionId }) {
         let ringColor = '#15803d'
         if (subsection.fase === 'forethought') {
             ringColor = '#15803d'
@@ -23,7 +23,10 @@ export const AccordionCourse = ({ createCourseSectionsList, setSectionContentSel
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v4.59L7.3 9.24a.75.75 0 00-1.1 1.02l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V6.75z" clipRule="evenodd" />
                     </svg>
                 </span>
-                <button onClick={() => setSectionContentSelector(subsection.id)} className="flex items-center mb-1 font-medium text-gray-900 line-clamp-2 w-3/4 hover:translate-x-2 duration-200 text-left"> {subsection.title}</button>
+                <button onClick={() => {
+                    setSectionContentSelector(subsection.id)
+                    setSectionId(sectionId)
+                }} className="flex items-center mb-1 font-medium text-gray-900 line-clamp-2 w-3/4 hover:translate-x-2 duration-200 text-left"> {subsection.title}</button>
             </li>
         )
     }
@@ -49,7 +52,7 @@ export const AccordionCourse = ({ createCourseSectionsList, setSectionContentSel
                 >
                     <ol className="relative border-l border-dashed border-gray-300 ml-10 text-base">
                         {section.subsections.map((subsection, index) => (
-                            <RenderCourseSubsections key={index} subsection={subsection} />
+                            <RenderCourseSubsections key={index} subsection={subsection} sectionId={section.id} />
                         ))}
                     </ol>
                 </Panel>

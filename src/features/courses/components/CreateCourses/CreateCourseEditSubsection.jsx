@@ -136,7 +136,7 @@ export const CreateCourseEditSubsection = ({
             <MDEditor className='mt-2 mb-8' data-color-mode='light' onChange={(e) => handleSubsectionChange('content', e)} value={subsection.content} />
             <Collapse onChange={() => setIsPanelOpen(!isPanelOpen)}>
               <Panel key='1' header='Task detail'>
-                <CreateTask task={task} setTask={setTask} sectionId={sectionId} subsection={subsection} setCreateCourseSectionsList={setCreateCourseSectionsList} />
+                <CreateTask task={task} setTask={setTask} sectionId={sectionId} subsection={subsection} setCreateCourseSectionsList={setCreateCourseSectionsList} createCourseSectionsList={createCourseSectionsList} />
               </Panel>
             </Collapse>
           </div>

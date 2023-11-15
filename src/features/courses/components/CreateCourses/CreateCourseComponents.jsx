@@ -13,6 +13,9 @@ import { AccordionCourse } from './AccordionCourse';
 import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from '@dnd-kit/sortable';
 import { CourseContent } from './CourseConfirmation/CourseContent';
 import { TaskContent } from './CourseConfirmation/TaskContent';
+import { Empty, Select } from 'antd';
+import SelectProfessor from './CourseInfo/SelectProfessor';
+
 
 registerPlugin(FilePondPluginImagePreview);
 
@@ -20,7 +23,7 @@ const variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0 },
 };
-const transition = { duration: 0.3 };
+const transition = { duration: 0.2 };
 
 const CreateCourseButtons = (createCourseOption, setCreateCourseOption) => {
   const navigate = useNavigate();
@@ -55,42 +58,95 @@ const CreateCourseButtons = (createCourseOption, setCreateCourseOption) => {
 
 }
 
-export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption }) => {
+export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, setCourseBasicInfo, courseBasicInfo }) => {
+  const [formData, setFormData] = useState({
+    courseName: '',
+    description: '',
+    courseType: '',
+  });
+  const handleChange = (field, value) => {
+    setFormData((prevData) => ({ ...prevData, [field]: value }));
+    setCourseBasicInfo((prevInfo) => ({ ...prevInfo, [field]: value }));
+  };
+
 
   return (
     <motion.div className='w-2/4 flex flex-col' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
       <p className='font-normal text-sm text-gray-400 mt-5 mb-5'>First, give us some information about the new course</p>
-      <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 ">Course name</label>
-      <input type="text" id="base-input" class="bg-gray-50 border border-gray-300 text-gray-900 font-normal text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " />
-      <label for="message" class="block mb-2 text-sm font-medium text-gray-900 mt-8">Description</label>
-      <textarea id="message" rows="4" class="block p-2.5 w-full text-sm text-gray-900 font-normal bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 "></textarea>
+      <label htmlFor="base-input" className="block mb-2 text-sm font-medium text-gray-900">
+        Course name
+      </label>
+      <input
+        type="text"
+        id="base-input"
+        className="bg-gray-50  text-gray-900 font-normal text-sm rounded-lg ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 block w-full p-2.5"
+        value={courseBasicInfo.courseName}
+        onChange={(e) => handleChange('courseName', e.target.value)}
+      />
+
+      <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 mt-8">
+        Description
+      </label>
+      <textarea
+        id="message"
+        rows="4"
+        className="block p-2.5 w-full text-sm text-gray-900 font-normal bg-gray-50 rounded-lg  border-gray-300 ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        value={courseBasicInfo.description}
+        onChange={(e) => handleChange('description', e.target.value)}
+      />
+
       <div className='flex mt-8 justify-between'>
         <div className='font-medium w-full mr-8'>
           <FilePond
             allowMultiple={true}
             maxFiles={5}
           />
+          <SelectProfessor setCourseBasicInfo={setCourseBasicInfo} />
         </div>
         <div>
           <label class="block  text-sm font-medium text-gray-900 mb-4">Course type</label>
           <fieldset className='ml-4'>
             <legend class="sr-only">Course type</legend>
             <div class="flex items-center mb-4">
-              <input id="country-option-1" type="radio" name="countries" value="USA" class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 " />
+              <input
+                id="country-option-1"
+                type="radio"
+                name="countries"
+                value="Required"
+                className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300"
+                checked={courseBasicInfo.courseType === 'Required'}
+                onChange={() => handleChange('courseType', 'Required')}
+              />
               <label for="country-option-1" class="block ml-2 text-sm font-normal text-gray-900 ">
                 Required
               </label>
             </div>
 
             <div class="flex items-center mb-4">
-              <input id="country-option-2" type="radio" name="countries" value="Germany" class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 " />
+              <input
+                id="country-option-2"
+                type="radio"
+                name="countries"
+                value="Optional"
+                className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300"
+                checked={courseBasicInfo.courseType === 'Optional'}
+                onChange={() => handleChange('courseType', 'Optional')}
+              />
               <label for="country-option-2" class="block ml-2 text-sm font-normal text-gray-900 ">
                 Optional
               </label>
             </div>
 
             <div class="flex items-center mb-4">
-              <input id="country-option-3" type="radio" name="countries" value="Spain" class="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300 " />
+              <input
+                id="country-option-3"
+                type="radio"
+                name="countries"
+                value="Basic Formation"
+                className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300"
+                checked={courseBasicInfo.courseType === 'Basic Formation'}
+                onChange={() => handleChange('courseType', 'Basic Formation')}
+              />
               <label for="country-option-3" class="block ml-2 text-sm font-normal text-gray-900 ">
                 Basic formation
               </label>
@@ -187,7 +243,11 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
               </DndContext>
             </div> :
             <div>
-              <p className='text-sm font-normal italic text-gray-500 mt-6'>Create your first section!</p>
+              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={
+                <span>
+                  There are no sections yet
+                </span>
+              } />
             </div>
         }
         <p className='text-xs font-normal  text-gray-400 mt-8'>Drag and drop to reorder your sections</p>
@@ -197,39 +257,65 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
   )
 }
 
-export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption, createCourseSectionsList }) => {
+export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption, createCourseSectionsList, evaluator }) => {
+  console.log('baknan', evaluator)
   const [sectionContentSelector, setSectionContentSelector] = useState('course');
   const [visibilityTask, setVisibilityTask] = useState(false);
-  const [selectedSubsection, setSelectedSubsection] = useState();
+  const [selectedSubsection, setSelectedSubsection] = useState(createCourseSectionsList[0]?.subsections[0]);
+  const [sectionId, setSectionId] = useState(createCourseSectionsList[0]?.id);
 
   useEffect(() => {
-    createCourseSectionsList.map((section) => {
-      section.subsections.map((subsection) => {
-        if (subsection.id === sectionContentSelector) {
-          setSelectedSubsection(subsection)
-        }
-      })
-    })
-  }, [sectionContentSelector])
+    createCourseSectionsList.forEach((section) => {
+      const subsection = section.subsections.find((subsection) => subsection.id === sectionContentSelector);
+      if (subsection) {
+        setSelectedSubsection(subsection);
+      }
+    });
+  }, [sectionContentSelector]);
+
+  const renderContent = () => {
+    if (!visibilityTask) {
+      return (
+        <>
+          <div className='w-full mr-5'>
+            <CourseContent
+              createCourseSectionsList={createCourseSectionsList}
+              sectionContentSelector={sectionContentSelector}
+              setVisibilityTask={setVisibilityTask}
+              selectedSubsection={selectedSubsection}
+              sectionId={sectionId}
+            />
+          </div>
+          <div style={{ width: '45rem' }} className=' ml-auto'>
+            <AccordionCourse
+              createCourseSectionsList={createCourseSectionsList}
+              setSectionContentSelector={setSectionContentSelector}
+              setSectionId={setSectionId}
+            />
+          </div>
+        </>
+      );
+    } else {
+      return (
+        <div className='w-full mr-5'>
+          {sectionId && <TaskContent setVisibilityTask={setVisibilityTask} task={findSectionTask(sectionId)} evaluator={evaluator} />}
+        </div>
+      );
+    }
+  };
+
+  const findSectionTask = (id) => {
+    const section = createCourseSectionsList.find((section) => section.id === id);
+    return section ? section.task : null;
+  };
 
   return (
     <motion.div className='w-full' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
       <div className='flex flex-row'>
-        {!visibilityTask ?
-          <>
-            <div className='w-full mr-5'>
-              <CourseContent sectionContentSelector={sectionContentSelector} setVisibilityTask={setVisibilityTask}  selectedSubsection={selectedSubsection}/>
-            </div>
-            <div style={{ width: '45rem' }} className=' ml-auto'>
-              <AccordionCourse createCourseSectionsList={createCourseSectionsList} setSectionContentSelector={setSectionContentSelector} />
-            </div>
-          </> :
-          <div className='w-full mr-5'>
-            {selectedSubsection?.task && <TaskContent setVisibilityTask={setVisibilityTask} task={selectedSubsection.task} />}
-          </div>
-        }
+        {renderContent()}
       </div>
       {CreateCourseButtons(createCourseOption, setCreateCourseOption)}
     </motion.div>
-  )
-}
+  );
+
+};

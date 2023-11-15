@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import { TaskComponentCard } from './TaskComponentCard'
 import { Content } from './Content'
 
-export const CourseContent = ({ createCourseSectionsList, sectionContentSelector, setVisibilityTask, selectedSubsection }) => {
+export const CourseContent = ({ createCourseSectionsList, sectionContentSelector, setVisibilityTask, selectedSubsection, sectionId }) => {
     const [courseInsideSectionType, setcourseInsideSectionType] = useState('course');
 
     return (
         selectedSubsection && (
             <>
-                <h2 className='mt-6 '>{selectedSubsection.title}</h2>
+                <h2 className='mt-6'>{selectedSubsection.title}</h2>
                 <div className='flex flex-row mt-5  items-center space-x-8 ml-5'>
                     <button
                         className={`font-medium text-base hover:text-black pb-3 ${courseInsideSectionType === 'course' ? 'text-black border-b-2 border-black' : 'text-gray-500'}`}>
@@ -24,8 +24,8 @@ export const CourseContent = ({ createCourseSectionsList, sectionContentSelector
                     {
                         selectedSubsection &&
                         <>
-                            <TaskComponentCard task={selectedSubsection.task} setVisibilityTask={setVisibilityTask}/>
-                            <hr className='mb-10 h-px  bg-gray-300' />
+                            {(createCourseSectionsList.find(section => section.id === sectionId)).task && <TaskComponentCard task={(createCourseSectionsList.find(section => section.id === sectionId)).task} setVisibilityTask={setVisibilityTask} />}
+                            <hr className='h-px  bg-gray-300' />
                             <Content selectedSubsection={selectedSubsection} />
                         </>
                     }

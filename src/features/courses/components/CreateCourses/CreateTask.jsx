@@ -17,15 +17,15 @@ import '../../styles/filePondNoBoxshadow.css'
 import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileEncode)
 
-export const CreateTask = ({ task, setTask, sectionId, subsection, setCreateCourseSectionsList }) => {
+export const CreateTask = ({ task, setTask, sectionId, subsection, setCreateCourseSectionsList, createCourseSectionsList }) => {
     const [content, setContent] = useState();
     const [title, setTitle] = useState('');
     const [switchState, setSwitchState] = useState(true);
     const [deadline, setDeadline] = useState();
     const [files, setFiles] = useState([]);
-    console.log(subsection)
 
     useEffect(() => {
+        console.log('noel', task);
         if (task && task[sectionId] && task[sectionId].title && task[sectionId].description && task[sectionId].deadline) {
             setTitle(task[sectionId].title);
             setContent(task[sectionId].description);
@@ -34,6 +34,40 @@ export const CreateTask = ({ task, setTask, sectionId, subsection, setCreateCour
             setFiles(task[sectionId].files || []);
         }
     }, [task]);
+
+    function saveChangesButton() {
+        console.log(content)
+
+        setCreateCourseSectionsList((prevSections) => {
+            const newSections = prevSections.map((section) => {
+                if (section.id === sectionId && section?.task) {
+                    const updatedTask = {
+                        id: section.task.id,
+                        title: title,
+                        description: content,
+                        deadline: deadline,
+                        evaluable: switchState,
+                        files: files.map(file => file.file),
+                        ponderation: section.task.ponderation,
+                        type: section.task.type,
+                        order: section.task.order,
+                    };
+                    setTask(prevTask => ({
+                        ...prevTask,
+                        [sectionId]: updatedTask,
+                    }));
+                    return {
+                        ...section,
+                        task: updatedTask,
+                    };
+                }
+                return section;
+            });
+            return newSections;
+        });
+
+        message.success('Task updated successfully');
+    }
 
     function createTaskButton() {
         try {
@@ -54,7 +88,6 @@ export const CreateTask = ({ task, setTask, sectionId, subsection, setCreateCour
             const newTask = {
                 [sectionId]: activity,
             }
-            console.log(newTask);
             setTask(prevTask => ({
                 ...prevTask,
                 ...newTask,
@@ -64,12 +97,7 @@ export const CreateTask = ({ task, setTask, sectionId, subsection, setCreateCour
                     if (section.id === sectionId) {
                         return {
                             ...section,
-                            subsections: section.subsections.map((subsectionList) => {
-                                return {
-                                    ...subsectionList,
-                                    task: activity
-                                };
-                            }),
+                            task: activity
                         };
                     }
                     return section;
@@ -125,12 +153,15 @@ export const CreateTask = ({ task, setTask, sectionId, subsection, setCreateCour
                 </div>
                 <div className='flex justify-center'>
                     {
-                        //task[sectionId] === undefined &&
-                        <button onClick={() => createTaskButton()} className='justify-center flex duration-150 text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none font-medium mt-4 rounded-lg text-sm px-4 py-2.5 text-center  items-center mr-2 '>
-                            Create task
-                        </button>
+                        task[sectionId] === undefined ?
+                            <button onClick={() => createTaskButton()} className='justify-center flex duration-150 text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none font-medium mt-4 rounded-lg text-sm px-4 py-2.5 text-center  items-center mr-2 '>
+                                Create task
+                            </button>
+                            :
+                            <button onClick={() => saveChangesButton()} className='justify-center flex duration-150 text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none font-medium mt-4 rounded-lg text-sm px-4 py-2.5 text-center  items-center mr-2 '>
+                                Save Changes
+                            </button>
                     }
-
                 </div>
             </div>
         </>

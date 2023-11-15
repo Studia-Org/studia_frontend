@@ -11,6 +11,7 @@ import { CreateConfirmation, CreateCourseInfo, CreateCourseSections } from '../c
 const CreateCourse = () => {
     const [createCourseOption, setCreateCourseOption] = useState(0);
     const [createCourseSectionsList, setCreateCourseSectionsList] = useState([])
+    const [courseBasicInfo, setCourseBasicInfo] = useState({})
     const [editCourseSectionFlag, setEditCourseSectionFlag] = useState(false)
     const [sectionToEdit, setSectionToEdit] = useState({})
     const [task, setTask] = useState({})
@@ -18,11 +19,11 @@ const CreateCourse = () => {
     function RenderCreateCourse() {
         switch (createCourseOption) {
             case 0:
-                return <CreateCourseInfo createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} />
+                return <CreateCourseInfo createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} setCourseBasicInfo={setCourseBasicInfo} courseBasicInfo={courseBasicInfo}/>
             case 1:
                 return <CreateCourseSections createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} setCreateCourseSectionsList={setCreateCourseSectionsList} createCourseSectionsList={createCourseSectionsList} setEditCourseSectionFlag={setEditCourseSectionFlag} setSectionToEdit={setSectionToEdit} task={task} setTask={setTask}/>
             case 2:
-                return <CreateConfirmation createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} createCourseSectionsList={createCourseSectionsList}  />
+                return <CreateConfirmation createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} createCourseSectionsList={createCourseSectionsList} evaluator={courseBasicInfo.evaluator}  />
             default:
                 return <CreateCourseInfo createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} />
         }
