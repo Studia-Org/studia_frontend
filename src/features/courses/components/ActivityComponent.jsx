@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useReducer } from 'react'
 import { ProfessorData } from './ProfessorData';
 import { getToken } from '../../../helpers';
 import ReactMarkdown from 'react-markdown';
@@ -15,27 +15,31 @@ import Swal from 'sweetalert2';
 registerPlugin(FilePondPluginImagePreview);
 
 
-export const ActivityComponent = ({ activityData }) => {
+export const ActivityComponent = ({ activityData, idQualification }) => {
   console.log({ activityData });
   const evaluated = activityData.qualification ? true : false;
   const [formData, setFormData] = useState(new FormData());
   const { user } = useAuthContext();
   const { activityId } = useParams();
+  const [, forceUpdate] = useReducer(x => x + 1, 0);
 
   function handleFileUpload(file) {
     const dataCopy = formData;
     dataCopy.append('files', file);
     setFormData(dataCopy);
-
+    console.log(dataCopy.getAll('files').length);
+    document.getElementById('submit-button-activity').disabled = false;
   }
   async function sendFile(result) {
 
     try {
       let response2 = undefined;
+      let files = activityData.file.data.map((file) => file.id);
+      files = files.concat(result.map((file) => file.id));
       const qualificationData = {
         data: {
           activity: activityId,
-          file: result.id,
+          file: files,
           user: user.id,
           delivered: true,
           delivered_data: new Date(),
@@ -45,8 +49,8 @@ export const ActivityComponent = ({ activityData }) => {
       console.log(activityData?.delivered && !evaluated);
       if (activityData.delivered && !evaluated) {
         console.log('put');
-         response2 =
-          await fetch(`${API}/qualifications/${activityId}`, {
+        response2 =
+          await fetch(`${API}/qualifications/${idQualification}`, {
             method: 'PUT',
             headers: {
               "Content-Type": "application/json",
@@ -54,10 +58,10 @@ export const ActivityComponent = ({ activityData }) => {
             },
             body: JSON.stringify(qualificationData),
           });
-      } 
+      }
       else if (!evaluated) {
         console.log('post');
-         response2 =
+        response2 =
           await fetch(`${API}/qualifications`, {
             method: 'POST',
             headers: {
@@ -66,7 +70,7 @@ export const ActivityComponent = ({ activityData }) => {
             },
             body: JSON.stringify(qualificationData),
           });
-         
+
       }
       return response2;
     } catch (error) {
@@ -86,16 +90,17 @@ export const ActivityComponent = ({ activityData }) => {
 
       if (response.ok) {
         const result = await response.json();
-        const uploadPromises = result.map(sendFile);
-        const response_upload = await Promise.all(uploadPromises);
-        console.log({ response_upload });
-        if(response_upload.ok){
+        const response_upload = await sendFile(result);
+        if (response_upload.ok) {
           Swal.fire({
             icon: 'success',
             title: 'Success',
             text: 'Files uploaded successfully',
+          }).then((result) => {
+            forceUpdate();
           })
         }
+        else throw new Error('Error uploading files');
       }
       else {
         Swal.fire({
@@ -103,7 +108,7 @@ export const ActivityComponent = ({ activityData }) => {
           title: 'Oops...',
           text: 'Something went wrong!',
         })
-      }	
+      }
     } catch (error) {
       Swal.fire({
         icon: 'error',
@@ -115,8 +120,8 @@ export const ActivityComponent = ({ activityData }) => {
 
   function renderFiles(file) {
     return (
-      <button onClick={() => downloadFile(file)} className='shadow-md rounded-md flex p-3 w-full bg-green-700 text-white'>
-        <p>{file.name}</p>
+      <button key={file.id} onClick={() => downloadFile(file)} className='shadow-md rounded-md flex p-3 w-full bg-green-700 text-white'>
+        <p>{file.attributes.name}</p>
         <div className='ml-auto mr-2'>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.0} stroke="currentColor" className="w-5 h-5">
             <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
@@ -146,8 +151,7 @@ export const ActivityComponent = ({ activityData }) => {
       console.error('Error en la descarga: ', error);
     }
   };
-
-
+  console.log(formData.getAll('files').length);
   return (
     <div className='flex flex-col 1.5xl:flex-row items-start 1.5xl:items-start 1.5xl:space-x-24 p-5 sm:p-10'>
       <div className='1.5xl:w-2/4 lg:w-10/12 w-full'>
@@ -208,24 +212,41 @@ export const ActivityComponent = ({ activityData }) => {
             <ProfessorData professor={{ attributes: activityData.evaluator.data.attributes }} evaluatorFlag={true} />
             <p className='text-xs text-gray-400 mb-1 mt-5'>Your submission</p>
             <div className='mb-14 '>
-              
+              {activityData.file.data && activityData.file.data.map(renderFiles)}
             </div>
           </div> :
           <div className='flex flex-col w-[30rem] mt-5'>
-            
-              <div className='bg-white rounded-md shadow-md p-5 space-y-3 md:w-[30rem]' >
-                {activityData.file && activityData.file.map(renderFiles)}
-              </div>
-              <FilePond
-                allowMultiple={true}
-                maxFiles={5}
-                onaddfile={(err, item) => {
-                  if (!err) {
-                    handleFileUpload(item.file);
-                  }
-                }}
-              />
-            <button onClick={() => { sendData() }}
+            <p className='text-xs text-gray-400 mb-1 my-5'>Your submission</p>
+            <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
+              {activityData.file.data && activityData.file.data.map(renderFiles)}
+
+            </div>
+            <FilePond
+              allowMultiple={true}
+              maxFiles={5}
+              onaddfile={(err, item) => {
+                if (!err) {
+                  handleFileUpload(item.file);
+                }
+              }}
+              onremovefile={(err, item) => {
+                if (!err) {
+                  const dataCopy = formData;
+                  console.log(formData.getAll('files').length);
+                  dataCopy.forEach((value, key) => {
+                    if (value.name === item.file.name) {
+                      dataCopy.delete(key);
+                    }
+                  });
+                  document.getElementById('submit-button-activity').disabled = formData.getAll('files').length === 0;
+                  setFormData(dataCopy);
+                }
+              }}
+            />
+            <button
+              id='submit-button-activity'
+              disabled={true}
+              onClick={() => { sendData() }}
               className="bg-blue-500 text-white font-semibold py-2 px-4 
                             rounded ml-auto hover:bg-blue-800 duration-150">
               Submit

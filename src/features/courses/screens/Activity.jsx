@@ -13,11 +13,21 @@ const Activity = () => {
   const fetchUserQualificationsData = async () => {
     try {
       if (!user) return;
-      const response = await fetch(`${API}/qualifications?qualification&populate[activity][populate][evaluators][fields][0]=*&filters[activity][id]=${activityId}&populate[user][fields][0]=*&populate[evaluator][populate][profile_photo][fields][0]=*&filters[user][id]=${user.id}`);
+      const response =
+        await fetch(
+          `${API}/qualifications?qualification` +
+          `&populate[file][fields][0]=*` +
+          `&populate[activity][populate][evaluators][fields][0]=*` +
+          `&populate[activity][populate][file][fields][0]=*` +
+          `&filters[activity][id]=${activityId}` +
+          `&populate[user][fields][0]=*` +
+          `&populate[evaluator][populate][profile_photo][fields][0]=*` +
+          `&filters[user][id]=${user.id}`)
       const data = await response.json();
 
       if (data.data.length > 0) {
-        setUserQualification({ activity: data.data[0].attributes });
+        console.log(data.data[0]["id"]);
+        setUserQualification({ activity: data.data[0].attributes, idQualification: data.data[0]["id"] });
       } else {
         const activityData = await fetch(
           `${API}/activities/${activityId}?populate=*`
@@ -42,7 +52,7 @@ const Activity = () => {
   return (
     <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] grid '>
       {userQualification.activity && (
-        <ActivityComponent activityData={userQualification.activity} />
+        <ActivityComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} />
       )}
     </div>
   )
