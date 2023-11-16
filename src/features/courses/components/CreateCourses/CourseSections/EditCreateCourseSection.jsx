@@ -3,13 +3,12 @@ import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { CreateCourseSubsectionsList } from './CreateCourseSubsectionsList';
 import { CreateCourseEditSubsection } from './CreateCourseEditSubsection';
-import { SubsectionItems } from '../CreateCourses/SubsectionItems';
+import { SubsectionItems } from './SubsectionItems';
 import { CreateCourseTimelineSubsection } from './CreateCourseTimelineSubsection';
 import { motion } from 'framer-motion';
 import { message } from 'antd';
 
 export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCourseSectionsList, sectionToEdit, createCourseSectionsList, task, setTask }) => {
-    console.log(createCourseSectionsList)
     const [subsectionsToEdit, setSubsectionsToEdit] = useState((createCourseSectionsList.filter((section) => section.id === sectionToEdit.id)[0]))
     const [editSubsectionFlag, setEditSubsectionFlag] = useState(false)
     const [subsectionEditing, setSubsectionEditing] = useState()
@@ -118,8 +117,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCou
                                                         key={subsection.id}
                                                         initial={{ opacity: 0, x: -50 }}
                                                         animate={{ opacity: 1, x: 0 }}
-                                                        exit={{ opacity: 0, x: 50 }}
-                                                    >
+                                                        exit={{ opacity: 0, x: 50 }}>
                                                         <CreateCourseSubsectionsList subsection={subsection} setCreateCourseSectionsList={setCreateCourseSectionsList} sectionId={sectionToEdit.id} setEditSubsectionFlag={setEditSubsectionFlag} setSubsectionEditing={setSubsectionEditing} key={subsection.id} />
                                                     </motion.li>
                                                 ))}

@@ -3,7 +3,7 @@ import { Sidebar } from '../../../shared/elements/Sidebar';
 import { Navbar } from '../../../shared/elements/Navbar';
 import draw2 from '../../../assets/draw2.png'
 import { CreateCourseBreadcrumb } from '../components/CreateCourses/CreateCourseBreadcrumb';
-import { EditCreateCourseSection } from '../components/CreateCourses/EditCreateCourseSection';
+import { EditCreateCourseSection } from '../components/CreateCourses/CourseSections/EditCreateCourseSection';
 import { CreateConfirmation, CreateCourseInfo, CreateCourseSections } from '../components/CreateCourses/CreateCourseComponents';
 
 

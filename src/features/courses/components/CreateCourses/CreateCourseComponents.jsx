@@ -8,8 +8,8 @@ import { FilePond, registerPlugin } from 'react-filepond';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import { DndContext, closestCenter } from '@dnd-kit/core';
-import { CreateCourseSectionsList } from './CreateCourseSectionsList';
-import { AccordionCourse } from './AccordionCourse';
+import { CreateCourseSectionsList } from './CourseSections/CreateCourseSectionsList';
+import { AccordionCourse } from './CourseConfirmation/AccordionCourse';
 import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from '@dnd-kit/sortable';
 import { CourseContent } from './CourseConfirmation/CourseContent';
 import { TaskContent } from './CourseConfirmation/TaskContent';
@@ -25,38 +25,40 @@ const variants = {
 };
 const transition = { duration: 0.2 };
 
-const CreateCourseButtons = (createCourseOption, setCreateCourseOption) => {
+const CreateCourseButtons = (createCourseOption, setCreateCourseOption, visibilityTask) => {
   const navigate = useNavigate();
 
-  return (
-    <div className='flex w-full mt-8 mb-10'>
-      {
-        createCourseOption === 0 ?
-          <button onClick={() => navigate('/app/courses')} type="button" class="text-white duration-150  bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center mr-2 ">
-            Cancel
-          </button> :
-          <button onClick={() => setCreateCourseOption(createCourseOption - 1)} type="button" class="duration-150 text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center mr-2 ">
-            Back
-          </button>
-      }
+  if (!visibilityTask) {
+    return (
+      <div className='flex w-full mt-8 mb-10'>
+        {
+          createCourseOption === 0 ?
+            <button onClick={() => navigate('/app/courses')} type="button" class="text-white duration-150  bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center mr-2 ">
+              Cancel
+            </button> :
+            <button onClick={() => setCreateCourseOption(createCourseOption - 1)} type="button" class="duration-150 text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center mr-2 ">
+              Back
+            </button>
+        }
 
-      {
-        createCourseOption === 2 ?
-          <button type="button" class="duration-150 group/continue text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center ">
-            Confirm
-          </button> :
+        {
+          createCourseOption === 2 ?
+            <button type="button" class="duration-150 group/continue text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center ">
+              Confirm
+            </button> :
 
-          <button type="button" onClick={() => setCreateCourseOption(createCourseOption + 1)} class=" duration-150 group/continue text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center ">
-            Continue
-            <svg class="w-3.5 h-3.5 ml-2 group-hover/continue:translate-x-1 duration-150" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-            </svg>
-          </button>
-      }
-    </div>
-  )
-
+            <button type="button" onClick={() => setCreateCourseOption(createCourseOption + 1)} class=" duration-150 group/continue text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center ">
+              Continue
+              <svg class="w-3.5 h-3.5 ml-2 group-hover/continue:translate-x-1 duration-150" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+              </svg>
+            </button>
+        }
+      </div>
+    )
+  }
 }
+
 
 export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, setCourseBasicInfo, courseBasicInfo }) => {
   const [formData, setFormData] = useState({
@@ -97,9 +99,16 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
 
       <div className='flex mt-8 justify-between'>
         <div className='font-medium w-full mr-8'>
+          <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 ">
+            Cover image
+          </label>
           <FilePond
             allowMultiple={true}
-            maxFiles={5}
+            files={courseBasicInfo.cover}
+            maxFiles={1}
+            onupdatefiles={(e) => {
+              setCourseBasicInfo((prevInfo) => ({ ...prevInfo, 'cover': e }));
+            }}
           />
           <SelectProfessor setCourseBasicInfo={setCourseBasicInfo} />
         </div>
@@ -258,7 +267,6 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
 }
 
 export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption, createCourseSectionsList, evaluator }) => {
-  console.log('baknan', evaluator)
   const [sectionContentSelector, setSectionContentSelector] = useState('course');
   const [visibilityTask, setVisibilityTask] = useState(false);
   const [selectedSubsection, setSelectedSubsection] = useState(createCourseSectionsList[0]?.subsections[0]);
@@ -314,7 +322,7 @@ export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption, 
       <div className='flex flex-row'>
         {renderContent()}
       </div>
-      {CreateCourseButtons(createCourseOption, setCreateCourseOption)}
+      {CreateCourseButtons(createCourseOption, setCreateCourseOption, visibilityTask)}
     </motion.div>
   );
 

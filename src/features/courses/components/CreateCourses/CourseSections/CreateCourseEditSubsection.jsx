@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
@@ -14,11 +14,13 @@ import 'filepond/dist/filepond.min.css';
 import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
-import '../../styles/filePondNoBoxshadow.css';
+import '../../../styles/filePondNoBoxshadow.css';
+
 
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
 
 const { Panel } = Collapse;
+
 
 export const CreateCourseEditSubsection = ({
   subsection,
@@ -30,7 +32,6 @@ export const CreateCourseEditSubsection = ({
   setTask,
   sectionId,
 }) => {
-  const [isPanelOpen, setIsPanelOpen] = useState(true);
 
   useEffect(() => {
     const matchingSubsection = createCourseSectionsList
@@ -54,15 +55,15 @@ export const CreateCourseEditSubsection = ({
             case 'start_date':
             case 'end_date':
             case 'description':
+            case 'landscape_photo':
+            case 'files':
             case 'content':
               subsectionCopy[type] = newValue;
               break;
             default:
               break;
           }
-
           sectionCopy.subsections = sectionCopy.subsections.map((sub) => (sub.id === subsection.id ? subsectionCopy : sub));
-
           return sectionCopy;
         }
 
@@ -128,15 +129,41 @@ export const CreateCourseEditSubsection = ({
               <label className='text-sm text-gray-500 ' htmlFor=''>
                 Background Photo
               </label>
-              <FilePond allowMultiple={true} maxFiles={1} />
+              <FilePond
+                files={(createCourseSectionsList.flatMap((section) => section.subsections).find((sub) => sub.id === subsection.id)).landscape_photo}
+                allowMultiple={false}
+                onupdatefiles={(e) => {
+                  handleSubsectionChange('landscape_photo', e);
+                }} maxFiles={1}
+              />
+            </div>
+            <div className='mt-3 space-y-2'>
+              <label className='text-sm text-gray-500 ' htmlFor=''>
+                Subsection Files
+              </label>
+              <FilePond
+                files={(createCourseSectionsList.flatMap((section) => section.subsections).find((sub) => sub.id === subsection.id)).files}
+                allowMultiple={true}
+                allowReorder={true}
+                onupdatefiles={(e) => {
+                  handleSubsectionChange('files', e);
+                }}
+              />
             </div>
             <label className='text-sm text-gray-500' htmlFor=''>
               Subsection content
             </label>
             <MDEditor className='mt-2 mb-8' data-color-mode='light' onChange={(e) => handleSubsectionChange('content', e)} value={subsection.content} />
-            <Collapse onChange={() => setIsPanelOpen(!isPanelOpen)}>
+            <Collapse accordion>
               <Panel key='1' header='Task detail'>
-                <CreateTask task={task} setTask={setTask} sectionId={sectionId} subsection={subsection} setCreateCourseSectionsList={setCreateCourseSectionsList} createCourseSectionsList={createCourseSectionsList} />
+                <CreateTask
+                  task={task}
+                  setTask={setTask}
+                  sectionId={sectionId}
+                  subsection={subsection}
+                  setCreateCourseSectionsList={setCreateCourseSectionsList}
+                  createCourseSectionsList={createCourseSectionsList}
+                />
               </Panel>
             </Collapse>
           </div>

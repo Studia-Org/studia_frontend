@@ -1,6 +1,6 @@
 import React from 'react'
 import { Empty } from 'antd'
-import TimelineComponent from '../../../timeline/components/TimelineComponent'
+import TimelineComponent from '../../../../timeline/components/TimelineComponent'
 
 export const CreateCourseTimelineSubsection = ({ createCourseSectionsList, sectionId }) => {
   const sectionFiltered = createCourseSectionsList.filter((section) => section.id === sectionId)[0]

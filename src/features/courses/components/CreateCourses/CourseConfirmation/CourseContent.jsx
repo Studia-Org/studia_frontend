@@ -1,36 +1,110 @@
 import React, { useState } from 'react'
 import { TaskComponentCard } from './TaskComponentCard'
 import { Content } from './Content'
+import { Tabs } from 'antd';
+import { QuestionnaireConfirmation } from './QuestionnaireConfirmation';
+import ImageDisplay from './ImageDisplay';
 
 export const CourseContent = ({ createCourseSectionsList, sectionContentSelector, setVisibilityTask, selectedSubsection, sectionId }) => {
-    const [courseInsideSectionType, setcourseInsideSectionType] = useState('course');
 
-    return (
-        selectedSubsection && (
-            <>
-                <h2 className='mt-6'>{selectedSubsection.title}</h2>
-                <div className='flex flex-row mt-5  items-center space-x-8 ml-5'>
-                    <button
-                        className={`font-medium text-base hover:text-black pb-3 ${courseInsideSectionType === 'course' ? 'text-black border-b-2 border-black' : 'text-gray-500'}`}>
-                        Course
-                    </button>
-                    <button
-                        className={`font-medium text-base hover:text-black pb-3 ${courseInsideSectionType === 'files' ? 'text-black border-b-2 border-black' : 'text-gray-500'}`}>
-                        Files
-                    </button>
-                </div>
-                <hr className="h-px  bg-gray-600 border-0 mb-6"></hr>
-                <div className='mt-5'>
+    const CourseContent = () => {
+        return (
+            <div className='w-full flex flex-row items-center space-x-8'>
+                <div className='w-full mr-5'>
                     {
                         selectedSubsection &&
                         <>
-                            {(createCourseSectionsList.find(section => section.id === sectionId)).task && <TaskComponentCard task={(createCourseSectionsList.find(section => section.id === sectionId)).task} setVisibilityTask={setVisibilityTask} />}
-                            <hr className='h-px  bg-gray-300' />
+                            <p className='text-xs font-normal text-gray-400 mb-1'>Task</p>
+                            <hr className='mb-5' />
+                            {(createCourseSectionsList.find(section => section.id === sectionId)).task &&
+                                <TaskComponentCard task={(createCourseSectionsList.find(section => section.id === sectionId)).task} setVisibilityTask={setVisibilityTask} />}
+
+                            <p className='text-xs font-normal text-gray-400 mb-1'>Course content</p>
+                            <hr className='mb-5' />
                             <Content selectedSubsection={selectedSubsection} />
                         </>
                     }
                 </div>
-            </>
+            </div>
+        )
+    }
+
+
+    const CourseFiles = () => {
+        return (
+            <div className='w-full flex flex-row items-center space-x-8'>
+                <div className='w-full mr-5'>
+                    {
+                        selectedSubsection &&
+                        <>
+                            {
+                                <div className='flex flex-wrap'>
+                                    {selectedSubsection.files.map((file, index) => {
+                                        return (
+                                            <>
+                                                <div key={index} className='rounded-md bg-white shadow-md p-3 border-l-8 border-indigo-500 cursor-pointer mb-4 mr-4'>
+                                                    <div className='flex space-x-2'>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                                        </svg>
+                                                        <p className='font-medium'>{file.filenameWithoutExtension}</p>
+                                                    </div>
+                                                </div>
+                                            </>
+                                        )
+                                    })}
+                                </div>
+                            }
+                        </>
+                    }
+                </div>
+            </div>
+        )
+    }
+
+
+    const items = [
+        {
+            key: '1',
+            label: 'Course',
+            children: <CourseContent />,
+        },
+        {
+            key: '2',
+            label: 'Files',
+            children: <CourseFiles />,
+        }
+    ];
+
+    function imageURL() {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            return e.target.result;
+        };
+    }
+
+    return (
+        selectedSubsection && (
+            selectedSubsection?.questionnaire ? (
+                <div className='w-full text-base' >
+                    <QuestionnaireConfirmation questionnaire={selectedSubsection?.questionnaire} />
+                </div >
+            ) :
+                <div className='w-full'>
+                    {
+                        selectedSubsection?.landscape_photo[0] && (
+                            <div className=''>
+                                <ImageDisplay fileData={selectedSubsection?.landscape_photo[0]} />
+                            </div>
+                        )
+                    }
+                    <h2 className='mt-2 font-medium text-xl'>{selectedSubsection.title}</h2>
+                    <Tabs className='font-normal' tabBarStyle={
+                        {
+                            borderBottom: '1px solid black',
+                        }
+                    } defaultActiveKey="1" items={items} />
+                </div>
         )
     )
 }

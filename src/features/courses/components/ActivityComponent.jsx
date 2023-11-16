@@ -74,7 +74,6 @@ export const ActivityComponent = ({ activityData }) => {
         </div>
       </button>
     )
-
   }
 
   const downloadFile = async (file) => {

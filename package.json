@@ -34,9 +34,12 @@
     "dotenv": "^16.3.1",
     "faker": "^6.6.6",
     "filepond": "^4.30.4",
-    "filepond-plugin-file-encode": "^2.1.11",
+    "filepond-plugin-file-encode": "^2.1.13",
+    "filepond-plugin-file-validate-type": "^1.2.8",
+    "filepond-plugin-image-crop": "^2.0.6",
     "filepond-plugin-image-exif-orientation": "^1.0.11",
     "filepond-plugin-image-preview": "^4.6.11",
+    "filepond-plugin-image-transform": "^3.8.7",
     "framer-motion": "^10.12.23",
     "randomcolor": "^0.6.2",
     "react": "^18.2.0",
@@ -94,6 +97,6 @@
     "@tailwindcss/typography": "^0.5.9",
     "prettier": "^3.0.3",
     "prettier-plugin-tailwindcss": "^0.5.6",
-    "tailwindcss": "^3.2.7"
+    "tailwindcss": "^3.3.5"
   }
 }

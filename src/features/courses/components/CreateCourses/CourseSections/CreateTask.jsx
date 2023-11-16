@@ -13,11 +13,11 @@ import 'filepond/dist/filepond.min.css'
 import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation'
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
-import '../../styles/filePondNoBoxshadow.css'
+import '../../../styles/filePondNoBoxshadow.css'
 import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileEncode)
 
-export const CreateTask = ({ task, setTask, sectionId, subsection, setCreateCourseSectionsList, createCourseSectionsList }) => {
+export const CreateTask = ({ task, setTask, sectionId, subsection, setCreateCourseSectionsList, createCourseSectionsList}) => {
     const [content, setContent] = useState();
     const [title, setTitle] = useState('');
     const [switchState, setSwitchState] = useState(true);
@@ -25,7 +25,6 @@ export const CreateTask = ({ task, setTask, sectionId, subsection, setCreateCour
     const [files, setFiles] = useState([]);
 
     useEffect(() => {
-        console.log('noel', task);
         if (task && task[sectionId] && task[sectionId].title && task[sectionId].description && task[sectionId].deadline) {
             setTitle(task[sectionId].title);
             setContent(task[sectionId].description);
@@ -36,8 +35,6 @@ export const CreateTask = ({ task, setTask, sectionId, subsection, setCreateCour
     }, [task]);
 
     function saveChangesButton() {
-        console.log(content)
-
         setCreateCourseSectionsList((prevSections) => {
             const newSections = prevSections.map((section) => {
                 if (section.id === sectionId && section?.task) {

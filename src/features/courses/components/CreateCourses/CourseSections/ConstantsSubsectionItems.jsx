@@ -35,7 +35,8 @@ function createSubsection(subsectionName, fase, data, setCreateCourseSectionsLis
         content: '',
         paragraphs: [],
         description: null,
-        landscape_photo: null,
+        landscape_photo: [],
+        files: [],
         questionnaire: data?.data,
         users: null
     };
