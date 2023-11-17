@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { TaskComponentCard } from './TaskComponentCard'
 import { Content } from './Content'
-import { Tabs } from 'antd';
+import { Tabs, Empty } from 'antd';
 import { QuestionnaireConfirmation } from './QuestionnaireConfirmation';
 import ImageDisplay from './ImageDisplay';
 
@@ -38,27 +38,40 @@ export const CourseContent = ({ createCourseSectionsList, sectionContentSelector
                         selectedSubsection &&
                         <>
                             {
-                                <div className='flex flex-wrap'>
-                                    {selectedSubsection.files.map((file, index) => {
-                                        return (
-                                            <>
-                                                <div key={index} className='rounded-md bg-white shadow-md p-3 border-l-8 border-indigo-500 cursor-pointer mb-4 mr-4'>
-                                                    <div className='flex space-x-2'>
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                                                        </svg>
-                                                        <p className='font-medium'>{file.filenameWithoutExtension}</p>
-                                                    </div>
-                                                </div>
-                                            </>
-                                        )
-                                    })}
-                                </div>
+                                selectedSubsection?.files?.length === 0 ?
+                                    (
+                                        <div>
+                                            <Empty  className='mt-6' description={
+                                                <span className='text-gray-500 font-normal '>
+                                                    There are no files
+                                                </span>
+                                            } />
+                                        </div>
+                                    )
+                                    :
+                                    (
+                                        <div className='flex flex-wrap'>
+                                            {selectedSubsection.files.map((file, index) => {
+                                                return (
+                                                    <>
+                                                        <div key={index} className='rounded-md bg-white shadow-md p-3 border-l-8 border-indigo-500 cursor-pointer mb-4 mr-4'>
+                                                            <div className='flex space-x-2'>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                                                                </svg>
+                                                                <p className='font-medium'>{file.filenameWithoutExtension}</p>
+                                                            </div>
+                                                        </div>
+                                                    </>
+                                                )
+                                            })}
+                                        </div>
+                                    )
                             }
                         </>
                     }
                 </div>
-            </div>
+            </div >
         )
     }
 
@@ -76,13 +89,6 @@ export const CourseContent = ({ createCourseSectionsList, sectionContentSelector
         }
     ];
 
-    function imageURL() {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            return e.target.result;
-        };
-    }
-
     return (
         selectedSubsection && (
             selectedSubsection?.questionnaire ? (
@@ -98,7 +104,7 @@ export const CourseContent = ({ createCourseSectionsList, sectionContentSelector
                             </div>
                         )
                     }
-                    <h2 className='mt-2 font-medium text-xl'>{selectedSubsection.title}</h2>
+                    <h2 className='mt-4 font-medium text-xl'>{selectedSubsection.title}</h2>
                     <Tabs className='font-normal' tabBarStyle={
                         {
                             borderBottom: '1px solid black',

@@ -130,7 +130,7 @@ export const CreateCourseEditSubsection = ({
                 Background Photo
               </label>
               <FilePond
-                files={(createCourseSectionsList.flatMap((section) => section.subsections).find((sub) => sub.id === subsection.id)).landscape_photo}
+                files={(createCourseSectionsList.flatMap((section) => section.subsections).find((sub) => sub.id === subsection.id))?.landscape_photo}
                 allowMultiple={false}
                 onupdatefiles={(e) => {
                   handleSubsectionChange('landscape_photo', e);
@@ -142,7 +142,7 @@ export const CreateCourseEditSubsection = ({
                 Subsection Files
               </label>
               <FilePond
-                files={(createCourseSectionsList.flatMap((section) => section.subsections).find((sub) => sub.id === subsection.id)).files}
+                files={(createCourseSectionsList.flatMap((section) => section.subsections).find((sub) => sub.id === subsection.id))?.files}
                 allowMultiple={true}
                 allowReorder={true}
                 onupdatefiles={(e) => {

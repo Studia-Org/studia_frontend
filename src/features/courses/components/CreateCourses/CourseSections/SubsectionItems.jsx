@@ -7,7 +7,7 @@ import { ForethoughtPage, PerformancePage, SelfReflectionPage } from './Constant
 export const SubsectionItems = ({ setCreateCourseSectionsList, sectionToEdit }) => {
     const [currentPage, setCurrentPage] = useState('first');
     const [currentPageSequence, setCurrentPageSequence] = useState(0);
-    const [addItemsOrPreMade, setAddItemsOrPreMade] = useState('addItems');
+    const [addItemsOrPreMade, setAddItemsOrPreMade] = useState('preMade');
 
     const variants = {
         hidden: { opacity: 0, y: 20 },
@@ -91,8 +91,8 @@ export const SubsectionItems = ({ setCreateCourseSectionsList, sectionToEdit }) 
         <>
             <div className="relative bg-white rounded-md shadow-md p-5 font-medium text-base  mt-5 mr-16 mb-10">
                 <div className="absolute top-0 h-[5rem] border-b-[4px] border-[#45406f]  bg-[#7468c3] w-full left-0 rounded-t-md flex items-center">
-                    <button onClick={() => setAddItemsOrPreMade('addItems')} className={`${addItemsOrPreMade === 'addItems' ? ' bg-[#45406f]' : ''} font-medium inline-block px-4 ml-4 hover:bg-[#45406f] duration-100  mt-[2.5rem] rounded-t-lg text-white p-2`}>Add items to the sequence</button>
-                    <button onClick={() => setAddItemsOrPreMade('preMade')} className={`${addItemsOrPreMade === 'preMade' ? ' bg-[#45406f]' : ''} font-medium inline-block ml-2 px-4 hover:bg-[#45406f] duration-100  mt-[2.5rem] rounded-t-lg text-white p-2`}>Pre-Made sequences</button>
+                    <button onClick={() => setAddItemsOrPreMade('preMade')} className={`${addItemsOrPreMade === 'preMade' ? ' bg-[#45406f]' : ''} font-medium inline-block ml-4 px-4 hover:bg-[#45406f] duration-100  mt-[2.5rem] rounded-t-lg text-white p-2`}>Pre-Made sequences</button>
+                    <button onClick={() => setAddItemsOrPreMade('addItems')} className={`${addItemsOrPreMade === 'addItems' ? ' bg-[#45406f]' : ''} font-medium inline-block px-4 ml-2 hover:bg-[#45406f] duration-100  mt-[2.5rem] rounded-t-lg text-white p-2`}>Add items to the sequence</button>
                 </div>
                 {
                     addItemsOrPreMade === 'addItems' ?

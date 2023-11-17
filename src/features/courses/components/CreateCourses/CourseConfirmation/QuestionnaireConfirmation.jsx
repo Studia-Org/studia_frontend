@@ -117,7 +117,7 @@ export const QuestionnaireConfirmation = ({ questionnaire }) => {
     };
 
     return (
-        <div className="flex flex-col mt-5">
+        <div className="flex flex-col mt-5 font-medium">
             <div className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1]">
                 <div className="my-7 mx-7">
                     <div className='flex items-center'>
