@@ -48,6 +48,9 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
             let allSections = []
             for (const section of createCourseSectionsList) {
                 let allSubsections = []
+
+                //TODO: Crear activity
+
                 for (const subsection of section.subsections) {
                     let newSubsection = {}
                     if (subsection?.questionnaire) {
@@ -73,10 +76,10 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                             title: subsection.title,
                             fase: subsection.fase,
                             finished: false,
-                            start_date: subsection.start_date,
-                            end_date: subsection.end_date,
+                            start_date: new Date(subsection.start_date).toISOString(),
+                            end_date: new Date(subsection.end_date).toISOString(),
                             paragraphs: null,
-                            description: subsection.questionnaire.attributes.description,
+                            description: subsection.questionnaire.attributes.description.slice(0, 140),
                             landscape_photo: null,
                             questionnaire: data.data.id,
                             users: null,
@@ -85,37 +88,41 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                         }
                     } else {
                         const formData = new FormData();
-                        for (const file of subsection.files) {
-                            formData.append('files', file.file);
+                        let filesData = null
+                        if (subsection.files.length > 0) {
+                            for (const file of subsection.files) {
+                                formData.append('files', file.file);
+                            }
+                            console.log(subsection.files)
+                            const response = await fetch(`${API}/upload`, {
+                                method: 'POST',
+                                headers: {
+                                    Authorization: `Bearer ${getToken()}`
+                                },
+                                body: formData,
+                            });
+                            filesData = await response.json();
                         }
-                        const response = await fetch(`${API}/upload`, {
-                            method: 'POST',
-                            headers: {
-                                Authorization: `Bearer ${getToken()}`
-                            },
-                            body: formData,
-                        });
-                        const data = await response.json();
 
                         newSubsection =
                         {
                             title: subsection.title,
                             fase: subsection.fase,
                             finished: false,
-                            start_date: subsection.start_date,
-                            end_date: subsection.end_date,
+                            start_date: new Date(subsection.start_date).toISOString() ,
+                            end_date: new Date(subsection.end_date).toISOString() ,
                             paragraphs: null,
                             description: subsection.description,
                             landscape_photo: null,
                             questionnaire: null,
                             users: null,
-                            files: data.map((file) => file.id),
+                            files: filesData?.map((file) => file.id),
                             content: subsection.content,
                         }
 
                         if (subsection?.landscape_photo.length > 0) {
                             formData.delete('files');
-                            formData.append('files', subsection.landscape_photo);
+                            formData.append('files', subsection.landscape_photo[0].file);
                             const response = await fetch(`${API}/upload`, {
                                 method: 'POST',
                                 headers: {
@@ -127,6 +134,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                             newSubsection.landscape_photo = data[0].id;
                         }
                     }
+                    console.log(newSubsection)
                     const createSubsection = await fetch(`${API}/subsections`, {
                         method: 'POST',
                         headers: {
@@ -136,6 +144,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                         body: JSON.stringify({ data: newSubsection }),
                     });
                     const data = await createSubsection.json();
+                    console.log(data)
                     allSubsections.push(data.data.id)
                 }
 
@@ -203,8 +212,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
             const dataForum = await createForum.json();
             message.success('Course created successfully');
             setIsLoading(false)
-            navigate(`/courses/`)
-
+            navigate(`/app/courses/`)
         }
         catch (e) {
             setIsLoading(false)

@@ -7,7 +7,8 @@ import TextField from '@mui/material/TextField';
 import MDEditor from '@uiw/react-md-editor';
 import { Switch } from 'antd';
 import dayjs from 'dayjs';
-import { message } from 'antd';
+import { message, Select } from 'antd';
+import { ACTIVITY_CATEGORIES } from '../../../../../constant';
 import { FilePond, registerPlugin } from 'react-filepond'
 import 'filepond/dist/filepond.min.css'
 import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation'
@@ -17,20 +18,22 @@ import '../../../styles/filePondNoBoxshadow.css'
 import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileEncode)
 
-export const CreateTask = ({ task, setTask, sectionId, subsection, setCreateCourseSectionsList, createCourseSectionsList}) => {
+export const CreateTask = ({ task, setTask, sectionId, subsection, setCreateCourseSectionsList, createCourseSectionsList }) => {
     const [content, setContent] = useState();
     const [title, setTitle] = useState('');
     const [switchState, setSwitchState] = useState(true);
     const [deadline, setDeadline] = useState();
+    const [categories, setCategories] = useState([]);
     const [files, setFiles] = useState([]);
 
     useEffect(() => {
-        if (task && task[sectionId] && task[sectionId].title && task[sectionId].description && task[sectionId].deadline) {
+        if (task && task[sectionId] && task[sectionId].title && task[sectionId].description && task[sectionId].deadline && task[sectionId].categories) {
             setTitle(task[sectionId].title);
             setContent(task[sectionId].description);
             setSwitchState(task[sectionId].evaluable);
             setDeadline(task[sectionId].deadline);
             setFiles(task[sectionId].files || []);
+            setCategories(task[sectionId].categories || []);
         }
     }, [task]);
 
@@ -44,6 +47,7 @@ export const CreateTask = ({ task, setTask, sectionId, subsection, setCreateCour
                         description: content,
                         deadline: deadline,
                         evaluable: switchState,
+                        categories: categories,
                         files: files.map(file => file.file),
                         ponderation: section.task.ponderation,
                         type: section.task.type,
@@ -68,7 +72,7 @@ export const CreateTask = ({ task, setTask, sectionId, subsection, setCreateCour
 
     function createTaskButton() {
         try {
-            if (!title || !content || !deadline) {
+            if (!title || !content || !deadline || !categories) {
                 throw new Error('Please complete all required fields.');
             }
             const activity = {
@@ -77,6 +81,7 @@ export const CreateTask = ({ task, setTask, sectionId, subsection, setCreateCour
                 description: content,
                 deadline: deadline,
                 ponderation: 0,
+                categories: categories,
                 type: 'Delivery',
                 files: files.map(file => file.file),
                 order: 5,
@@ -132,6 +137,19 @@ export const CreateTask = ({ task, setTask, sectionId, subsection, setCreateCour
                         }}
                         maxFiles={10} />
                 </div>
+                <div className='space-y-2 mb-3'>
+                    <label className='text-sm text-gray-500' htmlFor="" >Task Categories</label>
+                    <Select
+                        mode="tags"
+                        className=''
+                        style={{ width: '100%' }}
+                        placeholder=""
+                        value={categories}
+                        onChange={(value) => setCategories(value)}
+                        options={Object.keys(ACTIVITY_CATEGORIES).map(key => ({ label: key, value: key }))}
+                    />
+                </div>
+
                 <label className='text-sm text-gray-500' htmlFor="" >Deadline</label>
                 <div className='flex'>
                     <div className='w-full mr-5'>
