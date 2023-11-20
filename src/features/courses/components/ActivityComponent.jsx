@@ -12,6 +12,8 @@ import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import Chip from '@mui/material/Chip';
 import Swal from 'sweetalert2';
+
+import { ObjectivesTag } from './ObjectivesTag';
 registerPlugin(FilePondPluginImagePreview);
 
 
@@ -21,6 +23,8 @@ export const ActivityComponent = ({ activityData, idQualification }) => {
   const [formData, setFormData] = useState(new FormData());
   const { user } = useAuthContext();
   const { activityId } = useParams();
+
+  const USER_OBJECTIVES = [...new Set(user?.user_objectives?.map((objective) => objective.categories.map((category) => category)).flat() || [])];
 
   function handleFileUpload(file) {
     const dataCopy = formData;
@@ -125,7 +129,7 @@ export const ActivityComponent = ({ activityData, idQualification }) => {
   function renderFiles(file) {
     return (
       <button key={file.id} onClick={() => downloadFile(file)} className='shadow-md rounded-md flex p-3 w-full bg-green-700 text-white'>
-        <p>{file.attributes.name}</p>
+        <p className='max-w-[calc(100%-4rem)] overflow-hidden text-ellipsis'>{file.attributes.name}</p>
         <div className='ml-auto mr-2'>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.0} stroke="currentColor" className="w-5 h-5">
             <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
@@ -190,6 +194,15 @@ export const ActivityComponent = ({ activityData, idQualification }) => {
               <Chip className='ml-auto' label="Not finished" color="primary" />
           }
         </div>
+        <section className="flex flex-wrap gap-x-2">
+          {
+            activityData?.activity.data.attributes.categories?.map((category) => {
+              return (
+                <ObjectivesTag key={category} category={category} USER_OBJECTIVES={USER_OBJECTIVES} />
+              )
+            })
+          }
+        </section>
         {
           evaluated ?
             <>
@@ -202,23 +215,24 @@ export const ActivityComponent = ({ activityData, idQualification }) => {
             :
             null
         }
+
         <p className='text-xs text-gray-400 mb-1 mt-5'>Task description</p>
         <hr />
         <div className='prose my-3 text-gray-600 ml-5 w-full box-content'>
           <ReactMarkdown>{activityData.activity.data.attributes.description}</ReactMarkdown>
         </div>
 
-      </div>
+      </div >
       {
         evaluated ?
           <div className='flex flex-col '>
-            <p className='text-xs text-gray-400 mb-1'>Evaluator</p>
+            < p className='text-xs text-gray-400 mb-1' > Evaluator</ p>
             <ProfessorData professor={{ attributes: activityData.evaluator.data.attributes }} evaluatorFlag={true} />
             <p className='text-xs text-gray-400 mb-1 mt-5'>Your submission</p>
             <div className='mb-14 '>
               {activityData.file.data && activityData.file.data.map(renderFiles)}
             </div>
-          </div> :
+          </div > :
           <div className='flex flex-col w-[30rem] mt-5'>
             <p className='text-xs text-gray-400 mb-1 my-5'>Your submission</p>
             <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
@@ -256,6 +270,6 @@ export const ActivityComponent = ({ activityData, idQualification }) => {
             </button>
           </div>
       }
-    </div>
+    </div >
   )
 }
