@@ -67,7 +67,7 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
                 title: 'Success!'
             })
             setSelectedOption('help')
-            
+
         } catch (error) {
             console.log(error.error);
             Toast.fire({

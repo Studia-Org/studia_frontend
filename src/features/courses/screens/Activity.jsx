@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { ActivityComponent } from '../components/ActivityComponent'
-import { Sidebar } from '../../../shared/elements/Sidebar';
-import { useParams } from 'react-router-dom';
-import { Navbar } from '../../../shared/elements/Navbar';
-import { API } from '../../../constant';
-import { useAuthContext } from '../../../context/AuthContext';
+import React, { useEffect, useState } from "react";
+import { ActivityComponent } from "../components/ActivityComponent";
+import { useParams } from "react-router-dom";
+import { API } from "../../../constant";
+import { useAuthContext } from "../../../context/AuthContext";
 
 const Activity = () => {
   const { courseId, activityId } = useParams();
@@ -14,19 +12,34 @@ const Activity = () => {
 
   const fetchUserQualificationsData = async () => {
     try {
-      const response = await fetch(`${API}/users/${user.id}?populate=qualifications.activity,qualifications.evaluator.profile_photo,qualifications.file`);
+      if (!user) return;
+      const response =
+        await fetch(
+          `${API}/qualifications?qualification` +
+          `&populate[file][fields][0]=*` +
+          `&populate[activity][populate][evaluators][fields][0]=*` +
+          `&populate[activity][populate][file][fields][0]=*` +
+          `&filters[activity][id]=${activityId}` +
+          `&populate[user][fields][0]=*` +
+          `&populate[evaluator][populate][profile_photo][fields][0]=*` +
+          `&filters[user][id]=${user.id}`)
       const data = await response.json();
-      console.log(activityId)
-      const dataFiltered = (data.qualifications.filter(qualification => qualification.activity.id === Number(activityId))[0])
-      console.log(dataFiltered)
-      if (dataFiltered !== undefined) {
-        setUserQualification(dataFiltered)
-      } else {
-        const activityData = await fetch(`${API}/activities/${activityId}?populate=*`);
-        const data = await activityData.json();
-        setUserQualification({activity: data.data.attributes})
-      }
 
+      if (data.data.length > 0) {
+        console.log(data.data[0]["id"]);
+        setUserQualification({ activity: data.data[0].attributes, idQualification: data.data[0]["id"] });
+      } else {
+        const activityData = await fetch(
+          `${API}/activities/${activityId}?populate=*`
+        );
+        const data = await activityData.json();
+        const qualificationData = {
+          activity: {
+            data: data.data
+          }
+        }
+        setUserQualification({ activity: qualificationData })
+      }
     } catch (error) {
       console.error(error);
     }
@@ -37,20 +50,12 @@ const Activity = () => {
   }, [user]);
 
   return (
-      <div className='min-h-screen  bg-white '>
-        <Navbar />
-        <div className='flex min-h-[calc(100vh-8rem)] md:ml-80 md:min-w-[calc(100vw-20rem)] md:flex-nowrap bg-white'>
-          <Sidebar section={'courses'} />
-          <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] grid '>
-            <div className='md:ml-12 ml-8 '>
-              {userQualification.activity && (
-                <ActivityComponent activityData={userQualification} />
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] grid '>
+      {userQualification.activity && (
+        <ActivityComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} />
+      )}
+    </div>
   )
 }
 
-export default Activity
+export default Activity;
