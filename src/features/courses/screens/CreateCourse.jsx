@@ -11,10 +11,9 @@ import { CreateConfirmation, CreateCourseInfo, CreateCourseSections } from '../c
 
 const CreateCourse = () => {
     const navigate = useNavigate();
-    const [isDataChanged, setIsDataChanged] = useState(true);
     const [createCourseOption, setCreateCourseOption] = useState(0);
     const [createCourseSectionsList, setCreateCourseSectionsList] = useState([])
-    const [courseBasicInfo, setCourseBasicInfo] = useState({})
+    const [courseBasicInfo, setCourseBasicInfo] = useState({ tags: [] })
     const [editCourseSectionFlag, setEditCourseSectionFlag] = useState(false)
     const [sectionToEdit, setSectionToEdit] = useState({})
     const [task, setTask] = useState({})

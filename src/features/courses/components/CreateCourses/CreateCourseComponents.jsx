@@ -5,6 +5,7 @@ import 'filepond/dist/filepond.min.css';
 import '../../styles/filepondStyles.css'
 import { message } from "antd";
 import { FilePond, registerPlugin } from 'react-filepond';
+import 'react-tagsinput/react-tagsinput.css'
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import { DndContext, closestCenter } from '@dnd-kit/core';
@@ -16,6 +17,10 @@ import { TaskContent } from './CourseConfirmation/TaskContent';
 import { Empty, Select, Popconfirm, Button } from 'antd';
 import { ButtonCreateCourse } from './CourseConfirmation/ButtonCreateCourse';
 import SelectProfessor from './CourseInfo/SelectProfessor';
+import { MoonLoader } from 'react-spinners';
+
+import TagsInput from 'react-tagsinput'
+
 
 
 registerPlugin(FilePondPluginImagePreview);
@@ -76,12 +81,16 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
     courseName: '',
     description: '',
     courseType: '',
+    tags: [],
   });
+
+  const [tags, setTags] = useState([]);
+
   const handleChange = (field, value) => {
     setFormData((prevData) => ({ ...prevData, [field]: value }));
+    console.log(value)
     setCourseBasicInfo((prevInfo) => ({ ...prevInfo, [field]: value }));
   };
-
 
   return (
     <motion.div className='w-2/4 flex flex-col' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
@@ -107,6 +116,14 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
         value={courseBasicInfo.description}
         onChange={(e) => handleChange('description', e.target.value)}
       />
+      <div className='font-normal text-sm'>
+        <label htmlFor="message" className="block mb-4 text-sm font-medium text-gray-900 mt-8">
+          Tags
+        </label>
+        <TagsInput value={courseBasicInfo.tags} onChange={(e) => handleChange('tags', e) } />
+      </div>
+
+
 
       <div className='flex mt-8 justify-between'>
         <div className='font-medium w-full mr-8'>
@@ -282,7 +299,6 @@ export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption, 
   const [visibilityTask, setVisibilityTask] = useState(false);
   const [selectedSubsection, setSelectedSubsection] = useState(createCourseSectionsList[0]?.subsections[0]);
   const [sectionId, setSectionId] = useState(createCourseSectionsList[0]?.id);
-
   useEffect(() => {
     createCourseSectionsList.forEach((section) => {
       const subsection = section.subsections.find((subsection) => subsection.id === sectionContentSelector);

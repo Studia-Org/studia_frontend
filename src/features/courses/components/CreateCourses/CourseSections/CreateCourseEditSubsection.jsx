@@ -32,6 +32,8 @@ export const CreateCourseEditSubsection = ({
   setTask,
   sectionId,
 }) => {
+  const [landscape_photo, setLandscape_photo] = useState((createCourseSectionsList.flatMap((section) => section.subsections).find((sub) => sub.id === subsection.id))?.landscape_photo);
+  const [files, setFiles] = useState((createCourseSectionsList.flatMap((section) => section.subsections).find((sub) => sub.id === subsection.id))?.files);
 
   useEffect(() => {
     const matchingSubsection = createCourseSectionsList
@@ -43,13 +45,13 @@ export const CreateCourseEditSubsection = ({
     }
   }, [createCourseSectionsList]);
 
+
   const handleSubsectionChange = (type, newValue) => {
     setCreateCourseSectionsList((courses) => {
       const updatedCourses = courses.map((course) => {
         if (course.id === sectionId) {
           const sectionCopy = { ...course };
           const subsectionCopy = { ...subsection };
-
           switch (type) {
             case 'title':
             case 'start_date':
@@ -130,9 +132,10 @@ export const CreateCourseEditSubsection = ({
                 Background Photo
               </label>
               <FilePond
-                files={(createCourseSectionsList.flatMap((section) => section.subsections).find((sub) => sub.id === subsection.id))?.landscape_photo}
+                files={landscape_photo}
                 allowMultiple={false}
                 onupdatefiles={(e) => {
+                  setLandscape_photo(e);
                   handleSubsectionChange('landscape_photo', e);
                 }} maxFiles={1}
               />
@@ -142,10 +145,11 @@ export const CreateCourseEditSubsection = ({
                 Subsection Files
               </label>
               <FilePond
-                files={(createCourseSectionsList.flatMap((section) => section.subsections).find((sub) => sub.id === subsection.id))?.files}
+                files={files}
                 allowMultiple={true}
                 allowReorder={true}
                 onupdatefiles={(e) => {
+                  setFiles(e);
                   handleSubsectionChange('files', e);
                 }}
               />
