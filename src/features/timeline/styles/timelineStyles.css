@@ -32,10 +32,12 @@
     overflow-x: hidden !important;
     width: 100% !important;
 }
+
 .rct-scroll:hover {
     cursor: move !important;
 }
-.rct-vl{
+
+.rct-vl {
     height: 100% !important;
 }
 

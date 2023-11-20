@@ -154,7 +154,6 @@ const CalendarEvents = () => {
         const date = new Date(dateTimeString);
         return date.toLocaleTimeString(undefined, options);
     }
-    console.log(infoModalData)
     return (
         <>
             <div className='max-w-full rounded-tl-3xl bg-[#e7eaf886] '>
