@@ -21,7 +21,6 @@ export const ActivityComponent = ({ activityData, idQualification }) => {
   const [formData, setFormData] = useState(new FormData());
   const { user } = useAuthContext();
   const { activityId } = useParams();
-  const [, forceUpdate] = useReducer(x => x + 1, 0);
 
   function handleFileUpload(file) {
     const dataCopy = formData;
@@ -34,7 +33,10 @@ export const ActivityComponent = ({ activityData, idQualification }) => {
 
     try {
       let response2 = undefined;
-      let files = activityData.file.data.map((file) => file.id);
+      let files = []
+      if (activityData.file.data !== null) {
+        files = activityData.file.data.map((file) => file.id);
+      }
       files = files.concat(result.map((file) => file.id));
       const qualificationData = {
         data: {
@@ -78,6 +80,8 @@ export const ActivityComponent = ({ activityData, idQualification }) => {
     }
   }
   async function sendData() {
+
+
     try {
 
       const response = await fetch(`${API}/upload`, {
@@ -87,7 +91,6 @@ export const ActivityComponent = ({ activityData, idQualification }) => {
         },
         body: formData,
       });
-
       if (response.ok) {
         const result = await response.json();
         const response_upload = await sendFile(result);
@@ -97,7 +100,8 @@ export const ActivityComponent = ({ activityData, idQualification }) => {
             title: 'Success',
             text: 'Files uploaded successfully',
           }).then((result) => {
-            forceUpdate();
+            window.location.reload();
+
           })
         }
         else throw new Error('Error uploading files');
@@ -151,7 +155,7 @@ export const ActivityComponent = ({ activityData, idQualification }) => {
       console.error('Error en la descarga: ', error);
     }
   };
-  console.log(formData.getAll('files').length);
+
   return (
     <div className='flex flex-col 1.5xl:flex-row items-start 1.5xl:items-start 1.5xl:space-x-24 p-5 sm:p-10'>
       <div className='1.5xl:w-2/4 lg:w-10/12 w-full'>
@@ -245,7 +249,6 @@ export const ActivityComponent = ({ activityData, idQualification }) => {
             />
             <button
               id='submit-button-activity'
-              disabled={true}
               onClick={() => { sendData() }}
               className="bg-blue-500 text-white font-semibold py-2 px-4 
                             rounded ml-auto hover:bg-blue-800 duration-150">
