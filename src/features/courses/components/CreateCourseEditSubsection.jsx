@@ -6,7 +6,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import TextField from '@mui/material/TextField';
 
 export const CreateCourseEditSubsection = ({ subsection, setEditSubsectionFlag }) => {
-    console.log(subsection)
     const [show, setShow] = useState(false)
     const handleChangeStartDate = (selectedDate) => {
 

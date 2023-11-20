@@ -15,7 +15,7 @@ function Dashboard() {
           <MoonLoader color="#363cd6" size={80} />
         </div>
       ) : (
-        <main className="flex flex-wrap w-full h-full justify-center p-3">
+        <main className="flex flex-wrap w-full h-full justify-center items-center p-3">
           <div className="flex flex-wrap xl:flex-nowrap h-[45%] gap-y-2 xl:gap-x-[2%] justify-between min-w-[95%] max-w-[95%] ">
             <SectionCoursesCards
               courses={user.courses}

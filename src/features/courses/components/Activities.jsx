@@ -20,7 +20,6 @@ export const ActivitiesText = ({ activitie }) => {
 }
 
 export const ActivitiesLecture = ({ activitie }) => {
-    console.log(activitie)
     return (
         <a href={activitie.url}>
             <div className='cursor-pointer pl-5 pt-3 rounded py-4 border-t-8 border-blue-800 border bg-white'>
@@ -45,7 +44,7 @@ export const ActivitiesQuestionnaire = ({ activitie }) => {
     )
 }
 
-export const ActivitiesDelivery = ({ activitie, activitieID, courseID}) => {
+export const ActivitiesDelivery = ({ activitie, activitieID, courseID }) => {
     const currentDate = new Date();
     const deliveryDate = new Date(activitie.deadline)
     const isPastDue = deliveryDate > currentDate;
