@@ -18,10 +18,8 @@ export const CoursesCardHome = ({ course }) => {
         professorProfilePhoto = course.professor.data.attributes.profile_photo.data.attributes.url
         professorName = course.professor.data.attributes.name
         students = course.students.data
-        tags = course.course_tags.data
     } else {
         courseID = course.id
-        tags = course.course_tags
         professorName = course.professor.name
         students = course.students
         courseCover = course.cover.url
@@ -31,7 +29,7 @@ export const CoursesCardHome = ({ course }) => {
     function renderCourseTags(tag) {
         return (
             <div className=' bg-blue-200 p-1 h-6 rounded-lg text-blue-800 my-1 mr-3'>
-                <p className='font-medium text-xs'>{tag?.attributes ? tag.attributes.tag : tag.tag}</p>
+                <p className='font-medium text-xs'>{tag}</p>
             </div>
         )
     }
@@ -43,7 +41,7 @@ export const CoursesCardHome = ({ course }) => {
                     <img className="rounded-t-3xl w-full h-[13rem] object-fill" src={courseCover} alt="" />
                     <div className="p-3 flex flex-col ml-5 mr-5 h-full">
                         <div className='flex flex-wrap flex-grow '>
-                            {tags.map(renderCourseTags)}
+                            {course.tags?.map(renderCourseTags)}
                         </div>
                         <h3 className='text-left text-xl font-bold w-full overflow-hidden line-clamp-2 mt-2 items-center'>{course.title}</h3>
                         <div className='flex items-center flex-grow mt-3' name='studentData'>
