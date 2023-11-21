@@ -9,7 +9,7 @@
     background: linear-gradient(to right, #a0afee, #9088fa);
 }
 
-.active {
+.active_card {
     background: linear-gradient(to right, #1d46ff, #6E66D6);
     pointer-events: none;
 }

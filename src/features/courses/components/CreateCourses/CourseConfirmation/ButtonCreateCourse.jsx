@@ -49,8 +49,6 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
             for (const section of createCourseSectionsList) {
                 let allSubsections = []
 
-                //TODO: Crear activity
-
                 for (const subsection of section.subsections) {
                     let newSubsection = {}
                     if (subsection?.questionnaire) {
@@ -79,7 +77,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                             start_date: new Date(subsection.start_date).toISOString(),
                             end_date: new Date(subsection.end_date).toISOString(),
                             paragraphs: null,
-                            description: subsection.questionnaire.attributes.description.slice(0, 140),
+                            description: subsection.questionnaire.attributes.description?.slice(0, 140) || 'description',
                             landscape_photo: null,
                             questionnaire: data.data.id,
                             users: null,
@@ -93,7 +91,6 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                             for (const file of subsection.files) {
                                 formData.append('files', file.file);
                             }
-                            console.log(subsection.files)
                             const response = await fetch(`${API}/upload`, {
                                 method: 'POST',
                                 headers: {
@@ -109,10 +106,10 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                             title: subsection.title,
                             fase: subsection.fase,
                             finished: false,
-                            start_date: new Date(subsection.start_date).toISOString() ,
-                            end_date: new Date(subsection.end_date).toISOString() ,
+                            start_date: new Date(subsection.start_date).toISOString(),
+                            end_date: new Date(subsection.end_date).toISOString(),
                             paragraphs: null,
-                            description: subsection.description,
+                            description: subsection.description?.slice(0, 140) || 'description',
                             landscape_photo: null,
                             questionnaire: null,
                             users: null,
@@ -134,7 +131,6 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                             newSubsection.landscape_photo = data[0].id;
                         }
                     }
-                    console.log(newSubsection)
                     const createSubsection = await fetch(`${API}/subsections`, {
                         method: 'POST',
                         headers: {
@@ -144,13 +140,53 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                         body: JSON.stringify({ data: newSubsection }),
                     });
                     const data = await createSubsection.json();
-                    console.log(data)
                     allSubsections.push(data.data.id)
                 }
+
+                let filesdata2 = null
+                const newFormData = new FormData();
+
+                if (section?.task?.files.length > 0) {
+                    for (const file of section.task.files) {
+                        newFormData.append('files', file);
+                    }
+                    const uploadFiles = await fetch(`${API}/upload`, {
+                        method: 'POST',
+                        headers: {
+                            Authorization: `Bearer ${getToken()}`
+                        },
+                        body: newFormData,
+                    });
+                    filesdata2 = await uploadFiles.json();
+                }
+
+                const activity = {
+                    title: section.task.title,
+                    deadline: new Date(section.task.deadline).toISOString(),
+                    ponderation: 0,
+                    type: section.task.type,
+                    file: filesdata2?.map((file) => file.id),
+                    description: section.task.description,
+                    order: 5,
+                    evaluable: section.task.evaluable,
+                    qualifications: null,
+                    evaluators: null,
+                    categories: section.task.categories,
+                }
+                const createActivity = await fetch(`${API}/activities`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${getToken()}`,
+                    },
+                    body: JSON.stringify({ data: activity }),
+                })
+                const dataActivity = await createActivity.json();
 
                 let newSection = {
                     title: section.name,
                     subsections: allSubsections,
+                    activity: dataActivity.data.id,
                 }
                 const createSection = await fetch(`${API}/sections`, {
                     method: 'POST',
@@ -210,6 +246,16 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                 body: JSON.stringify({ data: newForumCourse }),
             })
             const dataForum = await createForum.json();
+
+            const updateCourse = await fetch(`${API}/courses/${dataFinal.data.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${getToken()}`,
+                },
+                body: JSON.stringify({ data: { forum: dataForum.data.id } }),
+            })
+            const dataUpdate = await updateCourse.json();
             message.success('Course created successfully');
             setIsLoading(false)
             navigate(`/app/courses/`)
@@ -218,6 +264,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
             setIsLoading(false)
             message.error(e.message)
         }
+
     }
     if (isLoading) {
         return (
