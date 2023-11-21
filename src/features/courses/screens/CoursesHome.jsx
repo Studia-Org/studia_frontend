@@ -1,7 +1,7 @@
 import { useEffect, useState, React } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useWindowSize } from 'react-use';
+import { useTimeout, useWindowSize } from 'react-use';
 import 'react-loading-skeleton/dist/skeleton.css'
 import '../styles/utils.css'
 import { getToken } from '../../../helpers';
@@ -30,7 +30,7 @@ const CoursesHome = () => {
 
 
   const navigate = useNavigate();
-  const { width, height } = useWindowSize();
+  
   const variants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
@@ -43,10 +43,11 @@ const CoursesHome = () => {
 
 
   useEffect(() => {
-    const confettiDuration = 5000;
+    if(!confettiExplode) return
+    const confettiDuration = 10000;
     setConfettiActive(true);
     const confettiTimeout = setTimeout(() => {
-      setConfettiActive(false);
+        setConfettiActive(false)
     }, confettiDuration);
     return () => {
       clearTimeout(confettiTimeout);
@@ -213,10 +214,11 @@ const CoursesHome = () => {
     )
   }
   function renderConfeti() {
+
     return (
-      <div>
+      <div id="confetti" className='min-w-screen move-confetti'>
         {confettiActive && (
-          <Confetti width={width} height={height} />
+          <Confetti />
         )}
       </div>
     );
@@ -249,9 +251,7 @@ const CoursesHome = () => {
             obj.id === updatedObjective.id ? updatedObjective : obj
           );
         });
-        if (props.completed === false) {
-          setConfettiExplode(true);
-        }
+       
         Swal.mixin({
           toast: true,
           position: 'top-end',
@@ -261,7 +261,14 @@ const CoursesHome = () => {
           didOpen: (toast) => {
             toast.addEventListener('mouseenter', Swal.stopTimer)
             toast.addEventListener('mouseleave', Swal.resumeTimer)
-          }
+            if (props.completed === false) {
+              setConfettiExplode(true);
+              setTimeout(() => {
+                setConfettiExplode(false);
+              }, 10000);
+            }
+          },
+        
         }).fire({
           icon: 'success',
           title: 'Status updated successfully'
@@ -295,6 +302,14 @@ const CoursesHome = () => {
   }
   return (
     <>
+     {
+      confettiExplode ?
+      <div className='w-screen absolute -ml-80 -mt-32 min-h-screen'>
+        {renderConfeti()}
+        </div>
+        :
+        null
+      }
       <div className=' max-h-full rounded-tl-3xl bg-[#e7eaf886] grid w-full'>
         <div className=' sm:px-12 px-6  font-bold text-2xl flex flex-wrap min-w-full relative flex-col grid-home:flex-row '>
           {
@@ -352,12 +367,7 @@ const CoursesHome = () => {
                                   </div>
                                 </div>
                             }
-                            {
-                              confettiExplode === true ?
-                                renderConfeti()
-                                :
-                                null
-                            }
+                           
                           </div>
                         </>
                         :

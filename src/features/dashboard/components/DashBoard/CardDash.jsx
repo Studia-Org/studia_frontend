@@ -11,7 +11,7 @@ export function CardDash({ courseName, courseId }) {
       onClick={() => {
         navigate(`/app/dashboard/${courseId}`);
       }}
-      className={`px-7 shadow-md w-full ${parseInt(path) === courseId ? "active" : "cardDash"
+      className={`px-7 shadow-md w-full ${parseInt(path) === courseId ? "active-card" : "cardDash"
         }
       md2:min-w-[49%] md2:max-w-[49%] 2xl:min-w-[30%] 2xl:max-w-[30%] flex  items-center 
          rounded-lg py-3 relative
