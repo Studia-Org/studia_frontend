@@ -1,24 +1,13 @@
-import React, { useState } from "react";
-import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
-import "react-circular-progressbar/dist/styles.css";
-import {
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
-} from "@chakra-ui/accordion";
+import React, { useState } from 'react'
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+import { Collapse } from 'antd';
+import { CaretRightOutlined } from '@ant-design/icons';
+import '../styles/utils.css'
 
-export const AccordionCourseContent = ({
-  courseContentInformation,
-  setCourseSubsection,
-  setCourseSection,
-  setForumFlag,
-  setQuestionnaireFlag,
-  setCourseSubsectionQuestionnaire,
-  subsectionsCompleted,
-}) => {
-  const [sectionNumber, setSectionNumber] = useState(1);
+export const AccordionCourseContent = ({ courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted }) => {
+    const [sectionNumber, setSectionNumber] = useState(1);
+    const { Panel } = Collapse;
 
   function handleSections(tituloSeccion, subsection) {
     if (
@@ -205,54 +194,46 @@ export const AccordionCourseContent = ({
       percentageFinished = 0;
     }
 
-    return (
-      <Accordion allowMultiple className="" key={section.id}>
-        <AccordionItem className="border rounded-3xl my-4">
-          <AccordionButton className="rounded-3xl border-b py-5  ">
-            <div className="w-20 h-20 ml-5 items-center flex">
-              <CircularProgressbar
-                className="font-medium "
-                value={percentageFinished}
-                text={`${percentageFinished}%`}
-                styles={buildStyles({
-                  textSize: "26px",
-                  pathColor: "#6366f1",
-                  textColor: "black",
-                })}
-              />
-            </div>
-            <div className="flex flex-col ml-9 w-full text-left">
-              <p className="text-sm mb-1">Section {sectionNumber}</p>
-              <div className="flex items-center">
-                <h2 className="w-3/4 text-lg font-medium text-left line-clamp-2 ">
-                  {section.attributes.title}
-                </h2>
-                <AccordionIcon fontSize={"24px"} className="ml-auto mr-5" />
-              </div>
-            </div>
-          </AccordionButton>
-          <AccordionPanel className="  mb-3 ">
-            <ol className="relative border-l border-dashed border-gray-300 ml-10">
-              {section.attributes.subsections.data.map((subsection, index) => {
-                const isFirstSubsection = index === 0;
-                const content = RenderCourseInsideSectionContent(
-                  subsection,
-                  section.attributes.title,
-                  prevSubsectionFinished,
-                  isFirstSubsection,
-                  index
-                );
-                prevSubsectionFinished = subsectionsCompleted.some(
-                  (subsectionTemp) => subsectionTemp.id === subsection.id
-                );
-                return content;
-              })}
-            </ol>
-          </AccordionPanel>
-        </AccordionItem>
-      </Accordion>
-    );
-  }
+        return (
+            <Collapse
+                expandIcon={({ isActive }) => <CaretRightOutlined className='absolute top-0 bottom-0 right-5 ' rotate={isActive ? 90 : 0} />}
+                className='mt-5 bg-gray-50'
+                expandIconPosition="right"
+            >
+                <Panel
+                    header={
+                        <div className='flex items-center py-4 '>
+                            <div className='ml-2 items-center flex'>
+                                <div className='w-20 h-20 items-center flex text-sm'>
+                                    <CircularProgressbar className='font-medium text-sm' value={percentageFinished} text={`${percentageFinished}%`} styles={buildStyles({
+                                        textSize: '22px',
+                                        pathColor: '#6366f1',
+                                        textColor: 'black',
+                                    })} />
+                                </div>
+                            </div>
+                            <div className='flex flex-col ml-9 w-full text-left'>
+                                <p className='text-sm mb-1'>Section {sectionNumber}</p>
+                                <h2 className='w-3/4 text-lg font-medium text-left line-clamp-2'>
+                                    {section.attributes.title}
+                                </h2>
+                            </div>
+                        </div>
+                    }
+                    key={sectionNumber}
+                >
+                    <ol className="relative border-l border-dashed border-gray-300 ml-10 text-base">
+                        {section.attributes.subsections.data.map((subsection, index) => {
+                            const isFirstSubsection = index === 0;
+                            const content = RenderCourseInsideSectionContent(subsection, section.attributes.title, prevSubsectionFinished, isFirstSubsection);
+                            prevSubsectionFinished = subsectionsCompleted.some(subsectionTemp => subsectionTemp.id === subsection.id);
+                            return content;
+                        })}
+                    </ol>
+                </Panel>
+            </Collapse>
+        )
+    }
 
   return (
     <div className="flex-shrink-0 w-full sm:w-auto z-20 ">

@@ -36,3 +36,14 @@
     transform: scale(1.1);
 
 }
+
+
+.custom-collapse .ant-collapse-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .custom-collapse .ant-collapse-content {
+    padding-left: 0; /* Ajusta según sea necesario */
+  }

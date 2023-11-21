@@ -11,6 +11,9 @@ module.exports = {
     transparent: "transparent",
     current: "currentColor",
     extend: {
+      blur: {
+        DEFAULT: "8px",
+      },
       colors: {
         // light mode
         tremor: {

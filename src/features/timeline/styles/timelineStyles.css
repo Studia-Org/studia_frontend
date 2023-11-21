@@ -4,7 +4,9 @@
 
 .rct-items {
     pointer-events: none;
+    top: 40px;
 }
+
 
 .rct-vertical-lines {
     color: #e4e2e2;

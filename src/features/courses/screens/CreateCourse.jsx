@@ -1,27 +1,32 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { Sidebar } from '../../../shared/elements/Sidebar';
 import { Navbar } from '../../../shared/elements/Navbar';
 import draw2 from '../../../assets/draw2.png'
-import { CreateCourseBreadcrumb } from '../components/CreateCourseBreadcrumb';
-import { EditCreateCourseSection } from '../components/EditCreateCourseSection';
-import { CreateConfirmation, CreateCourseInfo, CreateCourseSections } from '../components/CreateCourseComponents';
+import { CreateCourseBreadcrumb } from '../components/CreateCourses/CreateCourseBreadcrumb';
+import { EditCreateCourseSection } from '../components/CreateCourses/CourseSections/EditCreateCourseSection';
+import { CreateConfirmation, CreateCourseInfo, CreateCourseSections } from '../components/CreateCourses/CreateCourseComponents';
 
 
 
 const CreateCourse = () => {
+    const navigate = useNavigate();
     const [createCourseOption, setCreateCourseOption] = useState(0);
     const [createCourseSectionsList, setCreateCourseSectionsList] = useState([])
+    const [courseBasicInfo, setCourseBasicInfo] = useState({ tags: [] })
     const [editCourseSectionFlag, setEditCourseSectionFlag] = useState(false)
     const [sectionToEdit, setSectionToEdit] = useState({})
+    const [task, setTask] = useState({})
+
 
     function RenderCreateCourse() {
         switch (createCourseOption) {
             case 0:
-                return <CreateCourseInfo createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} />
+                return <CreateCourseInfo createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} setCourseBasicInfo={setCourseBasicInfo} courseBasicInfo={courseBasicInfo} />
             case 1:
-                return <CreateCourseSections createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} setCreateCourseSectionsList={setCreateCourseSectionsList} createCourseSectionsList={createCourseSectionsList} setEditCourseSectionFlag={setEditCourseSectionFlag} setSectionToEdit={setSectionToEdit} />
+                return <CreateCourseSections createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} setCreateCourseSectionsList={setCreateCourseSectionsList} createCourseSectionsList={createCourseSectionsList} setEditCourseSectionFlag={setEditCourseSectionFlag} setSectionToEdit={setSectionToEdit} task={task} setTask={setTask} />
             case 2:
-                return <CreateConfirmation createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} />
+                return <CreateConfirmation createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} createCourseSectionsList={createCourseSectionsList} evaluator={courseBasicInfo.evaluator} courseBasicInfo={courseBasicInfo} />
             default:
                 return <CreateCourseInfo createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} />
         }
@@ -33,16 +38,22 @@ const CreateCourse = () => {
                 {
                     editCourseSectionFlag ?
                         <>
-                            <EditCreateCourseSection  setEditCourseSectionFlag={setEditCourseSectionFlag} setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} createCourseSectionsList={createCourseSectionsList}/>
+                            <EditCreateCourseSection setEditCourseSectionFlag={setEditCourseSectionFlag} setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} createCourseSectionsList={createCourseSectionsList} task={task} setTask={setTask} />
                         </>
-
                         :
                         <>
                             <h1>Create new Course</h1>
                             <CreateCourseBreadcrumb createCourseOption={createCourseOption} />
                             <div className='flex justify-between mr-16 mt-5'>
                                 {RenderCreateCourse()}
-                                <img src={draw2} className='w-[30rem] h-[30rem]' alt="" />
+                                {
+                                    createCourseOption !== 2 ?
+                                        <div className='w-[30rem] h-[30rem]'>
+                                            <img src={draw2} className='w-[30rem] h-[30rem]' alt="" />
+                                        </div>
+                                        :
+                                        null
+                                }
                             </div>
                         </>
                 }

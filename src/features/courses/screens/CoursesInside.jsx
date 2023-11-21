@@ -207,8 +207,8 @@ const CourseInside = () => {
   }, []);
 
   function renderAllActivities(activities) {
-    let Component = null;
-    if (activities.type === "paragraph") {
+    let Component = null
+    if (activities.type === 'paragraph') {
       Component = componentMap[activities.type];
     } else {
       Component = componentMap[activities.data.attributes.type];

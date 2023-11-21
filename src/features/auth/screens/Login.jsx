@@ -56,12 +56,12 @@ const Login = () => {
                 title: 'Something went wrong'
             })
         } finally {
-            setIsLoading(false);
+            // setIsLoading(false);
         }
     };
 
     return (
-        <div className="">
+        <div className=" ">
             <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
             <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.min.css')</style>
@@ -80,7 +80,7 @@ const Login = () => {
                             <div className='flex justify-center'>
                                 <div className='absolute top-48 w-2/4   '>
                                     <h1 className='text-white font-medium text-4xl '>Welcome back!</h1>
-                                    <p className='text-white py-3 '>You can sign in to access with your existing account.</p>
+                                    <p className='text-white py-3 '>You can sign in     o access with your existing account.</p>
                                 </div>
                             </div>
                             <div className='absolute bottom-7 inset-x-0 flex flex-col items-center'>
@@ -127,7 +127,7 @@ const Login = () => {
                                                 minLength='8'
                                                 required />
                                         </div>
-                                        <a href="" className='absolute  right-0  right-0'>  <p className='  text-xs my-3 mr-4 '>Forgot password?</p> </a>
+                                        <a href="" className='absolute right-0'>  <p className='text-xs my-3 mr-4 '>Forgot password?</p> </a>
                                     </div>
                                 </div>
                                 <div className="flex justify-center pt-7 mb-5">
