@@ -5,7 +5,7 @@ import { IconContext } from "react-icons";
 import { FiChevronDown } from 'react-icons/fi';
 
 
-import '../styles/chatBotStyles.css'
+import '../../styles/chatBotStyles.css'
 import "@chatscope/chat-ui-kit-styles/dist/default/styles.min.css";
 import {
     MainContainer,

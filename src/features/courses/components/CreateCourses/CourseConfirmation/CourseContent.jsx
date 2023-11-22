@@ -41,7 +41,7 @@ export const CourseContent = ({ createCourseSectionsList, sectionContentSelector
                                 selectedSubsection?.files?.length === 0 ?
                                     (
                                         <div>
-                                            <Empty  className='mt-6' description={
+                                            <Empty className='mt-6' description={
                                                 <span className='text-gray-500 font-normal '>
                                                     There are no files
                                                 </span>

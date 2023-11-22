@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ActivityComponent } from "../components/ActivityComponent";
+import { ActivityComponent } from "../components/Activity/ActivityComponent";
 import { useParams } from "react-router-dom";
 import { API } from "../../../constant";
 import { useAuthContext } from "../../../context/AuthContext";

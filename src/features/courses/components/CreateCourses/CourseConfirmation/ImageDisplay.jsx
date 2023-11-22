@@ -18,7 +18,7 @@ const ImageDisplay = ({ fileData }) => {
     return (
         <div>
             {imageSrc ? (
-                <img className='h-[30rem] w-full object-cover rounded-md' src={imageSrc} alt={fileData.filename} />
+                <img className='h-[30rem] w-full object-cover rounded-md shadow-md' src={imageSrc} alt={fileData.filename} />
             ) : (
                 <p>Loading image...</p>
             )}

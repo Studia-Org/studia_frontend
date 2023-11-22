@@ -1,19 +1,19 @@
-import { useState, useReducer } from 'react'
-import { ProfessorData } from './ProfessorData';
-import { getToken } from '../../../helpers';
+import { useState } from 'react'
+import { ProfessorData } from '../CoursesInside/ProfessorData';
+import { getToken } from '../../../../helpers';
 import ReactMarkdown from 'react-markdown';
-import { API } from '../../../constant';
-import { useAuthContext } from '../../../context/AuthContext';
-import { useParams } from "react-router-dom";
+import { API } from '../../../../constant';
+import { useAuthContext } from '../../../../context/AuthContext';
+import { useNavigate, useParams } from "react-router-dom";
 import 'filepond/dist/filepond.min.css';
-import '../styles/filepondStyles.css'
+import '../..//styles/filepondStyles.css'
 import { FilePond, registerPlugin } from 'react-filepond';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import Chip from '@mui/material/Chip';
 import Swal from 'sweetalert2';
-
 import { ObjectivesTag } from './ObjectivesTag';
+
 registerPlugin(FilePondPluginImagePreview);
 
 
@@ -22,7 +22,8 @@ export const ActivityComponent = ({ activityData, idQualification }) => {
   const [formData, setFormData] = useState(new FormData());
   const { user } = useAuthContext();
   const { activityId } = useParams();
-
+  let { courseId } = useParams();
+  const navigate = useNavigate();
   const USER_OBJECTIVES = [...new Set(user?.user_objectives?.map((objective) => objective.categories.map((category) => category)).flat() || [])];
 
   function handleFileUpload(file) {
@@ -161,10 +162,16 @@ export const ActivityComponent = ({ activityData, idQualification }) => {
   return (
     <div className='flex flex-col 1.5xl:flex-row items-start 1.5xl:items-start 1.5xl:space-x-24 p-5 sm:p-10'>
       <div className='1.5xl:w-2/4 lg:w-10/12 w-full'>
+        <button className='text-sm flex items-center ' onClick={() => navigate(`/app/courses/${courseId}`)}>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+            <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
+          </svg>
+          <p className='ml-1'>Go back to course</p>
+        </button>
         <div className='relative flex items-center mb-6 bg-white rounded-md p-5 shadow-md mt-5'>
           <div className='flex items-center space-x-3 '>
             {
-              activityData.activity.data.attributes.type === 'Delivery' ?
+              activityData.activity.data.attributes.type === 'task' ?
                 <div className='w-14 h-14 bg-red-500 rounded-md items-center flex justify-center'>
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
@@ -224,17 +231,17 @@ export const ActivityComponent = ({ activityData, idQualification }) => {
       {
         evaluated ?
           <div className='flex flex-col '>
-            < p className='text-xs text-gray-400 mb-1' > Evaluator</ p>
+            <p className='text-xs text-gray-400 mb-1' > Evaluator</ p>
             <ProfessorData professor={{ attributes: activityData.evaluator.data.attributes }} evaluatorFlag={true} />
             <p className='text-xs text-gray-400 mb-1 mt-5'>Your submission</p>
             <div className='mb-14 '>
               {activityData.file.data && activityData.file.data.map(renderFiles)}
             </div>
           </div > :
-          <div className='flex flex-col w-[30rem] mt-5'>
-            <p className='text-xs text-gray-400 mb-1 my-5'>Your submission</p>
+          <div className='flex flex-col w-[30rem] mt-1'>
+            <p className='text-xs text-gray-400 mb-1 mt-5'>Your submission</p>
             <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
-              {activityData.file.data && activityData.file.data.map(renderFiles)}
+              {activityData?.file?.data && activityData?.file?.data.map(renderFiles)}
 
             </div>
             <FilePond

@@ -3,8 +3,8 @@ import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import { Collapse } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
-import '../styles/utils.css'
-import { useAuthContext } from '../../../context/AuthContext';
+import '../../styles/utils.css'
+import { useAuthContext } from '../../../../context/AuthContext';
 
 export const AccordionCourseContent = ({ courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted }) => {
   const [sectionNumber, setSectionNumber] = useState(1);
@@ -60,9 +60,7 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
       (subsectionTemp) => subsectionTemp.id === subsection.id
     );
 
-    console.log(user.user)
-
-    if (user.user.role.type === 'professor' || user.user.role.type === 'admin') {
+    if (user.user?.role.type === 'professor' || user.user?.role.type === 'admin') {
       return (
         <li className="mb-10 ml-8 mt-8 flex items-center" key={index}>
           <span className="absolute flex items-center justify-center w-8 h-8 bg-indigo-500 rounded-full -left-4  ring-white ">

@@ -2,58 +2,34 @@ import { useEffect, useState, React } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { API, BEARER } from "../../../constant";
 import { getToken } from "../../../helpers";
-import {
-  ActivitiesText,
-  ActivitiesLecture,
-  ActivitiesDelivery,
-  ActivitiesPeerReview,
-  ActivitiesQuestionnaire,
-} from "../components/Activities";
-import { ProfessorData } from "../components/ProfessorData";
-import { Nothing404 } from "../components/Nothing404";
-import { Sidebar } from "../../../shared/elements/Sidebar";
-import { Navbar } from "../../../shared/elements/Navbar";
-import { AccordionCourseContent } from "../components/AccordionCourseContent";
-import { ForumClickable } from "../components/ForumClickable";
-
-import { Chatbot } from '../components/ChatBot';
-import { ForumComponent } from '../components/ForumComponent'
-import { QuestionnaireComponent } from '../components/QuestionnaireComponent';
-import { fi } from 'date-fns/locale';
-
-import { set, sub } from "date-fns";
+import ReactMarkdown from "react-markdown";
+import { Tabs, Empty, Button } from "antd";
+import { TaskComponentCard } from "../components/CreateCourses/CourseConfirmation/TaskComponentCard";
+import { ProfessorData } from "../components/CoursesInside/ProfessorData";
+import { AccordionCourseContent } from "../components/CoursesInside/AccordionCourseContent";
+import { ForumClickable } from "../components/CoursesInside/ForumClickable";
+import { Chatbot } from '../components/CoursesInside/ChatBot';
+import { ForumComponent } from '../components/CoursesInside/ForumComponent'
+import { QuestionnaireComponent } from '../components/CoursesInside/QuestionnaireComponent';
+import { CourseParticipants, CourseContent, CourseFiles } from "../components/CoursesInside/TabComponents";
 
 const CourseInside = () => {
-  const [courseInsideSectionType, setcourseInsideSectionType] =
-    useState("course");
-  const [files, setFiles] = useState([]);
   const [posts, setPosts] = useState([]);
   const [forumID, setForumID] = useState([]);
   const [forumFlag, setForumFlag] = useState(false);
   const [questionnaireFlag, setQuestionnaireFlag] = useState(false);
   const [questionnaireAnswers, setQuestionnaireAnswers] = useState([]);
-
   const [subsectionsCompleted, setSubsectionsCompleted] = useState([]);
-  const [subsectionsLandscapePhoto, setSubsectionsLandscapePhoto] =
-    useState(null);
+  const [subsectionsLandscapePhoto, setSubsectionsLandscapePhoto] = useState(null);
   const [courseSubsection, setCourseSubsection] = useState([]);
-  const [courseSection, setCourseSection] = useState([]);
-  const [courseSubsectionQuestionnaire, setCourseSubsectionQuestionnaire] =
-    useState([]);
-  let { courseId } = useParams();
-  const navigate = useNavigate();
-
+  const [courseSection, setCourseSection] = useState();
+  const [courseSubsectionQuestionnaire, setCourseSubsectionQuestionnaire] = useState([]);
   const [courseContentInformation, setCourseContentInformation] = useState([]);
   const [students, setStudents] = useState([]);
   const [professor, setProfessor] = useState([]);
+  let { courseId } = useParams();
+  const navigate = useNavigate();
 
-  const componentMap = {
-    paragraph: ActivitiesText,
-    Delivery: ActivitiesDelivery,
-    lecture: ActivitiesLecture,
-    peer_review: ActivitiesPeerReview,
-    cuestionario: ActivitiesQuestionnaire,
-  };
 
   const fetchPostData = async () => {
     try {
@@ -133,7 +109,7 @@ const CourseInside = () => {
   const fetchCourseInformation = async () => {
     try {
       const response = await fetch(
-        `${API}/courses/${courseId}?populate=sections.subsections.activities,sections.subsections.paragraphs,students.profile_photo,professor.profile_photo,sections.subsections.landscape_photo,sections.subsections.questionnaire`
+        `${API}/courses/${courseId}?populate=sections.subsections.activities,sections.subsections.paragraphs,sections.subsections.files,students.profile_photo,professor.profile_photo,sections.subsections.landscape_photo,sections.subsections.questionnaire`
       );
       const data = await response.json();
       setCourseContentInformation(data?.data?.attributes?.sections?.data ?? []);
@@ -206,90 +182,23 @@ const CourseInside = () => {
     fetchPostData();
   }, []);
 
-  function renderAllActivities(activities) {
-    let Component = null
-    if (activities.type === 'paragraph') {
-      Component = componentMap[activities.type];
-    } else {
-      Component = componentMap[activities.data.attributes.type];
+  const items = [
+    {
+      key: '1',
+      label: 'Course',
+      children: <CourseContent courseContentInformation={courseContentInformation} courseSection={courseSection} courseSubsection={courseSubsection} courseId={courseId} />,
+    },
+    {
+      key: '2',
+      label: 'Files',
+      children: <CourseFiles courseContentInformation={courseContentInformation} courseSection={courseSection} courseSubsection={courseSubsection} />,
+    },
+    {
+      key: '3',
+      label: 'Participants',
+      children: <CourseParticipants students={students} />,
     }
-    if (Component) {
-      return (
-        <Component
-          activitie={activities.data.attributes}
-          activitieID={activities.data.id}
-          courseID={courseId}
-        />
-      );
-    }
-    return null;
-  }
-
-  function RenderTextActivitiesInsideCourse() {
-    const section_ = courseContentInformation.find(
-      (seccion) => seccion.attributes.title === courseSection
-    );
-    const subsection_ = section_.attributes.subsections.data.find(
-      (subseccion) =>
-        subseccion.attributes.title === courseSubsection.attributes.title
-    );
-    var contenido = subsection_.attributes;
-
-    const activities = contenido.activities.data.map((activity) => {
-      return {
-        type: "activity",
-        order: activity.attributes.order,
-        data: activity,
-      };
-    });
-
-    const paragraphs = contenido.paragraphs.data.map((paragraph) => {
-      return {
-        type: "paragraph",
-        order: paragraph.attributes.order,
-        data: paragraph,
-      };
-    });
-
-    const combinedList = [...activities, ...paragraphs];
-    combinedList.sort((a, b) => a.order - b.order);
-
-    return <div className="mb-12">{combinedList.map(renderAllActivities)}</div>;
-  }
-
-  function RenderFilesInsideCourse() {
-    if (files.length === 0) {
-      return <Nothing404 />;
-    }
-  }
-
-  function RenderParticipantsInsideCourseHandler(students) {
-    return (
-      <button
-        className="bg-white rounded flex p-3 items-center space-x-3 shadow w-[14rem]"
-        onClick={() => navigate(`/app/profile/${students.id}/`)}
-      >
-        <img
-          src={students.attributes.profile_photo.data.attributes.url}
-          alt=""
-          className="rounded w-14 h-14"
-        />
-        <p className="font-medium">{students.attributes.name}</p>
-      </button>
-    );
-  }
-
-  function RenderParticipantsInsideCourse() {
-    if (students.data.length === 0) {
-      return <Nothing404 />;
-    } else {
-      return (
-        <div className="flex space-x-8">
-          {students.data.map(RenderParticipantsInsideCourseHandler)}
-        </div>
-      );
-    }
-  }
+  ];
 
   return (
     <>
@@ -301,63 +210,25 @@ const CourseInside = () => {
                 <img
                   src={subsectionsLandscapePhoto}
                   alt=""
-                  className="rounded shadow mt-8"
+                  className="h-[30rem] w-full object-cover rounded-md shadow-md mt-5"
                 />
               ) : null}
               {questionnaireFlag === true && questionnaireAnswers !== undefined ? (
-                <div>
-                  <QuestionnaireComponent
-                    questionnaire={courseSubsectionQuestionnaire}
-                    answers={questionnaireAnswers}
-                    subsectionID={courseSubsection.id}
-                  />
-                </div>
+                <QuestionnaireComponent
+                  questionnaire={courseSubsectionQuestionnaire}
+                  answers={questionnaireAnswers}
+                  subsectionID={courseSubsection.id}
+                />
               ) : (
-                <div>
+                courseSection && courseContentInformation.length > 0 &&
+                <>
                   {courseSubsection.attributes && (
                     <p className="text-xl mt-5 font-semibold">
                       {courseSubsection.attributes.title}
                     </p>
                   )}
-                  <div className="flex flex-row mt-8  items-center space-x-8 ml-5">
-                    <button
-                      className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === "course"
-                        ? "text-black border-b-2 border-black"
-                        : "text-gray-500"
-                        }`}
-                      onClick={() => setcourseInsideSectionType("course")}
-                    >
-                      Course
-                    </button>
-                    <button
-                      className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === "files"
-                        ? "text-black border-b-2 border-black"
-                        : "text-gray-500"
-                        }`}
-                      onClick={() => setcourseInsideSectionType("files")}
-                    >
-                      Files
-                    </button>
-                    <button
-                      className={`font-medium hover:text-black pb-3 ${courseInsideSectionType === "participants"
-                        ? "text-black border-b-2 border-black"
-                        : "text-gray-500"
-                        }`}
-                      onClick={() => setcourseInsideSectionType("participants")}
-                    >
-                      Participants
-                    </button>
-                  </div>
-                  <hr className="h-px  bg-gray-600 border-0 mb-6"></hr>
-                  {courseInsideSectionType === "course" &&
-                    courseContentInformation.length > 0 &&
-                    courseSection.length > 0 &&
-                    RenderTextActivitiesInsideCourse()}
-                  {courseInsideSectionType === "files" &&
-                    RenderFilesInsideCourse()}
-                  {courseInsideSectionType === "participants" &&
-                    RenderParticipantsInsideCourse()}
-                </div>
+                  <Tabs className='font-normal' tabBarStyle={{ borderBottom: '1px solid black' }} defaultActiveKey="1" items={items} />
+                </>
               )}
             </div>
           ) : (

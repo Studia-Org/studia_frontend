@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { v4 as uuid } from 'uuid';
 import ReactMarkdown from 'react-markdown'
-import { useAuthContext } from "../../../context/AuthContext";
+import { useAuthContext } from "../../../../context/AuthContext";
 import { formatDistanceToNow, set } from 'date-fns';
-import { Tag } from '../../../shared/elements/Tag';
+import { Tag } from '../../../../shared/elements/Tag';
 import { AvatarGroup, Avatar } from 'rsuite';
 import { message } from "antd";
-import { getToken } from "../../../helpers";
-import { API } from "../../../constant";
+import { getToken } from "../../../../helpers";
+import { API } from "../../../../constant";
 import { ForumAddThread } from './ForumAddThread';
 import {
   Accordion,
