@@ -10,5 +10,4 @@ export const ACTIVITY_CATEGORIES = {
     "Project": "purple",
     "Exam": "orange",
     "Quiz": "pink",
-    "Other": "grey"
 };

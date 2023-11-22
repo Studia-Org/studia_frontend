@@ -2,7 +2,7 @@ import { useEffect, useState, React } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTimeout, useWindowSize } from 'react-use';
-import  ModalCreateObjective  from './ModalCreateObjective';
+import ModalCreateObjective from './ModalCreateObjective';
 import 'react-loading-skeleton/dist/skeleton.css'
 import '../styles/utils.css'
 import { getToken } from '../../../helpers';
@@ -32,7 +32,7 @@ const CoursesHome = () => {
 
 
   const navigate = useNavigate();
-  
+
   const variants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0 },
@@ -45,11 +45,11 @@ const CoursesHome = () => {
 
 
   useEffect(() => {
-    if(!confettiExplode) return
+    if (!confettiExplode) return
     const confettiDuration = 10000;
     setConfettiActive(true);
     const confettiTimeout = setTimeout(() => {
-        setConfettiActive(false)
+      setConfettiActive(false)
     }, confettiDuration);
     return () => {
       clearTimeout(confettiTimeout);
@@ -100,7 +100,7 @@ const CoursesHome = () => {
       const response = await fetch(`${API}/users/${user.id}?populate=user_objectives`);
       const data = await response.json();
       setObjectives(data.user_objectives)
-      setOpenObjectivesModal(data.user_objectives.length === 0)      
+      setOpenObjectivesModal(data.user_objectives.length === 0)
     } catch (error) {
       console.error(error);
     }
@@ -254,7 +254,7 @@ const CoursesHome = () => {
             obj.id === updatedObjective.id ? updatedObjective : obj
           );
         });
-       
+
         Swal.mixin({
           toast: true,
           position: 'top-end',
@@ -271,7 +271,7 @@ const CoursesHome = () => {
               }, 10000);
             }
           },
-        
+
         }).fire({
           icon: 'success',
           title: 'Status updated successfully'
@@ -303,17 +303,17 @@ const CoursesHome = () => {
       </div>
     )
   }
-  console.log({openObjectivesModal})
+  console.log({ openObjectivesModal })
   return (
     <>
-      <ModalCreateObjective key={openObjectivesModal} openModal={openObjectivesModal}  />
-     {
-      confettiExplode ?
-      <div className='w-screen absolute -ml-80 -mt-32 min-h-screen'>
-        {renderConfeti()}
-        </div>
-        :
-        null
+      <ModalCreateObjective key={openObjectivesModal} openModal={openObjectivesModal} />
+      {
+        confettiExplode ?
+          <div className='w-screen absolute -ml-80 -mt-32 min-h-screen'>
+            {renderConfeti()}
+          </div>
+          :
+          null
       }
       <div className=' max-h-full rounded-tl-3xl bg-[#e7eaf886] grid w-full'>
         <div className=' sm:px-12 px-6  font-bold text-2xl flex flex-wrap min-w-full relative flex-col grid-home:flex-row '>
@@ -372,7 +372,7 @@ const CoursesHome = () => {
                                   </div>
                                 </div>
                             }
-                           
+
                           </div>
                         </>
                         :
