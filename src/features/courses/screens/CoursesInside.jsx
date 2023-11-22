@@ -176,7 +176,7 @@ const CourseInside = () => {
         },
       } = courseContentInformation[0];
       if (
-        subsecciones[0].attributes.activities.data[0].attributes.type ===
+        subsecciones[0]?.attributes?.activities?.data[0]?.attributes?.type ===
         "questionnaire"
       ) {
         setCourseSubsection(subsecciones[0]);
