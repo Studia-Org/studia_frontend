@@ -2,6 +2,7 @@ import { useEffect, useState, React } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTimeout, useWindowSize } from 'react-use';
+import  ModalCreateObjective  from './ModalCreateObjective';
 import 'react-loading-skeleton/dist/skeleton.css'
 import '../styles/utils.css'
 import { getToken } from '../../../helpers';
@@ -27,6 +28,7 @@ const CoursesHome = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
   const [dailyTasks, setDailyTasks] = useState([]);
+  const [openObjectivesModal, setOpenObjectivesModal] = useState(false);
 
 
   const navigate = useNavigate();
@@ -98,6 +100,7 @@ const CoursesHome = () => {
       const response = await fetch(`${API}/users/${user.id}?populate=user_objectives`);
       const data = await response.json();
       setObjectives(data.user_objectives)
+      setOpenObjectivesModal(data.user_objectives.length === 0)      
     } catch (error) {
       console.error(error);
     }
@@ -300,8 +303,10 @@ const CoursesHome = () => {
       </div>
     )
   }
+  console.log({openObjectivesModal})
   return (
     <>
+      <ModalCreateObjective key={openObjectivesModal} openModal={openObjectivesModal}  />
      {
       confettiExplode ?
       <div className='w-screen absolute -ml-80 -mt-32 min-h-screen'>
