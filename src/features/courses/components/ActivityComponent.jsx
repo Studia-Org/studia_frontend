@@ -19,6 +19,12 @@ registerPlugin(FilePondPluginImagePreview);
 
 export const ActivityComponent = ({ activityData, idQualification }) => {
   const evaluated = activityData.qualification ? true : false;
+  const type = activityData.activity.data.attributes.type;
+  let PeerReview = undefined
+  if (type === 'Peer Review') {
+    PeerReview = activityData?.PeerReviewQualification
+  }
+  console.log(PeerReview);
   const [formData, setFormData] = useState(new FormData());
   const { user } = useAuthContext();
   const { activityId } = useParams();
@@ -37,7 +43,8 @@ export const ActivityComponent = ({ activityData, idQualification }) => {
     try {
       let response2 = undefined;
       let files = []
-      if (activityData.file.data !== null) {
+      console.log(activityData);
+      if (activityData.file !== undefined && activityData?.file?.data !== null) {
         files = activityData.file.data.map((file) => file.id);
       }
       files = files.concat(result.map((file) => file.id));
@@ -83,8 +90,6 @@ export const ActivityComponent = ({ activityData, idQualification }) => {
     }
   }
   async function sendData() {
-
-
     try {
 
       const response = await fetch(`${API}/upload`, {
@@ -234,7 +239,7 @@ export const ActivityComponent = ({ activityData, idQualification }) => {
           <div className='flex flex-col w-[30rem] mt-5'>
             <p className='text-xs text-gray-400 mb-1 my-5'>Your submission</p>
             <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
-              {activityData.file.data && activityData.file.data.map(renderFiles)}
+              {activityData.file?.data && activityData?.file?.data?.map(renderFiles)}
 
             </div>
             <FilePond
@@ -266,6 +271,14 @@ export const ActivityComponent = ({ activityData, idQualification }) => {
                             rounded ml-auto hover:bg-blue-800 duration-150">
               Submit
             </button>
+            {type === 'Peer Review' && PeerReview !== undefined ?
+              <section>
+                <h3 className='font-semibold text-2xl max-w-[calc(100%-7rem)] sm:max-w-[calc(100%-9.5rem)]'>Peer Review</h3>
+                <p className='text-lg mb-3 mt-5'>Correct {PeerReview.data.attributes.user.data.attributes.username}'s task!</p>
+                {PeerReview.data.attributes.file.data.map(renderFiles)}
+              </section>
+              : null
+            }
           </div>
       }
     </div >

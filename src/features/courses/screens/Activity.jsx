@@ -22,7 +22,9 @@ const Activity = () => {
           `&filters[activity][id]=${activityId}` +
           `&populate[user][fields][0]=*` +
           `&populate[evaluator][populate][profile_photo][fields][0]=*` +
-          `&filters[user][id]=${user.id}`)
+          `&filters[user][id]=${user.id}` +
+          `&populate[PeerReviewQualification][populate][file][fields][0]=*` +
+          `&populate[PeerReviewQualification][populate][user][fields][0]=username`)
       const data = await response.json();
 
       if (data.data.length > 0) {
