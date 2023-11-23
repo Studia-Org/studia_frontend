@@ -62,37 +62,39 @@ const CoursesHome = () => {
 
   const fetchCoursesCards = async () => {
     setIsLoading(true);
-    if (user.role_str === 'professor') {
-      try {
-        const response = await fetch(`${API}/courses?populate=*,professor.profile_photo,course_tags,cover,students.profile_photo`);
-        const data = await response.json();
-        const coursesFiltered = data.data.filter((course) => course.attributes.professor.data.id === user.id)
-        setCourses(coursesFiltered ?? []);
-        setIsLoading(false);
-      } catch (error) {
-        console.error(error);
+    try {
+      let endpoint = `${API}/courses?populate=*,professor.profile_photo,course_tags,cover,students.profile_photo`;
+      if (user.role_str === 'student') {
+        endpoint = `${API}/users/${user?.id}?populate=courses.cover,courses.students.profile_photo,courses.professor,courses.professor.profile_photo,courses.course_tags`;
       }
-    } else if (user.role_str === 'student') {
-      try {
-        const response = await fetch(`${API}/users/${user?.id}?populate=courses.cover,courses.students.profile_photo,courses.professor,courses.professor.profile_photo,courses.course_tags`);
-        const data = await response.json();
-        setCourses(data.courses ?? []);
-        setIsLoading(false);
-      } catch (error) {
-        console.error(error);
-      }
-    } else if (user.role_str === 'admin') {
-      try {
-        const response = await fetch(`${API}/courses?populate=*,professor.profile_photo,course_tags,cover,students.profile_photo`);
-        const data = await response.json();
-        setCourses(data.data ?? []);
-        setIsLoading(false);
-      } catch (error) {
-        console.error(error);
-      }
+      const response = await fetch(endpoint);
+      const data = await response.json();
+      const coursesFiltered = filterCoursesByRole(data, user);
+      const finalCourses = coursesFiltered.map(mapCourseData);
+      setCourses(finalCourses ?? []);
+      setIsLoading(false);
+    } catch (error) {
+      console.error(error);
     }
-
   };
+  const filterCoursesByRole = (data, user) => {
+    if (user.role_str === 'professor' || user.role_str === 'admin') {
+      return data.data.filter(course => course.attributes.professor.data.id === user.id);
+    } else if (user.role_str === 'student') {
+      return data.courses;
+    }
+  };
+  const mapCourseData = course => ({
+    id: course.id,
+    title: course.title || course.attributes.title,
+    cover: course.cover ? course.cover.url : course.attributes.cover.data.attributes.url,
+    professor_name: course.professor ? course.professor.name : course.attributes.professor.data.attributes.name,
+    tags: course?.tags || course.attributes?.tags,
+    professor_profile_photo: course.professor ? course.professor.profile_photo.url : course.attributes.professor.data.attributes.profile_photo.data.attributes.url,
+    students: course.students || course.attributes.students.data
+  });
+
+
   const fetchUserObjectives = async () => {
     try {
       const response = await fetch(`${API}/users/${user.id}?populate=user_objectives`);
@@ -142,12 +144,6 @@ const CoursesHome = () => {
     }
   }, [isLoading, user]);
 
-  function RenderCourse(course) {
-    return (
-      <CoursesCardHome course={course} />
-    )
-  }
-
   const speaker = (props) => {
     return (
       <Popover>
@@ -155,8 +151,6 @@ const CoursesHome = () => {
       </Popover>
     )
   }
-
-
 
   function RenderDailyTasks(subsection) {
     var colorStyle = undefined;
@@ -283,7 +277,7 @@ const CoursesHome = () => {
     )
   }
 
-  
+
   return (
     <>
       {
@@ -302,12 +296,16 @@ const CoursesHome = () => {
                 <MoonLoader color="#363cd6" size={80} />
               </div> :
               <>
-                <div className={`flex flex-col ${user.role.type === 'student' && 'grid-home:max-w-[calc(100%-500px)]'} w-full`}>
+                <div className={`flex flex-col ${user.role_str === 'student' && 'grid-home:max-w-[calc(100%-500px)]'} w-full`}>
                   <p className='py-11 pb-6 font-bold text-xl'>Recent Courses</p>
                   <motion.div id='course-motion-div'
                     className='flex flex-wrap gap-x-[5%] gap-y-[16px]  max-w-full justify-center md:justify-start '
                     initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
-                    {courses && courses.map(RenderCourse)}
+                    {
+                      courses && courses.map((course) => (
+                        <CoursesCardHome key={course.id} course={course} />
+                      ))
+                    }
                   </motion.div>
                 </div>
 

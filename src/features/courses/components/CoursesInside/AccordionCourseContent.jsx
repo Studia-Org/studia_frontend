@@ -6,10 +6,10 @@ import { CaretRightOutlined } from '@ant-design/icons';
 import '../../styles/utils.css'
 import { useAuthContext } from '../../../../context/AuthContext';
 
-export const AccordionCourseContent = ({ courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted }) => {
+export const AccordionCourseContent = ({ courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted }) => {
   const [sectionNumber, setSectionNumber] = useState(1);
   const { Panel } = Collapse;
-  const user = useAuthContext();
+  const { user } = useAuthContext();
 
   function handleSections(tituloSeccion, subsection) {
     if (
@@ -26,6 +26,7 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
     setCourseSubsection(subsection);
     setCourseSection(tituloSeccion);
     setForumFlag(false);
+    setSettingsFlag(false);
   }
 
   function selectFaseSectionContent(str) {
@@ -60,7 +61,7 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
       (subsectionTemp) => subsectionTemp.id === subsection.id
     );
 
-    if (user.user?.role.type === 'professor' || user.user?.role.type === 'admin') {
+    if (user?.role_str === 'professor' || user?.role_str === 'admin') {
       return (
         <li className="mb-10 ml-8 mt-8 flex items-center" key={index}>
           <span className="absolute flex items-center justify-center w-8 h-8 bg-indigo-500 rounded-full -left-4  ring-white ">
@@ -237,13 +238,16 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
           header={
             <div className='flex items-center py-4 '>
               <div className='ml-2 items-center flex'>
-                <div className='w-20 h-20 items-center flex text-sm'>
-                  <CircularProgressbar className='font-medium text-sm' value={percentageFinished} text={`${percentageFinished}%`} styles={buildStyles({
-                    textSize: '22px',
-                    pathColor: '#6366f1',
-                    textColor: 'black',
-                  })} />
-                </div>
+                {
+                  user?.role_str === 'student' &&
+                  <div className='w-20 h-20 items-center flex text-sm'>
+                    <CircularProgressbar className='font-medium text-sm' value={percentageFinished} text={`${percentageFinished}%`} styles={buildStyles({
+                      textSize: '22px',
+                      pathColor: '#6366f1',
+                      textColor: 'black',
+                    })} />
+                  </div>
+                }
               </div>
               <div className='flex flex-col ml-9 w-full text-left'>
                 <p className='text-sm mb-1'>Section {sectionNumber}</p>

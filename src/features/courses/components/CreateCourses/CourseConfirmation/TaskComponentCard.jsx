@@ -1,12 +1,10 @@
 import React from 'react'
 import { useAuthContext } from '../../../../../context/AuthContext'
-import { sv } from 'date-fns/locale'
-import CourseInside from '../../../screens/CoursesInside'
 import { useNavigate } from 'react-router-dom'
 
 export const TaskComponentCard = ({ task, setVisibilityTask, context, courseId }) => {
     const deadlineOnTime = new Date(task.attributes.deadline) > new Date()
-    const user = useAuthContext()
+    const { user } = useAuthContext()
     const navigate = useNavigate()
 
     function handleClickButton() {
@@ -57,7 +55,7 @@ export const TaskComponentCard = ({ task, setVisibilityTask, context, courseId }
                 {svgType(task.attributes.type)}
             </div>
             <p className='font-medium text-xl ml-20'>{task.attributes.title}</p>
-            {user.user.role.type !== 'professor' && user.user.role.type !== 'admin' && (
+            {user.role_str !== 'professor' && user.role_str !== 'admin' && (
                 deadlineOnTime ?
                     <div className='ml-auto bg-green-700 rounded-md p-2 px-8 text-center '>
                         <p className='text-base font-medium text-white'>{task.attributes.deadline}</p>
