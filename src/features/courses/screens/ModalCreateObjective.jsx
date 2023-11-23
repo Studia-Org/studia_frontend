@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { Modal, Button } from 'rsuite';
 import { motion } from 'framer-motion';
-import { ACTIVITY_CATEGORIES } from '../../../constant';
+import { ACTIVITY_CATEGORIES, API } from '../../../constant';
 import './styles/modalObjective.css'
-export default function ModalCreateObjective({ openModal }) {
+import { useAuthContext } from '../../../context/AuthContext';
+import Swal from 'sweetalert2';
+export default function ModalCreateObjective({ openModal, setObjectives }) {
     const [open, setOpen] = useState(openModal);
     const [goals, setGoals] = useState([]);
     const [user_objectives, setUserObjectives] = useState([]);
+    const { user } = useAuthContext()
+
     function handleClose() {
         setOpen(false);
     }
@@ -25,6 +29,42 @@ export default function ModalCreateObjective({ openModal }) {
             setUserObjectives([...user_objectives, objective]);
         }
     }
+
+    function sendData() {
+        goals.forEach((goal) => {
+            const data = {
+                data: {
+                    objective: goal,
+                    categories: user_objectives,
+                    user: user.id
+                }
+            }
+            fetch(API + '/user-objectives', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify(data),
+
+            }).then(response => response.json())
+                .then(data => {
+                    console.log(data.data.id);
+                    setOpen(false);
+                    setObjectives(prevState => [...prevState, data.data.attributes]);
+                })
+                .catch((error) => {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Something went wrong!',
+                        icon: 'error',
+                        confirmButtonText: 'Try again'
+                    })
+                })
+
+        })
+    }
+
 
     return (
         <Modal size='lg' backdrop="static" className='font-Poppins p-3 h-3/4' open={open} onClose={handleClose}>
@@ -67,7 +107,7 @@ export default function ModalCreateObjective({ openModal }) {
                                 {goal}
                                 <button onClick={() => { setGoals(goals.filter((item) => item !== goal)) }}
                                     className='float-right text-red-500 hover:text-red-600 hover:scale-110'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="#ffe5e5" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="#ffe5e5" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
 
@@ -104,7 +144,10 @@ export default function ModalCreateObjective({ openModal }) {
 
             </Modal.Body>
             <Modal.Footer className='mt-4'>
-                <button className=' text-white absolute end-2.5 bottom-2.5 bg-emerald-600 hover:scale-95 hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm px-4 py-2 '>
+                <button onClick={sendData}
+                    disabled={user_objectives.length === 0 || goals.length === 0}
+                    className=' text-white absolute end-2.5 bottom-2.5 bg-emerald-600 hover:scale-95 disabled:bg-gray-500 disabled:cursor-not-allowed
+                     hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm px-4 py-2 '>
                     Add my own objectives!
                 </button>
             </Modal.Footer>

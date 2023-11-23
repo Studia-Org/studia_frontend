@@ -28,7 +28,7 @@ export const CoursesCardHome = ({ course }) => {
 
     function renderCourseTags(tag) {
         return (
-            <div className=' bg-blue-200 p-1 h-6 rounded-lg text-blue-800 my-1 mr-3'>
+            <div key={tag} className=' bg-blue-200 p-1 h-6 rounded-lg text-blue-800 my-1 mr-3'>
                 <p className='font-medium text-xs'>{tag}</p>
             </div>
         )
@@ -36,7 +36,7 @@ export const CoursesCardHome = ({ course }) => {
 
     return (
         <>
-            <Link to={`/app/courses/${courseID}`}>
+            <Link to={`/app/courses/${courseID}`} key={courseID}>
                 <div className="2xl:w-[24rem] mb-8 2xl:h-[26rem] lg:w-[20rem] lg:h-[24rem] md:w-[16rem] md:h-[22rem] w-[22rem] h-[24rem] bg-white rounded-3xl shadow-md cursor-pointer shadow2 relative flex flex-col">
                     <img className="rounded-t-3xl w-full h-[13rem] object-fill" src={courseCover} alt="" />
                     <div className="p-3 flex flex-col ml-5 mr-5 h-full">

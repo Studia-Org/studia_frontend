@@ -147,7 +147,7 @@ const CoursesHome = () => {
 
   function RenderCourse(course) {
     return (
-      <CoursesCardHome course={course} />
+      <CoursesCardHome key={course.id} course={course} />
     )
   }
 
@@ -238,6 +238,7 @@ const CoursesHome = () => {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes'
     }).then(async (result) => {
+
       if (result.isConfirmed) {
         const updateUserObjectives = await fetch(`${API}/user-objectives/${props.id}`, {
           method: 'PUT',
@@ -245,7 +246,7 @@ const CoursesHome = () => {
             Authorization: `Bearer ${getToken()}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ data: { completed: !props.completed } }),
+          body: JSON.stringify({ data: { completed: !props.completed, id: props.id } }),
         });
         const data = await updateUserObjectives.json();
         const updatedObjective = { ...props, completed: !props.completed };
@@ -286,7 +287,7 @@ const CoursesHome = () => {
 
   function renderObjectives(objective) {
     return (
-      <div>
+      <div key={objective.id}>
         <div className='bg-white rounded-2xl shadow-md flex  min-w-[450px] p-5 md:w-[28rem] lg:w-[30rem]'>
           <p className='font-medium text-base'>{objective.objective}</p>
           {
@@ -303,10 +304,9 @@ const CoursesHome = () => {
       </div>
     )
   }
-  console.log({ openObjectivesModal })
   return (
     <>
-      <ModalCreateObjective key={openObjectivesModal} openModal={openObjectivesModal} />
+      <ModalCreateObjective key={openObjectivesModal} openModal={openObjectivesModal} setObjectives={setObjectives} />
       {
         confettiExplode ?
           <div className='w-screen absolute -ml-80 -mt-32 min-h-screen'>
