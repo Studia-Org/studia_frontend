@@ -100,7 +100,8 @@ const CoursesHome = () => {
       const response = await fetch(`${API}/users/${user.id}?populate=user_objectives`);
       const data = await response.json();
       setObjectives(data.user_objectives)
-      setOpenObjectivesModal(data.user_objectives.length === 0)
+
+      if (user.role_str !== 'professor' && user.role_str !== 'admin') setOpenObjectivesModal(data.user_objectives.length === 0)
     } catch (error) {
       console.error(error);
     }

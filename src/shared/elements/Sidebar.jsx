@@ -53,6 +53,16 @@ export const Sidebar = (props) => {
       sidebar.classList.add("-translate-x-full");
     }
   });
+  window.addEventListener("scroll", function (event) {
+
+    const sidebar = document.getElementById("default-sidebar");
+    if (sidebar === null || sidebar === undefined) return;
+    if (window.innerWidth < 1280) {
+      sidebar.style.height = "fit-content";
+      sidebar.style.backgroundColor = "transparent";
+      sidebar.classList.add("-translate-x-full");
+    }
+  });
   window.addEventListener("click", function (event) {
     if (
       event.target.matches("#button-sidebar") ||
@@ -77,7 +87,7 @@ export const Sidebar = (props) => {
         aria-controls="default-sidebar"
         type="button"
         onClick={handleClick}
-        className="inline-flex z-10 items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg xl:hidden hover:bg-gray-100 
+        className="z-10 items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg xl:hidden hover:bg-gray-100 
                 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
       >
         <span className="sr-only">Open sidebar</span>
@@ -104,7 +114,7 @@ export const Sidebar = (props) => {
         aria-label="Sidebar"
       >
         <div className="h-full py-4 overflow-y-auto ">
-          <ul className="space-y-96 font-medium w-48 py-12 ">
+          <ul className="space-y-96 font-medium w-48 py-12 ml-3 xl:ml-0 ">
             <Link to={"/app/courses"} style={{ textDecoration: "none" }}>
               <li
                 className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all  rounded-lg ${Object.keys(iconProps.courses).length > 0
