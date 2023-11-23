@@ -70,6 +70,7 @@ const CoursesHome = () => {
       const response = await fetch(endpoint);
       const data = await response.json();
       const coursesFiltered = filterCoursesByRole(data, user);
+      console.log(coursesFiltered[3].attributes.cover);
       const finalCourses = coursesFiltered.map(mapCourseData);
       setCourses(finalCourses ?? []);
       setIsLoading(false);
@@ -87,7 +88,7 @@ const CoursesHome = () => {
   const mapCourseData = course => ({
     id: course.id,
     title: course.title || course.attributes.title,
-    cover: course.cover ? course.cover.url : course.attributes.cover.data.attributes.url,
+    cover: course.cover ? course.cover.url : course.attributes.cover.data?.attributes.url,
     professor_name: course.professor ? course.professor.name : course.attributes.professor.data.attributes.name,
     tags: course?.tags || course.attributes?.tags,
     professor_profile_photo: course.professor ? course.professor.profile_photo.url : course.attributes.professor.data.attributes.profile_photo.data.attributes.url,

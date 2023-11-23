@@ -18,7 +18,7 @@ export const CoursesCardHome = ({ course }) => {
         <>
             <Link to={`/app/courses/${course.id}`}>
                 <div className="2xl:w-[24rem] mb-8 2xl:h-[26rem] lg:w-[20rem] lg:h-[24rem] md:w-[16rem] md:h-[22rem] w-[22rem] h-[24rem] bg-white rounded-3xl shadow-md cursor-pointer shadow2 relative flex flex-col">
-                    <img className="rounded-t-3xl w-full h-[13rem] object-fill" src={course.cover} alt="" />
+                    <img className="rounded-t-3xl w-full min-h-[12rem] max-h-[12rem] object-cover" src={course.cover} alt="" />
                     <div className="p-3 flex flex-col ml-5 mr-5 h-full">
                         <div className='flex flex-wrap flex-grow '>
                             {course.tags?.map(renderCourseTags)}

@@ -110,7 +110,7 @@ const CourseInside = () => {
   const fetchCourseInformation = async () => {
     try {
       const response = await fetch(
-        `${API}/courses/${courseId}?populate=sections.subsections.activities,sections.subsections.paragraphs,sections.subsections.files,students.profile_photo,professor.profile_photo,sections.subsections.landscape_photo,sections.subsections.questionnaire`
+        `${API}/courses/${courseId}?populate=sections.subsections.activities,cover,sections.subsections.paragraphs,sections.subsections.files,students.profile_photo,professor.profile_photo,sections.subsections.landscape_photo,sections.subsections.questionnaire`
       );
       const data = await response.json();
       setCourseBasicInformation(data?.data?.attributes ?? []);

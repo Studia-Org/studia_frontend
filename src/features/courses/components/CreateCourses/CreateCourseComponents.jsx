@@ -1,28 +1,25 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import 'filepond/dist/filepond.min.css';
 import '../../styles/filepondStyles.css'
 import { message } from "antd";
-import { FilePond, registerPlugin } from 'react-filepond';
 import 'react-tagsinput/react-tagsinput.css'
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
-import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import { CreateCourseSectionsList } from './CourseSections/CreateCourseSectionsList';
 import { AccordionCourse } from './CourseConfirmation/AccordionCourse';
-import { SortableContext, verticalListSortingStrategy, useSortable, arrayMove } from '@dnd-kit/sortable';
+import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { CourseContent } from './CourseConfirmation/CourseContent';
 import { TaskContent } from './CourseConfirmation/TaskContent';
-import { Empty, Select, Popconfirm, Button } from 'antd';
+import { Empty, Popconfirm, Button } from 'antd';
 import { ButtonCreateCourse } from './CourseConfirmation/ButtonCreateCourse';
 import SelectProfessor from './CourseInfo/SelectProfessor';
-import { MoonLoader } from 'react-spinners';
 
 import TagsInput from 'react-tagsinput'
 
-
-
+import { FilePond, registerPlugin } from 'react-filepond';
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
+import 'filepond/dist/filepond.min.css';
 registerPlugin(FilePondPluginImagePreview);
 
 const variants = {
@@ -120,7 +117,7 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
         <label htmlFor="message" className="block mb-4 text-sm font-medium text-gray-900 mt-8">
           Tags
         </label>
-        <TagsInput value={courseBasicInfo.tags} onChange={(e) => handleChange('tags', e) } />
+        <TagsInput value={courseBasicInfo.tags} onChange={(e) => handleChange('tags', e)} />
       </div>
 
 
