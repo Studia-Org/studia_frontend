@@ -9,9 +9,8 @@ export const TaskComponentCard = ({ task, setVisibilityTask, context, courseId }
 
     function handleClickButton() {
         if (context === 'coursesInside') {
-            if (task.attributes.type === 'task') {
-                navigate(`/app/courses/${courseId}/activity/${task.id}`)
-            }
+
+            navigate(`/app/courses/${courseId}/activity/${task.id}`)
         } else {
             setVisibilityTask(true)
         }

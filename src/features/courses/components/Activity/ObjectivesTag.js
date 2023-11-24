@@ -18,3 +18,17 @@ export function ObjectivesTag({ category, USER_OBJECTIVES }) {
         </div>
     )
 }
+
+export default function ObjectivesTags({ categories, category, USER_OBJECTIVES }) {
+    return (
+        <section className="flex flex-wrap gap-x-2">
+            {
+                categories?.map((category) => {
+                    return (
+                        <ObjectivesTag key={category} category={category} USER_OBJECTIVES={USER_OBJECTIVES} />
+                    )
+                })
+            }
+        </section>
+    )
+}

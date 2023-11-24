@@ -72,7 +72,6 @@ const CoursesHome = () => {
       const response = await fetch(endpoint);
       const data = await response.json();
       const coursesFiltered = filterCoursesByRole(data, user);
-      console.log(coursesFiltered[3].attributes.cover);
       const finalCourses = coursesFiltered.map(mapCourseData);
       setCourses(finalCourses ?? []);
       setIsLoading(false);

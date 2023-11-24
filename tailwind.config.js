@@ -113,13 +113,13 @@ module.exports = {
       md: "770px",
       // => @media (min-width: 768px) { ... }
       md2: "892px",
+      md3: "945px",
 
       lg: "1024px",
       // => @media (min-width: 1024px) { ... }
 
       xl: "1280px",
       // => @media (min-width: 1280px) { ... }
-
       "2xl": "2000px",
       "1.5xl": "1440px",
 

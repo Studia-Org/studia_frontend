@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ActivityComponent } from "../components/Activity/ActivityComponent";
+import PeerReviewComponent from "../components/Activity/PeerReviewComponent.jsx";
 import { useParams } from "react-router-dom";
 import { API } from "../../../constant";
 import { useAuthContext } from "../../../context/AuthContext";
@@ -28,7 +29,6 @@ const Activity = () => {
       const data = await response.json();
 
       if (data.data.length > 0) {
-        console.log(data.data[0]["id"]);
         setUserQualification({ activity: data.data[0].attributes, idQualification: data.data[0]["id"] });
       } else {
         const activityData = await fetch(
@@ -47,6 +47,18 @@ const Activity = () => {
     }
   };
 
+  function selectTypeOfActivity() {
+    console.log(userQualification)
+    const type = userQualification.activity.activity.data.attributes.type;
+    switch (type) {
+      case "Peer Review":
+        return <PeerReviewComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} />;
+      default:
+        return <ActivityComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} />;
+
+    }
+
+  }
   useEffect(() => {
     fetchUserQualificationsData();
   }, [user]);
@@ -54,7 +66,7 @@ const Activity = () => {
   return (
     <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] grid '>
       {userQualification.activity && (
-        <ActivityComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} />
+        selectTypeOfActivity()
       )}
     </div>
   )

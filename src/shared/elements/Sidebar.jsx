@@ -40,16 +40,12 @@ export const Sidebar = (props) => {
   function handleClick() {
     const sidebar = document.getElementById("default-sidebar");
     if (sidebar === null || sidebar === undefined) return;
-    sidebar.style.minHeight = "100vh";
-    sidebar.style.backgroundColor = "white";
     sidebar.classList.toggle("-translate-x-full");
   }
   window.addEventListener("resize", function (event) {
     const sidebar = document.getElementById("default-sidebar");
     if (sidebar === null || sidebar === undefined) return;
     if (window.innerWidth > 1280) {
-      sidebar.style.height = "fit-content";
-      sidebar.style.backgroundColor = "transparent";
       sidebar.classList.add("-translate-x-full");
     }
   });
@@ -58,8 +54,6 @@ export const Sidebar = (props) => {
     const sidebar = document.getElementById("default-sidebar");
     if (sidebar === null || sidebar === undefined) return;
     if (window.innerWidth < 1280) {
-      sidebar.style.height = "fit-content";
-      sidebar.style.backgroundColor = "transparent";
       sidebar.classList.add("-translate-x-full");
     }
   });
@@ -73,8 +67,6 @@ export const Sidebar = (props) => {
     if (!event.target.matches(".inline-flex")) {
       const sidebar = document.getElementById("default-sidebar");
       if (sidebar === null || sidebar === undefined) return;
-      sidebar.style.height = "fit-content";
-      sidebar.style.backgroundColor = "transparent";
       sidebar.classList.add("-translate-x-full");
     }
   });
@@ -110,7 +102,7 @@ export const Sidebar = (props) => {
 
       <aside
         id="default-sidebar"
-        className="absolute z-[1000] sm:pl-16 top-0 left-0 w-80 md:mt-20 transition-transform -translate-x-full xl:translate-x-0"
+        className="absolute min-h-[calc(100vh-8rem)] bg-white z-[1000] sm:pl-16 top-0 left-0 w-80 md:mt-20 transition-transform -translate-x-full xl:translate-x-0"
         aria-label="Sidebar"
       >
         <div className="h-full py-4 overflow-y-auto ">
