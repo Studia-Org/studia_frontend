@@ -28,11 +28,13 @@ export const AppRoutes = () => {
 
     else if (authenticated)
         return (
-            <div className='font-Poppins  bg-white '>
+            <div className='font-Poppins  bg-white flex flex-col '>
                 <Navbar />
-                <Sidebar section={path} />
-                <div className='flex min-h-[calc(100vh-8rem)] xl:ml-80 xl:min-w-[calc(100vw-21rem)] bg-white'>
-                    {element}
+                <div className='flex'>
+                    <Sidebar section={path} />
+                    <div className='flex min-h-[calc(100vh-8rem)] overflow-x-auto xl:ml-80 xl:min-w-[calc(100vw-21rem)] bg-white max-w-[100vw]'>
+                        {element}
+                    </div>
                 </div>
             </div>
         )

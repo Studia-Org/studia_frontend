@@ -2,33 +2,6 @@ import React, { useState } from 'react';
 import './Rubrica.css';
 
 const Rubrica = () => {
-    const [rubricaNombre, setRubricaNombre] = useState('');
-    const [criterios, setCriterios] = useState([
-        { nombre: 'Creatividad', puntuacion: 8 },
-        { nombre: 'Presentación', puntuacion: 6 },
-        { nombre: 'Contenido', puntuacion: 9 },
-    ],);
-
-    const handleNombreChange = (event) => {
-        setRubricaNombre(event.target.value);
-    };
-
-    const handleCriterioChange = (index, key, value) => {
-        const newCriterios = [...criterios];
-        newCriterios[index][key] = value;
-        setCriterios(newCriterios);
-    };
-
-    const handlePuntuacionChange = (index, value) => {
-        handleCriterioChange(index, 'puntuacion', value);
-    };
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        // Aquí puedes enviar la información de la rubrica al servidor o hacer lo que necesites
-        console.log({ rubricaNombre, criterios });
-    };
-
     return (
         <table className='w-full min-h-[400px] border-collapse border-2 bg-white border-gray-300 '>
             <caption className='text-xl mb-3'>Task Evaluation Criteria</caption>

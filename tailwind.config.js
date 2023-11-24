@@ -159,7 +159,6 @@ module.exports = {
   plugins: [
     require("@headlessui/tailwindcss"),
     require("@tailwindcss/typography"),
-    require("@tailwindcss/line-clamp"),
     require('flowbite/plugin')
   ],
 };

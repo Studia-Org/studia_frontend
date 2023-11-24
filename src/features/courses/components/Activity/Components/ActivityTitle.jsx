@@ -29,13 +29,12 @@ function ActivityTitle({ type, title, evaluated, qualification }) {
                                 :
                                 <div className='w-14 h-14 bg-red-800 rounded-md'></div>
                 }
-                <h3 className='flex font-semibold text-2xl max-w-[calc(100%-7rem)] sm:max-w-[calc(100%-9.5rem)]'>{title}</h3>
+                <h3 className={`flex font-semibold text-2xl ${evaluated ? 'max-w-[calc(100%-7rem)]' : ''}  sm:max-w-[calc(100%-9.5rem)]`}>{title}</h3>
 
             </div>
             {
                 evaluated ?
                     <div className='absolute right-0 bg-green-700 rounded-r-md max-w-[3.5rem] sm:max-w-[6rem] sm:w-24   w-14 ml-auto flex flex-col h-full justify-center text-center'>
-
                         <p className='text-white font-semibold max-w-[100%] text-xl'>{qualification}/10</p>
                     </div>
 

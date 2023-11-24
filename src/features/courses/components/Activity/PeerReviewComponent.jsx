@@ -17,7 +17,7 @@ export default function PeerReviewComponent({ activityData, idQualification }) {
     const PeerReview = activityData?.PeerReviewQualification
 
     return (
-        <div className={`flex transition-transform ease-in-out duration-500 ${showEvaluate ? 'xl:-translate-x-[calc(100vw-20rem)] -translate-x-[100vw]' : ''}`}>
+        <div className={`flex transition-transform duration-500 ${showEvaluate ? 'xl:-translate-x-[calc(100vw-20rem)] -translate-x-[100vw]' : ''}`}>
             <div className={`flex content-start items-start p-5 sm:p-10 1.5xl:justify-between flex-wrap space-y-6 min-w-[100vw] xl:min-w-[calc(100vw-20rem)]`}>
                 <div className="flex flex-col 1.5xl:w-3/5">
                     <BackToCourse courseId={courseId} navigate={navigate} />
@@ -50,15 +50,18 @@ export default function PeerReviewComponent({ activityData, idQualification }) {
                     </svg>
                 </button>
             </div>
-            <div className={`${!showEvaluate ? 'w-0 h-0 overflow-hidden' : 'p-5 min-w-[100vw] xl:min-w-[calc(100vw-20rem)]'}`}>
-                <div className="flex gap-4">
-                    <div className="w-1/2">
-                        <Rubrica />
-                    </div>
-                    <div className="w-1/2">
+            <div className={`${!showEvaluate ? 'w-0 h-0 overflow-hidden' : 'p-5 min-w-[100dvw] xl:min-w-[calc(100dvw-20rem)]'}`}>
+                <div className="flex gap-4 max-w-full">
+                    <div className="max-w-[50%]">
                         <Rubrica />
                     </div>
                 </div>
+                <button
+                    className="mt-5 flex items-center flex-wrap gap-1 hover:translate-x-2 duration-200 
+                 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    onClick={() => setShowEvaluate(prev => !prev)}>
+                    Go back
+                </button>
             </div>
         </div>
 
