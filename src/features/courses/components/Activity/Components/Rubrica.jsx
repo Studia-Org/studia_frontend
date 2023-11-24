@@ -3,7 +3,7 @@ import './Rubrica.css';
 
 const Rubrica = () => {
     return (
-        <table className='w-full min-h-[400px] border-collapse border-2 bg-white border-gray-300 '>
+        <table className='max-w-full w-full min-h-[400px] border-collapse border-2 bg-white border-gray-300 '>
             <caption className='text-xl mb-3'>Task Evaluation Criteria</caption>
             <thead>
                 <tr className='bg-color-[#f8f8f8]'>

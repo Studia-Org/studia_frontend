@@ -17,8 +17,8 @@ export default function PeerReviewComponent({ activityData, idQualification }) {
     const PeerReview = activityData?.PeerReviewQualification
 
     return (
-        <div className={`flex transition-transform duration-500 ${showEvaluate ? 'xl:-translate-x-[calc(100vw-20rem)] -translate-x-[100vw]' : ''}`}>
-            <div className={`flex content-start items-start p-5 sm:p-10 1.5xl:justify-between flex-wrap space-y-6 min-w-[100vw] xl:min-w-[calc(100vw-20rem)]`}>
+        <div className={`flex transition-transform duration-500 p-5 sm:p-10 ${showEvaluate ? 'xl:-translate-x-[calc(100vw-25rem-6px)] -translate-x-[calc(100vw-1.5rem)]' : ''}`}>
+            <div className={`flex content-start items-start  1.5xl:justify-between flex-wrap space-y-6 max-w-[calc(100vw-4rem)] min-w-[calc(100vw-4rem)] xl:min-w-[calc(100vw-28rem)]`}>
                 <div className="flex flex-col 1.5xl:w-3/5">
                     <BackToCourse courseId={courseId} navigate={navigate} />
                     <ActivityTitle type='Peer Review'
@@ -38,7 +38,7 @@ export default function PeerReviewComponent({ activityData, idQualification }) {
                         </div>
                     </section> : null
                 }
-                <div className="mt-2">
+                <div className="mt-2 max-w-full">
                     <Rubrica />
                 </div>
                 <button onClick={() => setShowEvaluate(prev => !prev)}
@@ -52,7 +52,7 @@ export default function PeerReviewComponent({ activityData, idQualification }) {
             </div>
             <div className={`${!showEvaluate ? 'w-0 h-0 overflow-hidden' : 'p-5 min-w-[100dvw] xl:min-w-[calc(100dvw-20rem)]'}`}>
                 <div className="flex gap-4 max-w-full">
-                    <div className="max-w-[50%]">
+                    <div className="max-w-[50%] overflow-x-scroll">
                         <Rubrica />
                     </div>
                 </div>
