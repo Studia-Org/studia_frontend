@@ -1,15 +1,27 @@
 import React, { useState } from 'react'
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import { Collapse } from 'antd';
+import { Collapse, Button, message } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 import '../../styles/utils.css'
+import { AccordionButton, Accordion, AccordionItem, AccordionPanel } from '@chakra-ui/accordion';
 import { useAuthContext } from '../../../../context/AuthContext';
+import { getToken } from '../../../../helpers';
+import { API } from '../../../../constant';
+import { set } from 'date-fns';
+import { useParams } from 'react-router-dom';
 
-export const AccordionCourseContent = ({ courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted }) => {
+
+
+
+export const AccordionCourseContent = ({ courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setCourseContentInformation }) => {
   const [sectionNumber, setSectionNumber] = useState(1);
+  const [newSection, setNewSection] = useState('');
+  const [addSectionLoading, setAddSectionLoading] = useState(false);
   const { Panel } = Collapse;
   const { user } = useAuthContext();
+  let { courseId } = useParams()
+
 
   function handleSections(tituloSeccion, subsection) {
     if (
@@ -210,6 +222,49 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
     }
   }
 
+  const addNewSection = async () => {
+    setAddSectionLoading(true);
+    try {
+      const createSection = await fetch(`${API}/sections`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getToken()}`,
+        },
+        body: JSON.stringify({ data: { title: newSection } }),
+      })
+      const data = await createSection.json();
+      const sectionId = data.data.id;
+
+      await fetch(`${API}/courses/${courseId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getToken()}`,
+        },
+        body: JSON.stringify({ data: { sections: { connect: [sectionId] } } }),
+      })
+
+      setCourseContentInformation([...courseContentInformation, {
+        id: sectionId,
+        attributes: {
+          title: newSection,
+          subsections: {
+            data: [
+            ]
+          }
+        }
+      }])
+      setNewSection('');
+      setAddSectionLoading(false);
+      message.success("Section Added Successfully");
+    } catch (error) {
+      message.error("Error adding section");
+      setAddSectionLoading(false);
+    }
+
+  }
+
   function RenderCourseContent({ section, sectionNumber, index }) {
     let prevSubsectionFinished = false;
     const subsectionIdsCompleted = subsectionsCompleted.map(
@@ -274,7 +329,7 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
 
   return (
     <div className="flex-shrink-0 w-full sm:w-auto z-20 ">
-      <div className="mt-8 bg-white rounded-lg  p-5  sm:mr-9 sm:right-0 sm:w-[30rem] w-full shadow-md sm:visible collapse">
+      <div className="mt-4 bg-white rounded-lg  p-5  sm:mr-9 sm:right-0 sm:w-[30rem] w-full shadow-md sm:visible collapse">
         <p className="text-xl font-semibold">Course content</p>
         <hr className="h-px my-8 bg-gray-400 border-0"></hr>
         {courseContentInformation.map((section, index) => (
@@ -284,7 +339,37 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
             sectionNumber={sectionNumber + index}
           />
         ))}
+        {
+          (user?.role_str === 'professor' || user?.role_str === 'admin') &&
+          <Accordion allowMultiple >
+            <AccordionItem>
+              <AccordionButton className='bg-indigo-500 py-2 w-[4rem] rounded-md mt-3 text-white gap-2 justify-center '>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
+                </svg>
+                Add a new section
+              </AccordionButton>
+              <AccordionPanel>
+                <div className='mt-4'>
+                  <form>
+                    <div className="mb-4 border border-gray-200 rounded-lg bg-gray-50 ">
+                      <div className="px-4 py-2 bg-white rounded-t-lg ">
+                        <textarea onChange={(e) => setNewSection(e.target.value)} id="comment" rows="4" value={newSection} className="w-full  text-sm text-gray-900 bg-white p-3 " placeholder="Section name" required></textarea>
+                      </div>
+                      <div className="flex items-center justify-between px-3 py-2 border-t ">
+                        <Button loading={addSectionLoading} onClick={() => addNewSection()} type="button" className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-indigo-500 rounded-lg focus:ring-4 focus:ring-blue-200  hover:bg-blue-800">
+                          Add section
+                        </Button>
+                      </div>
+                    </div>
+                  </form>
+                  <hr />
+                </div>
+              </AccordionPanel>
+            </AccordionItem>
+          </Accordion>
+        }
       </div>
-    </div>
+    </div >
   );
 };
