@@ -8,8 +8,8 @@ export const CoursesCardHome = ({ course }) => {
 
     function renderCourseTags(tag) {
         return (
-            <div className=' bg-blue-200 p-1 h-6 rounded-lg text-blue-800 my-1 mr-3'>
-                <p className='font-medium text-xs'>{tag}</p>
+            <div className=' bg-[#1677ff] p-1 h-6 rounded-md text-white my-1 mr-3 px-2'>
+                <p className='font-normal text-xs'>{tag}</p>
             </div>
         )
     }
