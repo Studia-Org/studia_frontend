@@ -1,8 +1,9 @@
 import { useEffect, useState, React } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { API, BEARER } from "../../../constant";
 import { getToken } from "../../../helpers";
 import { Tabs } from "antd";
+import { SwitchEdit } from "../components/CoursesInside/SwitchEdit";
 import { FiChevronRight } from "react-icons/fi";
 import { ProfessorData } from "../components/CoursesInside/ProfessorData";
 import { CourseSettings } from "../components/CoursesInside/CourseSettings";
@@ -12,11 +13,16 @@ import { Chatbot } from '../components/CoursesInside/ChatBot';
 import { ForumComponent } from '../components/CoursesInside/ForumComponent'
 import { QuestionnaireComponent } from '../components/CoursesInside/QuestionnaireComponent';
 import { CourseParticipants, CourseContent, CourseFiles } from "../components/CoursesInside/TabComponents";
+import { useAuthContext } from "../../../context/AuthContext";
+import { EditSection } from "../components/CoursesInside/EditSection";
 
 const CourseInside = () => {
   const [posts, setPosts] = useState([]);
+  const [enableEdit, setEnableEdit] = useState(false)
   const [forumID, setForumID] = useState([]);
   const [forumFlag, setForumFlag] = useState(false);
+  const [editSectionFlag, setEditSectionFlag] = useState(false);
+  const [sectionToEdit, setSectionToEdit] = useState(null);
   const [courseBasicInformation, setCourseBasicInformation] = useState([]);
   const [questionnaireFlag, setQuestionnaireFlag] = useState(false);
   const [settingsFlag, setSettingsFlag] = useState(false);
@@ -30,7 +36,7 @@ const CourseInside = () => {
   const [students, setStudents] = useState([]);
   const [professor, setProfessor] = useState([]);
   let { courseId } = useParams();
-
+  const { user } = useAuthContext()
 
   const fetchPostData = async () => {
     try {
@@ -188,7 +194,7 @@ const CourseInside = () => {
     {
       key: '1',
       label: 'Course',
-      children: <CourseContent courseContentInformation={courseContentInformation} courseSection={courseSection} courseSubsection={courseSubsection} courseId={courseId} />,
+      children: <CourseContent courseContentInformation={courseContentInformation} courseSection={courseSection} courseSubsection={courseSubsection} courseId={courseId} enableEdit={enableEdit} setEnableEdit={setEnableEdit} setCourseContentInformation={setCourseContentInformation} />,
     },
     {
       key: '2',
@@ -206,36 +212,36 @@ const CourseInside = () => {
     <>
       <div className="container-fluid min-h-screen w-screen rounded-tl-3xl bg-[#e7eaf886] flex flex-wrap">
         <div className="flex-1 min-w-0 sm:w-auto mt-3 ml-8 mr-8">
-          {forumFlag === false ? (
+          {editSectionFlag && sectionToEdit !== null ? (
+            <EditSection setEditSectionFlag={setEditSectionFlag} sectionToEdit={sectionToEdit} />
+          ) : !forumFlag ? (
             <div>
-              {(subsectionsLandscapePhoto && !settingsFlag) && (
+              {subsectionsLandscapePhoto && !settingsFlag && (
                 <img
                   src={subsectionsLandscapePhoto}
                   alt=""
                   className="h-[30rem] w-full object-cover rounded-md shadow-md mt-5"
                 />
               )}
-              {
-                settingsFlag ? (
-                  <>
-                    <CourseSettings setSettingsFlag={setSettingsFlag} courseData={courseBasicInformation} setCourseData={setCourseBasicInformation} />
-                  </>
-                ) :
-                  questionnaireFlag && questionnaireAnswers !== undefined ? (
-                    <QuestionnaireComponent
-                      questionnaire={courseSubsectionQuestionnaire}
-                      answers={questionnaireAnswers}
-                      subsectionID={courseSubsection.id}
-                    />
-                  ) :
-                    (
-                      courseSection && courseContentInformation.length > 0 && (
-                        <>
-                          <p className="text-xl mt-5 font-semibold">{courseSubsection.attributes.title}</p>
-                          <Tabs className='font-normal' tabBarStyle={{ borderBottom: '1px solid black' }} defaultActiveKey="1" items={items} />
-                        </>
-                      )
-                    )}
+
+              {settingsFlag && (user.role_str === 'professor' || user.role_str === 'admin') ? (
+                <CourseSettings setSettingsFlag={setSettingsFlag} courseData={courseBasicInformation} setCourseData={setCourseBasicInformation} />
+              ) : questionnaireFlag && questionnaireAnswers !== undefined ? (
+                <QuestionnaireComponent
+                  questionnaire={courseSubsectionQuestionnaire}
+                  answers={questionnaireAnswers}
+                  subsectionID={courseSubsection.id}
+                />
+              ) : courseSection && courseContentInformation.length > 0 && (
+                <>
+                  <div className="flex items-center  mt-5">
+                    <p className="text-xl font-semibold">{courseSubsection.attributes.title}</p>
+                    <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} />
+                  </div>
+
+                  <Tabs className='font-normal' tabBarStyle={{ borderBottom: '1px solid black' }} defaultActiveKey="1" items={items} />
+                </>
+              )}
             </div>
           ) : (
             <ForumComponent posts={posts} forumID={forumID} />
@@ -265,6 +271,8 @@ const CourseInside = () => {
               setCourseSubsectionQuestionnaire,
               subsectionsCompleted,
               setCourseContentInformation,
+              setEditSectionFlag,
+              setSectionToEdit,
             }}
           />
           <ForumClickable posts={posts} setForumFlag={setForumFlag} />

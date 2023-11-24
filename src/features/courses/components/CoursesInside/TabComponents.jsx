@@ -1,9 +1,15 @@
+import React, { useState } from "react";
 import { TaskComponentCard } from "../CreateCourses/CourseConfirmation/TaskComponentCard";
 import ReactMarkdown from "react-markdown";
-import { Empty } from "antd";
+import { Empty, Button, message } from "antd";
 import { useNavigate } from "react-router-dom";
+import MDEditor from "@uiw/react-md-editor";
+import '@mdxeditor/editor/style.css'
+import { API } from "../../../../constant";
+import { getToken } from "../../../../helpers";
 
-export const CourseContent = ({ courseContentInformation, courseSection, courseSubsection, courseId }) => {
+export const CourseContent = ({ courseContentInformation, courseSection, courseSubsection, courseId, enableEdit, setEnableEdit, setCourseContentInformation }) => {
+    const [loading, setLoading] = useState(false);
     const section_ = courseContentInformation.find(
         (seccion) => seccion.attributes.title === courseSection
     );
@@ -11,6 +17,60 @@ export const CourseContent = ({ courseContentInformation, courseSection, courseS
         (subseccion) =>
             subseccion.attributes.title === courseSubsection.attributes.title
     );
+    const [subsectionContent, setSubsectionContent] = useState(subsection_.attributes.content);
+
+
+    const saveChanges = async () => {
+        setLoading(true)
+        const response = await fetch(`${API}/subsections/${subsection_.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${getToken()}`
+            },
+            body: JSON.stringify({ data: { content: subsectionContent } })
+        })
+        const data = await response.json();
+        if (response.ok) {
+            setCourseContentInformation([...courseContentInformation.map((section) => {
+                if (section.id === section_.id) {
+                    return {
+                        ...section,
+                        attributes: {
+                            ...section.attributes,
+                            subsections: {
+                                ...section.attributes.subsections,
+                                data: [...section.attributes.subsections.data.map((subsection) => {
+                                    if (subsection.id === subsection_.id) {
+                                        return {
+                                            ...subsection,
+                                            attributes: {
+                                                ...subsection.attributes,
+                                                content: subsectionContent
+                                            }
+                                        }
+                                    } else {
+                                        return subsection
+                                    }
+                                })]
+                            }
+                        }
+                    }
+                } else {
+                    return section
+                }
+            })])
+            message.success('Course updated successfully');
+            setEnableEdit(false)
+        } else {
+            const errorData = await response.json();
+            console.error('Error:', errorData);
+            message.error('Something went wrong');
+            setLoading(false);
+        }
+        setLoading(false);
+    }
+
     return (
         <>
             <p className='text-xs font-normal text-gray-400 mb-1'>Activity</p>
@@ -19,7 +79,19 @@ export const CourseContent = ({ courseContentInformation, courseSection, courseS
             <p className='text-xs font-normal text-gray-400 mb-1'>Course content</p>
             <hr className='mb-5' />
             <div className='prose max-w-none mb-12'>
-                <ReactMarkdown>{subsection_.attributes.content}</ReactMarkdown>
+                {
+                    !enableEdit
+                        ?
+                        <ReactMarkdown>{subsectionContent}</ReactMarkdown>
+                        :
+                        <div className="flex flex-col">
+                            <MDEditor height="30rem" className='mt-2 mb-8' data-color-mode='light' onChange={setSubsectionContent} value={subsectionContent} />
+                            <Button onClick={() => saveChanges()} type="primary" loading={loading} className=" ml-auto inline-flex justify-center rounded-md border border-transparent bg-blue-600  px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                            >
+                                Save Changes
+                            </Button>
+                        </div>
+                }
             </div>
         </>
 
