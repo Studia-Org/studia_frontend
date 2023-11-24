@@ -3,12 +3,12 @@ import React from 'react'
 
 
 
-function fetchDataAndCreateSubsection(subsectionName, fase, switcher, setCreateCourseSectionsList, sectionToEdit) {
+function fetchDataAndCreateSubsection(subsectionName, fase, switcher, setCreateCourseSectionsList, sectionToEdit, type) {
     return new Promise((resolve, reject) => {
         if (switcher !== null) {
             magicalFetcher(switcher)
                 .then(data => {
-                    createSubsection(subsectionName, fase, data, setCreateCourseSectionsList, sectionToEdit);
+                    createSubsection(subsectionName, fase, data, setCreateCourseSectionsList, sectionToEdit, type);
                     resolve();
                 })
                 .catch(error => {
@@ -16,14 +16,14 @@ function fetchDataAndCreateSubsection(subsectionName, fase, switcher, setCreateC
                     reject(error);
                 });
         } else {
-            createSubsection(subsectionName, fase, null, setCreateCourseSectionsList, sectionToEdit);
+            createSubsection(subsectionName, fase, null, setCreateCourseSectionsList, sectionToEdit, type);
             resolve();
         }
     });
 }
 
 
-function createSubsection(subsectionName, fase, data, setCreateCourseSectionsList, sectionToEdit) {
+function createSubsection(subsectionName, fase, data, setCreateCourseSectionsList, sectionToEdit, type) {
     const newSubsection = {
         id: Math.floor(Math.random() * 1000),
         title: subsectionName,
@@ -37,6 +37,7 @@ function createSubsection(subsectionName, fase, data, setCreateCourseSectionsLis
         description: null,
         landscape_photo: [],
         files: [],
+        type: type,
         questionnaire: data?.data,
         users: null
     };
@@ -45,14 +46,11 @@ function createSubsection(subsectionName, fase, data, setCreateCourseSectionsLis
             if (section.id === sectionToEdit.id) {
                 const currentFaseSubsections = section.subsections.filter(sub => sub.fase === fase);
                 const updatedSubsections = [...section.subsections.filter(sub => sub.fase !== fase), ...currentFaseSubsections, newSubsection];
-
                 const customSort = (a, b) => {
                     const faseOrder = { 'forethought': 1, 'performance': 2, 'self-reflection': 3 };
                     return faseOrder[a.fase] - faseOrder[b.fase];
                 };
-
                 const sortedSubsections = updatedSubsections.sort(customSort);
-
                 return {
                     ...section,
                     subsections: sortedSubsections,
@@ -126,17 +124,17 @@ const QuestionItem = ({ iconColor, iconPath, title }) => (
 
 export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit }) => {
     const sequence = [
-        { title: 'MSLQ Questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', switcher: 'mslq' },
-        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', switcher: null },
-        { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', switcher: 'plannification' },
-        { title: 'Task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', switcher: null },
-        { title: 'Peer review', iconColor: '#dc2626', iconPath: svgSwitcher('peerReview'), fase: 'self-reflection', switcher: null },
-        { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', switcher: null },
+        { title: 'MSLQ Questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', switcher: 'mslq', type: 'questionnaire' },
+        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', switcher: null, type: 'task' },
+        { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', switcher: 'plannification', type: 'questionnaire' },
+        { title: 'Task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', switcher: null, type: 'task' },
+        { title: 'Peer review', iconColor: '#dc2626', iconPath: svgSwitcher('peerReview'), fase: 'self-reflection', switcher: null, type: 'peerReview' },
+        { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', switcher: null, type: 'task' },
     ];
 
     async function addSequence() {
         for (const item of sequence) {
-            await fetchDataAndCreateSubsection(item.title, item.fase, item.switcher, setCreateCourseSectionsList, sectionToEdit);
+            await fetchDataAndCreateSubsection(item.title, item.fase, item.switcher, setCreateCourseSectionsList, sectionToEdit, item.type);
         }
     }
 
@@ -167,23 +165,23 @@ export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit }) 
 
 export const SequenceDevelopEducation1 = ({ setCreateCourseSectionsList, sectionToEdit }) => {
     const sequence = [
-        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', switcher: null },
-        { title: 'Forum debate', iconColor: '#15803d', iconPath: svgSwitcher('forum'), fase: 'forethought', switcher: null },
-        { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', switcher: 'plannification' },
-        { title: 'First task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', switcher: null },
-        { title: 'First delivery', iconColor: '#f59e0b', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'performance', switcher: null },
-        { title: 'Peer Review', iconColor: '#f59e0b', iconPath: svgSwitcher('peerReview'), fase: 'performance', switcher: null },
-        { title: 'Feedback reflection questionnaire', iconColor: '#f59e0b', iconPath: svgSwitcher('questionnaireNormal'), fase: 'performance', switcher: 'empty' },
-        { title: 'Second task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', switcher: null },
-        { title: 'Second delivery', iconColor: '#f59e0b', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'performance', switcher: null },
-        { title: 'Peer Review', iconColor: '#f59e0b', iconPath: svgSwitcher('peerReview'), fase: 'performance', switcher: null },
-        { title: 'Feedback reflection questionnaire', iconColor: '#f59e0b', iconPath: svgSwitcher('questionnaireNormal'), fase: 'performance', switcher: 'empty' },
-        { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', switcher: null },
+        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', switcher: null, type: 'task' },
+        { title: 'Forum debate', iconColor: '#15803d', iconPath: svgSwitcher('forum'), fase: 'forethought', switcher: null, type: 'forum'},
+        { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', switcher: 'plannification', type: 'questionnaire' },
+        { title: 'First task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', switcher: null, type: 'task' },
+        { title: 'First delivery', iconColor: '#f59e0b', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'performance', switcher: null, type: 'task' },
+        { title: 'Peer Review', iconColor: '#f59e0b', iconPath: svgSwitcher('peerReview'), fase: 'performance', switcher: null, type: 'peerReview'},
+        { title: 'Feedback reflection questionnaire', iconColor: '#f59e0b', iconPath: svgSwitcher('questionnaireNormal'), fase: 'performance', switcher: 'empty', type: 'questionnaire' },
+        { title: 'Second task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', switcher: null, type: 'task' },
+        { title: 'Second delivery', iconColor: '#f59e0b', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'performance', switcher: null, type: 'task' },
+        { title: 'Peer Review', iconColor: '#f59e0b', iconPath: svgSwitcher('peerReview'), fase: 'performance', switcher: null, type: 'peerReview'},
+        { title: 'Feedback reflection questionnaire', iconColor: '#f59e0b', iconPath: svgSwitcher('questionnaireNormal'), fase: 'performance', switcher: 'empty', type: 'questionnaire' },
+        { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', switcher: null, type: 'task' },
     ];
 
     async function addSequence() {
         for (const item of sequence) {
-            await fetchDataAndCreateSubsection(item.title, item.fase, item.switcher, setCreateCourseSectionsList, sectionToEdit);
+            await fetchDataAndCreateSubsection(item.title, item.fase, item.switcher, setCreateCourseSectionsList, sectionToEdit, item.type);
         }
     }
 
@@ -214,17 +212,17 @@ export const SequenceDevelopEducation1 = ({ setCreateCourseSectionsList, section
 
 export const SequenceDevelopEducation2 = ({ setCreateCourseSectionsList, sectionToEdit }) => {
     const sequence = [
-        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', switcher: null },
-        { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', switcher: 'plannification' },
-        { title: 'First task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', switcher: null },
-        { title: 'First delivery', iconColor: '#f59e0b', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'performance', switcher: null },
-        { title: 'Professor feedback and reflection', iconColor: '#dc2626', iconPath: svgSwitcher('peerReview'), fase: 'self-reflection', switcher: null },
-        { title: 'Autoevaluation questionnaire', iconColor: '#dc2626', iconPath: svgSwitcher('questionnaireNormal'), fase: 'self-reflection', switcher: 'empty' },
-        { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', switcher: null },
+        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', switcher: null, type: 'task' },
+        { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', switcher: 'plannification', type: 'questionnaire' },
+        { title: 'First task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', switcher: null, type: 'task' },
+        { title: 'First delivery', iconColor: '#f59e0b', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'performance', switcher: null, type: 'task' },
+        { title: 'Professor feedback and reflection', iconColor: '#dc2626', iconPath: svgSwitcher('peerReview'), fase: 'self-reflection', switcher: null, type: 'peerReview' },
+        { title: 'Autoevaluation questionnaire', iconColor: '#dc2626', iconPath: svgSwitcher('questionnaireNormal'), fase: 'self-reflection', switcher: 'empty', type: 'questionnaire' },
+        { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', switcher: null, type: 'task' },
     ];
     async function addSequence() {
         for (const item of sequence) {
-            await fetchDataAndCreateSubsection(item.title, item.fase, item.switcher, setCreateCourseSectionsList, sectionToEdit);
+            await fetchDataAndCreateSubsection(item.title, item.fase, item.switcher, setCreateCourseSectionsList, sectionToEdit, item.type);
         }
     }
     return (
@@ -254,18 +252,18 @@ export const SequenceDevelopEducation2 = ({ setCreateCourseSectionsList, section
 
 export const SequenceDevelopNoMSLQForum = ({ setCreateCourseSectionsList, sectionToEdit }) => {
     const sequence = [
-        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', switcher: null },
-        { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', switcher: 'plannification' },
-        { title: 'Task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', switcher: null },
-        { title: 'Forum Doubts', iconColor: '#f59e0b', iconPath: svgSwitcher('forum'), fase: 'performance', switcher: null },
-        { title: 'Peer review', iconColor: '#dc2626', iconPath: svgSwitcher('peerReview'), fase: 'self-reflection', switcher: null },
-        { title: 'Feedback refactor', iconColor: '#dc2626', iconPath: svgSwitcher('taskImplementation'), fase: 'self-reflection', switcher: null },
-        { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', switcher: null },
+        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', switcher: null, type: 'task' },
+        { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', switcher: 'plannification', type: 'questionnaire' },
+        { title: 'Task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', switcher: null, type: 'task' },
+        { title: 'Forum Doubts', iconColor: '#f59e0b', iconPath: svgSwitcher('forum'), fase: 'performance', switcher: null, type: 'forum' },
+        { title: 'Peer review', iconColor: '#dc2626', iconPath: svgSwitcher('peerReview'), fase: 'self-reflection', switcher: null, type: 'peerReview' },
+        { title: 'Feedback refactor', iconColor: '#dc2626', iconPath: svgSwitcher('taskImplementation'), fase: 'self-reflection', switcher: null, type: 'task' },
+        { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', switcher: null, type: 'task' },
     ];
 
     async function addSequence() {
         for (const item of sequence) {
-            await fetchDataAndCreateSubsection(item.title, item.fase, item.switcher, setCreateCourseSectionsList, sectionToEdit);
+            await fetchDataAndCreateSubsection(item.title, item.fase, item.switcher, setCreateCourseSectionsList, sectionToEdit, item.type);
         }
     }
     return (

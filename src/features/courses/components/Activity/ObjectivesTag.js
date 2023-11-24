@@ -1,4 +1,4 @@
-import { ACTIVITY_CATEGORIES } from '../../../constant';
+import { ACTIVITY_CATEGORIES } from '../../../../constant';
 import { Popover, Whisper } from 'rsuite';
 
 export function ObjectivesTag({ category, USER_OBJECTIVES }) {

@@ -4,8 +4,8 @@ import Swal from 'sweetalert2';
 import { message } from "antd";
 import { FiEdit } from "react-icons/fi";
 import axios from 'axios';
-import { API } from "../../../constant";
-import { getToken } from "../../../helpers";
+import { API } from "../../../../constant";
+import { getToken } from "../../../../helpers";
 import MDEditor from '@uiw/react-md-editor';
 
 export const ForumAddThread = ({ onClose, user, forumID }) => {
