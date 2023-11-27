@@ -19,7 +19,6 @@ export const CourseContent = ({ courseContentInformation, courseSection, courseS
     );
     const [subsectionContent, setSubsectionContent] = useState(subsection_.attributes.content);
 
-
     const saveChanges = async () => {
         setLoading(true)
         const response = await fetch(`${API}/subsections/${subsection_.id}`, {
@@ -132,7 +131,7 @@ export const CourseFiles = ({ courseContentInformation, courseSection, courseSub
         <div className='w-full flex flex-row items-center space-x-8'>
             <div className='w-full mr-5'>
                 <ul className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
-                    {subsection_.attributes.files.data.map((file) => (
+                    {subsection_.attributes.files?.data?.map((file) => (
                         <li key={file.id} className="col-span-1 flex rounded-md shadow-sm" >
                             <div
                                 className='bg-indigo-500 flex-shrink-0 flex items-center justify-center w-16  text-white text-sm font-medium rounded-l-md'>

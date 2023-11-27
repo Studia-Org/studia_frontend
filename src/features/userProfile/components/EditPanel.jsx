@@ -169,11 +169,11 @@ export const EditPanel = ({ onClose, userProfile, uid }) => {
                                         style={{ filter: 'brightness(50%)' }}
                                     />
                                 ) : (
-                                    <img className='w-full h-56 object-cover' style={{ filter: 'brightness(50%)' }} src={userProfile.landscape_photo.url} alt="" />
+                                    <img className='w-full h-56 object-cover' style={{ filter: 'brightness(50%)' }} src={userProfile?.landscape_photo?.url} alt="" />
                                 )
                             )}
                             <div className='absolute flex ml-auto justify-center items-center w-full h-full'>
-                                <div className='text-white'>
+                                <div className={`${userProfile.landscape_photo === null ? 'text-black' : 'text-white'}`}>
                                     <FiEdit size={20} />
                                 </div>
                             </div>
