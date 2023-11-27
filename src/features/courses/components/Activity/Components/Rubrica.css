@@ -1,4 +1,4 @@
-table {
+.rubrica {
     border-collapse: collapse;
     margin: 0;
     padding: 0;
@@ -6,30 +6,33 @@ table {
     border-radius: 5px;
 }
 
-table tr {
+.rubrica tr {
     background-color: #f8f8f8;
     border: 1px solid #ddd;
     padding: .35em;
     border-radius: 5px;
 }
 
+.rubrica tbody {
+    background-color: #e7eaf886;
+}
 
-table th {
+.rubrica th {
     font-size: .85em;
     letter-spacing: .1em;
     text-transform: uppercase;
 }
 
 @media screen and (max-width: 760px) {
-    table {
+    .rubrica {
         border: 0;
     }
 
-    table caption {
+    .rubrica caption {
         font-size: 1.3em;
     }
 
-    table thead {
+    .rubrica thead {
         border: none;
         clip: rect(0 0 0 0);
         height: 1px;
@@ -40,35 +43,74 @@ table th {
         width: 1px;
     }
 
-    table tr {
+    .rubrica tr {
         border-bottom: 3px solid #ddd;
         display: block;
         margin-bottom: .625em;
         font-weight: semibold;
     }
 
-
-    table td {
+    .rubrica td {
         border-bottom: 1px solid #ddd;
         display: block;
         font-size: .8em;
         text-align: right;
     }
 
-    table td::before {
-        /*
-    * aria-label has no advantage, it won't be read inside a table
-    content: attr(aria-label);
-    */
+    .rubrica td::before {
         content: attr(data-label);
         float: left;
         font-weight: bold;
         text-transform: uppercase;
     }
 
-    table td:last-child {
+    .rubrica td:last-child {
         border-bottom: 0;
     }
+}
+
+.petite {
+    border: 0;
+}
+
+.petite caption {
+    font-size: 1.3em;
+}
+
+.petite thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+.petite tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: .625em;
+    font-weight: semibold;
+}
+
+.petite td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: .8em;
+    text-align: right;
+}
+
+.petite td::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.petite td:last-child {
+    border-bottom: 0;
 }
 
 
