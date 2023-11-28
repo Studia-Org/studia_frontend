@@ -24,7 +24,6 @@ const Activity = () => {
           `&populate[evaluator][populate][profile_photo][fields][0]=*` +
           `&filters[user][id]=${user.id}`)
       const data = await response.json();
-
       if (data.data.length > 0) {
         console.log(data.data[0]["id"]);
         setUserQualification({ activity: data.data[0].attributes, idQualification: data.data[0]["id"] });

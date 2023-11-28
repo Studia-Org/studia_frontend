@@ -22,7 +22,10 @@ registerPlugin(FilePondPluginImagePreview);
 
 
 export const ActivityComponent = ({ activityData, idQualification, setUserQualification }) => {
-  console.log(activityData);
+  const [filesTask, setFilesTask] = useState([]);
+  console.log(activityData.activity.data.attributes.file?.data.map((file) => file.attributes));
+  console.log(filesTask)
+  const [title, setTitle] = useState(activityData.activity.data.attributes.title)
   const [subsectionContent, setSubsectionContent] = useState(activityData.activity.data.attributes.description);
   const [loading, setLoading] = useState(false);
   const [enableEdit, setEnableEdit] = useState(false);
@@ -44,7 +47,28 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
 
   async function saveChanges() {
     setLoading(true);
+    const formData = new FormData();
+    let filesId = [];
     try {
+      if (filesTask) {
+        filesTask.forEach((file) => {
+          console.log(file);
+          console.log(file.file);
+          formData.append('files', file.file);
+        });
+        const uploadFiles = await fetch(`${API}/upload`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${getToken()}`,
+          },
+          body: formData,
+        });
+        if (uploadFiles.ok) {
+          const result = await uploadFiles.json();
+          filesId = result.map((file) => file.id);
+          console.log(filesId);
+        }
+      }
       const response = await fetch(`${API}/activities/${activityId}`, {
         method: 'PUT',
         headers: {
@@ -54,6 +78,8 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
         body: JSON.stringify({
           data: {
             description: subsectionContent,
+            title: title,
+            file: filesId
           }
         }),
       });
@@ -164,7 +190,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
 
   function renderFiles(file) {
     return (
-      <button key={file.id} onClick={() => downloadFile(file)} className='shadow-md rounded-md flex p-3 w-full bg-green-700 text-white'>
+      <button key={file.id} onClick={() => downloadFile(file)} className='shadow-md rounded-md flex p-3 w-full bg-green-700 text-white active:translate-y-1 duration-150'>
         <p className='max-w-[calc(100%-4rem)] overflow-hidden text-ellipsis'>{file.attributes.name}</p>
         <div className='ml-auto mr-2'>
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.0} stroke="currentColor" className="w-5 h-5">
@@ -205,7 +231,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
           <p className='ml-1'>Go back to course</p>
         </button>
         <div className='relative flex items-center mb-6 bg-white rounded-md p-5 shadow-md mt-5'>
-          <div className='flex items-center space-x-3 '>
+          <div className='flex items-center space-x-3 flex-1 '>
             {
               activityData.activity.data.attributes.type === 'task' ?
                 <div className='w-14 h-14 bg-red-500 rounded-md items-center flex justify-center'>
@@ -222,17 +248,31 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                   :
                   <div className='w-14 h-14 bg-red-800 rounded-md'></div>
             }
-            <h3 className='font-semibold text-2xl max-w-[calc(100%-7rem)] sm:max-w-[calc(100%-9.5rem)]'>{activityData.activity.data.attributes.title}</h3>
+            {
+              enableEdit ?
+                <input
+                  type="text"
+                  name="first-name"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                  id="first-name"
+                  autoComplete="given-name"
+                  className="mt-1 block w-3/4 rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+                :
+                <h3 className='font-semibold w-full text-2xl max-w-[calc(100%-7rem)] sm:max-w-[calc(100%-9.5rem)]'>{activityData.activity.data.attributes.title}</h3>
+            }
           </div>
           {
-            evaluated ?
-              <div className='absolute right-0 bg-green-700 rounded-r-md w-14 sm:w-[6rem]  ml-auto flex flex-col h-full justify-center text-center'>
-
-                <p className='text-white font-semibold text-xl'>{activityData.qualification}/10</p>
-              </div>
-
+            user.role_str === 'professor' || user.role_str === 'admin' ?
+              null
               :
-              <Chip className='ml-auto' label="Not finished" color="primary" />
+              evaluated ?
+                <div className='absolute right-0 bg-green-700 rounded-r-md w-14 sm:w-[6rem]  ml-auto flex flex-col h-full justify-center text-center'>
+                  <p className='text-white font-semibold text-xl'>{activityData.qualification}/10</p>
+                </div>
+                :
+                <Chip className='ml-auto' label="Not finished" color="primary" />
           }
         </div>
         <section className="flex flex-wrap gap-x-2">
@@ -247,7 +287,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
         {
           evaluated ?
             <>
-
               <p className='text-xs text-gray-400 mb-1 mt-5'>Comments</p>
               <div className='w-full bg-white rounded-md shadow-md p-5'>
                 {activityData.comments}
@@ -262,7 +301,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
 
         <p className='text-xs text-gray-400 mb-1 mt-5'>Task description</p>
         <hr />
-        <div className='prose my-3 text-gray-600 ml-5 w-full box-content'>
+        <div className='prose my-3 text-gray-600 ml-5 w-full box-content mt-5 max-w-none'>
           {
             !enableEdit
               ?
@@ -270,8 +309,10 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
               :
               <div className="flex flex-col">
                 <MDEditor height="30rem" className='mt-2 mb-8' data-color-mode='light' onChange={setSubsectionContent} value={subsectionContent} />
-                <Button onClick={() => saveChanges()} type="primary" loading={loading} className=" ml-auto inline-flex justify-center rounded-md border border-transparent bg-blue-600  px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                >
+                <Button onClick={() => saveChanges()} type="primary" loading={loading}
+                  className=" ml-auto inline-flex justify-center rounded-md border border-transparent bg-blue-600  
+                px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 
+                focus:ring-blue-500 focus:ring-offset-2">
                   Save Changes
                 </Button>
               </div>
@@ -282,23 +323,34 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
       {
         user.role_str === 'professor' || user.role_str === 'admin' ?
           <>
-            <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[30rem]'>
-              <p className='text-lg font-medium mb-4'>Files</p>
-              {
-                activityData.activity.data.attributes.file?.data === null || activityData.activity.data.attributes.file?.data?.length === 0 ?
-                  <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
-                    <span className='text-gray-400 font-normal '>
-                      There are no files
-                    </span>
-                  } />
-                  :
-                  activityData.activity.data.attributes?.file?.data.map((file, index) => renderFiles(file, index))
-              }
+            <div className='bg-white mb-5 mt-10 rounded-md shadow-md p-5 w-[30rem]'>
+              <p className='text-lg font-medium mb-4'>Task Files</p>
+              {(!activityData.activity.data.attributes.file?.data || activityData.activity.data.attributes.file?.data.length === 0) ? (
+                enableEdit ? (
+                  <FilePond allowMultiple={true} maxFiles={5} onupdatefiles={setFilesTask} files={filesTask} />
+                ) : (
+                  <Empty
+                    image={Empty.PRESENTED_IMAGE_SIMPLE}
+                    className='mt-6'
+                    description={
+                      <span className='text-gray-400 font-normal'>
+                        There are no files
+                      </span>
+                    }
+                  />
+                )
+              ) : (
+                enableEdit ? (
+                  <FilePond allowMultiple={true} maxFiles={5} onupdatefiles={setFilesTask} files={filesTask} />
+                ) : (
+                  activityData.activity.data.attributes.file?.data.map((file, index) => renderFiles(file, index))
+                )
+              )}
             </div>
           </> :
           evaluated ?
             <div className='flex flex-col '>
-              <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[30rem]'>
+              <div className='bg-white mb-5 rounded-md shadow-md p-5 w-[30rem]'>
                 <p className='text-lg font-medium mb-4'>Files</p>
                 {
                   activityData.activity.data.attributes.file?.data === null || activityData.activity.data.attributes.file?.data?.length === 0 ?
