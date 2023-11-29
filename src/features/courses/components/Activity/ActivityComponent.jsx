@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ProfessorData } from '../CoursesInside/ProfessorData';
 import { getToken } from '../../../../helpers';
 import ReactMarkdown from 'react-markdown';
@@ -13,7 +13,7 @@ import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import Chip from '@mui/material/Chip';
 import Swal from 'sweetalert2';
 import { ObjectivesTag } from './ObjectivesTag';
-import { Empty, Button } from 'antd';
+import { Empty, Button, message, Popconfirm } from 'antd';
 import MDEditor from '@uiw/react-md-editor';
 import { SwitchEdit } from '../CoursesInside/SwitchEdit';
 
@@ -22,9 +22,7 @@ registerPlugin(FilePondPluginImagePreview);
 
 
 export const ActivityComponent = ({ activityData, idQualification, setUserQualification }) => {
-  const [filesTask, setFilesTask] = useState([]);
-  console.log(activityData.activity.data.attributes.file?.data.map((file) => file.attributes));
-  console.log(filesTask)
+  const [filesTask, setFilesTask] = useState();
   const [title, setTitle] = useState(activityData.activity.data.attributes.title)
   const [subsectionContent, setSubsectionContent] = useState(activityData.activity.data.attributes.description);
   const [loading, setLoading] = useState(false);
@@ -45,6 +43,12 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
     document.getElementById('submit-button-activity').disabled = false;
   }
 
+  useEffect(() => {
+    setFilesTask([]);
+    setSubsectionContent(activityData.activity.data.attributes.description);
+    setTitle(activityData.activity.data.attributes.title);
+  }, [enableEdit])
+
   async function saveChanges() {
     setLoading(true);
     const formData = new FormData();
@@ -52,8 +56,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
     try {
       if (filesTask) {
         filesTask.forEach((file) => {
-          console.log(file);
-          console.log(file.file);
           formData.append('files', file.file);
         });
         const uploadFiles = await fetch(`${API}/upload`, {
@@ -66,8 +68,8 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
         if (uploadFiles.ok) {
           const result = await uploadFiles.json();
           filesId = result.map((file) => file.id);
-          console.log(filesId);
         }
+        filesId = filesId.concat(activityData.activity.data.attributes.file?.data.map((file) => file.id));
       }
       const response = await fetch(`${API}/activities/${activityId}`, {
         method: 'PUT',
@@ -79,7 +81,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
           data: {
             description: subsectionContent,
             title: title,
-            file: filesId
+            file: filesId,
           }
         }),
       });
@@ -188,17 +190,91 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
     }
   }
 
+  async function deleteFile(fileId) {
+    setFilesTask((prev) => {
+      const updatedFiles = prev.filter((file) => file.id !== fileId);
+      return updatedFiles;
+    });
+
+
+
+    const reponse = await fetch(`${API}/upload/files/${fileId}`, {
+      method: 'DELETE',
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${getToken()}`,
+      }
+    })
+    if (reponse.ok) {
+      const result = await reponse.json();
+      console.log(result);
+      message.success('File deleted successfully, reload the page to see the changes');
+    }
+    else message.error('Something went wrong');
+  }
+
+
   function renderFiles(file) {
-    return (
+    if (file.attributes) {
+      return (
+        <button key={file.id} onClick={() => downloadFile(file.attributes)} className='shadow-md rounded-md flex p-3 w-full bg-green-700 text-white active:translate-y-1 duration-150'>
+          <p className='max-w-[calc(100%-4rem)] overflow-hidden text-ellipsis'>{file.attributes.name}</p>
+          <div className='ml-auto mr-2'>
+            {
+              enableEdit ?
+                <Popconfirm
+                  title="Delete the file"
+                  description="Are you sure to delete this file?"
+                  okText="Yes"
+                  okType="danger"
+                  onConfirm={(e) => {
+                    e.stopPropagation();
+                    deleteFile(file.id);
+                  }}
+                  onCancel={(e) => {
+                    e.stopPropagation();
+                  }}
+                  cancelText="No"
+                >
+                  <svg
+                    onClick={(e) => {
+                      e.stopPropagation();
+                    }}
+                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                    <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z" clipRule="evenodd" />
+                  </svg>
+                </Popconfirm>
+                :
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.0} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+            }
+          </div>
+        </button>
+      )
+    } else {
       <button key={file.id} onClick={() => downloadFile(file)} className='shadow-md rounded-md flex p-3 w-full bg-green-700 text-white active:translate-y-1 duration-150'>
-        <p className='max-w-[calc(100%-4rem)] overflow-hidden text-ellipsis'>{file.attributes.name}</p>
+        <p className='max-w-[calc(100%-4rem)] overflow-hidden text-ellipsis'>{file.filenameWithoutExtension}</p>
         <div className='ml-auto mr-2'>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.0} stroke="currentColor" className="w-5 h-5">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-          </svg>
+          {
+            enableEdit ?
+              <svg
+                onClick={(e) => {
+                  e.stopPropagation();
+                  deleteFile(file.id);
+                }}
+                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z" clipRule="evenodd" />
+              </svg>
+              :
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.0} stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+              </svg>
+          }
         </div>
       </button>
-    )
+    }
+
   }
 
   const downloadFile = async (file) => {
@@ -214,10 +290,10 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
         a.click();
         window.URL.revokeObjectURL(url);
       } else {
-        console.error('Error al descargar el archivo');
+        message.error('Something went wrong');
       }
     } catch (error) {
-      console.error('Error en la descarga: ', error);
+      message.error('Something went wrong: ', error);
     }
   };
 
@@ -325,9 +401,9 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
           <>
             <div className='bg-white mb-5 mt-10 rounded-md shadow-md p-5 w-[30rem]'>
               <p className='text-lg font-medium mb-4'>Task Files</p>
-              {(!activityData.activity.data.attributes.file?.data || activityData.activity.data.attributes.file?.data.length === 0) ? (
+              {(!activityData.activity.data.attributes.file?.data.length || activityData.activity.data.attributes.file?.data.length === 0) ? (
                 enableEdit ? (
-                  <FilePond allowMultiple={true} maxFiles={5} onupdatefiles={setFilesTask} files={filesTask} />
+                  <FilePond allowMultiple={true} maxFiles={5} onupdatefiles={setFilesTask} />
                 ) : (
                   <Empty
                     image={Empty.PRESENTED_IMAGE_SIMPLE}
@@ -341,9 +417,18 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                 )
               ) : (
                 enableEdit ? (
-                  <FilePond allowMultiple={true} maxFiles={5} onupdatefiles={setFilesTask} files={filesTask} />
+                  <>
+                    <FilePond allowMultiple={true} maxFiles={5} onupdatefiles={setFilesTask} />
+                    <div className='space-y-2'>
+                      {activityData.activity.data.attributes.file?.data.map((file, index) => renderFiles(file, index))}
+                    </div>
+
+                  </>
                 ) : (
-                  activityData.activity.data.attributes.file?.data.map((file, index) => renderFiles(file, index))
+                  <div className='space-y-2'>
+                    {activityData.activity.data.attributes.file?.data.map((file, index) => renderFiles(file, index))}
+                  </div>
+
                 )
               )}
             </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState, React } from "react";
+import { useEffect, useState, React, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { API, BEARER } from "../../../constant";
 import { getToken } from "../../../helpers";
@@ -16,7 +16,12 @@ import { CourseParticipants, CourseContent, CourseFiles } from "../components/Co
 import { useAuthContext } from "../../../context/AuthContext";
 import { EditSection } from "../components/CoursesInside/EditSection";
 
+import { set } from "date-fns";
+
 const CourseInside = () => {
+  const inputRefLandscape = useRef(null);
+  const [titleSubsection, setTitleSubsection] = useState("");
+  const [backgroundPhotoSubsection, setBackgroundPhotoSubsection] = useState()
   const [posts, setPosts] = useState([]);
   const [enableEdit, setEnableEdit] = useState(false)
   const [forumID, setForumID] = useState([]);
@@ -37,6 +42,15 @@ const CourseInside = () => {
   const [professor, setProfessor] = useState([]);
   let { courseId } = useParams();
   const { user } = useAuthContext()
+
+  function handleLandscapePhoto() {
+    inputRefLandscape.current.click();
+  }
+
+  function handleLandscapePhotoChange(event) {
+    setBackgroundPhotoSubsection(event.target.files[0]);
+  }
+
 
   const fetchPostData = async () => {
     try {
@@ -173,6 +187,7 @@ const CourseInside = () => {
         setCourseSubsection(subsecciones[0]);
       }
     }
+
   }, [courseContentInformation, subsectionsCompleted]);
 
   useEffect(() => {
@@ -182,6 +197,8 @@ const CourseInside = () => {
         null
       );
     }
+    setTitleSubsection(courseSubsection?.attributes?.title);
+    setBackgroundPhotoSubsection(courseSubsection?.attributes?.landscape_photo?.data?.attributes?.url)
   }, [courseSubsection]);
 
   useEffect(() => {
@@ -194,17 +211,17 @@ const CourseInside = () => {
     {
       key: '1',
       label: 'Course',
-      children: <CourseContent courseContentInformation={courseContentInformation} courseSection={courseSection} courseSubsection={courseSubsection} courseId={courseId} enableEdit={enableEdit} setEnableEdit={setEnableEdit} setCourseContentInformation={setCourseContentInformation} />,
+      children: <CourseContent courseContentInformation={courseContentInformation} courseSection={courseSection} courseSubsection={courseSubsection} courseId={courseId} enableEdit={enableEdit} setEnableEdit={setEnableEdit} setCourseContentInformation={setCourseContentInformation} titleSubsection={titleSubsection} backgroundPhotoSubsection={backgroundPhotoSubsection} />,
     },
     {
       key: '2',
       label: 'Files',
-      children: <CourseFiles courseContentInformation={courseContentInformation} courseSection={courseSection} courseSubsection={courseSubsection} />,
+      children: <CourseFiles courseContentInformation={courseContentInformation} courseSection={courseSection} courseSubsection={courseSubsection} enableEdit={enableEdit} setCourseContentInformation={setCourseContentInformation} />,
     },
     {
       key: '3',
       label: 'Participants',
-      children: <CourseParticipants students={students} />,
+      children: <CourseParticipants students={students} enableEdit={enableEdit} setSettingsFlag={setSettingsFlag} />,
     }
   ];
 
@@ -217,11 +234,32 @@ const CourseInside = () => {
           ) : !forumFlag ? (
             <div>
               {subsectionsLandscapePhoto && !settingsFlag && (
-                <img
-                  src={subsectionsLandscapePhoto}
-                  alt=""
-                  className="h-[30rem] w-full object-cover rounded-md shadow-md mt-5"
-                />
+                enableEdit ?
+                  <div className="relative w-full mt-5 h-[30rem]">
+                    <input type="file" ref={inputRefLandscape} accept="image/*" className="absolute  h-[30rem] w-full top-0 left-0 z-20 opacity-0 cursor-pointer" onChange={handleLandscapePhotoChange} />
+                    <div className="absolute top-0 left-0 w-full h-[30rem] bg-black opacity-40 rounded-md shadow-md z-10"></div>
+                    <img
+                      src={typeof backgroundPhotoSubsection === 'string' ? backgroundPhotoSubsection : URL.createObjectURL(backgroundPhotoSubsection)}
+                      alt="Background"
+                      className="absolute top-0 left-0 w-full h-[30rem] object-cover rounded-md shadow-md"
+                    />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-10 h-10 text-white z-20"
+                    >
+                      <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32l8.4-8.4z" />
+                      <path d="M5.25 5.25a3 3 0 00-3 3v10.5a3 3 0 003 3h10.5a3 3 0 003-3V13.5a.75.75 0 00-1.5 0v5.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5V8.25a1.5 1.5 0 011.5-1.5h5.25a.75.75 0 000-1.5H5.25z" />
+                    </svg>
+                  </div>
+                  :
+                  <img
+                    src={courseSubsection?.attributes?.landscape_photo?.data?.attributes?.url}
+                    alt=""
+                    className="h-[30rem] w-full object-cover rounded-md shadow-md mt-5"
+                  />
+
               )}
 
               {settingsFlag && (user.role_str === 'professor' || user.role_str === 'admin') ? (
@@ -235,10 +273,22 @@ const CourseInside = () => {
               ) : courseSection && courseContentInformation.length > 0 && (
                 <>
                   <div className="flex items-center  mt-5">
-                    <p className="text-xl font-semibold">{courseSubsection.attributes.title}</p>
+                    {
+                      enableEdit ?
+                        <input
+                          type="text"
+                          name="first-name"
+                          value={titleSubsection}
+                          onChange={(e) => setTitleSubsection(e.target.value)}
+                          id="first-name"
+                          autoComplete="given-name"
+                          className="mt-1   rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        />
+                        :
+                        <p className="text-xl font-semibold">{courseSubsection.attributes.title}</p>
+                    }
                     <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} />
                   </div>
-
                   <Tabs className='font-normal' tabBarStyle={{ borderBottom: '1px solid black' }} defaultActiveKey="1" items={items} />
                 </>
               )}
@@ -276,6 +326,7 @@ const CourseInside = () => {
                     setCourseContentInformation,
                     setEditSectionFlag,
                     setSectionToEdit,
+                    courseSubsection,
                   }}
                 />
                 <ForumClickable posts={posts} setForumFlag={setForumFlag} />

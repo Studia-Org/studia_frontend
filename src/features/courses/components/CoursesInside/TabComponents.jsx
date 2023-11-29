@@ -5,10 +5,14 @@ import { Empty, Button, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import MDEditor from "@uiw/react-md-editor";
 import '@mdxeditor/editor/style.css'
+import fileDownload from "js-file-download";
 import { API } from "../../../../constant";
 import { getToken } from "../../../../helpers";
+import { MoonLoader } from "react-spinners";
+import { set } from "date-fns";
 
-export const CourseContent = ({ courseContentInformation, courseSection, courseSubsection, courseId, enableEdit, setEnableEdit, setCourseContentInformation }) => {
+
+export const CourseContent = ({ courseContentInformation, courseSection, courseSubsection, courseId, enableEdit, setEnableEdit, setCourseContentInformation, titleSubsection, backgroundPhotoSubsection }) => {
     const [loading, setLoading] = useState(false);
     const section_ = courseContentInformation.find(
         (seccion) => seccion.attributes.title === courseSection
@@ -17,19 +21,45 @@ export const CourseContent = ({ courseContentInformation, courseSection, courseS
         (subseccion) =>
             subseccion.attributes.title === courseSubsection.attributes.title
     );
-    const [subsectionContent, setSubsectionContent] = useState(subsection_.attributes.content);
-
+    const [subsectionContent, setSubsectionContent] = useState(subsection_?.attributes?.content);
     const saveChanges = async () => {
         setLoading(true)
+        let background_photo_id = null;
+        if (backgroundPhotoSubsection) {
+            const dataForm = new FormData();
+            dataForm.append('files', backgroundPhotoSubsection);
+            const response = await fetch(`${API}/upload/`, {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${getToken()}`
+                },
+                body: dataForm
+            })
+            if (response.ok) {
+                const data = await response.json();
+                background_photo_id = data[0].id
+            } else {
+                const errorData = await response.json();
+                console.error('Error:', errorData);
+                message.error('Something went wrong');
+                setLoading(false);
+            }
+        }
+
         const response = await fetch(`${API}/subsections/${subsection_.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${getToken()}`
             },
-            body: JSON.stringify({ data: { content: subsectionContent } })
+            body: JSON.stringify({
+                data: {
+                    content: subsectionContent,
+                    landscape_photo: background_photo_id,
+                    title: titleSubsection,
+                }
+            })
         })
-        const data = await response.json();
         if (response.ok) {
             setCourseContentInformation([...courseContentInformation.map((section) => {
                 if (section.id === section_.id) {
@@ -45,7 +75,9 @@ export const CourseContent = ({ courseContentInformation, courseSection, courseS
                                             ...subsection,
                                             attributes: {
                                                 ...subsection.attributes,
-                                                content: subsectionContent
+                                                landscape_photo: backgroundPhotoSubsection,
+                                                content: subsectionContent,
+                                                title: titleSubsection,
                                             }
                                         }
                                     } else {
@@ -97,7 +129,16 @@ export const CourseContent = ({ courseContentInformation, courseSection, courseS
     )
 }
 
-export const CourseFiles = ({ courseContentInformation, courseSection, courseSubsection }) => {
+export const CourseFiles = ({ courseContentInformation, courseSection, courseSubsection, enableEdit, setCourseContentInformation }) => {
+    const [fileUploadLoading, setFileUploadLoading] = useState(false);
+    const section_ = courseContentInformation.find(
+        (seccion) => seccion.attributes.title === courseSection
+    );
+    const subsection_ = section_.attributes.subsections.data.find(
+        (subseccion) =>
+            subseccion.attributes.title === courseSubsection.attributes.title
+    );
+    const [files, setFiles] = useState(subsection_.attributes.files?.data);
 
     const downloadFile = async (file) => {
         try {
@@ -119,22 +160,105 @@ export const CourseFiles = ({ courseContentInformation, courseSection, courseSub
         }
     };
 
-    const section_ = courseContentInformation.find(
-        (seccion) => seccion.attributes.title === courseSection
-    );
-    const subsection_ = section_.attributes.subsections.data.find(
-        (subseccion) =>
-            subseccion.attributes.title === courseSubsection.attributes.title
-    );
+    async function handleFileChange(e) {
+        setFileUploadLoading(true)
+        let fileId = null;
+        let allFiles = []
+        let fileAttributes = null;
+        const file = e.target.files[0];
+        const formData = new FormData();
+        formData.append('files', file);
+
+        await fetch(`${API}/upload/`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${getToken()}`
+            },
+            body: formData
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                fileId = data[0].id
+                fileAttributes = data[0]
+                const fileObject = {
+                    id: fileId,
+                    attributes: fileAttributes
+                }
+                if (files) {
+                    setFiles([...files, fileObject])
+                }
+                else {
+                    setFiles([fileObject])
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+        if (subsection_?.attributes?.files?.data !== null) {
+            allFiles = subsection_?.attributes?.files?.data?.map((file) => file.id)
+        }
+
+        allFiles.push(fileId)
+        await fetch(`${API}/subsections/${subsection_.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${getToken()}`
+            },
+            body: JSON.stringify({ data: { files: allFiles } })
+        })
+
+        setCourseContentInformation([...courseContentInformation.map((section) => {
+            if (section.id === section_.id) {
+                return {
+                    ...section,
+                    attributes: {
+                        ...section.attributes,
+                        subsections: {
+                            ...section.attributes.subsections,
+                            data: (section.attributes.subsections && section.attributes.subsections.data)
+                                ? [...section.attributes.subsections.data.map((subsection) => {
+                                    if (subsection.id === subsection_.id) {
+                                        return {
+                                            ...subsection,
+                                            attributes: {
+                                                ...subsection.attributes,
+                                                files: {
+                                                    ...subsection.attributes.files,
+                                                    data: [...(subsection.attributes.files && subsection.attributes.files.data)
+                                                        ? subsection.attributes.files.data.concat({ id: fileId, attributes: fileAttributes })
+                                                        : [{ id: fileId, attributes: fileAttributes }]
+                                                    ]
+                                                }
+                                            }
+                                        };
+                                    } else {
+                                        return subsection;
+                                    }
+                                })]
+                                : [] // Empty array if subsections.data is null
+                        }
+                    }
+                };
+            } else {
+                return section;
+            }
+        })]);
+
+        message.success('File uploaded successfully');
+        setFileUploadLoading(false)
+
+    }
 
     return (
         <div className='w-full flex flex-row items-center space-x-8'>
             <div className='w-full mr-5'>
-                <ul className="mt-3 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
-                    {subsection_.attributes.files?.data?.map((file) => (
-                        <li key={file.id} className="col-span-1 flex rounded-md shadow-sm" >
+                <ul className="mt-3 flex gap-5 flex-wrap items-center">
+                    {files?.map((file) => (
+                        <li key={file.id} className=" flex rounded-md shadow-sm" >
                             <div
-                                className='bg-indigo-500 flex-shrink-0 flex items-center justify-center w-16  text-white text-sm font-medium rounded-l-md'>
+                                className='bg-indigo-500  flex items-center justify-center  px-4 text-white text-sm font-medium rounded-l-md'>
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                                     <path fillRule="evenodd" d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625zM7.5 15a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 017.5 15zm.75 2.25a.75.75 0 000 1.5H12a.75.75 0 000-1.5H8.25z" clipRule="evenodd" />
                                     <path d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z" />
@@ -143,11 +267,13 @@ export const CourseFiles = ({ courseContentInformation, courseSection, courseSub
                             <div className="flex flex-1 items-center justify-between  rounded-r-md border-t border-r border-b border-gray-200 bg-white">
                                 <div className="flex-1 truncate px-4 py-2 text-sm">
                                     <p className="font-medium text-gray-900 hover:text-gray-600">
-                                        {file.attributes.name}
+                                        {file.attributes.name.length > 30
+                                            ? `${file.attributes.name.slice(0, 30)}...`
+                                            : file.attributes.name}
                                     </p>
                                     <p className="text-gray-500">{file.attributes.size} b</p>
                                 </div>
-                                <div className="flex-shrink-0 pr-2">
+                                <div className="pr-2">
                                     <button
                                         type="button"
                                         onClick={() => downloadFile(file.attributes)}
@@ -162,34 +288,68 @@ export const CourseFiles = ({ courseContentInformation, courseSection, courseSub
                             </div>
                         </li>
                     ))}
+                    {
+                        enableEdit && (
+                            <li className="flex rounded-md items-center justify-center bg-indigo-500 text-white text-sm w-[3rem] h-[3rem] font-medium duration-100 hover:scale-105 cursor-pointer">
+                                <label htmlFor="avatar" className="file-input-label flex items-center gap-3 relative">
+                                    <div className="absolute flex items-center justify-center cursor-pointer" style={{ width: '100%', height: '100%' }}>
+                                        {
+                                            fileUploadLoading && (
+                                                <MoonLoader size={25} color={"#ffffff"} className="cursos-pointer" />
+                                            )
+                                        }
+                                    </div>
+                                    <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg" style={{ display: 'none' }} onChange={handleFileChange} />
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 cursor-pointer">
+                                        <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
+                                    </svg>
+                                </label>
+                            </li>
+                        )
+                    }
                 </ul>
             </div>
         </div >
     )
 }
 
-export const CourseParticipants = ({ students }) => {
+export const CourseParticipants = ({ students, enableEdit, setSettingsFlag }) => {
     const navigate = useNavigate()
 
     if (students.data.length === 0) {
         return <Empty />;
     } else {
         return (
-            <div className="flex space-x-8">
+            <div className="flex space-x-8 mt-3 items-center">
                 {students.data.map((student) => (
                     <button
                         key={student.id}
-                        className="bg-white rounded flex p-3 items-center space-x-3 shadow w-[14rem]"
+                        className="bg-white rounded flex items-center space-x-3 shadow w-auto pr-4 duration-150 hover:bg-gray-100"
                         onClick={() => navigate(`/app/profile/${student.id}/`)}
                     >
                         <img
                             src={student.attributes.profile_photo.data.attributes.url}
                             alt=""
-                            className="rounded w-14 h-14"
+                            className="rounded-l w-14 h-14"
                         />
-                        <p className="font-medium">{student.attributes.name}</p>
+                        <div className="flex flex-col items-start ">
+                            <p className="font-medium">{student.attributes.name}</p>
+                            <p className=" text-gray-500">{student.attributes.email}</p>
+                        </div>
+
                     </button>
                 ))}
+                {
+                    enableEdit && (
+                        <button onClick={() => setSettingsFlag(true)}
+                            className="bg-indigo-500 rounded flex items-center shadow w-auto duration-150 px-2 h-[2.5rem] gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-white">
+                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
+                            </svg>
+                            <p className="text-white font-medium">Add student</p>
+                        </button>
+                    )
+                }
             </div>
         );
     }
