@@ -16,7 +16,7 @@ import { de } from 'date-fns/locale';
 
 
 export const AccordionCourseContent = ({ courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag,
-  setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setCourseContentInformation, setEditSectionFlag, setSectionToEdit, courseSubsection }) => {
+  setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setCourseContentInformation, setEditSectionFlag, setSectionToEdit, courseSubsection, courseSection }) => {
   const [sectionNumber, setSectionNumber] = useState(1);
   const [newSection, setNewSection] = useState('');
   const [addSectionLoading, setAddSectionLoading] = useState(false);
@@ -320,11 +320,13 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
       percentageFinished = 0;
     }
 
+
     return (
       <Collapse
         expandIcon={({ isActive }) => <CaretRightOutlined className='absolute top-0 bottom-0 right-5 ' rotate={isActive ? 90 : 0} />}
         className='mt-5 bg-gray-50'
         expandIconPosition="right"
+        defaultActiveKey={(courseSection === section.attributes.title) && sectionNumber.toString()}
       >
         <Panel
           header={

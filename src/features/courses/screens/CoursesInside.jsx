@@ -2,7 +2,7 @@ import { useEffect, useState, React, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { API, BEARER } from "../../../constant";
 import { getToken } from "../../../helpers";
-import { Tabs } from "antd";
+import { Tabs, Popconfirm } from "antd";
 import { SwitchEdit } from "../components/CoursesInside/SwitchEdit";
 import { FiChevronRight } from "react-icons/fi";
 import { ProfessorData } from "../components/CoursesInside/ProfessorData";
@@ -15,8 +15,6 @@ import { QuestionnaireComponent } from '../components/CoursesInside/Questionnair
 import { CourseParticipants, CourseContent, CourseFiles } from "../components/CoursesInside/TabComponents";
 import { useAuthContext } from "../../../context/AuthContext";
 import { EditSection } from "../components/CoursesInside/EditSection";
-
-import { set } from "date-fns";
 
 const CourseInside = () => {
   const inputRefLandscape = useRef(null);
@@ -43,14 +41,9 @@ const CourseInside = () => {
   let { courseId } = useParams();
   const { user } = useAuthContext()
 
-  function handleLandscapePhoto() {
-    inputRefLandscape.current.click();
-  }
-
   function handleLandscapePhotoChange(event) {
     setBackgroundPhotoSubsection(event.target.files[0]);
   }
-
 
   const fetchPostData = async () => {
     try {
@@ -190,6 +183,10 @@ const CourseInside = () => {
 
   }, [courseContentInformation, subsectionsCompleted]);
 
+  function deleteFile() {
+    setBackgroundPhotoSubsection(undefined)
+  }
+
   useEffect(() => {
     if (courseSubsection.length !== 0) {
       setSubsectionsLandscapePhoto(
@@ -233,34 +230,72 @@ const CourseInside = () => {
             <EditSection setEditSectionFlag={setEditSectionFlag} sectionToEdit={sectionToEdit} setCourseContentInformation={setCourseContentInformation} setSectionToEdit={setSectionToEdit} />
           ) : !forumFlag ? (
             <div>
-              {subsectionsLandscapePhoto && !settingsFlag && (
-                enableEdit ?
-                  <div className="relative w-full mt-5 h-[30rem]">
-                    <input type="file" ref={inputRefLandscape} accept="image/*" className="absolute  h-[30rem] w-full top-0 left-0 z-20 opacity-0 cursor-pointer" onChange={handleLandscapePhotoChange} />
-                    <div className="absolute top-0 left-0 w-full h-[30rem] bg-black opacity-40 rounded-md shadow-md z-10"></div>
-                    <img
-                      src={typeof backgroundPhotoSubsection === 'string' ? backgroundPhotoSubsection : URL.createObjectURL(backgroundPhotoSubsection)}
-                      alt="Background"
-                      className="absolute top-0 left-0 w-full h-[30rem] object-cover rounded-md shadow-md"
-                    />
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-10 h-10 text-white z-20"
-                    >
+              {
+                backgroundPhotoSubsection && !settingsFlag && (
+                  enableEdit ?
+                    <div className="relative w-full mt-5 h-[30rem]">
+                      <input type="file" ref={inputRefLandscape} accept="image/*" className="absolute  h-[30rem] w-full top-0 left-0 z-40 opacity-0 cursor-pointer" onChange={handleLandscapePhotoChange} />
+                      <div className="absolute top-0 left-0 w-full h-[30rem] bg-black opacity-40 rounded-md shadow-md z-10"></div>
+                      <img
+                        src={typeof backgroundPhotoSubsection === 'string' ? backgroundPhotoSubsection : URL.createObjectURL(backgroundPhotoSubsection)}
+                        alt="Background"
+                        className="absolute top-0 left-0 w-full h-[30rem] object-cover rounded-md shadow-md"
+                      />
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-9 h-9 text-white z-20"
+                      >
+                        <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32l8.4-8.4z" />
+                        <path d="M5.25 5.25a3 3 0 00-3 3v10.5a3 3 0 003 3h10.5a3 3 0 003-3V13.5a.75.75 0 00-1.5 0v5.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5V8.25a1.5 1.5 0 011.5-1.5h5.25a.75.75 0 000-1.5H5.25z" />
+                      </svg>
+                      <Popconfirm
+                        title="Delete the background"
+                        description="Are you sure to delete the background photo?"
+                        okText="Yes"
+                        okType="danger"
+                        onConfirm={(e) => {
+                          e.stopPropagation();
+                          deleteFile();
+                        }}
+                        onCancel={(e) => {
+                          e.stopPropagation();
+                        }}
+                        cancelText="No"
+                      >
+                        <button onClick={(e) => {
+                          e.stopPropagation();
+                        }} className="absolute top-0 right-0 z-50 px-4 py-4">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-white ">
+                            <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z" clipRule="evenodd" />
+                          </svg>
+                        </button>
+                      </Popconfirm>
+                    </div>
+                    :
+                    courseSubsection?.attributes?.landscape_photo?.data ?
+                      <>
+                        <img
+                          src={courseSubsection?.attributes?.landscape_photo?.data?.attributes?.url}
+                          alt=""
+                          className="h-[30rem] w-full object-cover rounded-md shadow-md mt-5"
+                        />
+                      </>
+                      : null
+                )
+              }
+              {
+                (enableEdit && !backgroundPhotoSubsection && !settingsFlag && !questionnaireFlag) && (
+                  <div className="relative w-full h-[15rem] rounded-md bg-gray-50 flex items-center justify-center shadow-md">
+                    <input ref={inputRefLandscape} type="file" className="absolute opacity-0 h-[15rem] w-full cursor-pointer z-20" onChange={handleLandscapePhotoChange} />
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-9 h-9 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
                       <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32l8.4-8.4z" />
                       <path d="M5.25 5.25a3 3 0 00-3 3v10.5a3 3 0 003 3h10.5a3 3 0 003-3V13.5a.75.75 0 00-1.5 0v5.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5V8.25a1.5 1.5 0 011.5-1.5h5.25a.75.75 0 000-1.5H5.25z" />
                     </svg>
                   </div>
-                  :
-                  <img
-                    src={courseSubsection?.attributes?.landscape_photo?.data?.attributes?.url}
-                    alt=""
-                    className="h-[30rem] w-full object-cover rounded-md shadow-md mt-5"
-                  />
-
-              )}
+                )
+              }
 
               {settingsFlag && (user.role_str === 'professor' || user.role_str === 'admin') ? (
                 <CourseSettings setSettingsFlag={setSettingsFlag} courseData={courseBasicInformation} setCourseData={setCourseBasicInformation} />
@@ -327,6 +362,7 @@ const CourseInside = () => {
                     setEditSectionFlag,
                     setSectionToEdit,
                     courseSubsection,
+                    courseSection,
                   }}
                 />
                 <ForumClickable posts={posts} setForumFlag={setForumFlag} />
