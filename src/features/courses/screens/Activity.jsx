@@ -4,10 +4,12 @@ import PeerReviewComponent from "../components/Activity/PeerReviewComponent.jsx"
 import { useParams } from "react-router-dom";
 import { API } from "../../../constant";
 import { useAuthContext } from "../../../context/AuthContext";
+import { getToken } from "../../../helpers.js";
 
 const Activity = () => {
   const { courseId, activityId } = useParams();
   const [userQualification, setUserQualification] = useState([]);
+  const [idPartnerReview, setIdPartnerReview] = useState(null);
 
   const { user } = useAuthContext();
 
@@ -42,13 +44,14 @@ const Activity = () => {
         }
         setUserQualification({ activity: qualificationData })
       }
+
+
     } catch (error) {
       console.error(error);
     }
   };
 
   function selectTypeOfActivity() {
-    console.log(userQualification)
     const type = userQualification.activity.activity.data.attributes.type;
     switch (type) {
       case "Peer Review":
@@ -61,6 +64,7 @@ const Activity = () => {
   }
   useEffect(() => {
     fetchUserQualificationsData();
+
   }, [user]);
 
   return (
