@@ -29,7 +29,6 @@ const Activity = () => {
           `&populate[PeerReviewQualification][populate][file][fields][0]=*` +
           `&populate[PeerReviewQualification][populate][user][fields][0]=username`)
       const data = await response.json();
-
       if (data.data.length > 0) {
         setUserQualification({ activity: data.data[0].attributes, idQualification: data.data[0]["id"] });
       } else {
@@ -50,6 +49,7 @@ const Activity = () => {
       console.error(error);
     }
   };
+  console.log(userQualification);
 
   function selectTypeOfActivity() {
     const type = userQualification.activity.activity.data.attributes.type;

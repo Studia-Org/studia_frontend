@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { ForethoughtPage, PerformancePage, SelfReflectionPage } from './ConstantsSubsectionItems'
 
 
-export const SubsectionItems = ({ setCreateCourseSectionsList, sectionToEdit }) => {
+export const SubsectionItems = ({ setCreateCourseSectionsList, sectionToEdit, context }) => {
     const [currentPage, setCurrentPage] = useState('first');
     const [currentPageSequence, setCurrentPageSequence] = useState(0);
     const [addItemsOrPreMade, setAddItemsOrPreMade] = useState('preMade');
@@ -31,13 +31,13 @@ export const SubsectionItems = ({ setCreateCourseSectionsList, sectionToEdit }) 
     function renderPage() {
         switch (currentPage) {
             case 'first':
-                return <ForethoughtPage setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} handleBack={handleBack} handleContinue={handleContinue} />
+                return <ForethoughtPage setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} handleBack={handleBack} handleContinue={handleContinue} context={context} />
             case 'second':
-                return <PerformancePage setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} handleBack={handleBack} handleContinue={handleContinue} />
+                return <PerformancePage setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} handleBack={handleBack} handleContinue={handleContinue} context={context} />
             case 'third':
-                return <SelfReflectionPage setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} handleBack={handleBack} handleContinue={handleContinue} />
+                return <SelfReflectionPage setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} handleBack={handleBack} handleContinue={handleContinue} context={context} />
             default:
-                return <ForethoughtPage setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} handleBack={handleBack} handleContinue={handleContinue} />
+                return <ForethoughtPage setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} handleBack={handleBack} handleContinue={handleContinue} context={context} />
         }
     }
 
