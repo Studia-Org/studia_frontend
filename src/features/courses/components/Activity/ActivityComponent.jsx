@@ -401,7 +401,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
           <>
             <div className='bg-white mb-5 mt-10 rounded-md shadow-md p-5 w-[30rem]'>
               <p className='text-lg font-medium mb-4'>Task Files</p>
-              {(!activityData.activity.data.attributes.file?.data.length || activityData.activity.data.attributes.file?.data.length === 0) ? (
+              {(!activityData.activity.data.attributes.file?.data?.length || activityData.activity.data.attributes.file?.data?.length === 0) ? (
                 enableEdit ? (
                   <FilePond allowMultiple={true} maxFiles={5} onupdatefiles={setFilesTask} />
                 ) : (

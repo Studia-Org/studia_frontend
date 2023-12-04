@@ -1,15 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TaskComponentCard } from "../CreateCourses/CourseConfirmation/TaskComponentCard";
 import ReactMarkdown from "react-markdown";
 import { Empty, Button, message } from "antd";
 import { useNavigate } from "react-router-dom";
 import MDEditor from "@uiw/react-md-editor";
 import '@mdxeditor/editor/style.css'
-import fileDownload from "js-file-download";
 import { API } from "../../../../constant";
 import { getToken } from "../../../../helpers";
 import { MoonLoader } from "react-spinners";
-import { set } from "date-fns";
+
 
 
 export const CourseContent = ({ courseContentInformation, courseSection, courseSubsection, courseId, enableEdit, setEnableEdit, setCourseContentInformation, titleSubsection, backgroundPhotoSubsection }) => {
@@ -22,6 +21,11 @@ export const CourseContent = ({ courseContentInformation, courseSection, courseS
             subseccion.attributes.title === courseSubsection.attributes.title
     );
     const [subsectionContent, setSubsectionContent] = useState(subsection_?.attributes?.content);
+
+    useEffect(() => {
+        setSubsectionContent(subsection_?.attributes?.content)
+    }, [subsection_?.attributes?.content])
+    console.log(subsectionContent)
     const saveChanges = async () => {
         setLoading(true)
         let background_photo_id = null;
@@ -113,7 +117,7 @@ export const CourseContent = ({ courseContentInformation, courseSection, courseS
                 {
                     !enableEdit
                         ?
-                        <ReactMarkdown>{subsectionContent}</ReactMarkdown>
+                        <ReactMarkdown>{subsection_?.attributes?.content}</ReactMarkdown>
                         :
                         <div className="flex flex-col">
                             <MDEditor height="30rem" className='mt-2 mb-8' data-color-mode='light' onChange={setSubsectionContent} value={subsectionContent} />
@@ -330,10 +334,10 @@ export const CourseParticipants = ({ students, enableEdit, setSettingsFlag }) =>
                         <img
                             src={student.attributes.profile_photo.data.attributes.url}
                             alt=""
-                            className="rounded-l w-14 h-14"
+                            className="rounded-l w-14"
                         />
                         <div className="flex flex-col items-start ">
-                            <p className="font-medium">{student.attributes.name}</p>
+                            <p className="font-medium line-clamp-1">{student.attributes.name}</p>
                             <p className=" text-gray-500">{student.attributes.email}</p>
                         </div>
 
