@@ -57,7 +57,7 @@ export const TaskComponentCard = ({ task, setVisibilityTask, context, courseId }
                     {svgType(task?.attributes?.type)}
                 </div>
                 <p className='font-medium text-xl ml-20'>{task.attributes.title}</p>
-                {user.role_str !== 'professor' && user.role_str !== 'admin' && (
+                {user?.role_str !== 'professor' && user?.role_str !== 'admin' && (
                     deadlineOnTime ?
                         <div className='ml-auto bg-green-700 rounded-md p-2 px-8 text-center '>
                             <p className='text-base font-medium text-white'>{task.attributes.deadline}</p>

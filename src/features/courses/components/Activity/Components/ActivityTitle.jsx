@@ -2,7 +2,7 @@ import React from 'react'
 import Chip from '@mui/material/Chip';
 
 
-function ActivityTitle({ type, title, evaluated, qualification }) {
+function ActivityTitle({ type, title, evaluated, qualification, setTitle, enableEdit, userRole, titleState }) {
     return (
         <div className='relative flex items-center mb-6 bg-white rounded-md p-5 shadow-md mt-5'>
             <div className='flex items-center space-x-3 '>
@@ -31,17 +31,31 @@ function ActivityTitle({ type, title, evaluated, qualification }) {
                                 :
                                 <div className='w-14 h-14 bg-red-800 rounded-md'></div>
                 }
-                <h3 className={`flex font-semibold text-2xl ${evaluated ? 'max-w-[calc(100%-7rem)]' : ''}  sm:max-w-[calc(100%-9.5rem)]`}>{title}</h3>
-
+                {
+                    enableEdit ?
+                        <input
+                            type="text"
+                            name="first-name"
+                            value={titleState}
+                            onChange={(e) => setTitle(e.target.value)}
+                            id="first-name"
+                            autoComplete="given-name"
+                            className="mt-1 block w-3/4 rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                        />
+                        :
+                        <h3 className={`flex font-semibold w-full text-2xl ${evaluated ? 'max-w-[calc(100%-7rem)]' : ''}  sm:max-w-[calc(100%-9.5rem)]`}>{title}</h3>
+                }
             </div>
             {
-                evaluated ?
-                    <div className='absolute right-0 bg-green-700 rounded-r-md max-w-[3.5rem] sm:max-w-[6rem] sm:w-24   w-14 ml-auto flex flex-col h-full justify-center text-center'>
-                        <p className='text-white font-semibold max-w-[100%] text-xl'>{qualification}/10</p>
-                    </div>
-
+                userRole === 'professor' || userRole === 'admin' ?
+                    null
                     :
-                    <Chip className='ml-auto' label="Not finished" color="primary" />
+                    evaluated ?
+                        <div className='absolute right-0 bg-green-700 rounded-r-md w-14 sm:w-[6rem]  ml-auto flex flex-col h-full justify-center text-center'>
+                            <p className='text-white font-semibold text-xl'>{qualification}/10</p>
+                        </div>
+                        :
+                        <Chip className='ml-auto' label="Not finished" color="primary" />
             }
         </div>
     )

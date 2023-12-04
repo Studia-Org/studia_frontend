@@ -57,7 +57,7 @@ const Activity = () => {
       case "Peer Review":
         return <PeerReviewComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} />;
       default:
-        return <ActivityComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} />;
+        return <ActivityComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} setUserQualification={setUserQualification} />;
 
     }
 

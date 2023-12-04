@@ -56,7 +56,7 @@ const Login = () => {
                 title: 'Something went wrong'
             })
         } finally {
-            // setIsLoading(false);
+            setIsLoading(false);
         }
     };
 

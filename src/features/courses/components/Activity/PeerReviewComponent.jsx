@@ -5,6 +5,7 @@ import { API } from "../../../../constant";
 import { getToken } from "../../../../helpers";
 import { MoonLoader } from 'react-spinners';
 import Swal from "sweetalert2";
+import { useAuthContext } from "../../../../context/AuthContext";
 
 export default function PeerReviewComponent({ activityData, idQualification }) {
     const [showEvaluate, setShowEvaluate] = useState(false);
@@ -12,8 +13,12 @@ export default function PeerReviewComponent({ activityData, idQualification }) {
     const [idPartnerReview, setIdPartnerReview] = useState(null);
     const [answersDelivered, setAnswersDelivered] = useState(null);
     const [loading, setLoading] = useState(true);
+    const { user } = useAuthContext();
+
 
     useEffect(() => {
+        if (user === null || user === undefined || user.role_str !== 'student') { setLoading(false); return }
+
         fetch(`${API}/qualifications?qualification` +
             `&fields[0]=PeerReviewAnswers` +
             `&populate[activity][fields][0]=id` +
@@ -42,7 +47,7 @@ export default function PeerReviewComponent({ activityData, idQualification }) {
             setLoading(false)
         })
 
-    }, []);
+    }, [user]);
 
 
     function sendEvalution() {

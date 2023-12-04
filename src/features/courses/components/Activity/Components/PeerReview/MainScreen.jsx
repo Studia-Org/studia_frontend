@@ -15,7 +15,7 @@ function MainScreen({ activityData, setShowEvaluate, data }) {
     const PeerReview = activityData?.PeerReviewQualification
     const answers = activityData?.PeerReviewAnswers
     const deadLine = new Date(activityData?.activity?.data?.attributes?.deadline)
-    const overpassDeadLine = deadLine < new Date()
+    const overpassDeadLine = deadLine < new Date() && user?.role_str === 'student'
     return (
         <div className={`flex ${overpassDeadLine ? `flex-col` : ""} content-start items-start 1.5xl:justify-between flex-wrap space-y-6 `}>
             <div className={`flex flex-col 1.5xl:w-3/5 ${overpassDeadLine ? "sm:p-10 p-5" : "p-5"}`}>

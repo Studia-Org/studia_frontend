@@ -93,10 +93,13 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
         setUserQualification({ ...activityData, activity: { activity: result } });
         setEnableEdit(false);
         setLoading(false);
+        message.success('Changes saved successfully');
       }
       else throw new Error('Error saving changes');
     } catch (error) {
-      console.error(error);
+      message.error(error.message);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -311,21 +314,24 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
           evaluated={evaluated}
           qualification={activityData.qualification}
           setTitle={setTitle}
+          titleState={title}
           enableEdit={enableEdit}
-          userRole={user.role_str}
+          userRole={user?.role_str}
         />
         <ObjectivesTags USER_OBJECTIVES={USER_OBJECTIVES} categories={activityData?.activity.data.attributes.categories} />
 
-        <div className='flex ml-auto items-center'>
-          <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} />
-        </div>
+        {
+          user.role_str === 'professor' || user.role_str === 'admin' ?
+            <div className='flex ml-auto items-center'>
+              <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} />
+            </div> : null
+        }
 
         <p className='text-xs text-gray-400 mb-1 mt-5'>Task description</p>
         <hr />
         <div className='prose my-3 text-gray-600 ml-5 w-full box-content mt-5 max-w-none'>
           {
-            !enableEdit
-              ?
+            !enableEdit ?
               <ReactMarkdown className=''>{activityData.activity.data.attributes.description}</ReactMarkdown>
               :
               <div className="flex flex-col">
