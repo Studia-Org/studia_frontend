@@ -25,7 +25,6 @@ export const CourseContent = ({ courseContentInformation, courseSection, courseS
     useEffect(() => {
         setSubsectionContent(subsection_?.attributes?.content)
     }, [subsection_?.attributes?.content])
-    console.log(subsectionContent)
     const saveChanges = async () => {
         setLoading(true)
         let background_photo_id = null;
