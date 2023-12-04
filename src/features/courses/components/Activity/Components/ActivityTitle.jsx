@@ -5,7 +5,7 @@ import Chip from '@mui/material/Chip';
 function ActivityTitle({ type, title, evaluated, qualification, setTitle, enableEdit, userRole, titleState }) {
     return (
         <div className='relative flex items-center mb-6 bg-white rounded-md p-5 shadow-md mt-5'>
-            <div className='flex items-center space-x-3 '>
+            <div className='flex items-center w-full space-x-3'>
                 {
                     type === 'task' ?
                         <div className='w-14 h-14 bg-red-500 rounded-md items-center flex justify-center'>
@@ -43,7 +43,7 @@ function ActivityTitle({ type, title, evaluated, qualification, setTitle, enable
                             className="mt-1 block w-3/4 rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         />
                         :
-                        <h3 className={`flex font-semibold w-full text-2xl ${evaluated ? 'max-w-[calc(100%-7rem)]' : ''}  sm:max-w-[calc(100%-9.5rem)]`}>{title}</h3>
+                        <h3 className={`flex font-semibold  text-2xl ${evaluated ? 'max-w-[calc(100%-7rem)]' : ''}  sm:max-w-[calc(100%-9.5rem)]`}>{title}</h3>
                 }
             </div>
             {
