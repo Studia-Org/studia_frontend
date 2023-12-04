@@ -43,7 +43,7 @@ function MainScreen({ activityData, setShowEvaluate, data }) {
                         <section className="p-10 ">
                             <div className=" flex-1">
                                 <h3 className="font-semibold text-2xl mb-5">Submission feedback!</h3>
-                                <div className="grid  grid-cols-2 sm:grid-cols-4 md:grid-cols-5  shadow-lg rounded-[14px] sm:border-2 sm:border-gray-700">
+                                <div className="grid font-semibold  grid-cols-2 sm:grid-cols-4 md:grid-cols-5  shadow-lg rounded-[14px] sm:border-2 sm:border-gray-700">
                                     {Object.keys(answers).map((criterion, index) => {
                                         const range = Object.keys(answers[criterion])[0];
                                         const feedback = answers[criterion][range];
@@ -53,11 +53,11 @@ function MainScreen({ activityData, setShowEvaluate, data }) {
 
                                         return (
                                             <>
-                                                <div className={`flex sm:min-h-[70px] items-center p-4 font-medium bg-scampi-400 text-gray-900 ${isLastRow ? "" : "sm:border-b-2 sm:border-gray-700"}  ${cornerClasses}`}>{criterion}</div>
-                                                <div className={`${isFirstRow ? "rounded-tr-xl" : ""}  bg-scampi-400  ${isLastRow ? "" : "sm:border-b-2 sm:border-gray-700"}
-                                                    sm:bg-white sm:rounded-none flex sm:min-h-[70px] items-center p-4 font-medium  text-gray-900`}>{range}</div>
+                                                <div className={`flex sm:min-h-[70px] items-center p-4  bg-purple-300 text-gray-900 ${isLastRow ? "" : "sm:border-b-2 sm:border-gray-700"}  ${cornerClasses}`}>{criterion}</div>
+                                                <div className={`${isFirstRow ? "rounded-tr-xl" : ""}  bg-purple-300  ${isLastRow ? "" : "sm:border-b-2 sm:border-gray-700"}
+                                                    sm:bg-white sm:rounded-none flex sm:min-h-[70px] items-center p-4  text-gray-900`}>{range}</div>
                                                 <div className={`col-span-2 md:col-span-3 sm:min-h-[70px]
-                                                    flex items-center p-4 h-full  bg-white sm:bg-scampi-400 ${isFirstRow ? "sm:rounded-tr-xl" : ""}
+                                                    flex items-center p-4 h-full  bg-white sm:bg-purple-300 ${isFirstRow ? "sm:rounded-tr-xl" : ""}
                                                     ${isLastRow ? "rounded-bl-xl sm:rounded-bl-none rounded-br-xl" : "border-b-2 border-gray-700"}`}>{feedback}</div>
                                             </>
                                         );

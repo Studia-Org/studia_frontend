@@ -6,6 +6,7 @@ import './styles/modalObjective.css'
 import { useAuthContext } from '../../../context/AuthContext';
 import Swal from 'sweetalert2';
 export default function ModalCreateObjective({ openModal, setObjectives }) {
+
     const [open, setOpen] = useState(openModal);
     const [goals, setGoals] = useState([]);
     const [user_objectives, setUserObjectives] = useState([]);
@@ -92,7 +93,7 @@ export default function ModalCreateObjective({ openModal, setObjectives }) {
                             <input type="search" id="search"
                                 className="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-emerald-500 focus:border-emerald-500 " placeholder="Enter your goal here..." required />
                             <button type='submit'
-                                className="text-white absolute end-2.5 bottom-2.5 bg-emerald-600 hover:scale-95 hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm px-4 py-2 ">
+                                className="text-white absolute end-2.5 bottom-2.5 bg-green-400 hover:scale-95 hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm px-4 py-2 ">
                                 Add
                             </button>
                         </div>
@@ -100,7 +101,7 @@ export default function ModalCreateObjective({ openModal, setObjectives }) {
                     <lu className="w-full">
                         {goals.map((goal, index) =>
                             <motion.li
-                                className='list-none bg-emerald-100 border-[1px] border-emerald-500 text-emerald-500 rounded-lg p-2 my-2 '
+                                className='list-none bg-emerald-100 border-[1px] bg- border-emerald-500 text-emerald-500  rounded-lg p-2 my-2 '
                                 animate={{ opacity: [0, 1], y: [-10, 0] }}
                                 transition={{ delay: index * 0.025 }}
                                 key={index}>
