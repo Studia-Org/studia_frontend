@@ -1,0 +1,133 @@
+.rubrica {
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+    table-layout: auto;
+    border-radius: 5px;
+}
+
+.rubrica tr {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    padding: .35em;
+    border-radius: 5px;
+}
+
+.rubrica tbody {
+    background-color: #e7eaf886;
+}
+
+.rubrica th {
+    font-size: .85em;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+}
+
+@media screen and (max-width: 760px) {
+    .rubrica {
+        border: 0;
+    }
+
+    .rubrica caption {
+        font-size: 1.3em;
+    }
+
+    .rubrica thead {
+        border: none;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+
+    .rubrica tr {
+        border-bottom: 3px solid #ddd;
+        display: block;
+        margin-bottom: .625em;
+        font-weight: semibold;
+    }
+
+    .rubrica td {
+        border-bottom: 1px solid #ddd;
+        display: block;
+        font-size: .8em;
+        text-align: right;
+    }
+
+    .rubrica td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .rubrica td:last-child {
+        border-bottom: 0;
+    }
+}
+
+.petite {
+    border: 0;
+}
+
+.petite caption {
+    font-size: 1.3em;
+}
+
+.petite thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+.petite tr {
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: .625em;
+    font-weight: semibold;
+}
+
+.petite td {
+    border-bottom: 1px solid #ddd;
+    display: block;
+    font-size: .8em;
+    text-align: right;
+}
+
+.petite td::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.petite td:last-child {
+    border-bottom: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* general styling */
+body {
+    font-family: "Open Sans", sans-serif;
+    line-height: 1.25;
+}

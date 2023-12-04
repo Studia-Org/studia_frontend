@@ -56,10 +56,8 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCou
         }
 
         const validFasesOrder = ['forethought', 'performance', 'self-reflection'];
-
         const currentFase = movedSubsection.fase;
         const targetFase = subsections[newIndex].fase;
-
         const currentIndex = validFasesOrder.indexOf(currentFase);
         const targetIndex = validFasesOrder.indexOf(targetFase);
 

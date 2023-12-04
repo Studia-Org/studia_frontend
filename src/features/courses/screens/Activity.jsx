@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { ActivityComponent } from "../components/ActivityComponent";
+import { ActivityComponent } from "../components/Activity/ActivityComponent";
+import PeerReviewComponent from "../components/Activity/PeerReviewComponent.jsx";
 import { useParams } from "react-router-dom";
 import { API } from "../../../constant";
 import { useAuthContext } from "../../../context/AuthContext";
+import { getToken } from "../../../helpers.js";
 
 const Activity = () => {
   const { courseId, activityId } = useParams();
   const [userQualification, setUserQualification] = useState([]);
+  const [idPartnerReview, setIdPartnerReview] = useState(null);
 
   const { user } = useAuthContext();
 
@@ -22,11 +25,11 @@ const Activity = () => {
           `&filters[activity][id]=${activityId}` +
           `&populate[user][fields][0]=*` +
           `&populate[evaluator][populate][profile_photo][fields][0]=*` +
-          `&filters[user][id]=${user.id}`)
+          `&filters[user][id]=${user.id}` +
+          `&populate[PeerReviewQualification][populate][file][fields][0]=*` +
+          `&populate[PeerReviewQualification][populate][user][fields][0]=username`)
       const data = await response.json();
-
       if (data.data.length > 0) {
-        console.log(data.data[0]["id"]);
         setUserQualification({ activity: data.data[0].attributes, idQualification: data.data[0]["id"] });
       } else {
         const activityData = await fetch(
@@ -40,19 +43,34 @@ const Activity = () => {
         }
         setUserQualification({ activity: qualificationData })
       }
+
+
     } catch (error) {
       console.error(error);
     }
   };
+  console.log(userQualification);
 
+  function selectTypeOfActivity() {
+    const type = userQualification.activity.activity.data.attributes.type;
+    switch (type) {
+      case "Peer Review":
+        return <PeerReviewComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} />;
+      default:
+        return <ActivityComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} setUserQualification={setUserQualification} />;
+
+    }
+
+  }
   useEffect(() => {
     fetchUserQualificationsData();
+
   }, [user]);
 
   return (
     <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] grid '>
       {userQualification.activity && (
-        <ActivityComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} />
+        selectTypeOfActivity()
       )}
     </div>
   )

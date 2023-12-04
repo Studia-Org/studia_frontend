@@ -69,6 +69,32 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
 
 
                         const data = await response.json();
+
+                        const activity = {
+                            title: subsection.title,
+                            deadline: new Date(subsection.end_date).toISOString(),
+                            ponderation: 0,
+                            type: 'questionnaire',
+                            file: null,
+                            description: subsection.questionnaire.attributes.description,
+                            order: 5,
+                            evaluable: true,
+                            qualifications: null,
+                            evaluators: null,
+                            categories: null,
+                        }
+
+                        const createActivity = await fetch(`${API}/activities`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                Authorization: `Bearer ${getToken()}`,
+                            },
+                            body: JSON.stringify({ data: activity }),
+                        })
+                        const dataActivity = await createActivity.json();
+
+
                         newSubsection =
                         {
                             title: subsection.title,
@@ -76,11 +102,11 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                             finished: false,
                             start_date: new Date(subsection.start_date).toISOString(),
                             end_date: new Date(subsection.end_date).toISOString(),
-                            paragraphs: null,
                             description: subsection.questionnaire.attributes.description?.slice(0, 140) || 'description',
                             landscape_photo: null,
                             questionnaire: data.data.id,
                             users: null,
+                            activities: dataActivity.data.id,
                             files: null,
                             content: subsection.content,
                         }
@@ -101,6 +127,30 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                             filesData = await response.json();
                         }
 
+                        const activity = {
+                            title: subsection.title,
+                            deadline: new Date(subsection.end_date).toISOString(),
+                            ponderation: 0,
+                            type: subsection.type,
+                            file: null,
+                            description: subsection.description,
+                            order: 5,
+                            evaluable: true,
+                            qualifications: null,
+                            evaluators: null,
+                            categories: null,
+                        }
+
+                        const createActivity = await fetch(`${API}/activities`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                Authorization: `Bearer ${getToken()}`,
+                            },
+                            body: JSON.stringify({ data: activity }),
+                        })
+                        const dataActivity = await createActivity.json();
+
                         newSubsection =
                         {
                             title: subsection.title,
@@ -108,10 +158,10 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                             finished: false,
                             start_date: new Date(subsection.start_date).toISOString(),
                             end_date: new Date(subsection.end_date).toISOString(),
-                            paragraphs: null,
                             description: subsection.description?.slice(0, 140) || 'description',
                             landscape_photo: null,
                             questionnaire: null,
+                            activities: dataActivity.data.id,
                             users: null,
                             files: filesData?.map((file) => file.id),
                             content: subsection.content,

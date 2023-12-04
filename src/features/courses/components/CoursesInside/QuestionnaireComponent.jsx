@@ -5,16 +5,16 @@ import TextField from '@mui/material/TextField';
 import { Link } from 'react-router-dom';
 import Chip from '@mui/material/Chip';
 import { motion, Variants } from "framer-motion";
-import { useAuthContext } from "../../../context/AuthContext";
+import { useAuthContext } from "../../../../context/AuthContext";
 import { message } from "antd";
-import { API } from "../../../constant";
-import { getToken } from "../../../helpers";
+import { API } from "../../../../constant";
+import { getToken } from "../../../../helpers";
 import Swal from 'sweetalert2'
 import FormControlLabel, {
   FormControlLabelProps,
 } from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
-import { useTimer } from "../../../shared/elements/useTimer";
+import { useTimer } from "../../../../shared/elements/useTimer";
 
 
 export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID }) => {

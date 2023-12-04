@@ -113,19 +113,59 @@ module.exports = {
       md: "770px",
       // => @media (min-width: 768px) { ... }
       md2: "892px",
+      md3: "945px",
 
       lg: "1024px",
       // => @media (min-width: 1024px) { ... }
 
       xl: "1280px",
       // => @media (min-width: 1280px) { ... }
-
       "2xl": "2000px",
       "1.5xl": "1440px",
 
       "grid-home": "1340px",
       // => @media (min-width: 1280px) { ... }
     },
+    colors: {
+      'scampi': {
+        '50': '#f2f4fb',
+        '100': '#e7eaf8',
+        '200': '#d3d7f2',
+        '300': '#b9bfe8',
+        '400': '#9c9fdd',
+        '500': '#8583d1',
+        '600': '#736ac1',
+        '700': '#6359a9',
+        '800': '#514a89',
+        '900': '#44416e',
+        '950': '#282640',
+      },
+      'emerald': {
+        '50': '#ecfdf5',
+        '100': '#d1fae5',
+        '200': '#a7f3d0',
+        '300': '#6ee7b7',
+        '400': '#34d399',
+        '500': '#10b981',
+        '600': '#059669',
+        '700': '#047857',
+        '800': '#065f46',
+        '900': '#064e3b',
+        '950': '#022c22'
+      },
+      'tahiti': {
+        '100': '#cffafe',
+        '200': '#a5f3fc',
+        '300': '#67e8f9',
+        '400': '#22d3ee',
+        '500': '#06b6d4',
+        '600': '#0891b2',
+        '700': '#0e7490',
+        '800': '#155e75',
+        '900': '#164e63',
+      },
+    },
+
   },
   safelist: [
     {
@@ -159,7 +199,6 @@ module.exports = {
   plugins: [
     require("@headlessui/tailwindcss"),
     require("@tailwindcss/typography"),
-    require("@tailwindcss/line-clamp"),
     require('flowbite/plugin')
   ],
 };

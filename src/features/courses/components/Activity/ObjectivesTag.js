@@ -1,4 +1,4 @@
-import { ACTIVITY_CATEGORIES } from '../../../constant';
+import { ACTIVITY_CATEGORIES } from '../../../../constant';
 import { Popover, Whisper } from 'rsuite';
 
 export function ObjectivesTag({ category, USER_OBJECTIVES }) {
@@ -16,5 +16,19 @@ export function ObjectivesTag({ category, USER_OBJECTIVES }) {
             </Whisper>
             <div className={`absolute ${USER_OBJECTIVES.includes(category) ? "blur" : ""} inset-0 -top-[1px] bg-${ACTIVITY_CATEGORIES[category]}-500 rounded w-full h-[calc(100%+4px)]`} ></div>
         </div>
+    )
+}
+
+export default function ObjectivesTags({ categories, category, USER_OBJECTIVES }) {
+    return (
+        <section className="flex flex-wrap gap-x-2 gap-y-6">
+            {
+                categories?.map((category) => {
+                    return (
+                        <ObjectivesTag key={category} category={category} USER_OBJECTIVES={USER_OBJECTIVES} />
+                    )
+                })
+            }
+        </section>
     )
 }
