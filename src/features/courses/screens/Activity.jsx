@@ -24,7 +24,6 @@ const Activity = () => {
           `&populate[evaluator][populate][profile_photo][fields][0]=*` +
           `&filters[user][id]=${user.id}`)
       const data = await response.json();
-
       if (data.data.length > 0) {
         console.log(data.data[0]["id"]);
         setUserQualification({ activity: data.data[0].attributes, idQualification: data.data[0]["id"] });
@@ -44,6 +43,7 @@ const Activity = () => {
       console.error(error);
     }
   };
+  console.log(userQualification);
 
   useEffect(() => {
     fetchUserQualificationsData();
@@ -52,7 +52,7 @@ const Activity = () => {
   return (
     <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] grid '>
       {userQualification.activity && (
-        <ActivityComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} />
+        <ActivityComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} setUserQualification={setUserQualification}/>
       )}
     </div>
   )
