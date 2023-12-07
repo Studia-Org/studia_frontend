@@ -165,7 +165,7 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
                             Cover
                         </label>
                         <FilePond
-                            files={courseData.cover.data?.attributes.url}
+                            files={courseData?.cover?.data?.attributes.url}
                             allowMultiple={false}
                             onupdatefiles={(fileItems) => {
                                 setCourseData(prevState => ({

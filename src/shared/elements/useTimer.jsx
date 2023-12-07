@@ -12,7 +12,6 @@ export function useTimer({ testCompleted }) {
                     setSeconds(0);
                     setMinutes((prevMinutes) => prevMinutes + 1);
                 }
-                console.log('seconds: ', seconds);
             }, 1000);
 
             return () => clearInterval(interval);

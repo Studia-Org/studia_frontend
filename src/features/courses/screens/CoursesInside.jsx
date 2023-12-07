@@ -305,6 +305,10 @@ const CourseInside = () => {
                   questionnaire={courseSubsectionQuestionnaire}
                   answers={questionnaireAnswers}
                   subsectionID={courseSubsection.id}
+                  enableEdit={enableEdit}
+                  setEnableEdit={setEnableEdit}
+                  courseSubsection={courseSubsection}
+                  setCourseSubsectionQuestionnaire={setCourseSubsectionQuestionnaire}
                 />
               ) : courseSection && courseContentInformation.length > 0 && (
                 <>
@@ -324,7 +328,7 @@ const CourseInside = () => {
                         <p className="text-xl font-semibold">{courseSubsection.attributes.title}</p>
                     }
                     {
-                      user.role_str === 'professor' || user.role_str === 'admin' ?
+                      user?.role_str === 'professor' || user?.role_str === 'admin' ?
                         <div className='flex ml-auto items-center'>
                           <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} />
                         </div> : null
@@ -339,10 +343,10 @@ const CourseInside = () => {
           )}
         </div>
         {
-          editSectionFlag && sectionToEdit !== null && (user.role_str !== 'professor' || user.role_str !== 'admin') ? null :
+          editSectionFlag && sectionToEdit !== null && (user?.role_str !== 'professor' || user?.role_str !== 'admin') ? null :
             (
               <div>
-                {(user.role_str === 'professor' || user.role_str === 'admin') ?
+                {(user?.role_str === 'professor' || user?.role_str === 'admin') ?
                   <button onClick={() => setSettingsFlag(true)} className="bg-white p-3 rounded-md shadow-md flex items-center mt-8 w-[30rem]">
                     <div className="flex items-center gap-2">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 ml-2">
@@ -380,7 +384,6 @@ const CourseInside = () => {
             )
         }
       </div>
-      <Chatbot />
     </>
   );
 
