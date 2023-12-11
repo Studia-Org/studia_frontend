@@ -35,14 +35,22 @@ export default function SelectProfessor({ setCourseBasicInfo }) {
     };
 
     useEffect(() => {
-        if (professors.length === 0) {
-            fetchProfessorInformation();
-        }
+        fetchProfessorInformation();
     }, []);
 
     useEffect(() => {
         if (professors.length > 0) {
             setSelected(professors[0]);
+            setCourseBasicInfo(prevState => ({
+                ...prevState,
+                evaluator: {
+                    id: professors[0].id,
+                    name: professors[0].name,
+                    avatar: professors[0].avatar,
+                    description: professors[0].description
+                }
+            }))
+
         }
     }, [professors]);
 
@@ -65,13 +73,13 @@ export default function SelectProfessor({ setCourseBasicInfo }) {
             <Listbox value={selected} onChange={handleSelectChange}>
                 {({ open }) => (
                     <>
-                        <Listbox.Label className="block text-sm font-medium leading-6 text-gray-900">Professor</Listbox.Label>
+                        <Listbox.Label className="block mt-5 text-sm font-medium leading-6  text-gray-900">Evaluator</Listbox.Label>
                         <div className="relative mt-2">
                             {selected &&
                                 <Listbox.Button className="relative w-full cursor-default rounded-md bg-white py-3 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6">
                                     <span className="flex items-center">
                                         <img src={selected.avatar} alt="" className="h-5 w-5 flex-shrink-0 rounded-full" />
-                                        <span className="ml-3 block truncate">{selected.name}</span>
+                                        <span className="ml-3 block truncate font-normal">{selected.name}</span>
                                     </span>
                                     <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-gray-400">

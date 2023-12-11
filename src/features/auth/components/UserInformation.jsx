@@ -2,7 +2,7 @@ import React from 'react'
 import { BsFillArrowLeftSquareFill } from 'react-icons/bs'
 import { Link } from 'react-router-dom';
 
-export const UserInformation = ({ onChange, formData, username, description, email, university, password, repassword, name, setPageSelector}) => {
+export const UserInformation = ({ onChange, formData, username, email, university, password, repassword, name, setPageSelector}) => {
 
     return (
         <div class="bg-gray-100 text-gray-500 rounded-3xl shadow-xl w-full overflow-hidden " style={{ maxWidth: '1000px' }} >
@@ -97,24 +97,6 @@ export const UserInformation = ({ onChange, formData, username, description, ema
                             </div>
                         </div>
                         <div class="flex -mx-3">
-                            <div class="w-full px-3 mb-5">
-                                <label for="" class="text-xs font-semibold px-1">Description</label>
-                                <div class="flex">
-                                    <div class="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-comment-text text-gray-400 text-lg"></i></div>
-                                    <textarea
-                                        type="email"
-
-                                        className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500 resize-none"
-                                        placeholder=""
-                                        rows={3}
-                                        name='description'
-                                        value={description}
-                                        onChange={e => onChange(e)}
-                                        required />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex -mx-3">
                             <div class="w-full px-3 mb-12 relative">
                                 <label for="" class="text-xs font-semibold px-1">Password</label>
                                 <div class="flex">
@@ -122,7 +104,7 @@ export const UserInformation = ({ onChange, formData, username, description, ema
                                     <input
                                         type="password"
                                         class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                                        placeholder="************"
+                                        placeholder=""
                                         name='password'
                                         value={password}
                                         onChange={e => onChange(e)}
@@ -137,7 +119,7 @@ export const UserInformation = ({ onChange, formData, username, description, ema
                                     <input
                                         type="password"
                                         class="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500"
-                                        placeholder="************"
+                                        placeholder=""
                                         name='repassword'
                                         value={repassword}
                                         onChange={e => onChange(e)}

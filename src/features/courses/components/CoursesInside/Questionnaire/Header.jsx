@@ -5,7 +5,7 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { SwitchEdit } from '../SwitchEdit'
 import Chip from '@mui/material/Chip';
-import { Button, Popconfirm } from "antd";
+import { Button, Popconfirm, Badge } from "antd";
 import { motion, AnimatePresence } from "framer-motion";
 import { message } from 'antd';
 import { useAuthContext } from '../../../../../context/AuthContext';
@@ -14,7 +14,7 @@ import dayjs from 'dayjs';
 import { getToken } from '../../../../../helpers';
 
 
-export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, completed, setEnableEdit, courseSubsection, editedQuestions}) => {
+export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, completed, setEnableEdit, courseSubsection, editedQuestions }) => {
     const { user } = useAuthContext()
     const [titleEdit, setTitleEdit] = useState(questionnaire.attributes.Title)
     const [descriptionEdit, setDescriptionEdit] = useState(questionnaire.attributes.description)
@@ -105,7 +105,10 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
                             enableEdit ?
                                 <input type="text" value={titleEdit} className=' font-semibold text-3xl w-full' onChange={(e) => setTitleEdit(e.target.value)} />
                                 :
-                                <p className="text-black font-semibold text-3xl">{questionnaire.attributes.Title}</p>
+                                <div className='gap-3 flex items-center'>
+                                    <p className="text-black font-semibold text-3xl">{questionnaire.attributes.Title}</p>
+                                    <Badge color="#6366f1" count={new Date(courseSubsection.attributes.end_date).toDateString()} />
+                                </div>
                         }
                         {
                             (questionnaireAnswerData.length > 0 && user?.role_str === 'student') &&

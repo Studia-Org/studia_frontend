@@ -2,14 +2,13 @@ import { useEffect, useState, React, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { API, BEARER } from "../../../constant";
 import { getToken } from "../../../helpers";
-import { Tabs, Popconfirm } from "antd";
+import { Tabs, Popconfirm, Badge } from "antd";
 import { SwitchEdit } from "../components/CoursesInside/SwitchEdit";
 import { FiChevronRight } from "react-icons/fi";
 import { ProfessorData } from "../components/CoursesInside/ProfessorData";
 import { CourseSettings } from "../components/CoursesInside/CourseSettings";
 import { AccordionCourseContent } from "../components/CoursesInside/AccordionCourseContent";
 import { ForumClickable } from "../components/CoursesInside/ForumClickable";
-import { Chatbot } from '../components/CoursesInside/ChatBot';
 import { ForumComponent } from '../components/CoursesInside/ForumComponent'
 import { QuestionnaireComponent } from '../components/CoursesInside/QuestionnaireComponent';
 import { CourseParticipants, CourseContent, CourseFiles } from "../components/CoursesInside/TabComponents";
@@ -325,7 +324,10 @@ const CourseInside = () => {
                           className="mt-1   rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         />
                         :
-                        <p className="text-xl font-semibold">{courseSubsection.attributes.title}</p>
+                        <div className="gap-3 flex items-center">
+                          <p className="text-xl font-semibold"> {courseSubsection.attributes.title}</p>
+                          <Badge color="#6366f1" count={new Date(courseSubsection.attributes.end_date).toDateString()} />
+                        </div>
                     }
                     {
                       user?.role_str === 'professor' || user?.role_str === 'admin' ?

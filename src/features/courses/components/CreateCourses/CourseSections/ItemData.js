@@ -1,6 +1,7 @@
+import { API } from '../../../../../constant';
 export async function fetchDataMSLQuestionnaire() {
     try {
-        const response = await fetch('http://localhost:1337/api/questionnaires/5');
+        const response = await fetch(`${API}/questionnaires/5`);
         if (!response.ok) {
             throw new Error(`La solicitud falló con el código ${response.status}`);
         }
@@ -13,7 +14,7 @@ export async function fetchDataMSLQuestionnaire() {
 
 export async function fetchDataPlannificationQuestionnaire() {
     try {
-        const response = await fetch('http://localhost:1337/api/questionnaires/7');
+        const response = await fetch(`${API}/questionnaires/7`);
         if (!response.ok) {
             throw new Error(`La solicitud falló con el código ${response.status}`);
         }
@@ -26,7 +27,7 @@ export async function fetchDataPlannificationQuestionnaire() {
 
 export async function fetchDataEmptyQuestionnaire() {
     try {
-        const response = await fetch('http://localhost:1337/api/questionnaires/8');
+        const response = await fetch(`${API}/questionnaires/8`);
         if (!response.ok) {
             throw new Error(`La solicitud falló con el código ${response.status}`);
         }

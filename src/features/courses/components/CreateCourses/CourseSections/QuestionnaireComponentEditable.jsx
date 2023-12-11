@@ -68,9 +68,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
 
     const MyFormControlLabel = (props) => {
         const radioGroup = useRadioGroup();
-
         let checked = false;
-
         if (radioGroup) {
             checked = radioGroup.value === props.value;
         }
