@@ -381,8 +381,8 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
   }
 
   return (
-    <div className="flex-shrink-0 w-full sm:w-auto z-20 ">
-      <div className="mt-4 bg-white rounded-lg  p-5  sm:mr-9 sm:right-0 sm:w-[30rem] w-full shadow-md sm:visible collapse">
+    <div className="flex-shrink-0 w-full max-w-[calc(100vw-4rem)] sm:w-auto z-20 mt-3 ml-8 lg:mr-0">
+      <div className="mt-4 bg-white rounded-lg  p-5  sm:mr-9 sm:right-0 sm:w-[30rem] w-full shadow-md sm:visible">
         <p className="text-xl font-semibold">Course content</p>
         <hr className="h-px my-8 bg-gray-400 border-0"></hr>
         {courseContentInformation.map((section, index) => (
