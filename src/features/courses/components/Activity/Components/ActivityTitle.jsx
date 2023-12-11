@@ -47,7 +47,7 @@ function ActivityTitle({ type, title, evaluated, qualification, setTitle, enable
                 }
             </div>
             {
-                userRole === 'professor' || userRole === 'admin' ?
+                userRole === 'professor' || userRole === 'admin' || type === 'Peer Review' ?
                     null
                     :
                     evaluated ?
