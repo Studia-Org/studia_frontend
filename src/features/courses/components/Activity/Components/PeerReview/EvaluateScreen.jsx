@@ -2,6 +2,7 @@ import Rubrica from './Rubrica';
 
 function EvaluateScreen({ data, setShowEvaluate, sendEvalution, answersDelivered }) {
     let buttonText = answersDelivered === null ? "Send" : "Update FeedBack"
+
     return (
         <>
             <div className="pl-8 pt-4">
@@ -31,18 +32,32 @@ function EvaluateScreen({ data, setShowEvaluate, sendEvalution, answersDelivered
                                     <label htmlFor={"large-input" + key} className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
                                         {key}
                                     </label>
-                                    <select
-                                        id={"large-input" + key}
-                                        name="large-input"
-                                        autoComplete="large-input"
-                                        className="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500"
-                                    >
-                                        {data["Criteria"].map((item, index) => (
-                                            <option value={item} selected={defaultDataKey === item} key={index}>
-                                                {item}
-                                            </option>
-                                        ))}
-                                    </select>
+                                    {!isNaN(parseFloat(data["Criteria"][0].split("-")[0])) && isFinite(data["Criteria"][0].split("-")[0])
+
+                                        ? <input
+                                            defaultValue={defaultDataKey || 0}
+                                            id={key + "about"}
+                                            name={key + "about"}
+                                            type="number"
+                                            min={0}
+                                            max={parseInt(data["Criteria"][data["Criteria"].length - 1].split("-")[1])}
+                                            className="resize-none block w-full mt-1 text-sm border border-gray-300 rounded-lg"
+                                        />
+                                        :
+                                        <select
+                                            id={"large-input" + key}
+                                            name="large-input"
+                                            autoComplete="large-input"
+                                            className="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500"
+                                        >
+                                            {data["Criteria"].map((item, index) => (
+                                                <option defaultValue={item} selected={defaultDataKey === item} key={index}>
+                                                    {item}
+                                                </option>
+                                            ))}
+                                        </select>
+
+                                    }
                                     <textarea
                                         defaultValue={answersDelivered[key]?.[defaultDataKey] || ""}
                                         id={key + "about"}

@@ -54,8 +54,10 @@ export default function PeerReviewComponent({ activityData, idQualification }) {
         const answers = {}
         Object.keys(data).forEach((key, index) => {
             if (key === 'Criteria') return
+            console.log(key)
+
             const grid = document.getElementById(key)
-            const select = grid.querySelector("select").value
+            const select = grid.querySelector("select")?.value || grid.querySelector("input")?.value
             const textarea = grid.querySelector("textarea").value
             const dict = {}
             dict[select] = textarea

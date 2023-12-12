@@ -224,8 +224,8 @@ const CourseInside = () => {
 
   return (
     <>
-      <div className="container-fluid min-h-screen w-screen rounded-tl-3xl bg-[#e7eaf886] flex flex-wrap">
-        <div className="flex-1 min-w-0 sm:w-auto mt-3 ml-8 mr-8">
+      <div className="container-fluid min-h-screen w-screen rounded-tl-3xl bg-[#e7eaf886] flex flex-wrap flex-col-reverse md:flex-row  ">
+        <div className="flex-1 min-w-0 sm:w-auto mt-3 ml-8 mr-8 basis-[600px]">
           {editSectionFlag && sectionToEdit !== null ? (
             <EditSection setEditSectionFlag={setEditSectionFlag} sectionToEdit={sectionToEdit} setCourseContentInformation={setCourseContentInformation} setSectionToEdit={setSectionToEdit} />
           ) : !forumFlag ? (
