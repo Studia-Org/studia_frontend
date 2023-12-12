@@ -2,7 +2,6 @@
   "name": "studia_fe",
   "version": "0.1.0",
   "private": true,
-  "homepage": ".",
   "dependencies": {
     "@azure/storage-blob": "^12.15.0",
     "@chakra-ui/accordion": "^2.1.11",
@@ -35,6 +34,7 @@
     "cloudinary": "^1.41.0",
     "clsx": "^1.2.1",
     "date-fns": "^2.30.0",
+    "react-top-loading-bar": "^2.3.1",
     "datepicker": "^0.0.0",
     "dayjs": "^1.11.10",
     "dotenv": "^16.3.1",
@@ -70,7 +70,6 @@
     "react-spinners": "^0.13.8",
     "react-tag-input": "^6.8.1",
     "react-tagsinput": "^3.20.3",
-    "react-top-loading-bar": "^2.3.1",
     "react-use": "^17.4.0",
     "redux-devtools-extension": "^2.13.9",
     "redux-persist": "^6.0.0",
@@ -84,7 +83,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && echo '/* /index.html  200' | cat >build/_redirects ",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
