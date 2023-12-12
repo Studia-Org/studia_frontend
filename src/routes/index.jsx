@@ -32,7 +32,7 @@ export const AppRoutes = () => {
                 <Navbar />
                 <div className='flex'>
                     <Sidebar section={path} />
-                    <div className='flex min-h-[calc(100vh-8rem)] overflow-x-auto xl:ml-80 xl:min-w-[calc(100vw-21rem)] bg-white w-full max-w-[100vw]'>
+                    <div className='flex min-h-[calc(100vh-8rem)] overflow-x-auto xl:ml-80 xl:min-w-[calc(100vw-22rem)] bg-white w-full max-w-[100vw]'>
                         {element}
                     </div>
                 </div>
