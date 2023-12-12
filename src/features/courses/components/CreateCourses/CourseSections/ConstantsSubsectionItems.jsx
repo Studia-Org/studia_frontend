@@ -8,6 +8,7 @@ function fetchDataAndCreateSubsection(subsectionName, fase, switcher, setCreateC
         if (switcher !== null) {
             magicalFetcher(switcher)
                 .then(data => {
+                    console.log(data);
                     createSubsection(subsectionName, fase, data, setCreateCourseSectionsList, sectionToEdit, type, context);
                     resolve();
                 })

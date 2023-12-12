@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { FiBell } from "react-icons/fi";
 import { Tag } from './Tag';
@@ -17,11 +17,11 @@ export const Navbar = () => {
                     <FiBell size={25} className="lg:mr-8 mr-4 cursor-pointer " />
                     <Tag className={'hidden lg:block'} User={user} />
                     {user && <p className='font-medium mr-5 hidden lg:block'>{user['name']}</p>}
-                    <button onClick={() => navigate(`/app/profile/${user.id}/`)} className='rounded w-14 mr-9'>
+                    <button onClick={() => navigate(`/app/profile/${user.id}/`)} className='rounded  mr-9'>
                         {user && user['profile_photo'] ? (
                             <img
                                 src={user['profile_photo'].url}
-                                className='object-scale-down rounded-lg cursor-pointer'
+                                className='object-cover rounded-lg cursor-pointer h-14 w-14'
                                 alt=""
                             />
                         ) : (

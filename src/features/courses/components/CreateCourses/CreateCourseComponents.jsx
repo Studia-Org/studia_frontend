@@ -81,11 +81,8 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
     tags: [],
   });
 
-  const [tags, setTags] = useState([]);
-
   const handleChange = (field, value) => {
     setFormData((prevData) => ({ ...prevData, [field]: value }));
-    console.log(value)
     setCourseBasicInfo((prevInfo) => ({ ...prevInfo, [field]: value }));
   };
 
@@ -98,7 +95,7 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
       <input
         type="text"
         id="base-input"
-        className="bg-gray-50  text-gray-900 font-normal text-sm rounded-lg ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 block w-full p-2.5"
+        className="bg-gray-50  text-gray-900 font-normal text-sm rounded-lg border-0 ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 block w-full p-2.5"
         value={courseBasicInfo.courseName}
         onChange={(e) => handleChange('courseName', e.target.value)}
       />
@@ -109,10 +106,11 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
       <textarea
         id="message"
         rows="4"
-        className="block p-2.5 w-full text-sm text-gray-900 font-normal bg-gray-50 rounded-lg  border-gray-300 ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        className="block p-2.5 w-full text-sm text-gray-900 font-normal bg-gray-50 rounded-lg border-0 border-gray-300 ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         value={courseBasicInfo.description}
         onChange={(e) => handleChange('description', e.target.value)}
       />
+      <SelectProfessor setCourseBasicInfo={setCourseBasicInfo} />
       <div className='font-normal text-sm'>
         <label htmlFor="message" className="block mb-4 text-sm font-medium text-gray-900 mt-8">
           Tags
@@ -135,7 +133,6 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
               setCourseBasicInfo((prevInfo) => ({ ...prevInfo, 'cover': e }));
             }}
           />
-          <SelectProfessor setCourseBasicInfo={setCourseBasicInfo} />
         </div>
         <div>
           <label class="block  text-sm font-medium text-gray-900 mb-4">Course type</label>

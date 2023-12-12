@@ -102,7 +102,7 @@ const UserProfile = () => {
                         {userProfile && userProfile.profile_photo ? (
                           <img
                             src={userProfile && userProfile.profile_photo.url}
-                            className="shadow-xl rounded-full h-auto align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"
+                            className="shadow-xl rounded-lg h-36 w-36 object-cover  align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"
                             alt=""
                           />
                         ) : (
