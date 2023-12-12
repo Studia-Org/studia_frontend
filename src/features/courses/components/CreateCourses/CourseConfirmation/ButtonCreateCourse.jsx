@@ -3,11 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { message } from 'antd';
 import { getToken } from '../../../../../helpers';
 import { API } from '../../../../../constant';
-import { MoonLoader } from 'react-spinners';
+import LoadingBar from 'react-top-loading-bar'
+import { BeatLoader, BounceLoader, DotLoader, SyncLoader } from 'react-spinners';
 
 
 export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }) => {
     const [isLoading, setIsLoading] = useState(false);
+    const [progress, setProgress] = useState(0);
+
     const navigate = useNavigate();
     const isValidCourseBasicInfo = (courseBasicInfo) => {
         if (!courseBasicInfo) {
@@ -46,9 +49,9 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
             isValidCourse(createCourseSectionsList)
             setIsLoading(true)
             let allSections = []
+            const totalIterations = createCourseSectionsList.reduce((acc, section) => acc + section.subsections.length, 0)
             for (const section of createCourseSectionsList) {
                 let allSubsections = []
-
                 for (const subsection of section.subsections) {
                     let newSubsection = {}
                     if (subsection?.questionnaire) {
@@ -57,7 +60,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                             description: subsection.questionnaire.attributes.description,
                             Options: subsection.questionnaire.attributes.Options,
                         };
-
+                        setProgress(progress + ((1 / totalIterations) * 100))
                         const response = await fetch(`${API}/questionnaires`, {
                             method: 'POST',
                             headers: {
@@ -266,11 +269,12 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
             const coverUpload = await fetch(`${API}/upload/`, {
                 method: 'POST',
                 headers: {
-                    Authorization: `Bearer ${getToken()}`
+                    Authorization: `Bearer ${getToken()}`,
                 },
                 body: formData,
             });
             const data = await coverUpload.json();
+            console.log(data)
             newCourse.cover = data[0].id;
 
             const createCourseFinal = await fetch(`${API}/courses`, {
@@ -297,7 +301,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
             })
             const dataForum = await createForum.json();
 
-            const updateCourse = await fetch(`${API}/courses/${dataFinal.data.id}`, {
+            await fetch(`${API}/courses/${dataFinal.data.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -305,31 +309,36 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                 },
                 body: JSON.stringify({ data: { forum: dataForum.data.id } }),
             })
-            const dataUpdate = await updateCourse.json();
             message.success('Course created successfully');
             setIsLoading(false)
             navigate(`/app/courses/`)
         }
         catch (e) {
             setIsLoading(false)
+            setProgress(100)
             message.error(e.message)
         }
-
+        finally {
+            setIsLoading(false)
+            setProgress(100)
+        }
     }
-    if (isLoading) {
-        return (
-            <div className='absolute left-0 top-0 h-screen w-screen bg-indigo-400 opacity-60 flex items-center justify-center z-50'>
-                <MoonLoader color="#363cd6" size={80} />
-            </div>
-        )
-    } else {
-        return (
-            <button onClick={createCourse} class="flex justify-center items-center mb-5 text-lg font-medium  bg-gradient-to-r from-[#657DE9] to-[#6E66D6] hover:from-pink-500 hover:to-purple-600 text-white py-3 px-6 rounded-lg shadow-lg transform transition-all duration-500 ease-in-out hover:scale-110 hover:brightness-110 hover:animate-pulse active:scale-100">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="mr-2 w-5 h-5">
-                    <path d="M15.98 1.804a1 1 0 00-1.96 0l-.24 1.192a1 1 0 01-.784.785l-1.192.238a1 1 0 000 1.962l1.192.238a1 1 0 01.785.785l.238 1.192a1 1 0 001.962 0l.238-1.192a1 1 0 01.785-.785l1.192-.238a1 1 0 000-1.962l-1.192-.238a1 1 0 01-.785-.785l-.238-1.192zM6.949 5.684a1 1 0 00-1.898 0l-.683 2.051a1 1 0 01-.633.633l-2.051.683a1 1 0 000 1.898l2.051.684a1 1 0 01.633.632l.683 2.051a1 1 0 001.898 0l.683-2.051a1 1 0 01.633-.633l2.051-.683a1 1 0 000-1.898l-2.051-.683a1 1 0 01-.633-.633L6.95 5.684zM13.949 13.684a1 1 0 00-1.898 0l-.184.551a1 1 0 01-.632.633l-.551.183a1 1 0 000 1.898l.551.183a1 1 0 01.633.633l.183.551a1 1 0 001.898 0l.184-.551a1 1 0 01.632-.633l.551-.183a1 1 0 000-1.898l-.551-.184a1 1 0 01-.633-.632l-.183-.551z" />
-                </svg>
+    return (
+        <>
+            <LoadingBar color='#6366f1' progress={progress} onLoaderFinished={() => setProgress(0)} shadow={true} />
+            <button onClick={createCourse} disabled={isLoading} className={`flex justify-center items-center mb-5 text-lg font-medium  bg-gradient-to-r from-[#657DE9] to-[#6E66D6] ${!isLoading ? 'hover:from-pink-500 hover:to-purple-600 hover:scale-110 hover:brightness-110' : ''}  text-white py-3 px-6 rounded-lg shadow-lg transform transition-all duration-500 ease-in-out  hover:animate-pulse active:scale-100`}>
+                {
+                    isLoading ?
+                        <BeatLoader color='#FFFFFF' size={15} className='mr-2' />
+                        :
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="mr-2 w-5 h-5">
+                            <path d="M15.98 1.804a1 1 0 00-1.96 0l-.24 1.192a1 1 0 01-.784.785l-1.192.238a1 1 0 000 1.962l1.192.238a1 1 0 01.785.785l.238 1.192a1 1 0 001.962 0l.238-1.192a1 1 0 01.785-.785l1.192-.238a1 1 0 000-1.962l-1.192-.238a1 1 0 01-.785-.785l-.238-1.192zM6.949 5.684a1 1 0 00-1.898 0l-.683 2.051a1 1 0 01-.633.633l-2.051.683a1 1 0 000 1.898l2.051.684a1 1 0 01.633.632l.683 2.051a1 1 0 001.898 0l.683-2.051a1 1 0 01.633-.633l2.051-.683a1 1 0 000-1.898l-2.051-.683a1 1 0 01-.633-.633L6.95 5.684zM13.949 13.684a1 1 0 00-1.898 0l-.184.551a1 1 0 01-.632.633l-.551.183a1 1 0 000 1.898l.551.183a1 1 0 01.633.633l.183.551a1 1 0 001.898 0l.184-.551a1 1 0 01.632-.633l.551-.183a1 1 0 000-1.898l-.551-.184a1 1 0 01-.633-.632l-.183-.551z" />
+                        </svg>
+                }
                 Generate Course
             </button>
-        )
-    }
+        </>
+
+    )
+
 }

@@ -41,6 +41,18 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
     };
     const transition = { duration: 0.3 };
 
+    const limpiarCampos = () => {
+        setTimeout(() => {
+            const nameInput = document.querySelector('input[name="name"]');
+            const emailInput = document.querySelector('input[name="email"]');
+            const messageInput = document.querySelector('textarea[name="message"]');
+
+            if (nameInput) nameInput.value = '';
+            if (emailInput) emailInput.value = '';
+            if (messageInput) messageInput.value = '';
+        }, 1000);
+    };
+
 
     const changePasswordButton = async (data) => {
 
@@ -248,7 +260,8 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
                                     <form
                                         method='POST'
                                         action='https://getform.io/f/f2dc89ec-4d74-4789-a837-8411ebbeb789'
-                                        className="space-y-5"
+                                        onSubmit={() => limpiarCampos()}
+                                        className="space-y-5 font-normal"
                                     >
                                         <div>
                                             <label className="font-medium">
