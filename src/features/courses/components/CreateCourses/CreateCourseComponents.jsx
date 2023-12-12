@@ -192,7 +192,8 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
   )
 }
 
-export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption, createCourseSectionsList, setCreateCourseSectionsList, setEditCourseSectionFlag, setSectionToEdit }) => {
+export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption, createCourseSectionsList, setCreateCourseSectionsList, setEditCourseSectionFlag,
+  setSectionToEdit, setCreateCourseSectionsListCopy, createCourseSectionsListCopy }) => {
   const [sectionName, setSectionName] = useState('');
   const [addSectionFlag, setAddSectionFlag] = useState(true);
 
@@ -213,6 +214,7 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
       subsections: []
     }
     setCreateCourseSectionsList([...createCourseSectionsList, newSection])
+    setCreateCourseSectionsListCopy([...createCourseSectionsList, newSection])
     setAddSectionFlag(true)
     setSectionName('')
     message.success("Section created successfully")
@@ -221,6 +223,7 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
   function deleteSection(section) {
     const newSections = createCourseSectionsList.filter(item => item.id !== section.id)
     setCreateCourseSectionsList(newSections)
+    setCreateCourseSectionsListCopy(newSections)
   }
 
   return (

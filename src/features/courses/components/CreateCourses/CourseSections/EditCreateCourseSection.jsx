@@ -6,24 +6,25 @@ import { CreateCourseEditSubsection } from './CreateCourseEditSubsection';
 import { SubsectionItems } from './SubsectionItems';
 import { CreateCourseTimelineSubsection } from './CreateCourseTimelineSubsection';
 import { motion } from 'framer-motion';
-import { message } from 'antd';
+import { message, Button } from 'antd';
 
-export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCourseSectionsList, sectionToEdit, createCourseSectionsList, task, setTask }) => {
-    const [subsectionsToEdit, setSubsectionsToEdit] = useState((createCourseSectionsList.filter((section) => section.id === sectionToEdit.id)[0]))
+export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdit, createCourseSectionsList, task, setTask,
+    createCourseSectionsListCopy, setCreateCourseSectionsListCopy, setCreateCourseSectionsList }) => {
+    const [subsectionsToEdit, setSubsectionsToEdit] = useState((createCourseSectionsListCopy.filter((section) => section.id === sectionToEdit.id)[0]))
     const [editSubsectionFlag, setEditSubsectionFlag] = useState(false)
     const [subsectionEditing, setSubsectionEditing] = useState()
-
+    const [thereIsChanges, setThereIsChanges] = useState(false)
 
     useEffect(() => {
-        setSubsectionsToEdit((createCourseSectionsList.filter((section) => section.id === sectionToEdit.id)[0]))
-    }, [createCourseSectionsList])
+        setSubsectionsToEdit((createCourseSectionsListCopy.filter((section) => section.id === sectionToEdit.id)[0]))
+        setThereIsChanges(JSON.stringify(createCourseSectionsListCopy) !== JSON.stringify(createCourseSectionsList))
+    }, [createCourseSectionsListCopy])
 
     const handleDragEnd = (event) => {
         const { active, over } = event;
-
         try {
-            setCreateCourseSectionsList((courses) => {
-                const updatedCourses = createCourseSectionsList.map((course) => {
+            setCreateCourseSectionsListCopy((courses) => {
+                const updatedCourses = createCourseSectionsListCopy.map((course) => {
                     if (course.id === sectionToEdit.id) {
                         const sectionCopy = { ...course };
                         const oldIndex = sectionCopy.subsections.findIndex(c => c.id === active.id);
@@ -80,8 +81,11 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCou
 
         return true;
     };
-
-
+    function saveChanges() {
+        setCreateCourseSectionsList(createCourseSectionsListCopy)
+        setEditCourseSectionFlag(false)
+        message.success('Changes saved successfully');
+    }
 
 
     return (
@@ -95,7 +99,11 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCou
             <div className='flex'>
                 <div className='w-1/2 pr-10 pl-5 '>
                     <h1 className='font-bold text-2xl mt-5'>Edit Section</h1>
-                    <h2 className='font-medium text-xl mt-5'>{sectionToEdit.name}</h2>
+                    <div className='flex items-center justify-between mt-5'>
+                        <h2 className='font-medium text-xl '>{sectionToEdit.name}</h2>
+                        <Button disabled={!thereIsChanges} type='primary' onClick={saveChanges} className='bg-[#1677ff] text-white '>Save Changes</Button>
+                    </div>
+
                     <div className='bg-white rounded-md shadow-md p-5 font-medium text-base mb-5 mt-5'>
                         <div className='flex items-center'>
                             <h3 className=''>Course sequence</h3>
@@ -116,7 +124,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCou
                                                         initial={{ opacity: 0, x: -50 }}
                                                         animate={{ opacity: 1, x: 0 }}
                                                         exit={{ opacity: 0, x: 50 }}>
-                                                        <CreateCourseSubsectionsList subsection={subsection} setCreateCourseSectionsList={setCreateCourseSectionsList} sectionId={sectionToEdit.id} setEditSubsectionFlag={setEditSubsectionFlag} setSubsectionEditing={setSubsectionEditing} key={subsection.id} />
+                                                        <CreateCourseSubsectionsList subsection={subsection} setCreateCourseSectionsList={setCreateCourseSectionsListCopy} sectionId={sectionToEdit.id} setEditSubsectionFlag={setEditSubsectionFlag} setSubsectionEditing={setSubsectionEditing} key={subsection.id} />
                                                     </motion.li>
                                                 ))}
                                             </ol>
@@ -130,14 +138,14 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, setCreateCou
                         }
                         <p className='text-xs font-normal  text-gray-400 mt-8'>Drag and drop to reorder the sequence</p>
                     </div>
-                    <CreateCourseTimelineSubsection createCourseSectionsList={createCourseSectionsList} sectionId={sectionToEdit.id} />
+                    <CreateCourseTimelineSubsection createCourseSectionsList={createCourseSectionsListCopy} sectionId={sectionToEdit.id} />
                 </div>
                 <div className='w-1/2'>
                     {
                         editSubsectionFlag ?
-                            <CreateCourseEditSubsection subsection={subsectionEditing} setEditSubsectionFlag={setEditSubsectionFlag} setCreateCourseSectionsList={setCreateCourseSectionsList} createCourseSectionsList={createCourseSectionsList} setSubsectionEditing={setSubsectionEditing} task={task} setTask={setTask} sectionId={sectionToEdit.id} />
+                            <CreateCourseEditSubsection subsection={subsectionEditing} setEditSubsectionFlag={setEditSubsectionFlag} setCreateCourseSectionsList={setCreateCourseSectionsListCopy} createCourseSectionsList={createCourseSectionsListCopy} setSubsectionEditing={setSubsectionEditing} task={task} setTask={setTask} sectionId={sectionToEdit.id} />
                             :
-                            <SubsectionItems setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} />
+                            <SubsectionItems setCreateCourseSectionsList={setCreateCourseSectionsListCopy} sectionToEdit={sectionToEdit} />
                     }
                 </div>
             </div>
