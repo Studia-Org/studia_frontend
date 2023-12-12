@@ -2,14 +2,13 @@ import { useEffect, useState, React, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { API, BEARER } from "../../../constant";
 import { getToken } from "../../../helpers";
-import { Tabs, Popconfirm } from "antd";
+import { Tabs, Popconfirm, Badge } from "antd";
 import { SwitchEdit } from "../components/CoursesInside/SwitchEdit";
 import { FiChevronRight } from "react-icons/fi";
 import { ProfessorData } from "../components/CoursesInside/ProfessorData";
 import { CourseSettings } from "../components/CoursesInside/CourseSettings";
 import { AccordionCourseContent } from "../components/CoursesInside/AccordionCourseContent";
 import { ForumClickable } from "../components/CoursesInside/ForumClickable";
-import { Chatbot } from '../components/CoursesInside/ChatBot';
 import { ForumComponent } from '../components/CoursesInside/ForumComponent'
 import { QuestionnaireComponent } from '../components/CoursesInside/QuestionnaireComponent';
 import { CourseParticipants, CourseContent, CourseFiles } from "../components/CoursesInside/TabComponents";
@@ -225,8 +224,8 @@ const CourseInside = () => {
 
   return (
     <>
-      <div className="container-fluid min-h-screen w-screen rounded-tl-3xl bg-[#e7eaf886] flex flex-wrap">
-        <div className="flex-1 min-w-0 sm:w-auto mt-3 ml-8 mr-8">
+      <div className="container-fluid min-h-screen w-screen rounded-tl-3xl bg-[#e7eaf886] flex flex-wrap flex-col-reverse md:flex-row  ">
+        <div className="flex-1 min-w-0 sm:w-auto mt-3 ml-8 mr-8 basis-[600px]">
           {editSectionFlag && sectionToEdit !== null ? (
             <EditSection setEditSectionFlag={setEditSectionFlag} sectionToEdit={sectionToEdit} setCourseContentInformation={setCourseContentInformation} setSectionToEdit={setSectionToEdit} />
           ) : !forumFlag ? (
@@ -305,6 +304,10 @@ const CourseInside = () => {
                   questionnaire={courseSubsectionQuestionnaire}
                   answers={questionnaireAnswers}
                   subsectionID={courseSubsection.id}
+                  enableEdit={enableEdit}
+                  setEnableEdit={setEnableEdit}
+                  courseSubsection={courseSubsection}
+                  setCourseSubsectionQuestionnaire={setCourseSubsectionQuestionnaire}
                 />
               ) : courseSection && courseContentInformation.length > 0 && (
                 <>
@@ -321,10 +324,13 @@ const CourseInside = () => {
                           className="mt-1   rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         />
                         :
-                        <p className="text-xl font-semibold">{courseSubsection.attributes.title}</p>
+                        <div className="gap-3 flex items-center">
+                          <p className="text-xl font-semibold"> {courseSubsection.attributes.title}</p>
+                          <Badge color="#6366f1" count={new Date(courseSubsection.attributes.end_date).toDateString()} />
+                        </div>
                     }
                     {
-                      user.role_str === 'professor' || user.role_str === 'admin' ?
+                      user?.role_str === 'professor' || user?.role_str === 'admin' ?
                         <div className='flex ml-auto items-center'>
                           <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} />
                         </div> : null
@@ -339,10 +345,10 @@ const CourseInside = () => {
           )}
         </div>
         {
-          editSectionFlag && sectionToEdit !== null && (user.role_str !== 'professor' || user.role_str !== 'admin') ? null :
+          editSectionFlag && sectionToEdit !== null && (user?.role_str !== 'professor' || user?.role_str !== 'admin') ? null :
             (
               <div>
-                {(user.role_str === 'professor' || user.role_str === 'admin') ?
+                {(user?.role_str === 'professor' || user?.role_str === 'admin') ?
                   <button onClick={() => setSettingsFlag(true)} className="bg-white p-3 rounded-md shadow-md flex items-center mt-8 w-[30rem]">
                     <div className="flex items-center gap-2">
                       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 ml-2">
@@ -380,7 +386,6 @@ const CourseInside = () => {
             )
         }
       </div>
-      <Chatbot />
     </>
   );
 
