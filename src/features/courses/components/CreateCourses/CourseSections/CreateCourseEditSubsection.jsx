@@ -157,19 +157,7 @@ export const CreateCourseEditSubsection = ({
             <label className='text-sm text-gray-500' htmlFor=''>
               Subsection content
             </label>
-            <MDEditor className='mt-2 mb-8' data-color-mode='light' onChange={(e) => handleSubsectionChange('content', e)} value={subsection.content} />
-            <Collapse accordion>
-              <Panel key='1' header='Task detail'>
-                <CreateTask
-                  task={task}
-                  setTask={setTask}
-                  sectionId={sectionId}
-                  subsection={subsection}
-                  setCreateCourseSectionsList={setCreateCourseSectionsList}
-                  createCourseSectionsList={createCourseSectionsList}
-                />
-              </Panel>
-            </Collapse>
+            <MDEditor className='mt-2 mb-2' data-color-mode='light' onChange={(e) => handleSubsectionChange('content', e)} value={subsection.content} />
           </div>
         </>
       )}

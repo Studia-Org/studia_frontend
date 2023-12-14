@@ -49,9 +49,8 @@ export const CreateCourseSubsectionsList = ({ subsection, setCreateCourseSection
         <li onClick={() => {
             setEditSubsectionFlag(true)
             setSubsectionEditing(subsection)
-        }} style={style} class="cursor-pointer mb-10 ml-8 mt-8 flex items-center h-[2rem] w-[35rem] relative">
-            <div className='absolute -top-2 border rounded-md  bg-gray-50 h-[3rem] w-[40rem] -left-14 '>
-            </div>
+        }} style={style} class="cursor-pointer mb-10 ml-8 mt-8 flex items-center h-[2rem] relative mr-5 ">
+            <div className='absolute w-[calc(100%+4rem)] bg-gray-50 h-[3rem] -left-14 rounded-md border '></div>
             <span
                 {...attributes}
                 {...listeners}

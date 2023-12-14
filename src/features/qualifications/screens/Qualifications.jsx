@@ -1,9 +1,6 @@
 import { useEffect, React, useState } from 'react';
-import { Sidebar } from '../../../shared/elements/Sidebar';
-import { Navbar } from '../../../shared/elements/Navbar';
 import { API } from "../../../constant";
 import { motion } from 'framer-motion';
-import kasscloud from '../../../assets/kasscloud.png'
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import { MoonLoader } from "react-spinners";
@@ -207,15 +204,13 @@ const Qualifications = () => {
             {
                 user !== undefined && user?.role_str === 'professor' ?
                     <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] '>
+                        <h1 className='pt-11 font-bold text-xl ml-12'>Qualifications</h1>
                         {!loading ?
                             <div className='p-9 px-12 font-bold text-2xl'>
                                 <div className='flex'>
-                                    <motion.div className='flex flex-wrap w-3/4 gap-8 ' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
+                                    <motion.div className='flex flex-wrap w-full gap-8 ' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
                                         {qualificationsProfessor && qualificationsProfessor.map(renderProfessorQualificationsCard)}
                                     </motion.div>
-                                    <div className='absolute right-0  '>
-                                        <img src={kasscloud} className=' w-[40rem] ' alt="" />
-                                    </div>
                                 </div>
                             </div>
                             :

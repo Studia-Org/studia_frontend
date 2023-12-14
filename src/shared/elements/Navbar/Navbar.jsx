@@ -1,8 +1,9 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { FiBell } from "react-icons/fi";
-import { Tag } from './Tag';
-import { useAuthContext } from "../../context/AuthContext";
+import { Tag } from '../Tag';
+import { useAuthContext } from "../../../context/AuthContext";
+import { Notifications } from './Notifications';
+
 
 export const Navbar = () => {
     const navigate = useNavigate();
@@ -13,8 +14,8 @@ export const Navbar = () => {
 
                 <Link to={'/app/courses'}><h1 className='p-10 sm:px-16 font-bold text-3xl italic leading-none tracking-tight cursor-pointer'>Uptitude<span className='text-pink-500 text-4xl '>.</span></h1></Link>
                 <div className=' absolute right-0 flex items-center '>
+                    <Notifications />
 
-                    <FiBell size={25} className="lg:mr-8 mr-4 cursor-pointer " />
                     <Tag className={'hidden lg:block'} User={user} />
                     {user && <p className='font-medium mr-5 hidden lg:block'>{user['name']}</p>}
                     <button onClick={() => navigate(`/app/profile/${user.id}/`)} className='rounded  mr-9'>

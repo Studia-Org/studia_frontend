@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { Sidebar } from '../../../shared/elements/Sidebar';
-import { Navbar } from '../../../shared/elements/Navbar';
 import draw2 from '../../../assets/draw2.png'
 import { CreateCourseBreadcrumb } from '../components/CreateCourses/CreateCourseBreadcrumb';
 import { EditCreateCourseSection } from '../components/CreateCourses/CourseSections/EditCreateCourseSection';
@@ -30,7 +28,7 @@ const CreateCourse = () => {
                     setSectionToEdit={setSectionToEdit} setCreateCourseSectionsListCopy={setCreateCourseSectionsListCopy}
                     createCourseSectionsListCopy={createCourseSectionsListCopy} />
             case 2:
-                return <CreateConfirmation createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} createCourseSectionsList={createCourseSectionsList} evaluator={courseBasicInfo.evaluator} courseBasicInfo={courseBasicInfo} />
+                return <CreateConfirmation task={task} createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} createCourseSectionsList={createCourseSectionsList} evaluator={courseBasicInfo.evaluator} courseBasicInfo={courseBasicInfo} />
             default:
                 return <CreateCourseInfo createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} />
         }

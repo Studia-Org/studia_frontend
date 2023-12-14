@@ -325,7 +325,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
     }
     return (
         <>
-            <LoadingBar color='#6366f1' progress={progress} onLoaderFinished={() => setProgress(0)} shadow={true} />
+            <LoadingBar color='#6366f1' height={4} progress={progress} onLoaderFinished={() => setProgress(0)} shadow={true} />
             <button onClick={createCourse} disabled={isLoading} className={`flex justify-center items-center mb-5 text-lg font-medium  bg-gradient-to-r from-[#657DE9] to-[#6E66D6] ${!isLoading ? 'hover:from-pink-500 hover:to-purple-600 hover:scale-110 hover:brightness-110' : ''}  text-white py-3 px-6 rounded-lg shadow-lg transform transition-all duration-500 ease-in-out  hover:animate-pulse active:scale-100`}>
                 {
                     isLoading ?

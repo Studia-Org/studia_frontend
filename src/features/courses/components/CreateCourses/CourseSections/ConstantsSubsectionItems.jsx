@@ -173,14 +173,6 @@ export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit }) 
 
     return (
         <div className="relative flex items-center p-5 border rounded-xl bg-gray-50">
-            <div className="absolute top-0 right-0">
-                <button onClick={addSequence} className="mr-10 mt-10 bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
-                    </svg>
-                    Add Sequence
-                </button>
-            </div>
             <div>
                 <ol className="ml-8 relative border-l border-dashed border-gray-300 mr-4">
                     {sequence.map((item, index) => (
@@ -188,9 +180,17 @@ export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit }) 
                     ))}
                 </ol>
             </div>
-            <div className="ml-5">
-                <p className="text-base font-normal">Continuous feedback</p>
-                <p className="text-sm text-gray-500 font-normal mr-10">The sequence is designed to revolve around the delivery of a task, allowing students to plan the task and progressively improve it with feedback from other students</p>
+            <div className='bg-white rounded-md border p-5 text-right w-1/2 h-full '>
+                <button onClick={addSequence} className="bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150 mb-5 ml-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
+                    </svg>
+                    Add Sequence
+                </button>
+                <div className="">
+                    <p className="text-base font-normal">Continuous feedback</p>
+                    <p className="text-sm text-gray-500 font-normal ">The sequence is designed to revolve around the delivery of a task, allowing students to plan the task and progressively improve it with feedback from other students</p>
+                </div>
             </div>
         </div>
     );
@@ -220,14 +220,6 @@ export const SequenceDevelopEducation1 = ({ setCreateCourseSectionsList, section
 
     return (
         <div className="relative flex items-center p-5 border rounded-xl bg-gray-50">
-            <div className="absolute top-0 right-0">
-                <button onClick={addSequence} className="mr-10 mt-10 bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
-                    </svg>
-                    Add Sequence
-                </button>
-            </div>
             <div>
                 <ol className="ml-8 relative border-l border-dashed border-gray-300 mr-4">
                     {sequence.map((item, index) => (
@@ -235,9 +227,17 @@ export const SequenceDevelopEducation1 = ({ setCreateCourseSectionsList, section
                     ))}
                 </ol>
             </div>
-            <div className="ml-5">
-                <p className="text-base font-normal">Continuous feedback</p>
-                <p className="text-sm text-gray-500 font-normal mr-10">The sequence is designed to revolve around the delivery of a task, allowing students to plan the task and progressively improve it with feedback from other students</p>
+            <div className='bg-white rounded-md border p-5 text-right w-1/2 h-full '>
+                <button onClick={addSequence} className="bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150 mb-5 ml-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
+                    </svg>
+                    Add Sequence
+                </button>
+                <div className="">
+                    <p className="text-base font-normal">Continuous feedback</p>
+                    <p className="text-sm text-gray-500 font-normal">The sequence is designed to revolve around the delivery of a task, allowing students to plan the task and progressively improve it with feedback from other students</p>
+                </div>
             </div>
         </div>
     );
@@ -259,15 +259,7 @@ export const SequenceDevelopEducation2 = ({ setCreateCourseSectionsList, section
         }
     }
     return (
-        <div className="relative flex items-center p-5 border rounded-xl bg-gray-50">
-            <div className="absolute top-0 right-0">
-                <button onClick={addSequence} className="mr-10 mt-10 bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
-                    </svg>
-                    Add Sequence
-                </button>
-            </div>
+        <div className="flex items-center p-5 border rounded-xl bg-gray-50">
             <div>
                 <ol className="ml-8 relative border-l border-dashed border-gray-300 mr-4">
                     {sequence.map((item, index) => (
@@ -275,9 +267,17 @@ export const SequenceDevelopEducation2 = ({ setCreateCourseSectionsList, section
                     ))}
                 </ol>
             </div>
-            <div className="ml-5">
-                <p className="text-base font-normal">Early Professor feedback and reflection</p>
-                <p className="text-sm text-gray-500 font-normal mr-10">The sequence is designed to revolve around the delivery of a task, allowing students to plan the task and progressively improve it with feedback from other students</p>
+            <div className='bg-white rounded-md border p-5 text-right w-1/2 h-full '>
+                <button onClick={addSequence} className="bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150 mb-5 ml-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
+                    </svg>
+                    Add Sequence
+                </button>
+                <div className="">
+                    <p className="text-base font-normal">Early Professor feedback and reflection</p>
+                    <p className="text-sm text-gray-500 font-normal">The sequence is designed to revolve around the delivery of a task, allowing students to plan the task and progressively improve it with feedback from other students</p>
+                </div>
             </div>
         </div>
     );
@@ -301,14 +301,6 @@ export const SequenceDevelopNoMSLQForum = ({ setCreateCourseSectionsList, sectio
     }
     return (
         <div className="relative flex items-center p-5 border rounded-xl bg-gray-50">
-            <div className="absolute top-0 right-0">
-                <button onClick={addSequence} className="mr-10 mt-10 bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
-                    </svg>
-                    Add Sequence
-                </button>
-            </div>
             <div>
                 <ol className="ml-8 relative border-l border-dashed border-gray-300 mr-4">
                     {sequence.map((item, index) => (
@@ -316,24 +308,27 @@ export const SequenceDevelopNoMSLQForum = ({ setCreateCourseSectionsList, sectio
                     ))}
                 </ol>
             </div>
-            <div className="ml-5">
-                <p className="text-base font-normal">Develop a task with forum feedback</p>
-                <p className="text-sm text-gray-500 font-normal mr-10">The sequence is designed to revolve around the delivery of a task, allowing students to plan the task and progressively improve it with feedback from other students</p>
+            <div className='bg-white rounded-md border p-5 text-right w-1/2 h-full '>
+                <button onClick={addSequence} className="bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150 mb-5 ml-auto">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
+                    </svg>
+                    Add Sequence
+                </button>
+                <div className="">
+                    <p className="text-base font-normal">Develop a task with forum feedback</p>
+                    <p className="text-sm text-gray-500 font-normal">The sequence is designed to revolve around the delivery of a task, allowing students to plan the task and progressively improve it with feedback from other students</p>
+                </div>
             </div>
         </div>
     );
 }
 
-export const PerformancePage = ({ setCreateCourseSectionsList, sectionToEdit, handleBack, handleContinue, context }) => {
-
+export const PerformancePage = ({ setCreateCourseSectionsList, sectionToEdit, context }) => {
 
     return (
         <>
-            <div className='flex mt-20 mb-5 '>
-                <p className=''>Performance</p>
-                {buttonGroup({ handleBack, handleContinue })}
-            </div>
-            <div className='flex items-center p-5 border rounded-xl bg-gray-50 mt-5'>
+            <div className='flex items-center p-5 border rounded-xl bg-gray-50'>
                 <div className='px-3 py-3 bg-[#f59e0b] rounded-md flex items-center justify-center '>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-8 h-8 text-white">
                         <path fillRule="evenodd" d="M3 3.5A1.5 1.5 0 014.5 2h6.879a1.5 1.5 0 011.06.44l4.122 4.12A1.5 1.5 0 0117 7.622V16.5a1.5 1.5 0 01-1.5 1.5h-11A1.5 1.5 0 013 16.5v-13zm10.857 5.691a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 00-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clipRule="evenodd" />
@@ -389,14 +384,10 @@ export const buttonGroup = ({ handleBack, handleContinue }) => {
     )
 }
 
-export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, handleBack, handleContinue, context }) => {
+export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, context }) => {
 
     return (
         <>
-            <div className='flex mt-20 mb-5 '>
-                <p className=''>Forethought</p>
-                {buttonGroup({ handleBack, handleContinue })}
-            </div>
             <div className='flex items-center p-5 border rounded-xl bg-gray-50'>
                 <div className='px-3 py-3 bg-[#15803d] rounded-md flex items-center justify-center '>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 text-white">
@@ -483,15 +474,11 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, ha
     )
 }
 
-export const SelfReflectionPage = ({ setCreateCourseSectionsList, sectionToEdit, handleBack, handleContinue, context }) => {
+export const SelfReflectionPage = ({ setCreateCourseSectionsList, sectionToEdit, context }) => {
 
     return (
         <>
-            <div className='flex mt-20 mb-5 '>
-                <p className=''>Self-Reflection</p>
-                {buttonGroup({ handleBack, handleContinue })}
-            </div>
-            <div className='flex items-center p-5 border rounded-xl bg-gray-50 mt-5'>
+            <div className='flex items-center p-5 border rounded-xl bg-gray-50 '>
                 <div className='px-3 py-3 bg-[#dc2626] rounded-md flex items-center justify-center '>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-8 h-8 text-white">
                         <path d="M10 9a3 3 0 100-6 3 3 0 000 6zM6 8a2 2 0 11-4 0 2 2 0 014 0zM1.49 15.326a.78.78 0 01-.358-.442 3 3 0 014.308-3.516 6.484 6.484 0 00-1.905 3.959c-.023.222-.014.442.025.654a4.97 4.97 0 01-2.07-.655zM16.44 15.98a4.97 4.97 0 002.07-.654.78.78 0 00.357-.442 3 3 0 00-4.308-3.517 6.484 6.484 0 011.907 3.96 2.32 2.32 0 01-.026.654zM18 8a2 2 0 11-4 0 2 2 0 014 0zM5.304 16.19a.844.844 0 01-.277-.71 5 5 0 019.947 0 .843.843 0 01-.277.71A6.975 6.975 0 0110 18a6.974 6.974 0 01-4.696-1.81z" />
@@ -507,7 +494,6 @@ export const SelfReflectionPage = ({ setCreateCourseSectionsList, sectionToEdit,
                     </svg>
                 </button>
             </div>
-
             <div className='flex items-center p-5 border rounded-xl bg-gray-50 mt-5'>
                 <div className='px-3 py-3 bg-[#dc2626] rounded-md flex items-center justify-center '>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-8 h-8 text-white">

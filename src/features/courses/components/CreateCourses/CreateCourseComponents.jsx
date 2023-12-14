@@ -217,6 +217,8 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
     setCreateCourseSectionsListCopy([...createCourseSectionsList, newSection])
     setAddSectionFlag(true)
     setSectionName('')
+    setEditCourseSectionFlag(true)
+    setSectionToEdit(newSection)
     message.success("Section created successfully")
   }
 
@@ -291,11 +293,12 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
   )
 }
 
-export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption, createCourseSectionsList, evaluator, courseBasicInfo }) => {
+export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption, createCourseSectionsList, evaluator, courseBasicInfo, task }) => {
   const [sectionContentSelector, setSectionContentSelector] = useState('course');
   const [visibilityTask, setVisibilityTask] = useState(false);
   const [selectedSubsection, setSelectedSubsection] = useState(createCourseSectionsList[0]?.subsections[0]);
   const [sectionId, setSectionId] = useState(createCourseSectionsList[0]?.id);
+
   useEffect(() => {
     createCourseSectionsList.forEach((section) => {
       const subsection = section.subsections.find((subsection) => subsection.id === sectionContentSelector);
@@ -316,6 +319,7 @@ export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption, 
               setVisibilityTask={setVisibilityTask}
               selectedSubsection={selectedSubsection}
               sectionId={sectionId}
+              task={task}
             />
           </div>
           <div style={{ width: '45rem' }} className=' ml-auto items-center flex flex-col'>
@@ -325,6 +329,8 @@ export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption, 
                 createCourseSectionsList={createCourseSectionsList}
                 setSectionContentSelector={setSectionContentSelector}
                 setSectionId={setSectionId}
+                selectedSubsection={selectedSubsection}
+                sectionId={sectionId}
               />
             </div>
           </div>
@@ -333,15 +339,10 @@ export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption, 
     } else {
       return (
         <div className='w-full mr-5'>
-          {sectionId && <TaskContent setVisibilityTask={setVisibilityTask} task={findSectionTask(sectionId)} evaluator={evaluator} />}
+          {sectionId && <TaskContent setVisibilityTask={setVisibilityTask} task={task[sectionId]} evaluator={evaluator} />}
         </div>
       );
     }
-  };
-
-  const findSectionTask = (id) => {
-    const section = createCourseSectionsList.find((section) => section.id === id);
-    return section ? section.task : null;
   };
 
   return (

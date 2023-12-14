@@ -3,15 +3,12 @@ import { useAuthContext } from '../../../../../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 
 export const TaskComponentCard = ({ task, setVisibilityTask, context, courseId }) => {
-    console.log(task)
-    console.log(context)
     const deadlineOnTime = new Date(task?.attributes?.deadline) > new Date()
     const { user } = useAuthContext()
     const navigate = useNavigate()
 
     function handleClickButton() {
         if (context === 'coursesInside') {
-
             navigate(`/app/courses/${courseId}/activity/${task.id}`)
         } else {
             setVisibilityTask(true)
