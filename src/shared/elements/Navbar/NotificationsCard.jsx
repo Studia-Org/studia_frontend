@@ -17,16 +17,7 @@ export const NotificationsCard = ({ notification, setNotifications }) => {
 
     async function handleNotificationClick() {
         markNotificationAsRead(notification.id);
-        switch (notification.type) {
-            case 'qualifications':
-                navigate('/app/qualifications')
-                break;
-            case 'forum':
-                navigate('/app/courses')
-                break;
-            default:
-                break;
-        }
+        routeNotification(notification.type);
         await fetch(`${API}/notifications/${notification.id}`, {
             method: 'PUT',
             headers: {
@@ -42,6 +33,19 @@ export const NotificationsCard = ({ notification, setNotifications }) => {
         });
     }
 
+    function routeNotification() {
+        switch (notification.type) {
+            case 'qualifications':
+                navigate('/app/qualifications')
+                break;
+            case 'forum':
+                navigate('/app/courses')
+                break;
+            default:
+                break;
+        }
+    }
+
     if (notification.read === false) {
         return (
             <>
@@ -54,7 +58,7 @@ export const NotificationsCard = ({ notification, setNotifications }) => {
         )
     } else {
         return (
-            <div className='hover:bg-gray-50 rounded-md p-3 border w-full'>
+            <div onClick={() => routeNotification()} className='hover:bg-gray-50 rounded-md p-3 border w-full cursor-pointer'>
                 <p>{notification.content}</p>
             </div>
         )

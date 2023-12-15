@@ -41,7 +41,7 @@ export const ForumClickable = ({ posts, setForumFlag }) => {
             <FiCornerDownLeft />{" "}
             <p className="ml-auto">
               {" "}
-              {post.attributes.forum_answers.data.length} Replies
+              {post.attributes.forum_answers.data?.length} Replies
             </p>
           </span>
         </div>

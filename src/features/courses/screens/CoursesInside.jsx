@@ -341,7 +341,7 @@ const CourseInside = () => {
               )}
             </div>
           ) : (
-            <ForumComponent posts={posts} forumID={forumID} />
+            <ForumComponent posts={posts} setPosts={setPosts} forumID={forumID} />
           )}
         </div>
         {
