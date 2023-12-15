@@ -4,7 +4,7 @@ import { publicRoutes } from './public';
 import { checkAuthenticated } from '../helpers';
 import Home from '../shared/home';
 import Page404Screen from '../features/404/screens/Page404Screen';
-import { Navbar } from '../shared/elements/Navbar';
+import { Navbar } from '../shared/elements/Navbar/Navbar';
 import { Sidebar } from '../shared/elements/Sidebar';
 
 export const AppRoutes = () => {

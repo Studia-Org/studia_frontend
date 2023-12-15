@@ -2,11 +2,14 @@ import React, { useState } from 'react'
 import { Collapse, Progress } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 
-export const AccordionCourse = ({ createCourseSectionsList, setSectionContentSelector, setSectionId }) => {
+export const AccordionCourse = ({ createCourseSectionsList, setSectionContentSelector, setSectionId, selectedSubsection, sectionId }) => {
     const { Panel } = Collapse;
     const [sectionNumber, setSectionNumber] = useState(1);
 
+
     function RenderCourseSubsections({ subsection, sectionId }) {
+        const selectedSubsectionTemp = subsection.id === selectedSubsection.id
+
         let ringColor = '#15803d'
         if (subsection.fase === 'forethought') {
             ringColor = '#15803d'
@@ -27,6 +30,14 @@ export const AccordionCourse = ({ createCourseSectionsList, setSectionContentSel
                     setSectionContentSelector(subsection.id)
                     setSectionId(sectionId)
                 }} className="flex items-center mb-1 font-medium text-gray-900 line-clamp-2 w-3/4 hover:translate-x-2 duration-200 text-left"> {subsection.title}</button>
+                {
+                    selectedSubsectionTemp && (
+                        <span class="relative flex h-3 w-3 ml-3">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
+                        </span>
+                    )
+                }
             </li>
         )
     }
@@ -36,7 +47,10 @@ export const AccordionCourse = ({ createCourseSectionsList, setSectionContentSel
             <Collapse
                 expandIcon={({ isActive }) => <CaretRightOutlined className='absolute top-0 bottom-0 right-5 ' rotate={isActive ? 90 : 0} />}
                 className='mt-5 bg-gray-50'
-                expandIconPosition="right">
+                expandIconPosition="right"
+                defaultActiveKey={(sectionId === section.id) && sectionNumber.toString()}
+
+            >
                 <Panel
                     header={
                         <div className='flex items-center py-4 '>
@@ -44,7 +58,9 @@ export const AccordionCourse = ({ createCourseSectionsList, setSectionContentSel
                                 <p className='text-sm mb-1'>Section {sectionNumber}</p>
                                 <h2 className='w-3/4 text-lg font-medium text-left line-clamp-2'>
                                     {section.name}
+
                                 </h2>
+
                             </div>
                         </div>
                     }

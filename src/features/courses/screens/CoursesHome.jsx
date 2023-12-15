@@ -303,7 +303,7 @@ const CoursesHome = () => {
               </div> :
               <>
                 <div className={`flex flex-col ${user.role_str === 'student' && 'grid-home:max-w-[calc(100%-500px)]'} w-full`}>
-                  <p className='py-11 pb-6 font-bold text-xl'>Recent Courses</p>
+                  <h1 className='py-11 pb-6 font-bold text-xl'>Recent Courses</h1>
                   <motion.div id='course-motion-div'
                     className='flex flex-wrap gap-x-[5%] gap-y-[16px]  max-w-full justify-center md:justify-start '
                     initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>

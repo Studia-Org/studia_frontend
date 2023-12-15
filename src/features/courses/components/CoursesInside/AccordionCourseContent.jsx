@@ -292,8 +292,19 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
           }
         }
       }])
+      setSectionToEdit({
+        id: sectionId,
+        attributes: {
+          title: newSection,
+          subsections: {
+            data: [
+            ]
+          }
+        }
+      });
       setNewSection('');
       setAddSectionLoading(false);
+      setEditSectionFlag(true);
       message.success("Section Added Successfully");
     } catch (error) {
       message.error("Error adding section");
