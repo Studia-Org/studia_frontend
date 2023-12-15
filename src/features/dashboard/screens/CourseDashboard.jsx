@@ -1,6 +1,5 @@
 import { useAuthContext } from "../../../context/AuthContext";
 import { MoonLoader } from "react-spinners";
-import { SectionCoursesCards } from "../components/DashBoard/CardDash";
 import { ActivitiesDash } from "../components/CourseDashBoard/ActivitiesDash/ActivitiesDash";
 import { ForumDash } from "../components/CourseDashBoard/ForumDash";
 import { useEffect, useState } from "react";
@@ -29,24 +28,21 @@ function CourseDashboard() {
           <div className=" flex items-center justify-center w-full h-full">
             <MoonLoader color="#363cd6" size={80} />
           </div> :
-          <main className="flex flex-col flex-wrap w-full h-full content-center  p-5 box-border">
-            <div className="flex flex-wrap h-fit xl:h-fit gap-y-2 xl:gap-x-[2%] 
-            justify-between min-w-[95%] max-w-[95%] box-border mb-4"
-            >
-              <SectionCoursesCards courses={user.courses} styles={"w-full h-fit"} />
+          <main className="flex flex-col flex-wrap w-full h-full content-center box-border">
+            <div className="flex flex-wrap h-fit xl:h-fit justify-between w-full box-border p-10 pb-5">
             </div>
-            <div className="flex flex-1 flex-wrap xl:flex-nowrap
-               xl:gap-x-[2%] justify-between min-w-[95%] max-w-[95%] box-border">
+            <div className="flex flex-1 flex-wrap xl:flex-nowrap justify-between box-border px-10 pb-10">
               <ActivitiesDash
                 key={"ActivitiesDash " + courseId}
                 courseInformation={courseContentInformation.courseInformation}
-                styles={"min-w-full xl:min-w-[49%]"}
+                courseId={courseId}
+                styles={"min-w-full xl:min-w-[100%]"}
               />
-              <ForumDash
+              {/* <ForumDash
                 key={"ForumDash " + courseId}
                 courseInformation={courseContentInformation.courseInformation}
                 styles={"min-w-full mt-4 xl:mt-0 xl:min-w-[49%]"}
-              />
+              /> */}
             </div>
           </main>
       }

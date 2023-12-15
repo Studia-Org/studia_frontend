@@ -1,8 +1,12 @@
 import { API } from "../constant";
 
-export async function fetchAverageQualification({ activityId }) {
+export async function fetchAverageQualificationOneActivity({ activityId }) {
     try {
-        const response = await fetch(`${API}/qualifications?fields[0]=qualification&populate[activity][fields][0]=title&filters[activity][id]=${activityId}`);
+        const response = await fetch(`${API}/qualifications?` +
+            `fields[0]=qualification&` +
+            `populate[activity][fields][0]=title&` +
+            `filters[activity][id]=${activityId}`);
+
         const data = await response.json();
 
         const qualificationsList = data.data.map((qualification) => {

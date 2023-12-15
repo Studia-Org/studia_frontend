@@ -264,20 +264,18 @@ const CoursesHome = () => {
 
   function renderObjectives(objective) {
     return (
-      <div key={objective.id}>
-        <div className='bg-white rounded-2xl shadow-md flex  min-w-[450px] p-5 md:w-[28rem] lg:w-[30rem]'>
-          <p className='font-medium text-base'>{objective.objective}</p>
-          {
-            objective.completed === true ?
-              <div className='ml-auto'>
-                <Chip label='Completed' color='success' className='ml-auto ' onClick={() => handleObjectiveCompleted(objective)} />
-              </div>
-              :
-              <div className='ml-auto'>
-                <Chip label='Not Completed' color='info' className='ml-auto' onClick={() => handleObjectiveCompleted(objective)} />
-              </div>
-          }
-        </div>
+      <div key={objective.id} className='bg-white rounded-2xl shadow-md flex  p-5 '>
+        <p className='font-medium text-base'>{objective.objective}</p>
+        {
+          objective.completed === true ?
+            <div className='ml-auto'>
+              <Chip label='Completed' color='success' className='ml-auto ' onClick={() => handleObjectiveCompleted(objective)} />
+            </div>
+            :
+            <div className='ml-auto'>
+              <Chip label='Not Completed' color='info' className='ml-auto' onClick={() => handleObjectiveCompleted(objective)} />
+            </div>
+        }
       </div>
     )
   }

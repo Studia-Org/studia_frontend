@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import { CardSimple } from "../../../utils/CardSimple";
 import { GenerateChartQualifitation } from "../../../utils/BarChartQualification";
 import { DropDownCourse, DropDownSection } from "./components/DropDownActivities";
-import { fetchAverageQualification } from "../../../../../fetches/fetchAverageQualification";
 import { MoonLoader } from "react-spinners";
-import { fetchSingleQualification } from "../../../../../fetches/fetchSingleQualification";
 import { useAuthContext } from "../../../../../context/AuthContext";
+import { fetchAverageQualificationOneSection } from "../../../../../fetches/fetchAverageSectionQualification";
+import { fetchAverageSubSectionMark } from "../../../../../fetches/fetchAvegareSubsectionsMark";
 
-export function ActivitiesDash({ courseInformation, styles }) {
+export function ActivitiesDash({ courseInformation, styles, courseId }) {
     const [selectedCourse, setSelectedCourse] = useState("Section");
     const [selectedSection, setSelectedSection] = useState("Subsection");
     const [selectedActivity, setSelectedActivity] = useState("Activity");
@@ -17,20 +17,28 @@ export function ActivitiesDash({ courseInformation, styles }) {
     const { user } = useAuthContext();
 
     useEffect(() => {
-        if (selectedActivity === "Activity") return
         async function getAverageAndQualification() {
-            const activityId = selectedActivity.id
             const userId = user.id
             setLoading(true)
-            const average = await fetchAverageQualification({ activityId })
-            const qualification = await fetchSingleQualification({ activityId, userId })
+            const { averageMainActivity, averageMainActivityUser } = await fetchAverageQualificationOneSection({ courseId, userId })
+            //const qualification = await fetchSingleQualification({ activityId, userId })
             setLoading(false)
-            setAverageQualification(average)
-            setQualification(qualification)
+            setAverageQualification(averageMainActivity)
+            setQualification(averageMainActivityUser)
         }
         getAverageAndQualification()
 
-    }, [selectedActivity]);
+    }, [courseId])
+
+
+    useEffect(() => {
+        if (selectedCourse === "Subsection") return
+        console.log("selectedSection", selectedCourse)
+        const sectionId = selectedCourse.id
+        const userId = user.id
+        fetchAverageSubSectionMark({ courseId, userId, sectionId })
+
+    }, [selectedCourse])
 
     function ActivitySection({ selectedSection, setSelectedActivity }) {
         return (
@@ -60,7 +68,7 @@ export function ActivitiesDash({ courseInformation, styles }) {
                                 <p className="text-lg font-medium pt-2 pb-1">
                                     Average: {averageQualification.toFixed(2)}</p>
                                 <p className="text-lg font-medium pt-2 pb-1">
-                                    Your score: {qualification.toFixed(2)}</p>
+                                    Your mark: {qualification.toFixed(2)}</p>
                             </div>
                             <GenerateChartQualifitation
                                 averageQualification={averageQualification}
@@ -83,24 +91,10 @@ export function ActivitiesDash({ courseInformation, styles }) {
                         setSelectedCourse={setSelectedCourse}
                         setSelectedSection={setSelectedSection} />
                 }
-                {selectedCourse !== "Section" &&
-                    <DropDownSection
-                        selectedCourse={selectedCourse}
-                        selectedSection={selectedSection}
-                        setSelectedSection={setSelectedSection}
-                        setSelectedActivity={setSelectedActivity} />
-                }
             </div>
-
-            {selectedSection !== "Subsection" && (
-                <ActivitySection
-                    selectedSection={selectedSection}
-                    setSelectedActivity={setSelectedActivity}
-                />
-            )}
-            {selectedActivity !== "Activity" && (
+            <div className="flex">
                 <ActivityInformation averageQualification={averageQualification} />
-            )}
+            </div>
         </section>
     );
 }
