@@ -28,10 +28,8 @@ function CourseDashboard() {
           <div className=" flex items-center justify-center w-full h-full">
             <MoonLoader color="#363cd6" size={80} />
           </div> :
-          <main className="flex flex-col flex-wrap w-full h-full content-center box-border">
-            <div className="flex flex-wrap h-fit xl:h-fit justify-between w-full box-border p-10 pb-5">
-            </div>
-            <div className="flex flex-1 flex-wrap xl:flex-nowrap justify-between box-border px-10 pb-10">
+          <main className="flex flex-col w-full h-full content-center box-border">
+            <div className="flex flex-1 w-full box-border p-2 md:p-5 lg:10">
               <ActivitiesDash
                 key={"ActivitiesDash " + courseId}
                 courseInformation={courseContentInformation.courseInformation}

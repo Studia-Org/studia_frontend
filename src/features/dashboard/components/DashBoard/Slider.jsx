@@ -17,6 +17,8 @@ export default class DemoComponent extends Component {
             align={window.screen.width > 600 ? "prev" : "center"}
             circular={true}
             plugins={this._plugins}
+            className="w-full"
+
         >
             {data.map((course, index) => {
                 return (
