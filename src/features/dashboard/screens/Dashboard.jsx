@@ -20,7 +20,7 @@ function Dashboard() {
             {/* <PerformanceGraphic courses={user.courses} /> */}
           </div>
           <div className="flex min-h-[400px] h-[calc(100vh-15rem-10rem)] p-3 min-w-[95%] max-w-[95%]">
-            <TimeDedicated courses={user.courses} />
+            <TimeDedicated courses={user?.courses} />
           </div>
         </main>
       )}

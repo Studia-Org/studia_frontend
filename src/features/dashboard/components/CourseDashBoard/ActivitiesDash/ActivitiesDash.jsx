@@ -117,7 +117,9 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
         <section className={`flex flex-col p-2 lg:p-5 rounded-lg  ${styles}`}>
             {
                 loading ?
-                    <MoonLoader className="self-center" color="#363cd6" size={80} />
+                    <div className=" flex items-center justify-center w-full h-full">
+                        <MoonLoader color="#363cd6" size={80} />
+                    </div>
                     :
                     <>
                         <button className='text-sm flex -mt-4 pb-2  w-fit hover:-translate-x-2 duration-150 '

@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Badge } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { API } from '../../../constant';
 import { getToken } from '../../../helpers';
 import { useAuthContext } from '../../../context/AuthContext';
 
-export const NotificationsCard = ({ notification, setNotifications, setOpen }) => {
+export const NotificationsCard = ({ notification, setNotifications }) => {
     const navigate = useNavigate();
     const { user } = useAuthContext()
 
@@ -41,7 +41,7 @@ export const NotificationsCard = ({ notification, setNotifications, setOpen }) =
     }
 
     function routeNotification() {
-        setOpen(false);
+        document.getElementById("notification-button").click();
         navigate(notification.link)
     }
 

@@ -326,8 +326,8 @@ const CourseInside = () => {
                         />
                         :
                         <div className="gap-3 flex items-center">
-                          <p className="text-xl font-semibold"> {courseSubsection.attributes.title}</p>
-                          <Badge color="#6366f1" count={new Date(courseSubsection.attributes.end_date).toDateString()} />
+                          <p className="text-xl font-semibold"> {courseSubsection?.attributes?.title}</p>
+                          <Badge color="#6366f1" count={new Date(courseSubsection?.attributes?.end_date).toDateString()} />
                         </div>
                     }
                     {
