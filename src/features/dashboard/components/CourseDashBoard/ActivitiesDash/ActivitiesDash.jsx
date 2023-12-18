@@ -72,7 +72,7 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
                             <p className="text-lg font-medium pt-2 pb-1">
                                 Average: {averageQualification.toFixed(2)}</p>
                             <p className="text-lg font-medium pt-2 pb-1">
-                                Your mark: {qualification?.toFixed(2)}</p>
+                                Your grade: {qualification?.toFixed(2)}</p>
                         </div>
                         <GenerateChartQualifitation
                             averageQualification={averageQualification}

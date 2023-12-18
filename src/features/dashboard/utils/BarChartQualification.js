@@ -61,8 +61,8 @@ export function GenerateChartQualifitation({ averageQualification, qualification
                                 </svg>
                                 <label>{
                                     user_bool_row && bool_row ? "In the average! " + qualification :
-                                        user_bool_row ? "Your mark: " + qualification :
-                                            "Average mark: " + averageQualification
+                                        user_bool_row ? "Your grade: " + qualification :
+                                            "Average grade: " + averageQualification
                                 }</label>
                             </div>
                             : ""}
