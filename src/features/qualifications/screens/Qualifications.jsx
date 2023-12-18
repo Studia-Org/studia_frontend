@@ -1,9 +1,6 @@
 import { useEffect, React, useState } from 'react';
-import { Sidebar } from '../../../shared/elements/Sidebar';
-import { Navbar } from '../../../shared/elements/Navbar';
 import { API } from "../../../constant";
 import { motion } from 'framer-motion';
-import kasscloud from '../../../assets/kasscloud.png'
 import { Link } from 'react-router-dom';
 import { format } from 'date-fns';
 import { MoonLoader } from "react-spinners";
@@ -52,7 +49,7 @@ const Qualifications = () => {
     function callQualificationsData() {
         if (user) {
             setLoading(true);
-            fetch(`${API}/users/${user.id}?populate=courses.sections.subsections.activities,qualifications.activity,courses.professor.profile_photo,courses.cover`)
+            fetch(`${API}/users/${user.id}?populate=courses.sections.subsections.activity,qualifications.activity,courses.professor.profile_photo,courses.cover`)
                 .then((res) => res.json())
                 .then((data) => {
                     const coursesWithActivities = []
@@ -61,9 +58,7 @@ const Qualifications = () => {
                         const filteredQualifications = data.qualifications.filter(qualification => {
                             return course.sections.some(section => {
                                 return section.subsections.some(subsection => {
-                                    return subsection.activities.some(activity => {
-                                        return activity.id === qualification.activity.id;
-                                    });
+                                    return subsection.activity?.id === qualification.activity?.id;
                                 });
                             });
                         });
@@ -90,7 +85,7 @@ const Qualifications = () => {
 
     const speaker = (props) => {
         return (
-            <Popover title={props.activity.title}>
+            <Popover title={props.activity?.title}>
                 <p className='italic text-gray-400'>Comments </p>
                 {props.comments ? <p>{props.comments}</p> : <p>No comments.</p>}
             </Popover>
@@ -110,7 +105,7 @@ const Qualifications = () => {
         return (
             <div>
                 <Whisper placement="top" className='text-sm shadow-md' trigger="hover" controlId="control-id-hover" speaker={speaker(grades)}>
-                    <Link className='no-underline' to={`/app/courses/${courseID}/activity/${grades.activity.id}`}>
+                    <Link className='no-underline' to={`/app/courses/${courseID}/activity/${grades.activity?.id}`}>
                         <Button style={style} className='text-sm shadow-md bg-gradient-to-r from-[#657DE9] to-[#6E66D6] '> {grades.qualification}</Button>
                     </Link>
                 </Whisper>
@@ -180,7 +175,7 @@ const Qualifications = () => {
 
         return (
             <tr class="bg-white border-b hover:bg-gray-50">
-                <th scope="row" class="px-6 py-4 text-gray-900 whitespace-nowrap">
+                <th scope="row" class="px-6 py-4 text-gray-900 whitespace-nowrap font-semibold">
                     <p className='lg:text-base text-sm'>{curso_grade.title}</p>
                 </th>
                 <td class="px-6 py-4 flex items-center text-gray-900">
@@ -207,15 +202,13 @@ const Qualifications = () => {
             {
                 user !== undefined && user?.role_str === 'professor' ?
                     <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] '>
+                        <h1 className='pt-11 font-bold text-xl ml-12'>Qualifications</h1>
                         {!loading ?
                             <div className='p-9 px-12 font-bold text-2xl'>
                                 <div className='flex'>
-                                    <motion.div className='flex flex-wrap w-3/4 gap-8 ' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
+                                    <motion.div className='flex flex-wrap w-full gap-8 ' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
                                         {qualificationsProfessor && qualificationsProfessor.map(renderProfessorQualificationsCard)}
                                     </motion.div>
-                                    <div className='absolute right-0  '>
-                                        <img src={kasscloud} className=' w-[40rem] ' alt="" />
-                                    </div>
                                 </div>
                             </div>
                             :

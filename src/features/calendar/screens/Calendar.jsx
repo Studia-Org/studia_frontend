@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { Sidebar } from '../../../shared/elements/Sidebar';
-import { Navbar } from '../../../shared/elements/Navbar';
 import 'rsuite/dist/rsuite-no-reset.min.css';
 import { useAuthContext } from "../../../context/AuthContext";
 import { Calendar, Whisper, Popover, Badge, Modal, Input, Button, Form } from 'rsuite';

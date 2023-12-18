@@ -114,7 +114,8 @@ export const Sidebar = (props) => {
                   : ""
                   }`}
               >
-                <span className="flex font-semibold">
+                <span className="flex items-center font-semibold">
+
                   <IconContext.Provider value={iconProps.courses}>
                     <FiGrid size={25} />
                   </IconContext.Provider>
@@ -137,7 +138,8 @@ export const Sidebar = (props) => {
                   : ""
                   }`}
               >
-                <span className="flex font-semibold">
+                <span className="flex items-center font-semibold">
+
                   <IconContext.Provider value={iconProps.events}>
                     <FiCalendar size={25} />
                   </IconContext.Provider>
@@ -159,7 +161,8 @@ export const Sidebar = (props) => {
                   : ""
                   }`}
               >
-                <span className="flex font-semibold">
+                <span className="flex items-center font-semibold">
+
                   <IconContext.Provider value={iconProps.timeline}>
                     <MdTimeline size={25} />
                   </IconContext.Provider>
@@ -181,7 +184,8 @@ export const Sidebar = (props) => {
                   : ""
                   }`}
               >
-                <span className="flex font-semibold">
+                <span className="flex items-center font-semibold">
+
                   <IconContext.Provider value={iconProps.dashboard}>
                     <FiBarChart size={25} />
                   </IconContext.Provider>
@@ -225,7 +229,8 @@ export const Sidebar = (props) => {
                   : ""
                   }`}
               >
-                <span className="flex font-semibold">
+                <span className="flex items-center font-semibold">
+
                   <IconContext.Provider value={iconProps.settings}>
                     <FiSettings size={25} />
                   </IconContext.Provider>

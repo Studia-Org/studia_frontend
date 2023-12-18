@@ -2,7 +2,7 @@ import React from 'react'
 import { Empty } from 'antd'
 import TimelineComponent from '../../../../timeline/components/TimelineComponent'
 
-export const CreateCourseTimelineSubsection = ({ createCourseSectionsList, sectionId }) => {
+export const CreateCourseTimelineSubsection = ({ createCourseSectionsList, sectionId, ref2 }) => {
   const sectionFiltered = createCourseSectionsList.filter((section) => section.id === sectionId)[0]
   const groups = Array.from({ length: sectionFiltered.subsections.length }, (_, index) => ({
     id: (index + 1).toString(),
@@ -29,7 +29,7 @@ export const CreateCourseTimelineSubsection = ({ createCourseSectionsList, secti
 
   return (
     groups.length === 0 ?
-      <div className='bg-white shadow-md rounded-md p-5 mb-10 flex items-center justify-center flex-col'>
+      <div ref={ref2} className='bg-white shadow-md rounded-md p-5 mb-10 flex items-center justify-center flex-col'>
         <Empty description={
           <span className='text-gray-400 font-normal '>
             Add your first item
@@ -38,7 +38,7 @@ export const CreateCourseTimelineSubsection = ({ createCourseSectionsList, secti
       </div>
       :
       alturaElemento &&
-      <div
+      <div ref={ref2}
         style={{ height: alturaElemento > 25 ? '25rem' : alturaElemento + 'rem' }}
         className={`bg-white shadow-md rounded-md p-5 duration-150  mb-10 ${alturaElemento > 35 && 'overflow-y-scroll'} `}
       >

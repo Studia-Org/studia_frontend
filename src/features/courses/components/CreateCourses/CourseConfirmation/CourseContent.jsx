@@ -5,7 +5,7 @@ import { Tabs, Empty } from 'antd';
 import { QuestionnaireConfirmation } from './QuestionnaireConfirmation';
 import ImageDisplay from './ImageDisplay';
 
-export const CourseContent = ({ createCourseSectionsList, sectionContentSelector, setVisibilityTask, selectedSubsection, sectionId }) => {
+export const CourseContent = ({ createCourseSectionsList, sectionContentSelector, setVisibilityTask, selectedSubsection, sectionId, task }) => {
 
     const CourseContent = () => {
         return (
@@ -16,9 +16,10 @@ export const CourseContent = ({ createCourseSectionsList, sectionContentSelector
                         <>
                             <p className='text-xs font-normal text-gray-400 mb-1'>Task</p>
                             <hr className='mb-5' />
-                            {(createCourseSectionsList.find(section => section.id === sectionId)).task &&
-                                <TaskComponentCard task={(createCourseSectionsList.find(section => section.id === sectionId)).task} setVisibilityTask={setVisibilityTask} />}
-
+                            {
+                                task[sectionId] &&
+                                <TaskComponentCard task={task[sectionId]} setVisibilityTask={setVisibilityTask} />
+                            }
                             <p className='text-xs font-normal text-gray-400 mb-1'>Course content</p>
                             <hr className='mb-5' />
                             <Content selectedSubsection={selectedSubsection} />

@@ -1,7 +1,6 @@
 import { useAuthContext } from "../../../context/AuthContext";
 import { MoonLoader } from "react-spinners";
-import { SectionCoursesCards } from "../components/DashBoard/CardDash";
-import { PerformanceGraphic } from "../components/DashBoard/PerformanceGraphic";
+import { CardDash } from "../components/DashBoard/CardDash";
 import { TimeDedicated } from "../components/DashBoard/TimeDedicated";
 import "../styles/cardDash.css";
 
@@ -16,15 +15,12 @@ function Dashboard() {
         </div>
       ) : (
         <main className="flex flex-wrap w-full h-full justify-center items-center p-3">
-          <div className="flex flex-wrap xl:flex-nowrap h-[45%] gap-y-2 xl:gap-x-[2%] justify-between min-w-[95%] max-w-[95%] ">
-            <SectionCoursesCards
-              courses={user.courses}
-              styles={"min-w-full xl:min-w-[48%] max-w-[50%] "}
-            />
-            <PerformanceGraphic courses={user.courses} />
+          <div className="flex h-[15rem] p-3 min-w-[95%] max-w-[95%] ">
+            <CardDash user={user} />
+            {/* <PerformanceGraphic courses={user.courses} /> */}
           </div>
-          <div className="flex h-[48%] mt-3 xl:mt-0 min-w-[95%] max-w-[95%]">
-            <TimeDedicated courses={user.courses} />
+          <div className="flex min-h-[400px] h-[calc(100vh-15rem-10rem)] p-3 min-w-[95%] max-w-[95%]">
+            <TimeDedicated courses={user?.courses} />
           </div>
         </main>
       )}

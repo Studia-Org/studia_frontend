@@ -1,34 +1,55 @@
 import React, { useState } from 'react'
-import { Modal, Button } from 'rsuite';
-import Swal from 'sweetalert2';
-import { message } from "antd";
-import { FiEdit } from "react-icons/fi";
-import axios from 'axios';
+import { Modal } from 'rsuite';
+import { message, Button } from "antd";
 import { API } from "../../../../constant";
 import { getToken } from "../../../../helpers";
 import MDEditor from '@uiw/react-md-editor';
+import { useParams } from 'react-router-dom';
 
-export const ForumAddThread = ({ onClose, user, forumID }) => {
+export const ForumAddThread = ({ onClose, user, forumID, setPosts, courseData }) => {
     const [title, setTitle] = useState();
     const [open, setOpen] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [content, setContent] = useState();
+    const [titleError, setTitleError] = useState(false);
+    const [contentError, setContentError] = useState(false);
+    const { courseId } = useParams();
 
-    const handleChangeTitle = (event) => {
-        setTitle(event.target.value);
+    console.log(courseData.students.filter(studentID => studentID !== user.id));
+
+    const handleChangeTitle = (e) => {
+        setTitle(e.target.value);
+        setTitleError(false);
+    };
+
+    const handleChangeContent = (e) => {
+        setContent(e);
+        setContentError(false);
     }
     const handleClose = () => {
         setOpen(false);
         onClose();
     };
 
+
     async function handleEdit() {
-        const userData = {
-            title: title,
-            content: content,
-            autor: user.id,
-            forums: forumID,
-        };
         try {
+            setLoading(true);
+            if (!title || !title.trim()) {
+                setTitleError(true);
+                throw new Error("Title is required");
+            }
+
+            if (!content || !content.trim()) {
+                setContentError(true);
+                throw new Error("Content is required");
+            }
+            const userData = {
+                title: title,
+                content: content,
+                autor: user.id,
+                forums: forumID,
+            };
             const response = await fetch(`${API}/forum-posts`, {
                 method: 'POST',
                 headers: {
@@ -38,12 +59,66 @@ export const ForumAddThread = ({ onClose, user, forumID }) => {
                 body: JSON.stringify({ data: userData })
             });
             const data = await response.json();
+            data.data.attributes.forum_answers = [];
+            data.data.attributes.autor = {
+                data: {
+                    id: user.id,
+                    attributes: {
+                        username: user.username,
+                        email: user.email,
+                        name: user.name,
+                        role_str: user.role_str,
+                        profile_photo: {
+                            data: {
+                                id: 80,
+                                attributes: user.profile_photo
+                            }
+                        }
+                    }
+                }
+            }
+            setPosts((prevPosts) => {
+                const newPost = data.data
+                const updatedPosts = [newPost, ...prevPosts];
+                updatedPosts.sort((a, b) => new Date(b.attributes.createdAt) - new Date(a.attributes.createdAt));
+                return updatedPosts;
+            });
+
+            const readJSON = {}
+
+            courseData.students.forEach(function (student) {
+                readJSON[student] = false;
+            });
+
+
+            await fetch(`${API}/notifications`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${getToken()}`,
+                },
+                body: JSON.stringify({
+                    data: {
+                        content: `New post in forum from course ${courseData.name}`,
+                        link: `app/courses/${courseId}`,
+                        readJSON: readJSON,
+                        type: 'forum',
+                        users: courseData.students.filter(studentID => studentID !== user.id)
+                    }
+                })
+            });
+
+
             message.success("Post Added Successfully");
+            setLoading(false);
+            setOpen(false);
+            onClose();
+
         } catch (error) {
-            console.error(error);
+            setLoading(false);
+            console.error(error.message);
+            return;
         }
-        setOpen(false);
-        onClose();
 
     }
 
@@ -54,16 +129,19 @@ export const ForumAddThread = ({ onClose, user, forumID }) => {
                     <div className='flex flex-col '>
                         <div class="mb-6">
                             <label for="title" class="block mb-2 text-sm font-medium text-gray-900 ">Title</label>
-                            <textarea onChange={handleChangeTitle} type="name" id="name" class="shadow-sm resize-none  border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  " >
-                            </textarea>
+                            <textarea
+                                onChange={handleChangeTitle}
+                                value={title}
+                                className={`shadow-sm resize-none border ${titleError ? 'border-red-500' : 'border-gray-300'} text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5`}
+                            />
                         </div>
                         <div class="mb-6">
                             <label for="content" class="block mb-2 text-sm font-medium text-gray-900  ">Content</label>
-                            <div className="container">
+                            <div className="container ">
                                 <MDEditor
                                     value={content}
-                                    className='mx-1'
-                                    onChange={setContent}
+                                    className={`mx-1 ${contentError ? 'border border-red-500' : ''}`}
+                                    onChange={handleChangeContent}
                                     data-color-mode="light"
                                 />
                             </div>
@@ -71,11 +149,11 @@ export const ForumAddThread = ({ onClose, user, forumID }) => {
                     </div>
                 </Modal.Body>
                 <div className='mt-4'>
-                    <Modal.Footer className=''>
-                        <Button onClick={handleEdit} appearance="primary" >
-                            Add new thread
+                    <Modal.Footer className='space-x-3'>
+                        <Button loading={loading} onClick={handleEdit} className='bg-blue-500' type="primary" >
+                            Submit
                         </Button>
-                        <Button onClick={handleClose} appearance="subtle">
+                        <Button onClick={handleClose} >
                             Cancel
                         </Button>
                     </Modal.Footer>
