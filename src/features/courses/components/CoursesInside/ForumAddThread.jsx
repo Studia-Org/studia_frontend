@@ -4,16 +4,18 @@ import { message, Button } from "antd";
 import { API } from "../../../../constant";
 import { getToken } from "../../../../helpers";
 import MDEditor from '@uiw/react-md-editor';
+import { useParams } from 'react-router-dom';
 
-export const ForumAddThread = ({ onClose, user, forumID, setPosts }) => {
+export const ForumAddThread = ({ onClose, user, forumID, setPosts, courseData }) => {
     const [title, setTitle] = useState();
     const [open, setOpen] = useState(true);
     const [loading, setLoading] = useState(false);
     const [content, setContent] = useState();
     const [titleError, setTitleError] = useState(false);
     const [contentError, setContentError] = useState(false);
-    console.log(user);
+    const { courseId } = useParams();
 
+    console.log(courseData.students.filter(studentID => studentID !== user.id));
 
     const handleChangeTitle = (e) => {
         setTitle(e.target.value);
@@ -57,7 +59,6 @@ export const ForumAddThread = ({ onClose, user, forumID, setPosts }) => {
                 body: JSON.stringify({ data: userData })
             });
             const data = await response.json();
-            console.log(data);
             data.data.attributes.forum_answers = [];
             data.data.attributes.autor = {
                 data: {
@@ -82,6 +83,32 @@ export const ForumAddThread = ({ onClose, user, forumID, setPosts }) => {
                 updatedPosts.sort((a, b) => new Date(b.attributes.createdAt) - new Date(a.attributes.createdAt));
                 return updatedPosts;
             });
+
+            const readJSON = {}
+
+            courseData.students.forEach(function (student) {
+                readJSON[student] = false;
+            });
+
+
+            await fetch(`${API}/notifications`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${getToken()}`,
+                },
+                body: JSON.stringify({
+                    data: {
+                        content: `New post in forum from course ${courseData.name}`,
+                        link: `app/courses/${courseId}`,
+                        readJSON: readJSON,
+                        type: 'forum',
+                        users: courseData.students.filter(studentID => studentID !== user.id)
+                    }
+                })
+            });
+
+
             message.success("Post Added Successfully");
             setLoading(false);
             setOpen(false);

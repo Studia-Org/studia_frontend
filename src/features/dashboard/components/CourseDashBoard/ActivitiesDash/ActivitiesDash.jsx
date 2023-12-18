@@ -36,7 +36,7 @@ export function ActivitiesDash({ courseInformation, styles }) {
         return (
             <div className="flex-col">
                 <p className="text-xl font-semibold pt-2 pb-1">Tasks</p>
-                {selectedSection.attributes.activities.data.map((activity) => {
+                {selectedSection.attributes.activity.data.map((activity) => {
                     return (
                         <CardSimple
                             onClick={() => setSelectedActivity(activity)}

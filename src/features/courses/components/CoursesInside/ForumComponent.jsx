@@ -5,7 +5,7 @@ import { useAuthContext } from "../../../../context/AuthContext";
 import { formatDistanceToNow, set } from 'date-fns';
 import { Tag } from '../../../../shared/elements/Tag';
 import { AvatarGroup, Avatar } from 'rsuite';
-import { message, Button } from "antd";
+import { message, Button, Divider, Badge } from "antd";
 import { getToken } from "../../../../helpers";
 import { API } from "../../../../constant";
 import { ForumAddThread } from './ForumAddThread';
@@ -18,8 +18,7 @@ import {
 
 import { FiMessageSquare } from "react-icons/fi";
 
-export const ForumComponent = ({ posts, forumID, setPosts }) => {
-  console.log(posts);
+export const ForumComponent = ({ posts, forumID, setPosts, courseData }) => {
   const { user } = useAuthContext();
   const [comment, setComment] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -84,6 +83,7 @@ export const ForumComponent = ({ posts, forumID, setPosts }) => {
 
   function renderPosts(post) {
     const timeAgo = formatDistanceToNow(new Date(post.attributes.createdAt), { addSuffix: true });
+    const isPostNew = new Date(post.attributes.createdAt) > new Date(new Date().setDate(new Date().getDate() - 1));
     const usersSet = []
 
     if (post.attributes.forum_answers && post.attributes.forum_answers.data) {
@@ -102,6 +102,7 @@ export const ForumComponent = ({ posts, forumID, setPosts }) => {
 
     return (
       <div>
+        {isPostNew && <Badge.Ribbon text="New" />}
         <div className='bg-white pb-12 rounded-lg shadow-md pt-10 text-left'>
           <Accordion allowMultiple>
             <AccordionItem>
@@ -175,19 +176,23 @@ export const ForumComponent = ({ posts, forumID, setPosts }) => {
 
   return (
     <div className='flex flex-col pt-5 '>
-      <div className='space-y-7'>
-        <Button className='flex ml-auto items-center gap-2 bg-blue-500' type='primary' onClick={handleOpenModal}>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
-          </svg>
+      <div className=''>
+        <div className='flex items-center mb-5'>
+          <h2 className='font-bold text-xl'>Forum</h2>
+          <Button className='flex ml-auto items-center gap-2 bg-blue-500' type='primary' onClick={handleOpenModal}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
+            </svg>
+            Add a new thread
+          </Button>
+        </div>
+        <Divider />
 
-          Add a new thread
-        </Button>
         <div className='space-y-7 pb-10'>
           {posts.map(renderPosts)}
         </div>
 
-        {showModal && <ForumAddThread onClose={handleCloseModal} user={user} forumID={forumID} setPosts={setPosts} />}
+        {showModal && <ForumAddThread onClose={handleCloseModal} user={user} forumID={forumID} setPosts={setPosts} courseData={courseData} />}
       </div>
 
     </div>

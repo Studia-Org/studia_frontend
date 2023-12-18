@@ -1,5 +1,6 @@
 const port = process.env.REACT_APP_API_PORT || 1337;
-export const API = "https://studia-backend-dev-tkfh.2.ie-1.fl0.io/api";
+//export const API = "https://studia-backend-dev-tkfh.2.ie-1.fl0.io/api";
+export const API = "http://localhost:1337/api";
 export const AUTH_TOKEN = "authToken";
 export const BEARER = "Bearer";
 export const ACTIVITY_CATEGORIES = {

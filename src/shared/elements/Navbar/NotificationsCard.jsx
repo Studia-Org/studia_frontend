@@ -3,17 +3,24 @@ import { Badge } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { API } from '../../../constant';
 import { getToken } from '../../../helpers';
+import { useAuthContext } from '../../../context/AuthContext';
 
-export const NotificationsCard = ({ notification, setNotifications }) => {
+export const NotificationsCard = ({ notification, setNotifications, setOpen }) => {
     const navigate = useNavigate();
+    const { user } = useAuthContext()
 
     const markNotificationAsRead = (notificationId) => {
         setNotifications(prevNotifications =>
-            prevNotifications.map(notification =>
-                notification.id === notificationId ? { ...notification, read: true } : notification
-            )
+            prevNotifications.map(notification => {
+                if (notification.id === notificationId) {
+                    const updatedReadJSON = { ...notification.readJSON, [user.id]: true };
+                    return { ...notification, readJSON: updatedReadJSON };
+                }
+                return notification;
+            })
         );
     };
+
 
     async function handleNotificationClick() {
         markNotificationAsRead(notification.id);
@@ -27,26 +34,18 @@ export const NotificationsCard = ({ notification, setNotifications }) => {
             },
             body: JSON.stringify({
                 data: {
-                    read: true
+                    readJSON: { ...notification.readJSON, [user.id]: true }
                 }
             })
         });
     }
 
     function routeNotification() {
-        switch (notification.type) {
-            case 'qualifications':
-                navigate('/app/qualifications')
-                break;
-            case 'forum':
-                navigate('/app/courses')
-                break;
-            default:
-                break;
-        }
+        setOpen(false);
+        navigate(notification.link)
     }
 
-    if (notification.read === false) {
+    if (notification.readJSON?.[user.id] === false) {
         return (
             <>
                 <Badge dot className='w-full'>

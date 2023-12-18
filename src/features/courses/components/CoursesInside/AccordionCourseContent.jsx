@@ -27,7 +27,7 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
 
   function handleSections(tituloSeccion, subsection) {
     if (
-      subsection.attributes.activities?.data[0]?.attributes.type ===
+      subsection.attributes.activity?.data?.attributes.type ===
       "questionnaire"
     ) {
       setQuestionnaireFlag(true);
@@ -119,7 +119,7 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
       return (
         <li className="mb-10 ml-8 mt-8 flex items-center" key={index}>
           <span className={` absolute flex items-center justify-center w-8 h-8 bg-indigo-500 rounded-full -left-4  ring-white `}>
-            {switchSVG(subsection.attributes.activities?.data[0]?.attributes.type)}
+            {switchSVG(subsection.attributes.activity?.data?.attributes.type)}
           </span>
           <button
             onClick={() => handleSections(titulo, subsection)}

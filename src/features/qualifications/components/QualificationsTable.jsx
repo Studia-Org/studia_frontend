@@ -6,7 +6,7 @@ import { getToken } from '../../../helpers'
 import { message } from "antd"
 
 
-export const QualificationsTable = ({ students, activities }) => {
+export const QualificationsTable = ({ students, activities, setStudents }) => {
     const [isEditChecked, setIsEditChecked] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -38,6 +38,7 @@ export const QualificationsTable = ({ students, activities }) => {
                         student={student}
                         activities={activities}
                         isEditChecked={isEditChecked}
+                        setStudents={setStudents}
                     />
                 ))}
             </>

@@ -4,9 +4,12 @@ import { Badge, Button, Popover, Empty } from 'antd';
 import { API } from '../../../constant';
 import { getToken } from '../../../helpers';
 import { NotificationsCard } from './NotificationsCard';
+import { useAuthContext } from '../../../context/AuthContext';
 
 export const Notifications = () => {
     const [notifications, setNotifications] = useState([]);
+    const { user } = useAuthContext();
+    const [open, setOpen] = useState(false);
 
     const navigate = useNavigate();
 
@@ -14,11 +17,11 @@ export const Notifications = () => {
         <div className='w-[25rem] h-[25rem] overflow-y-auto overflow-x-hidden px-3'>
             <hr className='mb-3' />
             {
-                notifications.length > 0 ?
+                notifications?.length > 0 ?
                     (
                         <div className='space-y-3 '>
                             {notifications && notifications.map(notification => (
-                                <NotificationsCard key={notification.id} notification={notification} setNotifications={setNotifications} />
+                                <NotificationsCard key={notification.id} notification={notification} setNotifications={setNotifications} setOpen={setOpen} />
                             ))}
                         </div>
                     )
@@ -66,13 +69,13 @@ export const Notifications = () => {
 
 
     return (
-        <Popover content={content} className='' title={contentTitle} trigger="click">
-            <Button className='' shape="circle">
-                <Badge count={notifications.filter((noti) => noti.read === false).length} className=''>
+        <Popover content={content} className='' title={contentTitle} open={open} trigger="click">
+            <Button className='' onClick={() => setOpen(!open)} shape="circle">
+                {user && <Badge count={notifications?.filter((noti) => noti.readJSON[user.id] === false)?.length} className=''>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
                     </svg>
-                </Badge>
+                </Badge>}
             </Button>
         </Popover>
     )

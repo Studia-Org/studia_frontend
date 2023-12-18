@@ -1,23 +1,26 @@
 import React, { useState } from 'react'
-import TextField from '@mui/material/TextField';
-import { Whisper, Popover, Modal, Input, Button, Form } from 'rsuite';
-import { set } from 'date-fns/esm';
-import Swal from 'sweetalert2'
+import { Whisper, Popover, Modal, Input, Form } from 'rsuite';
 import { useAuthContext } from '../../../context/AuthContext';
-import { message } from "antd"
+import { message, Popconfirm, Button } from "antd"
 import { getToken } from '../../../helpers';
 import { API } from '../../../constant';
+import { set } from 'date-fns';
 
-export const TableRowsStudents = ({ student, activities, isEditChecked }) => {
+export const TableRowsStudents = ({ student, activities, isEditChecked, setStudents }) => {
     const [open, setOpen] = useState(false);
     const [qualification, setQualification] = useState('');
     const [placeholderComment, setPlaceholderComment] = useState('');
     const [placeholderQualification, setPlaceholderQualification] = useState('');
-    const [qualificationID, setQualificationId] = useState('');
+    const [qualificationID, setQualificationId] = useState(null);
     const [activitieId, setActivitieId] = useState('');
     const [comments, setComments] = useState('');
     const { user } = useAuthContext();
 
+    const [openPop, setOpenPop] = useState(false);
+    const [confirmLoading, setConfirmLoading] = useState(false);
+    const showPopconfirm = () => {
+        setOpenPop(true);
+    };
 
     const handleQualificationChange = (value) => {
         setQualification(value);
@@ -29,7 +32,7 @@ export const TableRowsStudents = ({ student, activities, isEditChecked }) => {
 
     const handleOpen = (student, activitie) => {
         const grade = student.attributes.qualifications.data.find(
-            qualification => qualification.attributes.activity.data.id === activitie.id
+            qualification => qualification.attributes.activity.data?.id === activitie.id
         );
         const gradeId = grade ? grade.id : null;
         setQualificationId(gradeId)
@@ -53,12 +56,11 @@ export const TableRowsStudents = ({ student, activities, isEditChecked }) => {
         )
     }
 
-
     const saveChangesButton = async (studentId) => {
+        setConfirmLoading(true);
         let successFlag = false;
         if (qualification !== '' || comments !== '') {
-            if (qualificationID === null) {
-                //En caso que no exista el modelo qualification   
+            if (qualificationID === null || qualificationID === undefined) {
                 const data = {
                     activity: activitieId,
                     user: studentId,
@@ -68,6 +70,7 @@ export const TableRowsStudents = ({ student, activities, isEditChecked }) => {
                     file: null,
                     delivered: true
                 }
+                console.log(data)
                 const response = await fetch(`${API}/qualifications`, {
                     method: 'POST',
                     headers: {
@@ -101,8 +104,59 @@ export const TableRowsStudents = ({ student, activities, isEditChecked }) => {
         }
 
         if (successFlag) {
+            await fetch(`${API}/notifications`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${getToken()}`,
+                },
+                body: JSON.stringify({
+                    data: {
+                        link: `app/qualifications`,
+                        content: `The professor ${user.name} has updated your qualification in the activity ${activities.find(activitie => activitie.id === activitieId).attributes.title}`,
+                        type: 'qualification',
+                        readJSON: { [studentId]: false },
+                        users: [studentId],
+                    },
+                }),
+            });
+            setConfirmLoading(false);
+            setStudents(prevState => {
+                const newStudents = prevState.map(student => {
+                    if (student.id === studentId) {
+                        const newQualifications = student.attributes.qualifications.data.map(qualificationTemp => {
+                            if (qualificationTemp.id === qualificationID) {
+                                return {
+                                    ...qualificationTemp,
+                                    attributes: {
+                                        ...qualificationTemp.attributes,
+                                        comments: comments,
+                                        qualification: qualification
+                                    }
+                                }
+                            } else {
+                                return qualificationTemp
+                            }
+                        })
+                        return {
+                            ...student,
+                            attributes: {
+                                ...student.attributes,
+                                qualifications: {
+                                    ...student.attributes.qualifications,
+                                    data: newQualifications
+                                }
+                            }
+                        }
+                    } else {
+                        return student
+                    }
+                })
+                return newStudents
+            })
             message.success('Changes saved successfully!');
         } else {
+            setConfirmLoading(false);
             message.error('There was an error while saving the changes. Please, check if grades have correct values.');
         }
 
@@ -142,23 +196,24 @@ export const TableRowsStudents = ({ student, activities, isEditChecked }) => {
         return (
             <Modal size='sm' open={open} onClose={handleClose}>
                 <Modal.Header>
-                    <Modal.Title className=''>Edit qualification</Modal.Title>
+                    <Modal.Title className='font-semibold'>Edit qualification</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form.Group >
-                        <Form.ControlLabel>Qualification</Form.ControlLabel>
+                        <Form.ControlLabel className='font-medium text-sm'>Qualification</Form.ControlLabel>
                         <Input className='my-4' value={qualification} placeholder={placeholderQualification} onChange={handleQualificationChange} />
                     </Form.Group >
                     <Form.Group >
-                        <Form.ControlLabel>Comments</Form.ControlLabel>
+                        <Form.ControlLabel className='font-medium text-sm'>Comments</Form.ControlLabel>
                         <Input className='mt-4' value={comments} placeholder={placeholderComment} onChange={handleCommentsChange} />
                     </Form.Group >
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={handleClose} appearance="subtle">
+
+                    <Button onClick={handleClose} className='mr-3'>
                         Cancel
                     </Button>
-                    <Button onClick={() => saveChangesButton(student.id)} appearance="primary">
+                    <Button loading={confirmLoading} onClick={() => saveChangesButton(student.id)} className='bg-blue-500' type="primary">
                         Save changes
                     </Button>
                 </Modal.Footer>
@@ -167,44 +222,53 @@ export const TableRowsStudents = ({ student, activities, isEditChecked }) => {
     }
 
     const deleteQualification = async (grade) => {
+        setConfirmLoading(true);
         const bodyData = {
             comments: null,
             qualification: null,
             evaluator: null,
         }
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You are going to delete the qualification",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes!'
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                const response = await fetch(`${API}/qualifications/${grade.id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${getToken()}`,
-                    },
-                    body: JSON.stringify({ data: bodyData }),
-                })
-                if (response.status === 200) {
-                    message.success('Qualification deleted successfully!');
-                } else {
-                    message.error('There was an error while deleting the qualification. Please, try again.');
-                }
-            }
+        const response = await fetch(`${API}/qualifications/${grade.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${getToken()}`,
+            },
+            body: JSON.stringify({ data: bodyData }),
         })
+        if (response.status === 200) {
+            setStudents(prevState => {
+                const newStudents = prevState.map(student => {
+                    const newQualifications = student.attributes.qualifications.data.filter(qualification => qualification.id !== grade.id)
+                    return {
+                        ...student,
+                        attributes: {
+                            ...student.attributes,
+                            qualifications: {
+                                ...student.attributes.qualifications,
+                                data: newQualifications
+                            }
+                        }
+                    }
 
+                })
+                return newStudents
+            })
+            message.success('Qualification deleted successfully!');
+            setConfirmLoading(false);
+            setOpenPop(false);
+        } else {
+            message.error('There was an error while deleting the qualification. Please, try again.');
+            setConfirmLoading(false);
+            setOpenPop(false);
+        }
     }
 
 
 
     function renderCell(activitie) {
         const grade = student.attributes.qualifications.data.find(
-            qualification => qualification.attributes.activity.data.id === activitie.id
+            qualification => qualification.attributes.activity.data?.id === activitie?.id
         );
         const file = grade?.attributes?.file.data
 
@@ -216,12 +280,27 @@ export const TableRowsStudents = ({ student, activities, isEditChecked }) => {
                             <p>{grade ? grade.attributes.qualification : ''}</p>
                         </button>
                         {
-                            grade?.attributes?.qualification !== '' && grade?.attributes?.qualification !== undefined && grade?.attributes?.qualification !== null?
-                                <button onClick={() => deleteQualification(grade)} className='flex items-center mx-2'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
-                                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clipRule="evenodd" />
-                                    </svg>
-                                </button> : null
+                            grade?.attributes?.qualification !== '' && grade?.attributes?.qualification !== undefined && grade?.attributes?.qualification !== null ?
+                                <Popconfirm
+                                    id={activitie.id}
+                                    title="Delete the task"
+                                    description="Are you sure to delete this qualification?"
+                                    okText="Yes"
+                                    okType="danger"
+                                    cancelText="No"
+                                    okButtonProps={{
+                                        loading: confirmLoading,
+                                    }}
+                                    onConfirm={() => deleteQualification(grade)}
+                                    onCancel={() => setOpenPop(false)}
+                                >
+                                    <button onClick={showPopconfirm} className='flex items-center mx-2'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+                                            <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clipRule="evenodd" />
+                                        </svg>
+                                    </button>
+                                </Popconfirm>
+                                : null
                         }
 
                         {
@@ -240,16 +319,16 @@ export const TableRowsStudents = ({ student, activities, isEditChecked }) => {
             return (
                 <td key={activitie.id} className="px-6 py-4">
                     <div className='flex'>
-                        {grade?.attributes?.comments ? 
-                        (
-                            <Whisper placement="top" className='text-sm shadow-md' trigger="hover" controlId="control-id-hover" speaker={speaker(grade.attributes.comments)}>
-                                <div className="rounded-md w-[10rem] h-[3rem] p-3 text-center">
-                                    <p>{grade.attributes.qualification}</p>
-                                </div>
-                            </Whisper>
-                        ) : (
-                            <div className="rounded-md w-[10rem] h-[3rem] p-3 text-center"></div>
-                        )}
+                        {grade?.attributes?.comments ?
+                            (
+                                <Whisper placement="top" className='text-sm shadow-md' trigger="hover" controlId="control-id-hover" speaker={speaker(grade.attributes.comments)}>
+                                    <div className="rounded-md w-[10rem] h-[3rem] p-3 text-center">
+                                        <p>{grade.attributes.qualification}</p>
+                                    </div>
+                                </Whisper>
+                            ) : (
+                                <div className="rounded-md w-[10rem] h-[3rem] p-3 text-center"></div>
+                            )}
                         {
                             file !== null && file !== undefined ?
                                 <div className='flex items-center px-2'>

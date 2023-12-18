@@ -49,7 +49,7 @@ const Qualifications = () => {
     function callQualificationsData() {
         if (user) {
             setLoading(true);
-            fetch(`${API}/users/${user.id}?populate=courses.sections.subsections.activities,qualifications.activity,courses.professor.profile_photo,courses.cover`)
+            fetch(`${API}/users/${user.id}?populate=courses.sections.subsections.activity,qualifications.activity,courses.professor.profile_photo,courses.cover`)
                 .then((res) => res.json())
                 .then((data) => {
                     const coursesWithActivities = []
@@ -58,9 +58,7 @@ const Qualifications = () => {
                         const filteredQualifications = data.qualifications.filter(qualification => {
                             return course.sections.some(section => {
                                 return section.subsections.some(subsection => {
-                                    return subsection.activities.some(activity => {
-                                        return activity.id === qualification.activity.id;
-                                    });
+                                    return subsection.activity?.id === qualification.activity?.id;
                                 });
                             });
                         });
@@ -87,7 +85,7 @@ const Qualifications = () => {
 
     const speaker = (props) => {
         return (
-            <Popover title={props.activity.title}>
+            <Popover title={props.activity?.title}>
                 <p className='italic text-gray-400'>Comments </p>
                 {props.comments ? <p>{props.comments}</p> : <p>No comments.</p>}
             </Popover>
@@ -107,7 +105,7 @@ const Qualifications = () => {
         return (
             <div>
                 <Whisper placement="top" className='text-sm shadow-md' trigger="hover" controlId="control-id-hover" speaker={speaker(grades)}>
-                    <Link className='no-underline' to={`/app/courses/${courseID}/activity/${grades.activity.id}`}>
+                    <Link className='no-underline' to={`/app/courses/${courseID}/activity/${grades.activity?.id}`}>
                         <Button style={style} className='text-sm shadow-md bg-gradient-to-r from-[#657DE9] to-[#6E66D6] '> {grades.qualification}</Button>
                     </Link>
                 </Whisper>
@@ -177,7 +175,7 @@ const Qualifications = () => {
 
         return (
             <tr class="bg-white border-b hover:bg-gray-50">
-                <th scope="row" class="px-6 py-4 text-gray-900 whitespace-nowrap">
+                <th scope="row" class="px-6 py-4 text-gray-900 whitespace-nowrap font-semibold">
                     <p className='lg:text-base text-sm'>{curso_grade.title}</p>
                 </th>
                 <td class="px-6 py-4 flex items-center text-gray-900">

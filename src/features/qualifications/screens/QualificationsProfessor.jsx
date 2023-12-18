@@ -22,20 +22,18 @@ const QualificationsProfessor = () => {
 
     const fetchCourseData = async () => {
         try {
-            const response = await fetch(`${API}/courses/${courseID}?populate=sections.subsections.activities,cover,students.profile_photo,students.qualifications.activity,students.qualifications.file`);
+            const response = await fetch(`${API}/courses/${courseID}?populate=sections.subsections.activity,cover,students.profile_photo,students.qualifications.activity,students.qualifications.file`);
             const data = await response.json();
             const evaluableActivities = []
-            data.data.attributes.sections.data.forEach(
+            data.data?.attributes.sections.data.forEach(
                 section => {
-                    section.attributes.subsections.data.forEach(
+                    section?.attributes.subsections.data.forEach(
                         subsection => {
-                            subsection.attributes.activities.data.forEach(
-                                activity => {
-                                    if (activity.attributes.evaluable === true) {
-                                        evaluableActivities.push(activity)
-                                    }
+                            if (subsection?.attributes.activity.data) {
+                                if (subsection?.attributes?.activity.data.attributes.evaluable === true) {
+                                    evaluableActivities.push(subsection.attributes.activity.data)
                                 }
-                            )
+                            }
                         }
                     )
                 }
@@ -53,6 +51,7 @@ const QualificationsProfessor = () => {
         fetchCourseData();
     }, [])
 
+    console.log(students);
     return (
         <div className='w-full relative rounded-tl-3xl bg-[#e7eaf886] p-10'>
             {
@@ -69,7 +68,7 @@ const QualificationsProfessor = () => {
                             />
                         </section>
                         <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
-                            <QualificationsTable students={students} activities={activities} />
+                            <QualificationsTable students={students} activities={activities} setStudents={setStudents} />
                         </motion.div>
 
                     </>

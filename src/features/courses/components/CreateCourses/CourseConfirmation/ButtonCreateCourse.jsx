@@ -109,7 +109,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                             landscape_photo: null,
                             questionnaire: data.data.id,
                             users: null,
-                            activities: dataActivity.data.id,
+                            activity: dataActivity.data.id,
                             files: null,
                             content: subsection.content,
                         }
@@ -164,7 +164,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                             description: subsection.description?.slice(0, 140) || 'description',
                             landscape_photo: null,
                             questionnaire: null,
-                            activities: dataActivity.data.id,
+                            activity: dataActivity.data.id,
                             users: null,
                             files: filesData?.map((file) => file.id),
                             content: subsection.content,
