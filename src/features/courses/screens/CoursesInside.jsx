@@ -122,7 +122,7 @@ const CourseInside = () => {
   const fetchCourseInformation = async () => {
     try {
       const response = await fetch(
-        `${API}/courses/${courseId}?populate=sections.subsections.activities,cover,sections.subsections.paragraphs,sections.subsections.files,students.profile_photo,professor.profile_photo,sections.subsections.landscape_photo,sections.subsections.questionnaire`
+        `${API}/courses/${courseId}?populate=sections.subsections.activity,cover,sections.subsections.paragraphs,sections.subsections.files,students.profile_photo,professor.profile_photo,sections.subsections.landscape_photo,sections.subsections.questionnaire`
       );
       const data = await response.json();
       setCourseBasicInformation(data?.data?.attributes ?? []);
@@ -144,7 +144,8 @@ const CourseInside = () => {
         subsectionsCompleted
       );
       if (firstSubsection) {
-        if (firstSubsection?.subseccion?.attributes?.activities?.data[0]?.attributes?.type === 'questionnaire') {
+        console.log(firstSubsection?.subseccion?.attributes?.activity?.data?.attributes?.type)
+        if (firstSubsection?.subseccion?.attributes?.activity?.data?.attributes?.type === 'questionnaire') {
           setCourseSubsection(firstSubsection.subseccion);
           setQuestionnaireFlag(true);
           setCourseSubsectionQuestionnaire(
@@ -166,7 +167,7 @@ const CourseInside = () => {
         },
       } = courseContentInformation[0];
       if (
-        subsecciones[0]?.attributes?.activities?.data[0]?.attributes?.type ===
+        subsecciones[0]?.attributes?.activity?.data?.attributes?.type ===
         "questionnaire"
       ) {
         setCourseSubsection(subsecciones[0]);
@@ -341,7 +342,13 @@ const CourseInside = () => {
               )}
             </div>
           ) : (
-            <ForumComponent posts={posts} forumID={forumID} />
+            <ForumComponent posts={posts} setPosts={setPosts} forumID={forumID}
+              courseData={
+                {
+                  name: courseBasicInformation.title,
+                  students: courseBasicInformation.students.data.map((student) => student.id)
+                }
+              } />
           )}
         </div>
         {

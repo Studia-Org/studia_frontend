@@ -5,7 +5,7 @@ import { useAuthContext } from "../../../../context/AuthContext";
 import { formatDistanceToNow, set } from 'date-fns';
 import { Tag } from '../../../../shared/elements/Tag';
 import { AvatarGroup, Avatar } from 'rsuite';
-import { message } from "antd";
+import { message, Button, Divider, Badge } from "antd";
 import { getToken } from "../../../../helpers";
 import { API } from "../../../../constant";
 import { ForumAddThread } from './ForumAddThread';
@@ -18,7 +18,7 @@ import {
 
 import { FiMessageSquare } from "react-icons/fi";
 
-export const ForumComponent = ({ posts, forumID }) => {
+export const ForumComponent = ({ posts, forumID, setPosts, courseData }) => {
   const { user } = useAuthContext();
   const [comment, setComment] = useState('');
   const [showModal, setShowModal] = useState(false);
@@ -83,6 +83,7 @@ export const ForumComponent = ({ posts, forumID }) => {
 
   function renderPosts(post) {
     const timeAgo = formatDistanceToNow(new Date(post.attributes.createdAt), { addSuffix: true });
+    const isPostNew = new Date(post.attributes.createdAt) > new Date(new Date().setDate(new Date().getDate() - 1));
     const usersSet = []
 
     if (post.attributes.forum_answers && post.attributes.forum_answers.data) {
@@ -101,6 +102,7 @@ export const ForumComponent = ({ posts, forumID }) => {
 
     return (
       <div>
+        {isPostNew && <Badge.Ribbon text="New" />}
         <div className='bg-white pb-12 rounded-lg shadow-md pt-10 text-left'>
           <Accordion allowMultiple>
             <AccordionItem>
@@ -160,7 +162,7 @@ export const ForumComponent = ({ posts, forumID }) => {
                   <p className="ml-auto text-xs text-gray-500 mb-5">Remember, contributions to this topic should follow our <a href="#" className="text-blue-600 hover:underline">Community Guidelines</a>.</p>
                   <hr />
                   <div className='mt-5 ml-10 space-y-5'>
-                    {post.attributes.forum_answers.data.map(renderResponses)}
+                    {post.attributes?.forum_answers?.data?.map(renderResponses)}
                   </div>
                 </div>
               </AccordionPanel>
@@ -174,16 +176,23 @@ export const ForumComponent = ({ posts, forumID }) => {
 
   return (
     <div className='flex flex-col pt-5 '>
-      <div className='space-y-7'>
-        <div className='bg-white rounded-lg shadow-md flex justify-between items-center'>
-          <p className='ml-8 text-gray-400 text-sm'>Add a new thread</p>
-          <button onClick={handleOpenModal} type="button" className="text-white bg-indigo-500 hover:bg-indigo-600 transition-all duration-100 focus:ring-4 focus:ring-indigo-300 mr-5 font-medium rounded-xl text-sm px-3 py-2 m-2 mb-2 focus:outline-none">+</button>
+      <div className=''>
+        <div className='flex items-center mb-5'>
+          <h2 className='font-bold text-xl'>Forum</h2>
+          <Button className='flex ml-auto items-center gap-2 bg-blue-500' type='primary' onClick={handleOpenModal}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
+            </svg>
+            Add a new thread
+          </Button>
         </div>
+        <Divider />
+
         <div className='space-y-7 pb-10'>
           {posts.map(renderPosts)}
         </div>
 
-        {showModal && <ForumAddThread onClose={handleCloseModal} user={user} forumID={forumID} />}
+        {showModal && <ForumAddThread onClose={handleCloseModal} user={user} forumID={forumID} setPosts={setPosts} courseData={courseData} />}
       </div>
 
     </div>

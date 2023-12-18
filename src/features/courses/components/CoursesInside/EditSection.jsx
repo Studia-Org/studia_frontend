@@ -11,7 +11,6 @@ import { SubsectionItems } from '../CreateCourses/CourseSections/SubsectionItems
 
 
 export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseContentInformation, setSectionToEdit }) => {
-
     const confirm = (e) => {
         try {
             setCourseContentInformation((prev) => {
@@ -103,7 +102,7 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
                                         strategy={verticalListSortingStrategy}>
                                         <ol className="relative border-l border-dashed border-gray-300 ml-10">
                                             {
-                                                sectionToEdit.attributes.subsections.data.map((subsection) => (
+                                                sectionToEdit.attributes?.subsections?.data.map((subsection) => (
                                                     <motion.li
                                                         key={subsection.id}
                                                         initial={{ opacity: 0, x: -50 }}

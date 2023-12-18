@@ -4,14 +4,12 @@ import { useNavigate } from 'react-router-dom'
 
 export const TaskComponentCard = ({ task, setVisibilityTask, context, courseId }) => {
     console.log(task)
-    console.log(context)
     const deadlineOnTime = new Date(task?.attributes?.deadline) > new Date()
     const { user } = useAuthContext()
     const navigate = useNavigate()
 
     function handleClickButton() {
         if (context === 'coursesInside') {
-
             navigate(`/app/courses/${courseId}/activity/${task.id}`)
         } else {
             setVisibilityTask(true)
@@ -56,15 +54,15 @@ export const TaskComponentCard = ({ task, setVisibilityTask, context, courseId }
                 <div className='absolute bg-indigo-500 h-full left-0 top-0 w-[5rem] rounded-l-md flex items-center justify-center'>
                     {svgType(task?.attributes?.type)}
                 </div>
-                <p className='font-medium text-xl ml-20'>{task.attributes.title}</p>
+                <p className='font-medium text-xl ml-20'>{task?.attributes.title}</p>
                 {user?.role_str !== 'professor' && user?.role_str !== 'admin' && (
                     deadlineOnTime ?
                         <div className='ml-auto bg-green-700 rounded-md p-2 px-8 text-center '>
-                            <p className='text-base font-medium text-white'>{task.attributes.deadline}</p>
+                            <p className='text-base font-medium text-white'>{task?.attributes.deadline}</p>
                         </div>
                         :
                         <div className='ml-auto bg-red-700 rounded-md p-2 px-8 text-center '>
-                            <p className='text-base font-medium text-white'>{task.attributes.deadline}</p>
+                            <p className='text-base font-medium text-white'>{task?.attributes.deadline}</p>
                         </div>
                 )}
             </button>

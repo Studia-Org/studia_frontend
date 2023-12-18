@@ -1,8 +1,6 @@
 import { useEffect, useState, React } from 'react';
 import { useParams } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { Sidebar } from '../../../shared/elements/Sidebar';
-import { Navbar } from '../../../shared/elements/Navbar';
 import { Tag } from '../../../shared/elements/Tag';
 import { API } from "../../../constant";
 import { useAuthContext } from "../../../context/AuthContext";

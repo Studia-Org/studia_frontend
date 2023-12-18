@@ -2,8 +2,6 @@ import { useEffect, useState, React } from 'react';
 import { checkAuthenticated } from "../../../helpers";
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from "../../../context/AuthContext";
-import { Sidebar } from '../../../shared/elements/Sidebar';
-import { Navbar } from '../../../shared/elements/Navbar';
 import SidebarSetting from '../components/SidebarSetting';
 import { SettingContent } from '../components/SettingContent';
 

@@ -223,7 +223,7 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
                                             {students.map(item => (
                                                 <Option key={item.id} value={item.id} label={item.name}>
                                                     <div className='flex items-center gap-3'>
-                                                        <Avatar src={item.profile_photo.url}></Avatar>
+                                                        <Avatar src={item.profile_photo?.url}></Avatar>
                                                         <p className='font-medium'>{item.name}</p>
                                                     </div>
                                                 </Option>
