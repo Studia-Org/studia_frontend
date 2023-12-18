@@ -25,15 +25,16 @@ const Register = () => {
     landscape_photo: [300],
   });
   const { email, password, username, name, repassword, university, description } = formData;
-
-  const [profilePhoto, setProfilePhoto] = useState(null);
-
+  const [profilePhoto, setProfilePhoto] = useState([]);
+  const [user_objectives, setUserObjectives] = useState([]);
+  const [goals, setGoals] = useState([]);
   const [pageSelector, setPageSelector] = useState(1)
+
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handlePhotoUpload = async (data) => {
     const photoFormData = new FormData();
-    photoFormData.append("files", profilePhoto[0]);
+    photoFormData.append("files", profilePhoto[0].file);
     const uploadPhoto = await fetch(`${API}/upload`, {
       method: 'POST',
       body: photoFormData,
@@ -45,11 +46,38 @@ const Register = () => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${getToken()}`,
+        Authorization: `Bearer ${data.jwt}`,
       },
       body: JSON.stringify({
         profile_photo: photoId,
       }),
+    })
+  }
+
+  const handleSetObjectives = async (data) => {
+    goals.forEach((goal) => {
+      const dataJSON = {
+        data: {
+          objective: goal,
+          categories: user_objectives,
+          user: data.user.id
+        }
+      }
+      fetch(API + '/user-objectives', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${data.jwt}`,
+        },
+        body: JSON.stringify(dataJSON),
+
+      }).then(response => response.json())
+        .then(dataTemp => {
+          console.log(dataTemp.data.id);
+        })
+        .catch((error) => {
+          message.error(error.message);
+        })
     })
   }
 
@@ -63,6 +91,7 @@ const Register = () => {
       if (!profilePhoto) {
         throw new Error("Please upload a profile photo");
       }
+      
       const response = await fetch(`${API}/auth/local/register`, {
         method: "POST",
         headers: {
@@ -71,13 +100,13 @@ const Register = () => {
         body: JSON.stringify(formData),
       });
       const data = await response.json();
-      console.log(data);
       if (data?.error) {
         throw data?.error;
       } else {
+        await handlePhotoUpload(data);
+        await handleSetObjectives(data);
         setToken(data.jwt);
         setUser(data.user);
-        await handlePhotoUpload(data);
         message.success("Account created successfully");
         setLoading(false);
         navigate("/app/courses");
@@ -88,45 +117,45 @@ const Register = () => {
     } finally {
       setLoading(false);
     }
-  };
+    };
 
-  window.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      registerAccount();
-    }
-  });
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        registerAccount();
+      }
+    });
 
-  function switchPage() {
-    switch (pageSelector) {
-      case 1:
-        return (
-          <UserInformation onChange={onChange} formData={formData} username={username}
-            email={email} university={university} password={password} repassword={repassword} name={name} setPageSelector={setPageSelector} />
-        )
-      case 2:
-        return (
-          <UserObjectives setPageSelector={setPageSelector} description={description} onChange={onChange}
-            registerAccount={registerAccount} profilePhoto={profilePhoto} setProfilePhoto={setProfilePhoto} loading={loading} />
-        )
-      default:
-        return (
-          <UserInformation onChange={onChange} formData={formData} username={username} description={description}
-            email={email} university={university} password={password} repassword={repassword} name={name} />
-        )
+    function switchPage() {
+      switch (pageSelector) {
+        case 1:
+          return (
+            <UserInformation onChange={onChange} formData={formData} username={username}
+              email={email} university={university} password={password} repassword={repassword} name={name} setPageSelector={setPageSelector} setProfilePhoto={setProfilePhoto} profilePhoto={profilePhoto} />
+          )
+        case 2:
+          return (
+            <UserObjectives setPageSelector={setPageSelector} description={description} onChange={onChange} goals={goals} setGoals={setGoals} user_objectives={user_objectives} setUserObjectives={setUserObjectives}
+              registerAccount={registerAccount} loading={loading} />
+          )
+        default:
+          return (
+            <UserInformation onChange={onChange} formData={formData} username={username}
+              email={email} university={university} password={password} repassword={repassword} name={name} setPageSelector={setPageSelector} setProfilePhoto={setProfilePhoto} profilePhoto={profilePhoto} />
+          )
+      }
     }
+
+
+    return (
+      <div class="">
+        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
+        <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.min.css')</style>
+        <div class="min-w-screen min-h-screen  flex items-center justify-center px-5 py-5 bg-gradient-to-r from-indigo-400  to-[#6e66d6]">
+          {switchPage()}
+        </div>
+      </div>
+    )
   }
 
-
-  return (
-    <div class="">
-      <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
-      <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.min.css')</style>
-      <div class="min-w-screen min-h-screen  flex items-center justify-center px-5 py-5 bg-gradient-to-r from-indigo-400  to-[#6e66d6]">
-        {switchPage()}
-      </div>
-    </div>
-  )
-}
-
-export default Register;
+  export default Register;

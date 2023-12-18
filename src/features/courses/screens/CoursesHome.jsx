@@ -1,8 +1,6 @@
 import { useEffect, useState, React } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { useTimeout, useWindowSize } from 'react-use';
-import ModalCreateObjective from './ModalCreateObjective';
 import 'react-loading-skeleton/dist/skeleton.css'
 import '../styles/utils.css'
 import { getToken } from '../../../helpers';
@@ -26,7 +24,6 @@ const CoursesHome = () => {
   const [confettiExplode, setConfettiExplode] = useState(false);
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isExpanded, setIsExpanded] = useState(false);
   const [dailyTasks, setDailyTasks] = useState([]);
   const [openObjectivesModal, setOpenObjectivesModal] = useState(false);
 
@@ -285,7 +282,6 @@ const CoursesHome = () => {
 
   return (
     <>
-      <ModalCreateObjective key={openObjectivesModal} openModal={openObjectivesModal} setObjectives={setObjectives} />
       {
         confettiExplode ?
           <div className='w-screen absolute -ml-80 -mt-32 min-h-screen'>
