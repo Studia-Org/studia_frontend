@@ -155,10 +155,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
     }
   }
   async function sendData() {
-
-
     try {
-
       const response = await fetch(`${API}/upload`, {
         method: 'POST',
         headers: {

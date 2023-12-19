@@ -16,7 +16,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
         if (!courseBasicInfo) {
             throw new Error("courseBasicInfo is missing");
         }
-        const requiredAttributes = ['courseName', 'description', 'cover', 'courseType', 'evaluator'];
+        const requiredAttributes = ['courseName', 'description', 'cover', 'evaluator'];
         for (const attribute of requiredAttributes) {
             if (!courseBasicInfo[attribute]) {
                 throw new Error(`Missing '${attribute}' in the course info`);
@@ -30,6 +30,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
             throw new Error("The course or subsections array is missing");
         }
         course.forEach((section) => {
+            console.log(section)
             if (!section.task) {
                 throw new Error(`Missing task in section ${section.name}`);
             }

@@ -118,10 +118,8 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
         <TagsInput value={courseBasicInfo.tags} onChange={(e) => handleChange('tags', e)} />
       </div>
 
-
-
       <div className='flex mt-8 justify-between'>
-        <div className='font-medium w-full mr-8'>
+        <div className='font-medium w-full'>
           <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 ">
             Cover image
           </label>
@@ -133,58 +131,6 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
               setCourseBasicInfo((prevInfo) => ({ ...prevInfo, 'cover': e }));
             }}
           />
-        </div>
-        <div>
-          <label class="block  text-sm font-medium text-gray-900 mb-4">Course type</label>
-          <fieldset className='ml-4'>
-            <legend class="sr-only">Course type</legend>
-            <div class="flex items-center mb-4">
-              <input
-                id="country-option-1"
-                type="radio"
-                name="countries"
-                value="Required"
-                className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300"
-                checked={courseBasicInfo.courseType === 'Required'}
-                onChange={() => handleChange('courseType', 'Required')}
-              />
-              <label for="country-option-1" class="block ml-2 text-sm font-normal text-gray-900 ">
-                Required
-              </label>
-            </div>
-
-            <div class="flex items-center mb-4">
-              <input
-                id="country-option-2"
-                type="radio"
-                name="countries"
-                value="Optional"
-                className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300"
-                checked={courseBasicInfo.courseType === 'Optional'}
-                onChange={() => handleChange('courseType', 'Optional')}
-              />
-              <label for="country-option-2" class="block ml-2 text-sm font-normal text-gray-900 ">
-                Optional
-              </label>
-            </div>
-
-            <div class="flex items-center mb-4">
-              <input
-                id="country-option-3"
-                type="radio"
-                name="countries"
-                value="Basic Formation"
-                className="w-4 h-4 border-gray-300 focus:ring-2 focus:ring-blue-300"
-                checked={courseBasicInfo.courseType === 'Basic Formation'}
-                onChange={() => handleChange('courseType', 'Basic Formation')}
-              />
-              <label for="country-option-3" class="block ml-2 text-sm font-normal text-gray-900 ">
-                Basic formation
-              </label>
-
-            </div>
-            <p className='text-xs font-normal text-gray-400'>This option will not affect the course creation</p>
-          </fieldset>
         </div>
       </div>
       {CreateCourseButtons(createCourseOption, setCreateCourseOption)}

@@ -6,7 +6,7 @@ import '../styles/utils.css'
 import { getToken } from '../../../helpers';
 import { useAuthContext } from "../../../context/AuthContext";
 import { CoursesCardHome } from '../components/CoursesHome/CoursesCardHome';
-
+import { Divider } from 'antd';
 import Swal from 'sweetalert2'
 import { MoonLoader } from "react-spinners";
 import { API } from "../../../constant";
@@ -170,7 +170,7 @@ const CoursesHome = () => {
     }
 
     return (
-      <div className='relative bg-white rounded-2xl shadow-md flex p-3 min-w-[450px] md:w-[28rem] lg:w-[30rem] min-h-[5rem]'>
+      <div className='relative rounded-2xl border flex p-3 min-w-[450px] md:w-[28rem] lg:w-[30rem] min-h-[5rem]'>
         <div className="w-2 rounded-md mr-3" style={colorStyle}></div>
         <div className='flex-col flex justify-center w-full max-w-[calc(100%-6rem)]'>
           <div className='flex w-full'>
@@ -197,9 +197,14 @@ const CoursesHome = () => {
   function renderConfeti() {
 
     return (
-      <div id="confetti" className='min-w-screen move-confetti'>
+      <div id="confetti" className='min-w-screen' style={{ zIndex: 1000 }} >
         {confettiActive && (
-          <Confetti />
+          <Confetti className='absolute' style={{ zIndex: 1000 }}
+            width={window.innerWidth}
+            height={window.innerHeight}
+            numberOfPieces={500}
+            recycle={false}
+          />
         )}
       </div>
     );
@@ -261,7 +266,7 @@ const CoursesHome = () => {
 
   function renderObjectives(objective) {
     return (
-      <div key={objective.id} className='bg-white rounded-2xl shadow-md flex  p-5 '>
+      <div key={objective.id} className='bg-white rounded-lg border flex  p-5 '>
         <p className='font-medium text-base'>{objective.objective}</p>
         {
           objective.completed === true ?
@@ -309,54 +314,46 @@ const CoursesHome = () => {
                   </motion.div>
                 </div>
 
-                <div className='flex flex-col md:w-[480px] min-w-3/4 mt-12 grid-home:absolute right-16 '>
-                  <div className=''>
-                    {
-                      user.role_str !== 'professor' && user.role_str !== 'admin' ?
-                        <>
-                          <p className=' pb-6 font-bold text-xl'>Daily Tasks</p>
-                          {
-                            dailyTasks.length > 0 ?
+                {
+                  user.role_str === 'student' &&
+                  <div className='shadow-md flex flex-col md:w-[480px] min-w-3/4 mt-12 grid-home:absolute right-16 bg-white p-8 rounded-lg'>
+                    <section >
+                      <p className='font-bold text-xl'>Daily Tasks</p>
+                      <Divider />
+                      {
+                        dailyTasks.length > 0 ?
 
-                              <div className='flex flex-col space-y-5 mb-10'>
-                                {dailyTasks.map(RenderDailyTasks)}
-                              </div>
-                              :
-                              <div className='flex'>
-                                <div className='bg-white shadow-md rounded-2xl p-5 flex mb-10 items-center space-x-7'>
-                                  <p className='font-medium text-gray-400 text-base '>There are no tasks for today</p>
-                                  <img className='opacity-50 w-36' src="https://liferay-support.zendesk.com/hc/article_attachments/360032795211/empty_state.gif" alt="" />
-                                </div>
-                              </div>
-                          }
-                        </> : null
-                    }
-                  </div>
-                  <div className=''>
-                    {
-                      user.role_str !== 'professor' && user.role_str !== 'admin' ?
-                        <>
-                          <p className=' pb-6 font-bold text-xl'>Your Objectives</p>
-                          <div className='space-y-5 flex flex-col mb-5'>
-                            {
-                              objectives !== undefined && objectives.length > 0 ?
-                                objectives.map(renderObjectives)
-                                :
-                                <div className='flex'>
-                                  <div className='bg-white shadow-md rounded-2xl p-5 flex mb-10 items-center space-x-7'>
-                                    <p className='font-medium text-gray-400 text-base '>You did not set any objective yet!</p>
-                                    <img className='opacity-50 w-36' src="https://liferay-support.zendesk.com/hc/article_attachments/360032795211/empty_state.gif" alt="" />
-                                  </div>
-                                </div>
-                            }
-
+                          <div className='flex flex-col space-y-5 mb-10'>
+                            {dailyTasks.map(RenderDailyTasks)}
                           </div>
-                        </>
-                        :
-                        null
-                    }
+                          :
+                          <div className='flex'>
+                            <div className='border rounded-lg p-5 flex mb-10 items-center space-x-7'>
+                              <p className='font-medium text-gray-400 text-base '>There are no tasks for today</p>
+                              <img className='opacity-50 w-36' src="https://liferay-support.zendesk.com/hc/article_attachments/360032795211/empty_state.gif" alt="" />
+                            </div>
+                          </div>
+                      }
+                    </section>
+                    <section>
+                      <p className='font-bold text-xl'>Your Objectives</p>
+                      <Divider />
+                      <div className='space-y-5 flex flex-col mb-5'>
+                        {
+                          objectives !== undefined && objectives.length > 0 ?
+                            objectives.map(renderObjectives)
+                            :
+                            <div className='flex'>
+                              <div className='bg-white shadow-md rounded-2xl p-5 flex mb-10 items-center space-x-7'>
+                                <p className='font-medium text-gray-400 text-base '>You did not set any objective yet!</p>
+                                <img className='opacity-50 w-36' src="https://liferay-support.zendesk.com/hc/article_attachments/360032795211/empty_state.gif" alt="" />
+                              </div>
+                            </div>
+                        }
+                      </div>
+                    </section>
                   </div>
-                </div>
+                }
               </>
           }
         </div>

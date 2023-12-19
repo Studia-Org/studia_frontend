@@ -86,7 +86,7 @@ export const CreateCourseEditSubsection = ({
 
   const renderDatePicker = (label, date, onChange) => (
     <div>
-      <label className='text-sm text-gray-500'>{label}</label>
+      <label className='text-sm text-gray-500'>{label} *</label>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DemoContainer components={['DateTimePicker']}>
           <DateTimePicker
@@ -115,6 +115,19 @@ export const CreateCourseEditSubsection = ({
         <>
           <input className='text-lg bg-transparent border p-3 rounded-xl border-gray-400 ' type="text" onChange={(e) => handleTitleChange(e.target.value)} value={subsection.title} />
           <div className='bg-white rounded-md shadow-md p-5 mt-4 mb-10 '>
+            <div className='space-y-2'>
+              <label className='text-sm text-gray-500 ' htmlFor=''>
+                Cover
+              </label>
+              <FilePond
+                files={landscape_photo}
+                allowMultiple={false}
+                onupdatefiles={(e) => {
+                  setLandscape_photo(e);
+                  handleSubsectionChange('landscape_photo', e);
+                }} maxFiles={1}
+              />
+            </div>
             <div className='flex items-center justify-between w-full '>
               <div>{renderDatePicker('Start Date', subsection?.start_date, handleSubsectionChange.bind(null, 'start_date'))}</div>
               <div>{renderDatePicker('End Date', subsection?.end_date, handleSubsectionChange.bind(null, 'end_date'))}</div>
@@ -126,19 +139,6 @@ export const CreateCourseEditSubsection = ({
               <div className='flex w-full'>
                 <TextField className=' flex w-full' id='outlined-basic' value={subsection.description} onChange={(e) => handleSubsectionChange('description', e.target.value)} variant='outlined' />
               </div>
-            </div>
-            <div className='mt-3 space-y-2'>
-              <label className='text-sm text-gray-500 ' htmlFor=''>
-                Background Photo
-              </label>
-              <FilePond
-                files={landscape_photo}
-                allowMultiple={false}
-                onupdatefiles={(e) => {
-                  setLandscape_photo(e);
-                  handleSubsectionChange('landscape_photo', e);
-                }} maxFiles={1}
-              />
             </div>
             <div className='mt-3 space-y-2'>
               <label className='text-sm text-gray-500 ' htmlFor=''>
@@ -155,7 +155,7 @@ export const CreateCourseEditSubsection = ({
               />
             </div>
             <label className='text-sm text-gray-500' htmlFor=''>
-              Subsection content
+              Subsection content *
             </label>
             <MDEditor className='mt-2 mb-2' data-color-mode='light' onChange={(e) => handleSubsectionChange('content', e)} value={subsection.content} />
           </div>
