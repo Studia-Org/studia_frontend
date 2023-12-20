@@ -19,7 +19,7 @@ import '../../../styles/filePondNoBoxshadow.css'
 import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileEncode)
 
-export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList, setEditTaskFlag }) => {
+export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList, setEditTaskFlag, setCreateCourseSectionsListCopy }) => {
     const [content, setContent] = useState();
     const [title, setTitle] = useState('');
     const [switchState, setSwitchState] = useState(true);
@@ -67,6 +67,34 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
             });
             return newSections;
         });
+        setCreateCourseSectionsListCopy((prevSections) => {
+            const newSections = prevSections.map((section) => {
+                if (section.id === section.id && section?.task) {
+                    const updatedTask = {
+                        id: section.task.id,
+                        title: title,
+                        description: content,
+                        deadline: deadline,
+                        evaluable: switchState,
+                        categories: categories,
+                        files: files.map(file => file.file),
+                        ponderation: section.task.ponderation,
+                        type: section.task.type,
+                        order: section.task.order,
+                    };
+                    setTask(prevTask => ({
+                        ...prevTask,
+                        [section.id]: updatedTask,
+                    }));
+                    return {
+                        ...section,
+                        task: updatedTask,
+                    };
+                }
+                return section;
+            });
+            return newSections;
+        });
         setEditTaskFlag(false);
         message.success('Task updated successfully');
     }
@@ -83,7 +111,7 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                 deadline: deadline,
                 ponderation: 0,
                 categories: categories,
-                type: 'Delivery',
+                type: 'task',
                 files: files.map(file => file.file),
                 order: 5,
                 evaluable: switchState,
@@ -96,6 +124,18 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                 ...newTask,
             }));
             setCreateCourseSectionsList((prevSections) => {
+                const newSections = prevSections.map((section) => {
+                    if (section.id === section.id) {
+                        return {
+                            ...section,
+                            task: activity
+                        };
+                    }
+                    return section;
+                });
+                return newSections;
+            });
+            setCreateCourseSectionsListCopy((prevSections) => {
                 const newSections = prevSections.map((section) => {
                     if (section.id === section.id) {
                         return {

@@ -193,7 +193,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
     };
 
 
-
+    console.log(createCourseSectionsList)
     return (
         <div className='text-base font-normal'>
             <Tour open={open} onClose={() => {
@@ -209,7 +209,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
 
             {
                 !task[sectionToEdit.id] || editTaskFlag ?
-                    <CreateTask task={task} setTask={setTask} section={sectionToEdit} setCreateCourseSectionsList={setCreateCourseSectionsList} setEditTaskFlag={setEditTaskFlag} />
+                    <CreateTask task={task} setTask={setTask} section={sectionToEdit} setCreateCourseSectionsList={setCreateCourseSectionsList} setCreateCourseSectionsListCopy={setCreateCourseSectionsListCopy} setEditTaskFlag={setEditTaskFlag} />
                     :
                     <div className='flex'>
                         <div className='w-1/2 pr-10 pl-5 '>
@@ -284,7 +284,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
                                 editSubsectionFlag ?
                                     <CreateCourseEditSubsection subsection={subsectionEditing} setEditSubsectionFlag={setEditSubsectionFlag} setCreateCourseSectionsList={setCreateCourseSectionsListCopy} createCourseSectionsList={createCourseSectionsListCopy} setSubsectionEditing={setSubsectionEditing} task={task} setTask={setTask} sectionId={sectionToEdit.id} />
                                     :
-                                    <SubsectionItems setCreateCourseSectionsList={setCreateCourseSectionsListCopy} sectionToEdit={sectionToEdit} ref3={ref3} />
+                                    <SubsectionItems setCreateCourseSectionsList={setCreateCourseSectionsListCopy} sectionToEdit={sectionToEdit} ref3={ref3} sectionTask={createCourseSectionsList.filter((section) => section.id === sectionToEdit.id)[0].task} />
                             }
                         </div>
                     </div>

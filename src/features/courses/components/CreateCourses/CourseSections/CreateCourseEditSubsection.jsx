@@ -5,9 +5,9 @@ import dayjs from 'dayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { QuestionnaireComponentEditable } from './QuestionnaireComponentEditable';
+import { PeerReviewRubricModal } from './PeerReviewRubricModal';
 import TextField from '@mui/material/TextField';
-import { CreateTask } from './CreateTask';
-import { Collapse, message } from 'antd';
+import { Collapse, message, Button } from 'antd';
 import MDEditor from '@uiw/react-md-editor';
 import { FilePond, registerPlugin } from 'react-filepond';
 import 'filepond/dist/filepond.min.css';
@@ -32,9 +32,11 @@ export const CreateCourseEditSubsection = ({
   setTask,
   sectionId,
 }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [landscape_photo, setLandscape_photo] = useState((createCourseSectionsList.flatMap((section) => section.subsections).find((sub) => sub.id === subsection.id))?.landscape_photo);
   const [files, setFiles] = useState((createCourseSectionsList.flatMap((section) => section.subsections).find((sub) => sub.id === subsection.id))?.files);
 
+  console.log('subsection', subsection);
   useEffect(() => {
     const matchingSubsection = createCourseSectionsList
       .flatMap((section) => section.subsections)
@@ -99,6 +101,7 @@ export const CreateCourseEditSubsection = ({
 
   return (
     <div className='w-[45rem]'>
+      <PeerReviewRubricModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} rubricData={subsection.activity.PeerReviewRubrica} />
       <button className='text-sm flex items-center -translate-y-5 ' onClick={() => setEditSubsectionFlag(false)}>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
           <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
@@ -115,19 +118,38 @@ export const CreateCourseEditSubsection = ({
         <>
           <input className='text-lg bg-transparent border p-3 rounded-xl border-gray-400 ' type="text" onChange={(e) => handleTitleChange(e.target.value)} value={subsection.title} />
           <div className='bg-white rounded-md shadow-md p-5 mt-4 mb-10 '>
-            <div className='space-y-2'>
-              <label className='text-sm text-gray-500 ' htmlFor=''>
-                Cover
-              </label>
-              <FilePond
-                files={landscape_photo}
-                allowMultiple={false}
-                onupdatefiles={(e) => {
-                  setLandscape_photo(e);
-                  handleSubsectionChange('landscape_photo', e);
-                }} maxFiles={1}
-              />
-            </div>
+            {
+              subsection?.type === 'peerReview' && (
+                <div className='flex flex-col justify-center space-y-2 mb-5'>
+                  <label className='text-sm text-gray-500 '>
+                    Peer review rubric *
+                  </label>
+                  <Button onClick={() => {
+                    setIsModalOpen(true);
+                    document.body.style.overflow = 'hidden';
+                  }}>
+                    Edit Rubric
+                  </Button>
+                </div>
+              )
+            }
+            {
+              subsection?.type === 'task' && (
+                <div className='space-y-2'>
+                  <label className='text-sm text-gray-500 ' htmlFor=''>
+                    Cover
+                  </label>
+                  <FilePond
+                    files={landscape_photo}
+                    allowMultiple={false}
+                    onupdatefiles={(e) => {
+                      setLandscape_photo(e);
+                      handleSubsectionChange('landscape_photo', e);
+                    }} maxFiles={1}
+                  />
+                </div>
+              )
+            }
             <div className='flex items-center justify-between w-full '>
               <div>{renderDatePicker('Start Date', subsection?.start_date, handleSubsectionChange.bind(null, 'start_date'))}</div>
               <div>{renderDatePicker('End Date', subsection?.end_date, handleSubsectionChange.bind(null, 'end_date'))}</div>

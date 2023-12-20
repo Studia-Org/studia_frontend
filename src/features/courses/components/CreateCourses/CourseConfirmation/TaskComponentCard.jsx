@@ -48,6 +48,19 @@ export const TaskComponentCard = ({ task, setVisibilityTask, context, courseId }
         }
     }
 
+    function handleTaskTitle() {
+        switch (task.type) {
+            case 'task':
+                return task.title
+            case 'peerReview':
+                return 'Peer review'
+            case 'forum':
+                return 'Forum'
+            default:
+                return task.title
+        }
+    }
+
     if (context === 'coursesInside') {
         return (
             <button onClick={() => handleClickButton()} className='relative py-5 mb-5 bg-white rounded-md p-5 w-full text-left shadow-md flex items-center'>
@@ -73,7 +86,7 @@ export const TaskComponentCard = ({ task, setVisibilityTask, context, courseId }
                 <div className='absolute bg-indigo-500 h-full left-0 top-0 w-[5rem] rounded-l-md flex items-center justify-center'>
                     {svgType(task.type)}
                 </div>
-                <p className='font-medium text-xl ml-20'>{task.title}</p>
+                <p className='font-medium text-xl ml-20'>{handleTaskTitle()}</p>
             </button>
         )
     }

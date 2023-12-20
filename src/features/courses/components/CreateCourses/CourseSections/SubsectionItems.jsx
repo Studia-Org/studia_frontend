@@ -5,7 +5,7 @@ import { Badge, Tabs } from 'antd';
 import { ForethoughtPage, PerformancePage, SelfReflectionPage } from './ConstantsSubsectionItems'
 
 
-export const SubsectionItems = ({ setCreateCourseSectionsList, sectionToEdit, context, ref3 }) => {
+export const SubsectionItems = ({ setCreateCourseSectionsList, sectionToEdit, context, ref3, sectionTask }) => {
     const [currentPage, setCurrentPage] = useState('first');
     const [currentPageSequence, setCurrentPageSequence] = useState(0);
     const [addItemsOrPreMade, setAddItemsOrPreMade] = useState('preMade');
@@ -34,23 +34,23 @@ export const SubsectionItems = ({ setCreateCourseSectionsList, sectionToEdit, co
             case 0:
                 return (
                     <>
-                        <SequenceDevelop setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} />
-                        <SequenceDevelopNoMSLQForum setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} />
+                        <SequenceDevelop setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} sectionTask={sectionTask} />
+                        <SequenceDevelopNoMSLQForum setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} sectionTask={sectionTask} />
                     </>
                 )
             case 1:
                 return (
-                    <SequenceDevelopEducation1 setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} />
+                    <SequenceDevelopEducation1 setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} sectionTask={sectionTask} />
                 )
             case 2:
                 return (
-                    <SequenceDevelopEducation2 setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} />
+                    <SequenceDevelopEducation2 setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} sectionTask={sectionTask} />
                 )
             default:
                 return (
                     <>
-                        <SequenceDevelop setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} />
-                        <SequenceDevelopNoMSLQForum setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} />
+                        <SequenceDevelop setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} sectionTask={sectionTask} />
+                        <SequenceDevelopNoMSLQForum setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} sectionTask={sectionTask} />
                     </>
                 )
         }
@@ -79,17 +79,17 @@ export const SubsectionItems = ({ setCreateCourseSectionsList, sectionToEdit, co
         {
             key: '1',
             label: 'Forethought',
-            children: <ForethoughtPage setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} handleBack={handleBack} handleContinue={handleContinue} context={context} />
+            children: <ForethoughtPage sectionTask={sectionTask} setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} handleBack={handleBack} handleContinue={handleContinue} context={context} />
         },
         {
             key: '2',
             label: 'Performance',
-            children: <PerformancePage setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} handleBack={handleBack} handleContinue={handleContinue} context={context} />,
+            children: <PerformancePage sectionTask={sectionTask} setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} handleBack={handleBack} handleContinue={handleContinue} context={context} />,
         },
         {
             key: '3',
             label: 'Self-Reflection',
-            children: <SelfReflectionPage setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} handleBack={handleBack} handleContinue={handleContinue} context={context} />,
+            children: <SelfReflectionPage sectionTask={sectionTask} setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} handleBack={handleBack} handleContinue={handleContinue} context={context} />,
         },
     ];
 

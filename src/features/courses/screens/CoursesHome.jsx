@@ -6,7 +6,7 @@ import '../styles/utils.css'
 import { getToken } from '../../../helpers';
 import { useAuthContext } from "../../../context/AuthContext";
 import { CoursesCardHome } from '../components/CoursesHome/CoursesCardHome';
-import { Divider } from 'antd';
+import { Divider, Empty } from 'antd';
 import Swal from 'sweetalert2'
 import { MoonLoader } from "react-spinners";
 import { API } from "../../../constant";
@@ -318,7 +318,7 @@ const CoursesHome = () => {
                   user.role_str === 'student' &&
                   <div className='shadow-md flex flex-col md:w-[480px] min-w-3/4 mt-12 grid-home:absolute right-16 bg-white p-8 rounded-lg'>
                     <section >
-                      <p className='font-bold text-xl'>Daily Tasks</p>
+                      <p className='font-semibold text-lg'>Daily Tasks</p>
                       <Divider />
                       {
                         dailyTasks.length > 0 ?
@@ -328,15 +328,16 @@ const CoursesHome = () => {
                           </div>
                           :
                           <div className='flex'>
-                            <div className='border rounded-lg p-5 flex mb-10 items-center space-x-7'>
-                              <p className='font-medium text-gray-400 text-base '>There are no tasks for today</p>
-                              <img className='opacity-50 w-36' src="https://liferay-support.zendesk.com/hc/article_attachments/360032795211/empty_state.gif" alt="" />
+                            <div className='border rounded-lg p-5 flex mb-10 items-center justify-center w-full space-x-7'>
+                              <Empty description={
+                                <span className='font-medium text-gray-400 text-sm '>You do not have any task for today</span>
+                              } />
                             </div>
                           </div>
                       }
                     </section>
                     <section>
-                      <p className='font-bold text-xl'>Your Objectives</p>
+                      <p className='font-semibold text-lg'>Your Objectives</p>
                       <Divider />
                       <div className='space-y-5 flex flex-col mb-5'>
                         {
