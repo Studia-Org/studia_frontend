@@ -43,7 +43,7 @@ function MainScreen({ activityData, setShowEvaluate, data }) {
                     <PeerReviewAnswers answers={answers} data={data.Criteria} />
                     :
                     <>
-                        <div className="mt-2 max-w-full overflow-x-hidden px-5">
+                        <div className="mt-2 min-w-full max-w-full overflow-x-hidden px-5">
                             <Rubrica data={data} />
                         </div>
                         <div className="px-5 pb-5">

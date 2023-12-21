@@ -68,7 +68,7 @@ function PeerReviewAnswers({ answers, data }) {
                 </div>
             </section>
             :
-            <section className="p-10 ">
+            <section className="p-10 pt-0 ">
                 <div className=" flex-1">
                     <h3 className="font-semibold text-2xl mb-5">Submission feedback!</h3>
                     <p>Your partner could not give you feedback 😔</p>

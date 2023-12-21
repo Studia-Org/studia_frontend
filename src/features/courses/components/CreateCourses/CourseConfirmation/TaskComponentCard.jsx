@@ -51,18 +51,18 @@ export const TaskComponentCard = ({ task, setVisibilityTask, context, courseId }
     if (context === 'coursesInside') {
         return (
             <button onClick={() => handleClickButton()} className='relative py-5 mb-5 bg-white rounded-md p-5 w-full text-left shadow-md flex items-center'>
-                <div className='absolute bg-indigo-500 h-full left-0 top-0 w-[5rem] rounded-l-md flex items-center justify-center'>
+                <div className='absolute bg-indigo-500 h-full left-0 top-0 w-fit md:w-[5rem] rounded-l-md flex items-center justify-center'>
                     {svgType(task?.attributes?.type)}
                 </div>
-                <p className='font-medium text-xl ml-20'>{task?.attributes.title}</p>
+                <p className='font-medium text-xl ml-11 md:ml-20'>{task?.attributes.title}</p>
                 {user?.role_str !== 'professor' && user?.role_str !== 'admin' && (
                     deadlineOnTime ?
                         <div className='ml-auto bg-green-700 rounded-md p-2 px-8 text-center '>
-                            <p className='text-base font-medium text-white'>{task?.attributes.deadline}</p>
+                            <p className='text-base font-medium text-white'>{new Date(task?.attributes.deadline).toLocaleString()}</p>
                         </div>
                         :
                         <div className='ml-auto bg-red-700 rounded-md p-2 px-8 text-center '>
-                            <p className='text-base font-medium text-white'>{task?.attributes.deadline}</p>
+                            <p className='text-base font-medium text-white'>{new Date(task?.attributes.deadline).toLocaleString()}</p>
                         </div>
                 )}
             </button>

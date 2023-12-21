@@ -17,7 +17,7 @@ function EvaluateScreen({ data, setShowEvaluate, sendEvalution, answersDelivered
                 </button>
             </div>
             <div className="flex max-w-full flex-wrap md2:flex-row pl-8 flex-col-reverse">
-                <div id="container-rubrica" className="md2:max-w-[calc(50%)] md2:min-w-[calc(50%)] overflow-x-scroll px-5 ">
+                <div id="container-rubrica" className="md2:max-w-[calc(50%)] md2:min-w-[calc(50%)] px-5 ">
                     <Rubrica petite={true} data={data} index={"-1"} />
                 </div>
                 <div className=" md2:max-w-[calc(50%)] w-full  flex flex-col pb-2 ">

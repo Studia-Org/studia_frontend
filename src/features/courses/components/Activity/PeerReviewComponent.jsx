@@ -15,7 +15,6 @@ export default function PeerReviewComponent({ activityData, idQualification }) {
     const [loading, setLoading] = useState(true);
     const { user } = useAuthContext();
 
-
     useEffect(() => {
         if (user === null || user === undefined || user.role_str !== 'student') { setLoading(false); return }
 
@@ -134,7 +133,7 @@ export default function PeerReviewComponent({ activityData, idQualification }) {
                                 data={data}
                             />
                         </div>
-                        <div className={`${!showEvaluate ? 'w-0 h-0 overflow-hidden absolute' : 'min-w-[calc(100vw)] xl:min-w-[calc(100vw-21rem)] overflow-x-hidden  '}`}>
+                        <div className={`${!showEvaluate ? 'w-0 h-0 overflow-hidden absolute' : 'min-w-[calc(100vw)] xl:min-w-[calc(100vw-22rem)] overflow-x-hidden  '}`}>
                             <EvaluateScreen data={data} setShowEvaluate={setShowEvaluate} sendEvalution={sendEvalution} answersDelivered={answersDelivered} />
                         </div>
                     </>

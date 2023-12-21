@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import './Rubrica.css';
 
 function Rubrica({ petite, title, data, index }) {
@@ -27,7 +26,8 @@ function Rubrica({ petite, title, data, index }) {
                             <td className={'py-2 px-4 border  ' + tableClass} data-label={key}>{key}</td>
                             {data[key].map((item, index) => {
                                 return (
-                                    <td className={'py-2 px-4 border bg-white ' + tableClass} data-label={data["Criteria"][index]} key={item}>{item}</td>
+                                    <td className={'py-2 px-4 border bg-white ' + tableClass}
+                                        data-label={data["Criteria"][index]} key={item}>{item}</td>
                                 )
                             })}
                         </tr>
