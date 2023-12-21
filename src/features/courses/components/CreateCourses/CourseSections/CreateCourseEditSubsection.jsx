@@ -16,11 +16,7 @@ import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import '../../../styles/filePondNoBoxshadow.css';
 
-
 registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
-
-const { Panel } = Collapse;
-
 
 export const CreateCourseEditSubsection = ({
   subsection,
@@ -28,15 +24,14 @@ export const CreateCourseEditSubsection = ({
   setCreateCourseSectionsList,
   createCourseSectionsList,
   setSubsectionEditing,
-  task,
-  setTask,
   sectionId,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [landscape_photo, setLandscape_photo] = useState((createCourseSectionsList.flatMap((section) => section.subsections).find((sub) => sub.id === subsection.id))?.landscape_photo);
   const [files, setFiles] = useState((createCourseSectionsList.flatMap((section) => section.subsections).find((sub) => sub.id === subsection.id))?.files);
 
-  console.log('subsection', subsection);
+  console.log('subsection', (createCourseSectionsList.flatMap((section) => section.subsections).find((sub) => sub.id === subsection.id)));
+
   useEffect(() => {
     const matchingSubsection = createCourseSectionsList
       .flatMap((section) => section.subsections)
@@ -67,13 +62,15 @@ export const CreateCourseEditSubsection = ({
             default:
               break;
           }
+          if (subsection?.type === 'peerReview' && type === 'end_date') {
+            subsectionCopy.activity.deadline = newValue;
+          }
           sectionCopy.subsections = sectionCopy.subsections.map((sub) => (sub.id === subsection.id ? subsectionCopy : sub));
+
           return sectionCopy;
         }
-
         return course;
       });
-
       return updatedCourses;
     });
   };
@@ -98,10 +95,10 @@ export const CreateCourseEditSubsection = ({
       </LocalizationProvider>
     </div>
   );
+  console.log('subsection', subsection.type);
 
   return (
     <div className='w-[45rem]'>
-      <PeerReviewRubricModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} rubricData={subsection.activity.PeerReviewRubrica} />
       <button className='text-sm flex items-center -translate-y-5 ' onClick={() => setEditSubsectionFlag(false)}>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
           <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
@@ -121,6 +118,7 @@ export const CreateCourseEditSubsection = ({
             {
               subsection?.type === 'peerReview' && (
                 <div className='flex flex-col justify-center space-y-2 mb-5'>
+                  <PeerReviewRubricModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} rubricData={subsection.activity.PeerReviewRubrica} setSubsectionEditing={setSubsectionEditing} />
                   <label className='text-sm text-gray-500 '>
                     Peer review rubric *
                   </label>
@@ -145,7 +143,8 @@ export const CreateCourseEditSubsection = ({
                     onupdatefiles={(e) => {
                       setLandscape_photo(e);
                       handleSubsectionChange('landscape_photo', e);
-                    }} maxFiles={1}
+                    }}
+                    maxFiles={1}
                   />
                 </div>
               )
@@ -159,7 +158,8 @@ export const CreateCourseEditSubsection = ({
                 Subsection description
               </label>
               <div className='flex w-full'>
-                <TextField className=' flex w-full' id='outlined-basic' value={subsection.description} onChange={(e) => handleSubsectionChange('description', e.target.value)} variant='outlined' />
+                <TextField className=' flex w-full' id='outlined-basic' value={subsection.description ? subsection.description : ''}
+                  onChange={(e) => handleSubsectionChange('description', e.target.value)} variant='outlined' />
               </div>
             </div>
             <div className='mt-3 space-y-2'>

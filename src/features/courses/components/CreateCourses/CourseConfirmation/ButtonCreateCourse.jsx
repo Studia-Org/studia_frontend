@@ -130,28 +130,17 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                             });
                             filesData = await response.json();
                         }
-
-                        const activity = {
-                            title: subsection.title,
-                            deadline: new Date(subsection.end_date).toISOString(),
-                            ponderation: 0,
-                            type: subsection.type,
-                            file: null,
-                            description: subsection.description,
-                            order: 5,
-                            evaluable: true,
-                            qualifications: null,
-                            evaluators: null,
-                            categories: null,
+                        if ('id' in subsection.activity) {
+                            delete subsection.activity.id;
                         }
-
+                        console.log(subsection.activity)
                         const createActivity = await fetch(`${API}/activities`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
                                 Authorization: `Bearer ${getToken()}`,
                             },
-                            body: JSON.stringify({ data: activity }),
+                            body: JSON.stringify({ data: subsection.activity }),
                         })
                         const dataActivity = await createActivity.json();
 

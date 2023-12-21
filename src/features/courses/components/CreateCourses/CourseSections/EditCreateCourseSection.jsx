@@ -192,8 +192,6 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
         document.body.style.overflow = 'hidden';
     };
 
-
-    console.log(createCourseSectionsList)
     return (
         <div className='text-base font-normal'>
             <Tour open={open} onClose={() => {

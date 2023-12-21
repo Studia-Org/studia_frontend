@@ -108,7 +108,7 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                 id: Math.random().toString(16).slice(2),
                 title: title,
                 description: content,
-                deadline: deadline,
+                deadline: new Date(deadline).toISOString(),
                 ponderation: 0,
                 categories: categories,
                 type: 'task',
