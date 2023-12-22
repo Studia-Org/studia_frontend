@@ -8,14 +8,12 @@ import { AccordionButton, Accordion, AccordionItem, AccordionPanel } from '@chak
 import { useAuthContext } from '../../../../context/AuthContext';
 import { getToken } from '../../../../helpers';
 import { API } from '../../../../constant';
-import { set } from 'date-fns';
 import { useParams } from 'react-router-dom';
-import { de } from 'date-fns/locale';
 
 
 
 
-export const AccordionCourseContent = ({ styles, courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag,
+export const AccordionCourseContent = ({ whisper, styles, courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag,
   setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setCourseContentInformation, setEditSectionFlag, setSectionToEdit, courseSubsection, courseSection }) => {
   const [sectionNumber, setSectionNumber] = useState(1);
   const [newSection, setNewSection] = useState('');
@@ -26,6 +24,7 @@ export const AccordionCourseContent = ({ styles, courseContentInformation, setCo
 
 
   function handleSections(tituloSeccion, subsection) {
+
     if (
       subsection.attributes.activity?.data?.attributes.type ===
       "questionnaire"
@@ -41,6 +40,7 @@ export const AccordionCourseContent = ({ styles, courseContentInformation, setCo
     setCourseSection(tituloSeccion);
     setForumFlag(false);
     setSettingsFlag(false);
+    if (whisper) whisper.current.close()
   }
 
   function selectFaseSectionContent(str) {

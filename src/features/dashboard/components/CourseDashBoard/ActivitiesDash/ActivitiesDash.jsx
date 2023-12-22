@@ -5,7 +5,7 @@ import { useAuthContext } from "../../../../../context/AuthContext";
 import { fetchAverageCourse } from "../../../../../fetches/fetchAverageCourse";
 import { fetchAverageSubSectionMark } from "../../../../../fetches/fetchAvegareSubsectionsMark";
 import { PieChart } from '@mui/x-charts/PieChart';
-import { BarChart } from '@mui/x-charts/BarChart';
+import ReactApexChart from 'react-apexcharts'
 import { useNavigate } from "react-router-dom";
 import { fetchQuestionnaireTimeByCourse } from "../../../../../fetches/fetchQuestionnaireTimeByCourse";
 
@@ -28,13 +28,12 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
             setQualification(averageMainActivityUser)
 
 
-            const { tiempoPromedio, tiempoPromedioFormateado, tiempoUsuario, tiempoUsuarioFormateado, totalQuestionnaire } =
+            let { tiempoPromedio, tiempoPromedioFormateado, tiempoUsuario, tiempoUsuarioFormateado, totalQuestionnaire } =
                 await fetchQuestionnaireTimeByCourse({ courseId, userId })
+            if (isNaN(tiempoPromedio)) tiempoPromedio = 0
+            if (isNaN(tiempoUsuario)) tiempoUsuario = 0
 
-            setQuestionnaireTime([{
-                data: [(tiempoPromedio / 60).toFixed(2), (tiempoUsuario / 60).toFixed(2)]
-
-            }])
+            setQuestionnaireTime([(tiempoPromedio / 60).toFixed(2), (tiempoUsuario / 60).toFixed(2)])
 
             const sumValues = Object.values(totalQualifications).reduce((a, b) => a + b, 0);
             let dict = [];
@@ -103,12 +102,59 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
         return (
             <div>
                 <p className="text-2xl font-semibold pb-2">Questionnarie time (min)</p>
-                <BarChart
-                    xAxis={[{ scaleType: 'band', data: ["Average", "Your's"] }]}
-                    series={questionnaireTime}
-                    width={500}
-                    height={300}
-                />
+                <ReactApexChart
+                    options={{
+                        chart: {
+                            type: 'bar',
+                            height: 'auto'
+                        },
+                        plotOptions: {
+                            bar: {
+                                borderRadius: 5,
+                                dataLabels: {
+                                    position: 'top', // top, center, bottom
+                                },
+                            }
+                        },
+                        dataLabels: {
+                            enabled: true,
+                            formatter: function (val) {
+                                return val;
+                            },
+                            offsetY: -20,
+                            style: {
+                                fontSize: '12px',
+                                colors: ["#304758"]
+                            }
+                        },
+                        stroke: {
+                            show: true,
+                            width: 1,
+                            colors: ['transparent']
+                        },
+                        xaxis: {
+                            categories: ["Average time spent", "Your time spent"],
+                        },
+                        fill: {
+                            opacity: 1
+                        },
+                        tooltip: {
+                            y: {
+                                formatter: function (val) {
+                                    return val + " min"
+                                }
+                            }
+                        }
+                    }
+                    }
+                    series={[
+                        {
+                            name: 'Time',
+                            data: questionnaireTime
+                        }
+
+
+                    ]} type="bar" height={'100%'} />
             </div>
         )
     }

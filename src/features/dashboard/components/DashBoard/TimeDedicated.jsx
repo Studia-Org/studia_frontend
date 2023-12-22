@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { fetchAverageCourse } from "../../../../fetches/fetchAverageCourse";
 import { useAuthContext } from "../../../../context/AuthContext";
 import { set } from "date-fns";
+import ReactApexChart from 'react-apexcharts'
 
 const chartdata2 = [
   {
@@ -57,7 +58,6 @@ export function TimeDedicated({ courses }) {
       await Promise.all(courses.map(async (course) => {
         dict[course.title] = await fetchAverageCourse({ courseId: course.id, userId });
       }));
-      console.log(dict);
       // Imprimir el diccionario después de que todas las promesas se hayan resuelto
       setCharData(
         Object.keys(dict).map((key) => {
@@ -79,21 +79,66 @@ export function TimeDedicated({ courses }) {
   }, [courses]);
 
 
-
   return (
     <section className=" p-5 bg-white shadow-lg w-full rounded-lg box-border">
       <Title>Average course marks</Title>
-      <BarChart
-        className="mx-auto my-auto w-[95%] h-full py-5"
-        data={charData}
-        index="name"
-        categories={[
-          "Average course",
-          "Your mark",
-        ]}
-        colors={["emerald", "violet"]}
-        yAxisWidth={48}
-      />
+      <ReactApexChart
+        options={{
+          chart: {
+            type: 'bar',
+            height: 'auto'
+          },
+          plotOptions: {
+            bar: {
+              borderRadius: 5,
+              dataLabels: {
+                position: 'top', // top, center, bottom
+              },
+            }
+          },
+          dataLabels: {
+            enabled: true,
+            formatter: function (val) {
+              return val;
+            },
+            offsetY: -20,
+            style: {
+              fontSize: '12px',
+              colors: ["#304758"]
+            }
+          },
+          stroke: {
+            show: true,
+            width: 2,
+            colors: ['transparent']
+          },
+          xaxis: {
+            categories: Object.keys(charData).map((key) => charData[key].name),
+          },
+          fill: {
+            opacity: 1
+          },
+          tooltip: {
+            y: {
+              formatter: function (val) {
+                return val
+              }
+            }
+          }
+        }
+        }
+        series={[
+          {
+            name: 'Average course grade',
+            data: Object.keys(charData).map((key) => charData[key]["Average course"])
+          }, {
+            name: 'Your grade',
+            data: Object.keys(charData).map((key) => charData[key]["Your mark"])
+          }
+
+
+        ]} type="bar" height={'95%'} />
+
     </section>
   );
 }

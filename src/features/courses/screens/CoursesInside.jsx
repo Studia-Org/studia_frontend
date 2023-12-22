@@ -391,6 +391,7 @@ const CourseInside = () => {
                       <Popover>
                         <AccordionCourseContent
                           {...{
+                            whisper,
                             styles: "shadow-none m-0 px-5 sm:w-full",
                             courseContentInformation,
                             setCourseSubsection,
