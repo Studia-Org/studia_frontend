@@ -1,14 +1,18 @@
 import React from "react";
 import { FiChevronRight, FiCornerDownLeft } from "react-icons/fi";
 
-export const ForumClickable = ({ posts, setForumFlag }) => {
+export const ForumClickable = ({ posts, setForumFlag, whisper }) => {
+
   function renderPostsLogic(posts) {
     if (posts.length === 1) {
+
       return renderPostsInside(posts[0]);
     } else if (posts.length > 1) {
+
       const firstTwoPosts = posts.slice(0, 2);
       return firstTwoPosts.map((post) => renderPostsInside(post));
     } else {
+
       return (
         <p className="text-gray-700 text-sm ">
           There are no posts yet,{" "}
@@ -51,15 +55,15 @@ export const ForumClickable = ({ posts, setForumFlag }) => {
   }
 
   return (
-    <div className="flex-shrink-0 w-full sm:w-auto">
-      <div className="mt-4 bg-white rounded-lg  px-5 py-5  sm:mr-9 sm:right-0 sm:w-[30rem] w-full shadow-md ml-8 hidden sm:block">
+    <div className="md:flex-shrink-0 w-full md:w-auto -ml-6 md:ml-0">
+      <div className="mt-4 bg-white rounded-lg  px-5 py-5  sm:mr-9 sm:right-0 sm:w-[30rem]  shadow-md ml-8  sm:block">
         <div className="flex items-center">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 mr-2">
             <path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM17.25 19.128l-.001.144a2.25 2.25 0 01-.233.96 10.088 10.088 0 005.06-1.01.75.75 0 00.42-.643 4.875 4.875 0 00-6.957-4.611 8.586 8.586 0 011.71 5.157v.003z" />
           </svg>
           <p className="text-lg font-medium">Forum</p>
           <button
-            onClick={setForumFlag}
+            onClick={() => { setForumFlag(true); if (whisper) whisper.current.close() }}
             className="text-base ml-auto font-medium text-indigo-700"
           >
             View all posts

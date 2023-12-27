@@ -13,7 +13,7 @@ export const Navbar = () => {
             <div className="container flex flex-wrap items-center ">
 
                 <Link to={'/app/courses'}><h1 className='p-10 sm:px-16 font-bold text-3xl italic leading-none tracking-tight cursor-pointer'>Uptitude<span className='text-pink-500 text-4xl '>.</span></h1></Link>
-                <div className=' absolute right-0 flex gap-x-6 md:gap-x-4 items-center '>
+                <div className=' absolute right-0 flex gap-x-6 md:gap-x-6 items-center '>
                     <Notifications />
                     <Tag className={'hidden lg:block'} User={user} />
                     {user && <p className='font-medium hidden lg:block'>{user['name']}</p>}

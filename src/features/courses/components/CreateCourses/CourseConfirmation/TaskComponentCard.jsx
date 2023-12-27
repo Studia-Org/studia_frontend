@@ -58,7 +58,8 @@ export const TaskComponentCard = ({ task, setVisibilityTask, context, courseId }
 
         const formattedString = `${day}/${month} ${hours}:${minutes}`;
         return (
-            <button onClick={() => handleClickButton()} className='relative py-5 mb-5 bg-white rounded-md p-5 w-full text-left shadow-md flex items-center'>
+            <button onClick={() => handleClickButton()}
+                className='relative py-5 mb-5 bg-white rounded-md p-5 w-full text-left shadow-md flex items-center'>
                 <div className='absolute bg-indigo-500 h-full left-0 top-0 w-[3rem] md:w-[5rem] rounded-l-md flex items-center justify-center'>
                     {svgType(task?.attributes?.type)}
                 </div>
@@ -77,7 +78,8 @@ export const TaskComponentCard = ({ task, setVisibilityTask, context, courseId }
         )
     } else {
         return (
-            <button onClick={() => handleClickButton()} className='relative py-5 mb-5 bg-white rounded-md p-5 w-full text-left shadow-md flex items-center'>
+            <button onClick={() => handleClickButton()}
+                className='relative py-5 mb-5 bg-white rounded-md p-5 w-full text-left shadow-md flex items-center'>
                 <div className='absolute bg-indigo-500 h-full left-0 top-0 w-[5rem] rounded-l-md flex items-center justify-center'>
                     {svgType(task.type)}
                 </div>

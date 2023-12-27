@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { FiChevronRight } from "react-icons/fi";
 
-export const ProfessorData = ({ professor, evaluatorFlag }) => {
+export const ProfessorData = ({ professor, evaluatorFlag, whisper }) => {
     const navigate = useNavigate();
     let link = null
     if (professor.attributes === null) return (<div></div>)
@@ -12,8 +12,8 @@ export const ProfessorData = ({ professor, evaluatorFlag }) => {
         link = '/app/profile/' + professor.id + '/';
     }
     return (
-        <div className='flex-shrink-0 w-full '>
-            <div className={`${evaluatorFlag ? 'mt-0 ' : 'my-4'} hidden flex-col bg-white rounded-lg  pl-5 py-5 sm:mr-9 pr-5 sm:right-0 max-w-[30rem] ml-8 shadow-md sm:flex `}>
+        <div className='md:flex-shrink-0 w-full md:max-w-[calc(100%)] max-w-[calc(100vw-3rem)] -ml-6 md:ml-0  '>
+            <div className={`${evaluatorFlag ? 'mt-0 ' : 'my-4'} flex flex-col bg-white rounded-lg  pl-5 py-5 sm:mr-9 pr-5 sm:right-0 md:max-w-[30rem] ml-8 shadow-md   `}>
                 <div className='flex items-center'>
                     {
                         evaluatorFlag === true ?
@@ -28,7 +28,10 @@ export const ProfessorData = ({ professor, evaluatorFlag }) => {
                             </>
 
                     }
-                    <button onClick={() => navigate(link)} className='text-base ml-auto font-medium text-indigo-700'>View profile</button>
+                    <button onClick={() => {
+                        navigate(link)
+                        if (whisper) whisper.current.close()
+                    }} className='text-base ml-auto font-medium text-indigo-700'>View profile</button>
                     <FiChevronRight className='text-indigo-700' />
                 </div>
 
