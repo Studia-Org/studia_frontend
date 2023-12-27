@@ -2,15 +2,18 @@ import React from 'react'
 import { useAuthContext } from '../../../../../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
 
-export const TaskComponentCard = ({ task, setVisibilityTask, context, courseId }) => {
-    console.log(task)
+export const TaskComponentCard = ({ task, setVisibilityTask, context, courseId, setForumFlag }) => {
     const deadlineOnTime = new Date(task?.attributes?.deadline) > new Date()
     const { user } = useAuthContext()
     const navigate = useNavigate()
 
     function handleClickButton() {
         if (context === 'coursesInside') {
-            navigate(`/app/courses/${courseId}/activity/${task.id}`)
+            if (task?.attributes?.type === 'forum') {
+                setForumFlag(true)
+            } else {
+                navigate(`/app/courses/${courseId}/activity/${task.id}`)
+            }
         } else {
             setVisibilityTask(true)
         }
@@ -48,16 +51,16 @@ export const TaskComponentCard = ({ task, setVisibilityTask, context, courseId }
         }
     }
 
-    function handleTaskTitle() {
-        switch (task.type) {
+    function handleTaskTitle(title) {
+        switch (title) {
             case 'task':
-                return task.title
+                return title
             case 'peerReview':
                 return 'Peer review'
             case 'forum':
-                return 'Forum'
+                return 'Forum discussion'
             default:
-                return task.title
+                return title
         }
     }
 
@@ -67,7 +70,7 @@ export const TaskComponentCard = ({ task, setVisibilityTask, context, courseId }
                 <div className='absolute bg-indigo-500 h-full left-0 top-0 w-[5rem] rounded-l-md flex items-center justify-center'>
                     {svgType(task?.attributes?.type)}
                 </div>
-                <p className='font-medium text-xl ml-20'>{task?.attributes.title}</p>
+                <p className='font-medium text-xl ml-20'>{handleTaskTitle(task.attributes.type)}</p>
                 {user?.role_str !== 'professor' && user?.role_str !== 'admin' && (
                     deadlineOnTime ?
                         <div className='ml-auto bg-green-700 rounded-md p-2 px-8 text-center '>
@@ -86,7 +89,7 @@ export const TaskComponentCard = ({ task, setVisibilityTask, context, courseId }
                 <div className='absolute bg-indigo-500 h-full left-0 top-0 w-[5rem] rounded-l-md flex items-center justify-center'>
                     {svgType(task.type)}
                 </div>
-                <p className='font-medium text-xl ml-20'>{handleTaskTitle()}</p>
+                <p className='font-medium text-xl ml-20'>{handleTaskTitle(task.title)}</p>
             </button>
         )
     }

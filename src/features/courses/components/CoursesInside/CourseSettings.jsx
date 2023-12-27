@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { API } from '../../../../constant'
-import { Select, Avatar, message, Button } from 'antd';
+import { Select, Avatar, message, Button, Popconfirm } from 'antd';
 import { getToken } from '../../../../helpers';
 import { useParams } from 'react-router-dom';
 import { FilePond, registerPlugin } from 'react-filepond';
@@ -15,6 +16,7 @@ const { Option } = Select;
 
 
 export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) => {
+    const navigate = useNavigate()
     const [students, setStudents] = useState([])
     const [selected, setSelected] = useState()
     const [loading, setLoading] = useState(false)
@@ -44,6 +46,55 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
                     data: [...prevState.students.data, selected]
                 }
             }))
+        }
+    }
+
+    const deleteCourse = async () => {
+        setLoading(true)
+        try {
+            courseData.sections.data.forEach(async (section) => {
+                section.attributes.subsections.data.forEach(async (subsection) => {
+                    if (subsection.attributes.activity.data) {
+                        await fetch(`${API}/activities/${subsection.attributes.activity.data.id}`, {
+                            method: 'DELETE',
+                            headers: {
+                                Authorization: `Bearer ${getToken()}`
+                            }
+                        })
+                    }
+                    if (subsection.attributes.questionnaire.data) {
+                        await fetch(`${API}/questionnaires/${subsection.attributes.questionnaire.data.id}`, {
+                            method: 'DELETE',
+                            headers: {
+                                Authorization: `Bearer ${getToken()}`
+                            }
+                        })
+                    }
+                    await fetch(`${API}/subsections/${subsection.id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            Authorization: `Bearer ${getToken()}`
+                        }
+                    })
+                })
+                await fetch(`${API}/sections/${section.id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: `Bearer ${getToken()}`
+                    }
+                })
+            })
+            await fetch(`${API}/courses/${courseId}`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${getToken()}`
+                }
+            })
+            navigate('/app/courses')
+            setLoading(false)
+        } catch (error) {
+            setLoading(false)
+            message.error(error)
         }
     }
 
@@ -122,11 +173,25 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
                 </button>
                 <h1 className="text-3xl font-bold tracking-tight text-blue-gray-900">Edit Course</h1>
                 <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
-                    <div className="sm:col-span-6">
-                        <h2 className="text-lg font-medium text-blue-gray-900 mt-8">Course info</h2>
-                        <p className="mt-1 text-sm text-gray-500">
-                            This information will be displayed publicly to the students.
-                        </p>
+                    <div className="sm:col-span-6 flex mt-8 items-center">
+                        <div>
+                            <h2 className="text-lg font-medium text-blue-gray-900 ">Course info</h2>
+                            <p className="mt-1 text-sm text-gray-500">
+                                This information will be displayed publicly to the students.
+                            </p>
+                        </div>
+                        <Popconfirm
+                            title="Delete the course"
+                            description="Are you sure to delete this course?"
+                            onConfirm={() => deleteCourse()}
+                            okText="Yes"
+                            cancelText="No"
+                        >
+                            <Button loading={loading} danger className='ml-auto bg-[#ff4d4f] hover:bg-[#ff4d50c5] !text-white'>
+                                Delete Course
+                            </Button>
+                        </Popconfirm>
+
                         <hr className='mt-5' />
                     </div>
 
@@ -284,6 +349,6 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
                     </Button>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }

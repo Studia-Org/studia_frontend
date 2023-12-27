@@ -8,6 +8,7 @@ import MDEditor from '@uiw/react-md-editor';
 import { motion } from 'framer-motion';
 import { Switch } from 'antd';
 import dayjs from 'dayjs';
+import { UploadFiles } from './UploadFiles';
 import { message, Select, Tag } from 'antd';
 import { ACTIVITY_CATEGORIES } from '../../../../../constant';
 import { FilePond, registerPlugin } from 'react-filepond'
@@ -34,7 +35,7 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
             setSwitchState(task[section.id].evaluable);
             setDeadline(task[section.id].deadline);
             setCategories(task[section.id].categories);
-            setFiles(task[section.id].files.map(file => ({ file: file, source: file })));
+            setFiles(task[section.id].files.map(file => (file)));
         }
     }, [])
 
@@ -49,7 +50,7 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                         deadline: deadline,
                         evaluable: switchState,
                         categories: categories,
-                        files: files.map(file => file.file),
+                        files: files.map(file => file),
                         ponderation: section.task.ponderation,
                         type: section.task.type,
                         order: section.task.order,
@@ -77,7 +78,7 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                         deadline: deadline,
                         evaluable: switchState,
                         categories: categories,
-                        files: files.map(file => file.file),
+                        files: files.map(file => file),
                         ponderation: section.task.ponderation,
                         type: section.task.type,
                         order: section.task.order,
@@ -112,7 +113,7 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                 ponderation: 0,
                 categories: categories,
                 type: 'task',
-                files: files.map(file => file.file),
+                files: files.map(file => file),
                 order: 5,
                 evaluable: switchState,
             }
@@ -189,7 +190,7 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                         <TextField className='bg-white inline-block' id="outlined-basic" value={title} onChange={(e) => setTitle(e.target.value)} variant="outlined" />
                     </div>
 
-                    <div className='pl-10 space-y-2 mb-3 flex flex-col justify-center'>
+                    <div className='ml-10 space-y-2 mb-3 flex flex-col justify-center'>
                         <label className='text-sm ' htmlFor="" >Deadline</label>
                         <div className='flex'>
                             <div className='w-full mr-5'>
@@ -203,8 +204,12 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                             </div>
                         </div>
                     </div>
+                    <div className='flex flex-col ml-10'>
+                        <label className='text-sm mb-2' htmlFor="">Evaluable</label>
+                        <Switch className='shadow-md' checked={switchState} onChange={setSwitchState} />
+                    </div>
                 </div>
-                <div className=''>
+                <div>
                     <label className='text-sm ' htmlFor="" >Task description</label>
                     <MDEditor
                         className='mt-2'
@@ -215,21 +220,14 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                         value={content}
                     />
                 </div>
-                <div className='flex mt-5'>
-                    <div className='w-1/2 pr-2 space-y-2'>
+                <div className='flex mt-5 mb-32'>
+                    <div className='w-1/2 pr-2 space-y-2 flex-auto'>
                         <label className='text-sm' htmlFor="">Task files</label>
-                        <FilePond
-                            allowMultiple={true}
-                            onupdatefiles={(fileItems) => {
-                                setFiles(fileItems);
-                            }}
-                            maxFiles={10}
-                        />
+                        <div style={{ flex: 'none' }}>
+                            <UploadFiles fileList={files} setFileList={setFiles} listType={'text'} maxCount={5} />
+                        </div>
                     </div>
-                </div>
-
-                <div className='flex mb-16'>
-                    <div className='w-1/2 pr-2 space-y-2'>
+                    <div className='w-1/2 pr-2 space-y-2 ml-8'>
                         <label className='text-sm' htmlFor="">Task Categories</label>
                         <Select
                             mode="tags"
@@ -241,13 +239,7 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                             options={Object.keys(ACTIVITY_CATEGORIES).map(key => ({ label: key, value: key }))}
                         />
                     </div>
-
-                    <div className='pl-10 space-y-2 flex flex-col justify-center'>
-                        <label className='text-sm mb-2' htmlFor="">Evaluable</label>
-                        <Switch className='shadow-md' checked={switchState} onChange={setSwitchState} />
-                    </div>
                 </div>
-
 
             </div>
         </motion.div>

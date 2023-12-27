@@ -50,7 +50,7 @@ const CourseInside = () => {
         `${API}/courses/${courseId}?populate=forum.posts.autor.profile_photo,forum.posts.forum_answers.autor.profile_photo`
       );
       const data = await response.json();
-      setForumID(data.data.attributes.forum.data.id);
+      setForumID(data.data.attributes.forum?.data.id);
       setPosts(data.data.attributes.forum.data.attributes.posts.data.reverse());
     } catch (error) {
       console.error(error);
@@ -208,7 +208,7 @@ const CourseInside = () => {
     {
       key: '1',
       label: 'Course',
-      children: <CourseContent courseContentInformation={courseContentInformation} courseSection={courseSection} courseSubsection={courseSubsection} courseId={courseId} enableEdit={enableEdit} setEnableEdit={setEnableEdit} setCourseContentInformation={setCourseContentInformation} titleSubsection={titleSubsection} backgroundPhotoSubsection={backgroundPhotoSubsection} />,
+      children: <CourseContent setForumFlag={setForumFlag} courseContentInformation={courseContentInformation} courseSection={courseSection} courseSubsection={courseSubsection} courseId={courseId} enableEdit={enableEdit} setEnableEdit={setEnableEdit} setCourseContentInformation={setCourseContentInformation} titleSubsection={titleSubsection} backgroundPhotoSubsection={backgroundPhotoSubsection} />,
     },
     {
       key: '2',

@@ -5,15 +5,14 @@ import dayjs from 'dayjs';
 import { styled } from '@mui/material/styles';
 import RadioGroup, { useRadioGroup } from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import Radio from '@mui/material/Radio';
-import { message } from 'antd';
+import { message, DatePicker, Input } from 'antd';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+
+
+const { RangePicker } = DatePicker;
 
 
 const list = {
@@ -188,7 +187,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
         }
     }
 
-    function handleOnChangeQuestion(newTitle, absoluteIndex){
+    function handleOnChangeQuestion(newTitle, absoluteIndex) {
         setCreateCourseSectionsList(prevSections => {
             const updatedSections = prevSections.map(section => {
                 if (section.subsections) {
@@ -309,58 +308,6 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
         });
     }
 
-    const handleStartDateChange = (date) => {
-        if (date) {
-            setCreateCourseSectionsList(prevSections => {
-                const updatedSections = prevSections.map(section => {
-                    if (section.subsections) {
-                        const updatedSubsections = section.subsections.map(sub => {
-                            if (sub.id === subsection.id) {
-                                return {
-                                    ...sub,
-                                    start_date: date.format('MM-DD-YYYY HH:mm:ss')
-                                };
-                            }
-                            return sub;
-                        });
-                        return {
-                            ...section,
-                            subsections: updatedSubsections
-                        };
-                    }
-                    return section;
-                });
-                return updatedSections;
-            })
-        }
-    };
-
-    const handleEndDateChange = (date) => {
-        if (date) {
-            setCreateCourseSectionsList(prevSections => {
-                const updatedSections = prevSections.map(section => {
-                    if (section.subsections) {
-                        const updatedSubsections = section.subsections.map(sub => {
-                            if (sub.id === subsection.id) {
-                                return {
-                                    ...sub,
-                                    end_date: date.format('MM-DD-YYYY HH:mm:ss')
-                                };
-                            }
-                            return sub;
-                        });
-                        return {
-                            ...section,
-                            subsections: updatedSubsections
-                        };
-                    }
-                    return section;
-                });
-                return updatedSections;
-            })
-        }
-    };
-
     const renderQuestionsForPage = () => {
         const startIdx = (currentPage - 1) * questionsPerPage;
         const endIdx = Math.min(startIdx + questionsPerPage, totalQuestions);
@@ -438,6 +385,39 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
         });
     };
 
+    const handleDateChange = (date) => {
+        setCreateCourseSectionsList(prevSections => {
+            const updatedSections = prevSections.map(section => {
+                if (section.subsections) {
+                    const updatedSubsections = section.subsections.map(sub => {
+                        if (sub.id === subsection.id) {
+                            return {
+                                ...sub,
+                                start_date: date[0].format('MM-DD-YYYY HH:mm:ss'),
+                                end_date: date[1].format('MM-DD-YYYY HH:mm:ss')
+                            };
+                        }
+                        return sub;
+                    });
+                    return {
+                        ...section,
+                        subsections: updatedSubsections
+                    };
+                }
+                return section;
+            });
+            return updatedSections;
+        })
+    }
+
+    const onChangeDate = (value) => {
+        if (value === null) {
+            handleDateChange([null, null]);
+        } else {
+            handleDateChange(value);
+        }
+    }
+
     return (
         <div className="flex flex-col mt-5 ">
             <div className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1] p-8">
@@ -446,44 +426,21 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                         <p className="text-black font-semibold text-3xl mb-5 ">{subsection.title}</p>
                     </div>
                 </div>
-                <div className='bg-white rounded-md  '>
-                    <div className='flex items-center justify-between w-full '>
-                        <div>
-                            <label className='text-sm text-gray-500' htmlFor="" >Start Date</label>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DemoContainer components={['DateTimePicker']}>
-                                    <DateTimePicker
-                                        value={dayjs(subsection?.start_date)}
-                                        onChange={handleStartDateChange}
-                                    />
-                                </DemoContainer>
-                            </LocalizationProvider>
-
-                        </div>
-                        <div>
-                            <label className='text-sm text-gray-500' htmlFor="" >End Date</label>
-                            <label className='text-sm text-gray-500' htmlFor="" >Start Date</label>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DemoContainer components={['DateTimePicker']}>
-                                    <DateTimePicker
-                                        value={dayjs(subsection?.end_date)}
-                                        onChange={handleEndDateChange}
-                                    />
-                                </DemoContainer>
-                            </LocalizationProvider>
-                        </div>
-                    </div>
+                <div className='bg-white rounded-md space-y-2  '>
+                    <label className='text-sm text-gray-500' htmlFor="" >Questionnaire Date</label>
+                    <RangePicker
+                        className='w-full py-4'
+                        showTime={{
+                            format: 'HH:mm',
+                        }}
+                        format="YYYY-MM-DD HH:mm"
+                        defaultValue={subsection.start_date ? [dayjs(subsection.start_date), dayjs(subsection.end_date)] : null}
+                        onChange={onChangeDate}
+                    />
                     <div className='mt-7'>
                         <label className='text-sm text-gray-500 mt-7 ' htmlFor="" >Description</label>
                         <div className='flex w-full mt-2'>
-                            <TextField
-                                className='mt-5 flex w-full bg-gray-50'
-                                id="outlined-basic"
-                                label=''
-                                value={description}
-                                variant="outlined"
-                                onChange={(e) => handleChangeDescription(e.target.value)}
-                            />
+                            <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3' placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} onBlur={(e) => handleChangeDescription(e.target.value)} />
                         </div>
                     </div>
                 </div>

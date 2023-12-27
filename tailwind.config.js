@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 /* eslint-disable max-len */
 module.exports = {
+
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
     "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}",
