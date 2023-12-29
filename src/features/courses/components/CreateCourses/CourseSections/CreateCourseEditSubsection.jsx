@@ -8,6 +8,7 @@ import MDEditor from '@uiw/react-md-editor';
 import { UploadFiles } from './UploadFiles';
 
 import '../../../styles/antdButtonStyles.css'
+import { PonderationWarning } from './PonderationWarning';
 const { RangePicker } = DatePicker;
 
 
@@ -72,6 +73,10 @@ export const CreateCourseEditSubsection = ({
           if (type === 'evaluable') {
             subsectionCopy.activity.evaluable = newValue;
           }
+          if (type === 'ponderation') {
+            subsectionCopy.activity.ponderation = newValue;
+
+          }
           if ((subsection?.type === 'peerReview' || subsection?.type === 'forum') && type === 'end_date') {
             subsectionCopy.activity.deadline = newValue;
           }
@@ -101,9 +106,6 @@ export const CreateCourseEditSubsection = ({
     }
   };
 
-  console.log(subsection.description)
-  console.log(subsection.activity)
-
   return (
     <div className='w-[45rem]'>
       <button className='text-sm flex items-center -translate-y-5 ' onClick={() => setEditSubsectionFlag(false)}>
@@ -117,6 +119,7 @@ export const CreateCourseEditSubsection = ({
           subsection={subsection}
           setCreateCourseSectionsList={setCreateCourseSectionsList}
           createCourseSectionsList={createCourseSectionsList}
+          sectionId={sectionId}
         />
       ) : (
         <>
@@ -163,20 +166,31 @@ export const CreateCourseEditSubsection = ({
               </div>
 
             </div>
-            <div className='mt-7 flex items-center'>
-              <label className='text-sm text-gray-500 mr-3 block' htmlFor=''>Evaluable * </label>
-              <Switch onChange={(e) => handleSubsectionChange('evaluable', e)} checked={subsection.activity?.evaluable} className='bg-gray-300' />
+            <div className='mt-7 flex items-center justify-between'>
+              <div className='flex items-center'>
+                <label className='text-sm text-gray-500 mr-3 block' htmlFor=''>Evaluable * </label>
+                <Switch onChange={(e) => handleSubsectionChange('evaluable', e)} checked={subsection.activity?.evaluable} className='bg-gray-300' />
+              </div>
+
               <Divider type="vertical" />
-              <label className='text-sm text-gray-500 mr-3' htmlFor=''>Ponderation *</label>
-              <InputNumber
-                disabled={!subsection.activity?.evaluable}
-                className=''
-                defaultValue={100}
-                min={0}
-                max={100}
-                formatter={(value) => `${value}%`}
-                parser={(value) => value.replace('%', '')}
-              />
+              <div className='flex items-center gap-4'>
+                {
+                  subsection.activity?.evaluable && (
+                    <PonderationWarning createCourseSectionsList={createCourseSectionsList} sectionID={sectionId} />
+                  )
+                }
+                <label className='text-sm text-gray-500' htmlFor=''>Ponderation *</label>
+                <InputNumber
+                  disabled={!subsection.activity?.evaluable}
+                  defaultValue={0}
+                  value={subsection.activity?.evaluable ? subsection.activity?.ponderation : 0}
+                  onChange={(e) => handleSubsectionChange('ponderation', e)}
+                  min={0}
+                  max={100}
+                  formatter={(value) => `${value}%`}
+                  parser={(value) => value.replace('%', '')}
+                />
+              </div>
 
             </div>
             <div className='mt-7 space-y-2'>

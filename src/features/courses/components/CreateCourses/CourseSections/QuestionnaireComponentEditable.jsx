@@ -6,10 +6,11 @@ import { styled } from '@mui/material/styles';
 import RadioGroup, { useRadioGroup } from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
 import Radio from '@mui/material/Radio';
-import { message, DatePicker, Input } from 'antd';
+import { message, DatePicker, Input, Switch, Divider, InputNumber } from 'antd';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { PonderationWarning } from './PonderationWarning';
 
 
 const { RangePicker } = DatePicker;
@@ -34,7 +35,7 @@ const item = {
 
 
 
-export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSectionsList, createCourseSectionsList }) => {
+export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSectionsList, createCourseSectionsList, sectionId }) => {
     const questionsPerPage = 3;
     const [currentPage, setCurrentPage] = useState(1);
     const [selectorValue, setSelectorValue] = useState('open-ended-short')
@@ -385,12 +386,73 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
         });
     };
 
+    const handleSwitchChange = (checked) => {
+        setCreateCourseSectionsList(prevSections => {
+            const updatedSections = prevSections.map(section => {
+                if (section.subsections) {
+                    const updatedSubsections = section.subsections.map(sub => {
+                        if (sub.id === subsection.id) {
+                            return {
+                                ...sub,
+                                activity: {
+                                    ...sub.activity,
+                                    evaluable: checked
+                                }
+                            };
+                        }
+                        return sub;
+                    });
+                    return {
+                        ...section,
+                        subsections: updatedSubsections
+                    };
+                }
+                return section;
+            });
+            return updatedSections;
+        })
+    }
+
+    const handlePonderationChange = (value) => {
+        setCreateCourseSectionsList(prevSections => {
+            const updatedSections = prevSections.map(section => {
+                if (section.subsections) {
+                    const updatedSubsections = section.subsections.map(sub => {
+                        if (sub.id === subsection.id) {
+                            return {
+                                ...sub,
+                                activity: {
+                                    ...sub.activity,
+                                    ponderation: value
+                                }
+                            };
+                        }
+                        return sub;
+                    });
+                    return {
+                        ...section,
+                        subsections: updatedSubsections
+                    };
+                }
+                return section;
+            });
+            return updatedSections;
+        })
+    }
+
     const handleDateChange = (date) => {
         setCreateCourseSectionsList(prevSections => {
             const updatedSections = prevSections.map(section => {
                 if (section.subsections) {
                     const updatedSubsections = section.subsections.map(sub => {
                         if (sub.id === subsection.id) {
+                            if (date[0] === null && date[1] === null) {
+                                return {
+                                    ...sub,
+                                    start_date: null,
+                                    end_date: null
+                                };
+                            }
                             return {
                                 ...sub,
                                 start_date: date[0].format('MM-DD-YYYY HH:mm:ss'),
@@ -426,7 +488,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                         <p className="text-black font-semibold text-3xl mb-5 ">{subsection.title}</p>
                     </div>
                 </div>
-                <div className='bg-white rounded-md space-y-2  '>
+                <div className='bg-white rounded-md space-y-4  '>
                     <label className='text-sm text-gray-500' htmlFor="" >Questionnaire Date</label>
                     <RangePicker
                         className='w-full py-4'
@@ -434,9 +496,36 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                             format: 'HH:mm',
                         }}
                         format="YYYY-MM-DD HH:mm"
-                        defaultValue={subsection.start_date ? [dayjs(subsection.start_date), dayjs(subsection.end_date)] : null}
+                        value={subsection.start_date ? [dayjs(subsection.start_date), dayjs(subsection.end_date)] : null}
                         onChange={onChangeDate}
                     />
+                    <div className='flex items-center justify-between'>
+                        <div className='flex items-center'>
+                            <label className='text-sm text-gray-500 mr-3 block' htmlFor=''>Evaluable * </label>
+                            <Switch checked={subsection.activity?.evaluable} onChange={(e) => handleSwitchChange(e)} className='bg-gray-300' />
+                        </div>
+
+                        <Divider type="vertical" />
+                        <div className='flex items-center gap-4'>
+                            {
+                                subsection.activity?.evaluable && (
+                                    <PonderationWarning createCourseSectionsList={createCourseSectionsList} sectionID={sectionId} />
+                                )
+                            }
+                            <label className='text-sm text-gray-500' htmlFor=''>Ponderation *</label>
+                            <InputNumber
+                                disabled={!subsection.activity?.evaluable}
+                                defaultValue={0}
+                                onChange={(e) => handlePonderationChange(e)}
+                                value={subsection.activity?.evaluable ? subsection.activity?.ponderation : 0}
+                                min={0}
+                                max={100}
+                                formatter={(value) => `${value}%`}
+                                parser={(value) => value.replace('%', '')}
+                            />
+                        </div>
+
+                    </div>
                     <div className='mt-7'>
                         <label className='text-sm text-gray-500 mt-7 ' htmlFor="" >Description</label>
                         <div className='flex w-full mt-2'>

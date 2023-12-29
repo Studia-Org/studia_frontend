@@ -2,6 +2,7 @@ import React from "react";
 import { FiChevronRight, FiCornerDownLeft } from "react-icons/fi";
 
 export const ForumClickable = ({ posts, setForumFlag }) => {
+  console.log(posts);
   function renderPostsLogic(posts) {
     if (posts.length === 1) {
       return renderPostsInside(posts[0]);

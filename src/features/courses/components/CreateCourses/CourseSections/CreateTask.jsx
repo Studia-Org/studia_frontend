@@ -1,29 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import TextField from '@mui/material/TextField';
 import MDEditor from '@uiw/react-md-editor';
 import { motion } from 'framer-motion';
-import { Switch } from 'antd';
 import dayjs from 'dayjs';
 import { UploadFiles } from './UploadFiles';
-import { message, Select, Tag } from 'antd';
+import { message, Select, Tag, Input, DatePicker } from 'antd';
 import { ACTIVITY_CATEGORIES } from '../../../../../constant';
-import { FilePond, registerPlugin } from 'react-filepond'
-import 'filepond/dist/filepond.min.css'
-import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation'
-import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
-import '../../../styles/filePondNoBoxshadow.css'
-import FilePondPluginFileEncode from 'filepond-plugin-file-encode';
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview, FilePondPluginFileEncode)
 
 export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList, setEditTaskFlag, setCreateCourseSectionsListCopy }) => {
     const [content, setContent] = useState();
     const [title, setTitle] = useState('');
-    const [switchState, setSwitchState] = useState(true);
     const [deadline, setDeadline] = useState();
     const [categories, setCategories] = useState([]);
     const [files, setFiles] = useState([]);
@@ -32,7 +20,6 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
         if (task[section.id]) {
             setContent(task[section.id].description);
             setTitle(task[section.id].title);
-            setSwitchState(task[section.id].evaluable);
             setDeadline(task[section.id].deadline);
             setCategories(task[section.id].categories);
             setFiles(task[section.id].files.map(file => (file)));
@@ -40,53 +27,78 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
     }, [])
 
     function saveChangesButton() {
+
         setCreateCourseSectionsList((prevSections) => {
+            let updatedTask;
+
             const newSections = prevSections.map((section) => {
-                if (section.id === section.id && section?.task) {
-                    const updatedTask = {
-                        id: section.task.id,
-                        title: title,
-                        description: content,
-                        deadline: deadline,
-                        evaluable: switchState,
-                        categories: categories,
-                        files: files.map(file => file),
-                        ponderation: section.task.ponderation,
-                        type: section.task.type,
-                        order: section.task.order,
-                    };
-                    setTask(prevTask => ({
+                updatedTask = {
+                    id: section.task.id,
+                    title: title,
+                    description: content,
+                    deadline: deadline,
+                    evaluable: true,
+                    categories: categories,
+                    files: files.map((file) => file),
+                    ponderation: section.task.ponderation,
+                    type: section.task.type,
+                    order: section.task.order,
+                };
+
+                if (section?.task) {
+                    setTask((prevTask) => ({
                         ...prevTask,
                         [section.id]: updatedTask,
                     }));
+
                     return {
                         ...section,
                         task: updatedTask,
                     };
                 }
                 return section;
+            });
+
+            newSections.forEach((section) => {
+                if (section.subsections && section.subsections.length > 0) {
+                    section.subsections.forEach((subsection) => {
+                        if (subsection.type === 'task') {
+                            const index = subsection.title.indexOf(':');
+                            if (index !== -1) {
+                                subsection.title = subsection.title.substring(0, index + 1) + ' ' + title;
+                            }
+                            subsection.activity = updatedTask;
+                        }
+                    });
+                }
             });
             return newSections;
         });
+
+
         setCreateCourseSectionsListCopy((prevSections) => {
+            let updatedTask;
+
             const newSections = prevSections.map((section) => {
-                if (section.id === section.id && section?.task) {
-                    const updatedTask = {
-                        id: section.task.id,
-                        title: title,
-                        description: content,
-                        deadline: deadline,
-                        evaluable: switchState,
-                        categories: categories,
-                        files: files.map(file => file),
-                        ponderation: section.task.ponderation,
-                        type: section.task.type,
-                        order: section.task.order,
-                    };
-                    setTask(prevTask => ({
+                updatedTask = {
+                    id: section.task.id,
+                    title: title,
+                    description: content,
+                    deadline: deadline,
+                    evaluable: true,
+                    categories: categories,
+                    files: files.map((file) => file),
+                    ponderation: section.task.ponderation,
+                    type: section.task.type,
+                    order: section.task.order,
+                };
+
+                if (section?.task) {
+                    setTask((prevTask) => ({
                         ...prevTask,
                         [section.id]: updatedTask,
                     }));
+
                     return {
                         ...section,
                         task: updatedTask,
@@ -94,11 +106,35 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                 }
                 return section;
             });
+
+            newSections.forEach((section) => {
+                if (section.subsections && section.subsections.length > 0) {
+                    section.subsections.forEach((subsection) => {
+                        if (subsection.type === 'task') {
+                            const index = subsection.title.indexOf(':');
+                            if (index !== -1) {
+                                subsection.title = subsection.title.substring(0, index + 1) + ' ' + title;
+                            }
+                            subsection.activity = updatedTask;
+                        }
+                    });
+                }
+            });
+            console.log('newSections', newSections)
             return newSections;
         });
         setEditTaskFlag(false);
         message.success('Task updated successfully');
     }
+
+    const handleTitleChange = (e) => {
+        const newValue = e.target.value;
+        if (newValue.includes(':')) {
+            message.error("Symbol ':' is not allowed");
+        } else {
+            setTitle(newValue);
+        }
+    };
 
     function createTaskButton() {
         try {
@@ -115,7 +151,7 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                 type: 'task',
                 files: files.map(file => file),
                 order: 5,
-                evaluable: switchState,
+                evaluable: true,
             }
             const newTask = {
                 [section.id]: activity,
@@ -185,28 +221,19 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
             <div className='mt-5'>
                 <div className='flex'>
 
-                    <div className='w-1/2 pr-2 space-y-2 mb-3 flex flex-col'>
-                        <label className='text-sm mb-2' htmlFor="" >Task title</label>
-                        <TextField className='bg-white inline-block' id="outlined-basic" value={title} onChange={(e) => setTitle(e.target.value)} variant="outlined" />
+                    <div className='w-1/2 pr-2 mb-3 flex flex-col'>
+                        <label className='text-sm mb-3' htmlFor="" >Task title</label>
+                        <Input
+                            className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3'
+                            placeholder="Title"
+                            value={title}
+                            onChange={(e) => handleTitleChange(e)}
+                        />
                     </div>
 
-                    <div className='ml-10 space-y-2 mb-3 flex flex-col justify-center'>
-                        <label className='text-sm ' htmlFor="" >Deadline</label>
-                        <div className='flex'>
-                            <div className='w-full mr-5'>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DemoContainer components={['DatePicker']}>
-                                        <DatePicker value={deadline ? dayjs(deadline) : null} onChange={(date) => {
-                                            setDeadline(dayjs(date).format('YYYY-MM-DD'));
-                                        }} className='w-full bg-white font-thin' />
-                                    </DemoContainer>
-                                </LocalizationProvider>
-                            </div>
-                        </div>
-                    </div>
-                    <div className='flex flex-col ml-10'>
-                        <label className='text-sm mb-2' htmlFor="">Evaluable</label>
-                        <Switch className='shadow-md' checked={switchState} onChange={setSwitchState} />
+                    <div className='ml-10  mb-3 flex flex-col justify-center'>
+                        <label className='text-sm mb-3' htmlFor="" >Deadline</label>
+                        <DatePicker className='py-3' showTime onOk={(date) => { setDeadline(dayjs(date).format('YYYY-MM-DD HH:mm:ss')) }} value={deadline ? dayjs(deadline) : null} />
                     </div>
                 </div>
                 <div>
