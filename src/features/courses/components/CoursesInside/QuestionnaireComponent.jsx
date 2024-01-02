@@ -18,7 +18,6 @@ import { NavigationButtons } from './Questionnaire/NavigationsButons';
 
 export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, enableEdit, setEnableEdit, courseSubsection, setCourseSubsectionQuestionnaire }) => {
   const { user } = useAuthContext();
-  const [loading, setLoading] = useState(false);
   const [groupValues, setGroupValues] = useState({});
   const questionnaireAnswerData = answers.filter((answer) => answer.questionnaire.id === questionnaire.id);
   const [completed, setCompleted] = useState(questionnaireAnswerData.length > 0);
