@@ -8,6 +8,7 @@ export async function fetchQuestionnaireTimeByCourse({ courseId, userId = null }
             `populate[sections][populate][subsections][populate][questionnaire][populate][user_response_questionnaires][fields][0]=timeToComplete&` +
             `populate[sections][populate][subsections][populate][questionnaire][populate][user_response_questionnaires][populate][user][fields][0]=id`);
         const data = await response.json();
+        console.log(data);
         let totalTime = 0;
         let totalUserTime = 0;
         let totalUserQuestionnaire = 0;
@@ -15,7 +16,6 @@ export async function fetchQuestionnaireTimeByCourse({ courseId, userId = null }
         const sections = data.data.attributes.sections;
         sections.data.forEach(section => {
             section.attributes.subsections.data.forEach(subsection => {
-                console.log(subsection);
                 if (subsection === null) return;
                 if (subsection.attributes.questionnaire === null ||
                     subsection.attributes.questionnaire.data === null) return;
@@ -40,7 +40,6 @@ export async function fetchQuestionnaireTimeByCourse({ courseId, userId = null }
         const tiempoPromedioFormateado = format(tiempoPromedio);
         const tiempoUsuario = totalUserTime / totalUserQuestionnaire;
         const tiempoUsuarioFormateado = format(tiempoUsuario);
-        console.log({ tiempoPromedio, tiempoPromedioFormateado, tiempoUsuario, tiempoUsuarioFormateado, totalQuestionnaire });
         return { tiempoPromedio, tiempoPromedioFormateado, tiempoUsuario, tiempoUsuarioFormateado, totalQuestionnaire };
     }
     catch (error) {

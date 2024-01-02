@@ -28,9 +28,6 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
   const { minutes, seconds, stopTimer } = useTimer({ testCompleted: questionnaireAnswerData.length > 0 });
   const [editedQuestions, setEditedQuestions] = useState({});
 
-  console.log(questionnaire)
-
-
   const handleInputChange = (question, absoluteIndex) => {
     setEditedQuestions((prev) => ({ ...prev, [absoluteIndex]: { question: question.question, options: question.options } }));
   };
@@ -136,6 +133,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
           timeToComplete: timeToComplete
         };
 
+
         const response = await fetch(`${API}/user-response-questionnaires`, {
           method: 'POST',
           headers: {
@@ -151,6 +149,11 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
               { id: subsectionID }
             ]
           };
+          const response3 = await fetch(`${API}/questionnaires/${questionnaire.id}`, {
+            method: 'PUT',
+
+
+          });
           const response2 = await fetch(`${API}/users/${user.id}`, {
             method: 'PUT',
             headers: {
@@ -163,7 +166,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
           if (response2.ok) {
             Swal.fire(
               'Completed!',
-              'The questionnaire has been completed, refresh the page to see your results',
+              'The questionnaire has been completed',
               'success'
             ).then(() => {
               window.location.reload();
@@ -226,7 +229,6 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
     const startIdx = (currentPage - 1) * questionsPerPage;
     const endIdx = Math.min(startIdx + questionsPerPage, totalQuestions);
     const questionsForPage = questionnaire.attributes.Options.questionnaire.questions.slice(startIdx, endIdx);
-    console.log(questionsForPage);
     return questionsForPage
       .filter((question) => question !== undefined && question !== null)
       .map((question, index) => {
@@ -261,7 +263,6 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
                 :
                 <p className="font-medium">{question.question}</p>
             }
-
 
             {Array.isArray(question.options) ? (
               user.role_str === "student" ?
@@ -367,7 +368,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
       >
         <div className="space-y-5 mt-5 ">{renderQuestionsForPage()}</div>
         {
-          (enableEdit === true && user.role_str !== 'student' && (totalPages === 0 || currentPage === totalPages)) && (
+          (enableEdit === true && user?.role_str !== 'student' && (totalPages === 0 || currentPage === totalPages)) && (
             <AddQuestionButton setCourseSubsectionQuestionnaire={setCourseSubsectionQuestionnaire} />
           )
         }

@@ -100,7 +100,7 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
         <div className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1]">
             <div className="my-7 mx-7 flex w-full">
                 <div className='w-3/4'>
-                    <div className='flex items-center '>
+                    <div className='flex items-center gap-2  flex-wrap'>
                         {
                             enableEdit ?
                                 <input type="text" value={titleEdit} className=' font-semibold text-3xl w-full' onChange={(e) => setTitleEdit(e.target.value)} />
