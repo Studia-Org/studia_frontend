@@ -1,7 +1,3 @@
-import React from "react";
-
-
-
 import Timeline, {
   DateHeader,
   TimelineHeaders,
@@ -10,7 +6,7 @@ import Timeline, {
 } from "react-calendar-timeline";
 import "react-calendar-timeline/lib/Timeline.css";
 import '../styles/timelineStyles.css'
-
+import { useEffect, useRef, useState } from "react";
 
 
 const keys = {
@@ -27,6 +23,7 @@ const keys = {
 };
 
 const TimelineComponent = ({ groups, timelineItems, createCourseFlag }) => {
+
   let alturaElemento = (5 * groups.length) + 5
   const lineHeight = createCourseFlag ? 60 : 153;
   const itemHeightRatio = createCourseFlag ? 0.8 : 0.70;
@@ -34,8 +31,46 @@ const TimelineComponent = ({ groups, timelineItems, createCourseFlag }) => {
   const today = new Date();
   const startOfWeek = new Date(today);
   startOfWeek.setDate(today.getDate() - today.getDay());
-  const endOfWeek = new Date(today);
-  endOfWeek.setDate(today.getDate() - today.getDay() + 9);
+
+
+  const [endOfWeek, setEndOfWeek] = useState(new Date());
+  const timelineContainer = useRef();
+  const updateEndOfWeek = () => {
+    const today = new Date();
+
+    if (timelineContainer.current === null || timelineContainer.current === undefined) return;
+
+    const screenTimeline = timelineContainer?.current.clientWidth;
+    let dayOffset = 7;
+    if (screenTimeline > 900) {
+      dayOffset = 7;
+    }
+    else if (screenTimeline > 700 && screenTimeline < 900) {
+      dayOffset = 5;
+    }
+    else if (screenTimeline > 500) {
+      dayOffset = 4;
+    }
+    else if (screenTimeline >= 400) {
+      dayOffset = 3;
+    }
+    else if (screenTimeline < 300) dayOffset = 1;
+    else dayOffset = 2;
+    const newEndOfWeek = new Date(today);
+    newEndOfWeek.setDate(today.getDate() - today.getDay() + dayOffset);
+
+    setEndOfWeek(newEndOfWeek);
+  };
+
+  useEffect(() => {
+    updateEndOfWeek();
+    window.addEventListener('resize', updateEndOfWeek);
+    return () => {
+      window.removeEventListener('resize', updateEndOfWeek);
+    };
+  }, []);
+
+
 
   const itemRenderer = ({
     item,
@@ -56,7 +91,7 @@ const TimelineComponent = ({ groups, timelineItems, createCourseFlag }) => {
     } else if (item.fase.toLowerCase() === 'forethought') {
       colorStyle = { backgroundColor: '#166534' }
     }
-
+    else colorStyle = { backgroundColor: '#3573f9' }
     return (
       <div className="pt-70">
         <div
@@ -104,6 +139,7 @@ const TimelineComponent = ({ groups, timelineItems, createCourseFlag }) => {
 
   function TimelineComponentStructure() {
     return (
+
       <Timeline
         groups={groups}
         items={timelineItems}
@@ -118,7 +154,7 @@ const TimelineComponent = ({ groups, timelineItems, createCourseFlag }) => {
         itemHeightRatio={itemHeightRatio}
         canMove={false}
         canChangeGroup={false}
-        canResize={false}
+        canResize={true}
         sidebarWidth={0}
         itemRenderer={itemRenderer}
       >
@@ -170,16 +206,24 @@ const TimelineComponent = ({ groups, timelineItems, createCourseFlag }) => {
           ) : null}
         </TimelineMarkers>
       </Timeline>
+
     )
   }
 
   return (
     createCourseFlag ?
-      <div style={{ height: alturaElemento + 'rem' }}>
+
+      <main ref={timelineContainer} style={{ height: alturaElemento + 'rem' }}>
         <TimelineComponentStructure />
-      </div> :
-      <TimelineComponentStructure />
-  );
+      </main>
+
+      :
+
+      <main ref={timelineContainer} style={{ height: "100%" }}>
+        <TimelineComponentStructure />
+      </main>
+
+  )
 };
 
 export default TimelineComponent;
