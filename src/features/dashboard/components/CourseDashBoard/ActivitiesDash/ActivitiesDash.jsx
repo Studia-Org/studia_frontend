@@ -2,31 +2,33 @@ import { useState, useEffect } from "react";
 import { GenerateChartQualifitation } from "../../../utils/BarChartQualification";
 import { MoonLoader } from "react-spinners";
 import { useAuthContext } from "../../../../../context/AuthContext";
-import { fetchAverageCourse } from "../../../../../fetches/fetchAverageCourse";
-import { fetchAverageSubSectionMark } from "../../../../../fetches/fetchAvegareSubsectionsMark";
 import { PieChart } from '@mui/x-charts/PieChart';
 import ReactApexChart from 'react-apexcharts'
 import { useNavigate } from "react-router-dom";
+import { fetchAverageCourse } from "../../../../../fetches/fetchAverageCourse";
+import { fetchNumbersOfPosts } from "../../../../../fetches/fetchNumbersOfPosts";
 import { fetchQuestionnaireTimeByCourse } from "../../../../../fetches/fetchQuestionnaireTimeByCourse";
 
 export function ActivitiesDash({ courseInformation, styles, courseId }) {
-    const [selectedCourse, setSelectedCourse] = useState("Section");
+
     const [loading, setLoading] = useState(true);
     const [averageQualification, setAverageQualification] = useState(0);
     const [qualification, setQualification] = useState(0);
     const [totalQualifications, setTotalQualifications] = useState();
     const [questionnaireTime, setQuestionnaireTime] = useState([{}]);
+    const [posts, setPosts] = useState({});
     const { user } = useAuthContext();
     const navigate = useNavigate();
+
     useEffect(() => {
         async function getAverageAndQualification() {
             const userId = user.id
             setLoading(true)
-            const { averageMainActivity, averageMainActivityUser, totalQualifications } =
-                await fetchAverageCourse({ courseId, userId })
+
+            const { averageMainActivity, averageMainActivityUser, totalQualifications } = await fetchAverageCourse({ courseId, userId })
+
             setAverageQualification(averageMainActivity)
             setQualification(averageMainActivityUser)
-
 
             let { tiempoPromedio, tiempoPromedioFormateado, tiempoUsuario, tiempoUsuarioFormateado, totalQuestionnaire } =
                 await fetchQuestionnaireTimeByCourse({ courseId, userId })
@@ -45,6 +47,9 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
             }
 
             setTotalQualifications(dict)
+
+            const { totalPosts, postsUsuario, totalRespuestas, respuestasUsuario } = await fetchNumbersOfPosts({ courseId, userId })
+            setPosts({ totalPosts, postsUsuario, totalRespuestas, respuestasUsuario })
             setLoading(false)
 
         }
@@ -52,19 +57,10 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
 
     }, [courseId])
 
-
-    useEffect(() => {
-        if (selectedCourse === "Subsection") return
-        const sectionId = selectedCourse.id
-        const userId = user.id
-        fetchAverageSubSectionMark({ courseId, userId, sectionId })
-
-    }, [selectedCourse])
-
     function ActivityInformation() {
         return (
             !loading ?
-                <div>
+                <>
                     <p className="text-2xl font-semibold">Course information</p>
                     <div className="flex flex-row justify-around h-full pb-2">
                         <div className="flex flex-col justify-evenly w-fit">
@@ -77,15 +73,14 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
                             averageQualification={averageQualification}
                             qualification={qualification} />
                     </div>
-                </div>
+                </>
                 :
                 <MoonLoader className="self-center" color="#363cd6" size={80} />
         )
     }
-
     function generatePieChart() {
         return (
-            <div>
+            <>
                 <p className="text-2xl font-semibold pb-4" >Qualifications distribution</p>
                 <PieChart
                     series={[{
@@ -95,25 +90,24 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
                     }]}
                     height={200}
                 />
-            </div>
+            </>
         )
     }
-    function generateBarChart() {
+    function QuestionnarieTime() {
         return (
-            <div>
+            <>
                 <p className="text-2xl font-semibold pb-2">Questionnarie time (min)</p>
                 <ReactApexChart
                     options={{
-                        chart: {
-                            type: 'bar',
-                            height: 'auto'
-                        },
+
+                        colors: ['#6E66D6'],
                         plotOptions: {
                             bar: {
                                 borderRadius: 5,
                                 dataLabels: {
-                                    position: 'top', // top, center, bottom
+                                    position: 'top',
                                 },
+                                columnWidth: 100 + (60 / (1 + 30 * Math.exp(2 / 3)))
                             }
                         },
                         dataLabels: {
@@ -127,6 +121,7 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
                                 colors: ["#304758"]
                             }
                         },
+
                         stroke: {
                             show: true,
                             width: 1,
@@ -136,7 +131,8 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
                             categories: ["Average time spent", "Your time spent"],
                         },
                         fill: {
-                            opacity: 1
+                            opacity: 1,
+
                         },
                         tooltip: {
                             y: {
@@ -144,9 +140,11 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
                                     return val + " min"
                                 }
                             }
+                        },
+                        yaxis: {
+                            max: Math.max(...questionnaireTime) + Math.max(...questionnaireTime) * 0.1,
                         }
-                    }
-                    }
+                    }}
                     series={[
                         {
                             name: 'Time',
@@ -154,11 +152,94 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
                         }
 
 
-                    ]} type="bar" height={'100%'} />
-            </div>
+                    ]}
+                    type="bar"
+                    height={'90%'} />
+            </>
         )
     }
+    function PostChart() {
+        return (
+            <>
+                <p className="text-2xl font-semibold pb-2">Participation in forums</p>
+                <ReactApexChart
+                    options={{
+                        chart: {
+                            type: 'bar',
+                            stacked: true,
+                        },
+                        stroke: {
+                            width: 1,
+                            colors: ['#fff']
+                        },
+                        plotOptions: {
+                            bar: {
+                                horizontal: true,
+                                dataLabels: {
+                                    total: {
+                                        enabled: true,
+                                        offsetX: 0,
+                                        style: {
+                                            fontSize: '13px',
+                                            fontWeight: 900
+                                        }
+                                    }
+                                }
+                            },
+                        },
+                        responsive: [{
+                            breakpoint: 480,
+                            options: {
+                                legend: {
+                                    position: 'bottom',
+                                    offsetX: -10,
+                                    offsetY: 0
+                                }
+                            }
+                        }],
+                        xaxis: {
+                            categories: ['Posts forum', 'Replies forum']
+                        },
+                        fill: {
+                            opacity: 1
+                        },
+                        colors: ['#008ffbd9', '#60009B', '#00e396d9', '#B800D8'],
+                        yaxis: {
+                            title: {
+                                text: undefined
+                            },
+                        },
+                        legend: {
+                            position: 'top',
+                            horizontalAlign: 'left',
+                            offsetX: 40
+                        }
 
+                    }}
+                    type="bar"
+                    height={'90%'}
+                    series={[
+                        {
+                            name: 'Total posts',
+                            data: [posts.totalPosts, 0]
+                        },
+                        {
+                            name: 'Total answers',
+                            data: [0, posts.totalRespuestas]
+                        },
+                        {
+                            name: 'Your posts',
+                            data: [posts.postsUsuario, 0]
+                        },
+                        {
+                            name: 'Your answers',
+                            data: [0, posts.respuestasUsuario]
+                        }
+                    ]}
+                />
+            </>
+        )
+    }
     return (
         <section className={`flex flex-col p-2 lg:p-5 rounded-lg  ${styles}`}>
             {
@@ -167,27 +248,33 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
                         <MoonLoader color="#363cd6" size={80} />
                     </div>
                     :
-                    <>
-                        <button className='text-sm flex -mt-4 pb-2  w-fit hover:-translate-x-2 duration-150 '
+                    <main className="h-full mb-10">
+                        <button className='text-sm flex md:-mt-4 pb-2  w-fit hover:-translate-x-2 duration-150 '
                             onClick={() => navigate(`/app/dashboard`)}>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                                 <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
                             </svg>
                             <p className='ml-1'>Go back to dashboard</p>
                         </button>
-                        <div className="grid grid-cols-[repeat(auto-fit,minmax(500px,1fr))] gap-6">
-                            <div className="rounded-lg bg-white p-5  min-h-[50%] shadow-lg">
-
+                        <div className="grid gap-6 h-full grid-cols-1 md:grid-cols-[repeat(auto-fit,minmax(30vw,1fr))] ">
+                            <section className="rounded-lg bg-white p-5 overflow-x-auto overflow-y-clip max-w-[calc(100vw-2rem)]  
+                            shadow-lg">
                                 <ActivityInformation />
-                            </div>
-                            <div className="rounded-lg bg-white p-5  min-h-[50%] shadow-lg">
+                            </section>
+                            <section className="rounded-lg bg-white p-5 overflow-x-auto overflow-y-clip max-w-[calc(100vw-2rem)] 
+                              shadow-lg">
                                 {totalQualifications && generatePieChart()}
-                            </div>
-                            <div className="rounded-lg bg-white p-5  min-h-[50%] shadow-lg">
-                                {questionnaireTime && generateBarChart()}
-                            </div>
+                            </section>
+                            <section className="rounded-lg max-h-[40dvh] bg-white p-5 overflow-x-auto overflow-y-clip max-w-[calc(100vw-2rem)] 
+                            shadow-lg">
+                                {questionnaireTime && QuestionnarieTime()}
+                            </section>
+                            <section className="rounded-lg max-h-[40dvh] bg-white overflow-x-auto p-5 overflow-y-clip max-w-[calc(100vw-2rem)] 
+                             shadow-lg">
+                                {posts && <PostChart />}
+                            </section>
                         </div>
-                    </>
+                    </main>
             }
 
         </section>
