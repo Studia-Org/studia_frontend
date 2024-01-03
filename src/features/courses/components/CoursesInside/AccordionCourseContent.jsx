@@ -116,11 +116,16 @@ export const AccordionCourseContent = ({ courseContentInformation, setCourseSubs
     );
     const dateToStart = differenceInDays(parseISO(subsection.attributes.start_date), new Date());
 
-    const contentOpenSubsection = (
-      <div>
-        <p>This subsection will open in  <strong> {dateToStart} days </strong> </p>
-      </div>
-    )
+    const contentOpenSubsection =
+      dateToStart > 0 ? (
+        <div>
+          <p>This subsection will open in  <strong> {dateToStart} days </strong> </p>
+        </div>
+      ) : (
+        <div>
+          <p>This subsection will open <strong> soon </strong> </p>
+        </div>
+      )
 
     if (user?.role_str === 'professor' || user?.role_str === 'admin') {
       return (

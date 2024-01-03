@@ -77,8 +77,8 @@ export const CreateCourseEditSubsection = ({
             subsectionCopy.activity.ponderation = newValue;
 
           }
-          if ((subsection?.type === 'peerReview' || subsection?.type === 'forum') && type === 'end_date') {
-            subsectionCopy.activity.deadline = newValue;
+          if ((subsection?.type === 'peerReview' || subsection?.type === 'forum') && type === 'date') {
+            subsectionCopy.activity.deadline = newValue[1];
           }
           sectionCopy.subsections = sectionCopy.subsections.map((sub) => (sub.id === subsection.id ? subsectionCopy : sub));
 

@@ -170,7 +170,7 @@ const CoursesHome = () => {
     }
 
     return (
-      <div className='relative rounded-2xl border flex p-3 min-w-[450px] md:w-[28rem] lg:w-[30rem] min-h-[5rem]'>
+      <div className='relative rounded-2xl border flex p-3 min-w-[350px] md:w-[22rem] lg:w-[24rem] min-h-[5rem]'>
         <div className="w-2 rounded-md mr-3" style={colorStyle}></div>
         <div className='flex-col flex justify-center w-full max-w-[calc(100%-6rem)]'>
           <div className='flex w-full'>
@@ -344,7 +344,7 @@ const CoursesHome = () => {
                       {
                         dailyTasks.length > 0 ?
 
-                          <div className='flex flex-col space-y-5 mb-10'>
+                          <div className='flex flex-col space-y-5 mb-10 max-h-[20rem] overflow-y-auto'>
                             {dailyTasks.map(RenderDailyTasks)}
                           </div>
                           :

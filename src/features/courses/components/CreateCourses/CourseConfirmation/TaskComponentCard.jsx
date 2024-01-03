@@ -89,9 +89,9 @@ export const TaskComponentCard = ({ task, setVisibilityTask, context, courseId, 
         return (
             <button onClick={() => handleClickButton()} className='relative py-5 mb-5 bg-white rounded-md p-5 w-full text-left shadow-md flex items-center'>
                 <div className='absolute bg-indigo-500 h-full left-0 top-0 w-[5rem] rounded-l-md flex items-center justify-center'>
-                    {svgType(task.type)}
+                    {svgType(task?.type)}
                 </div>
-                <p className='font-medium text-xl ml-20'>{handleTaskTitle(task.title)}</p>
+                <p className='font-medium text-xl ml-20'>{handleTaskTitle(task?.title)}</p>
             </button>
         )
     }

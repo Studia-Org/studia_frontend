@@ -183,7 +183,7 @@ export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit, se
 
 export const SequenceDevelopEducation1 = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask }) => {
     const sequence = [
-        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: null },
+        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
         { title: 'Forum debate', iconColor: '#15803d', iconPath: svgSwitcher('forum'), fase: 'forethought', questionnaireData: null, type: 'forum', activityData: ForumData },
         { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
         { title: 'First task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
