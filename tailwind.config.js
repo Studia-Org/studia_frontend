@@ -119,12 +119,13 @@ module.exports = {
 
       lg: "1024px",
       // => @media (min-width: 1024px) { ... }
-
+      "2lg": "1212px",
       xl: "1280px",
       // => @media (min-width: 1280px) { ... }
       "2xl": "2000px",
       "1.5xl": "1440px",
 
+      "flexible": "1532px",
       "grid-home": "1340px",
       // => @media (min-width: 1280px) { ... }
     },

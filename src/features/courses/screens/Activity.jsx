@@ -41,6 +41,7 @@ const Activity = () => {
             data: data.data
           }
         }
+        console.log(qualificationData)
         setUserQualification({ activity: qualificationData })
       }
 
@@ -49,7 +50,6 @@ const Activity = () => {
       console.error(error);
     }
   };
-  console.log(userQualification);
 
   function selectTypeOfActivity() {
     const type = userQualification.activity.activity.data.attributes.type;
