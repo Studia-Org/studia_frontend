@@ -2,7 +2,7 @@ import { useEffect, useState, React, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { API, BEARER } from "../../../constant";
 import { getToken } from "../../../helpers";
-import { Tabs, Popconfirm, Badge } from "antd";
+import { Tabs, Popconfirm, Badge, FloatButton } from "antd";
 import { SwitchEdit } from "../components/CoursesInside/SwitchEdit";
 import { FiChevronRight } from "react-icons/fi";
 import { ProfessorData } from "../components/CoursesInside/ProfessorData";
@@ -14,6 +14,7 @@ import { QuestionnaireComponent } from '../components/CoursesInside/Questionnair
 import { CourseParticipants, CourseContent, CourseFiles } from "../components/CoursesInside/TabComponents";
 import { useAuthContext } from "../../../context/AuthContext";
 import { EditSection } from "../components/CoursesInside/EditSection";
+import FloatingButtonNavigation from "../components/CoursesInside/FloatingButtonNavigation";
 
 const CourseInside = () => {
   const inputRefLandscape = useRef(null);
@@ -38,6 +39,7 @@ const CourseInside = () => {
   const [professor, setProfessor] = useState([]);
   let { courseId } = useParams();
   const { user } = useAuthContext()
+  const whisper = useRef(null);
 
   function handleLandscapePhotoChange(event) {
     setBackgroundPhotoSubsection(event.target.files[0]);
@@ -200,6 +202,20 @@ const CourseInside = () => {
     fetchUserResponsesData();
     fetchCourseInformation();
     fetchPostData();
+
+
+  }, []);
+
+  useEffect(() => {
+    const handleResize = (e) => {
+      whisper.current?.close();
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   const items = [
@@ -220,11 +236,10 @@ const CourseInside = () => {
     }
   ];
 
-
   return (
     <>
-      <div className="container-fluid min-h-screen w-screen rounded-tl-3xl bg-[#e7eaf886] flex flex-wrap flex-col-reverse md:flex-row  ">
-        <div className="flex-1 min-w-0 sm:w-auto mt-3 ml-8 mr-8 basis-[600px]">
+      <div className="container-fluid min-h-screen w-screen max-w-full rounded-tl-3xl bg-[#e7eaf886] flex flex-wrap flex-col-reverse md:flex-row  ">
+        <div id="flex_wrap" className="flex-1 max-w-full min-w-0 sm:w-auto mt-3 md:ml-8 md:mr-8 p-5 md:p-0 md:basis-[600px]">
           {editSectionFlag && sectionToEdit !== null ? (
             <EditSection setEditSectionFlag={setEditSectionFlag} sectionToEdit={sectionToEdit} setCourseContentInformation={setCourseContentInformation} setSectionToEdit={setSectionToEdit} />
           ) : !forumFlag ? (
@@ -278,7 +293,7 @@ const CourseInside = () => {
                         <img
                           src={courseSubsection?.attributes?.landscape_photo?.data?.attributes?.url}
                           alt=""
-                          className="h-[30rem] w-full object-cover rounded-md shadow-md mt-5"
+                          className="h-auto md:h-[30rem] w-[calc(100%-1.25rem)] md:w-full object-cover rounded-md shadow-md mt-5"
                         />
                       </>
                       : null
@@ -310,7 +325,7 @@ const CourseInside = () => {
                 />
               ) : courseSection && courseContentInformation.length > 0 && (
                 <>
-                  <div className="flex items-center  mt-5">
+                  <div className="flex items-center max-w-full w-full  md:my-5">
                     {
                       enableEdit ?
                         <input
@@ -320,11 +335,12 @@ const CourseInside = () => {
                           onChange={(e) => setTitleSubsection(e.target.value)}
                           id="first-name"
                           autoComplete="given-name"
-                          className="mt-1   rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                          className="mt-1 rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm
+                           focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         />
                         :
-                        <div className="gap-3 flex items-center">
-                          <p className="text-xl font-semibold"> {courseSubsection?.attributes?.title}</p>
+                        <div className="flex items-center w-full gap-x-5 max-w-full">
+                          <p className="text-2xl font-semibold max-w-[calc(100%-140px)]"> {courseSubsection?.attributes?.title}</p>
                           <Badge color="#6366f1" count={new Date(courseSubsection?.attributes?.end_date).toDateString()} />
                         </div>
                     }
@@ -368,8 +384,9 @@ const CourseInside = () => {
                   </button> : null
                 }
 
-                <AccordionCourseContent
+                <FloatingButtonNavigation
                   {...{
+                    whisper,
                     courseContentInformation,
                     setCourseSubsection,
                     setCourseSection,
@@ -385,11 +402,32 @@ const CourseInside = () => {
                     courseSection,
                   }}
                 />
-                {
-                  allForums[0]?.attributes &&
-                  <ForumClickable posts={allForums[0].attributes.posts.data} setForumFlag={setForumFlag} />
-                }
-                {professor.attributes && <ProfessorData professor={professor} evaluatorFlag={false} />}
+                
+                <div className="flexible:flex xl:hidden 2lg:flex hidden ">
+                  <AccordionCourseContent
+                    {...{
+                      courseContentInformation,
+                      setCourseSubsection,
+                      setCourseSection,
+                      setForumFlag,
+                      setQuestionnaireFlag,
+                      setSettingsFlag,
+                      setCourseSubsectionQuestionnaire,
+                      subsectionsCompleted,
+                      setCourseContentInformation,
+                      setEditSectionFlag,
+                      setSectionToEdit,
+                      courseSubsection,
+                      courseSection,
+                    }}
+                  />
+                </div>
+                <div className="flexible:block xl:hidden 2lg:block hidden ">
+                  {allForums[0]?.attributes &&
+                    <ForumClickable posts={allForums[0].attributes.posts.data} setForumFlag={setForumFlag} />
+                  }
+                  {professor.attributes && <ProfessorData professor={professor} evaluatorFlag={false} />}
+                </div>
               </div>
             )
         }

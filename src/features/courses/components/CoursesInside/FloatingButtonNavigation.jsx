@@ -1,7 +1,7 @@
 import React from 'react'
 import { Popover, Whisper } from 'rsuite';
 import { AccordionCourseContent } from './AccordionCourseContent';
-import { ForumClickable } from './ForumClickable';
+import { ForumClickable } from './Forum/ForumClickable';
 import { ProfessorData } from './ProfessorData';
 function FloatingButtonNavigation({ whisper, professor, courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setCourseContentInformation, setEditSectionFlag, setSectionToEdit, courseSubsection, courseSection, posts }) {
     return (
@@ -34,7 +34,7 @@ function FloatingButtonNavigation({ whisper, professor, courseContentInformation
                         />
                         <ForumClickable posts={posts} setForumFlag={setForumFlag} whisper={whisper} />
                         {
-                            professor.attributes &&
+                            professor?.attributes &&
                             <ProfessorData professor={professor} evaluatorFlag={false} whisper={whisper} />}
                     </Popover>}>
                 <div className={`bg-indigo-700 rounded-full w-[64px] h-[64px] p-[14px] cursor-pointer`}>
