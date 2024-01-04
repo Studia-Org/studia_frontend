@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import { Collapse, Button, message } from 'antd';
+import { Collapse, Button, message, Badge, Popover } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 import '../../styles/utils.css'
 import { AccordionButton, Accordion, AccordionItem, AccordionPanel } from '@chakra-ui/accordion';
 import { useAuthContext } from '../../../../context/AuthContext';
 import { getToken } from '../../../../helpers';
 import { API } from '../../../../constant';
+import { set, differenceInDays, parseISO } from 'date-fns';
 import { useParams } from 'react-router-dom';
 
 
@@ -44,17 +45,18 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
   }
 
   function selectFaseSectionContent(str) {
-    if (str === "Forethought") {
+    if (str === "forethought") {
       return (
-        <span className="  text-xs  font-medium w-3 h-3 rounded bg-green-400 text-white   ml-auto mr-5 "></span>
+        <Badge color='#15803d' count='Forethought' />
+
       );
-    } else if (str === "Performance") {
+    } else if (str === "performance") {
       return (
-        <span className="text-xs font-medium w-3 h-3 rounded bg-yellow-400 text-white  ml-auto mr-5  "></span>
+        <Badge color='#faad14' count='Performance' />
       );
-    } else if (str === "Self-reflection") {
+    } else if (str === "self-reflection") {
       return (
-        <span className="text-xs   font-medium w-3 h-3 rounded bg-red-400 text-white ml-auto mr-5 "></span>
+        <Badge color='#dc2626' count='Self-reflection' />
       );
     }
   }
@@ -114,6 +116,18 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
     const isSubsectionCompleted = subsectionsCompleted.some(
       (subsectionTemp) => subsectionTemp.id === subsection.id
     );
+    const dateToStart = differenceInDays(parseISO(subsection.attributes.start_date), new Date());
+
+    const contentOpenSubsection =
+      dateToStart > 0 ? (
+        <div>
+          <p>This subsection will open in  <strong> {dateToStart} days </strong> </p>
+        </div>
+      ) : (
+        <div>
+          <p>This subsection will open <strong> soon </strong> </p>
+        </div>
+      )
 
     if (user?.role_str === 'professor' || user?.role_str === 'admin') {
       return (
@@ -174,22 +188,25 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
               </svg>
             </span>
           ) : prevSubsectionFinished === false ? (
-            <span className="absolute flex items-center justify-center w-8 h-8 bg-white rounded-full border border-gray-300 -left-4  ring-black ">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={2}
-                stroke="currentColor"
-                className="w-4 h-4 text-gray-600"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
-                />
-              </svg>
-            </span>
+            <Popover content={contentOpenSubsection} title='Subsection is locked'>
+              <span className="absolute flex items-center justify-center w-8 h-8 bg-white rounded-full border border-gray-300 -left-4  ring-black ">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={2}
+                  stroke="currentColor"
+                  className="w-4 h-4 text-gray-600"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"
+                  />
+                </svg>
+              </span>
+            </Popover>
+
           ) : dateTemp < dateToday ? (
             <span className="absolute flex items-center justify-center w-8 h-8 bg-indigo-200 rounded-full -left-4  ring-white ">
               <svg
@@ -380,7 +397,10 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
         >
           <ol className="relative border-l border-dashed border-gray-300 ml-10 text-base">
             {section.attributes.subsections.data.map((subsection, index) => {
-              const isFirstSubsection = index === 0;
+              let isFirstSubsection = false;
+              if (sectionNumber === 1 && index === 0) {
+                isFirstSubsection = true;
+              }
               const content = RenderCourseInsideSectionContent(subsection, section.attributes.title, prevSubsectionFinished, isFirstSubsection);
               prevSubsectionFinished = subsectionsCompleted.some(subsectionTemp => subsectionTemp.id === subsection.id);
               return content;

@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { Modal } from 'rsuite';
 import { message, Button } from "antd";
-import { API } from "../../../../constant";
-import { getToken } from "../../../../helpers";
+import { API } from "../../../../../constant";
+import { getToken } from "../../../../../helpers";
 import MDEditor from '@uiw/react-md-editor';
 import { useParams } from 'react-router-dom';
 
-export const ForumAddThread = ({ onClose, user, forumID, setPosts, courseData }) => {
+export const ForumAddThread = ({ onClose, user, forumID, setAllForums, courseData }) => {
     const [title, setTitle] = useState();
     const [open, setOpen] = useState(true);
     const [loading, setLoading] = useState(false);
@@ -14,8 +14,6 @@ export const ForumAddThread = ({ onClose, user, forumID, setPosts, courseData })
     const [titleError, setTitleError] = useState(false);
     const [contentError, setContentError] = useState(false);
     const { courseId } = useParams();
-
-    console.log(courseData.students.filter(studentID => studentID !== user.id));
 
     const handleChangeTitle = (e) => {
         setTitle(e.target.value);
@@ -50,6 +48,7 @@ export const ForumAddThread = ({ onClose, user, forumID, setPosts, courseData })
                 autor: user.id,
                 forums: forumID,
             };
+
             const response = await fetch(`${API}/forum-posts`, {
                 method: 'POST',
                 headers: {
@@ -77,15 +76,20 @@ export const ForumAddThread = ({ onClose, user, forumID, setPosts, courseData })
                     }
                 }
             }
-            setPosts((prevPosts) => {
+
+            setAllForums((prevForums) => {
                 const newPost = data.data
-                const updatedPosts = [newPost, ...prevPosts];
-                updatedPosts.sort((a, b) => new Date(b.attributes.createdAt) - new Date(a.attributes.createdAt));
-                return updatedPosts;
-            });
+                const updatedForums = prevForums.map((forum) => {
+                    if (Number(forum.id) === Number(forumID)) {
+                        forum.attributes.posts.data = [newPost, ...forum.attributes.posts.data];
+                        forum.attributes.posts.data.sort((a, b) => new Date(b.attributes.createdAt) - new Date(a.attributes.createdAt));
+                    }
+                    return forum;
+                });
+                return updatedForums;
+            })
 
             const readJSON = {}
-
             courseData.students.forEach(function (student) {
                 readJSON[student] = false;
             });

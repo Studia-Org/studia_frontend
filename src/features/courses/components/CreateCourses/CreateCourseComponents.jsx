@@ -285,7 +285,7 @@ export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption, 
     } else {
       return (
         <div className='w-full mr-5'>
-          {sectionId && <TaskContent setVisibilityTask={setVisibilityTask} task={task[sectionId]} evaluator={evaluator} />}
+          {sectionId && <TaskContent setVisibilityTask={setVisibilityTask} task={selectedSubsection?.activity} evaluator={evaluator} />}
         </div>
       );
     }

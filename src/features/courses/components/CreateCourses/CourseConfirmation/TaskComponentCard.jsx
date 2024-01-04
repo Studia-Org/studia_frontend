@@ -1,16 +1,20 @@
 import React from 'react'
 import { useAuthContext } from '../../../../../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
+import { format } from 'date-fns'
 
-export const TaskComponentCard = ({ task, setVisibilityTask, context, courseId }) => {
-    console.log(task)
+export const TaskComponentCard = ({ task, setVisibilityTask, context, courseId, setForumFlag }) => {
     const deadlineOnTime = new Date(task?.attributes?.deadline) > new Date()
     const { user } = useAuthContext()
     const navigate = useNavigate()
 
     function handleClickButton() {
         if (context === 'coursesInside') {
-            navigate(`/app/courses/${courseId}/activity/${task.id}`)
+            if (task?.attributes?.type === 'forum') {
+                setForumFlag(true)
+            } else {
+                navigate(`/app/courses/${courseId}/activity/${task.id}`)
+            }
         } else {
             setVisibilityTask(true)
         }
@@ -48,30 +52,36 @@ export const TaskComponentCard = ({ task, setVisibilityTask, context, courseId }
         }
     }
 
+    function handleTaskTitle(title) {
+        switch (title) {
+            case 'task':
+                return title
+            case 'peerReview':
+                return 'Peer review'
+            case 'forum':
+                return 'Forum discussion'
+            default:
+                return title
+        }
+    }
+
     if (context === 'coursesInside') {
-        const formattedDeadline = new Date(task?.attributes.deadline);
-
-        const day = formattedDeadline.getDate().toString().padStart(2, '0');
-        const month = (formattedDeadline.getMonth() + 1).toString().padStart(2, '0');
-        const hours = formattedDeadline.getHours().toString().padStart(2, '0');
-        const minutes = formattedDeadline.getMinutes().toString().padStart(2, '0');
-
-        const formattedString = `${day}/${month} ${hours}:${minutes}`;
+        const deadlineFormatted = format(new Date(task?.attributes.deadline), 'yyyy-MM-dd HH:mm:ss')
         return (
             <button onClick={() => handleClickButton()}
                 className='relative py-5 mb-5 bg-white rounded-md p-5 w-full text-left shadow-md flex items-center'>
                 <div className='absolute bg-indigo-500 h-full left-0 top-0 w-[3rem] md:w-[5rem] rounded-l-md flex items-center justify-center'>
                     {svgType(task?.attributes?.type)}
                 </div>
-                <p className='font-medium text-xl ml-9 md:ml-20'>{task?.attributes.title}</p>
+                <p className='font-medium text-xl ml-10 md:ml-20'>{task?.attributes.title}</p>
                 {user?.role_str !== 'professor' && user?.role_str !== 'admin' && (
                     deadlineOnTime ?
-                        <div className='ml-auto bg-green-700 rounded-md p-1 px-2 md:p-2 md:px-4 text-center '>
-                            <p className='text-base font-medium text-white'>{formattedString}</p>
+                        <div className='ml-auto bg-green-700 rounded-md p-2 px-8 text-center '>
+                            <p className='text-base font-medium text-white'>{deadlineFormatted}</p>
                         </div>
                         :
-                        <div className='ml-auto bg-red-700 rounded-md p-1 px-2 md:p-2 md:px-4 text-center '>
-                            <p className='text-base font-medium text-white'>{formattedString}</p>
+                        <div className='ml-auto bg-red-700 rounded-md p-2 px-8 text-center '>
+                            <p className='text-base font-medium text-white'>{deadlineFormatted}</p>
                         </div>
                 )}
             </button>
@@ -81,9 +91,9 @@ export const TaskComponentCard = ({ task, setVisibilityTask, context, courseId }
             <button onClick={() => handleClickButton()}
                 className='relative py-5 mb-5 bg-white rounded-md p-5 w-full text-left shadow-md flex items-center'>
                 <div className='absolute bg-indigo-500 h-full left-0 top-0 w-[5rem] rounded-l-md flex items-center justify-center'>
-                    {svgType(task.type)}
+                    {svgType(task?.type)}
                 </div>
-                <p className='font-medium text-xl ml-20'>{task.title}</p>
+                <p className='font-medium text-xl ml-10 md:ml-20'>{handleTaskTitle(task?.title)}</p>
             </button>
         )
     }

@@ -6,7 +6,7 @@ import '../styles/utils.css'
 import { getToken } from '../../../helpers';
 import { useAuthContext } from "../../../context/AuthContext";
 import { CoursesCardHome } from '../components/CoursesHome/CoursesCardHome';
-import { Divider } from 'antd';
+import { Divider, Empty } from 'antd';
 import Swal from 'sweetalert2'
 import { MoonLoader } from "react-spinners";
 import { API } from "../../../constant";
@@ -170,7 +170,7 @@ const CoursesHome = () => {
     }
 
     return (
-      <div className='relative rounded-2xl border flex p-3 min-w-[450px] md:w-[28rem] lg:w-[30rem] min-h-[5rem]'>
+      <div className='relative rounded-2xl border flex p-3 min-w-[350px] md:w-[22rem] lg:w-[24rem] min-h-[5rem]'>
         <div className="w-2 rounded-md mr-3" style={colorStyle}></div>
         <div className='flex-col flex justify-center w-full max-w-[calc(100%-6rem)]'>
           <div className='flex w-full'>
@@ -303,40 +303,62 @@ const CoursesHome = () => {
               <>
                 <div className={`flex flex-col ${user.role_str === 'student' && 'grid-home:max-w-[calc(100%-500px)]'} w-full`}>
                   <h1 className='py-11 pb-6 font-bold text-xl'>Recent Courses</h1>
-                  <motion.div id='course-motion-div'
-                    className='flex flex-wrap gap-x-[5%] gap-y-[16px]  max-w-full justify-center md:justify-start '
-                    initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
-                    {
-                      courses && courses.map((course) => (
-                        <CoursesCardHome key={course.id} course={course} />
-                      ))
-                    }
-                  </motion.div>
+                  {
+                    courses.length !== 0 ?
+                      <motion.div id='course-motion-div'
+                        className='flex flex-wrap gap-x-[5%] gap-y-[16px]  max-w-full justify-center md:justify-start '
+                        initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
+                        {
+                          courses && courses.map((course) => (
+                            <CoursesCardHome key={course.id} course={course} />
+                          ))
+                        }
+                      </motion.div> :
+                      <motion.div id='course-motion-div'
+                        className='mr-10'
+                        initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
+                        <div
+                          type="button"
+                          className="relative block w-full rounded-lg border border-gray-300 p-12 text-center bg-white"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-12 h-12 mx-auto">
+                            <path d="M11.7 2.805a.75.75 0 0 1 .6 0A60.65 60.65 0 0 1 22.83 8.72a.75.75 0 0 1-.231 1.337 49.948 49.948 0 0 0-9.902 3.912l-.003.002c-.114.06-.227.119-.34.18a.75.75 0 0 1-.707 0A50.88 50.88 0 0 0 7.5 12.173v-.224c0-.131.067-.248.172-.311a54.615 54.615 0 0 1 4.653-2.52.75.75 0 0 0-.65-1.352 56.123 56.123 0 0 0-4.78 2.589 1.858 1.858 0 0 0-.859 1.228 49.803 49.803 0 0 0-4.634-1.527.75.75 0 0 1-.231-1.337A60.653 60.653 0 0 1 11.7 2.805Z" />
+                            <path d="M13.06 15.473a48.45 48.45 0 0 1 7.666-3.282c.134 1.414.22 2.843.255 4.284a.75.75 0 0 1-.46.711 47.87 47.87 0 0 0-8.105 4.342.75.75 0 0 1-.832 0 47.87 47.87 0 0 0-8.104-4.342.75.75 0 0 1-.461-.71c.035-1.442.121-2.87.255-4.286.921.304 1.83.634 2.726.99v1.27a1.5 1.5 0 0 0-.14 2.508c-.09.38-.222.753-.397 1.11.452.213.901.434 1.346.66a6.727 6.727 0 0 0 .551-1.607 1.5 1.5 0 0 0 .14-2.67v-.645a48.549 48.549 0 0 1 3.44 1.667 2.25 2.25 0 0 0 2.12 0Z" />
+                            <path d="M4.462 19.462c.42-.419.753-.89 1-1.395.453.214.902.435 1.347.662a6.742 6.742 0 0 1-1.286 1.794.75.75 0 0 1-1.06-1.06Z" />
+                          </svg>
+
+                          <span className="mt-2 block text-base font-medium text-gray-900">There are no courses available for you</span>
+                          <span className="mt-2 block text-sm font-medium text-gray-600">Explore other areas of the platform or check back later for new course options.</span>
+                        </div>
+                      </motion.div>
+                  }
+
                 </div>
 
                 {
                   user.role_str === 'student' &&
-                  <div className='shadow-md flex flex-col md:w-[480px] min-w-3/4 mt-12 grid-home:absolute right-16 bg-white p-8 rounded-lg'>
+                  <div className='border border-gray-300 flex flex-col md:w-[480px] min-w-3/4 mt-12 grid-home:absolute right-16 bg-white p-8 rounded-lg'>
                     <section >
-                      <p className='font-bold text-xl'>Daily Tasks</p>
+                      <p className='font-semibold text-lg'>Daily Tasks</p>
                       <Divider />
                       {
                         dailyTasks.length > 0 ?
 
-                          <div className='flex flex-col space-y-5 mb-10'>
+                          <div className='flex flex-col space-y-5 mb-10 max-h-[20rem] overflow-y-auto'>
                             {dailyTasks.map(RenderDailyTasks)}
                           </div>
                           :
                           <div className='flex'>
-                            <div className='border rounded-lg p-5 flex mb-10 items-center space-x-7'>
-                              <p className='font-medium text-gray-400 text-base '>There are no tasks for today</p>
-                              <img className='opacity-50 w-36' src="https://liferay-support.zendesk.com/hc/article_attachments/360032795211/empty_state.gif" alt="" />
+                            <div className='border rounded-lg p-5 flex mb-10 items-center justify-center w-full space-x-7'>
+                              <Empty description={
+                                <span className='font-medium text-gray-400 text-sm '>You do not have any task for today</span>
+                              } />
                             </div>
                           </div>
                       }
                     </section>
                     <section>
-                      <p className='font-bold text-xl'>Your Objectives</p>
+                      <p className='font-semibold text-lg'>Your Objectives</p>
                       <Divider />
                       <div className='space-y-5 flex flex-col mb-5'>
                         {

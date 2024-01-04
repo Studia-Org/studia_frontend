@@ -8,8 +8,8 @@ import { FiChevronRight } from "react-icons/fi";
 import { ProfessorData } from "../components/CoursesInside/ProfessorData";
 import { CourseSettings } from "../components/CoursesInside/CourseSettings";
 import { AccordionCourseContent } from "../components/CoursesInside/AccordionCourseContent";
-import { ForumClickable } from "../components/CoursesInside/ForumClickable";
-import { ForumComponent } from '../components/CoursesInside/ForumComponent'
+import { ForumClickable } from "../components/CoursesInside/Forum/ForumClickable";
+import { ForumComponent } from '../components/CoursesInside/Forum/ForumComponent'
 import { QuestionnaireComponent } from '../components/CoursesInside/QuestionnaireComponent';
 import { CourseParticipants, CourseContent, CourseFiles } from "../components/CoursesInside/TabComponents";
 import { useAuthContext } from "../../../context/AuthContext";
@@ -20,9 +20,8 @@ const CourseInside = () => {
   const inputRefLandscape = useRef(null);
   const [titleSubsection, setTitleSubsection] = useState("");
   const [backgroundPhotoSubsection, setBackgroundPhotoSubsection] = useState()
-  const [posts, setPosts] = useState([]);
+  const [allForums, setAllForums] = useState([]);
   const [enableEdit, setEnableEdit] = useState(false)
-  const [forumID, setForumID] = useState([]);
   const [forumFlag, setForumFlag] = useState(false);
   const [editSectionFlag, setEditSectionFlag] = useState(false);
   const [sectionToEdit, setSectionToEdit] = useState(null);
@@ -49,11 +48,10 @@ const CourseInside = () => {
   const fetchPostData = async () => {
     try {
       const response = await fetch(
-        `${API}/courses/${courseId}?populate=forum.posts.autor.profile_photo,forum.posts.forum_answers.autor.profile_photo`
+        `${API}/courses/${courseId}?populate=forums.posts.autor.profile_photo,forums.posts.forum_answers.autor.profile_photo`
       );
       const data = await response.json();
-      setForumID(data.data.attributes.forum.data.id);
-      setPosts(data.data.attributes.forum.data.attributes.posts.data.reverse());
+      setAllForums(data.data.attributes.forums.data);
     } catch (error) {
       console.error(error);
     }
@@ -224,7 +222,7 @@ const CourseInside = () => {
     {
       key: '1',
       label: 'Course',
-      children: <CourseContent courseContentInformation={courseContentInformation} courseSection={courseSection} courseSubsection={courseSubsection} courseId={courseId} enableEdit={enableEdit} setEnableEdit={setEnableEdit} setCourseContentInformation={setCourseContentInformation} titleSubsection={titleSubsection} backgroundPhotoSubsection={backgroundPhotoSubsection} />,
+      children: <CourseContent setForumFlag={setForumFlag} courseContentInformation={courseContentInformation} courseSection={courseSection} courseSubsection={courseSubsection} courseId={courseId} enableEdit={enableEdit} setEnableEdit={setEnableEdit} setCourseContentInformation={setCourseContentInformation} titleSubsection={titleSubsection} backgroundPhotoSubsection={backgroundPhotoSubsection} />,
     },
     {
       key: '2',
@@ -358,7 +356,7 @@ const CourseInside = () => {
               )}
             </div>
           ) : (
-            <ForumComponent posts={posts} setPosts={setPosts} forumID={forumID}
+            <ForumComponent allForums={allForums} setAllForums={setAllForums}
               courseData={
                 {
                   name: courseBasicInformation.title,
@@ -385,31 +383,30 @@ const CourseInside = () => {
                     </div>
                   </button> : null
                 }
+                {allForums[0]?.attributes &&
+                  <FloatingButtonNavigation
+                    {...{
+                      whisper,
+                      courseContentInformation,
+                      setCourseSubsection,
+                      setCourseSection,
+                      setForumFlag,
+                      setQuestionnaireFlag,
+                      setSettingsFlag,
+                      setCourseSubsectionQuestionnaire,
+                      subsectionsCompleted,
+                      setCourseContentInformation,
+                      setEditSectionFlag,
+                      setSectionToEdit,
+                      courseSubsection,
+                      courseSection,
+                      professor,
+                      allForums
+                    }}
+                  />
+                }
 
-                <FloatingButtonNavigation
-                  {...{
-                    whisper,
-                    courseContentInformation,
-                    setCourseSubsection,
-                    setCourseSection,
-                    setForumFlag,
-                    setQuestionnaireFlag,
-                    setSettingsFlag,
-                    setCourseSubsectionQuestionnaire,
-                    subsectionsCompleted,
-                    setCourseContentInformation,
-                    setEditSectionFlag,
-                    setSectionToEdit,
-                    courseSubsection,
-                    courseSection,
-                    posts,
-                    professor,
-                  }}
-                  evaluatorFlag={false}
-
-                />
-
-                <div className="flexible:flex xl:hidden 2lg:flex hidden ">
+                <div className="flexible:flex xl:hidden accordion:flex hidden ">
                   <AccordionCourseContent
                     {...{
                       courseContentInformation,
@@ -428,15 +425,13 @@ const CourseInside = () => {
                     }}
                   />
                 </div>
-                <div className="flexible:block xl:hidden 2lg:block hidden ">
-
-                  <ForumClickable posts={posts} setForumFlag={setForumFlag} />
-                  {
-                    professor.attributes &&
-                    <ProfessorData professor={professor} evaluatorFlag={false} />}
+                <div className="flexible:block xl:hidden accordion:block hidden ">
+                  {allForums[0]?.attributes &&
+                    <ForumClickable posts={allForums[0].attributes.posts.data} setForumFlag={setForumFlag} />
+                  }
+                  {professor.attributes && <ProfessorData professor={professor} evaluatorFlag={false} />}
                 </div>
               </div>
-
             )
         }
       </div>
