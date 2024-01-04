@@ -1,25 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from 'dayjs';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import React, { useState, useEffect } from 'react';
 import { QuestionnaireComponentEditable } from './QuestionnaireComponentEditable';
-import TextField from '@mui/material/TextField';
-import { CreateTask } from './CreateTask';
-import { Collapse, message } from 'antd';
+import { PeerReviewRubricModal } from './PeerReviewRubricModal';
+import dayjs from 'dayjs';
+import { message, Button, DatePicker, Input, Switch, InputNumber, Divider } from 'antd';
+
 import MDEditor from '@uiw/react-md-editor';
-import { FilePond, registerPlugin } from 'react-filepond';
-import 'filepond/dist/filepond.min.css';
-import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation';
-import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
-import '../../../styles/filePondNoBoxshadow.css';
+import { UploadFiles } from './UploadFiles';
 
-
-registerPlugin(FilePondPluginImageExifOrientation, FilePondPluginImagePreview);
-
-const { Panel } = Collapse;
+import '../../../styles/antdButtonStyles.css'
+import { PonderationWarning } from './PonderationWarning';
+const { RangePicker } = DatePicker;
 
 
 export const CreateCourseEditSubsection = ({
@@ -28,12 +18,13 @@ export const CreateCourseEditSubsection = ({
   setCreateCourseSectionsList,
   createCourseSectionsList,
   setSubsectionEditing,
-  task,
-  setTask,
   sectionId,
 }) => {
-  const [landscape_photo, setLandscape_photo] = useState((createCourseSectionsList.flatMap((section) => section.subsections).find((sub) => sub.id === subsection.id))?.landscape_photo);
-  const [files, setFiles] = useState((createCourseSectionsList.flatMap((section) => section.subsections).find((sub) => sub.id === subsection.id))?.files);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [landscape_photo, setLandscape_photo] = useState([]);
+  const [markdownContent, setMarkdownContent] = useState(subsection.content);
+  const [files, setFiles] = useState([]);
 
   useEffect(() => {
     const matchingSubsection = createCourseSectionsList
@@ -45,6 +36,18 @@ export const CreateCourseEditSubsection = ({
     }
   }, [createCourseSectionsList]);
 
+  useEffect(() => {
+    setLandscape_photo((createCourseSectionsList.flatMap((section) => section.subsections).find((sub) => sub.id === subsection.id))?.landscape_photo);
+    setFiles((createCourseSectionsList.flatMap((section) => section.subsections).find((sub) => sub.id === subsection.id))?.files);
+  }, [subsection])
+
+  useEffect(() => {
+    handleSubsectionChange('landscape_photo', landscape_photo);
+  }, [landscape_photo])
+
+  useEffect(() => {
+    handleSubsectionChange('files', files);
+  }, [files])
 
   const handleSubsectionChange = (type, newValue) => {
     setCreateCourseSectionsList((courses) => {
@@ -54,26 +57,45 @@ export const CreateCourseEditSubsection = ({
           const subsectionCopy = { ...subsection };
           switch (type) {
             case 'title':
-            case 'start_date':
-            case 'end_date':
             case 'description':
             case 'landscape_photo':
             case 'files':
             case 'content':
               subsectionCopy[type] = newValue;
               break;
+            case 'date':
+              subsectionCopy.start_date = newValue[0];
+              subsectionCopy.end_date = newValue[1];
+              break;
             default:
               break;
           }
+          if (type === 'evaluable') {
+            subsectionCopy.activity.evaluable = newValue;
+          }
+          if (type === 'ponderation') {
+            subsectionCopy.activity.ponderation = newValue;
+
+          }
+          if ((subsection?.type === 'peerReview' || subsection?.type === 'forum') && type === 'date') {
+            subsectionCopy.activity.deadline = newValue[1];
+          }
           sectionCopy.subsections = sectionCopy.subsections.map((sub) => (sub.id === subsection.id ? subsectionCopy : sub));
+
           return sectionCopy;
         }
-
         return course;
       });
-
       return updatedCourses;
     });
+  };
+
+  const onChangeDate = (value) => {
+    if (value === null) {
+      handleSubsectionChange('date', [null, null]);
+    } else {
+      handleSubsectionChange('date', value);
+    }
   };
 
   const handleTitleChange = (newTitle) => {
@@ -83,19 +105,6 @@ export const CreateCourseEditSubsection = ({
       handleSubsectionChange('title', newTitle);
     }
   };
-
-  const renderDatePicker = (label, date, onChange) => (
-    <div>
-      <label className='text-sm text-gray-500'>{label} *</label>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DemoContainer components={['DateTimePicker']}>
-          <DateTimePicker
-            value={dayjs(date)} onChange={onChange}
-          />
-        </DemoContainer>
-      </LocalizationProvider>
-    </div>
-  );
 
   return (
     <div className='w-[45rem]'>
@@ -110,54 +119,98 @@ export const CreateCourseEditSubsection = ({
           subsection={subsection}
           setCreateCourseSectionsList={setCreateCourseSectionsList}
           createCourseSectionsList={createCourseSectionsList}
+          sectionId={sectionId}
         />
       ) : (
         <>
-          <input className='text-lg bg-transparent border p-3 rounded-xl border-gray-400 ' type="text" onChange={(e) => handleTitleChange(e.target.value)} value={subsection.title} />
+          <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-lg pl-3' placeholder="Description" onChange={(e) => handleTitleChange(e.target.value)} value={subsection.title} />
           <div className='bg-white rounded-md shadow-md p-5 mt-4 mb-10 '>
-            <div className='space-y-2'>
-              <label className='text-sm text-gray-500 ' htmlFor=''>
-                Cover
-              </label>
-              <FilePond
-                files={landscape_photo}
-                allowMultiple={false}
-                onupdatefiles={(e) => {
-                  setLandscape_photo(e);
-                  handleSubsectionChange('landscape_photo', e);
-                }} maxFiles={1}
-              />
-            </div>
+            {
+              subsection?.type === 'peerReview' && (
+                <div className='flex flex-col justify-center space-y-2 mb-5'>
+                  <PeerReviewRubricModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} rubricData={subsection.activity.PeerReviewRubrica} setSubsectionEditing={setSubsectionEditing} />
+                  <label className='text-sm text-gray-500 '>
+                    Peer review rubric *
+                  </label>
+                  <Button onClick={() => {
+                    setIsModalOpen(true);
+                    document.body.style.overflow = 'hidden';
+                  }}>
+                    Edit Rubric
+                  </Button>
+                </div>
+              )
+            }
+            {
+              subsection?.type === 'task' && (
+                <div className='space-y-2 mb-5'>
+                  <label className='text-sm text-gray-500' htmlFor=''>
+                    Cover
+                  </label>
+                  <UploadFiles fileList={landscape_photo} setFileList={setLandscape_photo} listType={'picture'} maxCount={1} />
+                </div>
+              )
+            }
             <div className='flex items-center justify-between w-full '>
-              <div>{renderDatePicker('Start Date', subsection?.start_date, handleSubsectionChange.bind(null, 'start_date'))}</div>
-              <div>{renderDatePicker('End Date', subsection?.end_date, handleSubsectionChange.bind(null, 'end_date'))}</div>
+              <div className='w-full space-y-2'>
+                <label className='text-sm text-gray-500 mb-4'>Subsection Date *</label>
+                <RangePicker
+                  className='w-full py-4'
+                  showTime={{
+                    format: 'HH:mm',
+                  }}
+                  value={subsection.start_date ? [dayjs(subsection.start_date), dayjs(subsection.end_date)] : null}
+                  format="YYYY-MM-DD HH:mm"
+                  onChange={onChangeDate}
+                />
+              </div>
+
+            </div>
+            <div className='mt-7 flex items-center justify-between'>
+              <div className='flex items-center'>
+                <label className='text-sm text-gray-500 mr-3 block' htmlFor=''>Evaluable * </label>
+                <Switch onChange={(e) => handleSubsectionChange('evaluable', e)} checked={subsection.activity?.evaluable} className='bg-gray-300' />
+              </div>
+
+              <Divider type="vertical" />
+              <div className='flex items-center gap-4'>
+                {
+                  subsection.activity?.evaluable && (
+                    <PonderationWarning createCourseSectionsList={createCourseSectionsList} sectionID={sectionId} />
+                  )
+                }
+                <label className='text-sm text-gray-500' htmlFor=''>Ponderation *</label>
+                <InputNumber
+                  disabled={!subsection.activity?.evaluable}
+                  defaultValue={0}
+                  value={subsection.activity?.evaluable ? subsection.activity?.ponderation : 0}
+                  onChange={(e) => handleSubsectionChange('ponderation', e)}
+                  min={0}
+                  max={100}
+                  formatter={(value) => `${value}%`}
+                  parser={(value) => value.replace('%', '')}
+                />
+              </div>
+
             </div>
             <div className='mt-7 space-y-2'>
-              <label className='text-sm text-gray-500 mt-7 ' htmlFor=''>
-                Subsection description
-              </label>
-              <div className='flex w-full'>
-                <TextField className=' flex w-full' id='outlined-basic' value={subsection.description} onChange={(e) => handleSubsectionChange('description', e.target.value)} variant='outlined' />
+              <label className='text-sm text-gray-500 mt-7 ' htmlFor=''>Subsection description</label>
+              <div className='flex w-full prose prose-lg'>
+                <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3' placeholder="Description" value={subsection.description}
+                  onChange={(e) => handleSubsectionChange('description', e.target.value)} />
               </div>
             </div>
-            <div className='mt-3 space-y-2'>
+            <div className='mt-3 space-y-2 mb-5'>
               <label className='text-sm text-gray-500 ' htmlFor=''>
-                Subsection Files
+                Subsection Files (max 5)
               </label>
-              <FilePond
-                files={files}
-                allowMultiple={true}
-                allowReorder={true}
-                onupdatefiles={(e) => {
-                  setFiles(e);
-                  handleSubsectionChange('files', e);
-                }}
-              />
+              <UploadFiles fileList={files} setFileList={setFiles} listType={'text'} maxCount={5} />
             </div>
             <label className='text-sm text-gray-500' htmlFor=''>
               Subsection content *
             </label>
-            <MDEditor className='mt-2 mb-2' data-color-mode='light' onChange={(e) => handleSubsectionChange('content', e)} value={subsection.content} />
+            <MDEditor className='mt-2 mb-2' data-color-mode='light' onChange={setMarkdownContent} onBlur={() => handleSubsectionChange('content', markdownContent)}
+              value={markdownContent} visibleDragbar={false} />
           </div>
         </>
       )}

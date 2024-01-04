@@ -5,14 +5,11 @@ export const ForumClickable = ({ posts, setForumFlag, whisper }) => {
 
   function renderPostsLogic(posts) {
     if (posts.length === 1) {
-
       return renderPostsInside(posts[0]);
     } else if (posts.length > 1) {
-
       const firstTwoPosts = posts.slice(0, 2);
       return firstTwoPosts.map((post) => renderPostsInside(post));
     } else {
-
       return (
         <p className="text-gray-700 text-sm ">
           There are no posts yet,{" "}

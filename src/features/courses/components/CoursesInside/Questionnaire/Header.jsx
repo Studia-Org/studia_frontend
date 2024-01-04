@@ -98,96 +98,88 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
 
     return (
         <div className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1]">
-            <div className="my-7 mx-7 flex w-full">
-                <div className='w-3/4'>
-                    <div className='flex items-center gap-2  flex-wrap'>
-                        {
-                            enableEdit ?
-                                <input type="text" value={titleEdit} className=' font-semibold text-3xl w-full' onChange={(e) => setTitleEdit(e.target.value)} />
-                                :
-                                <div className='gap-3 flex items-center'>
-                                    <p className="text-black font-semibold text-3xl">{questionnaire.attributes.Title}</p>
-                                    <Badge color="#6366f1" count={new Date(courseSubsection.attributes.end_date).toDateString()} />
-                                </div>
-                        }
-                        {
-                            (questionnaireAnswerData.length > 0 && user?.role_str === 'student') &&
-                            <div className='flex  justify-between'>
-                                <Chip className='ml-auto' label="Completed" color="success" />
-                            </div>
-                        }
-                    </div>
-                    <div className='flex justify-between mt-7'>
-                        {
-                            enableEdit ?
-                                <input type="text" value={descriptionEdit} className='w-full' onChange={(e) => setDescriptionEdit(e.target.value)} />
-                                :
-                                <p >{questionnaire.attributes.description}</p>
-                        }
-                        {
-                            completed === true ?
-                                <span className='text-gray-500 pl-2'>{"Completed in: " + format(questionnaireAnswerData[0]?.timeToComplete)}</span>
-                                : null
-                        }
-
-                    </div>
-                    {
-                        enableEdit && (
-                            <>
-                                <p className='text-sm text-gray-500 mt-3'>Deadline</p>
-                                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <DemoContainer components={['DateTimePicker']}>
-                                        <DateTimePicker className='w-1/2'
-                                            value={deadline} onChange={(newDate) => setDeadline(newDate)}
-                                        />
-                                    </DemoContainer>
-                                </LocalizationProvider>
-                            </>
-                        )
-                    }
-
+            <div className="my-7 mx-7 flex w-full flex-col">
+                <div className='flex items-center w-full '>
+                    {enableEdit ? (
+                        <input type="text" value={titleEdit} className='font-semibold text-3xl w-full' onChange={(e) => setTitleEdit(e.target.value)} />
+                    ) : (
+                        <div className='gap-3 flex items-center w-full'>
+                            <p className="text-black font-semibold text-3xl">{questionnaire.attributes.Title}</p>
+                            <Badge color="#6366f1" className='ml-auto mr-10' count={new Date(courseSubsection.attributes.end_date).toDateString()} />
+                        </div>
+                    )}
+                    {(questionnaireAnswerData.length > 0 && user?.role_str === 'student') && (
+                        <div className='flex justify-end items-center'>
+                            <Chip className=' mr-10' label="Completed" color="success" />
+                        </div>
+                    )}
                 </div>
-                <div className='w-1/4 h-full mr-10 '>
-                    {
-                        user.role_str !== 'student' && (
-                            <div className='flex flex-col space-y-5 justify-end items-end '>
-                                <div>
-                                    <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} />
-                                </div>
-                                <AnimatePresence>
-                                    {enableEdit && (
-                                        <motion.div
-                                            initial={{ opacity: -10, y: -10 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            exit={{ opacity: -10, y: 0 }}
-                                            transition={{ duration: 0.1 }}
-                                            className="">
-                                            <div>
-                                                <Popconfirm
-                                                    title="Edit the questionnaire"
-                                                    description="Are you sure you want to save changes?"
-                                                    okText="Yes"
-                                                    onConfirm={() => saveChanges()}
-                                                    okButtonProps={{ className: 'bg-blue-500', type: 'primary' }}
-                                                    cancelText="No">
-                                                    <Button
-                                                        type="primary"
-                                                        loading={loading}
-                                                        className="mt-5 duration-150 justify-center rounded-md border border-transparent bg-blue-600 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                                        Save Changes
-                                                    </Button>
-
-                                                </Popconfirm>
-                                            </div>
-
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
-                            </div>
-                        )
-                    }
+                <div className='flex justify-between mt-7'>
+                    {enableEdit ? (
+                        <input type="text" value={descriptionEdit} className='w-full' onChange={(e) => setDescriptionEdit(e.target.value)} />
+                    ) : (
+                        <p>{questionnaire.attributes.description}</p>
+                    )}
+                    {completed === true ? (
+                        <span className='text-gray-500 pl-2 mr-10'>{"Completed in: " + format(questionnaireAnswerData[0]?.timeToComplete)}</span>
+                    ) : null}
                 </div>
+
+                {
+                    enableEdit && (
+                        <>
+                            <p className='text-sm text-gray-500 mt-3'>Deadline</p>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <DemoContainer components={['DateTimePicker']}>
+                                    <DateTimePicker className='w-1/2'
+                                        value={deadline} onChange={(newDate) => setDeadline(newDate)}
+                                    />
+                                </DemoContainer>
+                            </LocalizationProvider>
+                        </>
+                    )
+                }
+
+            </div>
+            <div className='mr-3'>
+                {
+                    user.role_str !== 'student' && (
+                        <div className='flex flex-col space-y-5 justify-end items-end mb-10'>
+                            <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} />
+                            <AnimatePresence>
+                                {enableEdit && (
+                                    <motion.div
+                                        initial={{ opacity: -10, y: -10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: -10, y: 0 }}
+                                        transition={{ duration: 0.1 }}
+                                        className="">
+                                        <div>
+                                            <Popconfirm
+                                                title="Edit the questionnaire"
+                                                description="Are you sure you want to save changes?"
+                                                okText="Yes"
+                                                onConfirm={() => saveChanges()}
+                                                okButtonProps={{ className: 'bg-blue-500', type: 'primary' }}
+                                                cancelText="No">
+                                                <Button
+                                                    type="primary"
+                                                    loading={loading}
+                                                    className="mb-5 duration-150 justify-center rounded-md border border-transparent bg-blue-600 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                                    Save Changes
+                                                </Button>
+
+                                            </Popconfirm>
+                                        </div>
+
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </div>
+                    )
+                }
             </div>
         </div>
+
     )
 }

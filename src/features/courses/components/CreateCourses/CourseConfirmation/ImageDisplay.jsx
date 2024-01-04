@@ -11,14 +11,14 @@ const ImageDisplay = ({ fileData }) => {
                 setImageSrc(reader.result);
             };
 
-            reader.readAsDataURL(fileData.file);
+            reader.readAsDataURL(fileData.originFileObj);
         }
     }, [fileData]);
 
     return (
         <div>
             {imageSrc ? (
-                <img className='h-[30rem] w-full object-cover rounded-md shadow-md' src={imageSrc} alt={fileData.filename} />
+                <img className='h-[30rem] w-full object-cover rounded-md shadow-md' src={imageSrc} alt={fileData.name} />
             ) : (
                 <p>Loading image...</p>
             )}

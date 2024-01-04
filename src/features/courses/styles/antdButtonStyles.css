@@ -1,0 +1,13 @@
+.ant-btn-primary {
+    background-color: #1a73e8 !important;
+}
+
+.ant-btn-primary[disabled] {
+    background-color: rgba(0, 0, 0, 0.04) !important;
+    /* Cambia el color para el estado disabled según tus preferencias */
+}
+
+.ant-btn-primary:hover[disabled] {
+    background-color: rgba(0, 0, 0, 0.04) !important;
+    /* Puedes cambiar el color para el estado hover del botón disabled si lo deseas */
+}

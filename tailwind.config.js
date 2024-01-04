@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 /* eslint-disable max-len */
 module.exports = {
+
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
     "./node_modules/@tremor/**/*.{js,ts,jsx,tsx}",
@@ -123,8 +124,8 @@ module.exports = {
       // => @media (min-width: 1280px) { ... }
       "2xl": "2000px",
       "1.5xl": "1440px",
-
-      "flexible": "1532px",
+      "accordion": "1230px",
+      "flexible": "1550px",
       "grid-home": "1340px",
       // => @media (min-width: 1280px) { ... }
     },

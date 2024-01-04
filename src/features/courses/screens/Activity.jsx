@@ -41,7 +41,6 @@ const Activity = () => {
             data: data.data
           }
         }
-        console.log(qualificationData)
         setUserQualification({ activity: qualificationData })
       }
 
@@ -54,7 +53,7 @@ const Activity = () => {
   function selectTypeOfActivity() {
     const type = userQualification.activity.activity.data.attributes.type;
     switch (type) {
-      case "Peer Review":
+      case "peerReview":
         return <PeerReviewComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} />;
       default:
         return <ActivityComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} setUserQualification={setUserQualification} />;
