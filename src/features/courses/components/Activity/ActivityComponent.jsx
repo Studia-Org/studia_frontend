@@ -163,8 +163,8 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
         },
         body: formData,
       });
+      const result = await response.json();
       if (response.ok) {
-        const result = await response.json();
         const response_upload = await sendFile(result);
         if (response_upload.ok) {
           Swal.fire({
@@ -402,8 +402,20 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
               <div className='mb-14 '>
                 {activityData.file.data && activityData.file.data.map(renderFiles)}
               </div>
-            </div > :
+            </div >
+            :
             <div className='flex flex-col w-[30rem] mt-1 max-w-[calc(100vw-2.5rem)]'>
+              <p className='text-lg font-medium mb-4'>Files</p>
+              {
+                activityData.activity.data.attributes.file?.data === null || activityData.activity.data.attributes.file?.data?.length === 0 ?
+                  <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
+                    <span className='text-gray-400 font-normal '>
+                      There are no files
+                    </span>
+                  } />
+                  :
+                  activityData.activity.data.attributes.file.data.map((file, index) => renderFiles(file, index))
+              }
               <p className='text-xs text-gray-400 mb-1 mt-5'>Your submission</p>
               <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
                 {activityData?.file?.data && activityData?.file?.data.map(renderFiles)}

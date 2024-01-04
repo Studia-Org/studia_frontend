@@ -383,27 +383,30 @@ const CourseInside = () => {
                     </div>
                   </button> : null
                 }
+                {allForums[0]?.attributes &&
+                  <FloatingButtonNavigation
+                    {...{
+                      whisper,
+                      courseContentInformation,
+                      setCourseSubsection,
+                      setCourseSection,
+                      setForumFlag,
+                      setQuestionnaireFlag,
+                      setSettingsFlag,
+                      setCourseSubsectionQuestionnaire,
+                      subsectionsCompleted,
+                      setCourseContentInformation,
+                      setEditSectionFlag,
+                      setSectionToEdit,
+                      courseSubsection,
+                      courseSection,
+                      professor,
+                      allForums
+                    }}
+                  />
+                }
 
-                <FloatingButtonNavigation
-                  {...{
-                    whisper,
-                    courseContentInformation,
-                    setCourseSubsection,
-                    setCourseSection,
-                    setForumFlag,
-                    setQuestionnaireFlag,
-                    setSettingsFlag,
-                    setCourseSubsectionQuestionnaire,
-                    subsectionsCompleted,
-                    setCourseContentInformation,
-                    setEditSectionFlag,
-                    setSectionToEdit,
-                    courseSubsection,
-                    courseSection,
-                  }}
-                />
-                
-                <div className="flexible:flex xl:hidden 2lg:flex hidden ">
+                <div className="flexible:flex xl:hidden accordion:flex hidden ">
                   <AccordionCourseContent
                     {...{
                       courseContentInformation,
@@ -422,7 +425,7 @@ const CourseInside = () => {
                     }}
                   />
                 </div>
-                <div className="flexible:block xl:hidden 2lg:block hidden ">
+                <div className="flexible:block xl:hidden accordion:block hidden ">
                   {allForums[0]?.attributes &&
                     <ForumClickable posts={allForums[0].attributes.posts.data} setForumFlag={setForumFlag} />
                   }

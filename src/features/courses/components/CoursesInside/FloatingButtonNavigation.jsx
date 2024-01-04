@@ -3,9 +3,9 @@ import { Popover, Whisper } from 'rsuite';
 import { AccordionCourseContent } from './AccordionCourseContent';
 import { ForumClickable } from './Forum/ForumClickable';
 import { ProfessorData } from './ProfessorData';
-function FloatingButtonNavigation({ whisper, professor, courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setCourseContentInformation, setEditSectionFlag, setSectionToEdit, courseSubsection, courseSection, posts }) {
+function FloatingButtonNavigation({ whisper, allForums, professor, courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setCourseContentInformation, setEditSectionFlag, setSectionToEdit, courseSubsection, courseSection, posts }) {
     return (
-        <div className=' right-5 bottom-5  flexible:hidden xl:flex 2lg:hidden fixed'>
+        <div className=' right-5 bottom-5  flexible:hidden xl:flex accordion:hidden fixed'>
             <Whisper
                 ref={whisper}
                 placement="autoVerticalEnd"
@@ -32,10 +32,10 @@ function FloatingButtonNavigation({ whisper, professor, courseContentInformation
                                 courseSection,
                             }}
                         />
-                        <ForumClickable posts={posts} setForumFlag={setForumFlag} whisper={whisper} />
-                        {
-                            professor?.attributes &&
-                            <ProfessorData professor={professor} evaluatorFlag={false} whisper={whisper} />}
+                        {allForums[0]?.attributes &&
+                            <ForumClickable posts={allForums[0].attributes.posts.data} setForumFlag={setForumFlag} whisper={whisper} />
+                        }
+                        {professor.attributes && <ProfessorData professor={professor} evaluatorFlag={false} />}
                     </Popover>}>
                 <div className={`bg-indigo-700 rounded-full w-[64px] h-[64px] p-[14px] cursor-pointer`}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}

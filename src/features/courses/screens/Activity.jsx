@@ -41,7 +41,6 @@ const Activity = () => {
             data: data.data
           }
         }
-        console.log(qualificationData)
         setUserQualification({ activity: qualificationData })
       }
 

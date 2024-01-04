@@ -62,8 +62,8 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
             !loading ?
                 <>
                     <p className="text-2xl font-semibold">Course information</p>
-                    <div className="flex flex-row justify-around h-full pb-2">
-                        <div className="flex flex-col justify-evenly w-fit">
+                    <div className="flex flex-row justify-between sm:justify-around items-center h-full pb-2">
+                        <div className="flex flex-col justify-evenly w-fit h-full">
                             <p className="text-lg font-medium pt-2 pb-1">
                                 Average: {averageQualification.toFixed(2)}</p>
                             <p className="text-lg font-medium pt-2 pb-1">
@@ -256,7 +256,7 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
                             </svg>
                             <p className='ml-1'>Go back to dashboard</p>
                         </button>
-                        <div className="grid gap-6 h-full grid-cols-1 md:grid-cols-[repeat(auto-fit,minmax(30vw,1fr))] ">
+                        <div className="grid gap-6 h-full grid-cols-1 lg:grid-cols-[repeat(auto-fit,minmax(30vw,1fr))] ">
                             <section className="rounded-lg bg-white p-5 overflow-x-auto overflow-y-clip max-w-[calc(100vw-2rem)]  
                             shadow-lg">
                                 <ActivityInformation />
