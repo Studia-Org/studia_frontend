@@ -30,7 +30,6 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
             throw new Error("The course or subsections array is missing");
         }
         course.forEach((section) => {
-            console.log(section)
             if (!section.task) {
                 throw new Error(`Missing task in section ${section.name}`);
             }
@@ -50,6 +49,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
             isValidCourse(createCourseSectionsList)
             setIsLoading(true)
             let allSections = []
+            let forumIds = []
             const totalIterations = createCourseSectionsList.reduce((acc, section) => acc + section.subsections.length, 0)
             for (const section of createCourseSectionsList) {
                 let allSubsections = []
@@ -82,10 +82,15 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                             file: null,
                             description: subsection.questionnaire.attributes.description,
                             order: 5,
-                            evaluable: true,
+                            evaluable: false,
                             qualifications: null,
                             evaluators: null,
                             categories: null,
+                        }
+
+                        if (subsection.activity) {
+                            activity.ponderation = subsection.activity.ponderation
+                            activity.evaluable = subsection.activity.evaluable
                         }
 
                         const createActivity = await fetch(`${API}/activities`, {
@@ -243,7 +248,39 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                 })
                 const data = await createSection.json();
                 allSections.push(data.data.id)
+
+                const createForum = await fetch(`${API}/forums`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${getToken()}`,
+                    },
+                    body: JSON.stringify({
+                        data: {
+                            title: section.task.title,
+                            posts: null
+                        }
+                    }),
+                })
+                const dataForum = await createForum.json();
+                forumIds.push(dataForum.data.id)
             }
+
+            const createNewsForum = await fetch(`${API}/forums`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${getToken()}`,
+                },
+                body: JSON.stringify({
+                    data: {
+                        title: 'News',
+                        posts: null
+                    }
+                }),
+            })
+            const newsForum = await createNewsForum.json();
+            forumIds.push(newsForum.data.id)
 
             const newCourse = {
                 title: courseBasicInfo.courseName,
@@ -277,20 +314,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                 body: JSON.stringify({ data: newCourse }),
             })
             const dataFinal = await createCourseFinal.json();
-            const newForumCourse = {
-                course: dataFinal.data.id,
-                posts: null
-            }
 
-            const createForum = await fetch(`${API}/forums`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${getToken()}`,
-                },
-                body: JSON.stringify({ data: newForumCourse }),
-            })
-            const dataForum = await createForum.json();
 
             await fetch(`${API}/courses/${dataFinal.data.id}`, {
                 method: 'PUT',
@@ -298,7 +322,13 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${getToken()}`,
                 },
-                body: JSON.stringify({ data: { forum: dataForum.data.id } }),
+                body: JSON.stringify({
+                    data: {
+                        forums: {
+                            connect: forumIds
+                        }
+                    }
+                }),
             })
             message.success('Course created successfully');
             setIsLoading(false)

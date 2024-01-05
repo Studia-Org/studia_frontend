@@ -9,13 +9,15 @@ import { CoursesCardsProfile } from '../components/CoursesCardsProfile';
 import { checkAuthenticated } from "../../../helpers";
 
 const UserProfile = () => {
+
   const [courses, setCourses] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const { user } = useAuthContext();
   const [userProfile, setUserProfile] = useState([]);
   let { uid } = useParams();
 
-
+  document.title = `${user.name} - Uptitude`
+  
   const navigate = useNavigate();
   useEffect(() => {
     if (!checkAuthenticated()) {

@@ -1,6 +1,16 @@
 import React from 'react'
+import { message } from 'antd';
 
-export const CreateCourseBreadcrumb = ({ createCourseOption, setCreateCourseOption }) => {
+export const CreateCourseBreadcrumb = ({ createCourseOption, setCreateCourseOption, courseBasicInfo }) => {
+
+    function handleContinue(n) {
+        if (courseBasicInfo.courseName === '' || courseBasicInfo.description === '' || courseBasicInfo.tags.length === 0 || !courseBasicInfo.cover || courseBasicInfo.cover.length === 0) {
+            message.error("Please complete all the fields")
+        } else {
+            setCreateCourseOption(n)
+        }
+    }
+
     switch (createCourseOption) {
         case 0:
             return (
@@ -14,13 +24,13 @@ export const CreateCourseBreadcrumb = ({ createCourseOption, setCreateCourseOpti
                         </button>
                     </li>
                     <li class="flex md:w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 ">
-                        <button onClick={() => setCreateCourseOption(1)} class="hover:text-blue-400 duration-150 flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 ">
+                        <button onClick={() => handleContinue(1)} class="hover:text-blue-400 duration-150 flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 ">
                             <span class="mr-2">2</span>
                             Course <span class="hidden sm:inline-flex sm:ml-2">sections</span>
                         </button>
                     </li>
                     <li class="flex md:w-full items-center after:content-[''] after:w-full after:h-1 after:border-b after:border-gray-200 after:border-1 after:hidden sm:after:inline-block after:mx-6 xl:after:mx-10 ">
-                        <button onClick={() => setCreateCourseOption(2)} class="hover:text-blue-400 duration-150 flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 ">
+                        <button onClick={() => handleContinue(2)} class="hover:text-blue-400 duration-150 flex items-center after:content-['/'] sm:after:hidden after:mx-2 after:text-gray-200 ">
                             <span class="mr-2">3</span>
                             Course <span class="hidden sm:inline-flex sm:ml-2">Visualization</span>
                         </button>

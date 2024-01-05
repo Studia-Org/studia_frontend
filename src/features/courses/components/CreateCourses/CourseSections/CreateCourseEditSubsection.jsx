@@ -20,11 +20,11 @@ export const CreateCourseEditSubsection = ({
   setSubsectionEditing,
   sectionId,
 }) => {
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [landscape_photo, setLandscape_photo] = useState([]);
   const [markdownContent, setMarkdownContent] = useState(subsection.content);
   const [files, setFiles] = useState([]);
+  console.log(subsection)
 
   useEffect(() => {
     const matchingSubsection = createCourseSectionsList
@@ -37,6 +37,7 @@ export const CreateCourseEditSubsection = ({
   }, [createCourseSectionsList]);
 
   useEffect(() => {
+    setMarkdownContent(subsection.content);
     setLandscape_photo((createCourseSectionsList.flatMap((section) => section.subsections).find((sub) => sub.id === subsection.id))?.landscape_photo);
     setFiles((createCourseSectionsList.flatMap((section) => section.subsections).find((sub) => sub.id === subsection.id))?.files);
   }, [subsection])
@@ -171,8 +172,6 @@ export const CreateCourseEditSubsection = ({
                 <label className='text-sm text-gray-500 mr-3 block' htmlFor=''>Evaluable * </label>
                 <Switch onChange={(e) => handleSubsectionChange('evaluable', e)} checked={subsection.activity?.evaluable} className='bg-gray-300' />
               </div>
-
-              <Divider type="vertical" />
               <div className='flex items-center gap-4'>
                 {
                   subsection.activity?.evaluable && (

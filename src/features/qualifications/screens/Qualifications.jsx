@@ -9,6 +9,8 @@ import { useAuthContext } from "../../../context/AuthContext";
 import { ProfessorQualificationsCard } from '../components/ProfessorQualificationsCard';
 
 const Qualifications = () => {
+    document.title = 'Qualifications - Uptitude'
+
     const { user } = useAuthContext();
     const [loading, setLoading] = useState(true);
     const [qualifications, setQualifications] = useState([]);

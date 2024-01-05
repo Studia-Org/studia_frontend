@@ -143,7 +143,17 @@ export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit, se
                 } : item.activityData,
 
             };
-        } else {
+        }
+        else if (item.activityData === PeerReviewData) {
+            return {
+                ...item,
+                activityData: item.activityData === PeerReviewData ? {
+                    ...PeerReviewData,
+                    id: Math.random().toString(16).slice(2),
+                } : item.activityData,
+            };
+        }
+        else {
             return item;
         }
     });
@@ -210,11 +220,20 @@ export const SequenceDevelopEducation1 = ({ setCreateCourseSectionsList, section
                 } : item.activityData,
 
             };
-        } else {
+        }
+        else if (item.activityData === PeerReviewData) {
+            return {
+                ...item,
+                activityData: item.activityData === PeerReviewData ? {
+                    ...PeerReviewData,
+                    id: Math.random().toString(16).slice(2),
+                } : item.activityData,
+            };
+        }
+        else {
             return item;
         }
     });
-
 
     function addSequence() {
         for (const item of modifiedSequence) {
@@ -270,7 +289,17 @@ export const SequenceDevelopEducation2 = ({ setCreateCourseSectionsList, section
                 } : item.activityData,
 
             };
-        } else {
+        }
+        else if (item.activityData === PeerReviewData) {
+            return {
+                ...item,
+                activityData: item.activityData === PeerReviewData ? {
+                    ...PeerReviewData,
+                    id: Math.random().toString(16).slice(2),
+                } : item.activityData,
+            };
+        }
+        else {
             return item;
         }
     });
@@ -329,7 +358,17 @@ export const SequenceDevelopNoMSLQForum = ({ setCreateCourseSectionsList, sectio
                 } : item.activityData,
 
             };
-        } else {
+        }
+        else if (item.activityData === PeerReviewData) {
+            return {
+                ...item,
+                activityData: item.activityData === PeerReviewData ? {
+                    ...PeerReviewData,
+                    id: Math.random().toString(16).slice(2),
+                } : item.activityData,
+            };
+        }
+        else {
             return item;
         }
     });

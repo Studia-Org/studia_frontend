@@ -8,6 +8,8 @@ import { API } from '../../../constant';
 const Timeline = () => {
     const { user } = useAuthContext();
     const [timelineItems, setTimelineItems] = useState([]);
+    document.title = 'Timeline - Uptitude'
+
     const groups = [{ id: '1', bgColor: '#f490e5' }, { id: '2', bgColor: '#f29dd0' }, { id: '3', bgColor: '#f29dd0' }, { id: '4', bgColor: '#f29dd0' }, { id: '5', bgColor: '#f29dd0' }]
 
     const fetchCourseInformation = async () => {

@@ -7,6 +7,8 @@ import "../styles/cardDash.css";
 
 function Dashboard() {
   const { user, isLoading } = useAuthContext();
+  document.title = 'Dashboard - Uptitude'
+
   return (
     <div className="rounded-tl-3xl  bg-[#e7eaf886] w-full">
       {isLoading ? (

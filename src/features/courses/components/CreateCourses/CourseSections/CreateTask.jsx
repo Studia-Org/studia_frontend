@@ -67,7 +67,11 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                             if (index !== -1) {
                                 subsection.title = subsection.title.substring(0, index + 1) + ' ' + title;
                             }
-                            subsection.activity = updatedTask;
+                            subsection.activity.description = updatedTask.description;
+                            subsection.activity.title = updatedTask.title;
+                            subsection.activity.deadline = updatedTask.deadline;
+                            subsection.activity.categories = updatedTask.categories;
+                            subsection.activity.files = updatedTask.files;
                         }
                     });
                 }
@@ -115,12 +119,15 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                             if (index !== -1) {
                                 subsection.title = subsection.title.substring(0, index + 1) + ' ' + title;
                             }
-                            subsection.activity = updatedTask;
+                            subsection.activity.description = updatedTask.description;
+                            subsection.activity.title = updatedTask.title;
+                            subsection.activity.deadline = updatedTask.deadline;
+                            subsection.activity.categories = updatedTask.categories;
+                            subsection.activity.files = updatedTask.files;
                         }
                     });
                 }
             });
-            console.log('newSections', newSections)
             return newSections;
         });
         setEditTaskFlag(false);
@@ -138,7 +145,7 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
 
     function createTaskButton() {
         try {
-            if (!title || !content || !deadline || !categories) {
+            if (!title || !content || !deadline || categories.length === 0) {
                 throw new Error('Please complete all required fields.');
             }
             const activity = {
@@ -222,7 +229,7 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                 <div className='flex'>
 
                     <div className='w-1/2 pr-2 mb-3 flex flex-col'>
-                        <label className='text-sm mb-3' htmlFor="" >Task title</label>
+                        <label className='text-sm mb-3' htmlFor="" >Task title *</label>
                         <Input
                             className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3'
                             placeholder="Title"
@@ -232,12 +239,12 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                     </div>
 
                     <div className='ml-10  mb-3 flex flex-col justify-center'>
-                        <label className='text-sm mb-3' htmlFor="" >Deadline</label>
+                        <label className='text-sm mb-3' htmlFor="" >Deadline *</label>
                         <DatePicker className='py-3' showTime onOk={(date) => { setDeadline(dayjs(date).format('YYYY-MM-DD HH:mm:ss')) }} value={deadline ? dayjs(deadline) : null} />
                     </div>
                 </div>
                 <div>
-                    <label className='text-sm ' htmlFor="" >Task description</label>
+                    <label className='text-sm ' htmlFor="" >Task description *</label>
                     <MDEditor
                         className='mt-2'
                         style={{ minHeight: '25rem' }}
@@ -255,7 +262,7 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                         </div>
                     </div>
                     <div className='w-1/2 pr-2 space-y-2 ml-8'>
-                        <label className='text-sm' htmlFor="">Task Categories</label>
+                        <label className='text-sm' htmlFor="">Task Categories *</label>
                         <Select
                             mode="tags"
                             className=''

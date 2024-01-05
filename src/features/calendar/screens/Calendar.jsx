@@ -19,6 +19,7 @@ const CalendarEvents = () => {
     const [events, setEventList] = useState([]);
     const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
+    document.title = `Calendar - Uptitude`
     const handleTitleChange = (value) => {
         setTitle(value);
     };
