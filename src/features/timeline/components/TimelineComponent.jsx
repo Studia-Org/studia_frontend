@@ -7,6 +7,7 @@ import Timeline, {
 import "react-calendar-timeline/lib/Timeline.css";
 import '../styles/timelineStyles.css'
 import { useEffect, useRef, useState } from "react";
+import { off } from "rsuite/esm/DOMHelper";
 
 
 const keys = {
@@ -29,9 +30,9 @@ const TimelineComponent = ({ groups, timelineItems, createCourseFlag }) => {
   const itemHeightRatio = createCourseFlag ? 0.8 : 0.70;
 
   const today = new Date();
-  const startOfWeek = new Date(today);
-  startOfWeek.setDate(today.getDate() - today.getDay());
 
+
+  const [startOfWeek, setStartOfWeek] = useState(new Date());
 
   const [endOfWeek, setEndOfWeek] = useState(new Date());
   const timelineContainer = useRef();
@@ -41,24 +42,21 @@ const TimelineComponent = ({ groups, timelineItems, createCourseFlag }) => {
     if (timelineContainer.current === null || timelineContainer.current === undefined) return;
 
     const screenTimeline = timelineContainer?.current.clientWidth;
-    let dayOffset = 7;
+    let dayOffset = 8;
     if (screenTimeline > 900) {
-      dayOffset = 7;
+      dayOffset = 8;
     }
     else if (screenTimeline > 700 && screenTimeline < 900) {
-      dayOffset = 5;
+      dayOffset = 6;
     }
-    else if (screenTimeline > 500) {
-      dayOffset = 4;
-    }
-    else if (screenTimeline >= 400) {
-      dayOffset = 3;
-    }
-    else if (screenTimeline < 300) dayOffset = 1;
-    else dayOffset = 2;
+    else dayOffset = 5;
+
     const newEndOfWeek = new Date(today);
     newEndOfWeek.setDate(today.getDate() - today.getDay() + dayOffset);
+    const start = new Date(today);
 
+    start.setDate(today.getDate() - 1);
+    setStartOfWeek(start);
     setEndOfWeek(newEndOfWeek);
   };
 

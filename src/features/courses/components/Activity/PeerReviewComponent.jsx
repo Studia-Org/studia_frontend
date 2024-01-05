@@ -17,7 +17,12 @@ export default function PeerReviewComponent({ activityData, idQualification }) {
 
     useEffect(() => {
         if (user === null || user === undefined || user.role_str !== 'student') { setLoading(false); return }
-
+        console.log(activityData.PeerReviewQualification)
+        if (activityData.PeerReviewQualification === undefined) {
+            setLoading(false);
+            setIdPartnerReview("Error")
+            return
+        }
         fetch(`${API}/qualifications?qualification` +
             `&fields[0]=PeerReviewAnswers` +
             `&populate[activity][fields][0]=id` +
@@ -125,18 +130,25 @@ export default function PeerReviewComponent({ activityData, idQualification }) {
                         <MoonLoader color="#363cd6" size={80} />
                     </div>
                     :
-                    <>
-                        <div className="max-w-[calc(100vw-2rem)] min-w-[calc(100vw-2rem)] xl:min-w-[calc(100vw-21rem)]">
-                            <MainScreen
-                                activityData={activityData}
-                                setShowEvaluate={setShowEvaluate}
-                                data={data}
-                            />
+                    idPartnerReview === "Error" ?
+                        <div className="w-full h-full flex flex-col justify-center gap-10 items-center">
+                            <h1 className="text-2xl text-center">You have not been assigned a partner to evaluate</h1>
+                            <h3 className="text-xl text-center">Maybe you should not be here yet ;)</h3>
+                            <h3 className="text-xl text-center">If it's not the case, please contact your teacher</h3>
                         </div>
-                        <div className={`${!showEvaluate ? 'w-0 h-0 overflow-hidden absolute' : 'min-w-[calc(100vw)] xl:min-w-[calc(100vw-22rem)] overflow-x-hidden  '}`}>
-                            <EvaluateScreen data={data} setShowEvaluate={setShowEvaluate} sendEvalution={sendEvalution} answersDelivered={answersDelivered} />
-                        </div>
-                    </>
+                        :
+                        <>
+                            <div className="max-w-[calc(100vw-2rem)] min-w-[calc(100vw-2rem)] xl:min-w-[calc(100vw-21rem)]">
+                                <MainScreen
+                                    activityData={activityData}
+                                    setShowEvaluate={setShowEvaluate}
+                                    data={data}
+                                />
+                            </div>
+                            <div className={`${!showEvaluate ? 'w-0 h-0 overflow-hidden absolute' : 'min-w-[calc(100vw)] xl:min-w-[calc(100vw-22rem)] overflow-x-hidden  '}`}>
+                                <EvaluateScreen data={data} setShowEvaluate={setShowEvaluate} sendEvalution={sendEvalution} answersDelivered={answersDelivered} />
+                            </div>
+                        </>
             }
 
         </div>
