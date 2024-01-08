@@ -2,11 +2,11 @@ import { useEffect, useState, React, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { API, BEARER } from "../../../constant";
 import { getToken } from "../../../helpers";
-import { Tabs, Popconfirm, Badge, FloatButton } from "antd";
+import { Tabs, Popconfirm, Badge } from "antd";
 import { SwitchEdit } from "../components/CoursesInside/SwitchEdit";
 import { FiChevronRight } from "react-icons/fi";
 import { ProfessorData } from "../components/CoursesInside/ProfessorData";
-import { CourseSettings } from "../components/CoursesInside/CourseSettings";
+import { CourseSettings } from "../components/CoursesInside/Settings/CourseSettings";
 import { AccordionCourseContent } from "../components/CoursesInside/AccordionCourseContent";
 import { ForumClickable } from "../components/CoursesInside/Forum/ForumClickable";
 import { ForumComponent } from '../components/CoursesInside/Forum/ForumComponent'
@@ -122,9 +122,10 @@ const CourseInside = () => {
   const fetchCourseInformation = async () => {
     try {
       const response = await fetch(
-        `${API}/courses/${courseId}?populate=sections.subsections.activity,cover,sections.subsections.paragraphs,sections.subsections.files,students.profile_photo,professor.profile_photo,sections.subsections.landscape_photo,sections.subsections.questionnaire`
+        `${API}/courses/${courseId}?populate=sections.subsections.activity,cover,sections.subsections.paragraphs,sections.subsections.files,students.profile_photo,professor.profile_photo,evaluators.profile_photo,sections.subsections.landscape_photo,sections.subsections.questionnaire`
       );
       const data = await response.json();
+      document.title = `${data?.data?.attributes.title} - Uptitude`
       setCourseBasicInformation(data?.data?.attributes ?? []);
       setCourseContentInformation(data?.data?.attributes?.sections?.data ?? []);
       setStudents(data?.data?.attributes?.students ?? []);

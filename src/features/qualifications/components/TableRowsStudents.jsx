@@ -1,13 +1,17 @@
 import React, { useState } from 'react'
-import { Whisper, Popover, Modal, Input, Form } from 'rsuite';
+import { Whisper, Popover } from 'rsuite';
 import { useAuthContext } from '../../../context/AuthContext';
 import { message, Popconfirm, Button } from "antd"
 import { getToken } from '../../../helpers';
 import { API } from '../../../constant';
-import { set } from 'date-fns';
+import { ModalFiles } from './ModalFiles';
+import { ModalEditQualification } from './ModalEditQualification';
+
 
 export const TableRowsStudents = ({ student, activities, isEditChecked, setStudents }) => {
-    const [open, setOpen] = useState(false);
+    const [files, setFiles] = useState();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpenEditQualification, setIsModalOpenEditQualification] = useState(false);
     const [qualification, setQualification] = useState('');
     const [placeholderComment, setPlaceholderComment] = useState('');
     const [placeholderQualification, setPlaceholderQualification] = useState('');
@@ -15,19 +19,11 @@ export const TableRowsStudents = ({ student, activities, isEditChecked, setStude
     const [activitieId, setActivitieId] = useState('');
     const [comments, setComments] = useState('');
     const { user } = useAuthContext();
-
     const [openPop, setOpenPop] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
+
     const showPopconfirm = () => {
         setOpenPop(true);
-    };
-
-    const handleQualificationChange = (value) => {
-        setQualification(value);
-    };
-
-    const handleCommentsChange = (value) => {
-        setComments(value);
     };
 
     const handleOpen = (student, activitie) => {
@@ -39,13 +35,13 @@ export const TableRowsStudents = ({ student, activities, isEditChecked, setStude
         setActivitieId(activitie.id)
         setPlaceholderQualification(grade?.attributes?.qualification)
         setPlaceholderComment(grade?.attributes?.comments)
-        setOpen(true);
+        setIsModalOpenEditQualification(true);
     };
 
     const handleClose = () => {
         setQualification('')
         setComments('')
-        setOpen(false)
+        setIsModalOpenEditQualification(false)
     }
 
     const speaker = (props) => {
@@ -162,62 +158,23 @@ export const TableRowsStudents = ({ student, activities, isEditChecked, setStude
 
     }
 
-    const downloadFile = async (file) => {
-        try {
-            const response = await fetch(file.url);
-            if (response.ok) {
-                const blob = await response.blob();
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = file.name;
-                document.body.appendChild(a);
-                a.click();
-                window.URL.revokeObjectURL(url);
-            } else {
-                console.error('Error al descargar el archivo');
-            }
-        } catch (error) {
-            console.error('Error en la descarga: ', error);
-        }
+    const showModal = (files) => {
+        setFiles(files);
+        setIsModalOpen(true);
     };
 
-    function renderFileButtons(file) {
-        return (
-            <button onClick={() => downloadFile(file.attributes)} className='bg-gray-200  rounded-md p-2 h-[2rem] w-[2rem] mx-1 flex items-center justify-center'>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-                    <path fillRule="evenodd" d="M18.97 3.659a2.25 2.25 0 00-3.182 0l-10.94 10.94a3.75 3.75 0 105.304 5.303l7.693-7.693a.75.75 0 011.06 1.06l-7.693 7.693a5.25 5.25 0 11-7.424-7.424l10.939-10.94a3.75 3.75 0 115.303 5.304L9.097 18.835l-.008.008-.007.007-.002.002-.003.002A2.25 2.25 0 015.91 15.66l7.81-7.81a.75.75 0 011.061 1.06l-7.81 7.81a.75.75 0 001.054 1.068L18.97 6.84a2.25 2.25 0 000-3.182z" clipRule="evenodd" />
-                </svg>
-            </button>
-        )
-    }
 
-    function renderModal(student) {
-        return (
-            <Modal size='sm' open={open} onClose={handleClose}>
-                <Modal.Header>
-                    <Modal.Title className='font-semibold'>Edit qualification</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form.Group >
-                        <Form.ControlLabel className='font-medium text-sm'>Qualification</Form.ControlLabel>
-                        <Input className='my-4' value={qualification} placeholder={placeholderQualification} onChange={handleQualificationChange} />
-                    </Form.Group >
-                    <Form.Group >
-                        <Form.ControlLabel className='font-medium text-sm'>Comments</Form.ControlLabel>
-                        <Input className='mt-4' value={comments} placeholder={placeholderComment} onChange={handleCommentsChange} />
-                    </Form.Group >
-                </Modal.Body>
-                <Modal.Footer>
 
-                    <Button onClick={handleClose} className='mr-3'>
-                        Cancel
-                    </Button>
-                    <Button loading={confirmLoading} onClick={() => saveChangesButton(student.id)} className='bg-blue-500' type="primary">
-                        Save changes
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+    function renderFileButton(files) {
+        return (
+            <>
+                <Button onClick={() => showModal(files)} className='bg-gray-200  rounded-md p-2 h-[2rem] w-[2rem] mx-1 flex items-center justify-center'>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                        <path fillRule="evenodd" d="M18.97 3.659a2.25 2.25 0 00-3.182 0l-10.94 10.94a3.75 3.75 0 105.304 5.303l7.693-7.693a.75.75 0 011.06 1.06l-7.693 7.693a5.25 5.25 0 11-7.424-7.424l10.939-10.94a3.75 3.75 0 115.303 5.304L9.097 18.835l-.008.008-.007.007-.002.002-.003.002A2.25 2.25 0 015.91 15.66l7.81-7.81a.75.75 0 011.061 1.06l-7.81 7.81a.75.75 0 001.054 1.068L18.97 6.84a2.25 2.25 0 000-3.182z" clipRule="evenodd" />
+                    </svg>
+                </Button>
+            </>
+
         )
     }
 
@@ -266,6 +223,7 @@ export const TableRowsStudents = ({ student, activities, isEditChecked, setStude
 
 
 
+
     function renderCell(activitie) {
         const grade = student.attributes.qualifications.data.find(
             qualification => qualification.attributes.activity.data?.id === activitie?.id
@@ -275,6 +233,7 @@ export const TableRowsStudents = ({ student, activities, isEditChecked, setStude
         if (isEditChecked) {
             return (
                 <td key={activitie.id} className="px-6 py-4">
+                    <ModalFiles grade={grade} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} student={student} />
                     <div className='flex'>
                         <button onClick={() => handleOpen(student, activitie)} className='border rounded-md px-14 h-[3rem] w-1 flex items-center justify-center'>
                             <p>{grade ? grade.attributes.qualification : ''}</p>
@@ -306,18 +265,21 @@ export const TableRowsStudents = ({ student, activities, isEditChecked, setStude
                         {
                             file !== null && file !== undefined ?
                                 <div className='flex items-center mx-2 '>
-                                    {file.map(renderFileButtons)}
+                                    {renderFileButton(file)}
                                 </div> :
                                 null
                         }
 
-                        {renderModal(student)}
+                        <ModalEditQualification student={student} saveChangesButton={saveChangesButton} setIsModalOpen={setIsModalOpenEditQualification}
+                            isModalOpen={isModalOpenEditQualification} placeholderComment={placeholderComment} placeholderQualification={placeholderQualification}
+                            qualification={qualification} comments={comments} setComments={setComments} setQualifications={setQualification} />
                     </div>
                 </td>
             );
         } else {
             return (
                 <td key={activitie.id} className="px-6 py-4">
+                    <ModalFiles grade={grade} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} student={student} />
                     <div className='flex'>
                         {grade?.attributes?.comments ?
                             (
@@ -327,12 +289,12 @@ export const TableRowsStudents = ({ student, activities, isEditChecked, setStude
                                     </div>
                                 </Whisper>
                             ) : (
-                                <div className="rounded-md w-[10rem] h-[3rem] p-3 text-center"></div>
+                                <div className="rounded-md w-[10rem] h-[3rem] p-3 text-center">{grade?.attributes?.qualification}</div>
                             )}
                         {
                             file !== null && file !== undefined ?
                                 <div className='flex items-center px-2'>
-                                    {file.map(renderFileButtons)}
+                                    {renderFileButton(file)}
                                 </div> :
                                 null
                         }

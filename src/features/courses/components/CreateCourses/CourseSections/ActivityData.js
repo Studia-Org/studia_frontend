@@ -7,9 +7,7 @@ export const PeerReviewData = {
     categories: null,
     type: 'peerReview',
     files: null,
-    PeerReviewRubrica: {
-
-    },
+    PeerReviewRubrica: {},
     order: null,
     evaluable: false,
 }

@@ -28,8 +28,20 @@ const variants = {
 };
 const transition = { duration: 0.2 };
 
-const CreateCourseButtons = (createCourseOption, setCreateCourseOption, visibilityTask) => {
+const CreateCourseButtons = (createCourseOption, setCreateCourseOption, visibilityTask, courseBasicInfo) => {
   const navigate = useNavigate();
+
+  function handleContinue() {
+    if (createCourseOption === 0) {
+      if (courseBasicInfo.courseName === '' || courseBasicInfo.description === '' || courseBasicInfo.tags.length === 0 || !courseBasicInfo.cover || courseBasicInfo.cover.length === 0) {
+        message.error("Please complete all the fields")
+      } else {
+        setCreateCourseOption(createCourseOption + 1)
+      }
+    } else {
+      setCreateCourseOption(createCourseOption + 1)
+    }
+  }
 
   if (!visibilityTask) {
     return (
@@ -60,7 +72,7 @@ const CreateCourseButtons = (createCourseOption, setCreateCourseOption, visibili
               Confirm
             </button> :
 
-            <button type="button" onClick={() => setCreateCourseOption(createCourseOption + 1)} class=" duration-150 group/continue text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center ">
+            <button type="button" onClick={() => handleContinue()} class=" duration-150 group/continue text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center ">
               Continue
               <svg class="w-3.5 h-3.5 ml-2 group-hover/continue:translate-x-1 duration-150" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
@@ -90,7 +102,7 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
     <motion.div className='w-2/4 flex flex-col' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
       <p className='font-normal text-sm text-gray-400 mt-5 mb-5'>First, give us some information about the new course</p>
       <label htmlFor="base-input" className="block mb-2 text-sm font-medium text-gray-900">
-        Course name
+        Course name *
       </label>
       <input
         type="text"
@@ -101,7 +113,7 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
       />
 
       <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 mt-8">
-        Description
+        Description *
       </label>
       <textarea
         id="message"
@@ -113,7 +125,7 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
       <SelectProfessor setCourseBasicInfo={setCourseBasicInfo} />
       <div className='font-normal text-sm'>
         <label htmlFor="message" className="block mb-4 text-sm font-medium text-gray-900 mt-8">
-          Tags
+          Tags *
         </label>
         <TagsInput value={courseBasicInfo.tags} onChange={(e) => handleChange('tags', e)} />
       </div>
@@ -121,7 +133,7 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
       <div className='flex mt-8 justify-between'>
         <div className='font-medium w-full'>
           <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 ">
-            Cover image
+            Cover image *
           </label>
           <FilePond
             allowMultiple={true}
@@ -133,7 +145,7 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
           />
         </div>
       </div>
-      {CreateCourseButtons(createCourseOption, setCreateCourseOption)}
+      {CreateCourseButtons(createCourseOption, setCreateCourseOption, null, courseBasicInfo)}
     </motion.div>
   )
 }

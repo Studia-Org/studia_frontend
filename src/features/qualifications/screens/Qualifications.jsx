@@ -9,6 +9,7 @@ import { useAuthContext } from "../../../context/AuthContext";
 import { ProfessorQualificationsCard } from '../components/ProfessorQualificationsCard';
 
 const Qualifications = () => {
+    document.title = 'Qualifications - Uptitude'
     const { user } = useAuthContext();
     const [loading, setLoading] = useState(true);
     const [qualifications, setQualifications] = useState([]);
@@ -117,7 +118,7 @@ const Qualifications = () => {
     function renderProfessorQualificationsCard(qualification) {
         return (
             <>
-                <ProfessorQualificationsCard qualification={qualification} />
+                <ProfessorQualificationsCard qualification={qualification}/>
             </>
         )
     }
@@ -221,7 +222,7 @@ const Qualifications = () => {
     return (
         <>
             {
-                user !== undefined && user?.role_str === 'professor' ?
+                user !== undefined && user?.role_str !== 'student' ?
                     <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] '>
                         <h1 className='pt-11 font-bold text-xl ml-12'>Qualifications</h1>
                         {!loading ?

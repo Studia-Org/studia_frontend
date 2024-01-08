@@ -505,7 +505,6 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                             <Switch checked={subsection.activity?.evaluable} onChange={(e) => handleSwitchChange(e)} className='bg-gray-300' />
                         </div>
 
-                        <Divider type="vertical" />
                         <div className='flex items-center gap-4'>
                             {
                                 subsection.activity?.evaluable && (

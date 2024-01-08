@@ -27,7 +27,7 @@ const CoursesHome = () => {
   const [dailyTasks, setDailyTasks] = useState([]);
   const [openObjectivesModal, setOpenObjectivesModal] = useState(false);
 
-
+  document.title = 'Home - Uptitude'
   const navigate = useNavigate();
 
   const variants = {

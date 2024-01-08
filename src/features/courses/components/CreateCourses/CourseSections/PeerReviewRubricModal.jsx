@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Input, InputNumber, Popconfirm, Table, Typography, Modal, Button } from 'antd';
 import './Rubric.css'
 
@@ -64,9 +64,16 @@ const rubricDataConverter = (rubricData) => {
 export const PeerReviewRubricModal = ({ isModalOpen, setIsModalOpen, rubricData, setSubsectionEditing }) => {
 
     const [form] = Form.useForm();
-    const [data, setData] = useState(rubricDataConverter(rubricData));
+    const [data, setData] = useState(rubricData ? rubricDataConverter(rubricData) : null);
     const [editingKey, setEditingKey] = useState('');
     const [evaluationMethod, setEvaluationMethod] = useState('numeric')
+
+    useEffect(() => {
+        if (rubricData) {
+            setData(rubricDataConverter(rubricData))
+        }
+    }, [rubricData])
+
     const isEditing = (record) => record.key === editingKey;
 
     const deleteRow = (record) => {
@@ -213,14 +220,18 @@ export const PeerReviewRubricModal = ({ isModalOpen, setIsModalOpen, rubricData,
     ];
     const addRow = () => {
         const newData = {
-            key: data.length + 1,
+            key: data?.length ? data?.length + 1 : 1,
             criteria: '',
             evalution1: '',
             evalution2: '',
             evalution3: '',
             evalution4: '',
         };
-        setData([...data, newData])
+        if (data) {
+            setData([...data, newData])
+        } else {
+            setData([newData])
+        }
     }
     const mergedColumns = columns.map((col) => {
         if (!col.editable) {
@@ -255,7 +266,6 @@ export const PeerReviewRubricModal = ({ isModalOpen, setIsModalOpen, rubricData,
                 </div>
 
                 <Table
-
                     pagination={false}
                     className='overflow-y-scroll max-h-[30rem]'
                     components={{

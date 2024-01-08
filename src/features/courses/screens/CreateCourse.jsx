@@ -9,6 +9,7 @@ import { CreateConfirmation, CreateCourseInfo, CreateCourseSections } from '../c
 
 const CreateCourse = () => {
     const navigate = useNavigate();
+    document.title = 'Create Course - Uptitude'
     const [createCourseOption, setCreateCourseOption] = useState(0);
     const [createCourseSectionsList, setCreateCourseSectionsList] = useState([])
     const [createCourseSectionsListCopy, setCreateCourseSectionsListCopy] = useState([])
@@ -48,7 +49,7 @@ const CreateCourse = () => {
                         :
                         <>
                             <h1>Create new Course</h1>
-                            <CreateCourseBreadcrumb createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} />
+                            <CreateCourseBreadcrumb createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} courseBasicInfo={courseBasicInfo} />
                             <div className='flex justify-between mr-16 mt-5'>
                                 {RenderCreateCourse()}
                                 {

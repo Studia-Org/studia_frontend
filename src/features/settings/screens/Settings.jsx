@@ -9,6 +9,7 @@ const Settings = () => {
   const [selectedOption, setSelectedOption] = useState('help');
   const { user } = useAuthContext();
   const navigate = useNavigate();
+  document.title = 'Settings - Uptitude'  
 
   useEffect(() => {
     if (!checkAuthenticated()) {
