@@ -7,6 +7,8 @@ import "../styles/cardDash.css";
 
 function Dashboard() {
   const { user, isLoading } = useAuthContext();
+  document.title = 'Dashboard - Uptitude'
+
   return (
     <div className="rounded-tl-3xl  bg-[#e7eaf886] w-full">
       {isLoading ? (
@@ -17,9 +19,8 @@ function Dashboard() {
         <main className="flex flex-wrap w-full h-full justify-center items-center p-3">
           <div className="flex h-[15rem] p-3 min-w-[95%] max-w-[95%] ">
             <CardDash user={user} />
-            {/* <PerformanceGraphic courses={user.courses} /> */}
           </div>
-          <div className="flex min-h-[400px] h-[calc(100vh-15rem-10rem)] p-3 min-w-[95%] max-w-[95%]">
+          <div className="flex  min-h-[400px] h-[calc(100vh-15rem-10rem)] p-3 min-w-[95%] max-w-[95%]">
             <TimeDedicated courses={user?.courses} />
           </div>
         </main>

@@ -1,30 +1,9 @@
-import { fetchDataEmptyQuestionnaire, fetchDataPlannificationQuestionnaire, fetchDataMSLQuestionnaire } from './ItemData'
+import { MSLQuestionnaireData, EmptyQuestionnaireData, PlannificationQuestionnaireData } from './QuestionnaireData'
+import { PeerReviewData, ForumData } from './ActivityData';
 import React from 'react'
 
 
-
-function fetchDataAndCreateSubsection(subsectionName, fase, switcher, setCreateCourseSectionsList, sectionToEdit, type, context) {
-    return new Promise((resolve, reject) => {
-        if (switcher !== null) {
-            magicalFetcher(switcher)
-                .then(data => {
-                    console.log(data);
-                    createSubsection(subsectionName, fase, data, setCreateCourseSectionsList, sectionToEdit, type, context);
-                    resolve();
-                })
-                .catch(error => {
-                    console.error('Error al obtener datos:', error);
-                    reject(error);
-                });
-        } else {
-            createSubsection(subsectionName, fase, null, setCreateCourseSectionsList, sectionToEdit, type, context);
-            resolve();
-        }
-    });
-}
-
-
-function createSubsection(subsectionName, fase, data, setCreateCourseSectionsList, sectionToEdit, type, context) {
+function createSubsection(subsectionName, fase, questionnaireData, setCreateCourseSectionsList, sectionToEdit, type, context, activityData) {
     if (context === 'coursesInside') {
         const newSubsection = {
             id: Math.floor(Math.random() * 1000),
@@ -34,14 +13,14 @@ function createSubsection(subsectionName, fase, data, setCreateCourseSectionsLis
                 finished: false,
                 start_date: null,
                 end_date: null,
-                activity: [],
+                activity: activityData,
                 content: '',
                 paragraphs: [],
                 description: null,
                 landscape_photo: [],
                 files: [],
                 type: type,
-                questionnaire: data?.data,
+                questionnaire: questionnaireData,
                 users: null
             }
 
@@ -64,14 +43,14 @@ function createSubsection(subsectionName, fase, data, setCreateCourseSectionsLis
             finished: false,
             start_date: null,
             end_date: null,
-            activity: [],
+            activity: activityData,
             content: '',
             paragraphs: [],
             description: null,
             landscape_photo: [],
             files: [],
             type: type,
-            questionnaire: data?.data,
+            questionnaire: questionnaireData,
             users: null
         };
         setCreateCourseSectionsList(prevSections => {
@@ -92,19 +71,6 @@ function createSubsection(subsectionName, fase, data, setCreateCourseSectionsLis
                 return section;
             });
         });
-    }
-}
-
-function magicalFetcher(switcher) {
-    switch (switcher) {
-        case 'mslq':
-            return fetchDataMSLQuestionnaire()
-        case 'plannification':
-            return fetchDataPlannificationQuestionnaire()
-        case 'empty':
-            return fetchDataEmptyQuestionnaire()
-        default:
-            return null
     }
 }
 
@@ -155,19 +121,48 @@ const QuestionItem = ({ iconColor, iconPath, title }) => (
     </li>
 );
 
-export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit }) => {
+export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask }) => {
     const sequence = [
-        { title: 'MSLQ Questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', switcher: 'mslq', type: 'questionnaire' },
-        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', switcher: null, type: 'task' },
-        { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', switcher: 'plannification', type: 'questionnaire' },
-        { title: 'Task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', switcher: null, type: 'task' },
-        { title: 'Peer review', iconColor: '#dc2626', iconPath: svgSwitcher('peerReview'), fase: 'self-reflection', switcher: null, type: 'peerReview' },
-        { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', switcher: null, type: 'task' },
+        { title: 'MSLQ Questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: MSLQuestionnaireData, type: 'questionnaire', activityData: null },
+        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
+        { title: 'Task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: 'Peer review', iconColor: '#dc2626', iconPath: svgSwitcher('peerReview'), fase: 'self-reflection', questionnaireData: null, type: 'peerReview', activityData: PeerReviewData },
+        { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
     ];
 
-    async function addSequence() {
-        for (const item of sequence) {
-            await fetchDataAndCreateSubsection(item.title, item.fase, item.switcher, setCreateCourseSectionsList, sectionToEdit, item.type);
+    const modifiedSequence = sequence.map((item, index) => {
+        if (item.activityData === sectionTask) {
+            return {
+                ...item,
+                title: `${item.title}: ${sectionTask.title}`,
+                activityData: item.activityData === sectionTask ? {
+                    ...sectionTask,
+                    id: Math.random().toString(16).slice(2),
+                    title: `${item.title}: ${sectionTask.title}`
+                } : item.activityData,
+
+            };
+        }
+        else if (item.activityData === PeerReviewData) {
+            return {
+                ...item,
+                activityData: item.activityData === PeerReviewData ? {
+                    ...PeerReviewData,
+                    id: Math.random().toString(16).slice(2),
+                } : item.activityData,
+            };
+        }
+        else {
+            return item;
+        }
+    });
+
+
+
+    function addSequence() {
+        for (const item of modifiedSequence) {
+            createSubsection(item.title, item.fase, item.questionnaireData, setCreateCourseSectionsList, sectionToEdit, item.type, '', item.activityData);
         }
     }
 
@@ -196,25 +191,53 @@ export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit }) 
     );
 }
 
-export const SequenceDevelopEducation1 = ({ setCreateCourseSectionsList, sectionToEdit }) => {
+export const SequenceDevelopEducation1 = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask }) => {
     const sequence = [
-        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', switcher: null, type: 'task' },
-        { title: 'Forum debate', iconColor: '#15803d', iconPath: svgSwitcher('forum'), fase: 'forethought', switcher: null, type: 'forum' },
-        { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', switcher: 'plannification', type: 'questionnaire' },
-        { title: 'First task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', switcher: null, type: 'task' },
-        { title: 'First delivery', iconColor: '#f59e0b', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'performance', switcher: null, type: 'task' },
-        { title: 'Peer Review', iconColor: '#f59e0b', iconPath: svgSwitcher('peerReview'), fase: 'performance', switcher: null, type: 'peerReview' },
-        { title: 'Feedback reflection questionnaire', iconColor: '#f59e0b', iconPath: svgSwitcher('questionnaireNormal'), fase: 'performance', switcher: 'empty', type: 'questionnaire' },
-        { title: 'Second task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', switcher: null, type: 'task' },
-        { title: 'Second delivery', iconColor: '#f59e0b', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'performance', switcher: null, type: 'task' },
-        { title: 'Peer Review', iconColor: '#f59e0b', iconPath: svgSwitcher('peerReview'), fase: 'performance', switcher: null, type: 'peerReview' },
-        { title: 'Feedback reflection questionnaire', iconColor: '#f59e0b', iconPath: svgSwitcher('questionnaireNormal'), fase: 'performance', switcher: 'empty', type: 'questionnaire' },
-        { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', switcher: null, type: 'task' },
+        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: 'Forum debate', iconColor: '#15803d', iconPath: svgSwitcher('forum'), fase: 'forethought', questionnaireData: null, type: 'forum', activityData: ForumData },
+        { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
+        { title: 'First task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: 'First delivery', iconColor: '#f59e0b', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: 'Peer Review', iconColor: '#f59e0b', iconPath: svgSwitcher('peerReview'), fase: 'performance', questionnaireData: null, type: 'peerReview', activityData: PeerReviewData },
+        { title: 'Feedback reflection questionnaire', iconColor: '#f59e0b', iconPath: svgSwitcher('questionnaireNormal'), fase: 'performance', questionnaireData: EmptyQuestionnaireData, type: 'questionnaire', activityData: null },
+        { title: 'Second task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: 'Second delivery', iconColor: '#f59e0b', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: 'Peer Review', iconColor: '#f59e0b', iconPath: svgSwitcher('peerReview'), fase: 'performance', questionnaireData: null, type: 'peerReview', activityData: PeerReviewData },
+        { title: 'Feedback reflection questionnaire', iconColor: '#f59e0b', iconPath: svgSwitcher('questionnaireNormal'), fase: 'performance', questionnaireData: EmptyQuestionnaireData, type: 'questionnaire', activityData: null },
+        { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
     ];
 
-    async function addSequence() {
-        for (const item of sequence) {
-            await fetchDataAndCreateSubsection(item.title, item.fase, item.switcher, setCreateCourseSectionsList, sectionToEdit, item.type);
+
+    const modifiedSequence = sequence.map((item, index) => {
+        if (item.activityData === sectionTask) {
+            return {
+                ...item,
+                title: `${item.title}: ${sectionTask.title}`,
+                activityData: item.activityData === sectionTask ? {
+                    ...sectionTask,
+                    id: Math.random().toString(16).slice(2),
+                    title: `${item.title}: ${sectionTask.title}`
+                } : item.activityData,
+
+            };
+        }
+        else if (item.activityData === PeerReviewData) {
+            return {
+                ...item,
+                activityData: item.activityData === PeerReviewData ? {
+                    ...PeerReviewData,
+                    id: Math.random().toString(16).slice(2),
+                } : item.activityData,
+            };
+        }
+        else {
+            return item;
+        }
+    });
+
+    function addSequence() {
+        for (const item of modifiedSequence) {
+            createSubsection(item.title, item.fase, item.questionnaireData, setCreateCourseSectionsList, sectionToEdit, item.type, '', item.activityData);
         }
     }
 
@@ -243,19 +266,48 @@ export const SequenceDevelopEducation1 = ({ setCreateCourseSectionsList, section
     );
 }
 
-export const SequenceDevelopEducation2 = ({ setCreateCourseSectionsList, sectionToEdit }) => {
+export const SequenceDevelopEducation2 = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask }) => {
     const sequence = [
-        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', switcher: null, type: 'task' },
-        { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', switcher: 'plannification', type: 'questionnaire' },
-        { title: 'First task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', switcher: null, type: 'task' },
-        { title: 'First delivery', iconColor: '#f59e0b', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'performance', switcher: null, type: 'task' },
-        { title: 'Professor feedback and reflection', iconColor: '#dc2626', iconPath: svgSwitcher('peerReview'), fase: 'self-reflection', switcher: null, type: 'peerReview' },
-        { title: 'Autoevaluation questionnaire', iconColor: '#dc2626', iconPath: svgSwitcher('questionnaireNormal'), fase: 'self-reflection', switcher: 'empty', type: 'questionnaire' },
-        { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', switcher: null, type: 'task' },
+        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
+        { title: 'First task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: 'First delivery', iconColor: '#f59e0b', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: 'Professor feedback and reflection', iconColor: '#dc2626', iconPath: svgSwitcher('peerReview'), fase: 'self-reflection', questionnaireData: null, type: 'peerReview', activityData: PeerReviewData },
+        { title: 'Autoevaluation questionnaire', iconColor: '#dc2626', iconPath: svgSwitcher('questionnaireNormal'), fase: 'self-reflection', questionnaireData: EmptyQuestionnaireData, type: 'questionnaire', activityData: null },
+        { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
     ];
+
+    const modifiedSequence = sequence.map((item, index) => {
+        if (item.activityData === sectionTask) {
+            return {
+                ...item,
+                title: `${item.title}: ${sectionTask.title}`,
+                activityData: item.activityData === sectionTask ? {
+                    ...sectionTask,
+                    id: Math.random().toString(16).slice(2),
+                    title: `${item.title}: ${sectionTask.title}`
+                } : item.activityData,
+
+            };
+        }
+        else if (item.activityData === PeerReviewData) {
+            return {
+                ...item,
+                activityData: item.activityData === PeerReviewData ? {
+                    ...PeerReviewData,
+                    id: Math.random().toString(16).slice(2),
+                } : item.activityData,
+            };
+        }
+        else {
+            return item;
+        }
+    });
+
+
     async function addSequence() {
-        for (const item of sequence) {
-            await fetchDataAndCreateSubsection(item.title, item.fase, item.switcher, setCreateCourseSectionsList, sectionToEdit, item.type);
+        for (const item of modifiedSequence) {
+            createSubsection(item.title, item.fase, item.questionnaireData, setCreateCourseSectionsList, sectionToEdit, item.type, '', item.activityData);
         }
     }
     return (
@@ -283,20 +335,48 @@ export const SequenceDevelopEducation2 = ({ setCreateCourseSectionsList, section
     );
 }
 
-export const SequenceDevelopNoMSLQForum = ({ setCreateCourseSectionsList, sectionToEdit }) => {
+export const SequenceDevelopNoMSLQForum = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask }) => {
     const sequence = [
-        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', switcher: null, type: 'task' },
-        { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', switcher: 'plannification', type: 'questionnaire' },
-        { title: 'Task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', switcher: null, type: 'task' },
-        { title: 'Forum Doubts', iconColor: '#f59e0b', iconPath: svgSwitcher('forum'), fase: 'performance', switcher: null, type: 'forum' },
-        { title: 'Peer review', iconColor: '#dc2626', iconPath: svgSwitcher('peerReview'), fase: 'self-reflection', switcher: null, type: 'peerReview' },
-        { title: 'Feedback refactor', iconColor: '#dc2626', iconPath: svgSwitcher('taskImplementation'), fase: 'self-reflection', switcher: null, type: 'task' },
-        { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', switcher: null, type: 'task' },
+        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
+        { title: 'Task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: 'Forum Doubts', iconColor: '#f59e0b', iconPath: svgSwitcher('forum'), fase: 'performance', questionnaireData: null, type: 'forum', activityData: ForumData },
+        { title: 'Peer review', iconColor: '#dc2626', iconPath: svgSwitcher('peerReview'), fase: 'self-reflection', questionnaireData: null, type: 'peerReview', activityData: PeerReviewData },
+        { title: 'Feedback refactor', iconColor: '#dc2626', iconPath: svgSwitcher('taskImplementation'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
     ];
 
-    async function addSequence() {
-        for (const item of sequence) {
-            await fetchDataAndCreateSubsection(item.title, item.fase, item.switcher, setCreateCourseSectionsList, sectionToEdit, item.type);
+    const modifiedSequence = sequence.map((item, index) => {
+        if (item.activityData === sectionTask) {
+            return {
+                ...item,
+                title: `${item.title}: ${sectionTask.title}`,
+                activityData: item.activityData === sectionTask ? {
+                    ...sectionTask,
+                    id: Math.random().toString(16).slice(2),
+                    title: `${item.title}: ${sectionTask.title}`
+                } : item.activityData,
+
+            };
+        }
+        else if (item.activityData === PeerReviewData) {
+            return {
+                ...item,
+                activityData: item.activityData === PeerReviewData ? {
+                    ...PeerReviewData,
+                    id: Math.random().toString(16).slice(2),
+                } : item.activityData,
+            };
+        }
+        else {
+            return item;
+        }
+    });
+
+
+    function addSequence() {
+        for (const item of modifiedSequence) {
+            createSubsection(item.title, item.fase, item.questionnaireData, setCreateCourseSectionsList, sectionToEdit, item.type, '', item.activityData);
         }
     }
     return (
@@ -324,7 +404,7 @@ export const SequenceDevelopNoMSLQForum = ({ setCreateCourseSectionsList, sectio
     );
 }
 
-export const PerformancePage = ({ setCreateCourseSectionsList, sectionToEdit, context }) => {
+export const PerformancePage = ({ setCreateCourseSectionsList, sectionToEdit, context, sectionTask }) => {
 
     return (
         <>
@@ -339,7 +419,7 @@ export const PerformancePage = ({ setCreateCourseSectionsList, sectionToEdit, co
                     <p className='text-base font-normal'>Task implementation</p>
                     <p className='text-sm text-gray-500 font-normal'>Implementation of the task, during this phase, the planned tasks and activities are put into action. It involves carrying out the necessary actions to achieve the project or task objectives defined in the planning phase.</p>
                 </div>
-                <button onClick={() => fetchDataAndCreateSubsection('Task implementation', 'performance', null, setCreateCourseSectionsList, sectionToEdit, 'task', context)} className='mx-3 ml-auto pl-3'>
+                <button onClick={() => createSubsection('Task implementation', 'performance', null, setCreateCourseSectionsList, sectionToEdit, 'task', context, sectionTask)} className='mx-3 ml-auto pl-3'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -355,7 +435,7 @@ export const PerformancePage = ({ setCreateCourseSectionsList, sectionToEdit, co
                     <p className='text-base font-normal'>Custom Field</p>
                     <p className='text-sm text-gray-500 font-normal'>Add a custom field if you need to introduce any theorical subsection between phases.</p>
                 </div>
-                <button onClick={() => fetchDataAndCreateSubsection('Custom field', 'performance', null, setCreateCourseSectionsList, sectionToEdit, 'task', context)} className='mx-3 ml-auto pl-3'>
+                <button onClick={() => createSubsection('Custom field', 'performance', null, setCreateCourseSectionsList, sectionToEdit, 'task', context, sectionTask)} className='mx-3 ml-auto pl-3'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -384,7 +464,7 @@ export const buttonGroup = ({ handleBack, handleContinue }) => {
     )
 }
 
-export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, context }) => {
+export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, context, sectionTask }) => {
 
     return (
         <>
@@ -399,7 +479,7 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, co
                     <p className='text-base font-normal'>Plannification questionnaire</p>
                     <p className='text-sm text-gray-500 font-normal'>A planning questionnaire is a valuable tool for gathering essential information to create effective plans. This questionnaire helps individuals or teams define goals, identify resources, and establish a roadmap for successful execution. </p>
                 </div>
-                <button onClick={() => fetchDataAndCreateSubsection('Plannification questionnaire', 'forethought', 'plannification', setCreateCourseSectionsList, sectionToEdit, 'questionnaire', context)} className='mx-3  ml-3 pl-3'>
+                <button onClick={() => createSubsection('Plannification questionnaire', 'forethought', PlannificationQuestionnaireData, setCreateCourseSectionsList, sectionToEdit, 'questionnaire', context, null)} className='mx-3  ml-3 pl-3'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6  text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -415,7 +495,7 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, co
                     <p className='text-base font-normal'>MSLQ Questionnaire</p>
                     <p className='text-sm text-gray-500 font-normal'>The Motivated Strategies for Learning Questionnaire (MSLQ) is a widely-used tool in education for assessing students' motivation and learning strategies. This questionnaire aims to understand the factors that influence students' engagement and achievement.</p>
                 </div>
-                <button onClick={() => fetchDataAndCreateSubsection('MSLQ Questionnaire', 'forethought', 'mslq', setCreateCourseSectionsList, sectionToEdit, 'questionnaire', context)} className='mx-3 ml-auto pl-3'>
+                <button onClick={() => createSubsection('MSLQ Questionnaire', 'forethought', MSLQuestionnaireData, setCreateCourseSectionsList, sectionToEdit, 'questionnaire', context, null)} className='mx-3 ml-auto pl-3'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -432,7 +512,7 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, co
                     <p className='text-base font-normal'>Task statement</p>
                     <p className='text-sm text-gray-500 font-normal'>Define the essential details of the task, including its objectives, scope, and expected outcomes. Task statements are designed to provide clear guidance to individuals or teams, ensuring that they understand their responsibilities and can execute the task effectively. </p>
                 </div>
-                <button onClick={() => fetchDataAndCreateSubsection('Task statement', 'forethought', null, setCreateCourseSectionsList, sectionToEdit, 'task', context)} className='mx-3 ml-auto pl-3 '>
+                <button onClick={() => createSubsection('Task statement', 'forethought', null, setCreateCourseSectionsList, sectionToEdit, 'task', context, sectionTask)} className='mx-3 ml-auto pl-3 '>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -448,7 +528,7 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, co
                     <p className='text-base font-normal'>Custom field</p>
                     <p className='text-sm text-gray-500 font-normal'>Add a custom field if you need to introduce any theorical subsection between phases.</p>
                 </div>
-                <button onClick={() => fetchDataAndCreateSubsection('Custom field', 'forethought', null, setCreateCourseSectionsList, sectionToEdit, 'task', context)} className='mx-3 ml-auto pl-3'>
+                <button onClick={() => createSubsection('Custom field', 'forethought', null, setCreateCourseSectionsList, sectionToEdit, 'task', context, sectionTask)} className='mx-3 ml-auto pl-3'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -464,7 +544,7 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, co
                     <p className='text-base font-normal'>Empty Questionnaire</p>
                     <p className='text-sm text-gray-500 font-normal'>Create a new questionnaire from scratch.</p>
                 </div>
-                <button onClick={() => fetchDataAndCreateSubsection('Questionnaire', 'forethought', 'empty', setCreateCourseSectionsList, sectionToEdit, 'questionnaire', context)} className='mx-3 ml-auto pl-3'>
+                <button onClick={() => createSubsection('Questionnaire', 'forethought', EmptyQuestionnaireData, setCreateCourseSectionsList, sectionToEdit, 'questionnaire', context, null)} className='mx-3 ml-auto pl-3'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -474,7 +554,7 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, co
     )
 }
 
-export const SelfReflectionPage = ({ setCreateCourseSectionsList, sectionToEdit, context }) => {
+export const SelfReflectionPage = ({ setCreateCourseSectionsList, sectionToEdit, context, sectionTask }) => {
 
     return (
         <>
@@ -488,14 +568,14 @@ export const SelfReflectionPage = ({ setCreateCourseSectionsList, sectionToEdit,
                     <p className='text-base font-normal'>Peer review</p>
                     <p className='text-sm text-gray-500 font-normal'>This review method aims to provide constructive feedback, validate the quality and accuracy of the work, and ensure it meets established standards or criteria.</p>
                 </div>
-                <button onClick={() => fetchDataAndCreateSubsection('Peer review', 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit, 'peerReview', context)} className='mx-3 ml-auto pl-3'>
+                <button onClick={() => createSubsection('Peer review', 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit, 'peerReview', context, PeerReviewData)} className='mx-3 ml-auto pl-3'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
                 </button>
             </div>
             <div className='flex items-center p-5 border rounded-xl bg-gray-50 mt-5'>
-                <div className='px-3 py-3 bg-[#dc2626] rounded-md flex items-center justify-center '>
+                <div className='px-3 py-3 bg-[#dc2626] rounded-md flex items-center justify-center'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-8 h-8 text-white">
                         <path fillRule="evenodd" d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5zm4.75 11.25a.75.75 0 001.5 0v-2.546l.943 1.048a.75.75 0 101.114-1.004l-2.25-2.5a.75.75 0 00-1.114 0l-2.25 2.5a.75.75 0 101.114 1.004l.943-1.048v2.546z" clipRule="evenodd" />
                     </svg>
@@ -504,7 +584,7 @@ export const SelfReflectionPage = ({ setCreateCourseSectionsList, sectionToEdit,
                     <p className='text-base font-normal'>Final delivery</p>
                     <p className='text-sm text-gray-500 font-normal'>Final delivery of the task.</p>
                 </div>
-                <button onClick={() => fetchDataAndCreateSubsection('Final delivery', 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit, 'task', context)} className='mx-3 ml-auto pl-3'>
+                <button onClick={() => createSubsection('Final delivery', 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit, 'task', context, sectionTask)} className='mx-3 ml-auto pl-3'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f] ">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -520,7 +600,7 @@ export const SelfReflectionPage = ({ setCreateCourseSectionsList, sectionToEdit,
                     <p className='text-base font-normal'>Custom field</p>
                     <p className='text-sm text-gray-500 font-normal'>Add a custom field if you need to introduce any theorical subsection between phases.</p>
                 </div>
-                <button onClick={() => fetchDataAndCreateSubsection('Custom field', 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit, 'task', context)} className='mx-3 ml-auto pl-3'>
+                <button onClick={() => createSubsection('Custom field', 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit, 'task', context, sectionTask)} className='mx-3 ml-auto pl-3'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>

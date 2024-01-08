@@ -9,6 +9,7 @@ import { useAuthContext } from "../../../context/AuthContext";
 import { ProfessorQualificationsCard } from '../components/ProfessorQualificationsCard';
 
 const Qualifications = () => {
+    document.title = 'Qualifications - Uptitude'
     const { user } = useAuthContext();
     const [loading, setLoading] = useState(true);
     const [qualifications, setQualifications] = useState([]);
@@ -68,6 +69,7 @@ const Qualifications = () => {
                             id: course.id,
                             title: course.title,
                             professor: course.professor.name,
+                            professor_email: course.professor.email,
                             professor_photo: course.professor.profile_photo.url,
                             cover: course.cover.url,
                             last_update: format(dateObj, "yyyy-MM-dd HH:mm:ss"),
@@ -116,7 +118,7 @@ const Qualifications = () => {
     function renderProfessorQualificationsCard(qualification) {
         return (
             <>
-                <ProfessorQualificationsCard qualification={qualification} />
+                <ProfessorQualificationsCard qualification={qualification}/>
             </>
         )
     }
@@ -164,6 +166,25 @@ const Qualifications = () => {
                     </thead>
                     <tbody>
                         {qualifications && filteredQualifications.map(RenderQualifications)}
+                        {
+                            filteredQualifications.length < 3 && (
+                                <tr class="bg-white border-b">
+                                    <th scope="row" className='pb-96'>
+
+                                    </th>
+                                    <td class="px-6 py-4">
+
+                                    </td>
+                                    <td class="px-6 py-4">
+
+                                    </td>
+                                    <td class="px-6 py-4">
+
+                                    </td>
+                                </tr>
+                            )
+                        }
+
                     </tbody>
                 </table>
             </div>
@@ -182,7 +203,7 @@ const Qualifications = () => {
                     <img alt='' class="w-10 h-10 rounded-full" src={curso_grade.professor_photo} />
                     <div class="pl-3">
                         <div class="text-sm font-semibold">{curso_grade.professor}</div>
-                        <div class="font-normal text-xs text-gray-500">dawdawd@gmail.com</div>
+                        <div class="font-normal text-xs text-gray-500">{curso_grade.professor_email}</div>
                     </div>
                 </td>
                 <td class="px-6 py-4 lg:w-2/5">
@@ -195,12 +216,13 @@ const Qualifications = () => {
                 </td>
             </tr>
 
+
         )
     }
     return (
         <>
             {
-                user !== undefined && user?.role_str === 'professor' ?
+                user !== undefined && user?.role_str !== 'student' ?
                     <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] '>
                         <h1 className='pt-11 font-bold text-xl ml-12'>Qualifications</h1>
                         {!loading ?

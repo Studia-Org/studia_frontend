@@ -6,22 +6,22 @@ import { Tabs, Popconfirm, Badge } from "antd";
 import { SwitchEdit } from "../components/CoursesInside/SwitchEdit";
 import { FiChevronRight } from "react-icons/fi";
 import { ProfessorData } from "../components/CoursesInside/ProfessorData";
-import { CourseSettings } from "../components/CoursesInside/CourseSettings";
+import { CourseSettings } from "../components/CoursesInside/Settings/CourseSettings";
 import { AccordionCourseContent } from "../components/CoursesInside/AccordionCourseContent";
-import { ForumClickable } from "../components/CoursesInside/ForumClickable";
-import { ForumComponent } from '../components/CoursesInside/ForumComponent'
+import { ForumClickable } from "../components/CoursesInside/Forum/ForumClickable";
+import { ForumComponent } from '../components/CoursesInside/Forum/ForumComponent'
 import { QuestionnaireComponent } from '../components/CoursesInside/QuestionnaireComponent';
 import { CourseParticipants, CourseContent, CourseFiles } from "../components/CoursesInside/TabComponents";
 import { useAuthContext } from "../../../context/AuthContext";
 import { EditSection } from "../components/CoursesInside/EditSection";
+import FloatingButtonNavigation from "../components/CoursesInside/FloatingButtonNavigation";
 
 const CourseInside = () => {
   const inputRefLandscape = useRef(null);
   const [titleSubsection, setTitleSubsection] = useState("");
   const [backgroundPhotoSubsection, setBackgroundPhotoSubsection] = useState()
-  const [posts, setPosts] = useState([]);
+  const [allForums, setAllForums] = useState([]);
   const [enableEdit, setEnableEdit] = useState(false)
-  const [forumID, setForumID] = useState([]);
   const [forumFlag, setForumFlag] = useState(false);
   const [editSectionFlag, setEditSectionFlag] = useState(false);
   const [sectionToEdit, setSectionToEdit] = useState(null);
@@ -39,6 +39,7 @@ const CourseInside = () => {
   const [professor, setProfessor] = useState([]);
   let { courseId } = useParams();
   const { user } = useAuthContext()
+  const whisper = useRef(null);
 
   function handleLandscapePhotoChange(event) {
     setBackgroundPhotoSubsection(event.target.files[0]);
@@ -47,11 +48,10 @@ const CourseInside = () => {
   const fetchPostData = async () => {
     try {
       const response = await fetch(
-        `${API}/courses/${courseId}?populate=forum.posts.autor.profile_photo,forum.posts.forum_answers.autor.profile_photo`
+        `${API}/courses/${courseId}?populate=forums.posts.autor.profile_photo,forums.posts.forum_answers.autor.profile_photo`
       );
       const data = await response.json();
-      setForumID(data.data.attributes.forum.data.id);
-      setPosts(data.data.attributes.forum.data.attributes.posts.data.reverse());
+      setAllForums(data.data.attributes.forums.data);
     } catch (error) {
       console.error(error);
     }
@@ -122,9 +122,10 @@ const CourseInside = () => {
   const fetchCourseInformation = async () => {
     try {
       const response = await fetch(
-        `${API}/courses/${courseId}?populate=sections.subsections.activity,cover,sections.subsections.paragraphs,sections.subsections.files,students.profile_photo,professor.profile_photo,sections.subsections.landscape_photo,sections.subsections.questionnaire`
+        `${API}/courses/${courseId}?populate=sections.subsections.activity,cover,sections.subsections.paragraphs,sections.subsections.files,students.profile_photo,professor.profile_photo,evaluators.profile_photo,sections.subsections.landscape_photo,sections.subsections.questionnaire`
       );
       const data = await response.json();
+      document.title = `${data?.data?.attributes.title} - Uptitude`
       setCourseBasicInformation(data?.data?.attributes ?? []);
       setCourseContentInformation(data?.data?.attributes?.sections?.data ?? []);
       setStudents(data?.data?.attributes?.students ?? []);
@@ -202,13 +203,27 @@ const CourseInside = () => {
     fetchUserResponsesData();
     fetchCourseInformation();
     fetchPostData();
+
+
+  }, []);
+
+  useEffect(() => {
+    const handleResize = (e) => {
+      whisper.current?.close();
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   const items = [
     {
       key: '1',
       label: 'Course',
-      children: <CourseContent courseContentInformation={courseContentInformation} courseSection={courseSection} courseSubsection={courseSubsection} courseId={courseId} enableEdit={enableEdit} setEnableEdit={setEnableEdit} setCourseContentInformation={setCourseContentInformation} titleSubsection={titleSubsection} backgroundPhotoSubsection={backgroundPhotoSubsection} />,
+      children: <CourseContent setForumFlag={setForumFlag} courseContentInformation={courseContentInformation} courseSection={courseSection} courseSubsection={courseSubsection} courseId={courseId} enableEdit={enableEdit} setEnableEdit={setEnableEdit} setCourseContentInformation={setCourseContentInformation} titleSubsection={titleSubsection} backgroundPhotoSubsection={backgroundPhotoSubsection} />,
     },
     {
       key: '2',
@@ -222,11 +237,10 @@ const CourseInside = () => {
     }
   ];
 
-
   return (
     <>
-      <div className="container-fluid min-h-screen w-screen rounded-tl-3xl bg-[#e7eaf886] flex flex-wrap flex-col-reverse md:flex-row  ">
-        <div className="flex-1 min-w-0 sm:w-auto mt-3 ml-8 mr-8 basis-[600px]">
+      <div className="container-fluid min-h-screen w-screen max-w-full rounded-tl-3xl bg-[#e7eaf886] flex flex-wrap flex-col-reverse md:flex-row  ">
+        <div id="flex_wrap" className="flex-1 max-w-full min-w-0 sm:w-auto mt-3 md:ml-8 md:mr-8 p-5 md:p-0 md:basis-[600px]">
           {editSectionFlag && sectionToEdit !== null ? (
             <EditSection setEditSectionFlag={setEditSectionFlag} sectionToEdit={sectionToEdit} setCourseContentInformation={setCourseContentInformation} setSectionToEdit={setSectionToEdit} />
           ) : !forumFlag ? (
@@ -280,7 +294,7 @@ const CourseInside = () => {
                         <img
                           src={courseSubsection?.attributes?.landscape_photo?.data?.attributes?.url}
                           alt=""
-                          className="h-[30rem] w-full object-cover rounded-md shadow-md mt-5"
+                          className="h-auto md:h-[30rem] w-[calc(100%-1.25rem)] md:w-full object-cover rounded-md shadow-md mt-5"
                         />
                       </>
                       : null
@@ -312,7 +326,7 @@ const CourseInside = () => {
                 />
               ) : courseSection && courseContentInformation.length > 0 && (
                 <>
-                  <div className="flex items-center  mt-5">
+                  <div className="flex items-center max-w-full w-full  md:my-5">
                     {
                       enableEdit ?
                         <input
@@ -322,11 +336,12 @@ const CourseInside = () => {
                           onChange={(e) => setTitleSubsection(e.target.value)}
                           id="first-name"
                           autoComplete="given-name"
-                          className="mt-1   rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                          className="mt-1 rounded-md border-blue-gray-300 text-blue-gray-900 shadow-sm
+                           focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                         />
                         :
-                        <div className="gap-3 flex items-center">
-                          <p className="text-xl font-semibold"> {courseSubsection?.attributes?.title}</p>
+                        <div className="flex items-center w-full gap-x-5 max-w-full">
+                          <p className="text-2xl font-semibold max-w-[calc(100%-140px)]"> {courseSubsection?.attributes?.title}</p>
                           <Badge color="#6366f1" count={new Date(courseSubsection?.attributes?.end_date).toDateString()} />
                         </div>
                     }
@@ -342,7 +357,7 @@ const CourseInside = () => {
               )}
             </div>
           ) : (
-            <ForumComponent posts={posts} setPosts={setPosts} forumID={forumID}
+            <ForumComponent allForums={allForums} setAllForums={setAllForums}
               courseData={
                 {
                   name: courseBasicInformation.title,
@@ -369,26 +384,54 @@ const CourseInside = () => {
                     </div>
                   </button> : null
                 }
+                {allForums[0]?.attributes &&
+                  <FloatingButtonNavigation
+                    {...{
+                      whisper,
+                      courseContentInformation,
+                      setCourseSubsection,
+                      setCourseSection,
+                      setForumFlag,
+                      setQuestionnaireFlag,
+                      setSettingsFlag,
+                      setCourseSubsectionQuestionnaire,
+                      subsectionsCompleted,
+                      setCourseContentInformation,
+                      setEditSectionFlag,
+                      setSectionToEdit,
+                      courseSubsection,
+                      courseSection,
+                      professor,
+                      allForums
+                    }}
+                  />
+                }
 
-                <AccordionCourseContent
-                  {...{
-                    courseContentInformation,
-                    setCourseSubsection,
-                    setCourseSection,
-                    setForumFlag,
-                    setQuestionnaireFlag,
-                    setSettingsFlag,
-                    setCourseSubsectionQuestionnaire,
-                    subsectionsCompleted,
-                    setCourseContentInformation,
-                    setEditSectionFlag,
-                    setSectionToEdit,
-                    courseSubsection,
-                    courseSection,
-                  }}
-                />
-                <ForumClickable posts={posts} setForumFlag={setForumFlag} />
-                {professor.attributes && <ProfessorData professor={professor} evaluatorFlag={false} />}
+                <div className="flexible:flex xl:hidden accordion:flex hidden ">
+                  <AccordionCourseContent
+                    {...{
+                      courseContentInformation,
+                      setCourseSubsection,
+                      setCourseSection,
+                      setForumFlag,
+                      setQuestionnaireFlag,
+                      setSettingsFlag,
+                      setCourseSubsectionQuestionnaire,
+                      subsectionsCompleted,
+                      setCourseContentInformation,
+                      setEditSectionFlag,
+                      setSectionToEdit,
+                      courseSubsection,
+                      courseSection,
+                    }}
+                  />
+                </div>
+                <div className="flexible:block xl:hidden accordion:block hidden ">
+                  {allForums[0]?.attributes &&
+                    <ForumClickable posts={allForums[0].attributes.posts.data} setForumFlag={setForumFlag} />
+                  }
+                  {professor.attributes && <ProfessorData professor={professor} evaluatorFlag={false} />}
+                </div>
               </div>
             )
         }

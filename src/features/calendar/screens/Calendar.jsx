@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import 'rsuite/dist/rsuite-no-reset.min.css';
+import { Empty } from 'antd';
 import { useAuthContext } from "../../../context/AuthContext";
 import { Calendar, Whisper, Popover, Badge, Modal, Input, Button, Form } from 'rsuite';
 import { API } from "../../../constant";
@@ -18,6 +19,7 @@ const CalendarEvents = () => {
     const [events, setEventList] = useState([]);
     const [innerWidth, setInnerWidth] = useState(window.innerWidth);
 
+    document.title = `Calendar - Uptitude`
     const handleTitleChange = (value) => {
         setTitle(value);
     };
@@ -39,7 +41,7 @@ const CalendarEvents = () => {
         };
 
         try {
-            const response = await fetch(`${API}/calendar-events`, {
+            await fetch(`${API}/calendar-events`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -47,7 +49,7 @@ const CalendarEvents = () => {
                 },
                 body: JSON.stringify({ data: userData })
             });
-            const data = await response.json();
+            fetchEvents();
             message.success("Event Added Successfully");
         } catch (error) {
             console.error(error);
@@ -122,7 +124,7 @@ const CalendarEvents = () => {
 
                     {displayList.map((item, index) => (
 
-                        <li onClick={() => { setInfoModal(true); setInfoModalData(list) }} className={`text-left ${innerWidth < 690 ? "text-center" : ""}`} key={index}>
+                        <li className={`text-left ${innerWidth < 690 ? "text-center" : ""}`} key={index}>
                             {innerWidth < 690 ? <Badge /> :
                                 <>
                                     <Badge />
@@ -138,6 +140,13 @@ const CalendarEvents = () => {
         }
 
         return null;
+    }
+
+    function selectDate(date) {
+        setInfoModal(true);
+        setTitle('');
+        setDate(date);
+        setInfoModalData(getTodoList(date))
     }
 
     window.addEventListener('resize', () => {
@@ -159,7 +168,7 @@ const CalendarEvents = () => {
 
                     <div className='grid h-full '>
                         <div className='font-normal max-w-[95%] max-h-[95%] overflow-hidden bg-white rounded-xl my-auto mx-auto '>
-                            <Calendar compact={innerWidth < 690} bordered renderCell={renderCell} />
+                            <Calendar onSelect={selectDate} compact={innerWidth < 690} bordered renderCell={renderCell} />
                         </div>
                     </div>
                 </div>
@@ -213,6 +222,14 @@ const CalendarEvents = () => {
                         </Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
+                        {
+                            Object.keys(infoModalData).length === 0 && (
+                                <div>
+                                    <Empty description='There are no events' />
+
+                                </div>
+                            )
+                        }
                         {infoModalData && (
                             Object.keys(infoModalData).map((item, index) => (
                                 <div key={index}>
@@ -227,7 +244,7 @@ const CalendarEvents = () => {
                             Close
                         </Button>
                         <Button onClick={() => { setInfoModal(false); setOpen(true) }} appearance="primary">
-                            Add Event
+                            Add new Event
                         </Button>
                     </Modal.Footer>
                 </Modal>

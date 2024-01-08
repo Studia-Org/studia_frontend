@@ -1,12 +1,9 @@
 import React, { useState } from 'react'
 import { TableRowsStudents } from './TableRowsStudents'
-import Button from '@mui/material/Button'
-import { API } from '../../../constant'
-import { getToken } from '../../../helpers'
-import { message } from "antd"
+import { Button } from "antd"
 
 
-export const QualificationsTable = ({ students, activities, setStudents }) => {
+export const QualificationsTable = ({ students, activities, setStudents, setUploadQualificationsFlag }) => {
     const [isEditChecked, setIsEditChecked] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -78,9 +75,9 @@ export const QualificationsTable = ({ students, activities, setStudents }) => {
                                 <span className="ml-2 text-sm font-medium text-gray-900">Edit qualifications</span>
                             </label>
 
-                            <button class="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5" type="button">
+                            <Button onClick={() => setUploadQualificationsFlag(true)} className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5" type="default">
                                 Upload qualifications
-                            </button>
+                            </Button>
                         </div>
                         <table class="w-full text-sm text-left text-gray-500 ">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50  ">

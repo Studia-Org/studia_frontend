@@ -155,10 +155,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
     }
   }
   async function sendData() {
-
-
     try {
-
       const response = await fetch(`${API}/upload`, {
         method: 'POST',
         headers: {
@@ -166,8 +163,8 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
         },
         body: formData,
       });
+      const result = await response.json();
       if (response.ok) {
-        const result = await response.json();
         const response_upload = await sendFile(result);
         if (response_upload.ok) {
           Swal.fire({
@@ -305,7 +302,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   };
 
   return (
-    <div className='flex flex-col 1.5xl:flex-row items-start 1.5xl:items-start 1.5xl:space-x-24 p-5 sm:p-10'>
+    <div className='flex max-w-[calc(100vw)] flex-col 1.5xl:flex-row items-start 1.5xl:items-start 1.5xl:space-x-24 p-5 sm:p-10'>
       <div className='1.5xl:w-2/4 lg:w-10/12 w-full'>
         <BackToCourse navigate={navigate} courseId={courseId} />
         <ActivityTitle
@@ -329,7 +326,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
 
         <p className='text-xs text-gray-400 mb-1 mt-5'>Task description</p>
         <hr />
-        <div className='prose my-3 text-gray-600 ml-5 w-full box-content mt-5 max-w-none'>
+        <div className='prose my-3 text-gray-600 ml-5 max-w-[calc(100vw-1.25rem)] box-content mt-5 '>
           {
             !enableEdit ?
               <ReactMarkdown className=''>{activityData.activity.data.attributes.description}</ReactMarkdown>
@@ -350,7 +347,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
       {
         user.role_str === 'professor' || user.role_str === 'admin' ?
           <>
-            <div className='bg-white mb-5 mt-10 rounded-md shadow-md p-5 w-[30rem]'>
+            <div className='bg-white mb-5 mt-10 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)]  w-[30rem]'>
               <p className='text-lg font-medium mb-4'>Task Files</p>
               {(!activityData.activity.data.attributes.file?.data?.length || activityData.activity.data.attributes.file?.data?.length === 0) ? (
                 enableEdit ? (
@@ -368,15 +365,15 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                 )
               ) : (
                 enableEdit ? (
-                  <>
+                  <section className='max-w-[calc(100vw-1.25rem)]'>
                     <FilePond allowMultiple={true} maxFiles={5} onupdatefiles={setFilesTask} />
                     <div className='space-y-2'>
                       {activityData.activity.data.attributes.file?.data.map((file, index) => renderFiles(file, index))}
                     </div>
 
-                  </>
+                  </section>
                 ) : (
-                  <div className='space-y-2'>
+                  <div className='space-y-2 max-w-[calc(100vw-1.25rem)]'>
                     {activityData.activity.data.attributes.file?.data.map((file, index) => renderFiles(file, index))}
                   </div>
 
@@ -385,8 +382,8 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
             </div>
           </> :
           evaluated ?
-            <div className='flex flex-col '>
-              <div className='bg-white mb-5 rounded-md shadow-md p-5 w-[30rem]'>
+            <div className='flex flex-col max-w-[calc(100vw-1.25rem)]'>
+              <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)] w-[30rem]'>
                 <p className='text-lg font-medium mb-4'>Files</p>
                 {
                   activityData.activity.data.attributes.file?.data === null || activityData.activity.data.attributes.file?.data?.length === 0 ?
@@ -405,8 +402,20 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
               <div className='mb-14 '>
                 {activityData.file.data && activityData.file.data.map(renderFiles)}
               </div>
-            </div > :
-            <div className='flex flex-col w-[30rem] mt-1'>
+            </div >
+            :
+            <div className='flex flex-col w-[30rem] mt-1 max-w-[calc(100vw-2.5rem)]'>
+              <p className='text-lg font-medium mb-4'>Files</p>
+              {
+                activityData.activity.data.attributes.file?.data === null || activityData.activity.data.attributes.file?.data?.length === 0 ?
+                  <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
+                    <span className='text-gray-400 font-normal '>
+                      There are no files
+                    </span>
+                  } />
+                  :
+                  activityData.activity.data.attributes.file.data.map((file, index) => renderFiles(file, index))
+              }
               <p className='text-xs text-gray-400 mb-1 mt-5'>Your submission</p>
               <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
                 {activityData?.file?.data && activityData?.file?.data.map(renderFiles)}

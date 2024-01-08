@@ -1,7 +1,6 @@
 import { useAuthContext } from "../../../context/AuthContext";
 import { MoonLoader } from "react-spinners";
 import { ActivitiesDash } from "../components/CourseDashBoard/ActivitiesDash/ActivitiesDash";
-import { ForumDash } from "../components/CourseDashBoard/ForumDash";
 import { useEffect, useState } from "react";
 import { fetchCourseInformation } from "../../../fetches/fetchCourseInformation";
 import { useParams } from "react-router-dom";
@@ -36,11 +35,6 @@ function CourseDashboard() {
                 courseId={courseId}
                 styles={"min-w-full xl:min-w-[100%]"}
               />
-              {/* <ForumDash
-                key={"ForumDash " + courseId}
-                courseInformation={courseContentInformation.courseInformation}
-                styles={"min-w-full mt-4 xl:mt-0 xl:min-w-[49%]"}
-              /> */}
             </div>
           </main>
       }

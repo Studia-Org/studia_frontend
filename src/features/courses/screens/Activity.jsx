@@ -28,6 +28,8 @@ const Activity = () => {
           `&filters[user][id]=${user.id}` +
           `&populate[PeerReviewQualification][populate][file][fields][0]=*` +
           `&populate[PeerReviewQualification][populate][user][fields][0]=username`)
+
+
       const data = await response.json();
       if (data.data.length > 0) {
         setUserQualification({ activity: data.data[0].attributes, idQualification: data.data[0]["id"] });
@@ -49,12 +51,11 @@ const Activity = () => {
       console.error(error);
     }
   };
-  console.log(userQualification);
 
   function selectTypeOfActivity() {
     const type = userQualification.activity.activity.data.attributes.type;
     switch (type) {
-      case "Peer Review":
+      case "peerReview":
         return <PeerReviewComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} />;
       default:
         return <ActivityComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} setUserQualification={setUserQualification} />;

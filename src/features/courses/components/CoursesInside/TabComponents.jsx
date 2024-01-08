@@ -11,7 +11,7 @@ import { MoonLoader } from "react-spinners";
 
 
 
-export const CourseContent = ({ courseContentInformation, courseSection, courseSubsection, courseId, enableEdit, setEnableEdit, setCourseContentInformation, titleSubsection, backgroundPhotoSubsection }) => {
+export const CourseContent = ({ setForumFlag, courseContentInformation, courseSection, courseSubsection, courseId, enableEdit, setEnableEdit, setCourseContentInformation, titleSubsection, backgroundPhotoSubsection }) => {
     const [loading, setLoading] = useState(false);
     const section_ = courseContentInformation.find(
         (seccion) => seccion.attributes.title === courseSection
@@ -109,7 +109,7 @@ export const CourseContent = ({ courseContentInformation, courseSection, courseS
         <>
             <p className='text-xs font-normal text-gray-400 mb-1'>Activity</p>
             <hr className='mb-5' />
-            <TaskComponentCard task={subsection_.attributes.activity?.data} context={'coursesInside'} courseId={courseId} />
+            <TaskComponentCard task={subsection_.attributes.activity?.data} context={'coursesInside'} courseId={courseId} setForumFlag={setForumFlag} />
             <p className='text-xs font-normal text-gray-400 mb-1'>Course content</p>
             <hr className='mb-5' />
             <div className='prose max-w-none mb-12'>

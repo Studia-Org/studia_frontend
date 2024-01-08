@@ -35,7 +35,7 @@ export async function fetchAverageCourse({ courseId, userId = null }) {
                 totalQualifications[rounded] = totalQualifications[rounded] + 1 || 1;
             })
             let averageMainActivity = qualifications.reduce((acc, qualification) => acc + qualification, 0);
-            averagesMainActivity.push(averageMainActivity /= qualifications.length)
+            if (qualifications.length !== 0) averagesMainActivity.push(averageMainActivity /= qualifications.length)
         })
 
         averagesMainActivity.forEach((averageMainActivity, index) => {

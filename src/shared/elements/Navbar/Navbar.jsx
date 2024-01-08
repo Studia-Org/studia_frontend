@@ -13,12 +13,11 @@ export const Navbar = () => {
             <div className="container flex flex-wrap items-center ">
 
                 <Link to={'/app/courses'}><h1 className='p-10 sm:px-16 font-bold text-3xl italic leading-none tracking-tight cursor-pointer'>Uptitude<span className='text-pink-500 text-4xl '>.</span></h1></Link>
-                <div className=' absolute right-0 flex items-center '>
+                <div className=' absolute right-0 flex gap-x-6 md:gap-x-6 items-center '>
                     <Notifications />
-
                     <Tag className={'hidden lg:block'} User={user} />
-                    {user && <p className='font-medium mr-5 hidden lg:block'>{user['name']}</p>}
-                    <button onClick={() => navigate(`/app/profile/${user.id}/`)} className='rounded  mr-9'>
+                    {user && <p className='font-medium hidden lg:block'>{user['name']}</p>}
+                    <button onClick={() => navigate(`/app/profile/${user.id}/`)} className='rounded  mr-11'>
                         {user && user['profile_photo'] ? (
                             <img
                                 src={user['profile_photo'].url}
@@ -26,7 +25,7 @@ export const Navbar = () => {
                                 alt=""
                             />
                         ) : (
-                            <div></div>
+                            null
                         )}
                     </button>
                 </div>

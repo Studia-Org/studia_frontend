@@ -1,37 +1,41 @@
 import React, { useState, useEffect } from 'react'
-import { API } from '../../../../constant'
-import { Select, Avatar, message, Button } from 'antd';
-import { getToken } from '../../../../helpers';
+import { useNavigate } from 'react-router-dom'
+import { API } from '../../../../../constant'
+import { Select, Avatar, message, Button, Popconfirm } from 'antd';
+import { getToken } from '../../../../../helpers';
 import { useParams } from 'react-router-dom';
 import { FilePond, registerPlugin } from 'react-filepond';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond/dist/filepond.min.css';
 import TagsInput from 'react-tagsinput'
+import { AddParticipants } from './AddParticipants';
 
 registerPlugin(FilePondPluginImagePreview);
 
-const { Option } = Select;
+
 
 
 export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) => {
+    const navigate = useNavigate()
     const [students, setStudents] = useState([])
+    const [evaluators, setEvaluators] = useState([])
     const [selected, setSelected] = useState()
+    const [selectedEvaluator, setSelectedEvaluator] = useState()
     const [loading, setLoading] = useState(false)
+    const [loadingDelete, setLoadingDelete] = useState(false)
     let { courseId } = useParams();
 
-    const onChange = (value) => {
-        setSelected(students.find(item => item.id === value))
-    };
 
-    const fetchStudents = async () => {
+    const fetchUsers = async () => {
         const getAllUsers = await fetch(`${API}/users?populate=*`)
         const data = await getAllUsers.json();
         setStudents(data)
+        setEvaluators(data.filter(item => item?.role_str === 'admin' || item?.role_str === 'professor'))
     }
 
     useEffect(() => {
-        fetchStudents()
+        fetchUsers()
     }, [])
 
     function addStudentButton() {
@@ -44,6 +48,70 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
                     data: [...prevState.students.data, selected]
                 }
             }))
+        }
+    }
+
+    function addEvaluatorButton() {
+        if (courseData.evaluators.data.find(item => item.id === selectedEvaluator.id)) {
+            message.error('Evaluator already added')
+        } else {
+            setCourseData(prevState => ({
+                ...prevState,
+                evaluators: {
+                    data: [...prevState.evaluators.data, selectedEvaluator]
+                }
+            }))
+        }
+    }
+
+
+
+    const deleteCourse = async () => {
+        setLoadingDelete(true)
+        try {
+            courseData.sections.data.forEach(async (section) => {
+                section.attributes.subsections.data.forEach(async (subsection) => {
+                    if (subsection.attributes.activity.data) {
+                        await fetch(`${API}/activities/${subsection.attributes.activity.data.id}`, {
+                            method: 'DELETE',
+                            headers: {
+                                Authorization: `Bearer ${getToken()}`
+                            }
+                        })
+                    }
+                    if (subsection.attributes.questionnaire.data) {
+                        await fetch(`${API}/questionnaires/${subsection.attributes.questionnaire.data.id}`, {
+                            method: 'DELETE',
+                            headers: {
+                                Authorization: `Bearer ${getToken()}`
+                            }
+                        })
+                    }
+                    await fetch(`${API}/subsections/${subsection.id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            Authorization: `Bearer ${getToken()}`
+                        }
+                    })
+                })
+                await fetch(`${API}/sections/${section.id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        Authorization: `Bearer ${getToken()}`
+                    }
+                })
+            })
+            await fetch(`${API}/courses/${courseId}`, {
+                method: 'DELETE',
+                headers: {
+                    Authorization: `Bearer ${getToken()}`
+                }
+            })
+            navigate('/app/courses')
+            setLoadingDelete(false)
+        } catch (error) {
+            setLoadingDelete(false)
+            message.error(error)
         }
     }
 
@@ -78,7 +146,8 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
                         description: courseData.description,
                         tags: courseData.tags,
                         cover: uploadCoverData[0].id,
-                        students: courseData.students.data.map(item => item.id)
+                        students: courseData.students.data.map(item => item.id),
+                        evaluators: courseData.evaluators.data.map(item => item.id)
                     }
                 })
             })
@@ -105,9 +174,21 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
         }))
     }
 
+    function deleteEvaluator(evaluator) {
+        setCourseData(prevState => ({
+            ...prevState,
+            evaluators: {
+                data: prevState.evaluators.data.filter(item => item.id !== evaluator.id)
+            }
+        }))
+    }
+
     useEffect(() => {
         if (students.length > 0) {
             setSelected(students[0]);
+        }
+        if (evaluators.length > 0) {
+            setSelectedEvaluator(evaluators[0]);
         }
     }, [students]);
 
@@ -122,11 +203,25 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
                 </button>
                 <h1 className="text-3xl font-bold tracking-tight text-blue-gray-900">Edit Course</h1>
                 <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
-                    <div className="sm:col-span-6">
-                        <h2 className="text-lg font-medium text-blue-gray-900 mt-8">Course info</h2>
-                        <p className="mt-1 text-sm text-gray-500">
-                            This information will be displayed publicly to the students.
-                        </p>
+                    <div className="sm:col-span-6 flex mt-8 items-center">
+                        <div>
+                            <h2 className="text-lg font-medium text-blue-gray-900 ">Course info</h2>
+                            <p className="mt-1 text-sm text-gray-500">
+                                This information will be displayed publicly to the students.
+                            </p>
+                        </div>
+                        <Popconfirm
+                            title="Delete the course"
+                            description="Are you sure to delete this course?"
+                            onConfirm={() => deleteCourse()}
+                            okText="Yes"
+                            cancelText="No"
+                        >
+                            <Button loading={loadingDelete} danger className='ml-auto bg-[#ff4d4f] hover:bg-[#ff4d50c5] !text-white'>
+                                Delete Course
+                            </Button>
+                        </Popconfirm>
+
                         <hr className='mt-5' />
                     </div>
 
@@ -198,72 +293,11 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
                         </p>
                         <hr className='mt-5' />
                     </div>
-                    <div className='sm:col-span-6'>
-                        <div className="space-y-2">
-                            <div className="space-y-1">
-                                <div className='flex items-center'>
-                                    <label htmlFor="add-team-members" className="block text-sm font-medium text-gray-700">
-                                        Add students
-                                    </label>
-                                    <label className='ml-auto block text-sm font-medium text-gray-700'>Student number: {courseData.students.data.length}</label>
-                                </div>
+                    <AddParticipants participants={students} addedParticipants={courseData.students.data}
+                        addParticipant={addStudentButton} deleteParticipant={deleteStudent} setSelected={setSelected} addType={'Students'} />
 
-
-                                <div className="flex items-center">
-                                    <div className="flex-grow mt-3">
-                                        <Select
-                                            className='w-full'
-                                            showSearch
-                                            placeholder="Select a student"
-                                            optionFilterProp="label"
-                                            onChange={onChange}
-                                            filterOption={true}
-                                            optionLabelProp='label'
-                                        >
-                                            {students.map(item => (
-                                                <Option key={item.id} value={item.id} label={item.name}>
-                                                    <div className='flex items-center gap-3'>
-                                                        <Avatar src={item.profile_photo?.url}></Avatar>
-                                                        <p className='font-medium'>{item.name}</p>
-                                                    </div>
-                                                </Option>
-                                            ))}
-                                        </Select>
-                                    </div>
-                                    <span className="ml-3 mt-3">
-                                        <button
-                                            type="button"
-                                            onClick={() => addStudentButton()}
-                                            className="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2"
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="-ml-2 mr-1 h-5 w-5 text-gray-400">
-                                                <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
-                                            </svg>
-                                            <span>Add</span>
-                                        </button>
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div className="border-b border-gray-200 overflow-y-auto max-h-[20rem]">
-                                <ul className="divide-y divide-gray-200">
-                                    {courseData.students.data.map((person) => (
-                                        <li key={person.id} className="flex py-4 items-center">
-                                            <img className="h-10 w-10 rounded-full" src={person?.attributes ? person?.attributes.profile_photo.data?.attributes.url : person?.profile_photo?.url} alt="" />
-                                            <div className="ml-3 flex flex-col">
-                                                <span className="text-sm font-medium text-gray-900">{person?.attributes ? person.attributes.name : person.name}</span>
-                                                <span className="text-sm text-gray-500">{person?.attributes ? person.attributes.email : person.email}</span>
-                                            </div>
-                                            <svg onClick={() => deleteStudent(person)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="cursor-pointer w-5 h-5 ml-auto">
-                                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clipRule="evenodd" />
-                                            </svg>
-
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                    <AddParticipants participants={evaluators} addedParticipants={courseData?.evaluators?.data}
+                        addParticipant={addEvaluatorButton} deleteParticipant={deleteEvaluator} setSelected={setSelectedEvaluator} addType={'Evaluators'} />
 
                 </div>
 
@@ -284,6 +318,6 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
                     </Button>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
