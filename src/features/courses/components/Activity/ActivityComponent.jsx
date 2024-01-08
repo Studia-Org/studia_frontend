@@ -397,7 +397,10 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                 }
               </div>
               <p className='text-xs text-gray-400 mb-1' > Evaluator</ p>
-              <ProfessorData professor={{ attributes: activityData.evaluator.data.attributes }} evaluatorFlag={true} />
+              <ProfessorData
+                styles={{ marginLeft: '-2rem' }}
+                professor={{ attributes: activityData.evaluator.data.attributes }}
+                evaluatorFlag={true} />
               <p className='text-xs text-gray-400 mb-1 mt-5'>Your submission</p>
               <div className='mb-14 '>
                 {activityData.file.data && activityData.file.data.map(renderFiles)}
