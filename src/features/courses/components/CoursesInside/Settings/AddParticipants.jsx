@@ -19,7 +19,6 @@ export const AddParticipants = ({ participants, addedParticipants, addParticipan
 
     const uploadCSV = () => {
         setLoading(true);
-        console.log(files);
         if (files.length === 0) {
             message.error('No file selected.');
             return;
@@ -30,23 +29,22 @@ export const AddParticipants = ({ participants, addedParticipants, addParticipan
         reader.onload = (e) => {
             const content = e.target.result;
             const lines = content.split('\n');
-
             lines.forEach((line) => {
-                const columns = line.split(',');
-                const email = columns[0].trim()// Elimina las comillas y retorno de carro si están presentes
-                console.log(email);
+                const cleanLine = line.replace(/["\r]/g, '');
+                const columns = cleanLine.split(',');
+                const email = columns[0].trim();
                 const participant = participants.find(item => item.email === email);
                 if (participant) {
                     setSelected(participant);
                     addParticipant();
                 }
             });
-
         };
 
         reader.readAsText(file);
         setLoading(false);
-        //setIsModalOpen(false);
+        setIsModalOpen(false);
+        message.success('Participants imported successfully.');
     }
 
     return (
@@ -116,7 +114,11 @@ export const AddParticipants = ({ participants, addedParticipants, addParticipan
                                     </Button>,
                                 ]}
                             >
-                                <p>Upload a .csv file with all the student email on the first column, like in the example below.</p>
+                                <p>Please upload a CSV spreadsheet file (comma or semi-colon separated) with the following format:</p>
+                                <ol className='list-disc ml-10 mb-5'>
+                                    <li>Column 1: Student's email</li>
+                                </ol>
+                                <p>For example:</p>
                                 <img className='my-3' src={'https://res.cloudinary.com/dnmlszkih/image/upload/v1704474229/hwqyzbtduejhu3bwjrle.png'} alt="" />
                                 <UploadFiles fileList={files} setFileList={setFiles} listType={'picture'} maxCount={1} />
                             </Modal>

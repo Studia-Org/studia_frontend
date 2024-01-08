@@ -5,8 +5,10 @@ import { MoonLoader } from 'react-spinners'
 import { motion } from 'framer-motion';
 import { QualificationsTable } from '../components/QualificationsTable'
 import { set, sub } from 'date-fns'
+import { UploadQualifications } from '../components/UploadQualifications';
 
 const QualificationsProfessor = () => {
+    const [uploadQualificationsFlag, setUploadQualificationsFlag] = useState(false);
     const [activities, setActivities] = useState([])
     const [students, setStudents] = useState([])
     const [isLoading, setIsLoading] = useState(true)
@@ -51,7 +53,6 @@ const QualificationsProfessor = () => {
         fetchCourseData();
     }, [])
 
-    console.log(students);
     return (
         <div className='w-full relative rounded-tl-3xl bg-[#e7eaf886] p-10'>
             {
@@ -68,7 +69,13 @@ const QualificationsProfessor = () => {
                             />
                         </section>
                         <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
-                            <QualificationsTable students={students} activities={activities} setStudents={setStudents} />
+                            {
+                                uploadQualificationsFlag ?
+                                    <UploadQualifications setUploadQualificationsFlag={setUploadQualificationsFlag} activities={activities}/>
+                                    :
+                                    <QualificationsTable setUploadQualificationsFlag={setUploadQualificationsFlag} students={students} activities={activities} setStudents={setStudents} />
+
+                            }
                         </motion.div>
 
                     </>
