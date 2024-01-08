@@ -265,11 +265,11 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
                               shadow-lg">
                                 {totalQualifications && generatePieChart()}
                             </section>
-                            <section className="rounded-lg max-h-[40dvh] bg-white p-5 overflow-x-auto overflow-y-clip max-w-[calc(100vw-2rem)] 
+                            <section className="rounded-lg bg-white p-5 overflow-x-auto overflow-y-clip max-w-[calc(100vw-2rem)] 
                             shadow-lg">
                                 {questionnaireTime && QuestionnarieTime()}
                             </section>
-                            <section className="rounded-lg max-h-[40dvh] bg-white overflow-x-auto p-5 overflow-y-clip max-w-[calc(100vw-2rem)] 
+                            <section className="rounded-lg bg-white overflow-x-auto p-5 overflow-y-clip max-w-[calc(100vw-2rem)] 
                              shadow-lg">
                                 {posts && <PostChart />}
                             </section>
