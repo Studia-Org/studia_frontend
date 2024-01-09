@@ -48,7 +48,9 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
 
             setTotalQualifications(dict)
 
-            const { totalPosts, postsUsuario, totalRespuestas, respuestasUsuario } = await fetchNumbersOfPosts({ courseId, userId })
+            let { totalPosts, postsUsuario, totalRespuestas, respuestasUsuario } = await fetchNumbersOfPosts({ courseId, userId })
+            totalPosts = totalPosts - postsUsuario
+            totalRespuestas = totalRespuestas - respuestasUsuario
             setPosts({ totalPosts, postsUsuario, totalRespuestas, respuestasUsuario })
             setLoading(false)
 
