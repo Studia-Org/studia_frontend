@@ -222,11 +222,11 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
                     height={'90%'}
                     series={[
                         {
-                            name: 'Total posts',
+                            name: "Other's posts",
                             data: [posts.totalPosts, 0]
                         },
                         {
-                            name: 'Total answers',
+                            name: "Other's answers",
                             data: [0, posts.totalRespuestas]
                         },
                         {
