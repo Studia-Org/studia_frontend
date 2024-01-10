@@ -5,6 +5,8 @@ import { Upload } from 'antd';
 export const UploadFiles = ({ fileList, setFileList, listType, maxCount }) => {
     const [error, setError] = useState(null);
 
+    console.log(fileList);
+
     const props = {
         name: 'file',
         maxCount: maxCount,
