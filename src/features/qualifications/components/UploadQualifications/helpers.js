@@ -1,91 +1,63 @@
-import { message } from 'antd';
-import Papa from 'papaparse';
+import * as XLSX from 'xlsx';
 
-export function extractDataFromCSV(formValues) {
+
+export function extractDataFromSpreadsheet(formValues) {
     const { studentInputColumn, qualificationInputColumn, commentsInputColumn, file } = formValues;
 
-
-
     return new Promise((resolve, reject) => {
-        Papa.parse(file, {
-            complete: function (results) {
-                const dataListFinal = [];
-                const rows = results.data;
-                const studentColumnLetter = studentInputColumn.charAt(0);
-                const studentRowStart = parseInt(studentInputColumn.substring(1), 10);
-                const studentRowEnd = parseInt((studentInputColumn.split('-')[1]).substring(1), 10);
+        const reader = new FileReader();
 
-                if (rows.length < studentRowEnd) {
-                    message.error('El archivo CSV no contiene suficientes filas');
-                    reject('El archivo CSV no contiene suficientes filas');
-                    return;
-                }
+        reader.onload = function (e) {
+            try {
+                const data = e.target.result;
+                const workbook = XLSX.read(data, { type: 'binary' });
+                const sheetName = workbook.SheetNames[0];
+                const sheet = workbook.Sheets[sheetName];
 
-                const studentColumnIndex = getColumnIndex(studentColumnLetter)
-                const dataListStudent = [];
+                const studentData = extractColumnData(sheet, studentInputColumn);
+                const qualificationData = extractColumnData(sheet, qualificationInputColumn);
+                const commentsData = extractColumnData(sheet, commentsInputColumn);
 
-                for (let i = studentRowStart; i <= studentRowEnd; i++) {
-                    const student = rows[i][studentColumnIndex];
-                    dataListStudent.push(student);
-                }
+                const dataListFinal = studentData.map((student, index) => ({
+                    student,
+                    qualification: qualificationData[index],
+                    comments: commentsData[index]
+                }));
 
-                const dataListQualifications = [];
-                const qualificationColumnLetter = qualificationInputColumn.charAt(0);
-                const qualificationColumnIndex = getColumnIndex(qualificationColumnLetter);
-                const qualificationRowStart = parseInt(qualificationInputColumn.substring(1), 10);
-                const qualificationRowEnd = parseInt((qualificationInputColumn.split('-')[1]).substring(1), 10);
-
-                if (rows.length < qualificationRowEnd) {
-                    message.error('El archivo CSV no contiene suficientes filas');
-                    reject('El archivo CSV no contiene suficientes filas');
-                    return;
-                }
-
-                for (let i = qualificationRowStart; i <= qualificationRowEnd; i++) {
-                    const qualification = rows[i][qualificationColumnIndex];
-                    dataListQualifications.push(qualification);
-                }
-
-
-                const dataListComments = [];
-                const commentsColumnLetter = commentsInputColumn.charAt(0);
-                const commentsColumnIndex = getColumnIndex(commentsColumnLetter);
-                const commentsRowStart = parseInt(commentsInputColumn.substring(1), 10);
-                const commentsRowEnd = parseInt((commentsInputColumn.split('-')[1]).substring(1), 10);
-
-                if (rows.length < commentsRowEnd) {
-                    message.error('El archivo CSV no contiene suficientes filas');
-                    reject('El archivo CSV no contiene suficientes filas');
-                    return;
-                }
-                for (let i = commentsRowStart; i <= commentsRowEnd; i++) {
-                    const comment = rows[i][commentsColumnIndex];
-                    dataListComments.push(comment);
-                }
-
-
-                for (let i = 0; i < dataListStudent.length; i++) {
-                    dataListFinal.push({
-                        student: dataListStudent[i],
-                        qualification: dataListQualifications[i],
-                        comments: dataListComments[i]
-                    });
-                }
-                
                 resolve(dataListFinal);
-            },
-        });
+            } catch (error) {
+                console.error('Error parsing spreadsheet:', error);
+                reject('Error parsing spreadsheet');
+            }
+        };
+
+        reader.readAsBinaryString(file);
     });
 
-    function getColumnIndex(columnLetter) {
-        const columnIndex = columnLetter.toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0);
-        if (columnIndex < 0 || columnIndex >= 26) {
-            return -1;
+    function extractColumnData(sheet, inputColumn) {
+        const cellRange = XLSX.utils.decode_range(sheet['!ref']);
+        const columnLetter = inputColumn.charAt(0);
+        const columnIndex = getColumnIndex(columnLetter);
+
+        const startRow = parseInt(inputColumn.substring(1), 10);
+        const endRow = parseInt((inputColumn.split('-')[1]).substring(1), 10);
+
+        const data = [];
+
+        for (let row = startRow; row <= endRow; row++) {
+            const cellAddress = { c: columnIndex, r: row };
+            const cellValue = sheet[XLSX.utils.encode_cell(cellAddress)];
+            data.push(cellValue ? cellValue.v : null);
         }
 
-        return columnIndex;
+        return data;
+    }
+
+    function getColumnIndex(columnLetter) {
+        return columnLetter.toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0);
     }
 }
+
 
 export function parseData(studentsDataCSV, students) {
     const data = studentsDataCSV
