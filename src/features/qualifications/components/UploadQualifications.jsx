@@ -3,7 +3,7 @@ import { Steps, Button, message, Popconfirm } from 'antd';
 import { CSVConfiguration } from './UploadQualifications/CSVConfiguration';
 import { Confirmation } from './UploadQualifications/Confirmation';
 import { Visualization } from './UploadQualifications/Visualization';
-import { extractDataFromCSV, parseData } from './UploadQualifications/helpers.js';
+import { extractDataFromSpreadsheet, parseData } from './UploadQualifications/helpers.js';
 
 export const UploadQualifications = ({ setUploadQualificationsFlag, activities, students }) => {
     const [steps, setSteps] = useState(0)
@@ -33,7 +33,7 @@ export const UploadQualifications = ({ setUploadQualificationsFlag, activities, 
 
     useEffect(() => {
         if (formValues.file) {
-            extractDataFromCSV(formValues).then(dataList => {
+            extractDataFromSpreadsheet(formValues).then(dataList => {
                 setDataVisualization(dataList);
             });
         }
