@@ -15,10 +15,13 @@ export const CSVConfiguration = ({ activities, formValues, setFormValues, file, 
         }
     }, [file])
 
-    const activityOptions = activities.map((activity) => ({
+    const activityOptions = activities
+    .filter(activity => activity.attributes.evaluable === true)
+    .map(activity => ({
         value: JSON.stringify({ id: activity.id, title: activity.attributes.title }),
         label: activity.attributes.title,
     }));
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -40,6 +43,7 @@ export const CSVConfiguration = ({ activities, formValues, setFormValues, file, 
             <p className='text-sm mt-4 text-gray-600 mb-3'>First of all, select the activity to upload the grades:</p>
             <Select
                 showSearch
+                className='w-full'
                 placeholder="Select an activity"
                 optionFilterProp="children"
                 filterOption={filterOption}
