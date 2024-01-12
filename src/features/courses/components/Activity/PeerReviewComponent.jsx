@@ -6,6 +6,7 @@ import { getToken } from "../../../../helpers";
 import { MoonLoader } from 'react-spinners';
 import Swal from "sweetalert2";
 import { useAuthContext } from "../../../../context/AuthContext";
+import { ProfessorPeerReview } from "./ProfessorPeerReview";
 
 export default function PeerReviewComponent({ activityData, idQualification }) {
     const [showEvaluate, setShowEvaluate] = useState(false);
@@ -118,40 +119,43 @@ export default function PeerReviewComponent({ activityData, idQualification }) {
         }).catch(err => {
             throw new Error(err)
         }).finally(() => { })
-
-
     }
 
-    return (
-        <div className={`flex transition-transform duration-700 ${showEvaluate ? 'xl:-translate-x-[calc(100vw-21rem)] -translate-x-[calc(100vw-1rem)]' : ''}`}>
-            {
-                loading ?
-                    <div className="w-full h-full flex justify-center items-center">
-                        <MoonLoader color="#363cd6" size={80} />
-                    </div>
-                    :
-                    idPartnerReview === "Error" ?
-                        <div className="w-full h-full flex flex-col justify-center gap-10 items-center">
-                            <h1 className="text-2xl text-center">You have not been assigned a partner to evaluate</h1>
-                            <h3 className="text-xl text-center">Maybe you should not be here yet ;)</h3>
-                            <h3 className="text-xl text-center">If it's not the case, please contact your teacher</h3>
+    if (user.role_str !== 'student') {
+        return (
+            <ProfessorPeerReview activityData={activityData} />
+        )
+    } else {
+        return (
+            <div className={`flex transition-transform duration-700 ${showEvaluate ? 'xl:-translate-x-[calc(100vw-21rem)] -translate-x-[calc(100vw-1rem)]' : ''}`}>
+                {
+                    loading ?
+                        <div className="w-full h-full flex justify-center items-center">
+                            <MoonLoader color="#363cd6" size={80} />
                         </div>
                         :
-                        <>
-                            <div className="max-w-[calc(100vw-2rem)] min-w-[calc(100vw-2rem)] xl:min-w-[calc(100vw-21rem)]">
-                                <MainScreen
-                                    activityData={activityData}
-                                    setShowEvaluate={setShowEvaluate}
-                                    data={data}
-                                />
+                        idPartnerReview === "Error" ?
+                            <div className="w-full h-full flex flex-col justify-center gap-10 items-center">
+                                <h1 className="text-2xl text-center">You have not been assigned a partner to evaluate</h1>
+                                <h3 className="text-xl text-center">Maybe you should not be here yet ;)</h3>
+                                <h3 className="text-xl text-center">If it's not the case, please contact your teacher</h3>
                             </div>
-                            <div className={`${!showEvaluate ? 'w-0 h-0 overflow-hidden absolute' : 'min-w-[calc(100vw)] xl:min-w-[calc(100vw-22rem)] overflow-x-hidden  '}`}>
-                                <EvaluateScreen data={data} setShowEvaluate={setShowEvaluate} sendEvalution={sendEvalution} answersDelivered={answersDelivered} />
-                            </div>
-                        </>
-            }
+                            :
+                            <>
+                                <div className="max-w-[calc(100vw-2rem)] min-w-[calc(100vw-2rem)] xl:min-w-[calc(100vw-21rem)]">
+                                    <MainScreen
+                                        activityData={activityData}
+                                        setShowEvaluate={setShowEvaluate}
+                                        data={data}
+                                    />
+                                </div>
+                                <div className={`${!showEvaluate ? 'w-0 h-0 overflow-hidden absolute' : 'min-w-[calc(100vw)] xl:min-w-[calc(100vw-22rem)] overflow-x-hidden  '}`}>
+                                    <EvaluateScreen data={data} setShowEvaluate={setShowEvaluate} sendEvalution={sendEvalution} answersDelivered={answersDelivered} />
+                                </div>
+                            </>
+                }
+            </div>
+        )
+    }
 
-        </div>
-
-    )
 }
