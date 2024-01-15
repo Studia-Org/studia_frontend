@@ -1,8 +1,7 @@
 import Rubrica from './Rubrica';
 
 function EvaluateScreen({ data, setShowEvaluate, sendEvalution, answersDelivered }) {
-    let buttonText = answersDelivered === null ? "Send" : "Update FeedBack"
-
+    let buttonText = answersDelivered === null || answersDelivered === undefined ? "Send" : "Update FeedBack"
     return (
         <>
             <div className="pl-8 pt-4">
@@ -35,7 +34,7 @@ function EvaluateScreen({ data, setShowEvaluate, sendEvalution, answersDelivered
                                     {!isNaN(parseFloat(data["Criteria"][0].split("-")[0])) && isFinite(data["Criteria"][0].split("-")[0])
 
                                         ? <input
-                                            defaultValue={defaultDataKey || 0}
+                                            defaultValue={defaultDataKey}
                                             id={key + "about"}
                                             name={key + "about"}
                                             type="number"
@@ -51,7 +50,10 @@ function EvaluateScreen({ data, setShowEvaluate, sendEvalution, answersDelivered
                                             className="block w-full p-4 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 sm:text-md focus:ring-blue-500 focus:border-blue-500"
                                         >
                                             {data["Criteria"].map((item, index) => (
-                                                <option defaultValue={item} selected={defaultDataKey === item} key={index}>
+                                                <option
+                                                    defaultValue={item}
+                                                    selected={defaultDataKey === item}
+                                                    key={index}>
                                                     {item}
                                                 </option>
                                             ))}
