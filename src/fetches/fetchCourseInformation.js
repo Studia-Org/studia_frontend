@@ -3,7 +3,7 @@ import { API } from "../constant";
 export async function fetchCourseInformation({ courseId }) {
   try {
     const response = await fetch(
-      `${API}/courses/${courseId}?populate=sections.subsections.activity,sections.subsections.paragraphs,students.profile_photo,professor.profile_photo,sections.subsections.landscape_photo,sections.subsections.questionnaire`
+      `${API}/courses/${courseId}?populate=sections.subsections.activity,sections.subsections.paragraphs,students.profile_photo,students.qualifications.activity,students.qualifications.file,professor.profile_photo,sections.subsections.landscape_photo,sections.subsections.questionnaire`
     );
     const data = await response.json();
     return {

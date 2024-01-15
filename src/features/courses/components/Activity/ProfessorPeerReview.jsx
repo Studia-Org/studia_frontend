@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react'
 import BackToCourse from './Components/BackToCourse'
 import { useNavigate, useParams } from 'react-router-dom';
 import { fetchCourseInformation } from '../../../../fetches/fetchCourseInformation'
+import { fetchPeerReviewAnswers } from '../../../../fetches/fetchPeerReviewAnswers';
 import { StudentRow } from './Components/PeerReview/StudentRow';
 
 
 export const ProfessorPeerReview = ({ activityData }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [courseContentInformation, setCourseContentInformation] = useState({});
+  const [peerReviewAnswers, setPeerReviewAnswers] = useState([]);
   const navigate = useNavigate()
   const { courseId } = useParams()
 
@@ -20,6 +22,15 @@ export const ProfessorPeerReview = ({ activityData }) => {
     fetchCourseData();
   }, [courseId]);
 
+  useEffect(() => {
+    async function fetchPeerReviewData() {
+      const peerReviewAnswers =
+        await fetchPeerReviewAnswers();
+      setPeerReviewAnswers(peerReviewAnswers);
+    }
+    fetchPeerReviewData();
+  }, []);
+
   function renderTableRows() {
     const filteredStudents = courseContentInformation.students?.data.filter((student) =>
       student.attributes.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -27,13 +38,12 @@ export const ProfessorPeerReview = ({ activityData }) => {
     return (
       <>
         {filteredStudents.map((student) => (
-          <StudentRow student={student} key={student.id} />
+          <StudentRow student={student} peerReviewAnswers={peerReviewAnswers} activityToReviewID={activityData.activity.data.attributes.task_to_review.data.id} activityTitle={activityData.activity.data.attributes.title} key={student.id} />
         ))}
       </>
     );
   }
 
-  console.log(activityData)
 
 
   return (
