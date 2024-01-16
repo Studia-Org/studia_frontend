@@ -53,6 +53,7 @@
     "flowbite-react": "^0.6.4",
     "framer-motion": "^10.12.23",
     "js-file-download": "^0.4.12",
+    "papaparse": "^5.4.1",
     "randomcolor": "^0.6.2",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.1",
@@ -84,7 +85,8 @@
     "sweetalert2": "^11.7.3",
     "tailwind-datepicker-react": "^1.4.3",
     "typeface-roboto": "^1.1.13",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "react-scripts start",

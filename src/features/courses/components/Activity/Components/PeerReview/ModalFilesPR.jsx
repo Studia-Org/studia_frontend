@@ -1,8 +1,7 @@
 import React from 'react'
-import { Modal, Button } from 'antd'
+import { Modal, Button, Empty } from 'antd'
 
-export const ModalFiles = ({ grade, isModalOpen, setIsModalOpen, student }) => {
-    const title = grade?.attributes?.activity?.data?.attributes?.title
+export const ModalFilesPR = ({ files, activityTitle, isModalOpen, setIsModalOpen, studentName }) => {
     const downloadFile = async (file) => {
         try {
             const response = await fetch(file.url);
@@ -34,15 +33,19 @@ export const ModalFiles = ({ grade, isModalOpen, setIsModalOpen, student }) => {
         )
     }
     return (
-        <Modal title={title} open={isModalOpen} onOk={() => setIsModalOpen(false)} onCancel={() => setIsModalOpen(false)}
+        <Modal title={activityTitle} open={isModalOpen} onOk={() => setIsModalOpen(false)} onCancel={() => setIsModalOpen(false)}
             footer={[
                 <Button key="submit" type="primary" onClick={() => setIsModalOpen(false)}>
                     OK
                 </Button>
             ]}>
-            <p className='text-gray-700 text-sm'>Files delivered by {student.attributes.name} on activity {title}</p>
+            <p className='text-gray-700 text-sm'>Files delivered by {studentName} on activity {activityTitle}</p>
+            {
+                (files?.length === 0 || !files) &&
+                <Empty className='mt-7' description='There are no files delivered' />
+            }
             <div className='space-y-5 mt-3'>
-                {grade?.attributes?.file?.data?.map(renderFiles)}
+                {files?.map(renderFiles)}
             </div>
         </Modal>
     )
