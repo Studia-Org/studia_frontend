@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Button } from 'antd'
+import { Modal, Button, Empty } from 'antd'
 
 export const ModalFiles = ({ grade, isModalOpen, setIsModalOpen, student }) => {
     const title = grade?.attributes?.activity?.data?.attributes?.title
@@ -24,6 +24,7 @@ export const ModalFiles = ({ grade, isModalOpen, setIsModalOpen, student }) => {
     };
 
     function renderFiles(file) {
+
         return (
             <Button onClick={() => downloadFile(file.attributes)} className='flex items-center rounded-md border p-7 w-full'>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 mr-5">
@@ -41,6 +42,10 @@ export const ModalFiles = ({ grade, isModalOpen, setIsModalOpen, student }) => {
                 </Button>
             ]}>
             <p className='text-gray-700 text-sm'>Files delivered by {student.attributes.name} on activity {title}</p>
+            {
+                (grade?.attributes?.file?.data?.length === 0 || !grade?.attributes?.file.data) &&
+                <Empty className='mt-7' description='There are no files delivered'/>
+            }
             <div className='space-y-5 mt-3'>
                 {grade?.attributes?.file?.data?.map(renderFiles)}
             </div>
