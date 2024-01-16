@@ -12,6 +12,8 @@ export const StudentRow = ({ student, activityToReviewID, activityTitle, peerRev
     const studentQualificationsReceived = peerReviewAnswers.filter((answer) => answer.attributes.qualification?.data.attributes.user.data.id === student.id)
     const studentFiles = studentQualifications[0]?.attributes.file.data
 
+    console.log(activityToReviewID)
+
     function handleRubricModalOpen(qualification) {
         setRubricData(qualification)
         setIsRubricModalOpen(true)

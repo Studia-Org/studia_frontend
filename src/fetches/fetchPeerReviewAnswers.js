@@ -2,7 +2,7 @@ import { API } from "../constant";
 import { getToken } from "../helpers";
 
 
-export async function fetchPeerReviewAnswers() {
+export async function fetchPeerReviewAnswers(activityId) {
     try {
         const response = await fetch(
             `${API}/peer-review-answers?populate=user.profile_photo,qualification.activity,qualification.user.profile_photo`,
@@ -15,7 +15,8 @@ export async function fetchPeerReviewAnswers() {
             }
         );
         const data = await response.json();
-        return data?.data ?? []
+        const filteredData = data?.data?.filter((answer) => answer.attributes.qualification.data.attributes.activity.data.id === activityId);  
+        return filteredData ?? []
     } catch (error) {
         console.error(error);
     }

@@ -38,27 +38,29 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
         fetchUsers()
     }, [])
 
-    function addStudentButton() {
-        if (courseData.students.data.find(item => item.id === selected.id)) {
+
+    function addStudentButton(student) {
+        if (courseData.students.data.find(item => item.id === student.id)) {
             message.error('Student already added')
         } else {
             setCourseData(prevState => ({
                 ...prevState,
                 students: {
-                    data: [...prevState.students.data, selected]
+                    data: [...prevState.students.data, student]
                 }
             }))
         }
+
     }
 
-    function addEvaluatorButton() {
-        if (courseData.evaluators.data.find(item => item.id === selectedEvaluator.id)) {
+    function addEvaluatorButton(evaluator) {
+        if (courseData.evaluators.data.find(item => item.id === evaluator.id)) {
             message.error('Evaluator already added')
         } else {
             setCourseData(prevState => ({
                 ...prevState,
                 evaluators: {
-                    data: [...prevState.evaluators.data, selectedEvaluator]
+                    data: [...prevState.evaluators.data, evaluator]
                 }
             }))
         }
@@ -293,10 +295,10 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
                         </p>
                         <hr className='mt-5' />
                     </div>
-                    <AddParticipants participants={students} addedParticipants={courseData.students.data}
+                    <AddParticipants participants={students} addedParticipants={courseData.students.data} selected={selected}
                         addParticipant={addStudentButton} deleteParticipant={deleteStudent} setSelected={setSelected} addType={'Students'} />
 
-                    <AddParticipants participants={evaluators} addedParticipants={courseData?.evaluators?.data}
+                    <AddParticipants participants={evaluators} addedParticipants={courseData?.evaluators?.data} selected={selectedEvaluator}
                         addParticipant={addEvaluatorButton} deleteParticipant={deleteEvaluator} setSelected={setSelectedEvaluator} addType={'Evaluators'} />
 
                 </div>
