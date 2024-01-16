@@ -110,20 +110,15 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
     const selectedSubsection = subsection.id === courseSubsection.id;
     const dateToday = new Date();
     const startDate = new Date(subsection.attributes.start_date);
-    const endDate = new Date(subsection.attributes.end_date);
     const isBeforeStartDate = dateToday < startDate;
-    const isAfterEndDate = dateToday > endDate;
-    const isDoing = !isBeforeStartDate && !isAfterEndDate;
-    const isSubsectionCompleted = subsectionsCompleted.some((subsectionTemp) => subsectionTemp.id === subsection.id);
+    const disableButton = isBeforeStartDate || (!isFirstSubsection && !prevSubsectionFinished);
+
 
     const handleClick = () => {
-      if (isBeforeStartDate || isAfterEndDate || !isDoing) {
-        return;
-      }
       handleSections(titulo, subsection);
     };
 
-    const buttonClassName = `flex items-center mb-1 font-medium ${isDoing || isSubsectionCompleted ? 'text-gray-900 hover:translate-x-2' : 'text-gray-500'
+    const buttonClassName = `flex items-center mb-1 font-medium ${!disableButton ? 'text-gray-900 hover:translate-x-2' : 'text-gray-500'
       } line-clamp-2 w-3/4 duration-200 text-left`;
 
 
@@ -157,7 +152,7 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
           <button
             onClick={handleClick}
             className={buttonClassName}
-            disabled={isBeforeStartDate || isAfterEndDate || !isDoing}
+            disabled={disableButton}
           >
             {subsection.attributes.title}
           </button>
