@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Modal, Table } from 'antd';
+import { Modal, Table } from 'antd';
 
 
 export const ModalRubrica = ({ setIsModalOpen, isModalOpen, rubricData }) => {
@@ -42,8 +42,8 @@ export const ModalRubrica = ({ setIsModalOpen, isModalOpen, rubricData }) => {
     };
 
     return (
-        <Modal title="Peer Review Answers" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-            <Table className='mt-5' dataSource={transformedData} columns={columns} pagination={false} />
+        <Modal title="Peer Review Answers" width={1000} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+            <Table className='mt-5 w-full' dataSource={transformedData} columns={columns} pagination={false} />
         </Modal>
     )
 }

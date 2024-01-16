@@ -38,7 +38,7 @@ export const ProfessorPeerReview = ({ activityData }) => {
     return (
       <>
         {filteredStudents.map((student) => (
-          <StudentRow student={student} peerReviewAnswers={peerReviewAnswers} activityToReviewID={activityData.activity.data.attributes.task_to_review.data.id} activityTitle={activityData.activity.data.attributes.title} key={student.id} />
+          <StudentRow student={student} peerReviewAnswers={peerReviewAnswers} activityToReviewID={activityData.activity.data.attributes.task_to_review.data?.id} activityTitle={activityData.activity.data.attributes.title} key={student?.id} />
         ))}
       </>
     );
