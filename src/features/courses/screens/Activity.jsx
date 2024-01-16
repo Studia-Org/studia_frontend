@@ -22,6 +22,7 @@ const Activity = () => {
           `&populate[file][fields][0]=*` +
           `&populate[activity][populate][evaluators][fields][0]=*` +
           `&populate[activity][populate][file][fields][0]=*` +
+          `&populate[activity][populate][task_to_review][fields][0]=*` +
           `&filters[activity][id]=${activityId}` +
           `&populate[user][fields][0]=*` +
           `&populate[evaluator][populate][profile_photo][fields][0]=*` +
