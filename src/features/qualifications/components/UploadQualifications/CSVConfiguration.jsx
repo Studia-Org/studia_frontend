@@ -24,10 +24,10 @@ export const CSVConfiguration = ({ activities, formValues, setFormValues, file, 
 
 
     const handleInputChange = (e) => {
-        const { name, value } = e.target;
+        let { name, value } = e.target;
         setFormValues({
             ...formValues,
-            [name]: value,
+            [name]: value.toUpperCase(),
         });
     };
 
