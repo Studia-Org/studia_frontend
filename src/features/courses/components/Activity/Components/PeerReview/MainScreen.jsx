@@ -6,7 +6,8 @@ import renderFiles from "../../utils/renderFIles"
 import { useParams, useNavigate } from "react-router-dom"
 import { useAuthContext } from "../../../../../../context/AuthContext"
 import PeerReviewAnswers from "./PeerReviewAnswers"
-import { Avatar } from "antd"
+import { Avatar, Button } from "antd"
+import { Carousel } from 'flowbite-react';
 
 function MainScreen({ qualificationIds, activityData, setShowEvaluate, data, userIndexSelected, setUserIndexSelected, usersToPair, resetUser }) {
     const { user } = useAuthContext();
@@ -29,7 +30,7 @@ function MainScreen({ qualificationIds, activityData, setShowEvaluate, data, use
 
 
     ///////////coger user index selected////////////////
-    const answers = activityData?.PeerReviewAnswers // answers que nos han hecho los otros usuarios
+    const answers = activityData?.PeerReviewAnswers.data // answers que nos han hecho los otros usuarios
     const deadLine = new Date(activityData?.activity?.data?.attributes?.deadline)
     const overpassDeadLine = deadLine < new Date() && user?.role_str === 'student'
 
@@ -56,8 +57,23 @@ function MainScreen({ qualificationIds, activityData, setShowEvaluate, data, use
             }
             {
                 overpassDeadLine ?
-                    <section className="flex flex-1">
-                        <PeerReviewAnswers answers={answers} data={data.Criteria} />
+                    <section className="flex flex-1 min-w-[100vw] lg:min-w-[75vw] max-w-[90vw] pb-10">
+                        <div className="w-full h-full max-h-[600px]">
+                            <Carousel slide={false}
+                                indicators={answers.length > 1}
+                                leftControl={answers.length === 1 ? <div></div> : <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"
+                                    class="w-10 h-10 p-2 mt-10 text-black bg-[#ffffff80] rounded-full" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>}
+                                rightControl={answers.length === 1 ? <div></div> : <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"
+                                    class="w-10 h-10 p-2 mt-10 text-black bg-[#ffffff80] rounded-full" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>}>
+                                {
+                                    answers.map((answer, index) => {
+                                        return (
+                                            <PeerReviewAnswers answers={answer.attributes.Answers} data={data.Criteria} />
+                                        )
+                                    })
+                                }
+                            </Carousel>
+                        </div>
                     </section>
                     :
                     userIndexSelected === null ?
@@ -98,20 +114,20 @@ function MainScreen({ qualificationIds, activityData, setShowEvaluate, data, use
                             <div className="px-5 pb-5 flex gap-x-3">
                                 {
                                     userIndexSelected !== null && usersToPair > 1 &&
-                                    <button onClick={() => resetUser()}
-                                        className="flex items-center flex-wrap gap-1 hover:scale-95 duration-200 
-                        bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                                    <Button danger onClick={() => resetUser()}
+                                        className=" gap-1 hover:scale-95 duration-200 
+                                          font-bold ">
                                         Change user
-                                    </button>
+                                    </Button>
                                 }
-                                <button onClick={() => setShowEvaluate(prev => !prev)}
+                                <Button type="primary" onClick={() => setShowEvaluate(prev => !prev)}
                                     className="flex items-center flex-wrap gap-1 hover:translate-x-2 duration-200 
-                        bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                      font-bold">
                                     Evaluate
-                                    <svg viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                    <svg viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                                     </svg>
-                                </button>
+                                </Button>
 
 
                             </div>
