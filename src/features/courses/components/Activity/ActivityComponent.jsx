@@ -14,7 +14,6 @@ import Swal from 'sweetalert2';
 import ObjectivesTags from './ObjectivesTag';
 import ActivityTitle from './Components/ActivityTitle';
 import BackToCourse from './Components/BackToCourse';
-import renderFiles from './utils/renderFIles';
 import { Empty, Button, message, Popconfirm } from 'antd';
 import MDEditor from '@uiw/react-md-editor';
 import { SwitchEdit } from '../CoursesInside/SwitchEdit';
@@ -121,7 +120,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
           user: user.id,
           delivered: true,
           delivered_data: new Date(),
-          evaluator: activityData.activity.data.attributes.evaluators.data[0].id
         }
       };
       console.log(activityData?.delivered && !evaluated);
@@ -400,8 +398,14 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                     activityData.activity.data.attributes.file.data.map((file, index) => renderFiles(file, index))
                 }
               </div>
-              <p className='text-xs text-gray-400 mb-1' > Evaluator</ p>
-              <ProfessorData professor={{ attributes: activityData.evaluator.data.attributes }} evaluatorFlag={true} />
+              {
+                activityData.evaluator.data && (
+                  <>
+                    <p className='text-xs text-gray-400 mb-1' > Evaluator</ p>
+                    <ProfessorData professor={{ attributes: activityData.evaluator.data.attributes }} evaluatorFlag={true} />
+                  </>
+                )
+              }
               <p className='text-xs text-gray-400 mb-1 mt-5'>Your submission</p>
               <div className='mb-14 '>
                 {activityData.file.data && activityData.file.data.map(renderFiles)}
