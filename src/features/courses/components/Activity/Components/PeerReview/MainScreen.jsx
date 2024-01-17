@@ -61,10 +61,10 @@ function MainScreen({ qualificationIds, activityData, setShowEvaluate, data, use
                         <div className="w-full h-full max-h-[600px]">
                             <Carousel slide={false}
                                 indicators={answers.length > 1}
-                                leftControl={answers.length === 1 ? <div></div> : <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"
-                                    class="w-10 h-10 p-2 mt-10 text-black bg-[#ffffff80] rounded-full" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"></path></svg>}
-                                rightControl={answers.length === 1 ? <div></div> : <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"
-                                    class="w-10 h-10 p-2 mt-10 text-black bg-[#ffffff80] rounded-full" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path></svg>}>
+                                leftControl={answers.length === 1 ? <div></div> : <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" ariaHidden="true"
+                                    className="w-10 h-10 p-2 mt-10 text-black bg-[#ffffff80] rounded-full" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"></path></svg>}
+                                rightControl={answers.length === 1 ? <div></div> : <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" ariaHidden="true"
+                                    className="w-10 h-10 p-2 mt-10 text-black bg-[#ffffff80] rounded-full" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"></path></svg>}>
                                 {
                                     answers.map((answer, index) => {
                                         return (

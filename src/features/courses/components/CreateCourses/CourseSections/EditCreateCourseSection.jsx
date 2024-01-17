@@ -280,7 +280,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
                         <div className='w-1/2'>
                             {
                                 editSubsectionFlag ?
-                                    <CreateCourseEditSubsection subsection={subsectionEditing} setEditSubsectionFlag={setEditSubsectionFlag} setCreateCourseSectionsList={setCreateCourseSectionsListCopy} createCourseSectionsList={createCourseSectionsListCopy} setSubsectionEditing={setSubsectionEditing} task={task} setTask={setTask} sectionId={sectionToEdit.id} />
+                                    <CreateCourseEditSubsection allSubsections={subsectionsToEdit} subsection={subsectionEditing} setEditSubsectionFlag={setEditSubsectionFlag} setCreateCourseSectionsList={setCreateCourseSectionsListCopy} createCourseSectionsList={createCourseSectionsListCopy} setSubsectionEditing={setSubsectionEditing} task={task} setTask={setTask} sectionId={sectionToEdit.id} />
                                     :
                                     <SubsectionItems setCreateCourseSectionsList={setCreateCourseSectionsListCopy} sectionToEdit={sectionToEdit} ref3={ref3} sectionTask={createCourseSectionsList.filter((section) => section.id === sectionToEdit.id)[0].task} />
                             }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Button, Popconfirm, message, Popover } from 'antd';
+import { sub } from 'date-fns';
 
 export const CreateCourseSubsectionsList = ({
     subsection,
@@ -18,11 +19,13 @@ export const CreateCourseSubsectionsList = ({
                 case 'questionnaire':
                     return subsection.start_date && subsection.end_date;
                 case 'peerReview':
+
                     return (
                         subsection.title &&
                         subsection.content &&
                         subsection.start_date &&
                         subsection.end_date &&
+                        subsection.activity.task_to_review &&
                         Object.keys(subsection.activity.PeerReviewRubrica).length !== 0
                     );
                 case 'task':
@@ -36,7 +39,6 @@ export const CreateCourseSubsectionsList = ({
                     return false;
             }
         };
-
         setIsCompleted(checkCompletion());
     }, [subsection]);
 

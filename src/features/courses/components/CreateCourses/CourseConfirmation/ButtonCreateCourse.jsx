@@ -12,6 +12,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
     const [progress, setProgress] = useState(0);
 
     const navigate = useNavigate();
+
     const isValidCourseBasicInfo = (courseBasicInfo) => {
         if (!courseBasicInfo) {
             throw new Error("courseBasicInfo is missing");

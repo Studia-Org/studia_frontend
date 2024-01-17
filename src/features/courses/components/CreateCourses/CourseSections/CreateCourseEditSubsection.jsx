@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { QuestionnaireComponentEditable } from './QuestionnaireComponentEditable';
 import { PeerReviewRubricModal } from './PeerReviewRubricModal';
 import dayjs from 'dayjs';
-import { message, Button, DatePicker, Input, Switch, InputNumber, Divider } from 'antd';
+import { message, Button, DatePicker, Input, Switch, InputNumber, Select } from 'antd';
 
 import MDEditor from '@uiw/react-md-editor';
 import { UploadFiles } from './UploadFiles';
 
 import '../../../styles/antdButtonStyles.css'
 import { PonderationWarning } from './PonderationWarning';
+import { sub } from 'date-fns';
 const { RangePicker } = DatePicker;
 
 
@@ -19,13 +20,14 @@ export const CreateCourseEditSubsection = ({
   createCourseSectionsList,
   setSubsectionEditing,
   sectionId,
+  allSubsections
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [landscape_photo, setLandscape_photo] = useState([]);
   const [markdownContent, setMarkdownContent] = useState(subsection.content);
   const [files, setFiles] = useState([]);
+  const filteredSubsections = allSubsections.subsections.filter((sub) => sub.type.toLowerCase() === 'task')
   console.log(subsection)
-
   useEffect(() => {
     const matchingSubsection = createCourseSectionsList
       .flatMap((section) => section.subsections)
@@ -67,6 +69,9 @@ export const CreateCourseEditSubsection = ({
             case 'date':
               subsectionCopy.start_date = newValue[0];
               subsectionCopy.end_date = newValue[1];
+              break;
+            case 'peer_review':
+              subsectionCopy.activity.task_to_review = newValue;
               break;
             default:
               break;
@@ -139,6 +144,24 @@ export const CreateCourseEditSubsection = ({
                   }}>
                     Edit Rubric
                   </Button>
+                  <label className='text-sm text-gray-500 !mt-4'>
+                    Select the task for which the peer review will be conducted.  *
+                  </label>
+                  <Select
+                    defaultValue={() => {
+                      const act = filteredSubsections.find((sub) => sub.id === subsection.activity.task_to_review)
+
+                      if (act === undefined) {
+                        subsection.activity.task_to_review = null
+                        return 'Select a task'
+                      }
+                      return act.id
+                    }
+                    }
+                    style={{ width: '100%' }}
+                    onChange={(task) => { handleSubsectionChange('peer_review', task) }}
+                    options={filteredSubsections.map((sub) => ({ label: sub.title, value: sub.id }))}
+                  />
                 </div>
               )
             }

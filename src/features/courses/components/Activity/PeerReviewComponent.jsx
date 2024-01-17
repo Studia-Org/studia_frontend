@@ -7,6 +7,7 @@ import { MoonLoader } from 'react-spinners';
 import Swal from "sweetalert2";
 import { useAuthContext } from "../../../../context/AuthContext";
 import { ProfessorPeerReview } from "./ProfessorPeerReview";
+
 export default function PeerReviewComponent({ activityData }) {
     const [showEvaluate, setShowEvaluate] = useState(false);
     const data = activityData?.activity?.data?.attributes?.PeerReviewRubrica
