@@ -64,7 +64,7 @@ export const Notifications = () => {
         setLoading(false);
     }
 
-    async function fetchNotifiations() {
+    async function fetchNotifications() {
         const response = await fetch(`${API}/users/me?populate=notifications`, {
             method: 'GET',
             headers: {
@@ -72,13 +72,18 @@ export const Notifications = () => {
                 Authorization: `Bearer ${getToken()}`,
             },
         });
-        const data = await response.json();
-        setNotifications(data.notifications);
 
+        const data = await response.json();
+        const sortedNotifications = data.notifications.sort((a, b) => {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+
+        setNotifications(sortedNotifications);
     }
 
+
     useEffect(() => {
-        fetchNotifiations()
+        fetchNotifications()
     }, [])
 
     const contentTitle = (

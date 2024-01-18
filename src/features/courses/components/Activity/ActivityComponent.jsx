@@ -14,7 +14,6 @@ import Swal from 'sweetalert2';
 import ObjectivesTags from './ObjectivesTag';
 import ActivityTitle from './Components/ActivityTitle';
 import BackToCourse from './Components/BackToCourse';
-import renderFiles from './utils/renderFIles';
 import { Empty, Button, message, Popconfirm } from 'antd';
 import MDEditor from '@uiw/react-md-editor';
 import { SwitchEdit } from '../CoursesInside/SwitchEdit';
@@ -25,6 +24,7 @@ registerPlugin(FilePondPluginImagePreview);
 
 export const ActivityComponent = ({ activityData, idQualification, setUserQualification }) => {
   const [filesTask, setFilesTask] = useState();
+  const [uploadLoading, setUploadLoading] = useState(false);
   const [title, setTitle] = useState(activityData.activity.data.attributes.title)
   const [subsectionContent, setSubsectionContent] = useState(activityData.activity.data.attributes.description);
   const [loading, setLoading] = useState(false);
@@ -120,7 +120,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
           user: user.id,
           delivered: true,
           delivered_data: new Date(),
-          evaluator: activityData.activity.data.attributes.evaluators.data[0].id
         }
       };
       console.log(activityData?.delivered && !evaluated);
@@ -156,6 +155,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   }
   async function sendData() {
     try {
+      setUploadLoading(true);
       const response = await fetch(`${API}/upload`, {
         method: 'POST',
         headers: {
@@ -185,7 +185,9 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
           text: 'Something went wrong!',
         })
       }
+      setUploadLoading(false);
     } catch (error) {
+      setUploadLoading(false);
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
@@ -396,8 +398,14 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                     activityData.activity.data.attributes.file.data.map((file, index) => renderFiles(file, index))
                 }
               </div>
-              <p className='text-xs text-gray-400 mb-1' > Evaluator</ p>
-              <ProfessorData professor={{ attributes: activityData.evaluator.data.attributes }} evaluatorFlag={true} />
+              {
+                activityData.evaluator.data && (
+                  <>
+                    <p className='text-xs text-gray-400 mb-1' > Evaluator</ p>
+                    <ProfessorData professor={{ attributes: activityData.evaluator.data.attributes }} evaluatorFlag={true} />
+                  </>
+                )
+              }
               <p className='text-xs text-gray-400 mb-1 mt-5'>Your submission</p>
               <div className='mb-14 '>
                 {activityData.file.data && activityData.file.data.map(renderFiles)}
@@ -408,11 +416,13 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
               <p className='text-lg font-medium mb-4'>Files</p>
               {
                 activityData.activity.data.attributes.file?.data === null || activityData.activity.data.attributes.file?.data?.length === 0 ?
-                  <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
-                    <span className='text-gray-400 font-normal '>
-                      There are no files
-                    </span>
-                  } />
+                  <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
+                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
+                      <span className='text-gray-400 font-normal '>
+                        There are no files
+                      </span>
+                    } />
+                  </div>
                   :
                   activityData.activity.data.attributes.file.data.map((file, index) => renderFiles(file, index))
               }
@@ -442,13 +452,13 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                   }
                 }}
               />
-              <button
+              <Button
+                loading={uploadLoading}
                 id='submit-button-activity'
                 onClick={() => { sendData() }}
-                className="bg-blue-500 text-white font-semibold py-2 px-4 
-                            rounded ml-auto hover:bg-blue-800 duration-150">
+                className=" ml-auto" type='primary'>
                 Submit
-              </button>
+              </Button>
             </div>
       }
     </div >
