@@ -5,6 +5,7 @@ import { getToken } from '../../../../../helpers';
 import { API } from '../../../../../constant';
 import LoadingBar from 'react-top-loading-bar'
 import { BeatLoader, BounceLoader, DotLoader, SyncLoader } from 'react-spinners';
+import { sub } from 'date-fns';
 
 
 export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }) => {
@@ -38,9 +39,16 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                 if (!subsection.start_date || !subsection.end_date) {
                     throw new Error(`Missing start_date or end_date in subsection ${subsection.title}`);
                 }
+                if (subsection.type === 'peerReview') {
+                    const act = section.subsections.find((sub) => sub.id === subsection.activity.task_to_review)
+                    console.log(act)
+                    if (!act) {
+                        throw new Error(`Missing task to review in subsection ${subsection.title}`);
+                    }
+                }
             })
         })
-        return true;
+        return false;
     };
 
     async function createCourse() {
@@ -52,6 +60,9 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
             let allSections = []
             let forumIds = []
             const totalIterations = createCourseSectionsList.reduce((acc, section) => acc + section.subsections.length, 0)
+            const createdActivities = {
+
+            }
             for (const section of createCourseSectionsList) {
                 let allSubsections = []
                 for (const subsection of section.subsections) {
@@ -71,8 +82,6 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                             },
                             body: JSON.stringify({ data: questionnaire }),
                         });
-
-
                         const data = await response.json();
 
                         const activity = {
@@ -136,9 +145,13 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                                 body: formData,
                             });
                             filesData = await response.json();
+
                         }
                         if ('id' in subsection.activity) {
                             delete subsection.activity.id;
+                        }
+                        if (subsection.activity.type === 'peerReview') {
+                            subsection.activity.task_to_review = createdActivities[subsection.activity.task_to_review]
                         }
                         const createActivity = await fetch(`${API}/activities`, {
                             method: 'POST',
@@ -146,10 +159,10 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                                 'Content-Type': 'application/json',
                                 Authorization: `Bearer ${getToken()}`,
                             },
-                            body: JSON.stringify({ data: subsection.activity }),
+                            body: JSON.stringify({ data: { ...subsection.activity, title: subsection.title } }),
                         })
                         const dataActivity = await createActivity.json();
-
+                        createdActivities[subsection.id] = dataActivity.data.id
                         newSubsection =
                         {
                             title: subsection.title,

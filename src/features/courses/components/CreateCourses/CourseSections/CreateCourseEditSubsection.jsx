@@ -9,7 +9,8 @@ import { UploadFiles } from './UploadFiles';
 
 import '../../../styles/antdButtonStyles.css'
 import { PonderationWarning } from './PonderationWarning';
-import { sub } from 'date-fns';
+import { debounce } from 'lodash';
+
 const { RangePicker } = DatePicker;
 
 
@@ -129,12 +130,16 @@ export const CreateCourseEditSubsection = ({
         />
       ) : (
         <>
-          <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-lg pl-3' placeholder="Description" onChange={(e) => handleTitleChange(e.target.value)} value={subsection.title} />
+          <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-lg pl-3' placeholder="Description"
+            onChange={(e) => handleTitleChange(e.target.value)} value={subsection.title} />
           <div className='bg-white rounded-md shadow-md p-5 mt-4 mb-10 '>
             {
               subsection?.type === 'peerReview' && (
                 <div className='flex flex-col justify-center space-y-2 mb-5'>
-                  <PeerReviewRubricModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} rubricData={subsection.activity.PeerReviewRubrica} setSubsectionEditing={setSubsectionEditing} />
+                  <PeerReviewRubricModal isModalOpen={isModalOpen}
+                    setIsModalOpen={setIsModalOpen}
+                    rubricData={subsection.activity.PeerReviewRubrica}
+                    setSubsectionEditing={setSubsectionEditing} />
                   <label className='text-sm text-gray-500 '>
                     Peer review rubric *
                   </label>
@@ -206,7 +211,7 @@ export const CreateCourseEditSubsection = ({
                   disabled={!subsection.activity?.evaluable}
                   defaultValue={0}
                   value={subsection.activity?.evaluable ? subsection.activity?.ponderation : 0}
-                  onChange={(e) => handleSubsectionChange('ponderation', e)}
+                  onChange={debounce((e) => handleSubsectionChange('ponderation', e), 100)}
                   min={0}
                   max={100}
                   formatter={(value) => `${value}%`}

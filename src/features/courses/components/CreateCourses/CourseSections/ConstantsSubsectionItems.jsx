@@ -138,7 +138,7 @@ export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit, se
                 title: `${item.title}: ${sectionTask.title}`,
                 activityData: item.activityData === sectionTask ? {
                     ...sectionTask,
-                    id: Math.random().toString(16).slice(2),
+                    id: crypto.randomUUID(),
                     title: `${item.title}: ${sectionTask.title}`
                 } : item.activityData,
 
@@ -149,7 +149,7 @@ export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit, se
                 ...item,
                 activityData: item.activityData === PeerReviewData ? {
                     ...PeerReviewData,
-                    id: Math.random().toString(16).slice(2),
+                    id: crypto.randomUUID(),
                 } : item.activityData,
             };
         }
