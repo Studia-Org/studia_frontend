@@ -51,7 +51,9 @@ const CourseInside = () => {
         `${API}/courses/${courseId}?populate=forums.posts.autor.profile_photo,forums.posts.forum_answers.autor.profile_photo`
       );
       const data = await response.json();
-      setAllForums(data.data.attributes.forums.data);
+      const list = data.data.attributes.forums.data;
+      list.sort((a, b) => (a.attributes.title === 'News') ? -1 : (b.attributes.title === 'News') ? 1 : 0);
+      setAllForums(list);
     } catch (error) {
       console.error(error);
     }
