@@ -24,11 +24,13 @@ const Activity = () => {
           `&populate[activity][populate][file][fields][0]=*` +
           `&populate[activity][populate][task_to_review][fields][0]=*` +
           `&filters[activity][id]=${activityId}` +
-          `&populate[user][fields][0]=*` +
+          `&populate[user][populate][PeerReviewAnswers][populate][qualification][populate][user][fields][0]=username` +
           `&populate[evaluator][populate][profile_photo][fields][0]=*` +
           `&filters[user][id]=${user.id}` +
-          `&populate[PeerReviewQualification][populate][file][fields][0]=*` +
-          `&populate[PeerReviewQualification][populate][user][fields][0]=username`)
+          `&populate[PeerReviewAnswers][populate][user][populate][qualification][populate][Answers][fields][0]=*` +
+          `&populate[peer_review_qualifications][populate][file][fields][0]=*` +
+          `&populate[peer_review_qualifications][populate][user][fields][0]=username` +
+          `&populate[peer_review_qualifications][populate][user][populate][profile_photo][fields][0]=*`)
 
 
       const data = await response.json();
