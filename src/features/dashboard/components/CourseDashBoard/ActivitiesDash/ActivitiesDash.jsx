@@ -1,17 +1,21 @@
 import { useState, useEffect } from "react";
-import { GenerateChartQualifitation } from "../../../utils/BarChartQualification";
 import { MoonLoader } from "react-spinners";
 import { useAuthContext } from "../../../../../context/AuthContext";
 import { PieChart } from '@mui/x-charts/PieChart';
 import ReactApexChart from 'react-apexcharts'
 import { useNavigate } from "react-router-dom";
+import { BadgeProgress } from "./components/BadgeProgress";
 import { fetchAverageCourse } from "../../../../../fetches/fetchAverageCourse";
+import { fetchAllActivitiesObjectives } from "../../../../../fetches/fetchAllActivitiesObjectives";
 import { fetchNumbersOfPosts } from "../../../../../fetches/fetchNumbersOfPosts";
 import { fetchQuestionnaireTimeByCourse } from "../../../../../fetches/fetchQuestionnaireTimeByCourse";
+import { ProgressChart } from "./components/ProgressChart";
+import { Empty } from "antd";
 
 export function ActivitiesDash({ courseInformation, styles, courseId }) {
 
     const [loading, setLoading] = useState(true);
+    const [objectives, setObjectives] = useState()
     const [averageQualification, setAverageQualification] = useState(0);
     const [qualification, setQualification] = useState(0);
     const [totalQualifications, setTotalQualifications] = useState();
@@ -26,8 +30,10 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
             setLoading(true)
 
             const { averageMainActivity, averageMainActivityUser, totalQualifications } = await fetchAverageCourse({ courseId, userId })
+            const objectives = await fetchAllActivitiesObjectives({ courseId })
 
             setAverageQualification(averageMainActivity)
+            setObjectives(objectives)
             setQualification(averageMainActivityUser)
 
             let { tiempoPromedio, tiempoPromedioFormateado, tiempoUsuario, tiempoUsuarioFormateado, totalQuestionnaire } =
@@ -57,22 +63,22 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
 
     }, [courseId])
 
-    function ActivityInformation() {
+    console.log(objectives)
+
+    function CourseProgress() {
         return (
             !loading ?
                 <>
-                    <p className="text-lg font-semibold">Course information</p>
-                    <div className="flex flex-row justify-between sm:justify-around items-center h-full pb-2">
-                        <div className="flex flex-col justify-evenly w-fit h-full">
-                            <p className="text-base font-medium pt-2 pb-1">
-                                Average: {averageQualification.toFixed(2)}</p>
-                            <p className="text-base font-medium pt-2 pb-1">
-                                Your grade: {qualification?.toFixed(2)}</p>
-                        </div>
-                        <GenerateChartQualifitation
-                            averageQualification={averageQualification}
-                            qualification={qualification} />
+                    <p className="text-lg font-semibold pb-5">Objective progress</p>
+                    <div className="">
+                        {
+                            objectives.length !== 0 ?
+                                <ProgressChart objectivesList={objectives} />
+                                :
+                                <Empty description='Course is empty' />
+                        }
                     </div>
+
                 </>
                 :
                 <MoonLoader className="self-center" color="#363cd6" size={80} />
@@ -81,7 +87,7 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
     function generatePieChart() {
         return (
             <>
-                <p className="text-2xl font-semibold pb-4" >Qualifications distribution</p>
+                <p className="text-lg font-semibold pb-4" >Qualifications distribution</p>
                 <PieChart
                     series={[{
                         data: totalQualifications,
@@ -96,7 +102,7 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
     function QuestionnarieTime() {
         return (
             <>
-                <p className="text-2xl font-semibold pb-2">Questionnarie time (min)</p>
+                <p className="text-lg font-semibold pb-2">Questionnarie time (min)</p>
                 <ReactApexChart
                     options={{
 
@@ -161,7 +167,7 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
     function PostChart() {
         return (
             <>
-                <p className="text-2xl font-semibold pb-2">Participation in forums</p>
+                <p className="text-lg font-semibold pb-2">Participation in forums</p>
                 <ReactApexChart
                     options={{
                         chart: {
@@ -259,7 +265,7 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
                         <div className="grid gap-6 h-full grid-cols-1 lg:grid-cols-[repeat(auto-fit,minmax(30vw,1fr))] ">
                             <section className="rounded-lg bg-white p-5 overflow-x-auto overflow-y-clip max-w-[calc(100vw-2rem)]  
                             shadow-lg">
-                                <ActivityInformation />
+                                <CourseProgress />
                             </section>
                             <section className="rounded-lg bg-white p-5 overflow-x-auto overflow-y-clip max-w-[calc(100vw-2rem)] 
                               shadow-lg">
