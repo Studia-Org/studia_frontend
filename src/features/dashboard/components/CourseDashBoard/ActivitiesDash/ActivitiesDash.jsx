@@ -61,12 +61,12 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
         return (
             !loading ?
                 <>
-                    <p className="text-2xl font-semibold">Course information</p>
+                    <p className="text-lg font-semibold">Course information</p>
                     <div className="flex flex-row justify-between sm:justify-around items-center h-full pb-2">
                         <div className="flex flex-col justify-evenly w-fit h-full">
-                            <p className="text-lg font-medium pt-2 pb-1">
+                            <p className="text-base font-medium pt-2 pb-1">
                                 Average: {averageQualification.toFixed(2)}</p>
-                            <p className="text-lg font-medium pt-2 pb-1">
+                            <p className="text-base font-medium pt-2 pb-1">
                                 Your grade: {qualification?.toFixed(2)}</p>
                         </div>
                         <GenerateChartQualifitation
@@ -249,7 +249,7 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
                     </div>
                     :
                     <main className="h-full mb-10">
-                        <button className='text-sm flex md:-mt-4 pb-2  w-fit hover:-translate-x-2 duration-150 '
+                        <button className='text-sm flex md:-mt-4 pb-2  w-fit hover:-translate-x-2 duration-150 mb-4'
                             onClick={() => navigate(`/app/dashboard`)}>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                                 <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />

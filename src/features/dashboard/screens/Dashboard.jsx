@@ -16,7 +16,7 @@ function Dashboard() {
           <MoonLoader color="#363cd6" size={80} />
         </div>
       ) : (
-        <main className="flex flex-wrap w-full h-full justify-center items-center p-3">
+        <main className="flex flex-wrap w-full h-full justify-center items-center pt-7 ">
           <div className="flex h-[15rem] p-3 min-w-[95%] max-w-[95%] ">
             <CardDash user={user} />
           </div>
