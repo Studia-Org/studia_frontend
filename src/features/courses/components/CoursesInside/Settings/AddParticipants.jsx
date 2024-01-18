@@ -3,7 +3,7 @@ import { UploadFiles } from '../../CreateCourses/CourseSections/UploadFiles';
 import { Select, Avatar, Button, Modal, message } from 'antd';
 
 
-export const AddParticipants = ({ participants, addedParticipants, addParticipant, deleteParticipant, setSelected, addType }) => {
+export const AddParticipants = ({ participants, addedParticipants, addParticipant, deleteParticipant, setSelected, addType, selected }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [files, setFiles] = useState([]);
@@ -35,8 +35,7 @@ export const AddParticipants = ({ participants, addedParticipants, addParticipan
                 const email = columns[0].trim();
                 const participant = participants.find(item => item.email === email);
                 if (participant) {
-                    setSelected(participant);
-                    addParticipant();
+                    addParticipant(participant);
                 }
             });
         };
@@ -83,7 +82,7 @@ export const AddParticipants = ({ participants, addedParticipants, addParticipan
                         <span className="ml-3 mt-3">
                             <Button
                                 type="default"
-                                onClick={() => addParticipant()}
+                                onClick={() => addParticipant(selected)}
                                 className="inline-flex items-center gap-2 bg-gray-200"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4">
