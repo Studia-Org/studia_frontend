@@ -8,8 +8,8 @@ export const ProgressChart = ({ objectivesList }) => {
             {
                 objectivesList.map((objective, index) => {
                     return (
-                        <div className='flex items-center'>
-                            <Progress percent={30} status="active" showInfo={false} />
+                        <div key={objective.objective} className='flex items-center'>
+                            <Progress percent={objective.percentage} status="active" showInfo={false} strokeWidth={13} />
                             <Divider type="vertical" />
                             <BadgeProgress objective={objective} />
                         </div>

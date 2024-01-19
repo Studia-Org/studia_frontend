@@ -4,7 +4,6 @@ import { useAuthContext } from "../../../../../context/AuthContext";
 import { PieChart } from '@mui/x-charts/PieChart';
 import ReactApexChart from 'react-apexcharts'
 import { useNavigate } from "react-router-dom";
-import { BadgeProgress } from "./components/BadgeProgress";
 import { fetchAverageCourse } from "../../../../../fetches/fetchAverageCourse";
 import { fetchAllActivitiesObjectives } from "../../../../../fetches/fetchAllActivitiesObjectives";
 import { fetchNumbersOfPosts } from "../../../../../fetches/fetchNumbersOfPosts";
@@ -24,6 +23,7 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
     const { user } = useAuthContext();
     const navigate = useNavigate();
 
+
     useEffect(() => {
         async function getAverageAndQualification() {
             const userId = user.id
@@ -31,7 +31,6 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
 
             const { averageMainActivity, averageMainActivityUser, totalQualifications } = await fetchAverageCourse({ courseId, userId })
             const objectives = await fetchAllActivitiesObjectives({ courseId })
-
             setAverageQualification(averageMainActivity)
             setObjectives(objectives)
             setQualification(averageMainActivityUser)
@@ -62,8 +61,6 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
         getAverageAndQualification()
 
     }, [courseId])
-
-    console.log(objectives)
 
     function CourseProgress() {
         return (
