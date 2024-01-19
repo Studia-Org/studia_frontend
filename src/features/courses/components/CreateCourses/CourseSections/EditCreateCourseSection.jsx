@@ -169,7 +169,6 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
         if (currentIndex > targetIndex && newIndex !== targetIndex + 1) {
             return false;
         }
-        console.log(currentFase, targetFase)
 
         if (currentFase === 'self-reflection' && (targetFase === 'forethought' || targetFase === 'performance')) {
             return false;

@@ -41,7 +41,6 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                 }
                 if (subsection.type === 'peerReview') {
                     const act = section.subsections.find((sub) => sub.id === subsection.activity.task_to_review)
-                    console.log(act)
                     if (!act) {
                         throw new Error(`Missing task to review in subsection ${subsection.title}`);
                     }
@@ -181,7 +180,6 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
 
                         if (subsection?.landscape_photo.length > 0) {
                             formData.delete('files');
-                            console.log(subsection.landscape_photo[0])
                             formData.append('files', subsection.landscape_photo[0].originFileObj);
                             const response = await fetch(`${API}/upload`, {
                                 method: 'POST',
@@ -210,7 +208,6 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                 const newFormData = new FormData();
 
                 if (section?.task?.files.length > 0) {
-                    console.log(section.task)
                     for (const file of section.task.files) {
                         newFormData.append('files', file.originFileObj);
                     }

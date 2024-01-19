@@ -6,7 +6,6 @@ import { QuestionnaireConfirmation } from './QuestionnaireConfirmation';
 import ImageDisplay from './ImageDisplay';
 
 export const CourseContent = ({ createCourseSectionsList, sectionContentSelector, setVisibilityTask, selectedSubsection, sectionId, task }) => {
-    console.log(createCourseSectionsList)
     const CourseContent = () => {
         return (
             <div className='w-full flex flex-row items-center space-x-8'>
@@ -18,7 +17,7 @@ export const CourseContent = ({ createCourseSectionsList, sectionContentSelector
                             <hr className='mb-5' />
                             {
                                 task[sectionId] &&
-                                <TaskComponentCard task={selectedSubsection.activity} setVisibilityTask={setVisibilityTask} />
+                                <TaskComponentCard task={selectedSubsection} setVisibilityTask={setVisibilityTask} />
                             }
                             <p className='text-xs font-normal text-gray-400 mb-1'>Course content</p>
                             <hr className='mb-5' />
