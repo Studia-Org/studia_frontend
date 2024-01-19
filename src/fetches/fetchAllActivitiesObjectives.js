@@ -56,21 +56,29 @@ export async function fetchAllActivitiesObjectives({ courseId }) {
         info.courseInformation.forEach((section) => {
             section.attributes.subsections.data.forEach((subsection) => {
                 subsection?.attributes.activity?.data?.attributes.categories?.forEach((category) => {
-                    dataUser.subsections_completed?.forEach((subsection_completed) => {
-                        if (subsection_completed.activity.id === subsection.attributes.activity.data.id) {
-                            const existingObjective = objectivesCompleted[category];
-                            const i_completed = existingObjective ? existingObjective.i_completed + 1 : 1;
-                            const i_repeat = existingObjective ? existingObjective.i_repeat + 1 : 1;
-                            const objective = { objective: category, i_completed, i_repeat };
-                            objectivesCompleted[category] = objective;
-                        } else {
-                            const existingObjective = objectivesCompleted[category];
-                            const i_completed = existingObjective ? existingObjective.i_completed : 0;
-                            const i_repeat = existingObjective ? existingObjective.i_repeat + 1 : 1;
-                            const objective = { objective: category, i_completed, i_repeat };
-                            objectivesCompleted[category] = objective;
-                        }
-                    })
+                    if (userSubsectionsCompletedCourse.length !== 0) {
+                        userSubsectionsCompletedCourse?.forEach((subsection_completed) => {
+                            if (subsection_completed.activity.id === subsection.attributes.activity.data.id) {
+                                const existingObjective = objectivesCompleted[category];
+                                const i_completed = existingObjective ? existingObjective.i_completed + 1 : 1;
+                                const i_repeat = existingObjective ? existingObjective.i_repeat + 1 : 1;
+                                const objective = { objective: category, i_completed, i_repeat };
+                                objectivesCompleted[category] = objective;
+                            } else {
+                                const existingObjective = objectivesCompleted[category];
+                                const i_completed = existingObjective ? existingObjective.i_completed : 0;
+                                const i_repeat = existingObjective ? existingObjective.i_repeat + 1 : 1;
+                                const objective = { objective: category, i_completed, i_repeat };
+                                objectivesCompleted[category] = objective;
+                            }
+                        })
+                    } else {
+                        const existingObjective = objectivesCompleted[category];
+                        const i_completed = existingObjective ? existingObjective.i_completed : 0;
+                        const i_repeat = existingObjective ? existingObjective.i_repeat + 1 : 1;
+                        const objective = { objective: category, i_completed, i_repeat };
+                        objectivesCompleted[category] = objective;
+                    }
                 })
             })
         });
@@ -80,10 +88,10 @@ export async function fetchAllActivitiesObjectives({ courseId }) {
         objectivesCompletedArraySorted.forEach((objective) => {
             const isUserObjective = allUserCategories.includes(objective.objective);
             if (objective.i_completed > 0) {
-                finalList.push({ objective: objective.objective, percentage: 0, isUserObjective: isUserObjective })
+                finalList.push({ objective: objective.objective, percentage: Math.round(objective.i_completed / objective.i_repeat * 100), isUserObjective: isUserObjective })
             } else {
                 finalList.push({
-                    objective: objective.objective, percentage: Math.round(objective.i_completed / objective.i_repeat * 100), isUserObjective: isUserObjective
+                    objective: objective.objective, percentage: 0, isUserObjective: isUserObjective
                 })
             }
         })
