@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { PeerReviewVisualization } from './PeerReviewVisualization';
 
 export const TaskContent = ({ setVisibilityTask, task, evaluator }) => {
-    console.log(task)
 
     function renderFiles(file, index) {
         return (

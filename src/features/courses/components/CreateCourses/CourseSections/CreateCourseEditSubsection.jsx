@@ -2,13 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { QuestionnaireComponentEditable } from './QuestionnaireComponentEditable';
 import { PeerReviewRubricModal } from './PeerReviewRubricModal';
 import dayjs from 'dayjs';
-import { message, Button, DatePicker, Input, Switch, InputNumber, Divider } from 'antd';
+import { message, Button, DatePicker, Input, Switch, InputNumber, Select } from 'antd';
 
 import MDEditor from '@uiw/react-md-editor';
 import { UploadFiles } from './UploadFiles';
 
 import '../../../styles/antdButtonStyles.css'
 import { PonderationWarning } from './PonderationWarning';
+import { debounce } from 'lodash';
+import { sub } from 'date-fns';
+
 const { RangePicker } = DatePicker;
 
 
@@ -19,13 +22,13 @@ export const CreateCourseEditSubsection = ({
   createCourseSectionsList,
   setSubsectionEditing,
   sectionId,
+  allSubsections
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [landscape_photo, setLandscape_photo] = useState([]);
   const [markdownContent, setMarkdownContent] = useState(subsection.content);
   const [files, setFiles] = useState([]);
-  console.log(subsection)
-
+  const filteredSubsections = allSubsections.subsections.filter((sub) => sub.type.toLowerCase() === 'task')
   useEffect(() => {
     const matchingSubsection = createCourseSectionsList
       .flatMap((section) => section.subsections)
@@ -68,6 +71,12 @@ export const CreateCourseEditSubsection = ({
               subsectionCopy.start_date = newValue[0];
               subsectionCopy.end_date = newValue[1];
               break;
+            case 'peer_review':
+              subsectionCopy.activity.task_to_review = newValue;
+              break;
+            case 'usersToPair':
+              subsectionCopy.activity.usersToPair = newValue;
+              break;
             default:
               break;
           }
@@ -108,7 +117,7 @@ export const CreateCourseEditSubsection = ({
   };
 
   return (
-    <div className='w-[45rem]'>
+    <div key={subsection.id} className='w-[45rem]'>
       <button className='text-sm flex items-center -translate-y-5 ' onClick={() => setEditSubsectionFlag(false)}>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
           <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
@@ -123,13 +132,17 @@ export const CreateCourseEditSubsection = ({
           sectionId={sectionId}
         />
       ) : (
-        <>
-          <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-lg pl-3' placeholder="Description" onChange={(e) => handleTitleChange(e.target.value)} value={subsection.title} />
-          <div className='bg-white rounded-md shadow-md p-5 mt-4 mb-10 '>
+        <div key={subsection.id}>
+          <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-lg pl-3' placeholder="Description"
+            onChange={(e) => handleTitleChange(e.target.value)} value={subsection.title} />
+          <div key={subsection.id} className='bg-white rounded-md shadow-md p-5 mt-4 mb-10 '>
             {
               subsection?.type === 'peerReview' && (
                 <div className='flex flex-col justify-center space-y-2 mb-5'>
-                  <PeerReviewRubricModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} rubricData={subsection.activity.PeerReviewRubrica} setSubsectionEditing={setSubsectionEditing} />
+                  <PeerReviewRubricModal isModalOpen={isModalOpen}
+                    setIsModalOpen={setIsModalOpen}
+                    rubricData={subsection.activity.PeerReviewRubrica}
+                    setSubsectionEditing={setSubsectionEditing} />
                   <label className='text-sm text-gray-500 '>
                     Peer review rubric *
                   </label>
@@ -139,6 +152,37 @@ export const CreateCourseEditSubsection = ({
                   }}>
                     Edit Rubric
                   </Button>
+                  <label className='text-sm text-gray-500 !mt-4'>
+                    Select the task for which the peer review will be conducted.  *
+                  </label>
+                  <Select
+                    defaultValue={() => {
+                      const act = filteredSubsections.find((sub) => sub.id === subsection.activity.task_to_review)
+                      if (act === undefined) {
+                        subsection.activity.task_to_review = null
+                        return 'Select a task'
+                      }
+                      return act.id
+                    }
+                    }
+                    style={{ width: '100%' }}
+                    onChange={(task) => { handleSubsectionChange('peer_review', task) }}
+                    options={filteredSubsections.map((sub) => ({ label: sub.title, value: sub.id }))}
+                  />
+                  <label className='text-sm text-gray-500 !mt-4'>
+                    How many students are going to review each other  *
+                  </label>
+                  <Select
+                    defaultValue={subsection.activity.usersToPair || 1}
+                    style={{ width: '100%' }}
+                    onChange={(number) => { handleSubsectionChange('usersToPair', number) }}
+                    options={[
+                      { value: 1, label: 1 },
+                      { value: 2, label: 2 },
+                      { value: 3, label: 3 },
+                    ]}
+                  />
+
                 </div>
               )
             }
@@ -183,7 +227,7 @@ export const CreateCourseEditSubsection = ({
                   disabled={!subsection.activity?.evaluable}
                   defaultValue={0}
                   value={subsection.activity?.evaluable ? subsection.activity?.ponderation : 0}
-                  onChange={(e) => handleSubsectionChange('ponderation', e)}
+                  onChange={debounce((e) => handleSubsectionChange('ponderation', e), 100)}
                   min={0}
                   max={100}
                   formatter={(value) => `${value}%`}
@@ -211,9 +255,10 @@ export const CreateCourseEditSubsection = ({
             <MDEditor className='mt-2 mb-2' data-color-mode='light' onChange={setMarkdownContent} onBlur={() => handleSubsectionChange('content', markdownContent)}
               value={markdownContent} visibleDragbar={false} />
           </div>
-        </>
-      )}
-    </div>
+        </div>
+      )
+      }
+    </div >
   );
 };
 
