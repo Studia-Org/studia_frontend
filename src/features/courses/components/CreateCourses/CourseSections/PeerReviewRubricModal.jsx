@@ -153,7 +153,6 @@ export const PeerReviewRubricModal = ({ isModalOpen, setIsModalOpen, rubricData,
                 setEditingKey('');
             }
         } catch (errInfo) {
-            console.log('Validate Failed:', errInfo);
         }
     };
     const columns = [

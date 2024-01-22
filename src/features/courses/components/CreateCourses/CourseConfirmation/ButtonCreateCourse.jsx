@@ -5,6 +5,7 @@ import { getToken } from '../../../../../helpers';
 import { API } from '../../../../../constant';
 import LoadingBar from 'react-top-loading-bar'
 import { BeatLoader, BounceLoader, DotLoader, SyncLoader } from 'react-spinners';
+import { sub } from 'date-fns';
 
 
 export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }) => {
@@ -12,6 +13,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
     const [progress, setProgress] = useState(0);
 
     const navigate = useNavigate();
+
     const isValidCourseBasicInfo = (courseBasicInfo) => {
         if (!courseBasicInfo) {
             throw new Error("courseBasicInfo is missing");
@@ -37,9 +39,15 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                 if (!subsection.start_date || !subsection.end_date) {
                     throw new Error(`Missing start_date or end_date in subsection ${subsection.title}`);
                 }
+                if (subsection.type === 'peerReview') {
+                    const act = section.subsections.find((sub) => sub.id === subsection.activity.task_to_review)
+                    if (!act) {
+                        throw new Error(`Missing task to review in subsection ${subsection.title}`);
+                    }
+                }
             })
         })
-        return true;
+        return false;
     };
 
     async function createCourse() {
@@ -51,6 +59,9 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
             let allSections = []
             let forumIds = []
             const totalIterations = createCourseSectionsList.reduce((acc, section) => acc + section.subsections.length, 0)
+            const createdActivities = {
+
+            }
             for (const section of createCourseSectionsList) {
                 let allSubsections = []
                 for (const subsection of section.subsections) {
@@ -70,8 +81,6 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                             },
                             body: JSON.stringify({ data: questionnaire }),
                         });
-
-
                         const data = await response.json();
 
                         const activity = {
@@ -135,9 +144,13 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                                 body: formData,
                             });
                             filesData = await response.json();
+
                         }
                         if ('id' in subsection.activity) {
                             delete subsection.activity.id;
+                        }
+                        if (subsection.activity.type === 'peerReview') {
+                            subsection.activity.task_to_review = createdActivities[subsection.activity.task_to_review]
                         }
                         const createActivity = await fetch(`${API}/activities`, {
                             method: 'POST',
@@ -145,10 +158,10 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                                 'Content-Type': 'application/json',
                                 Authorization: `Bearer ${getToken()}`,
                             },
-                            body: JSON.stringify({ data: subsection.activity }),
+                            body: JSON.stringify({ data: { ...subsection.activity, title: subsection.title } }),
                         })
                         const dataActivity = await createActivity.json();
-
+                        createdActivities[subsection.id] = dataActivity.data.id
                         newSubsection =
                         {
                             title: subsection.title,
@@ -167,7 +180,6 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
 
                         if (subsection?.landscape_photo.length > 0) {
                             formData.delete('files');
-                            console.log(subsection.landscape_photo[0])
                             formData.append('files', subsection.landscape_photo[0].originFileObj);
                             const response = await fetch(`${API}/upload`, {
                                 method: 'POST',
@@ -196,7 +208,6 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                 const newFormData = new FormData();
 
                 if (section?.task?.files.length > 0) {
-                    console.log(section.task)
                     for (const file of section.task.files) {
                         newFormData.append('files', file.originFileObj);
                     }

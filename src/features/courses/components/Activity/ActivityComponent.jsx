@@ -402,7 +402,9 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                 activityData.evaluator.data && (
                   <>
                     <p className='text-xs text-gray-400 mb-1' > Evaluator</ p>
-                    <ProfessorData professor={{ attributes: activityData.evaluator.data.attributes }} evaluatorFlag={true} />
+                    <div className='pl-1'>
+                      <ProfessorData professor={{ attributes: activityData.evaluator.data.attributes }} evaluatorFlag={true} />
+                    </div>
                   </>
                 )
               }

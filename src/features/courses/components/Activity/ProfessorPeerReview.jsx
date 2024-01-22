@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { fetchCourseInformation } from '../../../../fetches/fetchCourseInformation'
 import { fetchPeerReviewAnswers } from '../../../../fetches/fetchPeerReviewAnswers';
 import { StudentRow } from './Components/PeerReview/StudentRow';
+import { Empty } from 'antd';
 
 
 export const ProfessorPeerReview = ({ activityData }) => {
@@ -88,6 +89,12 @@ export const ProfessorPeerReview = ({ activityData }) => {
               </tr>
             </thead>
             <tbody>
+              {courseContentInformation.students?.data.length === 0 &&
+                <tr>
+                  <td colSpan="4" class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                    <Empty description={<span className='text-gray-500'>There are no students enrolled in this course.</span>} />
+                  </td>
+                </tr>}
               {courseContentInformation.students?.data.length > 0 && renderTableRows()}
             </tbody>
           </table>

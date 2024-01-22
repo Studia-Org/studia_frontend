@@ -4,9 +4,11 @@ import React from 'react'
 
 
 function createSubsection(subsectionName, fase, questionnaireData, setCreateCourseSectionsList, sectionToEdit, type, context, activityData) {
+    const id = crypto.randomUUID();
+
     if (context === 'coursesInside') {
         const newSubsection = {
-            id: Math.floor(Math.random() * 1000),
+            id: id,
             attributes: {
                 title: subsectionName,
                 fase: fase,
@@ -37,13 +39,13 @@ function createSubsection(subsectionName, fase, questionnaireData, setCreateCour
         })
     } else {
         const newSubsection = {
-            id: Math.floor(Math.random() * 1000),
+            id: id,
             title: subsectionName,
             fase: fase,
             finished: false,
             start_date: null,
             end_date: null,
-            activity: activityData,
+            activity: { ...activityData, id: crypto.randomUUID() },
             content: '',
             paragraphs: [],
             description: null,
@@ -121,24 +123,17 @@ const QuestionItem = ({ iconColor, iconPath, title }) => (
     </li>
 );
 
-export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask }) => {
-    const sequence = [
-        { title: 'MSLQ Questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: MSLQuestionnaireData, type: 'questionnaire', activityData: null },
-        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
-        { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
-        { title: 'Task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
-        { title: 'Peer review', iconColor: '#dc2626', iconPath: svgSwitcher('peerReview'), fase: 'self-reflection', questionnaireData: null, type: 'peerReview', activityData: PeerReviewData },
-        { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
-    ];
-
+function modifySequence(sequence, sectionTask) {
     const modifiedSequence = sequence.map((item, index) => {
+        const id = crypto.randomUUID();
+
         if (item.activityData === sectionTask) {
             return {
                 ...item,
                 title: `${item.title}: ${sectionTask.title}`,
                 activityData: item.activityData === sectionTask ? {
                     ...sectionTask,
-                    id: Math.random().toString(16).slice(2),
+                    id: id,
                     title: `${item.title}: ${sectionTask.title}`
                 } : item.activityData,
 
@@ -149,7 +144,7 @@ export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit, se
                 ...item,
                 activityData: item.activityData === PeerReviewData ? {
                     ...PeerReviewData,
-                    id: Math.random().toString(16).slice(2),
+                    id: id,
                 } : item.activityData,
             };
         }
@@ -157,14 +152,28 @@ export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit, se
             return item;
         }
     });
+    return modifiedSequence;
+
+}
 
 
-
-    function addSequence() {
-        for (const item of modifiedSequence) {
-            createSubsection(item.title, item.fase, item.questionnaireData, setCreateCourseSectionsList, sectionToEdit, item.type, '', item.activityData);
-        }
+function addSequence(modifiedSequence, setCreateCourseSectionsList, sectionToEdit) {
+    for (const item of modifiedSequence) {
+        createSubsection(item.title, item.fase, item.questionnaireData, setCreateCourseSectionsList, sectionToEdit, item.type, '', item.activityData);
     }
+}
+
+export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask }) => {
+    const sequence = [
+        { title: 'MSLQ Questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: MSLQuestionnaireData, type: 'questionnaire', activityData: null },
+        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
+        { title: 'Task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: 'Peer review', iconColor: '#dc2626', iconPath: svgSwitcher('peerReview'), fase: 'self-reflection', questionnaireData: null, type: 'peerReview', activityData: PeerReviewData },
+        { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
+    ];
+
+    const modifiedSequence = modifySequence(sequence, sectionTask);
 
     return (
         <div className="relative flex items-center p-5 border rounded-xl bg-gray-50">
@@ -176,7 +185,7 @@ export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit, se
                 </ol>
             </div>
             <div className='bg-white rounded-md border p-5 text-right w-1/2 h-full '>
-                <button onClick={addSequence} className="bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150 mb-5 ml-auto">
+                <button onClick={() => { addSequence(modifiedSequence, setCreateCourseSectionsList, sectionToEdit) }} className="bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150 mb-5 ml-auto">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
                     </svg>
@@ -207,39 +216,7 @@ export const SequenceDevelopEducation1 = ({ setCreateCourseSectionsList, section
         { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
     ];
 
-
-    const modifiedSequence = sequence.map((item, index) => {
-        if (item.activityData === sectionTask) {
-            return {
-                ...item,
-                title: `${item.title}: ${sectionTask.title}`,
-                activityData: item.activityData === sectionTask ? {
-                    ...sectionTask,
-                    id: Math.random().toString(16).slice(2),
-                    title: `${item.title}: ${sectionTask.title}`
-                } : item.activityData,
-
-            };
-        }
-        else if (item.activityData === PeerReviewData) {
-            return {
-                ...item,
-                activityData: item.activityData === PeerReviewData ? {
-                    ...PeerReviewData,
-                    id: Math.random().toString(16).slice(2),
-                } : item.activityData,
-            };
-        }
-        else {
-            return item;
-        }
-    });
-
-    function addSequence() {
-        for (const item of modifiedSequence) {
-            createSubsection(item.title, item.fase, item.questionnaireData, setCreateCourseSectionsList, sectionToEdit, item.type, '', item.activityData);
-        }
-    }
+    const modifiedSequence = modifySequence(sequence, sectionTask);
 
     return (
         <div className="relative flex items-center p-5 border rounded-xl bg-gray-50">
@@ -251,7 +228,7 @@ export const SequenceDevelopEducation1 = ({ setCreateCourseSectionsList, section
                 </ol>
             </div>
             <div className='bg-white rounded-md border p-5 text-right w-1/2 h-full '>
-                <button onClick={addSequence} className="bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150 mb-5 ml-auto">
+                <button onClick={() => { addSequence(modifiedSequence, setCreateCourseSectionsList, sectionToEdit) }} className="bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150 mb-5 ml-auto">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
                     </svg>
@@ -277,39 +254,8 @@ export const SequenceDevelopEducation2 = ({ setCreateCourseSectionsList, section
         { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
     ];
 
-    const modifiedSequence = sequence.map((item, index) => {
-        if (item.activityData === sectionTask) {
-            return {
-                ...item,
-                title: `${item.title}: ${sectionTask.title}`,
-                activityData: item.activityData === sectionTask ? {
-                    ...sectionTask,
-                    id: Math.random().toString(16).slice(2),
-                    title: `${item.title}: ${sectionTask.title}`
-                } : item.activityData,
+    const modifiedSequence = modifySequence(sequence, sectionTask);
 
-            };
-        }
-        else if (item.activityData === PeerReviewData) {
-            return {
-                ...item,
-                activityData: item.activityData === PeerReviewData ? {
-                    ...PeerReviewData,
-                    id: Math.random().toString(16).slice(2),
-                } : item.activityData,
-            };
-        }
-        else {
-            return item;
-        }
-    });
-
-
-    async function addSequence() {
-        for (const item of modifiedSequence) {
-            createSubsection(item.title, item.fase, item.questionnaireData, setCreateCourseSectionsList, sectionToEdit, item.type, '', item.activityData);
-        }
-    }
     return (
         <div className="flex items-center p-5 border rounded-xl bg-gray-50">
             <div>
@@ -320,7 +266,7 @@ export const SequenceDevelopEducation2 = ({ setCreateCourseSectionsList, section
                 </ol>
             </div>
             <div className='bg-white rounded-md border p-5 text-right w-1/2 h-full '>
-                <button onClick={addSequence} className="bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150 mb-5 ml-auto">
+                <button onClick={() => { addSequence(modifiedSequence, setCreateCourseSectionsList, sectionToEdit) }} className="bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150 mb-5 ml-auto">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
                     </svg>
@@ -346,39 +292,8 @@ export const SequenceDevelopNoMSLQForum = ({ setCreateCourseSectionsList, sectio
         { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
     ];
 
-    const modifiedSequence = sequence.map((item, index) => {
-        if (item.activityData === sectionTask) {
-            return {
-                ...item,
-                title: `${item.title}: ${sectionTask.title}`,
-                activityData: item.activityData === sectionTask ? {
-                    ...sectionTask,
-                    id: Math.random().toString(16).slice(2),
-                    title: `${item.title}: ${sectionTask.title}`
-                } : item.activityData,
+    const modifiedSequence = modifySequence(sequence, sectionTask);
 
-            };
-        }
-        else if (item.activityData === PeerReviewData) {
-            return {
-                ...item,
-                activityData: item.activityData === PeerReviewData ? {
-                    ...PeerReviewData,
-                    id: Math.random().toString(16).slice(2),
-                } : item.activityData,
-            };
-        }
-        else {
-            return item;
-        }
-    });
-
-
-    function addSequence() {
-        for (const item of modifiedSequence) {
-            createSubsection(item.title, item.fase, item.questionnaireData, setCreateCourseSectionsList, sectionToEdit, item.type, '', item.activityData);
-        }
-    }
     return (
         <div className="relative flex items-center p-5 border rounded-xl bg-gray-50">
             <div>
@@ -389,7 +304,7 @@ export const SequenceDevelopNoMSLQForum = ({ setCreateCourseSectionsList, sectio
                 </ol>
             </div>
             <div className='bg-white rounded-md border p-5 text-right w-1/2 h-full '>
-                <button onClick={addSequence} className="bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150 mb-5 ml-auto">
+                <button onClick={() => { addSequence(modifiedSequence, setCreateCourseSectionsList, sectionToEdit) }} className="bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150 mb-5 ml-auto">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
                     </svg>

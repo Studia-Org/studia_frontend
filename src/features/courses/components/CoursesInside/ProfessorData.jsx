@@ -12,8 +12,9 @@ export const ProfessorData = ({ professor, evaluatorFlag, whisper }) => {
         link = '/app/profile/' + professor.id + '/';
     }
     return (
-        <div className='md:flex-shrink-0 w-full md:max-w-[calc(100%)] max-w-[calc(100vw-3rem)] -ml-6 md:ml-0  '>
-            <div className={`${evaluatorFlag ? 'mt-0 ' : 'my-4'} flex flex-col bg-white rounded-lg  pl-5 py-5 sm:mr-9 pr-5 sm:right-0 md:max-w-[30rem] ml-8 shadow-md   `}>
+        <div className='md:flex-shrink-0 w-full md:max-w-[calc(100%)] max-w-[calc(100vw-3rem)]   '>
+            <div className={`${evaluatorFlag ? 'mt-0 ' : 'my-4'}
+             flex flex-col bg-white rounded-lg  px-5 py-5  sm:right-0 md:max-w-[30rem] shadow-md   `}>
                 <div className='flex items-center'>
                     {
                         evaluatorFlag === true ?

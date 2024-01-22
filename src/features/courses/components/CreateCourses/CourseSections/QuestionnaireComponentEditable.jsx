@@ -52,7 +52,6 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
 
     const handleEditQuestionClick = (index) => {
         const newFlags = [...editQuestionFlags];
-        console.log(editQuestionFlags)
         newFlags[index] = !newFlags[index];
         setEditQuestionFlags(newFlags);
     };

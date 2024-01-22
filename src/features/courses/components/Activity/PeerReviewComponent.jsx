@@ -7,6 +7,7 @@ import { MoonLoader } from 'react-spinners';
 import Swal from "sweetalert2";
 import { useAuthContext } from "../../../../context/AuthContext";
 import { ProfessorPeerReview } from "./ProfessorPeerReview";
+
 export default function PeerReviewComponent({ activityData }) {
     const [showEvaluate, setShowEvaluate] = useState(false);
     const data = activityData?.activity?.data?.attributes?.PeerReviewRubrica
@@ -33,6 +34,7 @@ export default function PeerReviewComponent({ activityData }) {
     }, [user, userIndexSelected]);
 
     useEffect(() => {
+        if (user.role_str !== 'student') return
         if (qualificationIds === null) {
             fetch(`${API}/qualifications?qualification` +
                 `&populate[activity][fields][0]=id` +

@@ -41,7 +41,7 @@ const CreateCourse = () => {
                 {
                     editCourseSectionFlag ?
                         <>
-                            <EditCreateCourseSection setEditCourseSectionFlag={setEditCourseSectionFlag}
+                            <EditCreateCourseSection key={sectionToEdit.id} setEditCourseSectionFlag={setEditCourseSectionFlag}
                                 sectionToEdit={sectionToEdit} createCourseSectionsList={createCourseSectionsList} task={task} setTask={setTask}
                                 createCourseSectionsListCopy={createCourseSectionsListCopy} setCreateCourseSectionsListCopy={setCreateCourseSectionsListCopy}
                                 setCreateCourseSectionsList={setCreateCourseSectionsList} />
