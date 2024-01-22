@@ -38,6 +38,8 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   const navigate = useNavigate();
   const USER_OBJECTIVES = [...new Set(user?.user_objectives?.map((objective) => objective.categories.map((category) => category)).flat() || [])];
 
+  console.log(activityData);
+
   function handleFileUpload(file) {
     const dataCopy = formData;
     dataCopy.append('files', file);
@@ -326,6 +328,17 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
             </div> : null
         }
 
+        {
+          evaluated && (
+            <>
+              <p className='text-xs text-gray-400 mb-1 mt-5'>Comments</p>
+              <hr />
+              <p className='mt-3'>{activityData.comments}</p>
+            </>
+          )
+        }
+
+
         <p className='text-xs text-gray-400 mb-1 mt-5'>Task description</p>
         <hr />
         <div className='prose my-3 text-gray-600 ml-5 max-w-[calc(100vw-1.25rem)] box-content mt-5 '>
@@ -385,8 +398,8 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
           </> :
           evaluated ?
             <div className='flex flex-col max-w-[calc(100vw-1.25rem)]'>
+              <p className='text-xs text-gray-400 mb-3' > Task Files</ p>
               <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)] w-[30rem]'>
-                <p className='text-lg font-medium mb-4'>Files</p>
                 {
                   activityData.activity.data.attributes.file?.data === null || activityData.activity.data.attributes.file?.data?.length === 0 ?
                     <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
@@ -406,10 +419,21 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                   </>
                 )
               }
-              <p className='text-xs text-gray-400 mb-1 mt-5'>Your submission</p>
-              <div className='mb-14 '>
-                {activityData.file.data && activityData.file.data.map(renderFiles)}
-              </div>
+              <p className='text-xs text-gray-400 mt-5 mb-3'>Your submission</p>
+              {
+                activityData.file.data ?
+                  <div className='mb-14 '>
+                    {activityData.file.data && activityData.file.data.map(renderFiles)}
+                  </div> :
+                  <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)] w-[30rem]'>
+                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
+                      <span className='text-gray-400 font-normal '>
+                        You did not submit any files
+                      </span>
+                    } />
+                  </div>
+              }
+
             </div >
             :
             <div className='flex flex-col w-[30rem] mt-1 max-w-[calc(100vw-2.5rem)]'>
