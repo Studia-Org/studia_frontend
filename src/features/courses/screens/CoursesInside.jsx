@@ -432,7 +432,10 @@ const CourseInside = () => {
                   {allForums[0]?.attributes &&
                     <ForumClickable posts={allForums[0].attributes.posts.data} setForumFlag={setForumFlag} />
                   }
-                  {professor.attributes && <ProfessorData professor={professor} evaluatorFlag={false} />}
+                  {professor.attributes &&
+                    <section className="ml-8">
+                      <ProfessorData professor={professor} evaluatorFlag={false} />
+                    </section>}
                 </div>
               </div>
             )

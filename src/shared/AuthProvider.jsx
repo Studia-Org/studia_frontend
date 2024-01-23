@@ -26,7 +26,6 @@ const AuthProvider = ({ children }) => {
 
     } catch (error) {
       console.error(error);
-      // message.error("Error While Getting Logged In User Details");
     } finally {
       setIsLoading(false);
     }

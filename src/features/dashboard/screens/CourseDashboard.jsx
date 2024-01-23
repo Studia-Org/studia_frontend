@@ -27,7 +27,7 @@ function CourseDashboard() {
           <div className=" flex items-center justify-center w-full h-full">
             <MoonLoader color="#363cd6" size={80} />
           </div> :
-          <main className="flex flex-col w-full h-full content-center box-border">
+          <main className="flex flex-col w-full h-full overflow-y-hidden content-center box-border">
             <div className="flex flex-1 w-full box-border p-2 md:p-5 lg:10">
               <ActivitiesDash
                 key={"ActivitiesDash " + courseId}
