@@ -434,7 +434,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                     } />
                     :
                     <section className='flex flex-col gap-y-3'>
-                      {filesUploaded.map((file, index) => renderFiles(file, index))}
+                      {activityFiles.map((file, index) => renderFiles(file))}
                     </section>
                 }
               </div>
