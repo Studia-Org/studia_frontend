@@ -5,6 +5,7 @@ import { useAuthContext } from "../../../context/AuthContext";
 import { Calendar, Whisper, Popover, Badge, Modal, Input, Button, Form } from 'rsuite';
 import { API } from "../../../constant";
 import { message } from "antd";
+import { fetchAllCoursesFromUser } from '../../../fetches/fetchAllCoursesFromUser';
 import { getToken } from "../../../helpers";
 import { FiPlus } from 'react-icons/fi';
 import './calendar.css'
@@ -68,8 +69,21 @@ const CalendarEvents = () => {
                     return {
                         title: event.title,
                         date: new Date(event.date),
+                        type: 'event'
                     };
-                });
+                })
+                const coursesUser = await fetchAllCoursesFromUser(user.id);
+                coursesUser.forEach(course => {
+                    course.attributes.sections.data.forEach(section => {
+                        section.attributes.subsections.data.forEach(subsection => {
+                            eventsData.push({
+                                title: `${course.attributes.title} - ${section.attributes.title} - ${subsection.attributes.title}`,
+                                date: new Date(subsection.attributes.activity?.data?.attributes.deadline),
+                                type: 'course'
+                            })
+                        })
+                    })
+                })
                 setEventList(eventsData);
             } catch (error) {
                 console.error(error)
@@ -121,13 +135,23 @@ const CalendarEvents = () => {
             );
             return (
                 <ul className="calendar-todo-list over overflow-hidden">
-
                     {displayList.map((item, index) => (
 
                         <li className={`text-left ${innerWidth < 690 ? "text-center" : ""}`} key={index}>
-                            {innerWidth < 690 ? <Badge /> :
-                                <>
+                            {innerWidth < 690 ?
+                                item.type === 'event' ?
                                     <Badge />
+                                    :
+                                    <Badge color="blue" />
+
+                                :
+                                <>
+                                    {
+                                        item.type === 'event' ?
+                                            <Badge />
+                                            :
+                                            <Badge color="blue" />
+                                    }
                                     <b className='pl-1'>{formatTime(item.date)}</b> - {item.title}
                                 </>
                             }
@@ -161,13 +185,60 @@ const CalendarEvents = () => {
         const date = new Date(dateTimeString);
         return date.toLocaleTimeString(undefined, options);
     }
+
+    const formatDateExport = (date) => {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+
+        return `${year}${month}${day}T${hours}${minutes}${seconds}`;
+    };
+
+    //IMPORTANTE: No formatear el return
+    const exportCalendar = () => {
+        const calendarEvents = events.map(event => {
+            return `
+BEGIN:VEVENT
+SUMMARY:${event.title}
+DTSTART:${formatDateExport(event.date)}
+DESCRIPTION:${event.type}
+END:VEVENT
+    `;
+        });
+
+        const icsData = `
+BEGIN:VCALENDAR
+VERSION:2.0
+${calendarEvents.join('')}
+END:VCALENDAR
+    `;
+
+        const blob = new Blob([icsData], { type: 'text/calendar' });
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.setAttribute('download', 'calendar.ics');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
     return (
         <>
             <div className='max-w-full rounded-tl-3xl bg-[#e7eaf886] '>
                 <div className='font-bold text-2xl overflow-y-auto h-full'>
-
                     <div className='grid h-full '>
-                        <div className='font-normal max-w-[95%] max-h-[95%] overflow-hidden bg-white rounded-xl my-auto mx-auto '>
+                        <div className='font-normal max-w-[95%] max-h-[100%] mt-8 mb-10 overflow-hidden bg-white rounded-xl my-auto mx-auto '>
+                            <div className='flex w-full'>
+                                <Button bordered onClick={() => exportCalendar()} className='ml-auto mr-3 mt-3 gap-2'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+                                        <path d="M13.75 7h-3v5.296l1.943-2.048a.75.75 0 0 1 1.114 1.004l-3.25 3.5a.75.75 0 0 1-1.114 0l-3.25-3.5a.75.75 0 1 1 1.114-1.004l1.943 2.048V7h1.5V1.75a.75.75 0 0 0-1.5 0V7h-3A2.25 2.25 0 0 0 4 9.25v7.5A2.25 2.25 0 0 0 6.25 19h7.5A2.25 2.25 0 0 0 16 16.75v-7.5A2.25 2.25 0 0 0 13.75 7Z" />
+                                    </svg>
+                                    Export Calendar
+                                </Button>
+                            </div>
                             <Calendar onSelect={selectDate} compact={innerWidth < 690} bordered renderCell={renderCell} />
                         </div>
                     </div>
