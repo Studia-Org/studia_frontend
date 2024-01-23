@@ -40,7 +40,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   const navigate = useNavigate();
   const USER_OBJECTIVES = [...new Set(user?.user_objectives?.map((objective) => objective.categories.map((category) => category)).flat() || [])];
 
-  console.log(activityData);
+  console.log(activityFiles);
 
   function handleFileUpload(file) {
     const dataCopy = formData;
@@ -280,7 +280,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
     if (file.attributes) {
       return (
         <button key={file.id} onClick={() => downloadFile(file.attributes)}
-          className='shadow-md rounded-md flex items-center gap-x-2 p-3 w-full bg-green-700
+          className='shadow-md rounded-md flex items-center gap-x-2 p-3 w-full bg-green-700 hover:bg-green-800
            text-white active:translate-y-1 duration-150'>
           {user.role_str === 'student' && editable && !evaluated && <DeleteButton id={file.id} />}
           <p className='max-w-[calc(100%-4rem)] overflow-hidden text-ellipsis'>{file.attributes.name}</p>
@@ -298,7 +298,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
         </button>
       )
     } else {
-      <button key={file.id} onClick={() => downloadFile(file)} className='shadow-md rounded-md flex p-3 w-full bg-green-700 text-white active:translate-y-1 duration-150'>
+      <button key={file.id} onClick={() => downloadFile(file)} className='shadow-md rounded-md flex p-3 w-full bg-green-700 text-white active:translate-y-1 duration-150 hover:bg-green-800'>
         <p className='max-w-[calc(100%-4rem)] overflow-hidden text-ellipsis'>{file.filenameWithoutExtension}</p>
         <div className='ml-auto mr-2'>
           {
@@ -370,7 +370,13 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
             <>
               <p className='text-xs text-gray-400 mb-1 mt-5'>Comments</p>
               <hr />
-              <p className='mt-3'>{activityData.comments}</p>
+              {
+                activityData.comments === null || activityData.comments === '' ?
+                  <p className='mt-3'>There are no comments for your submission.</p>
+                  :
+                  <p className='mt-3'>{activityData.comments}</p>
+              }
+
             </>
           )
         }
@@ -398,9 +404,9 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
       </div >
       {
         user.role_str === 'professor' || user.role_str === 'admin' ?
-          <>
-            <div className='bg-white mb-5 mt-10 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)]  w-[30rem]'>
-              <p className='text-lg font-medium mb-4'>Task Files</p>
+          <div className='flex flex-col'>
+            <p className='text-xs text-gray-400 mb-3' > Task Files</ p>
+            <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)]  w-[30rem]'>
               {(!activityFiles.length ||
                 activityFiles?.length === 0) ? (
                 enableEdit ? (
@@ -433,7 +439,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                 )
               )}
             </div>
-          </> :
+          </div> :
           evaluated ?
             <div className='flex flex-col max-w-[calc(100vw-1.25rem)]'>
               <p className='text-xs text-gray-400 mb-3' > Task Files</ p>
@@ -447,7 +453,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                     } />
                     :
                     <section className='flex flex-col gap-y-3'>
-                      {filesUploaded.map((file, index) => renderFiles(file, index))}
+                      {activityFiles.map((file, index) => renderFiles(file, index))}
                     </section>
                 }
               </div>
@@ -478,25 +484,22 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
             </div >
             :
             <div className='flex flex-col w-[30rem] mt-1 max-w-[calc(100vw-2.5rem)]'>
-              <div className='bg-white p-5'>
-
-                <p className='text-lg font-medium  mb-4'>Task Files</p>
-                {
-                  activityData.activity.data.attributes.file?.data === null ||
-                    activityData.activity.data.attributes.file?.data?.length === 0 ?
-                    <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
-                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
-                        <span className='text-gray-400 font-normal '>
-                          There are no files
-                        </span>
-                      } />
-                    </div>
-                    :
-                    <div className='flex flex-col gap-y-3'>
-                      {activityFiles.map((file, index) => renderFiles(file))}
-                    </div>
-                }
-              </div>
+              <p className='text-xs text-gray-400 mb-3' > Task Files</ p>
+              {
+                activityData.activity.data.attributes.file?.data === null ||
+                  activityData.activity.data.attributes.file?.data?.length === 0 ?
+                  <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
+                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
+                      <span className='text-gray-400 font-normal '>
+                        There are no files
+                      </span>
+                    } />
+                  </div>
+                  :
+                  <div className='flex flex-col gap-y-3'>
+                    {activityFiles.map((file, index) => renderFiles(file))}
+                  </div>
+              }
               <p className='text-xs text-gray-400 mb-1 mt-5'>Your submission</p>
               <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
                 {filesUploaded && filesUploaded.map((file) => renderFiles(file, true))}
