@@ -66,7 +66,7 @@ export const TaskComponentCard = ({ task, setVisibilityTask, context, courseId, 
     }
 
     if (context === 'coursesInside') {
-        const deadlineFormatted = format(new Date(task?.attributes.deadline), 'yyyy-MM-dd HH:mm:ss')
+        const deadlineFormatted = format(new Date(task?.attributes.deadline), 'dd-MM-yyyy HH:mm:ss')
         return (
             <button onClick={() => handleClickButton()}
                 className='relative py-5 mb-5 bg-white rounded-md p-5 w-full text-left shadow-md flex items-center'>
