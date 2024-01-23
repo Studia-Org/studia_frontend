@@ -24,6 +24,8 @@ registerPlugin(FilePondPluginImagePreview);
 
 export const ActivityComponent = ({ activityData, idQualification, setUserQualification }) => {
   const [filesTask, setFilesTask] = useState();
+  const [filesUploaded, setFilesUploaded] = useState(activityData?.file?.data || []);
+  const [activityFiles, setActivityFiles] = useState(activityData?.activity?.data?.attributes?.file?.data || []);
   const [uploadLoading, setUploadLoading] = useState(false);
   const [title, setTitle] = useState(activityData.activity.data.attributes.title)
   const [subsectionContent, setSubsectionContent] = useState(activityData.activity.data.attributes.description);
@@ -57,7 +59,8 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
     const formData = new FormData();
     let filesId = [];
     try {
-      if (filesTask) {
+      if (filesTask.length === 0) return
+      if (filesTask.length > 0) {
         filesTask.forEach((file) => {
           formData.append('files', file.file);
         });
@@ -72,9 +75,11 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
           const result = await uploadFiles.json();
           filesId = result.map((file) => file.id);
         }
-        filesId = filesId.concat(activityData.activity.data.attributes.file?.data.map((file) => file.id));
+        if (activityFiles !== null) {
+          filesId = filesId.concat(activityFiles.map((file) => file.id));
+        }
       }
-      const response = await fetch(`${API}/activities/${activityId}`, {
+      const response = await fetch(`${API}/activities/${activityId}?populate[file][fields][0]=*`, {
         method: 'PUT',
         headers: {
           "Content-Type": "application/json",
@@ -92,11 +97,21 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
         const result = await response.json();
         setUserQualification({ ...activityData, activity: { activity: result } });
         setEnableEdit(false);
-        setLoading(false);
+
+        setActivityFiles(result.data.attributes.file?.data || []);
         message.success('Changes saved successfully');
       }
       else throw new Error('Error saving changes');
     } catch (error) {
+      await fetch(`${API}/upload`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+        body: {
+          files: filesId,
+        },
+      });
       message.error(error.message);
     } finally {
       setLoading(false);
@@ -109,9 +124,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
       let response2 = undefined;
       let files = []
 
-      if (activityData.file !== undefined && activityData?.file?.data !== null) {
-        files = activityData.file.data.map((file) => file.id);
-      }
+      files = filesUploaded.map((file) => file.id);
       files = files.concat(result.map((file) => file.id));
       const qualificationData = {
         data: {
@@ -155,6 +168,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   }
   async function sendData() {
     try {
+      console.log(formData);
       setUploadLoading(true);
       const response = await fetch(`${API}/upload`, {
         method: 'POST',
@@ -171,9 +185,18 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
             icon: 'success',
             title: 'Success',
             text: 'Files uploaded successfully',
-          }).then((result) => {
-            window.location.reload();
+          }).then((re) => {
+            const parsedResults = result.map((file) => {
+              return {
+                id: file.id,
+                attributes: {
+                  ...file,
+                }
+              }
+            })
 
+            setFilesUploaded(prev => [...prev, ...parsedResults]);
+            setFormData(new FormData());
           })
         }
         else throw new Error('Error uploading files');
@@ -185,14 +208,14 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
           text: 'Something went wrong!',
         })
       }
-      setUploadLoading(false);
     } catch (error) {
-      setUploadLoading(false);
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
         text: error.message,
       })
+    } finally {
+      setUploadLoading(false);
     }
   }
 
@@ -201,8 +224,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
       const updatedFiles = prev.filter((file) => file.id !== fileId);
       return updatedFiles;
     });
-
-
 
     const reponse = await fetch(`${API}/upload/files/${fileId}`, {
       method: 'DELETE',
@@ -213,43 +234,59 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
     })
     if (reponse.ok) {
       const result = await reponse.json();
-      console.log(result);
-      message.success('File deleted successfully, reload the page to see the changes');
+      const filesFiltered =
+        filesUploaded.filter((file) => file.id !== fileId);
+      setFilesUploaded(filesFiltered);
+
+
+
+      const activityFilesFiltered =
+        activityFiles.filter((file) => file.id !== fileId);
+      setActivityFiles(activityFilesFiltered);
+      message.success('File deleted successfully');
     }
     else message.error('Something went wrong');
   }
+  function DeleteButton({ id }) {
+    return (
+      <Popconfirm
+        title="Delete the file"
+        description="Are you sure to delete this file?"
+        okText="Yes"
+        okType="danger"
+        onConfirm={(e) => {
+          e.stopPropagation();
+          deleteFile(id);
+        }}
+        onCancel={(e) => {
+          e.stopPropagation();
+        }}
+        cancelText="No"
+      >
+        <svg
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+          xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+          <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z" clipRule="evenodd" />
+        </svg>
+      </Popconfirm>
+    )
+  }
 
-
-  function renderFiles(file) {
+  function renderFiles(file, editable = false) {
     if (file.attributes) {
       return (
-        <button key={file.id} onClick={() => downloadFile(file.attributes)} className='shadow-md rounded-md flex p-3 w-full bg-green-700 text-white active:translate-y-1 duration-150'>
+        <button key={file.id} onClick={() => downloadFile(file.attributes)}
+          className='shadow-md rounded-md flex items-center gap-x-2 p-3 w-full bg-green-700
+           text-white active:translate-y-1 duration-150'>
+          {user.role_str === 'student' && editable && !evaluated && <DeleteButton id={file.id} />}
           <p className='max-w-[calc(100%-4rem)] overflow-hidden text-ellipsis'>{file.attributes.name}</p>
           <div className='ml-auto mr-2'>
+
             {
               enableEdit ?
-                <Popconfirm
-                  title="Delete the file"
-                  description="Are you sure to delete this file?"
-                  okText="Yes"
-                  okType="danger"
-                  onConfirm={(e) => {
-                    e.stopPropagation();
-                    deleteFile(file.id);
-                  }}
-                  onCancel={(e) => {
-                    e.stopPropagation();
-                  }}
-                  cancelText="No"
-                >
-                  <svg
-                    onClick={(e) => {
-                      e.stopPropagation();
-                    }}
-                    xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
-                    <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z" clipRule="evenodd" />
-                  </svg>
-                </Popconfirm>
+                <DeleteButton id={file.id} />
                 :
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.0} stroke="currentColor" className="w-5 h-5">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
@@ -351,7 +388,8 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
           <>
             <div className='bg-white mb-5 mt-10 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)]  w-[30rem]'>
               <p className='text-lg font-medium mb-4'>Task Files</p>
-              {(!activityData.activity.data.attributes.file?.data?.length || activityData.activity.data.attributes.file?.data?.length === 0) ? (
+              {(!activityFiles.length ||
+                activityFiles?.length === 0) ? (
                 enableEdit ? (
                   <FilePond allowMultiple={true} maxFiles={5} onupdatefiles={setFilesTask} />
                 ) : (
@@ -370,13 +408,13 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                   <section className='max-w-[calc(100vw-1.25rem)]'>
                     <FilePond allowMultiple={true} maxFiles={5} onupdatefiles={setFilesTask} />
                     <div className='space-y-2'>
-                      {activityData.activity.data.attributes.file?.data.map((file, index) => renderFiles(file, index))}
+                      {activityFiles.map((file, index) => renderFiles(file))}
                     </div>
 
                   </section>
                 ) : (
                   <div className='space-y-2 max-w-[calc(100vw-1.25rem)]'>
-                    {activityData.activity.data.attributes.file?.data.map((file, index) => renderFiles(file, index))}
+                    {activityFiles.map((file, index) => renderFiles(file))}
                   </div>
 
                 )
@@ -410,29 +448,37 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
               }
               <p className='text-xs text-gray-400 mb-1 mt-5'>Your submission</p>
               <div className='mb-14 '>
-                {activityData.file.data && activityData.file.data.map(renderFiles)}
+                {filesUploaded && filesUploaded.map(renderFiles)}
               </div>
             </div >
             :
             <div className='flex flex-col w-[30rem] mt-1 max-w-[calc(100vw-2.5rem)]'>
-              <p className='text-lg font-medium mb-4'>Files</p>
-              {
-                activityData.activity.data.attributes.file?.data === null || activityData.activity.data.attributes.file?.data?.length === 0 ?
-                  <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
-                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
-                      <span className='text-gray-400 font-normal '>
-                        There are no files
-                      </span>
-                    } />
-                  </div>
-                  :
-                  activityData.activity.data.attributes.file.data.map((file, index) => renderFiles(file, index))
-              }
+              <div className='bg-white p-5'>
+
+                <p className='text-lg font-medium  mb-4'>Task Files</p>
+                {
+                  activityData.activity.data.attributes.file?.data === null ||
+                    activityData.activity.data.attributes.file?.data?.length === 0 ?
+                    <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
+                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
+                        <span className='text-gray-400 font-normal '>
+                          There are no files
+                        </span>
+                      } />
+                    </div>
+                    :
+                    <div className='flex flex-col gap-y-3'>
+                      {activityFiles.map((file, index) => renderFiles(file))}
+                    </div>
+                }
+              </div>
               <p className='text-xs text-gray-400 mb-1 mt-5'>Your submission</p>
               <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
-                {activityData?.file?.data && activityData?.file?.data.map(renderFiles)}
+                {filesUploaded && filesUploaded.map((file) => renderFiles(file, true))}
               </div>
+
               <FilePond
+                files={formData.getAll('files')}
                 allowMultiple={true}
                 maxFiles={5}
                 onaddfile={(err, item) => {
