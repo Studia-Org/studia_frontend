@@ -65,8 +65,10 @@ const CalendarEvents = () => {
                     method: 'GET',
                 });
                 const data = await response.json();
+                console.log(data.calendar_events)
                 const eventsData = data.calendar_events.map(event => {
                     return {
+                        id: event.id,
                         title: event.title,
                         date: new Date(event.date),
                         type: 'event'
@@ -77,6 +79,7 @@ const CalendarEvents = () => {
                     course.attributes.sections.data.forEach(section => {
                         section.attributes.subsections.data.forEach(subsection => {
                             eventsData.push({
+                                id: subsection.id,
                                 title: `${course.attributes.title} - ${section.attributes.title} - ${subsection.attributes.title}`,
                                 date: new Date(subsection.attributes.activity?.data?.attributes.deadline),
                                 type: 'course'
@@ -225,6 +228,23 @@ END:VCALENDAR
         document.body.removeChild(link);
     }
 
+    const deleteEvent = async (event) => {
+        try {
+            await fetch(`${API}/calendar-events/${event.id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${getToken()}`,
+                },
+            });
+            fetchEvents();
+            setInfoModal(false)
+            message.success("Event Deleted Successfully");
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     return (
         <>
             <div className='max-w-full rounded-tl-3xl bg-[#e7eaf886] '>
@@ -297,16 +317,29 @@ END:VCALENDAR
                             Object.keys(infoModalData).length === 0 && (
                                 <div>
                                     <Empty description='There are no events' />
-
                                 </div>
                             )
                         }
                         {infoModalData && (
                             Object.keys(infoModalData).map((item, index) => (
-                                <div key={index}>
-                                    <b> {infoModalData[item].title}</b> - {new Date(infoModalData[item].date).toLocaleTimeString()}
+                                <div key={index} className='flex w-full items-center hover:bg-gray-50 rounded p-3'>
+                                    <div className="flex-grow">
+                                        <b>{infoModalData[item].title}</b> - {new Date(infoModalData[item].date).toLocaleTimeString()}
+                                    </div>
+                                    {
+                                        infoModalData[item].type === 'event' && (
+                                            <div className='ml-2'>
+                                                <Button onClick={() => deleteEvent(infoModalData[item])}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 ml-auto">
+                                                        <path fillRule="evenodd" d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z" clipRule="evenodd" />
+                                                    </svg>
+                                                </Button>
+                                            </div>
+                                        )
+                                    }
                                 </div>
                             ))
+
                         )}
 
                     </Modal.Body>
