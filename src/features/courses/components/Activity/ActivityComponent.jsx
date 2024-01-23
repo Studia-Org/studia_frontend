@@ -433,7 +433,9 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                       </span>
                     } />
                     :
-                    activityData.activity.data.attributes.file.data.map((file, index) => renderFiles(file, index))
+                    <section className='flex flex-col gap-y-3'>
+                      {filesUploaded.map((file, index) => renderFiles(file, index))}
+                    </section>
                 }
               </div>
               {
@@ -446,8 +448,8 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                   </>
                 )
               }
-              <p className='text-xs text-gray-400 mb-1 mt-5'>Your submission</p>
-              <div className='mb-14 '>
+              <p className='text-xs text-gray-600 mb-1 mt-5'>Your submission</p>
+              <div className='mb-14 flex flex-col gap-y-3 bg-white p-5 rounded-md'>
                 {filesUploaded && filesUploaded.map(renderFiles)}
               </div>
             </div >
