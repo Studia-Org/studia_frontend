@@ -53,6 +53,7 @@ export const CreateCourseEditSubsection = ({
     handleSubsectionChange('files', files);
   }, [files])
 
+
   const handleSubsectionChange = (type, newValue) => {
     setCreateCourseSectionsList((courses) => {
       const updatedCourses = courses.map((course) => {
@@ -118,7 +119,7 @@ export const CreateCourseEditSubsection = ({
 
   return (
     <div key={subsection.id} className='w-[45rem]'>
-      <button className='text-sm flex items-center -translate-y-5 ' onClick={() => setEditSubsectionFlag(false)}>
+      <button className='flex items-center text-sm -translate-y-5 ' onClick={() => setEditSubsectionFlag(false)}>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
           <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
         </svg>
@@ -135,10 +136,10 @@ export const CreateCourseEditSubsection = ({
         <div key={subsection.id}>
           <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-lg pl-3' placeholder="Description"
             onChange={(e) => handleTitleChange(e.target.value)} value={subsection.title} />
-          <div key={subsection.id} className='bg-white rounded-md shadow-md p-5 mt-4 mb-10 '>
+          <div key={subsection.id} className='p-5 mt-4 mb-10 bg-white rounded-md shadow-md '>
             {
               subsection?.type === 'peerReview' && (
-                <div className='flex flex-col justify-center space-y-2 mb-5'>
+                <div className='flex flex-col justify-center mb-5 space-y-2'>
                   <PeerReviewRubricModal isModalOpen={isModalOpen}
                     setIsModalOpen={setIsModalOpen}
                     rubricData={subsection.activity.PeerReviewRubrica}
@@ -188,7 +189,7 @@ export const CreateCourseEditSubsection = ({
             }
             {
               subsection?.type === 'task' && (
-                <div className='space-y-2 mb-5'>
+                <div className='mb-5 space-y-2'>
                   <label className='text-sm text-gray-500' htmlFor=''>
                     Cover
                   </label>
@@ -198,7 +199,7 @@ export const CreateCourseEditSubsection = ({
             }
             <div className='flex items-center justify-between w-full '>
               <div className='w-full space-y-2'>
-                <label className='text-sm text-gray-500 mb-4'>Subsection Date *</label>
+                <label className='mb-4 text-sm text-gray-500'>Subsection Date *</label>
                 <RangePicker
                   className='w-full py-4'
                   showTime={{
@@ -211,9 +212,9 @@ export const CreateCourseEditSubsection = ({
               </div>
 
             </div>
-            <div className='mt-7 flex items-center justify-between'>
+            <div className='flex items-center justify-between mt-7'>
               <div className='flex items-center'>
-                <label className='text-sm text-gray-500 mr-3 block' htmlFor=''>Evaluable * </label>
+                <label className='block mr-3 text-sm text-gray-500' htmlFor=''>Evaluable * </label>
                 <Switch onChange={(e) => handleSubsectionChange('evaluable', e)} checked={subsection.activity?.evaluable} className='bg-gray-300' />
               </div>
               <div className='flex items-center gap-4'>
@@ -236,14 +237,14 @@ export const CreateCourseEditSubsection = ({
               </div>
 
             </div>
-            <div className='mt-7 space-y-2'>
+            <div className='space-y-2 mt-7'>
               <label className='text-sm text-gray-500 mt-7 ' htmlFor=''>Subsection description</label>
               <div className='flex w-full prose prose-lg'>
                 <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3' placeholder="Description" value={subsection.description}
                   onChange={(e) => handleSubsectionChange('description', e.target.value)} />
               </div>
             </div>
-            <div className='mt-3 space-y-2 mb-5'>
+            <div className='mt-3 mb-5 space-y-2'>
               <label className='text-sm text-gray-500 ' htmlFor=''>
                 Subsection Files (max 5)
               </label>

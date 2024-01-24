@@ -45,7 +45,7 @@ function createSubsection(subsectionName, fase, questionnaireData, setCreateCour
             finished: false,
             start_date: null,
             end_date: null,
-            activity: { ...activityData, id: crypto.randomUUID() },
+            activity: { ...activityData, id: crypto.randomUUID(), title: subsectionName },
             content: '',
             paragraphs: [],
             description: null,

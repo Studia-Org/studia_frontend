@@ -1,30 +1,32 @@
 import React, { useState, useEffect } from 'react'
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { TableCategories } from './TableCategories';
 import MDEditor from '@uiw/react-md-editor';
 import { motion } from 'framer-motion';
 import dayjs from 'dayjs';
 import { UploadFiles } from './UploadFiles';
 import { message, Select, Tag, Input, DatePicker } from 'antd';
 import { ACTIVITY_CATEGORIES } from '../../../../../constant';
+import { ca } from 'date-fns/locale';
 
 export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList, setEditTaskFlag, setCreateCourseSectionsListCopy }) => {
     const [content, setContent] = useState();
     const [title, setTitle] = useState('');
     const [deadline, setDeadline] = useState();
-    const [categories, setCategories] = useState([]);
+    const [categories, setCategories] = useState();
+    const [activitiesCategories, setActivitiesCategories] = useState({});
     const [files, setFiles] = useState([]);
+    const activitiesSection = section.subsections.map((subsection) => subsection.activity);
+
 
     useEffect(() => {
         if (task[section.id]) {
             setContent(task[section.id].description);
             setTitle(task[section.id].title);
             setDeadline(task[section.id].deadline);
-            setCategories(task[section.id].categories);
             setFiles(task[section.id].files.map(file => (file)));
         }
     }, [])
+
 
     function saveChangesButton() {
 
@@ -67,10 +69,13 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                             if (index !== -1) {
                                 subsection.title = subsection.title.substring(0, index + 1) + ' ' + title;
                             }
+                            const matchingCategories = activitiesCategories.filter((entry) => entry.id && entry.id.includes(subsection.activity.id));
+                            const categoriesForSubsection = matchingCategories.map((entry) => entry.categories);
+                            subsection.activity.categories = categoriesForSubsection;
                             subsection.activity.description = updatedTask.description;
-                            subsection.activity.title = updatedTask.title;
+                            subsection.activity.title = `${subsection.title}: ${updatedTask.title}`;
                             subsection.activity.deadline = updatedTask.deadline;
-                            subsection.activity.categories = updatedTask.categories;
+                            subsection.activity.categories = activitiesCategories.find((activity) => activity.id === subsection.activity.id)?.categories;
                             subsection.activity.files = updatedTask.files;
                         }
                     });
@@ -119,10 +124,12 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                             if (index !== -1) {
                                 subsection.title = subsection.title.substring(0, index + 1) + ' ' + title;
                             }
+                            const matchingCategories = activitiesCategories.filter((entry) => entry.id && entry.id.includes(subsection.activity.id));
+                            const categoriesForSubsection = matchingCategories.map((entry) => entry.categories);
+                            subsection.activity.categories = categoriesForSubsection;
                             subsection.activity.description = updatedTask.description;
-                            subsection.activity.title = updatedTask.title;
+                            subsection.activity.title = `${subsection.title}`;
                             subsection.activity.deadline = updatedTask.deadline;
-                            subsection.activity.categories = updatedTask.categories;
                             subsection.activity.files = updatedTask.files;
                         }
                     });
@@ -154,14 +161,25 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                 description: content,
                 deadline: new Date(deadline).toISOString(),
                 ponderation: 0,
-                categories: categories,
+                categories: [],
                 type: 'task',
                 files: files.map(file => file),
                 order: 5,
                 evaluable: true,
             }
             const newTask = {
-                [section.id]: activity,
+                [section.id]: {
+                    id: Math.random().toString(16).slice(2),
+                    title: title,
+                    description: content,
+                    deadline: new Date(deadline).toISOString(),
+                    ponderation: 0,
+                    categories: categories,
+                    type: 'task',
+                    files: files.map(file => file),
+                    order: 5,
+                    evaluable: true,
+                },
             }
             setTask(prevTask => ({
                 ...prevTask,
@@ -205,7 +223,7 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
             transition={{ duration: 0.2 }}
             className='mr-10'>
             <div className='flex items-center gap-2 mt-5'>
-                <h2 className='font-medium text-xl '>{section.name}</h2>
+                <h2 className='text-xl font-medium '>{section.name}</h2>
                 <Tag color="#108ee9">Section</Tag>
                 <div className='flex ml-auto'>
                     {
@@ -228,8 +246,8 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
             <div className='mt-5'>
                 <div className='flex'>
 
-                    <div className='w-1/2 pr-2 mb-3 flex flex-col'>
-                        <label className='text-sm mb-3' htmlFor="" >Task title *</label>
+                    <div className='flex flex-col w-1/2 pr-2 mb-3'>
+                        <label className='mb-3 text-sm' htmlFor="" >Task title *</label>
                         <Input
                             className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3'
                             placeholder="Title"
@@ -238,8 +256,8 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                         />
                     </div>
 
-                    <div className='ml-10  mb-3 flex flex-col justify-center'>
-                        <label className='text-sm mb-3' htmlFor="" >Deadline *</label>
+                    <div className='flex flex-col justify-center mb-3 ml-10'>
+                        <label className='mb-3 text-sm' htmlFor="" >Deadline *</label>
                         <DatePicker className='py-3' showTime onOk={(date) => { setDeadline(dayjs(date).format('YYYY-MM-DD HH:mm:ss')) }} value={deadline ? dayjs(deadline) : null} />
                     </div>
                 </div>
@@ -255,26 +273,31 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                     />
                 </div>
                 <div className='flex mt-5 mb-32'>
-                    <div className='w-1/2 pr-2 space-y-2 flex-auto'>
-                        <label className='text-sm' htmlFor="">Task files</label>
-                        <div style={{ flex: 'none' }}>
-                            <UploadFiles fileList={files} setFileList={setFiles} listType={'text'} maxCount={5} />
-                        </div>
-                    </div>
-                    <div className='w-1/2 pr-2 space-y-2 ml-8'>
+                    <div className='w-1/2 pr-2 mr-8 space-y-2'>
                         <label className='text-sm' htmlFor="">Task Categories *</label>
+                        <p className='text-xs text-gray-500'>Select the categories associated with the task that students are going to develop.</p>
                         <Select
-                            mode="tags"
                             className=''
+                            placement='topRight'
                             style={{ width: '100%' }}
-                            placeholder=""
+                            placeholder="Select a category"
                             value={categories}
                             onChange={(value) => setCategories(value)}
                             options={Object.keys(ACTIVITY_CATEGORIES).map(key => ({ label: key, value: key }))}
                         />
+                        <div className='p-5 duration-100 bg-white border rounded-md border-stone-300 hover:border-blue-400'>
+                            {<TableCategories categories={categories} setCategories={setCategories} activities={activitiesSection}
+                                activitiesCategories={activitiesCategories} setActivitiesCategories={setActivitiesCategories} />}
+                        </div>
+
+                    </div>
+                    <div className='flex-auto w-1/2 pr-2 space-y-2'>
+                        <label className='text-sm' htmlFor="">Task files</label>
+                        <div style={{ flex: 'none' }} className='p-3 bg-white border rounded-md border-stone-300'>
+                            <UploadFiles fileList={files} setFileList={setFiles} listType={'text'} maxCount={5} />
+                        </div>
                     </div>
                 </div>
-
             </div>
         </motion.div>
     )
