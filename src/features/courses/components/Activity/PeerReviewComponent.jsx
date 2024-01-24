@@ -10,8 +10,10 @@ import { ProfessorPeerReview } from "./ProfessorPeerReview";
 
 export default function PeerReviewComponent({ activityData }) {
     const [showEvaluate, setShowEvaluate] = useState(false);
+    const [sendDataLoader, setSendDataLoader] = useState(false);
     const data = activityData?.activity?.data?.attributes?.PeerReviewRubrica
     const usersToPair = activityData.activity.data.attributes.usersToPair
+
     ////////////////////eleccion de la data del user////////////////////////
     const [userIndexSelected, setUserIndexSelected] = useState(null)
     const [idQualification, setIdQualification] = useState(null)
@@ -94,96 +96,138 @@ export default function PeerReviewComponent({ activityData }) {
 
     }, [userIndexSelected])
 
-    function sendEvalution(e) {
-        const answers = {}
-        let emptyFields = false;
+    function sendEvalution() {
+        try {
+            setSendDataLoader(true)
 
-        Object.keys(data).forEach((key, index) => {
-            if (key === 'Criteria') return
-            const grid = document.getElementById(key)
-            const select = grid.querySelector("select")?.value || grid.querySelector("input")?.value
-            const textarea = grid.querySelector("textarea").value
-            const dict = {}
-            dict[select] = textarea
-            if ((!isNaN(parseFloat(select)) && isFinite(select) && (select < 0 || select > 10))) {
-                emptyFields = true;
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Values must be between 0 and 10',
-                })
-                return
-            }
-            if (textarea === "" ||
-                select === "") {
-                emptyFields = true;
-                Swal.fire({
-                    icon: 'error',
-                    title: 'You must fill all the fields',
-                })
-                return
-            }
+            const answers = {}
+            let emptyFields = false;
 
-            answers[key] = dict
-        })
-
-        if (emptyFields) return
-
-        const payload = {
-            data: {
-                Answers: answers,
-                user: user.id,
-                qualification: QualificationIdPartnerReview,
-            }
-        }
-        fetch(`${API}/peer-review-answers?populate[user]=*` +
-            `&filters[user][id]=${user.id}` +
-            `&populate[qualification][fields][0]=*` +
-            `&populate[qualification][populate][activity][fields][0]=id` +
-            `&filters[qualification][activity][id]=${activityData.activity.data.id}` +
-            `&populate[qualification][populate][user][fields][0]=*` +
-            `&filters[qualification][user][id]=${activityData.peer_review_qualifications.data[userIndexSelected].attributes.user.data.id}`
-            , {
-                method: 'GET',
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${getToken()}`,
-                }
-            }).then(res => {
-                if (res.ok) {
-                    return res.json()
-                } else {
-                    throw new Error(res.json())
-                }
-            }).then((data) => {
-                if (data.data.length === 0) {
-                    fetch(`${API}/peer-review-answers?populate[qualification][populate][user][fields][0]=*`, {
-                        method: 'POST',
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${getToken()}`,
-                        },
-                        body: JSON.stringify(payload),
-
-                    }).then(res => {
-                        if (res.ok) {
-                            return res.json()
-                        } else {
-                            throw new Error(res.json())
-                        }
-                    }).then((data) => {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Your feedback has been sent',
-                            showConfirmButton: true,
-                        }).then(() => {
-                            if (usersToPair > 1) {
-                                setShowEvaluate(false)
-                                resetUser()
-                                activityData.user.data.attributes.PeerReviewAnswers.data.push(data.data)
-                            }
-                        })
+            Object.keys(data).forEach((key, index) => {
+                if (key === 'Criteria') return
+                const grid = document.getElementById(key)
+                const select = grid.querySelector("select")?.value || grid.querySelector("input")?.value
+                const textarea = grid.querySelector("textarea").value
+                const dict = {}
+                dict[select] = textarea
+                if ((!isNaN(parseFloat(select)) && isFinite(select) && (select < 0 || select > 10))) {
+                    emptyFields = true;
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Values must be between 0 and 10',
                     })
-                        .catch(err => {
+                    return
+                }
+                if (textarea === "" ||
+                    select === "") {
+                    emptyFields = true;
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'You must fill all the fields',
+                    })
+                    return
+                }
+
+                answers[key] = dict
+            })
+
+            if (emptyFields) return
+
+            const payload = {
+                data: {
+                    Answers: answers,
+                    user: user.id,
+                    qualification: QualificationIdPartnerReview,
+                }
+            }
+            fetch(`${API}/peer-review-answers?populate[user]=*` +
+                `&filters[user][id]=${user.id}` +
+                `&populate[qualification][fields][0]=*` +
+                `&populate[qualification][populate][activity][fields][0]=id` +
+                `&filters[qualification][activity][id]=${activityData.activity.data.id}` +
+                `&populate[qualification][populate][user][fields][0]=*` +
+                `&filters[qualification][user][id]=${activityData.peer_review_qualifications.data[userIndexSelected].attributes.user.data.id}`
+                , {
+                    method: 'GET',
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${getToken()}`,
+                    }
+                }).then(res => {
+                    if (res.ok) {
+                        return res.json()
+                    } else {
+                        throw new Error(res.json())
+                    }
+                }).then((data) => {
+                    if (data.data.length === 0) {
+                        fetch(`${API}/peer-review-answers?populate[qualification][populate][user][fields][0]=*`, {
+                            method: 'POST',
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${getToken()}`,
+                            },
+                            body: JSON.stringify(payload),
+
+                        }).then(res => {
+                            if (res.ok) {
+                                return res.json()
+                            } else {
+                                throw new Error(res.json())
+                            }
+                        }).then((data) => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Your feedback has been sent',
+                                showConfirmButton: true,
+                            }).then(() => {
+                                if (usersToPair > 1) {
+                                    setShowEvaluate(false)
+                                    resetUser()
+                                    activityData.user.data.attributes.PeerReviewAnswers.data.push(data.data)
+                                }
+                            })
+                        })
+                            .catch(err => {
+                                console.log(err)
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Your feedback has not been sent, try again later',
+                                    showConfirmButton: false,
+                                    timer: 2000
+                                })
+                            }).finally(() => { })
+                    } else {
+                        fetch(`${API}/peer-review-answers/${data.data[0].id}`, {
+                            method: 'PUT',
+                            headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${getToken()}`,
+                            },
+                            body: JSON.stringify(payload),
+                        }).then(res => {
+                            if (res.ok) {
+                                return res.json()
+                            } else {
+                                throw new Error(res.json())
+                            }
+                        }).then(data => {
+
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Your feedback has been sent',
+                                showConfirmButton: true,
+                            }).then(() => {
+                                if (usersToPair > 1) {
+                                    setShowEvaluate(false)
+                                    resetUser()
+                                    const answer = (activityData.user.data.attributes.PeerReviewAnswers.data
+                                        .find((answer) => answer.attributes.qualification.data.id === QualificationIdPartnerReview))
+                                    answer.attributes.Answers = answers
+                                    console.log(activityData.user.data.attributes.PeerReviewAnswers.data)
+                                }
+                            })
+                        }).catch(err => {
                             console.log(err)
                             Swal.fire({
                                 icon: 'error',
@@ -192,55 +236,25 @@ export default function PeerReviewComponent({ activityData }) {
                                 timer: 2000
                             })
                         }).finally(() => { })
-                } else {
-                    fetch(`${API}/peer-review-answers/${data.data[0].id}`, {
-                        method: 'PUT',
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${getToken()}`,
-                        },
-                        body: JSON.stringify(payload),
-                    }).then(res => {
-                        if (res.ok) {
-                            return res.json()
-                        } else {
-                            throw new Error(res.json())
-                        }
-                    }).then(data => {
-
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Your feedback has been sent',
-                            showConfirmButton: true,
-                        }).then(() => {
-                            if (usersToPair > 1) {
-                                setShowEvaluate(false)
-                                resetUser()
-                                const answer = (activityData.user.data.attributes.PeerReviewAnswers.data
-                                    .find((answer) => answer.attributes.qualification.data.id === QualificationIdPartnerReview))
-                                answer.attributes.Answers = answers
-                                console.log(activityData.user.data.attributes.PeerReviewAnswers.data)
-                            }
-                        })
-                    }).catch(err => {
-                        console.log(err)
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Your feedback has not been sent, try again later',
-                            showConfirmButton: false,
-                            timer: 2000
-                        })
-                    }).finally(() => { })
-                }
-            }).catch(err => {
-                console.log(err)
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Your feedback has not been sent, try again later',
-                    showConfirmButton: false,
-                    timer: 2000
+                    }
+                }).catch(err => {
+                    console.log(err)
+                    throw new Error(err)
                 })
-            }).finally(() => { })
+        }
+        catch (err) {
+            console.log(err)
+            Swal.fire({
+                icon: 'error',
+                title: 'Your feedback has not been sent, try again later',
+                showConfirmButton: false,
+                timer: 2000
+            })
+        } finally {
+            setSendDataLoader(false)
+        }
+
+
 
     }
     function resetUser() {
@@ -259,12 +273,12 @@ export default function PeerReviewComponent({ activityData }) {
             <div className={`flex transition-transform duration-700 ${showEvaluate ? 'xl:-translate-x-[calc(100vw-21rem)] -translate-x-[calc(100vw-1rem)]' : ''}`}>
                 {
                     loading ?
-                        <div className="w-full h-full flex justify-center items-center">
+                        <div className="flex items-center justify-center w-full h-full">
                             <MoonLoader color="#363cd6" size={80} />
                         </div>
                         :
                         QualificationIdPartnerReview === "Error" ?
-                            <div className="w-full h-full flex flex-col justify-center gap-10 items-center">
+                            <div className="flex flex-col items-center justify-center w-full h-full gap-10">
                                 <h1 className="text-2xl text-center">You have not been assigned a partner to evaluate</h1>
                                 <h3 className="text-xl text-center">Maybe you should not be here yet ;)</h3>
                                 <h3 className="text-xl text-center">If it's not the case, please contact your teacher</h3>
@@ -289,7 +303,9 @@ export default function PeerReviewComponent({ activityData }) {
                                         data={data}
                                         setShowEvaluate={setShowEvaluate}
                                         sendEvalution={sendEvalution}
-                                        answersDelivered={answersDelivered} />
+                                        answersDelivered={answersDelivered}
+                                        sendDataLoader={sendDataLoader}
+                                    />
                                 </div>
                             </>
                 }
