@@ -79,9 +79,8 @@ const Qualifications = () => {
 
                     });
                     setQualifications(coursesWithActivities);
-                    setLoading(false);
-                })
-                .catch((error) => console.error(error));
+                }).catch((error) => console.error(error))
+                .finally(() => setLoading(false));
         }
     }
 
@@ -118,7 +117,7 @@ const Qualifications = () => {
     function renderProfessorQualificationsCard(qualification) {
         return (
             <>
-                <ProfessorQualificationsCard qualification={qualification}/>
+                <ProfessorQualificationsCard qualification={qualification} />
             </>
         )
     }
@@ -129,7 +128,7 @@ const Qualifications = () => {
         );
 
         return (
-            <div className='relative overflow-x-auto shadow-md rounded-lg mt-20'>
+            <div className='relative mt-20 overflow-x-auto rounded-lg shadow-md'>
                 <div class="collapse lg:visible flex items-center justify-between pb-4 bg-white p-5">
                     <label for="table-search" class="sr-only">Search</label>
                     <div class="relative">
@@ -197,7 +196,7 @@ const Qualifications = () => {
         return (
             <tr class="bg-white border-b hover:bg-gray-50">
                 <th scope="row" class="px-6 py-4 text-gray-900 whitespace-nowrap font-semibold">
-                    <p className='lg:text-base text-sm'>{curso_grade.title}</p>
+                    <p className='text-sm lg:text-base'>{curso_grade.title}</p>
                 </th>
                 <td class="px-6 py-4 flex items-center text-gray-900">
                     <img alt='' class="w-10 h-10 rounded-full" src={curso_grade.professor_photo} />
@@ -224,9 +223,9 @@ const Qualifications = () => {
             {
                 user !== undefined && user?.role_str !== 'student' ?
                     <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] '>
-                        <h1 className='pt-11 font-bold text-xl ml-12'>Qualifications</h1>
+                        <h1 className='ml-12 text-xl font-bold pt-11'>Qualifications</h1>
                         {!loading ?
-                            <div className='p-9 px-12 font-bold text-2xl'>
+                            <div className='px-12 text-2xl font-bold p-9'>
                                 <div className='flex'>
                                     <motion.div className='flex flex-wrap w-full gap-8 ' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
                                         {qualificationsProfessor && qualificationsProfessor.map(renderProfessorQualificationsCard)}
@@ -234,7 +233,7 @@ const Qualifications = () => {
                                 </div>
                             </div>
                             :
-                            <div className='w-full h-full flex items-center justify-center'>
+                            <div className='flex items-center justify-center w-full h-full'>
                                 <MoonLoader color="#363cd6" size={80} />
                             </div>
 
@@ -244,7 +243,7 @@ const Qualifications = () => {
                     <div className='w-full relative rounded-tl-3xl bg-[#e7eaf886] p-10'>
                         {!loading ?
                             <>
-                                <section className='absolute block top-0 left-0 w-full'>
+                                <section className='absolute top-0 left-0 block w-full'>
                                     {
                                         <img alt='' src={`https://wallpaperaccess.com/full/1779010.jpg`}
                                             className="absolute top-0 left-0 w-full h-[20rem] object-cover lg:rounded-tl-3xl" />
@@ -259,7 +258,7 @@ const Qualifications = () => {
                                 </motion.div>
                             </>
                             :
-                            <div className='w-full h-full flex items-center justify-center'>
+                            <div className='flex items-center justify-center w-full h-full'>
                                 <MoonLoader color="#363cd6" size={80} />
                             </div>
                         }
