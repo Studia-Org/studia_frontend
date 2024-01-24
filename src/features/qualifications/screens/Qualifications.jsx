@@ -127,7 +127,9 @@ const Qualifications = () => {
         return (
             <div className='relative mt-20 overflow-x-auto rounded-lg shadow-md'>
                 <div class="collapse lg:visible flex items-center justify-between pb-4 bg-white p-5">
-                    <Avatar shape="square" className='mr-3' size="default" src={JSON.parse(courseSelected.value).cover} />
+                    <Avatar onClick={() => {
+                        navigate(`/app/courses/${JSON.parse(courseSelected.value).id}`)
+                    }} shape="square" className='mr-3 hover:cursor-pointer' size="default" src={JSON.parse(courseSelected.value).cover} />
                     <Select
                         showSearch
                         className='w-full'
