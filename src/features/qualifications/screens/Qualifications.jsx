@@ -124,7 +124,7 @@ const Qualifications = () => {
         const filteredQualifications = qualifications.filter((qualification) => qualification.id === JSON.parse(courseSelected.value).id)[0]?.activities ?? [];
 
         return (
-            <div className='relative overflow-x-auto shadow-md rounded-lg mt-20'>
+            <div className='relative mt-20 overflow-x-auto rounded-lg shadow-md'>
                 <div class="collapse lg:visible flex items-center justify-between pb-4 bg-white p-5">
                     <Avatar shape="square" className='mr-3' size="default" src={JSON.parse(courseSelected.value).cover} />
                     <Select
@@ -186,9 +186,10 @@ const Qualifications = () => {
 
     function RenderQualifications({ qualification }) {
         return (
-            <tr onClick={() => navigate(`/app/courses/${JSON.parse(courseSelected.value).id}/activity/${qualification.activity?.id}`)} className="bg-white border-b hover:bg-gray-50 cursor-pointer">
+            <tr onClick={() => navigate(`/app/courses/${JSON.parse(courseSelected.value).id}/activity/${qualification.activity?.id}`)}
+                className="bg-white border-b cursor-pointer hover:bg-gray-50 group">
                 <td class="px-6 py-4">
-                    <p className='text-black font-medium'>{qualification.activity?.title}</p>
+                    <p className='font-medium text-black group-hover:underline hover:underline'>{qualification.activity?.title}</p>
                 </td>
                 <td class="px-6 py-4">
                     {
@@ -199,12 +200,19 @@ const Qualifications = () => {
                     }
                 </td>
                 <td class="px-6 py-4">
-                    <div className='p-2 bg-gray-200 rounded-md w-full justify-center text-center blur-sm hover:blur-none duration-100	'>
+                    <div onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        if (!e.currentTarget.classList.contains('blur-sm')) navigate(`/app/courses/${JSON.parse(courseSelected.value).id}/activity/${qualification.activity?.id}`)
+                        e.currentTarget.classList.remove('blur-sm');
+
+
+                    }} className='justify-center w-full p-2 text-center duration-100 bg-gray-200 rounded-md blur-sm hover:blur-none '>
                         {
                             qualification.qualification ?
-                                <p className='text-black font-medium'>{qualification.qualification}</p>
+                                <p className='font-medium text-black pointer-events-none'>{qualification.qualification}</p>
                                 :
-                                <p className='text-black font-medium'>-</p>
+                                <p className='font-medium text-black pointer-events-none'>-</p>
                         }
                     </div>
                 </td>
@@ -212,10 +220,10 @@ const Qualifications = () => {
                     {
                         qualification.evaluator ?
                             <div className='flex items-center'>
-                                <img alt='' src={qualification.evaluator?.profile_photo?.url} className='w-8 h-8 rounded-full object-cover' />
+                                <img alt='' src={qualification.evaluator?.profile_photo?.url} className='object-cover w-8 h-8 rounded-full' />
                                 <div className='flex flex-col'>
                                     <p className='ml-2'>{qualification.evaluator?.name}</p>
-                                    <p className='ml-2 text-gray-400 text-xs'>{qualification.evaluator?.email}</p>
+                                    <p className='ml-2 text-xs text-gray-400'>{qualification.evaluator?.email}</p>
                                 </div>
                             </div>
                             :
@@ -233,9 +241,9 @@ const Qualifications = () => {
             {
                 user !== undefined && user?.role_str !== 'student' ?
                     <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] '>
-                        <h1 className='pt-11 font-bold text-xl ml-12'>Qualifications</h1>
+                        <h1 className='ml-12 text-xl font-bold pt-11'>Qualifications</h1>
                         {!loading ?
-                            <div className='p-9 px-12 font-bold text-2xl'>
+                            <div className='px-12 text-2xl font-bold p-9'>
                                 <div className='flex'>
                                     <motion.div className='flex flex-wrap w-full gap-8 ' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
                                         {qualificationsProfessor && qualificationsProfessor.map(renderProfessorQualificationsCard)}
@@ -243,7 +251,7 @@ const Qualifications = () => {
                                 </div>
                             </div>
                             :
-                            <div className='w-full h-full flex items-center justify-center'>
+                            <div className='flex items-center justify-center w-full h-full'>
                                 <MoonLoader color="#363cd6" size={80} />
                             </div>
 
@@ -253,7 +261,7 @@ const Qualifications = () => {
                     <div className='w-full relative rounded-tl-3xl bg-[#e7eaf886] p-10'>
                         {!loading ?
                             <>
-                                <section className='absolute block top-0 left-0 w-full'>
+                                <section className='absolute top-0 left-0 block w-full'>
                                     {
                                         <img alt='' src={`https://wallpaperaccess.com/full/1779010.jpg`}
                                             className="absolute top-0 left-0 w-full h-[20rem] object-cover lg:rounded-tl-3xl" />
@@ -268,7 +276,7 @@ const Qualifications = () => {
                                 </motion.div>
                             </>
                             :
-                            <div className='w-full h-full flex items-center justify-center'>
+                            <div className='flex items-center justify-center w-full h-full'>
                                 <MoonLoader color="#363cd6" size={80} />
                             </div>
                         }
