@@ -1,9 +1,7 @@
 import { useEffect, React } from "react";
-import bg_img from '../assets/mbpng2.png'
+import bg_img from '../assets/uptitudenewlogo.png'
 import { useNavigate } from "react-router-dom";
-import { MdSchool } from 'react-icons/md';
-import { RiSurveyFill } from 'react-icons/ri';
-import { FaSchool } from 'react-icons/fa';
+import { Divider } from 'antd';
 import { checkAuthenticated } from '../helpers'
 import './styles/home.css'
 
@@ -12,17 +10,17 @@ const Home = () => {
 
     useEffect(() => {
         if (checkAuthenticated()) {
-          navigate("/app/courses/");
+            navigate("/app/courses/");
         }
-      }, [checkAuthenticated]); 
+    }, [checkAuthenticated]);
 
     return (
-        <div className='bg-[#f2f2f2]'>
-            <div class="overflow-x-hidden antialiased h-full">
-                <header class="relative z-50 w-full h-24">
+        <div className='bg-[#f2f2f2] overflow-y-hidden'>
+            <div class="overflow-x-hidden overflow-y-hidden antialiased h-full">
+                <header class="relative z-50 w-full h-[10vh] ">
                     <div
                         class="container flex items-center justify-center h-full max-w-6xl px-8 mx-auto sm:justify-between xl:px-0">
-                        <a href="/" class="relative flex flex-row items-center h-5 h-full font-black leading-none">
+                        <a href="/" class="relative flex flex-row items-center h-full font-black leading-none">
                             <span class="ml-3 flex flex-row text-xl text-gray-800 "> Uptitude <span class="text-pink-500">.</span> </span>
                         </a>
                         <div
@@ -55,65 +53,37 @@ const Home = () => {
                         </div>
                     </div>
                 </header>
-                <div class="relative items-center justify-center w-full overflow-x-hidden lg:pt-40 lg:pb-40 xl:pt-40 xl:pb-64 h-screen ">
+                <div class="relative items-center justify-center w-full overflow-x-hidden lg:pt-40 lg:pb-40 xl:pt-40 xl:pb-64 h-[90vh]  ">
                     <div
                         class="container flex flex-col items-center justify-between h-full max-w-6xl px-8 mx-auto -mt-32 lg:flex-row xl:px-0">
                         <div
                             class="z-30 flex flex-col items-center w-full max-w-xl pt-48 text-center lg:items-start lg:w-1/2 lg:pt-20 xl:pt-40 lg:text-left justify-center">
                             <h1
-                                class="relative mb-4 text-3xl font-black leading-tight text-gray-900 sm:text-6xl xl:mb-8 tracking-tighter">
+                                class="relative mb-4 text-3xl font-black leading-tight text-gray-900 sm:text-6xl xl:mb-8 tracking-tighter mt-24">
                                 Welcome to the new era of Learning </h1>
-                            <p class="pr-0 mt-7 text-base text-gray-900 sm:text-lg xl:text-xl lg:pr-20 z-20">Join the future of
+                            <p class="pr-0 mt-7 text-base text-gray-900 sm:text-lg xl:text-xl lg:pr-20 z-20 ">Join the future of
                                 education with our user-friendly e-learning platform designed for the University of Barcelona.</p>
                             <div className='lg:left-48 relative py-6 top-5 z-20'>
                                 <a href="/auth/login
                                 ">
-                                    <button class="inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
-                                        <span class=" px-8 py-3.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                                    <button class="inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900  rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white  focus:ring-4 focus:outline-none focus:ring-blue-300 ">
+                                        <span class=" px-8 py-3.5 transition-all ease-in duration-75 bg-white  rounded-md group-hover:bg-opacity-0 font-medium">
                                             Enter the classroom
                                         </span>
                                     </button>
                                 </a>
                             </div>
-                            <div class="flex-col hidden mt-12 sm:flex lg:mt-24">
-                                <div class="flex flex-wrap gap-x-8 h-[11rem] gap-8 ">
-                                    <a href="/auth/register">
-                                        <div className='shadow-lg  bg-white grid text-center cursor-pointer rounded-md w-40'>
-                                            <div className=' from-[#657DE9] h-[12rem] to-[#6e66d6] shadow2 bg-gradient-to-r rounded-md flex flex-col  '>
-                                                <div>
-                                                    <FaSchool size={50} className='inline-grid text-white my-3' />
-                                                </div>
-                                                <h1 className='font-semibold text-white px-3'> New student?</h1>
-                                                <p className='text-xs text-white py-2  px-3'>If you are a student and you have just enrolled, create your credentials.</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a href="https://www.ub.edu/campusvirtualub/ca/content/et-cal-ajuda">
-                                        <div className='shadow-lg  bg-white grid text-center cursor-pointer  shadow2 rounded-md w-40'>
-                                            <div className=' from-[#657DE9] h-[12rem] to-[#6e66d6] bg-gradient-to-r rounded-md flex flex-col'>
-                                                <div>
-                                                    <MdSchool size={50} className='inline text-white my-3' />
-                                                </div>
-
-                                                <h1 className='font-semibold text-white px-3'>Do you need help?</h1>
-                                                <p className='text-xs text-white py-2 px-3'>Consult the resources available or contact the support team.</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a href="https://forms.office.com/pages/responsepage.aspx?id=qzwxosOxOk-7ESFXRH3btJgz-3XbAEBHsUehETyC1ApUQjJKSEhPNVlWV1pXRlYwTlVVT0cwMElIOC4u">
-                                        <div className='shadow-lg  bg-white grid text-center cursor-pointer shadow2  rounded-md w-40'>
-                                            <div className=' from-[#657DE9] h-[12rem] to-[#6e66d6] bg-gradient-to-r rounded-md flex flex-col'>
-                                                <div>
-                                                    <RiSurveyFill className='inline text-white my-3' size={50} />
-                                                </div>
-                                                <h1 className='font-semibold text-white px-3'>Help us to improve</h1>
-                                                <p className='text-xs text-white py-2  px-3'>Complete the survey and help us to improve the teaching platform.</p>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
+                            <p className="mt-24 -translate-x-32 text-gray-500 mb-5 lg:mb-0">Funded by:</p>
+                            <div className="flex flex-wrap lg:flex-nowrap lg:items-center lg:space-x-4 space-y-4 lg:-translate-x-32 mb-5">
+                                <img className="w-60 h-14 " src="https://res.cloudinary.com/dnmlszkih/image/upload/v1706026314/iqehusa8b2l5xdyjubgf.png" alt="" />
+                                <Divider type="vertical" />
+                                <img className="w-52 h-14" src="https://res.cloudinary.com/dnmlszkih/image/upload/v1706026555/yifow75yq6pzoskyojgj.jpg" alt="" />
+                                <img className="w-48 h-30" src="https://res.cloudinary.com/dnmlszkih/image/upload/v1706025981/pstxitj0uzzqjsq1cznv.png" alt="" />
+                                <Divider type="vertical" />
+                                <img className="w-48 h-12 " src="https://res.cloudinary.com/dnmlszkih/image/upload/v1706027481/nzkikoai1bmnht3ihrot.png" alt="" />
                             </div>
-                            <svg class="absolute left-0 max-w-md mt-24 -ml-64 left-svg" viewBox="0 0 423 423"
+
+                            <svg class="absolute left-0 max-w-md mt-24 -ml-64 left-svg hidden lg:flex" viewBox="0 0 423 423"
                                 xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">
                                 <defs>
                                     <linearGradient x1="100%" y1="0%" x2="4.48%" y2="0%" id="linearGradient-1">
@@ -140,12 +110,13 @@ const Home = () => {
                                 </g>
                             </svg>
                         </div>
-                        <div class="relative z-50 flex flex-col items-end justify-center w-full h-full lg:w-1/2 ms:pl-10">
+                        <div class="relative z-50 hidden flex-col items-end justify-center w-full h-full lg:w-1/2 ms:pl-10  lg:flex">
                             <div class="container relative left-0 w-full max-w-4xl lg:absolute xl:max-w-6xl lg:w-screen">
-                                <img src={bg_img}
-                                    class="w-full h-auto  mb-20 ml-0 lg:mt-24 xl:mt-40 lg:-mb-16 lg:h-full lg:ml-12" />
+                                <img src={bg_img} alt="Uptitude - E-learning platform"
+                                    class="w-full h-auto  mb-20 ml-0 lg:mt-24 xl:mt-40 lg:-mb-16 lg:h-full lg:ml-20" />
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
