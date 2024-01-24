@@ -97,7 +97,8 @@ const Qualifications = () => {
                     });
                     setLoading(false);
                 })
-                .catch((error) => console.error(error));
+                .catch((error) => console.error(error))
+                .finally(() => setLoading(false));
         }
     }
 
