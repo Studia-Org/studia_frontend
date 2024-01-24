@@ -17,7 +17,7 @@ const UserProfile = () => {
   let { uid } = useParams();
 
   document.title = `${user.name} - Uptitude`
-  
+
   const navigate = useNavigate();
   useEffect(() => {
     if (!checkAuthenticated()) {
@@ -87,22 +87,22 @@ const UserProfile = () => {
 
               <span
                 id="blackOverlay"
-                className="w-full h-full absolute opacity-50 bg-black lg:rounded-tl-3xl"
+                className="absolute w-full h-full bg-black opacity-50 lg:rounded-tl-3xl"
               />
             </div>
 
           </section>
           <section className="relative py-16 ">
-            <div className="container mx-auto px-4">
-              <div className="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64">
+            <div className="container px-4 mx-auto">
+              <div className="relative flex flex-col w-full min-w-0 mb-6 -mt-64 break-words bg-white rounded-lg shadow-xl">
                 <div className="px-6">
                   <div className="flex flex-wrap justify-center">
-                    <div className="w-full lg:w-3/12 px-4 lg:order-2 flex justify-center">
+                    <div className="flex justify-center w-full px-4 lg:w-3/12 lg:order-2">
                       <div className="relative">
                         {userProfile && userProfile.profile_photo ? (
                           <img
                             src={userProfile && userProfile.profile_photo.url}
-                            className="shadow-xl rounded-lg h-36 w-36 object-cover  align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-150-px"
+                            className="absolute object-cover -m-16 -ml-20 align-middle border-none rounded-lg shadow-xl h-36 w-36 lg:-ml-16 max-w-150-px"
                             alt=""
                           />
                         ) : (
@@ -111,24 +111,24 @@ const UserProfile = () => {
                       </div>
                     </div>
 
-                    <div className="w-full lg:w-4/12 px-4  flex justify-end lg:order-2 lg:text-right lg:self-center">
+                    <div className="flex justify-end w-full px-4 lg:w-4/12 lg:order-2 lg:text-right lg:self-center">
                       <button
                         name='editButton'
                         onClick={handleOpenModal}
-                        className={`p-2.5 lg:m-4 mt-8 bg-indigo-500 rounded-xl hover:rounded-3xl hover:bg-indigo-600 text-white ${user?.id !== userProfile?.id ? 'invisible opacity-0' : ''
+                        className={`p-2.5 lg:m-4 mt-8 bg-indigo-500 rounded-xl hover:rounded-3xl duration-300 hover:bg-indigo-600 text-white ${user?.id !== userProfile?.id ? 'invisible opacity-0' : ''
                           }`}
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                         </svg>
                       </button>
                       {showModal && <EditPanel onClose={handleCloseModal} userProfile={userProfile} uid={uid} />}
                     </div>
-                    <div className="w-full lg:w-4/12 px-4 lg:order-1">
+                    <div className="w-full px-4 lg:w-4/12 lg:order-1">
                     </div>
                   </div>
-                  <div className="text-center mt-12">
-                    <h3 className="text-4xl font-semibold leading-normal text-blueGray-800 flex items-center justify-center text-center">
+                  <div className="mt-12 text-center">
+                    <h3 className="flex items-center justify-center text-4xl font-semibold leading-normal text-center text-blueGray-800">
                       {userProfile && userProfile.name}
                       <Tag className={'hidden lg:block'} User={userProfile} />
                     </h3>
@@ -136,14 +136,14 @@ const UserProfile = () => {
                     <h3 className="text-xl font-medium leading-normal text-blueGray-500 mb-7">
                       <p>{userProfile && userProfile.username}</p>
                     </h3>
-                    <div className="mb-2 text-blueGray-600 flex justify-center">
-                      <i className="fas fa-university mr-2 text-lg text-blueGray-400" />
+                    <div className="flex justify-center mb-2 text-blueGray-600">
+                      <i className="mr-2 text-lg fas fa-university text-blueGray-400" />
                       <p>{userProfile && userProfile.university}</p>
                     </div>
                   </div>
-                  <div className="mt-10 py-10 border-t border-blueGray-200 text-center">
+                  <div className="py-10 mt-10 text-center border-t border-blueGray-200">
                     <div className="flex flex-wrap justify-center">
-                      <div className="w-full lg:w-9/12 px-4">
+                      <div className="w-full px-4 lg:w-9/12">
                         <p className="mb-4 text-base leading-relaxed text-blueGray-700" name='editDescription'>
                           {userProfile && userProfile.description}
                         </p>
@@ -151,7 +151,7 @@ const UserProfile = () => {
                     </div>
                   </div>
                   <div className='border-t '>
-                    <div className='my-4 flex flex-col justify-center items-center'>
+                    <div className='flex flex-col items-center justify-center my-4'>
                       {courses.courses && courses.courses.map(renderCourseCard)}
                     </div>
                   </div>

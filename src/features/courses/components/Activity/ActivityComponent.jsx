@@ -39,7 +39,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   let { courseId } = useParams();
   const navigate = useNavigate();
   const USER_OBJECTIVES = [...new Set(user?.user_objectives?.map((objective) => objective.categories.map((category) => category)).flat() || [])];
-
+  const passedDeadline = activityData?.activity?.data?.attributes?.deadline ? new Date(activityData?.activity?.data?.attributes?.deadline) < new Date() : false;
   function handleFileUpload(file) {
     const dataCopy = formData;
     dataCopy.append('files', file);
@@ -338,7 +338,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
       message.error('Something went wrong: ', error);
     }
   };
-
+  console.log(activityData);
   return (
     <div className='flex max-w-[calc(100vw)] flex-col 1.5xl:flex-row items-start 1.5xl:items-start 1.5xl:space-x-24 p-5 sm:p-10'>
       <div className='1.5xl:w-2/4 lg:w-10/12 w-full'>
@@ -351,6 +351,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
           setTitle={setTitle}
           titleState={title}
           enableEdit={enableEdit}
+          passedDeadline={passedDeadline}
           userRole={user?.role_str}
         />
         <ObjectivesTags USER_OBJECTIVES={USER_OBJECTIVES} categories={activityData?.activity.data.attributes.categories} />
@@ -435,7 +436,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
               )}
             </div>
           </div> :
-          evaluated ?
+          evaluated || passedDeadline ?
             <div className='flex flex-col max-w-[calc(100vw-1.25rem)]'>
               <p className='mb-3 text-xs text-gray-400' > Task Files</ p>
               <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)] w-[30rem]'>
