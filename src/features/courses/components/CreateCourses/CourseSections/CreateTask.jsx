@@ -8,15 +8,12 @@ import { message, Select, Tag, Input, DatePicker } from 'antd';
 import { ACTIVITY_CATEGORIES } from '../../../../../constant';
 import { ca } from 'date-fns/locale';
 
-export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList, setEditTaskFlag, setCreateCourseSectionsListCopy }) => {
+export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList, setEditTaskFlag, setCreateCourseSectionsListCopy, categories, setCategories }) => {
     const [content, setContent] = useState();
     const [title, setTitle] = useState('');
     const [deadline, setDeadline] = useState();
-    const [categories, setCategories] = useState();
-    const [activitiesCategories, setActivitiesCategories] = useState({});
+    const [categoriesInside, setCategoriesInside] = useState();
     const [files, setFiles] = useState([]);
-    const activitiesSection = section.subsections.map((subsection) => subsection.activity);
-
 
     useEffect(() => {
         if (task[section.id]) {
@@ -27,12 +24,17 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
         }
     }, [])
 
-
     function saveChangesButton() {
+        const newCategories = {
+            [section.id]: categoriesInside,
+        }
+        setCategories(prevCategories => ({
+            ...prevCategories,
+            ...newCategories,
+        }));
 
         setCreateCourseSectionsList((prevSections) => {
             let updatedTask;
-
             const newSections = prevSections.map((section) => {
                 updatedTask = {
                     id: section.task.id,
@@ -40,13 +42,12 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                     description: content,
                     deadline: deadline,
                     evaluable: true,
-                    categories: categories,
+                    categories: [],
                     files: files.map((file) => file),
                     ponderation: section.task.ponderation,
                     type: section.task.type,
                     order: section.task.order,
                 };
-
                 if (section?.task) {
                     setTask((prevTask) => ({
                         ...prevTask,
@@ -69,13 +70,9 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                             if (index !== -1) {
                                 subsection.title = subsection.title.substring(0, index + 1) + ' ' + title;
                             }
-                            const matchingCategories = activitiesCategories.filter((entry) => entry.id && entry.id.includes(subsection.activity.id));
-                            const categoriesForSubsection = matchingCategories.map((entry) => entry.categories);
-                            subsection.activity.categories = categoriesForSubsection;
                             subsection.activity.description = updatedTask.description;
                             subsection.activity.title = `${subsection.title}: ${updatedTask.title}`;
-                            subsection.activity.deadline = updatedTask.deadline;
-                            subsection.activity.categories = activitiesCategories.find((activity) => activity.id === subsection.activity.id)?.categories;
+                            subsection.activity.deadline = updatedTask.deadline;;
                             subsection.activity.files = updatedTask.files;
                         }
                     });
@@ -124,9 +121,6 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                             if (index !== -1) {
                                 subsection.title = subsection.title.substring(0, index + 1) + ' ' + title;
                             }
-                            const matchingCategories = activitiesCategories.filter((entry) => entry.id && entry.id.includes(subsection.activity.id));
-                            const categoriesForSubsection = matchingCategories.map((entry) => entry.categories);
-                            subsection.activity.categories = categoriesForSubsection;
                             subsection.activity.description = updatedTask.description;
                             subsection.activity.title = `${subsection.title}`;
                             subsection.activity.deadline = updatedTask.deadline;
@@ -185,6 +179,15 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                 ...prevTask,
                 ...newTask,
             }));
+
+            const newCategories = {
+                [section.id]: categoriesInside,
+            }
+            setCategories(prevCategories => ({
+                ...prevCategories,
+                ...newCategories,
+            }));
+
             setCreateCourseSectionsList((prevSections) => {
                 const newSections = prevSections.map((section) => {
                     if (section.id === section.id) {
@@ -278,18 +281,15 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                         <p className='text-xs text-gray-500'>Select the categories associated with the task that students are going to develop.</p>
                         <Select
                             className=''
+                            mode="tags"
                             placement='topRight'
                             style={{ width: '100%' }}
                             placeholder="Select a category"
-                            value={categories}
-                            onChange={(value) => setCategories(value)}
+                            defaultValue={categories[section.id]}
+                            value={categoriesInside}
+                            onChange={(value) => setCategoriesInside(value)}
                             options={Object.keys(ACTIVITY_CATEGORIES).map(key => ({ label: key, value: key }))}
                         />
-                        <div className='p-5 duration-100 bg-white border rounded-md border-stone-300 hover:border-blue-400'>
-                            {<TableCategories categories={categories} setCategories={setCategories} activities={activitiesSection}
-                                activitiesCategories={activitiesCategories} setActivitiesCategories={setActivitiesCategories} />}
-                        </div>
-
                     </div>
                     <div className='flex-auto w-1/2 pr-2 space-y-2'>
                         <label className='text-sm' htmlFor="">Task files</label>

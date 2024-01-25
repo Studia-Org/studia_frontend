@@ -2,15 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { QuestionnaireComponentEditable } from './QuestionnaireComponentEditable';
 import { PeerReviewRubricModal } from './PeerReviewRubricModal';
 import dayjs from 'dayjs';
+import { TableCategories } from './TableCategories';
 import { message, Button, DatePicker, Input, Switch, InputNumber, Select } from 'antd';
-
 import MDEditor from '@uiw/react-md-editor';
 import { UploadFiles } from './UploadFiles';
-
 import '../../../styles/antdButtonStyles.css'
 import { PonderationWarning } from './PonderationWarning';
 import { debounce } from 'lodash';
-import { sub } from 'date-fns';
+
 
 const { RangePicker } = DatePicker;
 
@@ -22,8 +21,11 @@ export const CreateCourseEditSubsection = ({
   createCourseSectionsList,
   setSubsectionEditing,
   sectionId,
-  allSubsections
+  allSubsections,
+  categories,
+  setCategories
 }) => {
+  console.log(categories[sectionId])
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [landscape_photo, setLandscape_photo] = useState([]);
   const [markdownContent, setMarkdownContent] = useState(subsection.content);
@@ -210,7 +212,11 @@ export const CreateCourseEditSubsection = ({
                   onChange={onChangeDate}
                 />
               </div>
-
+            </div>
+            <div className='mt-7'>
+              <label className='block mr-3 text-sm text-gray-500' htmlFor=''>Categories * </label>
+              <TableCategories categories={categories[sectionId]} setCreateCourseSectionsList={setCreateCourseSectionsList}
+                subsection={subsection} sectionID={sectionId} createCourseSectionsList={createCourseSectionsList} />
             </div>
             <div className='flex items-center justify-between mt-7'>
               <div className='flex items-center'>

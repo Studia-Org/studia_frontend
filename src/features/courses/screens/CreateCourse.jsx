@@ -16,6 +16,7 @@ const CreateCourse = () => {
     const [courseBasicInfo, setCourseBasicInfo] = useState({ tags: [] })
     const [editCourseSectionFlag, setEditCourseSectionFlag] = useState(false)
     const [sectionToEdit, setSectionToEdit] = useState({})
+    const [categories, setCategories] = useState({})
     const [task, setTask] = useState({})
 
 
@@ -37,20 +38,20 @@ const CreateCourse = () => {
 
     return (
         <div className='rounded-tl-3xl bg-[#e7eaf886] w-full max-h-full'>
-            <div className='pt-9 pl-12 h-full font-bold text-2xl w-full'>
+            <div className='w-full h-full pl-12 text-2xl font-bold pt-9'>
                 {
                     editCourseSectionFlag ?
                         <>
                             <EditCreateCourseSection key={sectionToEdit.id} setEditCourseSectionFlag={setEditCourseSectionFlag}
                                 sectionToEdit={sectionToEdit} createCourseSectionsList={createCourseSectionsList} task={task} setTask={setTask}
                                 createCourseSectionsListCopy={createCourseSectionsListCopy} setCreateCourseSectionsListCopy={setCreateCourseSectionsListCopy}
-                                setCreateCourseSectionsList={setCreateCourseSectionsList} />
+                                setCreateCourseSectionsList={setCreateCourseSectionsList} categories={categories} setCategories={setCategories} />
                         </>
                         :
                         <>
                             <h1>Create new Course</h1>
                             <CreateCourseBreadcrumb createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} courseBasicInfo={courseBasicInfo} />
-                            <div className='flex justify-between mr-16 mt-5'>
+                            <div className='flex justify-between mt-5 mr-16'>
                                 {RenderCreateCourse()}
                                 {
                                     createCourseOption !== 2 ?

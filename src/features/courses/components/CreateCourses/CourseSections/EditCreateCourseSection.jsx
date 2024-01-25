@@ -10,7 +10,7 @@ import { message, Button, Tag, Tour } from 'antd';
 import { CreateTask } from './CreateTask';
 
 export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdit, createCourseSectionsList, task, setTask,
-    createCourseSectionsListCopy, setCreateCourseSectionsListCopy, setCreateCourseSectionsList }) => {
+    createCourseSectionsListCopy, setCreateCourseSectionsListCopy, setCreateCourseSectionsList, categories, setCategories }) => {
     const [subsectionsToEdit, setSubsectionsToEdit] = useState((createCourseSectionsListCopy.filter((section) => section.id === sectionToEdit.id)[0]))
     const [editSubsectionFlag, setEditSubsectionFlag] = useState(false)
     const [subsectionEditing, setSubsectionEditing] = useState()
@@ -209,7 +209,8 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
 
             {
                 !task[sectionToEdit.id] || editTaskFlag ?
-                    <CreateTask task={task} setTask={setTask} section={sectionToEdit} setCreateCourseSectionsList={setCreateCourseSectionsList} setCreateCourseSectionsListCopy={setCreateCourseSectionsListCopy} setEditTaskFlag={setEditTaskFlag} />
+                    <CreateTask task={task} setTask={setTask} section={sectionToEdit} setCreateCourseSectionsList={setCreateCourseSectionsList}
+                        setCreateCourseSectionsListCopy={setCreateCourseSectionsListCopy} setEditTaskFlag={setEditTaskFlag} categories={categories} setCategories={setCategories} />
                     :
                     <div className='flex'>
                         <div className='w-1/2 pl-5 pr-10 '>
@@ -279,7 +280,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
                         <div className='w-1/2'>
                             {
                                 editSubsectionFlag ?
-                                    <CreateCourseEditSubsection allSubsections={subsectionsToEdit} subsection={subsectionEditing} setEditSubsectionFlag={setEditSubsectionFlag} setCreateCourseSectionsList={setCreateCourseSectionsListCopy} createCourseSectionsList={createCourseSectionsListCopy} setSubsectionEditing={setSubsectionEditing} task={task} setTask={setTask} sectionId={sectionToEdit.id} />
+                                    <CreateCourseEditSubsection categories={categories} setCategories={setCategories} allSubsections={subsectionsToEdit} subsection={subsectionEditing} setEditSubsectionFlag={setEditSubsectionFlag} setCreateCourseSectionsList={setCreateCourseSectionsListCopy} createCourseSectionsList={createCourseSectionsListCopy} setSubsectionEditing={setSubsectionEditing} task={task} setTask={setTask} sectionId={sectionToEdit.id} />
                                     :
                                     <SubsectionItems setCreateCourseSectionsList={setCreateCourseSectionsListCopy} sectionToEdit={sectionToEdit} ref3={ref3} sectionTask={createCourseSectionsList.filter((section) => section.id === sectionToEdit.id)[0].task} />
                             }
