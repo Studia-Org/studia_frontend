@@ -1,9 +1,10 @@
 import { useEffect, React, useState } from 'react';
 import { API } from "../../../constant";
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { MoonLoader } from "react-spinners";
+import { Select, Avatar } from 'antd';
 import { Whisper, Button, Popover } from 'rsuite';
 import { useAuthContext } from "../../../context/AuthContext";
 import { ProfessorQualificationsCard } from '../components/ProfessorQualificationsCard';
@@ -14,8 +15,19 @@ const Qualifications = () => {
     const [loading, setLoading] = useState(true);
     const [qualifications, setQualifications] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [courseSelected, setCourseSelected] = useState();
     const [qualificationsProfessor, setQualificationsProfessor] = useState([]);
+    const navigate = useNavigate();
 
+    const courseOptions = qualifications.map(course => ({
+        value: JSON.stringify({ id: course.id, title: course.title, cover: course.cover }),
+        label: (
+            <div className='flex items-center gap-3'>
+                <Avatar shape="square" size="small" src={course.cover} />
+                <p>{course.title}</p>
+            </div>
+        ),
+    }));
 
     useEffect(() => {
         if (loading) {
@@ -50,7 +62,7 @@ const Qualifications = () => {
     function callQualificationsData() {
         if (user) {
             setLoading(true);
-            fetch(`${API}/users/${user.id}?populate=courses.sections.subsections.activity,qualifications.activity,courses.professor.profile_photo,courses.cover`)
+            fetch(`${API}/users/${user.id}?populate=courses.sections.subsections.activity,qualifications.activity,courses.professor.profile_photo,courses.cover,qualifications.evaluator.profile_photo`)
                 .then((res) => res.json())
                 .then((data) => {
                     const coursesWithActivities = []
@@ -79,85 +91,70 @@ const Qualifications = () => {
 
                     });
                     setQualifications(coursesWithActivities);
+                    setCourseSelected({
+                        value: JSON.stringify({ id: coursesWithActivities[0].id, title: coursesWithActivities[0].title, cover: coursesWithActivities[0].cover }),
+                        label: coursesWithActivities[0].title,
+                    });
                     setLoading(false);
                 })
-                .catch((error) => console.error(error));
+                .catch((error) => console.error(error))
+                .finally(() => setLoading(false));
         }
     }
 
-    const speaker = (props) => {
-        return (
-            <Popover title={props.activity?.title}>
-                <p className='italic text-gray-400'>Comments </p>
-                {props.comments ? <p>{props.comments}</p> : <p>No comments.</p>}
-            </Popover>
-        )
-    }
+    const filterOption = (input, option) =>
+        (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
-    function RenderGradesFromData(grades, courseID) {
-        const style = {
-            borderRadius: '0.5rem',
-            width: '2rem',
-            height: '2rem',
-            color: 'white',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-        };
-        return (
-            <div>
-                <Whisper placement="top" className='text-sm shadow-md' trigger="hover" controlId="control-id-hover" speaker={speaker(grades)}>
-                    <Link className='no-underline' to={`/app/courses/${courseID}/activity/${grades.activity?.id}`}>
-                        <Button style={style} className='text-sm shadow-md bg-gradient-to-r from-[#657DE9] to-[#6E66D6] '> {grades.qualification}</Button>
-                    </Link>
-                </Whisper>
-            </div>
-        );
-    }
 
     function renderProfessorQualificationsCard(qualification) {
         return (
             <>
-                <ProfessorQualificationsCard qualification={qualification}/>
+                <ProfessorQualificationsCard qualification={qualification} />
             </>
         )
     }
 
+    const handleCourseChange = (value) => {
+        setCourseSelected({
+            value: value,
+            label: JSON.parse(value).title
+        });
+    }
+
     const QualificationsTable = (qualifications) => {
-        const filteredQualifications = qualifications.filter((qualification) =>
-            qualification.title.toLowerCase().includes(searchTerm.toLowerCase())
-        );
+        const filteredQualifications = qualifications.filter((qualification) => qualification.id === JSON.parse(courseSelected.value).id)[0]?.activities ?? [];
 
         return (
-            <div className='relative overflow-x-auto shadow-md rounded-lg mt-20'>
+            <div className='relative mt-20 overflow-x-auto rounded-lg shadow-md'>
                 <div class="collapse lg:visible flex items-center justify-between pb-4 bg-white p-5">
-                    <label for="table-search" class="sr-only">Search</label>
-                    <div class="relative">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                            <svg class="w-4 h-4 text-gray-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                            </svg>
-                        </div>
-                        <input
-                            type="text"
-                            id="table-search-users"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
-                            placeholder="Search for courses" />
-                    </div>
+                    <Avatar onClick={() => {
+                        navigate(`/app/courses/${JSON.parse(courseSelected.value).id}`)
+                    }} shape="square" className='mr-3 hover:cursor-pointer' size="default" src={JSON.parse(courseSelected.value).cover} />
+                    <Select
+                        showSearch
+                        className='w-full'
+                        placeholder="Select a course"
+                        optionFilterProp="children"
+                        filterOption={filterOption}
+                        options={courseOptions}
+                        value={courseSelected}
+                        onChange={handleCourseChange}
+                    />
                 </div>
                 <table class="w-full text-sm text-left text-gray-500 ">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50  ">
                         <tr>
                             <th scope="col" class="px-6 py-3">
-                                Course
+                                Activity
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Professor
+                                Comments
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Qualifications
+                                Grade
+                            </th>
+                            <th scope="col" class="px-6 py-3">
+                                Evaluator
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 Last Updated
@@ -165,58 +162,81 @@ const Qualifications = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {qualifications && filteredQualifications.map(RenderQualifications)}
+                        {qualifications && filteredQualifications.map(qualification => (
+                            <RenderQualifications key={qualification.id} qualification={qualification} />
+                        ))}
                         {
                             filteredQualifications.length < 3 && (
                                 <tr class="bg-white border-b">
                                     <th scope="row" className='pb-96'>
-
                                     </th>
                                     <td class="px-6 py-4">
-
                                     </td>
                                     <td class="px-6 py-4">
-
                                     </td>
                                     <td class="px-6 py-4">
-
+                                    </td>
+                                    <td class="px-6 py-4">
                                     </td>
                                 </tr>
                             )
                         }
-
                     </tbody>
                 </table>
             </div>
         );
     };
 
-    function RenderQualifications(curso_grade) {
-        const filteredActivities = curso_grade.activities.filter((activity) => activity.qualification !== null);
-
+    function RenderQualifications({ qualification }) {
         return (
-            <tr class="bg-white border-b hover:bg-gray-50">
-                <th scope="row" class="px-6 py-4 text-gray-900 whitespace-nowrap font-semibold">
-                    <p className='lg:text-base text-sm'>{curso_grade.title}</p>
-                </th>
-                <td class="px-6 py-4 flex items-center text-gray-900">
-                    <img alt='' class="w-10 h-10 rounded-full" src={curso_grade.professor_photo} />
-                    <div class="pl-3">
-                        <div class="text-sm font-semibold">{curso_grade.professor}</div>
-                        <div class="font-normal text-xs text-gray-500">{curso_grade.professor_email}</div>
-                    </div>
+            <tr onClick={() => navigate(`/app/courses/${JSON.parse(courseSelected.value).id}/activity/${qualification.activity?.id}`)}
+                className="bg-white border-b cursor-pointer hover:bg-gray-50 group">
+                <td class="px-6 py-4">
+                    <p className='font-medium text-black group-hover:underline hover:underline'>{qualification.activity?.title}</p>
                 </td>
-                <td class="px-6 py-4 lg:w-2/5">
-                    <div className='flex space-x-3'>
-                        {filteredActivities.map((activity) => RenderGradesFromData(activity, curso_grade.id))}
+                <td class="px-6 py-4">
+                    {
+                        qualification.comments ?
+                            <p className=''>{qualification.comments}</p>
+                            :
+                            <p className=''>-</p>
+                    }
+                </td>
+                <td class="px-6 py-4">
+                    <div onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        if (!e.currentTarget.classList.contains('blur-sm')) navigate(`/app/courses/${JSON.parse(courseSelected.value).id}/activity/${qualification.activity?.id}`)
+                        e.currentTarget.classList.remove('blur-sm');
+
+
+                    }} className='justify-center w-full p-2 text-center duration-100 bg-gray-200 rounded-md blur-sm hover:blur-none '>
+                        {
+                            qualification.qualification ?
+                                <p className='font-medium text-black pointer-events-none'>{qualification.qualification}</p>
+                                :
+                                <p className='font-medium text-black pointer-events-none'>-</p>
+                        }
                     </div>
                 </td>
                 <td class="px-6 py-4">
-                    {curso_grade.last_update}
+                    {
+                        qualification.evaluator ?
+                            <div className='flex items-center'>
+                                <img alt='' src={qualification.evaluator?.profile_photo?.url} className='object-cover w-8 h-8 rounded-full' />
+                                <div className='flex flex-col'>
+                                    <p className='ml-2'>{qualification.evaluator?.name}</p>
+                                    <p className='ml-2 text-xs text-gray-400'>{qualification.evaluator?.email}</p>
+                                </div>
+                            </div>
+                            :
+                            <p className=''>-</p>
+                    }
+                </td>
+                <td class="px-6 py-4">
+                    {format(new Date(qualification.updatedAt), "dd-MM-yyyy HH:mm:ss")}
                 </td>
             </tr>
-
-
         )
     }
     return (
@@ -224,9 +244,9 @@ const Qualifications = () => {
             {
                 user !== undefined && user?.role_str !== 'student' ?
                     <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] '>
-                        <h1 className='pt-11 font-bold text-xl ml-12'>Qualifications</h1>
+                        <h1 className='ml-12 text-xl font-bold pt-11'>Qualifications</h1>
                         {!loading ?
-                            <div className='p-9 px-12 font-bold text-2xl'>
+                            <div className='px-12 text-2xl font-bold p-9'>
                                 <div className='flex'>
                                     <motion.div className='flex flex-wrap w-full gap-8 ' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
                                         {qualificationsProfessor && qualificationsProfessor.map(renderProfessorQualificationsCard)}
@@ -234,7 +254,7 @@ const Qualifications = () => {
                                 </div>
                             </div>
                             :
-                            <div className='w-full h-full flex items-center justify-center'>
+                            <div className='flex items-center justify-center w-full h-full'>
                                 <MoonLoader color="#363cd6" size={80} />
                             </div>
 
@@ -244,7 +264,7 @@ const Qualifications = () => {
                     <div className='w-full relative rounded-tl-3xl bg-[#e7eaf886] p-10'>
                         {!loading ?
                             <>
-                                <section className='absolute block top-0 left-0 w-full'>
+                                <section className='absolute top-0 left-0 block w-full'>
                                     {
                                         <img alt='' src={`https://wallpaperaccess.com/full/1779010.jpg`}
                                             className="absolute top-0 left-0 w-full h-[20rem] object-cover lg:rounded-tl-3xl" />
@@ -259,7 +279,7 @@ const Qualifications = () => {
                                 </motion.div>
                             </>
                             :
-                            <div className='w-full h-full flex items-center justify-center'>
+                            <div className='flex items-center justify-center w-full h-full'>
                                 <MoonLoader color="#363cd6" size={80} />
                             </div>
                         }
