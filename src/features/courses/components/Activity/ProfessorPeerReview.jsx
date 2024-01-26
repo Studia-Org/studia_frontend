@@ -4,8 +4,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { fetchCourseInformation } from '../../../../fetches/fetchCourseInformation'
 import { fetchPeerReviewAnswers } from '../../../../fetches/fetchPeerReviewAnswers';
 import { StudentRow } from './Components/PeerReview/StudentRow';
-import { Empty } from 'antd';
-
+import { Button, Empty } from 'antd';
+import generateExcelPeerReview from './utils/generateExcelPeerReview';
 
 export const ProfessorPeerReview = ({ activityData }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -13,6 +13,10 @@ export const ProfessorPeerReview = ({ activityData }) => {
   const [peerReviewAnswers, setPeerReviewAnswers] = useState([]);
   const navigate = useNavigate()
   const { courseId, activityId } = useParams()
+  const filteredStudents = courseContentInformation.students?.data.filter((student) =>
+    student.attributes.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   useEffect(() => {
     async function fetchCourseData() {
       const { courseInformation, students, professors } =
@@ -32,9 +36,6 @@ export const ProfessorPeerReview = ({ activityData }) => {
   }, []);
 
   function renderTableRows() {
-    const filteredStudents = courseContentInformation.students?.data.filter((student) =>
-      student.attributes.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
     return (
       <>
         {filteredStudents.map((student) => (
@@ -44,6 +45,7 @@ export const ProfessorPeerReview = ({ activityData }) => {
       </>
     );
   }
+
 
 
 
@@ -69,6 +71,12 @@ export const ProfessorPeerReview = ({ activityData }) => {
                 className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
                 placeholder="Search for users" />
             </div>
+            <Button onClick={() => generateExcelPeerReview(courseContentInformation.students.data, peerReviewAnswers)} type="default" className='flex items-center gap-x-1'>
+              Download all
+              <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+              </svg>
+            </Button>
           </div>
           <table className="w-full text-sm text-left text-gray-500 ">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
