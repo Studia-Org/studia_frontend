@@ -7,8 +7,8 @@ export default function generateExcelPeerReview(students, peerReviewAnswers) {
         return categories.map(category => {
             // Puedes ajustar esta lógica según la estructura real de tus datos
             return [
-                `Nota ${category}`,
-                `Comentario ${category}`
+                `Score ${category}`,
+                `Comments ${category}`
             ];
         });
     };
