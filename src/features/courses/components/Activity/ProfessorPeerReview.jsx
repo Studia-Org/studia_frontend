@@ -12,8 +12,7 @@ export const ProfessorPeerReview = ({ activityData }) => {
   const [courseContentInformation, setCourseContentInformation] = useState({});
   const [peerReviewAnswers, setPeerReviewAnswers] = useState([]);
   const navigate = useNavigate()
-  const { courseId } = useParams()
-
+  const { courseId, activityId } = useParams()
   useEffect(() => {
     async function fetchCourseData() {
       const { courseInformation, students, professors } =
@@ -26,7 +25,7 @@ export const ProfessorPeerReview = ({ activityData }) => {
   useEffect(() => {
     async function fetchPeerReviewData() {
       const peerReviewAnswers =
-        await fetchPeerReviewAnswers(activityData.activity.data.id);
+        await fetchPeerReviewAnswers(activityId);
       setPeerReviewAnswers(peerReviewAnswers);
     }
     fetchPeerReviewData();

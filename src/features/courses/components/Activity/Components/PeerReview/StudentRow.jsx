@@ -7,12 +7,20 @@ export const StudentRow = ({ student, activityToReviewID, activityTitle, peerRev
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isRubricModalOpen, setIsRubricModalOpen] = useState(false);
     const [rubricData, setRubricData] = useState({})
-    const studentQualifications = student.attributes.qualifications.data.filter((qualification) => qualification.attributes.activity.data.id === activityToReviewID)
-    const studentQualificationsGiven = peerReviewAnswers.filter((answer) => answer.attributes.user?.data.id === student.id)
-    const studentQualificationsReceived = peerReviewAnswers.filter((answer) => answer.attributes.qualification?.data.attributes.user.data.id === student.id)
-    const studentFiles = studentQualifications[0]?.attributes.file.data
+    const studentQualifications = student.attributes.qualifications.data.filter((qualification) => {
 
-    console.log(activityToReviewID)
+        if (qualification.attributes.activity.data === null) return false
+
+        return qualification.attributes.activity.data.id === activityToReviewID
+    })
+
+    const studentQualificationsGiven = peerReviewAnswers.filter((answer) =>
+        answer.attributes.user?.data.id === student.id)
+
+    const studentQualificationsReceived = peerReviewAnswers.filter((answer) =>
+        answer.attributes.qualification?.data.attributes.user.data.id === student.id)
+
+    const studentFiles = studentQualifications[0]?.attributes.file.data
 
     function handleRubricModalOpen(qualification) {
         setRubricData(qualification)
@@ -22,11 +30,11 @@ export const StudentRow = ({ student, activityToReviewID, activityTitle, peerRev
     function renderAllGivenQualifications(givenQualification) {
         return (
             <>
-                <Button onClick={() => handleRubricModalOpen(givenQualification)} className='h-full flex items-center' >
+                <Button onClick={() => handleRubricModalOpen(givenQualification)} className='flex items-center h-full' >
                     <img alt='' className="w-6 h-6 rounded-full" src={givenQualification.attributes.qualification?.data?.attributes?.user?.data?.attributes.profile_photo.data.attributes.url} />
                     <div className="pl-3 text-left">
                         <p className="text-sm font-semibold">{givenQualification.attributes.qualification?.data?.attributes?.user?.data?.attributes.name}</p>
-                        <p className="font-normal text-gray-500 text-xs">{givenQualification.attributes.qualification?.data?.attributes?.user?.data?.attributes.email}</p>
+                        <p className="text-xs font-normal text-gray-500">{givenQualification.attributes.qualification?.data?.attributes?.user?.data?.attributes.email}</p>
                     </div>
                 </Button>
             </>
@@ -36,11 +44,11 @@ export const StudentRow = ({ student, activityToReviewID, activityTitle, peerRev
     function renderAllRecievedQualifications(recievedQualification) {
         return (
             <>
-                <Button onClick={() => handleRubricModalOpen(recievedQualification)} className='h-full flex items-center' >
+                <Button onClick={() => handleRubricModalOpen(recievedQualification)} className='flex items-center h-full' >
                     <img alt='' className="w-6 h-6 rounded-full" src={recievedQualification.attributes.user?.data?.attributes.profile_photo.data.attributes.url} />
                     <div className="pl-3 text-left">
                         <p className="text-sm font-semibold">{recievedQualification.attributes.user?.data?.attributes.name}</p>
-                        <p className="font-normal text-gray-500 text-xs">{recievedQualification.attributes.user?.data?.attributes.email}</p>
+                        <p className="text-xs font-normal text-gray-500">{recievedQualification.attributes.user?.data?.attributes.email}</p>
                     </div>
                 </Button>
             </>
