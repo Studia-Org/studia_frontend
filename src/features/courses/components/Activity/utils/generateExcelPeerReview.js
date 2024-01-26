@@ -142,7 +142,6 @@ const generateExcel = async ({ categories, answersKeys, studentQualifications, a
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
     const url = URL.createObjectURL(blob);
-    console.log(studentQualifications);
     const link = document.createElement('a');
     link.href = url;
     link.download = `peer-review-${activityName}.xlsx`;

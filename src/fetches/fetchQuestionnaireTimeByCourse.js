@@ -8,7 +8,6 @@ export async function fetchQuestionnaireTimeByCourse({ courseId, userId = null }
             `populate[sections][populate][subsections][populate][questionnaire][populate][user_response_questionnaires][fields][0]=timeToComplete&` +
             `populate[sections][populate][subsections][populate][questionnaire][populate][user_response_questionnaires][populate][user][fields][0]=id`);
         const data = await response.json();
-        console.log(data);
         let totalTime = 0;
         let totalUserTime = 0;
         let totalUserQuestionnaire = 0;

@@ -25,7 +25,6 @@ export async function fetchAverageSubSectionMark({ courseId, userId = null, sect
         list.push(averageSubsection(section, userId));
     });
 
-    console.log("subsectionQualifications", list);
 
 }
 function averageSubsection(sectionData, userId = null) {

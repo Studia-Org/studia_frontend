@@ -46,7 +46,6 @@ export async function fetchAverageCourse({ courseId, userId = null }) {
         const averageMainActivity = averagesMainActivity.reduce((acc, averageMainActivity) => acc + averageMainActivity, 0);
 
         if (userId === null) {
-            console.log({ averageMainActivity, totalQualifications })
             return { averageMainActivity };
         }
         const userQualifications = sectionData
