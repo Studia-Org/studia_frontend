@@ -10,8 +10,8 @@ import { message, Button, Tag, Tour } from 'antd';
 import { CreateTask } from './CreateTask';
 
 export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdit, createCourseSectionsList, task, setTask,
-    createCourseSectionsListCopy, setCreateCourseSectionsListCopy, setCreateCourseSectionsList }) => {
-    const [subsectionsToEdit, setSubsectionsToEdit] = useState((createCourseSectionsListCopy.filter((section) => section.id === sectionToEdit.id)[0]))
+    createCourseSectionsListCopy, setCreateCourseSectionsListCopy, setCreateCourseSectionsList, categories, setCategories }) => {
+    const [subsectionsToEdit, setSubsectionsToEdit] = useState((createCourseSectionsListCopy?.filter((section) => section.id === sectionToEdit.id)[0]))
     const [editSubsectionFlag, setEditSubsectionFlag] = useState(false)
     const [subsectionEditing, setSubsectionEditing] = useState()
     const [thereIsChanges, setThereIsChanges] = useState(false)
@@ -32,7 +32,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
                 <>
                     <p>First of all, for defining your section you need to understand the basis of the section sequence. The realization of the task you definied will be divided in 3 parts,
                         Forethought, Performance and Self-reflection.</p>
-                    <ul className='ml-3 my-3'>
+                    <ul className='my-3 ml-3'>
                         <li>
                             <span className='font-bold'>Forethought:</span> Planning of the task, where students will define the task,  goal,  time and the resources they will need to complete it.
                         </li>
@@ -116,6 +116,8 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
         }
     ];
 
+    console.log(createCourseSectionsListCopy)
+
 
     useEffect(() => {
         setSubsectionsToEdit((createCourseSectionsListCopy.filter((section) => section.id === sectionToEdit.id)[0]))
@@ -182,7 +184,8 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
     };
     function saveChanges() {
         setCreateCourseSectionsList(createCourseSectionsListCopy)
-        setEditCourseSectionFlag(false)
+        setEditSubsectionFlag(false)
+        setThereIsChanges(false)
         message.success('Changes saved successfully');
     }
 
@@ -197,21 +200,22 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
                 setOpen(false)
                 document.body.style.overflow = 'auto'
             }} steps={steps} nextButtonProps={{ style: { backgroundColor: 'blue' } }} />
-            <button onClick={() => setEditCourseSectionFlag(false)} className='flex items-center hover:-translate-x-1 duration-100'>
+            <button onClick={() => setEditCourseSectionFlag(false)} className='flex items-center duration-100 hover:-translate-x-1'>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                     <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
                 </svg>
-                <p className='text-sm ml-1 '>Back to course setup</p>
+                <p className='ml-1 text-sm '>Back to course setup</p>
             </button>
 
             {
                 !task[sectionToEdit.id] || editTaskFlag ?
-                    <CreateTask task={task} setTask={setTask} section={sectionToEdit} setCreateCourseSectionsList={setCreateCourseSectionsList} setCreateCourseSectionsListCopy={setCreateCourseSectionsListCopy} setEditTaskFlag={setEditTaskFlag} />
+                    <CreateTask task={task} setTask={setTask} section={sectionToEdit} setCreateCourseSectionsList={setCreateCourseSectionsList}
+                        setCreateCourseSectionsListCopy={setCreateCourseSectionsListCopy} setEditTaskFlag={setEditTaskFlag} categories={categories} setCategories={setCategories} />
                     :
                     <div className='flex'>
-                        <div className='w-1/2 pr-10 pl-5 '>
+                        <div className='w-1/2 pl-5 pr-10 '>
                             <div className='flex items-center gap-2 mt-5'>
-                                <h1 className='font-bold text-2xl '>Edit Section</h1>
+                                <h1 className='text-2xl font-bold '>Edit Section</h1>
                                 <svg
                                     onClick={handleClick}
                                     xmlns="http://www.w3.org/2000/svg"
@@ -229,21 +233,19 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
                             </div>
                             <div className='flex items-center justify-between mt-5'>
                                 <div className='flex items-center gap-2'>
-                                    <h2 className='font-medium text-xl '>{sectionToEdit.name}</h2>
+                                    <h2 className='text-xl font-medium '>{sectionToEdit.name}</h2>
                                     <Tag color="#108ee9">Section</Tag>
                                 </div>
-
-
                                 <Button ref={ref4} disabled={!thereIsChanges} type='primary' onClick={saveChanges} className='bg-[#1677ff] text-white '>Save Changes</Button>
                             </div>
-
-                            <div ref={ref} className='bg-white rounded-md shadow-md p-5 font-medium text-base mb-5 mt-5'>
+                            <div ref={ref} className='p-5 mt-5 mb-5 text-base font-medium bg-white rounded-md shadow-md'>
                                 <div className='flex items-center'>
                                     <h3 className=''>Course sequence</h3>
                                     <Button ref={ref0} className='ml-auto' onClick={() => setEditTaskFlag(true)}>
                                         Edit Task
                                     </Button>
                                 </div>
+                                <p className='text-xs font-normal text-gray-400'>Click on a subsection for editing the content.</p>
                                 {
                                     subsectionsToEdit.subsections.length > 0 ?
                                         <div className='mt-6 space-y-3 h-[20rem] duration-700 overflow-y-auto overflow-x-hidden'>
@@ -253,7 +255,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
                                                 <SortableContext
                                                     items={subsectionsToEdit.subsections}
                                                     strategy={verticalListSortingStrategy}>
-                                                    <ol className="relative border-l border-dashed border-gray-300 ml-10">
+                                                    <ol className="relative ml-10 border-l border-gray-300 border-dashed">
                                                         {subsectionsToEdit.subsections.map((subsection) => (
                                                             <motion.li
                                                                 key={subsection.id}
@@ -269,17 +271,17 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
                                         </div>
                                         :
                                         <div>
-                                            <p className='text-sm font-normal italic text-gray-500 mt-6'>Start defining the sequence!</p>
+                                            <p className='mt-6 text-sm italic font-normal text-gray-500'>Start defining the sequence!</p>
                                         </div>
                                 }
-                                <p className='text-xs font-normal  text-gray-400 mt-8'>Drag and drop to reorder the sequence</p>
+                                <p className='mt-8 text-xs font-normal text-gray-400'>Drag and drop to reorder the sequence</p>
                             </div>
                             <CreateCourseTimelineSubsection ref2={ref2} createCourseSectionsList={createCourseSectionsListCopy} sectionId={sectionToEdit.id} />
                         </div>
                         <div className='w-1/2'>
                             {
                                 editSubsectionFlag ?
-                                    <CreateCourseEditSubsection allSubsections={subsectionsToEdit} subsection={subsectionEditing} setEditSubsectionFlag={setEditSubsectionFlag} setCreateCourseSectionsList={setCreateCourseSectionsListCopy} createCourseSectionsList={createCourseSectionsListCopy} setSubsectionEditing={setSubsectionEditing} task={task} setTask={setTask} sectionId={sectionToEdit.id} />
+                                    <CreateCourseEditSubsection categories={categories} setCategories={setCategories} allSubsections={subsectionsToEdit} subsection={subsectionEditing} setEditSubsectionFlag={setEditSubsectionFlag} setCreateCourseSectionsList={setCreateCourseSectionsListCopy} createCourseSectionsList={createCourseSectionsListCopy} setSubsectionEditing={setSubsectionEditing} task={task} setTask={setTask} sectionId={sectionToEdit.id} />
                                     :
                                     <SubsectionItems setCreateCourseSectionsList={setCreateCourseSectionsListCopy} sectionToEdit={sectionToEdit} ref3={ref3} sectionTask={createCourseSectionsList.filter((section) => section.id === sectionToEdit.id)[0].task} />
                             }

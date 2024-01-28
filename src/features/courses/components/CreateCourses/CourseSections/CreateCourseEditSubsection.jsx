@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { QuestionnaireComponentEditable } from './QuestionnaireComponentEditable';
 import { PeerReviewRubricModal } from './PeerReviewRubricModal';
 import dayjs from 'dayjs';
+import { motion } from "framer-motion";
+import { TableCategories } from './TableCategories';
 import { message, Button, DatePicker, Input, Switch, InputNumber, Select } from 'antd';
-
-import MDEditor from '@uiw/react-md-editor';
+import { SubsectionContentModal } from './SubsectionContentModal';
 import { UploadFiles } from './UploadFiles';
-
 import '../../../styles/antdButtonStyles.css'
 import { PonderationWarning } from './PonderationWarning';
 import { debounce } from 'lodash';
-import { sub } from 'date-fns';
+
 
 const { RangePicker } = DatePicker;
 
@@ -22,9 +22,12 @@ export const CreateCourseEditSubsection = ({
   createCourseSectionsList,
   setSubsectionEditing,
   sectionId,
-  allSubsections
+  allSubsections,
+  categories,
+  setCategories
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSubsectionModalOpen, setIsSubsectionModalOpen] = useState(false);
   const [landscape_photo, setLandscape_photo] = useState([]);
   const [markdownContent, setMarkdownContent] = useState(subsection.content);
   const [files, setFiles] = useState([]);
@@ -52,6 +55,7 @@ export const CreateCourseEditSubsection = ({
   useEffect(() => {
     handleSubsectionChange('files', files);
   }, [files])
+
 
   const handleSubsectionChange = (type, newValue) => {
     setCreateCourseSectionsList((courses) => {
@@ -116,9 +120,26 @@ export const CreateCourseEditSubsection = ({
     }
   };
 
+  function selectBorderColor(type) {
+    switch (type) {
+      case 'peerReview':
+        return 'red-500';
+      case 'forum':
+        return 'slate-500';
+      case 'task':
+        return 'blue-500';
+      default:
+        return 'blue-500';
+    }
+  }
+
+
   return (
-    <div key={subsection.id} className='w-[45rem]'>
-      <button className='text-sm flex items-center -translate-y-5 ' onClick={() => setEditSubsectionFlag(false)}>
+    <motion.div
+      key={subsection.id}
+      className='w-full pr-12'
+    >
+      <button className='flex items-center text-sm -translate-y-5 ' onClick={() => setEditSubsectionFlag(false)}>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
           <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
         </svg>
@@ -130,15 +151,35 @@ export const CreateCourseEditSubsection = ({
           setCreateCourseSectionsList={setCreateCourseSectionsList}
           createCourseSectionsList={createCourseSectionsList}
           sectionId={sectionId}
+          categories={categories}
         />
       ) : (
         <div key={subsection.id}>
-          <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-lg pl-3' placeholder="Description"
-            onChange={(e) => handleTitleChange(e.target.value)} value={subsection.title} />
-          <div key={subsection.id} className='bg-white rounded-md shadow-md p-5 mt-4 mb-10 '>
+          <motion.div
+            key={subsection.id}
+            initial="hidden"
+            animate="visible"
+            exit={{ opacity: 0, x: -20 }}
+            variants={{
+              visible: { opacity: 1, x: 0 },
+              hidden: { opacity: 0, x: -20 },
+            }}
+            transition={{
+              type: "spring",
+              bounce: 0.7,
+              duration: 0.9,
+            }}
+            className={`p-5 mb-10 bg-white rounded-md shadow-md border-t-[14px] border-${selectBorderColor(subsection?.type)} `}
+          >
+            <label className='text-sm text-gray-500 !mt-4'>
+              Title  *
+            </label>
+            <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-lg pl-3 mb-4 font-medium' placeholder="Description"
+              onChange={(e) => handleTitleChange(e.target.value)} value={subsection.title} />
             {
+
               subsection?.type === 'peerReview' && (
-                <div className='flex flex-col justify-center space-y-2 mb-5'>
+                <div className='flex flex-col justify-center mb-5 space-y-2'>
                   <PeerReviewRubricModal isModalOpen={isModalOpen}
                     setIsModalOpen={setIsModalOpen}
                     rubricData={subsection.activity.PeerReviewRubrica}
@@ -153,7 +194,7 @@ export const CreateCourseEditSubsection = ({
                     Edit Rubric
                   </Button>
                   <label className='text-sm text-gray-500 !mt-4'>
-                    Select the task for which the peer review will be conducted.  *
+                    Select the task for which the peer review will be conducted  *
                   </label>
                   <Select
                     defaultValue={() => {
@@ -188,17 +229,28 @@ export const CreateCourseEditSubsection = ({
             }
             {
               subsection?.type === 'task' && (
-                <div className='space-y-2 mb-5'>
+                <div className='mb-5 space-y-2'>
                   <label className='text-sm text-gray-500' htmlFor=''>
-                    Cover
+                    Cover (image)
                   </label>
                   <UploadFiles fileList={landscape_photo} setFileList={setLandscape_photo} listType={'picture'} maxCount={1} />
                 </div>
               )
             }
+            <div className='flex flex-col mb-4'>
+              <label className='text-sm text-gray-500' htmlFor=''>
+                Subsection content *
+              </label>
+              <Button className='py-5 pb-10 mt-2' onClick={() => {
+                setIsSubsectionModalOpen(true);
+                document.body.style.overflow = 'hidden';
+              }}>
+                Edit subsection content
+              </Button>
+            </div>
             <div className='flex items-center justify-between w-full '>
               <div className='w-full space-y-2'>
-                <label className='text-sm text-gray-500 mb-4'>Subsection Date *</label>
+                <label className='mb-4 text-sm text-gray-500'>Subsection Date *</label>
                 <RangePicker
                   className='w-full py-4'
                   showTime={{
@@ -209,11 +261,15 @@ export const CreateCourseEditSubsection = ({
                   onChange={onChangeDate}
                 />
               </div>
-
             </div>
-            <div className='mt-7 flex items-center justify-between'>
+            <div className='mt-7'>
+              <label className='block mr-3 text-sm text-gray-500' htmlFor=''>Categories * </label>
+              <TableCategories categories={categories[sectionId]} setCreateCourseSectionsList={setCreateCourseSectionsList}
+                subsection={subsection} sectionID={sectionId} createCourseSectionsList={createCourseSectionsList} />
+            </div>
+            <div className='flex items-center justify-between mt-7'>
               <div className='flex items-center'>
-                <label className='text-sm text-gray-500 mr-3 block' htmlFor=''>Evaluable * </label>
+                <label className='block mr-3 text-sm text-gray-500' htmlFor=''>Evaluable * </label>
                 <Switch onChange={(e) => handleSubsectionChange('evaluable', e)} checked={subsection.activity?.evaluable} className='bg-gray-300' />
               </div>
               <div className='flex items-center gap-4'>
@@ -236,29 +292,27 @@ export const CreateCourseEditSubsection = ({
               </div>
 
             </div>
-            <div className='mt-7 space-y-2'>
+            <div className='space-y-2 mt-7'>
               <label className='text-sm text-gray-500 mt-7 ' htmlFor=''>Subsection description</label>
-              <div className='flex w-full prose prose-lg'>
+              <div className='flex w-full '>
                 <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3' placeholder="Description" value={subsection.description}
                   onChange={(e) => handleSubsectionChange('description', e.target.value)} />
               </div>
             </div>
-            <div className='mt-3 space-y-2 mb-5'>
+            <div className='mt-3 mb-5 space-y-2'>
               <label className='text-sm text-gray-500 ' htmlFor=''>
                 Subsection Files (max 5)
               </label>
               <UploadFiles fileList={files} setFileList={setFiles} listType={'text'} maxCount={5} />
             </div>
-            <label className='text-sm text-gray-500' htmlFor=''>
-              Subsection content *
-            </label>
-            <MDEditor className='mt-2 mb-2' data-color-mode='light' onChange={setMarkdownContent} onBlur={() => handleSubsectionChange('content', markdownContent)}
-              value={markdownContent} visibleDragbar={false} />
-          </div>
+            <SubsectionContentModal isModalOpen={isSubsectionModalOpen} setIsModalOpen={setIsSubsectionModalOpen} setMarkdownContent={setMarkdownContent}
+              handleSubsectionChange={handleSubsectionChange} markdownContent={markdownContent}
+            />
+          </motion.div>
         </div>
       )
       }
-    </div >
+    </motion.div >
   );
 };
 
