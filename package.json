@@ -41,6 +41,7 @@
     "datepicker": "^0.0.0",
     "dayjs": "^1.11.10",
     "dotenv": "^16.3.1",
+    "exceljs": "^4.4.0",
     "faker": "^6.6.6",
     "filepond": "^4.30.4",
     "filepond-plugin-file-encode": "^2.1.13",

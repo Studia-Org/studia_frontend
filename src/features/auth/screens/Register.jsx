@@ -73,7 +73,6 @@ const Register = () => {
 
       }).then(response => response.json())
         .then(dataTemp => {
-          console.log(dataTemp.data.id);
         })
         .catch((error) => {
           message.error(error.message);
@@ -91,7 +90,7 @@ const Register = () => {
       if (!profilePhoto) {
         throw new Error("Please upload a profile photo");
       }
-      
+
       const response = await fetch(`${API}/auth/local/register`, {
         method: "POST",
         headers: {
@@ -117,45 +116,45 @@ const Register = () => {
     } finally {
       setLoading(false);
     }
-    };
+  };
 
-    window.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        registerAccount();
-      }
-    });
-
-    function switchPage() {
-      switch (pageSelector) {
-        case 1:
-          return (
-            <UserInformation onChange={onChange} formData={formData} username={username}
-              email={email} university={university} password={password} repassword={repassword} name={name} setPageSelector={setPageSelector} setProfilePhoto={setProfilePhoto} profilePhoto={profilePhoto} />
-          )
-        case 2:
-          return (
-            <UserObjectives setPageSelector={setPageSelector} description={description} onChange={onChange} goals={goals} setGoals={setGoals} user_objectives={user_objectives} setUserObjectives={setUserObjectives}
-              registerAccount={registerAccount} loading={loading} />
-          )
-        default:
-          return (
-            <UserInformation onChange={onChange} formData={formData} username={username}
-              email={email} university={university} password={password} repassword={repassword} name={name} setPageSelector={setPageSelector} setProfilePhoto={setProfilePhoto} profilePhoto={profilePhoto} />
-          )
-      }
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      registerAccount();
     }
+  });
 
-
-    return (
-      <div class="">
-        <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
-        <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.min.css')</style>
-        <div class="min-w-screen min-h-screen  flex items-center justify-center px-5 py-5 bg-gradient-to-r from-indigo-400  to-[#6e66d6]">
-          {switchPage()}
-        </div>
-      </div>
-    )
+  function switchPage() {
+    switch (pageSelector) {
+      case 1:
+        return (
+          <UserInformation onChange={onChange} formData={formData} username={username}
+            email={email} university={university} password={password} repassword={repassword} name={name} setPageSelector={setPageSelector} setProfilePhoto={setProfilePhoto} profilePhoto={profilePhoto} />
+        )
+      case 2:
+        return (
+          <UserObjectives setPageSelector={setPageSelector} description={description} onChange={onChange} goals={goals} setGoals={setGoals} user_objectives={user_objectives} setUserObjectives={setUserObjectives}
+            registerAccount={registerAccount} loading={loading} />
+        )
+      default:
+        return (
+          <UserInformation onChange={onChange} formData={formData} username={username}
+            email={email} university={university} password={password} repassword={repassword} name={name} setPageSelector={setPageSelector} setProfilePhoto={setProfilePhoto} profilePhoto={profilePhoto} />
+        )
+    }
   }
 
-  export default Register;
+
+  return (
+    <div class="">
+      <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
+      <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.min.css')</style>
+      <div class="min-w-screen min-h-screen  flex items-center justify-center px-5 py-5 bg-gradient-to-r from-indigo-400  to-[#6e66d6]">
+        {switchPage()}
+      </div>
+    </div>
+  )
+}
+
+export default Register;

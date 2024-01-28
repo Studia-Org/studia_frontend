@@ -5,7 +5,12 @@ import { getToken } from "../helpers";
 export async function fetchPeerReviewAnswers(activityId) {
     try {
         const response = await fetch(
-            `${API}/peer-review-answers?populate=user.profile_photo,qualification.activity,qualification.user.profile_photo`,
+            `${API}/peer-review-answers` +
+            `?populate[user][populate][profile_photo][fields][0]=*` +
+            `&populate[qualification][populate][activity][fields][0]=*` +
+            `&populate[qualification][populate][user][populate][profile_photo][fields][0]=*` +
+            '&filters[qualification][activity][id]=' + activityId,
+
             {
                 method: 'GET',
                 headers: {
@@ -15,8 +20,13 @@ export async function fetchPeerReviewAnswers(activityId) {
             }
         );
         const data = await response.json();
-        const filteredData = data?.data?.filter((answer) => answer.attributes.qualification.data.attributes.activity.data.id === activityId);  
-        return filteredData ?? []
+        try {
+
+            return data.data ?? []
+
+        } catch (error) {
+            return []
+        }
     } catch (error) {
         console.error(error);
     }
