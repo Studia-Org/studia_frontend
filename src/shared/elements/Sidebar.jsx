@@ -110,7 +110,7 @@ export const Sidebar = (props) => {
       <aside
         id="default-sidebar"
         className={`absolute flex min-h-screen xl:min-h-[calc(100vh-8rem)] bg-white z-[1000] pl-8 
-         xl:pl-16 top-5 left-0 w-80 xl:top-32 transition-transform -translate-x-full xl:${showSidebar ? "translate-x-0" : "-translate-x-full"}`}
+         xl:pl-16 top-5 left-0 w-80 xl:top-32 transition-transform -translate-x-full ${showSidebar ? "xl:translate-x-0" : "-translate-x-full"} `}
         aria-label="Sidebar"
       >
         <div className="min-h-[100%]">
