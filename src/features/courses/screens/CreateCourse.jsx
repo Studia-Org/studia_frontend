@@ -37,7 +37,7 @@ const CreateCourse = () => {
     }
 
     return (
-        <div className='rounded-tl-3xl bg-[#e7eaf886] w-full max-h-full'>
+        <div className=' bg-[#e7eaf886] w-full max-h-full'>
             <div className='w-full h-full pl-12 text-2xl font-bold pt-9'>
                 {
                     editCourseSectionFlag ?
