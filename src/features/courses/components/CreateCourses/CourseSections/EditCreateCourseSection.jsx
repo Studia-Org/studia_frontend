@@ -11,7 +11,7 @@ import { CreateTask } from './CreateTask';
 
 export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdit, createCourseSectionsList, task, setTask,
     createCourseSectionsListCopy, setCreateCourseSectionsListCopy, setCreateCourseSectionsList, categories, setCategories }) => {
-    const [subsectionsToEdit, setSubsectionsToEdit] = useState((createCourseSectionsListCopy.filter((section) => section.id === sectionToEdit.id)[0]))
+    const [subsectionsToEdit, setSubsectionsToEdit] = useState((createCourseSectionsListCopy?.filter((section) => section.id === sectionToEdit.id)[0]))
     const [editSubsectionFlag, setEditSubsectionFlag] = useState(false)
     const [subsectionEditing, setSubsectionEditing] = useState()
     const [thereIsChanges, setThereIsChanges] = useState(false)
@@ -245,6 +245,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
                                         Edit Task
                                     </Button>
                                 </div>
+                                <p className='text-xs font-normal text-gray-400'>Click on a subsection for editing the content.</p>
                                 {
                                     subsectionsToEdit.subsections.length > 0 ?
                                         <div className='mt-6 space-y-3 h-[20rem] duration-700 overflow-y-auto overflow-x-hidden'>

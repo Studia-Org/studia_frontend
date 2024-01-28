@@ -14,24 +14,26 @@ export const CreateCourseTimelineSubsection = ({ createCourseSectionsList, secti
   let alturaElemento = (5 * groups.length) + 6
 
   sectionFiltered.subsections.forEach(subsection => {
-    const info = {
-      id: Math.floor(Math.random() * Math.floor(Math.random() * Date.now())),
-      group: counter.toString(),
-      title: subsection.title,
-      start: new Date(subsection.start_date).getTime(),
-      end: new Date(subsection.end_date).getTime(),
-      description: subsection.description,
-      fase: subsection.fase,
-    };
-    counter++;
-    timelineItems.push(info);
+    if (subsection) {
+      const info = {
+        id: Math.floor(Math.random() * Math.floor(Math.random() * Date.now())),
+        group: counter.toString(),
+        title: subsection.title,
+        start: new Date(subsection.start_date).getTime(),
+        end: new Date(subsection.end_date).getTime(),
+        description: subsection.description,
+        fase: subsection.fase,
+      };
+      counter++;
+      timelineItems.push(info);
+    }
   });
 
   return (
     groups.length === 0 ?
-      <div ref={ref2} className='bg-white shadow-md rounded-md p-5 mb-10 flex items-center justify-center flex-col'>
+      <div ref={ref2} className='flex flex-col items-center justify-center p-5 mb-10 bg-white rounded-md shadow-md'>
         <Empty description={
-          <span className='text-gray-400 font-normal '>
+          <span className='font-normal text-gray-400 '>
             Add your first item
           </span>
         } />
