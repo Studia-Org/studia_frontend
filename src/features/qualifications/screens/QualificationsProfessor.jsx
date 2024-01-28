@@ -4,7 +4,6 @@ import { API } from '../../../constant'
 import { MoonLoader } from 'react-spinners'
 import { motion } from 'framer-motion';
 import { QualificationsTable } from '../components/QualificationsTable'
-import { set, sub } from 'date-fns'
 import { UploadQualifications } from '../components/UploadQualifications';
 
 const QualificationsProfessor = () => {
@@ -12,7 +11,6 @@ const QualificationsProfessor = () => {
     const [activities, setActivities] = useState([])
     const [students, setStudents] = useState([])
     const [isLoading, setIsLoading] = useState(true)
-    const [course, setCourse] = useState([])
     const [cover, setCover] = useState()
     let { courseID } = useParams();
 
@@ -61,7 +59,7 @@ const QualificationsProfessor = () => {
                         <section className='absolute block top-0 left-0 w-full'>
                             {
                                 cover && <img alt='' src={`${cover}`}
-                                    className="absolute top-0 left-0 w-full h-[20rem] object-cover lg:rounded-tl-3xl" />
+                                    className="absolute top-0 left-0 w-full h-[20rem] object-fill lg:rounded-tl-3xl" />
                             }
                             <span
                                 id="blackOverlay"
@@ -71,10 +69,9 @@ const QualificationsProfessor = () => {
                         <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
                             {
                                 uploadQualificationsFlag ?
-                                    <UploadQualifications setUploadQualificationsFlag={setUploadQualificationsFlag} activities={activities}/>
+                                    <UploadQualifications setUploadQualificationsFlag={setUploadQualificationsFlag} activities={activities} students={students}/>
                                     :
                                     <QualificationsTable setUploadQualificationsFlag={setUploadQualificationsFlag} students={students} activities={activities} setStudents={setStudents} />
-
                             }
                         </motion.div>
 

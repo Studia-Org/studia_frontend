@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react'
 import TimelineComponent from '../components/TimelineComponent';
 import { useAuthContext } from "../../../context/AuthContext"
 import { API } from '../../../constant';
-
+import { MoonLoader } from "react-spinners";
 
 
 const Timeline = () => {
     const { user } = useAuthContext();
     const [timelineItems, setTimelineItems] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     document.title = 'Timeline - Uptitude'
 
     const groups = [{ id: '1', bgColor: '#f490e5' }, { id: '2', bgColor: '#f29dd0' }, { id: '3', bgColor: '#f29dd0' }, { id: '4', bgColor: '#f29dd0' }, { id: '5', bgColor: '#f29dd0' }]
@@ -40,6 +41,7 @@ const Timeline = () => {
         } catch (error) {
             console.error(error);
         } finally {
+            setIsLoading(false);
         }
     };
 
@@ -51,15 +53,24 @@ const Timeline = () => {
 
     return (
         <div className='rounded-tl-3xl bg-[#e7eaf886] w-full '>
-            <div className='pt-9 pl-12 font-bold text-2xl h-[95%]  w-full '>
-                <div className='bg-[#f7f7f7] p-4 pb-0  rounded-t-2xl  h-full shadow-lg w-full '>
-                    {timelineItems && <TimelineComponent groups={groups} timelineItems={timelineItems} createCourseFlag={false} />}
+            {isLoading ? (
+                <div className='flex items-center justify-center w-full h-full'>
+                    <div className='flex items-center justify-center w-full h-full '>
+                        <MoonLoader color='#363cd6' size={80} />
+                    </div>
                 </div>
-            </div>
+
+            ) : (
+                <div className='pt-9 pl-12 font-bold text-2xl h-[95%]  w-full '>
+                    <div className='bg-[#f7f7f7] p-4 pb-0  rounded-t-2xl  h-full shadow-lg w-full '>
+                        {timelineItems && <TimelineComponent groups={groups} timelineItems={timelineItems} createCourseFlag={false} />}
+                    </div>
+                </div>
+            )}
+
+
         </div>
-
     )
-
 }
 
 export default Timeline

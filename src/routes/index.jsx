@@ -27,17 +27,17 @@ export const AppRoutes = () => {
     const pathSegments = new URL(window.location.href).pathname.split('/');
     const path = pathSegments[2];
     const { isLoading } = useAuthContext();
-
+    const inCourseCreate = pathSegments.join('/') === '/app/courses/create';
     if (element.props.match.route.path === '*') return <div className='font-Poppins'>{element}</div>;
     else if (authenticated)
 
         return (
-            isLoading ? <div className='flex justify-center items-center h-screen w-screen'><MoonLoader color="#363cd6" size={80} /></div> :
-                <div className='font-Poppins  bg-white flex flex-col '>
+            isLoading ? <div className='flex items-center justify-center w-screen h-screen'><MoonLoader color="#363cd6" size={80} /></div> :
+                <div className='flex flex-col bg-white font-Poppins '>
                     <Navbar />
                     <div className='flex'>
                         <Sidebar section={path} />
-                        <div className='flex min-h-[calc(100vh-8rem)] overflow-x-auto xl:ml-80 xl:min-w-[calc(100vw-22rem)] bg-white w-full max-w-[100vw]'>
+                        <div className={`flex min-h-[calc(100vh-8rem)] overflow-x-auto ${!inCourseCreate ? " xl:ml-80 xl:min-w-[calc(100vw-22rem)" : ""} bg-white w-full max-w-[100vw]`}>
                             {element}
                         </div>
                     </div>

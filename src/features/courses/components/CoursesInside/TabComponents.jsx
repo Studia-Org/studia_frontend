@@ -364,11 +364,11 @@ export const CourseParticipants = ({ students, enableEdit, setSettingsFlag }) =>
         return <Empty />;
     } else {
         return (
-            <div className="flex space-x-8 mt-3 items-center">
+            <div className="flex flex-wrap  mt-3 items-center ">
                 {students.data.map((student) => (
                     <button
                         key={student.id}
-                        className="bg-white rounded flex items-center space-x-3 shadow w-auto h-[4rem] pr-4 duration-150 hover:bg-gray-100"
+                        className="bg-white rounded flex items-center space-x-3 shadow w-auto h-[4rem] pr-4 mr-4 mb-4 duration-150 hover:bg-gray-100"
                         onClick={() => navigate(`/app/profile/${student.id}/`)}
                     >
                         <img

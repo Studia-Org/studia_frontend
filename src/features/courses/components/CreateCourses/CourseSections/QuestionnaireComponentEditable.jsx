@@ -6,7 +6,9 @@ import { styled } from '@mui/material/styles';
 import RadioGroup, { useRadioGroup } from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
 import Radio from '@mui/material/Radio';
-import { message, DatePicker, Input, Switch, Divider, InputNumber } from 'antd';
+import { TableCategories } from './TableCategories';
+
+import { message, DatePicker, Input, Switch, InputNumber } from 'antd';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
@@ -35,7 +37,7 @@ const item = {
 
 
 
-export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSectionsList, createCourseSectionsList, sectionId }) => {
+export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSectionsList, createCourseSectionsList, sectionId, categories }) => {
     const questionsPerPage = 3;
     const [currentPage, setCurrentPage] = useState(1);
     const [selectorValue, setSelectorValue] = useState('open-ended-short')
@@ -52,7 +54,6 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
 
     const handleEditQuestionClick = (index) => {
         const newFlags = [...editQuestionFlags];
-        console.log(editQuestionFlags)
         newFlags[index] = !newFlags[index];
         setEditQuestionFlags(newFlags);
     };
@@ -338,7 +339,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                         )}
 
                         <div className='flex ml-auto space-x-2'>
-                            <svg onClick={() => handleEditQuestionClick(absoluteIndex)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="ml-5 w-5 h-5 cursor-pointer">
+                            <svg onClick={() => handleEditQuestionClick(absoluteIndex)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 ml-5 cursor-pointer">
                                 <path d="M5.433 13.917l1.262-3.155A4 4 0 017.58 9.42l6.92-6.918a2.121 2.121 0 013 3l-6.92 6.918c-.383.383-.84.685-1.343.886l-3.154 1.262a.5.5 0 01-.65-.65z" />
                                 <path d="M3.5 5.75c0-.69.56-1.25 1.25-1.25H10A.75.75 0 0010 3H4.75A2.75 2.75 0 002 5.75v9.5A2.75 2.75 0 004.75 18h9.5A2.75 2.75 0 0017 15.25V10a.75.75 0 00-1.5 0v5.25c0 .69-.56 1.25-1.25 1.25h-9.5c-.69 0-1.25-.56-1.25-1.25v-9.5z" />
                             </svg>
@@ -358,7 +359,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                         </div>
                     ) : (
                         question.options === 'open-ended-short' ?
-                            <div key={absoluteIndex} className='mt-5 flex w-full'>
+                            <div key={absoluteIndex} className='flex w-full mt-5'>
                                 <TextField
                                     id="outlined-basic"
                                     label=""
@@ -369,7 +370,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                                     multiline
                                 />
                             </div> :
-                            <div key={absoluteIndex} className='mt-5 flex w-full'>
+                            <div key={absoluteIndex} className='flex w-full mt-5'>
                                 <TextField
                                     id="outlined-basic"
                                     label=""
@@ -481,14 +482,14 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
     }
 
     return (
-        <div className="flex flex-col mt-5 ">
+        <div className="flex flex-col ">
             <div className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1] p-8">
                 <div className="">
                     <div className='flex items-center'>
-                        <p className="text-black font-semibold text-3xl mb-5 ">{subsection.title}</p>
+                        <p className="mb-5 text-3xl font-semibold text-black ">{subsection.title}</p>
                     </div>
                 </div>
-                <div className='bg-white rounded-md space-y-4  '>
+                <div className='space-y-4 bg-white rounded-md '>
                     <label className='text-sm text-gray-500' htmlFor="" >Questionnaire Date</label>
                     <RangePicker
                         className='w-full py-4'
@@ -499,9 +500,14 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                         value={subsection.start_date ? [dayjs(subsection.start_date), dayjs(subsection.end_date)] : null}
                         onChange={onChangeDate}
                     />
+                    <div className='mt-7'>
+                        <label className='block mr-3 text-sm text-gray-500' htmlFor=''>Categories * </label>
+                        <TableCategories categories={categories[sectionId]} setCreateCourseSectionsList={setCreateCourseSectionsList}
+                            subsection={subsection} sectionID={sectionId} createCourseSectionsList={createCourseSectionsList} />
+                    </div>
                     <div className='flex items-center justify-between'>
                         <div className='flex items-center'>
-                            <label className='text-sm text-gray-500 mr-3 block' htmlFor=''>Evaluable * </label>
+                            <label className='block mr-3 text-sm text-gray-500' htmlFor=''>Evaluable * </label>
                             <Switch checked={subsection.activity?.evaluable} onChange={(e) => handleSwitchChange(e)} className='bg-gray-300' />
                         </div>
 
@@ -538,7 +544,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                 animate="visible"
                 variants={list}
             >
-                <div className="space-y-5 mt-5 ">{renderQuestionsForPage()}</div>
+                <div className="mt-5 space-y-5 ">{renderQuestionsForPage()}</div>
             </motion.ul>
 
             {
@@ -547,7 +553,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                     className='bg-white shadow-md rounded-md p-5 border-l-8 mt-5 flex flex-col justify-center border-[#6366f1]'
                     variants={item}>
                     <div className='flex items-center justify-between mb-5'>
-                        <p className="font-medium mb-4">Add question</p>
+                        <p className="mb-4 font-medium">Add question</p>
                         <FormControl >
                             <Select
                                 labelId="demo-simple-select-label"
@@ -569,7 +575,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                             </Select>
                         </FormControl>
                     </div>
-                    <label className='text-sm text-gray-500 mb-3' htmlFor="" >Question</label>
+                    <label className='mb-3 text-sm text-gray-500' htmlFor="" >Question</label>
                     <TextField
                         id="outlined-basic"
                         label=""
@@ -585,7 +591,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                     {
                         selectorValue === 'options' &&
                         <>
-                            <label className='text-sm text-gray-500 mb-3 mt-5' htmlFor="" >Options</label>
+                            <label className='mt-5 mb-3 text-sm text-gray-500' htmlFor="" >Options</label>
                             <div className='flex flex-col'>
 
                                 {
@@ -598,8 +604,8 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                                         null
 
                                 }
-                                <div className='mt-5 flex items-center'>
-                                    <button onClick={() => addOptionToList()} className='flex items-center  p-4 text-sm font-medium '>
+                                <div className='flex items-center mt-5'>
+                                    <button onClick={() => addOptionToList()} className='flex items-center p-4 text-sm font-medium '>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                                             <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                                         </svg>
@@ -629,13 +635,13 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
 
 
             <div className="flex items-center justify-between mt-5 mb-8 bg-white rounded-md shadow-md p-5 border-b-8 border-[#6366f1]">
-                <button className='flex items-center hover:-translate-x-2 duration-200 mx-4 disabled:text-gray-300 disabled:translate-x-0' onClick={handlePrevPage} disabled={currentPage === 1}>
+                <button className='flex items-center mx-4 duration-200 hover:-translate-x-2 disabled:text-gray-300 disabled:translate-x-0' onClick={handlePrevPage} disabled={currentPage === 1}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 mr-2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75" />
                     </svg>
                     Previous
                 </button>
-                <button className='flex items-center hover:translate-x-2 duration-200 mx-4 disabled:text-gray-300 disabled:translate-x-0' onClick={handleNextPage} disabled={currentPage === totalPages}>
+                <button className='flex items-center mx-4 duration-200 hover:translate-x-2 disabled:text-gray-300 disabled:translate-x-0' onClick={handleNextPage} disabled={currentPage === totalPages}>
                     Next
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />

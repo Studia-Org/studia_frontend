@@ -28,23 +28,23 @@ export const UserObjectives = ({ setPageSelector, description, onChange, registe
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="bg-gray-100 text-gray-500 rounded-3xl shadow-xl w-full overflow-hidden " style={{ maxWidth: '1000px' }} >
-            <div className="md:flex w-full ">
-                <div className="hidden md:block w-full py-10 px-10 relative ">
+            className="w-full overflow-hidden text-gray-500 bg-gray-100 shadow-xl rounded-3xl " style={{ maxWidth: '1000px' }} >
+            <div className="w-full md:flex ">
+                <div className="relative hidden w-full px-10 py-10 md:block ">
                     <button onClick={(e) => setPageSelector(1)}>
                         <BsFillArrowLeftSquareFill size={30} style={{ cursor: "pointer", color: "rgba(0, 0, 0, 1)" }} />
                     </button>
-                    <h1 className='justify-center text-center  font-bold text-3xl text-gray-900'>One last steps...</h1>
-                    <p className='text-center mb-5 mt-2'>Add some personalization to your profile and set your goals!</p>
+                    <h1 className='justify-center text-3xl font-bold text-center text-gray-900'>One last steps...</h1>
+                    <p className='mt-2 mb-5 text-center'>Add some personalization to your profile and set your goals!</p>
                     <div className="flex -mx-3">
                         <div className="w-full px-3 mb-5">
-                            <label for="" className="text-xs font-semibold px-1 ">Add a brief description about yourself</label>
+                            <label for="" className="px-1 text-xs font-semibold ">Add a brief description about yourself</label>
                             <div className="flex">
-                                <div className="w-10 z-10 pl-1 text-center pointer-events-none flex items-center justify-center"><i class="mdi mdi-comment-text text-gray-400 text-lg"></i></div>
+                                <div className="z-10 flex items-center justify-center w-10 pl-1 text-center pointer-events-none"><i class="mdi mdi-comment-text text-gray-400 text-lg"></i></div>
                                 <textarea
                                     type="email"
 
-                                    className="w-full -ml-10 pl-10 pr-3 py-2 rounded-lg border-2 border-gray-200 outline-none focus:border-indigo-500 resize-none"
+                                    className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none resize-none focus:border-indigo-500"
                                     placeholder=""
                                     rows={3}
                                     name='description'
@@ -54,15 +54,15 @@ export const UserObjectives = ({ setPageSelector, description, onChange, registe
                             </div>
                         </div>
                     </div>
-                    <label for="" className="text-xs font-semibold px-1 ">Set your goals</label>
+                    <label for="" className="px-1 text-xs font-semibold ">Set your goals</label>
 
-                    <div className='border-2 border-gray-200 outline-none rounded-lg bg-white p-5 text-sm'>
+                    <div className='p-5 text-sm bg-white border-2 border-gray-200 rounded-lg outline-none'>
                         <header className=''>
                             <p>Learning with a MOOC can be challenging. This tool supports you to achieve your goals. Here you can (1) actively
                                 set your goal for this course and (2) select indicators to monitor your progress towards your goal.</p>
                         </header>
                         <section className='pt-2'>
-                            <h2 className='font-semibold text-base py-2'>What do you want to achieve by the end of this course?</h2>
+                            <h2 className='py-2 text-base font-semibold'>What do you want to achieve by the end of this course?</h2>
                             <p className=''>
                                 Some examples for a goal are learning specific topics covered by the course, completing the course and getting a
                                 certificate, completing all activities in the course in a certain timeframe, dedicating 3 hours weekly to this course, etc.
@@ -101,24 +101,24 @@ export const UserObjectives = ({ setPageSelector, description, onChange, registe
                             </lu>
                         </main>
                         <section>
-                            <h2 className='font-semibold text-lg py-2'>How would you categorize your objectives ?</h2>
+                            <h2 className='py-2 text-lg font-semibold'>How would you categorize your objectives ?</h2>
                             <p>
                                 You can select one or more categories that best describe your objectives.
                                 This will help you to monitor your progress and help you to achieve your goals.
                             </p>
-                            <div className='flex flex-wrap pt-4 pl-1 gap-2'>
+                            <div className='flex flex-wrap gap-2 pt-4 pl-1'>
                                 {Object.keys(ACTIVITY_CATEGORIES).map((objective, index) =>
                                     <div className='relative ms-1' key={index}>
                                         <motion.button
                                             onClick={() => { handleClickObjective(objective) }}
-                                            className={`relative z-10 bg-${ACTIVITY_CATEGORIES[objective]}-100 text-${ACTIVITY_CATEGORIES[objective]}-500 hover:bg-${ACTIVITY_CATEGORIES[objective]}-200` +
-                                                ` hover:text-${ACTIVITY_CATEGORIES[objective]}-600 text-sm border-[1px] border-${ACTIVITY_CATEGORIES[objective]}-500 rounded-lg p-2 m-1`}
+                                            className={`relative z-10 bg-${ACTIVITY_CATEGORIES[objective].color}-100 text-${ACTIVITY_CATEGORIES[objective].color}-500 hover:bg-${ACTIVITY_CATEGORIES[objective].color}-200` +
+                                                ` hover:text-${ACTIVITY_CATEGORIES[objective].color}-600 text-sm border-[1px] border-${ACTIVITY_CATEGORIES[objective].color}-500 rounded-lg p-2 m-1`}
                                             animate={{ opacity: [0, 1], y: [-10, 0] }}
                                             transition={{ delay: index * 0.025 }}>
                                             {objective}
                                         </motion.button>
                                         <div className={`absolute ${user_objectives.includes(objective) ? "blur" : ""} 
-                                inset-0 top-1 left-1 bg-${ACTIVITY_CATEGORIES[objective]}-500 rounded-lg w-[calc(100%-8px)] h-[calc(100%-8px)]`} ></div>
+                                inset-0 top-1 left-1 bg-${ACTIVITY_CATEGORIES[objective].color}-500 rounded-lg w-[calc(100%-8px)] h-[calc(100%-8px)]`} ></div>
 
                                     </div>
 

@@ -5,13 +5,18 @@ import { getToken } from '../../../../../helpers';
 import { API } from '../../../../../constant';
 import LoadingBar from 'react-top-loading-bar'
 import { BeatLoader, BounceLoader, DotLoader, SyncLoader } from 'react-spinners';
+import { sub } from 'date-fns';
 
 
 export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }) => {
+
+
+    console.log(createCourseSectionsList[0].task)
     const [isLoading, setIsLoading] = useState(false);
     const [progress, setProgress] = useState(0);
 
     const navigate = useNavigate();
+
     const isValidCourseBasicInfo = (courseBasicInfo) => {
         if (!courseBasicInfo) {
             throw new Error("courseBasicInfo is missing");
@@ -37,9 +42,15 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                 if (!subsection.start_date || !subsection.end_date) {
                     throw new Error(`Missing start_date or end_date in subsection ${subsection.title}`);
                 }
+                if (subsection.type === 'peerReview') {
+                    const act = section.subsections.find((sub) => sub.id === subsection.activity.task_to_review)
+                    if (!act) {
+                        throw new Error(`Missing task to review in subsection ${subsection.title}`);
+                    }
+                }
             })
         })
-        return true;
+        return false;
     };
 
     async function createCourse() {
@@ -51,6 +62,9 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
             let allSections = []
             let forumIds = []
             const totalIterations = createCourseSectionsList.reduce((acc, section) => acc + section.subsections.length, 0)
+            const createdActivities = {
+
+            }
             for (const section of createCourseSectionsList) {
                 let allSubsections = []
                 for (const subsection of section.subsections) {
@@ -61,7 +75,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                             description: subsection.questionnaire.attributes.description,
                             Options: subsection.questionnaire.attributes.Options,
                         };
-                        setProgress(progress + ((1 / totalIterations) * 100))
+                        setProgress(progress + 10)
                         const response = await fetch(`${API}/questionnaires`, {
                             method: 'POST',
                             headers: {
@@ -70,8 +84,6 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                             },
                             body: JSON.stringify({ data: questionnaire }),
                         });
-
-
                         const data = await response.json();
 
                         const activity = {
@@ -85,7 +97,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                             evaluable: false,
                             qualifications: null,
                             evaluators: null,
-                            categories: null,
+                            categories: Object.keys(subsection.activity.categories),
                         }
 
                         if (subsection.activity) {
@@ -122,7 +134,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                     } else {
                         const formData = new FormData();
                         let filesData = null
-                        setProgress(progress + ((1 / totalIterations) * 100))
+                        setProgress(progress + 10)
                         if (subsection.files.length > 0) {
                             for (const file of subsection.files) {
                                 formData.append('files', file.originFileObj);
@@ -135,9 +147,13 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                                 body: formData,
                             });
                             filesData = await response.json();
+
                         }
                         if ('id' in subsection.activity) {
                             delete subsection.activity.id;
+                        }
+                        if (subsection.activity.type === 'peerReview') {
+                            subsection.activity.task_to_review = createdActivities[subsection.activity.task_to_review]
                         }
                         const createActivity = await fetch(`${API}/activities`, {
                             method: 'POST',
@@ -145,10 +161,10 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                                 'Content-Type': 'application/json',
                                 Authorization: `Bearer ${getToken()}`,
                             },
-                            body: JSON.stringify({ data: subsection.activity }),
+                            body: JSON.stringify({ data: { ...subsection.activity, title: subsection.title, categories: Object.keys(subsection.activity.categories) } }),
                         })
                         const dataActivity = await createActivity.json();
-
+                        createdActivities[subsection.id] = dataActivity.data.id
                         newSubsection =
                         {
                             title: subsection.title,
@@ -167,7 +183,6 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
 
                         if (subsection?.landscape_photo.length > 0) {
                             formData.delete('files');
-                            console.log(subsection.landscape_photo[0])
                             formData.append('files', subsection.landscape_photo[0].originFileObj);
                             const response = await fetch(`${API}/upload`, {
                                 method: 'POST',
@@ -196,7 +211,6 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                 const newFormData = new FormData();
 
                 if (section?.task?.files.length > 0) {
-                    console.log(section.task)
                     for (const file of section.task.files) {
                         newFormData.append('files', file.originFileObj);
                     }
@@ -352,7 +366,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                     isLoading ?
                         <BeatLoader color='#FFFFFF' size={15} className='mr-2' />
                         :
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="mr-2 w-5 h-5">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 mr-2">
                             <path d="M15.98 1.804a1 1 0 00-1.96 0l-.24 1.192a1 1 0 01-.784.785l-1.192.238a1 1 0 000 1.962l1.192.238a1 1 0 01.785.785l.238 1.192a1 1 0 001.962 0l.238-1.192a1 1 0 01.785-.785l1.192-.238a1 1 0 000-1.962l-1.192-.238a1 1 0 01-.785-.785l-.238-1.192zM6.949 5.684a1 1 0 00-1.898 0l-.683 2.051a1 1 0 01-.633.633l-2.051.683a1 1 0 000 1.898l2.051.684a1 1 0 01.633.632l.683 2.051a1 1 0 001.898 0l.683-2.051a1 1 0 01.633-.633l2.051-.683a1 1 0 000-1.898l-2.051-.683a1 1 0 01-.633-.633L6.95 5.684zM13.949 13.684a1 1 0 00-1.898 0l-.184.551a1 1 0 01-.632.633l-.551.183a1 1 0 000 1.898l.551.183a1 1 0 01.633.633l.183.551a1 1 0 001.898 0l.184-.551a1 1 0 01.632-.633l.551-.183a1 1 0 000-1.898l-.551-.184a1 1 0 01-.633-.632l-.183-.551z" />
                         </svg>
                 }

@@ -19,7 +19,7 @@ export const UploadFiles = ({ fileList, setFileList, listType, maxCount }) => {
                 setError('File must be smaller than 10MB');
                 return false;
             }
-            setError(null); 
+            setError(null);
             return true;
         },
         onChange(info) {

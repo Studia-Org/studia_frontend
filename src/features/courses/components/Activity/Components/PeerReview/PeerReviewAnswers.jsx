@@ -4,7 +4,9 @@ import { Popover, Whisper } from 'rsuite';
 
 function PeerReviewAnswers({ answers, data }) {
 
-    let number = !isNaN(parseFloat(data[0].split("-")[0])) && isFinite(data[0].split("-")[0])
+
+
+    const number = !isNaN(parseFloat(data[0].split("-")[0])) && isFinite(data[0].split("-")[0])
     const speaker = (
         <Popover>
             <div>
@@ -28,9 +30,9 @@ function PeerReviewAnswers({ answers, data }) {
     );
     return (
         answers !== undefined && answers !== null ?
-            <section className="p-10 ">
-                <div className=" flex-1">
-                    <div className='flex'>
+            <section className="px-10 h-full max-h-[600px]">
+                <div className=" h-full max-h-[600px]">
+                    <div className='flex '>
                         <h3 className="w-max font-semibold text-2xl mb-5">Submission feedback!</h3>
                         <Whisper
                             placement="autoHorizontalEnd"
@@ -43,7 +45,7 @@ function PeerReviewAnswers({ answers, data }) {
                             </svg>
                         </Whisper>
                     </div>
-                    <div className="grid font-semibold  grid-cols-2 sm:grid-cols-4 md:grid-cols-5  shadow-lg rounded-[14px] sm:border-2 sm:border-gray-700">
+                    <div className="grid font-semibold h-[calc(100%-4rem)] max-h-[600px] grid-cols-2 sm:grid-cols-4 md:grid-cols-5  shadow-lg rounded-[14px] sm:border-2 sm:border-gray-700">
 
                         {Object.keys(answers).map((criterion, index) => {
                             const range = Object.keys(answers[criterion])[0];
@@ -55,10 +57,10 @@ function PeerReviewAnswers({ answers, data }) {
 
                             return (
                                 <>
-                                    <div className={`flex sm:min-h-[70px] items-center p-4  bg-purple-300 text-gray-900 ${isLastRow ? "" : "sm:border-b-2 sm:border-gray-700"}  ${cornerClasses}`}>{criterion}</div>
-                                    <div className={`${isFirstRow ? "rounded-tr-xl" : ""}  bg-purple-300  ${isLastRow ? "" : "sm:border-b-2 sm:border-gray-700"}
+                                    <div className={`flex sm:min-h-[70px] items-center p-4 break-all	 bg-purple-300 text-gray-900 ${isLastRow ? "" : "sm:border-b-2 sm:border-gray-700"}  ${cornerClasses}`}>{criterion}</div>
+                                    <div className={`${isFirstRow ? "rounded-tr-xl" : ""} break-all	  bg-purple-300  ${isLastRow ? "" : "sm:border-b-2 sm:border-gray-700"}
                                                 sm:bg-white sm:rounded-none flex sm:min-h-[70px] items-center p-4  text-gray-900`}>{range}</div>
-                                    <div className={`col-span-2 md:col-span-3 sm:min-h-[70px]
+                                    <div className={`col-span-2 md:col-span-3 sm:min-h-[70px]  break-all	
                                                 flex items-center p-4 h-full  bg-white sm:bg-purple-300 ${isFirstRow ? "sm:rounded-tr-xl" : ""}
                                                 ${isLastRow ? "rounded-bl-xl sm:rounded-bl-none rounded-br-xl" : "border-b-2 border-gray-700"}`}>{feedback}</div>
                                 </>

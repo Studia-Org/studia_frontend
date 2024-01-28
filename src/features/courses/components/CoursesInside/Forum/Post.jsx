@@ -18,7 +18,7 @@ import {
 
 const markdownConverter = (text) => {
     return (
-        <div className='prose max-w-none text-base'>
+        <div className='text-base prose max-w-none'>
             <ReactMarkdown>{text}</ReactMarkdown>
         </div>
     )
@@ -130,33 +130,33 @@ export const Post = ({ post, setAllForums, forumId }) => {
     return (
         <>
             {isPostNew && <Badge.Ribbon text="New" />}
-            <div className='bg-white pb-12 rounded-lg shadow-md pt-10 text-left mb-7'>
+            <div className='pt-10 pb-12 text-left bg-white rounded-lg shadow-md mb-7'>
                 <Accordion allowMultiple>
                     <AccordionItem>
-                        <p className='ml-7 font-semibold text-2xl'>{post.attributes.title}</p>
-                        <div className='ml-12 flex mt-7 '>
+                        <p className='text-2xl font-semibold ml-7'>{post.attributes.title}</p>
+                        <div className='flex ml-12 mt-7 '>
                             <img className='w-12 rounded-lg' src={post.attributes.autor.data.attributes.profile_photo.data.attributes.url} alt="" />
                             <div className='flex flex-col ml-3 text-sm'>
-                                <div className='flex'>
+                                <div className='flex gap-x-2'>
                                     <p className='text-gray-800'>{post.attributes.autor.data.attributes.name}</p>
                                     <Tag User={post.attributes.autor.data.attributes} />
                                 </div>
                                 <p className='text-gray-400'>{timeAgo}</p>
                             </div>
                         </div>
-                        <div className='ml-12 mt-6 prose max-w-none text-sm'>
+                        <div className='mt-6 ml-12 text-sm prose max-w-none'>
                             {markdownConverter(post.attributes.content)}
                         </div>
-                        <div className='flex mt-10 ml-12 items-center'>
-                            <button className='bg-gray-100 py-2 rounded-lg inline-block border'>
+                        <div className='flex items-center mt-10 ml-12'>
+                            <button className='inline-block py-2 bg-gray-100 border rounded-lg'>
                                 <AccordionButton>
                                     <div className='flex items-center'>
                                         <FiMessageSquare className='mx-4' />
-                                        <p className=' text-gray-700 mr-4'>View Responses</p>
+                                        <p className='mr-4 text-gray-700 '>View Responses</p>
                                     </div>
                                 </AccordionButton>
                             </button>
-                            <div className=' ml-auto mr-12'>
+                            <div className='ml-auto mr-12 '>
                                 <AvatarGroup stack>
                                     {usersSet
                                         .filter((user, i) => i < 3)
@@ -177,7 +177,7 @@ export const Post = ({ post, setAllForums, forumId }) => {
                                     <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 ">
                                         <div className="px-4 py-2 bg-white rounded-t-lg ">
                                             <label for="comment" className="sr-only">Your comment</label>
-                                            <textarea onChange={handleChangeComment} id="comment" rows="4" value={comment} className="w-full  text-sm text-gray-900 bg-white p-3 " placeholder="Write a comment..." required></textarea>
+                                            <textarea onChange={handleChangeComment} id="comment" rows="4" value={comment} className="w-full p-3 text-sm text-gray-900 bg-white " placeholder="Write a comment..." required></textarea>
                                         </div>
                                         <div className="flex items-center justify-between px-3 py-2 border-t ">
                                             <Button loading={loading} type="button" onClick={() => onClickPost(post)} className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-indigo-500 rounded-lg focus:ring-4 focus:ring-blue-200  hover:bg-blue-800">
@@ -186,7 +186,7 @@ export const Post = ({ post, setAllForums, forumId }) => {
                                         </div>
                                     </div>
                                 </form>
-                                <p className="ml-auto text-xs text-gray-500 mb-5">Remember, contributions to this topic should follow our <a href="#" className="text-blue-600 hover:underline">Community Guidelines</a>.</p>
+                                <p className="mb-5 ml-auto text-xs text-gray-500">Remember, contributions to this topic should follow our <a href="#" className="text-blue-600 hover:underline">Community Guidelines</a>.</p>
                                 <hr />
                                 <div className='mt-5 ml-10 space-y-5'>
                                     {(post.attributes?.forum_answers?.data?.sort((a, b) => new Date(b.attributes.createdAt) - new Date(a.attributes.createdAt)))?.map(renderResponses)}

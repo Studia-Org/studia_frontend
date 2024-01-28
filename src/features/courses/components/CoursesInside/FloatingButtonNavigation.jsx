@@ -33,9 +33,11 @@ function FloatingButtonNavigation({ whisper, allForums, professor, courseContent
                             }}
                         />
                         {allForums[0]?.attributes &&
-                            <ForumClickable posts={allForums[0].attributes.posts.data} setForumFlag={setForumFlag} whisper={whisper} />
+                            <section className='ml-2'>
+                                <ForumClickable posts={allForums[0].attributes.posts.data} setForumFlag={setForumFlag} whisper={whisper} />
+                            </section>
                         }
-                        {professor.attributes && <ProfessorData professor={professor} evaluatorFlag={false} />}
+                        {professor.attributes && <section className='ml-10'> <ProfessorData professor={professor} evaluatorFlag={false} /></section>}
                     </Popover>}>
                 <div className={`bg-indigo-700 rounded-full w-[64px] h-[64px] p-[14px] cursor-pointer`}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}

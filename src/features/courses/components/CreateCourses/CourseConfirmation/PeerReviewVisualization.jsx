@@ -2,7 +2,6 @@ import React from 'react'
 import Rubrica from '../../Activity/Components/PeerReview/Rubrica'
 
 export const PeerReviewVisualization = ({ activity }) => {
-    console.log(activity)
     return (
         <div>
             <div className='relative flex items-center mb-6 bg-white rounded-md p-5 shadow-md mt-5'>

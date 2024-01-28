@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IconContext } from "react-icons";
 import { Link } from "react-router-dom";
 
@@ -37,6 +37,13 @@ export const Sidebar = (props) => {
   } else {
     iconProps.courses = { color: "white", size: "25px" };
   }
+
+  useEffect(() => {
+    setShowSidebar(document.location.pathname !== '/app/courses/create');
+  }, [document.location.pathname]);
+  const [showSidebar, setShowSidebar] = useState(document.location.pathname !== '/app/courses/create');
+  console.log(showSidebar);
+
   function handleClick() {
     const sidebar = document.getElementById("default-sidebar");
     if (sidebar === null || sidebar === undefined) return;
@@ -79,8 +86,8 @@ export const Sidebar = (props) => {
         aria-controls="default-sidebar"
         type="button"
         onClick={handleClick}
-        className="z-10 absolute items-center top-20 p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg xl:hidden hover:bg-gray-100 
-                focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+        className={`absolute z-10 items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg top-8 xl:${!showSidebar ? "block" : "hidden"} hover:bg-gray-100 
+        focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600`}
       >
         <span className="sr-only">Open sidebar</span>
         <svg
@@ -102,11 +109,12 @@ export const Sidebar = (props) => {
 
       <aside
         id="default-sidebar"
-        className="absolute flex min-h-screen xl:min-h-[calc(100vh-8rem)] bg-white z-[1000] pl-8  xl:pl-16 top-5 left-0 w-80 xl:top-32 transition-transform -translate-x-full xl:translate-x-0"
+        className={`absolute flex min-h-screen xl:min-h-[calc(100vh-8rem)] bg-white z-[1000] pl-8 
+         xl:pl-16 top-5 left-0 w-80 xl:top-32 transition-transform -translate-x-full xl:${showSidebar ? "translate-x-0" : "-translate-x-full"}`}
         aria-label="Sidebar"
       >
         <div className="min-h-[100%]">
-          <ul className="space-y-96 font-medium w-48 ml-3 xl:ml-0 ">
+          <ul className="w-48 ml-3 font-medium space-y-96 xl:ml-0 ">
             <Link to={"/app/courses"} style={{ textDecoration: "none" }}>
               <li
                 className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all  rounded-lg ${Object.keys(iconProps.courses).length > 0
@@ -207,7 +215,7 @@ export const Sidebar = (props) => {
                   : ""
                   }`}
               >
-                <span className="flex align-middle font-semibold">
+                <span className="flex font-semibold align-middle">
                   <IconContext.Provider value={iconProps.qualifications}>
                     <FiCheckCircle size={25} />
                   </IconContext.Provider>

@@ -35,7 +35,6 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
                 section.id === sectionToEdit.id ? sectionToEdit : section
             );
 
-            console.log(updatedSections);
             return updatedSections;
         })
         setEditSectionFlag(false);

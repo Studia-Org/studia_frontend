@@ -4,7 +4,7 @@ import RadioGroup, { useRadioGroup } from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
 import { motion } from "framer-motion";
 import { useAuthContext } from "../../../../context/AuthContext";
-import { message, Popconfirm } from "antd";
+import { Button, message, Popconfirm } from "antd";
 import { API } from "../../../../constant";
 import { getToken } from "../../../../helpers";
 import Swal from 'sweetalert2'
@@ -21,6 +21,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
   const [groupValues, setGroupValues] = useState({});
   const questionnaireAnswerData = answers.filter((answer) => answer.questionnaire.id === questionnaire.id);
   const [completed, setCompleted] = useState(questionnaireAnswerData.length > 0);
+  const [sendingData, setSendingData] = useState(false);
   const questionsPerPage = 5;
   const totalQuestions = questionnaire.attributes.Options.questionnaire.questions.length;
   const totalPages = Math.ceil(totalQuestions / questionsPerPage);
@@ -109,82 +110,91 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
 
 
   const handleSubmission = async () => {
-    if (Object.keys(groupValues).length === totalQuestions) {
-      const confirmed = await confirmSubmission();
-      if (confirmed) {
-        const formattedObject = {
-          responses: Object.keys(groupValues).map(questionIndex => ({
-            answer: groupValues[questionIndex],
-            question: questionnaire.attributes.Options.questionnaire.questions[questionIndex].question
-          }))
-        };
-        const hour = Math.floor(minutes / 60) < 10 ? "0" + Math.floor(minutes / 60) : Math.floor(minutes / 60)
-        const minutesLeft = minutes % 60;
-        const minutesFormat = minutesLeft < 10 ? "0" + minutesLeft : minutesLeft
-        const secondsFormat = seconds < 10 ? "0" + seconds : seconds
-        const timeToComplete = `${hour}:${minutesFormat}:${secondsFormat}:000`
+    try {
+      setSendingData(true);
 
-        const userData = {
-          user: user.id,
-          questionnaire: questionnaire.id,
-          responses: formattedObject,
-          finished: true,
-          timeToComplete: timeToComplete
-        };
-
-
-        const response = await fetch(`${API}/user-response-questionnaires`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${getToken()}`,
-          },
-          body: JSON.stringify({ data: userData })
-        });
-        if (response.ok) {
-          const newObject = {
-            subsections_completed: [
-              ...user.subsections_completed.map(subsection => ({ id: subsection.id })),
-              { id: subsectionID }
-            ]
+      if (Object.keys(groupValues).length === totalQuestions) {
+        const confirmed = await confirmSubmission();
+        if (confirmed) {
+          const formattedObject = {
+            responses: Object.keys(groupValues).map(questionIndex => ({
+              answer: groupValues[questionIndex],
+              question: questionnaire.attributes.Options.questionnaire.questions[questionIndex].question
+            }))
           };
-          const response3 = await fetch(`${API}/questionnaires/${questionnaire.id}`, {
-            method: 'PUT',
+          const hour = Math.floor(minutes / 60) < 10 ? "0" + Math.floor(minutes / 60) : Math.floor(minutes / 60)
+          const minutesLeft = minutes % 60;
+          const minutesFormat = minutesLeft < 10 ? "0" + minutesLeft : minutesLeft
+          const secondsFormat = seconds < 10 ? "0" + seconds : seconds
+          const timeToComplete = `${hour}:${minutesFormat}:${secondsFormat}:000`
 
+          const userData = {
+            user: user.id,
+            questionnaire: questionnaire.id,
+            responses: formattedObject,
+            finished: true,
+            timeToComplete: timeToComplete
+          };
 
-          });
-          const response2 = await fetch(`${API}/users/${user.id}`, {
-            method: 'PUT',
+          const response = await fetch(`${API}/user-response-questionnaires`, {
+            method: 'POST',
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${getToken()}`,
             },
-            body: JSON.stringify(newObject)
+            body: JSON.stringify({ data: userData })
           });
-          const temp = await response2.json();
-          if (response2.ok) {
-            Swal.fire(
-              'Completed!',
-              'The questionnaire has been completed',
-              'success'
-            ).then(() => {
-              window.location.reload();
-            })
-          } else {
-            message.error('Error al actualizar el usuario:', response2.statusText);
-          }
-        }
-        else {
-          Swal.fire(
-            'Error!',
-            'Error sending the questionnaire, please try again later',
-            'error'
-          )
-        }
+          if (response.ok) {
+            const newObject = {
+              subsections_completed: [
+                ...user.subsections_completed.map(subsection => ({ id: subsection.id })),
+                { id: subsectionID }
+              ]
+            };
+            const response3 = await fetch(`${API}/questionnaires/${questionnaire.id}`, {
+              method: 'PUT',
 
+
+            });
+            const response2 = await fetch(`${API}/users/${user.id}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${getToken()}`,
+              },
+              body: JSON.stringify(newObject)
+            });
+            const temp = await response2.json();
+            if (response2.ok) {
+              Swal.fire(
+                'Completed!',
+                'The questionnaire has been completed',
+                'success'
+              ).then(() => {
+                window.location.reload();
+              })
+            } else {
+              message.error('Error al actualizar el usuario:', response2.statusText);
+            }
+          }
+          else {
+            Swal.fire(
+              'Error!',
+              'Error sending the questionnaire, please try again later',
+              'error'
+            )
+          }
+
+        }
+      } else {
+        message.error('Please, answer all the questions')
       }
-    } else {
-      message.error('Please, answer all the questions')
+    }
+    catch (error) {
+      console.log(error)
+    }
+    finally {
+      setSendingData(false);
     }
   }
 
@@ -290,7 +300,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
                     <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} >
                       {initialValue.options.map((option, optionIndex) => (
                         <div className='flex items-center gap-2 space-y-2'>
-                          <div className='rounded-full w-5 h-5 border-2 border-gray-400 '> </div>
+                          <div className='w-5 h-5 border-2 border-gray-400 rounded-full '> </div>
                           <input type="text" value={option} onChange={(e) => {
                             const updatedOptions = initialValue.options.map((o, index) =>
                               index === optionIndex ? e.target.value : o
@@ -310,7 +320,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
                   </div>
             ) : (
               user.role_str === "student" ?
-                <div key={absoluteIndex} className='mt-5 flex w-full'>
+                <div key={absoluteIndex} className='flex w-full mt-5'>
                   {
                     questionnaireAnswerData.length > 0 ?
                       <TextField
@@ -336,7 +346,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
                   }
                 </div>
                 :
-                <div key={absoluteIndex} className='mt-5 flex w-full'>
+                <div key={absoluteIndex} className='flex w-full mt-5'>
                   <TextField
                     id="outlined-basic"
                     label=""
@@ -365,7 +375,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
         animate="visible"
         variants={list}
       >
-        <div className="space-y-5 mt-5 ">{renderQuestionsForPage()}</div>
+        <div className="mt-5 space-y-5 ">{renderQuestionsForPage()}</div>
         {
           (enableEdit === true && user?.role_str !== 'student' && (totalPages === 0 || currentPage === totalPages)) && (
             <AddQuestionButton setCourseSubsectionQuestionnaire={setCourseSubsectionQuestionnaire} />
@@ -373,7 +383,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
         }
       </motion.ul>
       {isLastPage && (
-        <div className="mt-5 flex justify-end">
+        <div className="flex justify-end mt-5">
           {
             completed === false &&
             <>
@@ -381,11 +391,10 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
                 user.role_str === 'student' && (
                   <>
                     <span className='inline-flex w-[60px] text-gray-500'>{minutes}:{seconds < 10 ? "0" + seconds : seconds}</span>
-                    <button onClick={handleSubmission}
-                      className="bg-blue-500 text-white font-semibold py-2 px-4 
-                              rounded ml-auto hover:bg-blue-800 duration-150">
+                    <Button type='primary' loading={sendingData} onClick={handleSubmission}
+                      className="ml-auto ">
                       Submit
-                    </button>
+                    </Button>
                   </>
                 )
               }
