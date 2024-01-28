@@ -149,7 +149,6 @@ const CourseInside = () => {
         subsectionsCompleted
       );
       if (firstSubsection) {
-        console.log(firstSubsection?.subseccion?.attributes?.activity?.data?.attributes?.type)
         if (firstSubsection?.subseccion?.attributes?.activity?.data?.attributes?.type === 'questionnaire') {
           setCourseSubsection(firstSubsection.subseccion);
           setQuestionnaireFlag(true);

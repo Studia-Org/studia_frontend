@@ -44,7 +44,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
     const dataCopy = formData;
     dataCopy.append('files', file);
     setFormData(dataCopy);
-    console.log(dataCopy.getAll('files').length);
     document.getElementById('submit-button-activity').disabled = false;
   }
 
@@ -135,9 +134,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
           delivered_data: new Date(),
         }
       };
-      console.log(activityData?.delivered && !evaluated);
       if (activityData.delivered && !evaluated) {
-        console.log('put');
         response2 =
           await fetch(`${API}/qualifications/${idQualification}`, {
             method: 'PUT',
@@ -149,7 +146,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
           });
       }
       else if (!evaluated) {
-        console.log('post');
         response2 =
           await fetch(`${API}/qualifications`, {
             method: 'POST',
@@ -168,7 +164,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   }
   async function sendData() {
     try {
-      console.log(formData);
       setUploadLoading(true);
       const response = await fetch(`${API}/upload`, {
         method: 'POST',
@@ -338,7 +333,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
       message.error('Something went wrong: ', error);
     }
   };
-  console.log(activityData);
   return (
     <div className='flex max-w-[calc(100vw)] flex-col 1.5xl:flex-row items-start 1.5xl:items-start 1.5xl:space-x-24 p-5 sm:p-10'>
       <div className='1.5xl:w-2/4 lg:w-10/12 w-full'>
@@ -513,7 +507,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                 onremovefile={(err, item) => {
                   if (!err) {
                     const dataCopy = formData;
-                    console.log(formData.getAll('files').length);
                     dataCopy.forEach((value, key) => {
                       if (value.name === item.file.name) {
                         dataCopy.delete(key);

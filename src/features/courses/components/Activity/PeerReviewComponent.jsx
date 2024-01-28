@@ -52,7 +52,6 @@ export default function PeerReviewComponent({ activityData }) {
                     return res.json()
 
                 } else {
-                    console.log()
                     throw new Error(res.status)
                 }
             }).then(data => {
