@@ -15,12 +15,12 @@ function MainScreen({ qualificationIds, activityData, setShowEvaluate, data, use
     const evaluated = activityData.qualification ? true : false;
     const { courseId } = useParams();
     const USER_OBJECTIVES = [...new Set(user?.user_objectives?.map((objective) => objective.categories.map((category) => category)).flat() || [])];
+
     /////////// coger user index selected////////////////   
     const PeerReview = activityData?.peer_review_qualifications.data[userIndexSelected]
 
     const usersToCorrect = activityData?.peer_review_qualifications.data
         .map((peerReview) => peerReview.attributes.user.data)
-    if (activityData.user.data.attributes.PeerReviewAnswers.data === undefined) return null
 
     const usersWithAnswers = activityData?.user.data.attributes.PeerReviewAnswers.data
         .filter((answer) =>
@@ -33,6 +33,8 @@ function MainScreen({ qualificationIds, activityData, setShowEvaluate, data, use
     const answers = activityData?.PeerReviewAnswers.data // answers que nos han hecho los otros usuarios
     const deadLine = new Date(activityData?.activity?.data?.attributes?.deadline)
     const overpassDeadLine = deadLine < new Date() && user?.role_str === 'student'
+    console.log(answers)
+
 
     return (
         <div className={`flex ${overpassDeadLine || userIndexSelected === null ? `flex-col h-full` : ""} content-start items-start 1.5xl:justify-between flex-wrap space-y-6 `}>
@@ -49,8 +51,8 @@ function MainScreen({ qualificationIds, activityData, setShowEvaluate, data, use
             {userIndexSelected !== null && PeerReview !== undefined && PeerReview !== null && deadLine > new Date() ?
                 <section className="flex-1 flex md3:justify-center min-w-[250px] md3:ms-3 px-5">
                     <div className="max-w-[70%] flex-1">
-                        <h3 className='font-semibold text-2xl'>Peer Review</h3>
-                        <p className='text-lg mb-3 mt-5'>Correct {PeerReview.attributes.user.data.attributes.username}'s task!</p>
+                        <h3 className='text-2xl font-semibold'>Peer Review</h3>
+                        <p className='mt-5 mb-3 text-lg'>Correct {PeerReview.attributes.user.data.attributes.username}'s task!</p>
                         {PeerReview?.attributes?.file?.data?.map(renderFiles)}
                     </div>
                 </section> : null
@@ -58,27 +60,35 @@ function MainScreen({ qualificationIds, activityData, setShowEvaluate, data, use
             {
                 overpassDeadLine ?
                     <section className="flex flex-1 min-w-[100vw] lg:min-w-[75vw] max-w-[90vw] pb-10">
-                        <div className="w-full h-full max-h-[600px]">
-                            <Carousel slide={false}
-                                indicators={answers.length > 1}
-                                leftControl={answers.length === 1 ? <div></div> : <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" ariaHidden="true"
-                                    className="w-10 h-10 p-2 mt-10 text-black bg-[#ffffff80] rounded-full" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"></path></svg>}
-                                rightControl={answers.length === 1 ? <div></div> : <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" ariaHidden="true"
-                                    className="w-10 h-10 p-2 mt-10 text-black bg-[#ffffff80] rounded-full" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"></path></svg>}>
-                                {
-                                    answers.map((answer, index) => {
-                                        return (
-                                            <PeerReviewAnswers answers={answer.attributes.Answers} data={data.Criteria} />
-                                        )
-                                    })
-                                }
-                            </Carousel>
-                        </div>
+                        {
+                            answers.length === 0 ?
+                                <div className="flex flex-col items-center flex-1">
+                                    <h3 className="text-2xl ">Your partner didn't give you a review :(</h3>
+                                </div>
+                                :
+                                <div className="w-full h-full max-h-[600px]">
+                                    <Carousel slide={false}
+                                        indicators={answers.length > 1}
+                                        leftControl={answers.length === 1 ? <div></div> : <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" ariaHidden="true"
+                                            className="w-10 h-10 p-2 mt-10 text-black bg-[#ffffff80] rounded-full" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7"></path></svg>}
+                                        rightControl={answers.length === 1 ? <div></div> : <svg stroke="currentColor" fill="none" strokeWidth="2" viewBox="0 0 24 24" ariaHidden="true"
+                                            className="w-10 h-10 p-2 mt-10 text-black bg-[#ffffff80] rounded-full" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7"></path></svg>}>
+                                        {
+                                            answers.map((answer, index) => {
+                                                return (
+                                                    <PeerReviewAnswers answers={answer.attributes.Answers} data={data.Criteria} />
+                                                )
+                                            })
+                                        }
+                                    </Carousel>
+                                </div>
+                        }
+
                     </section>
                     :
                     userIndexSelected === null ?
-                        <section className="flex flex-1 flex-wrap w-full gap-x-10 ">
-                            <div className="my-2 px-5 flex flex-col">
+                        <section className="flex flex-wrap flex-1 w-full gap-x-10 ">
+                            <div className="flex flex-col px-5 my-2">
                                 <h3 className="mb-2"> You have to review {usersToPair} colleagues to finish the activity</h3>
                                 <h3 >Left to review: {usersToPair - usersWithAnswers.length} </h3>
                                 {usersToCorrect.map((user, index) => {
@@ -108,21 +118,19 @@ function MainScreen({ qualificationIds, activityData, setShowEvaluate, data, use
                         </section>
                         :
                         <>
-                            <div className="mt-2 min-w-full max-w-full overflow-x-hidden px-5">
+                            <div className="max-w-full min-w-full px-5 mt-2 overflow-x-hidden">
                                 <Rubrica data={data} />
                             </div>
-                            <div className="px-5 pb-5 flex gap-x-3">
+                            <div className="flex px-5 pb-5 gap-x-3">
                                 {
                                     userIndexSelected !== null && usersToPair > 1 &&
                                     <Button danger onClick={() => resetUser()}
-                                        className=" gap-1 hover:scale-95 duration-200 
-                                          font-bold ">
+                                        className="gap-1 font-bold duration-200 hover:scale-95">
                                         Change user
                                     </Button>
                                 }
                                 <Button type="primary" onClick={() => setShowEvaluate(prev => !prev)}
-                                    className="flex items-center flex-wrap gap-1 hover:translate-x-2 duration-200 
-                                      font-bold">
+                                    className="flex flex-wrap items-center gap-1 font-bold duration-200 hover:translate-x-2">
                                     Evaluate
                                     <svg viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
