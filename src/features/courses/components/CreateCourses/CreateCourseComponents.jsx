@@ -128,6 +128,7 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
           Tags *
         </label>
         <Select
+          size='large'
           mode="tags"
           style={{
             width: '100%',
