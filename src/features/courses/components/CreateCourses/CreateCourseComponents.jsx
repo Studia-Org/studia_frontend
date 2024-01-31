@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/filepondStyles.css'
-import { message } from "antd";
+import { message, Select } from "antd";
 import 'react-tagsinput/react-tagsinput.css'
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import { CreateCourseSectionsList } from './CourseSections/CreateCourseSectionsList';
@@ -57,7 +57,7 @@ const CreateCourseButtons = (createCourseOption, setCreateCourseOption, visibili
               cancelText={<span className="">No</span>}
               okButtonProps={{ className: 'bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5' }}
             >
-              <Button type="button" className="text-white duration-150  bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-5 text-center inline-flex items-center mr-2 ">
+              <Button type="button" className="inline-flex items-center px-4 py-5 mr-2 text-sm font-medium text-center text-white duration-150 bg-gray-800 rounded-lg hover:bg-gray-900 focus:ring-4 focus:outline-none ">
                 Cancel
               </Button>
             </Popconfirm> :
@@ -99,8 +99,8 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
   };
 
   return (
-    <motion.div className='w-2/4 flex flex-col' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
-      <p className='font-normal text-sm text-gray-400 mt-5 mb-5'>First, give us some information about the new course</p>
+    <motion.div className='flex flex-col w-2/4' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
+      <p className='mt-5 mb-5 text-sm font-normal text-gray-400'>First, give us some information about the new course</p>
       <label htmlFor="base-input" className="block mb-2 text-sm font-medium text-gray-900">
         Course name *
       </label>
@@ -112,7 +112,7 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
         onChange={(e) => handleChange('courseName', e.target.value)}
       />
 
-      <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 mt-8">
+      <label htmlFor="message" className="block mt-8 mb-2 text-sm font-medium text-gray-900">
         Description *
       </label>
       <textarea
@@ -123,15 +123,23 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
         onChange={(e) => handleChange('description', e.target.value)}
       />
       <SelectProfessor setCourseBasicInfo={setCourseBasicInfo} />
-      <div className='font-normal text-sm'>
-        <label htmlFor="message" className="block mb-4 text-sm font-medium text-gray-900 mt-8">
+      <div className='text-sm font-normal'>
+        <label htmlFor="message" className="block mt-8 mb-4 text-sm font-medium text-gray-900">
           Tags *
         </label>
-        <TagsInput value={courseBasicInfo.tags} onChange={(e) => handleChange('tags', e)} />
+        <Select
+          mode="tags"
+          style={{
+            width: '100%',
+          }}
+          placeholder="Enter course tags"
+          value={courseBasicInfo.tags}
+          onChange={(e) => handleChange('tags', e)}
+        />
       </div>
 
-      <div className='flex mt-8 justify-between'>
-        <div className='font-medium w-full'>
+      <div className='flex justify-between mt-8'>
+        <div className='w-full font-medium'>
           <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 ">
             Cover image *
           </label>
@@ -187,9 +195,9 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
   }
 
   return (
-    <motion.div className='w-2/4 flex flex-col' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
-      <p className='font-normal text-sm text-gray-400 mt-5 mb-5'>It's time to build your course, construct the sections and define the sequence! 🚀</p>
-      <div className='bg-white rounded-md shadow-md p-5 font-medium text-base mb-5'>
+    <motion.div className='flex flex-col w-2/4' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
+      <p className='mt-5 mb-5 text-sm font-normal text-gray-400'>It's time to build your course, construct the sections and define the sequence! 🚀</p>
+      <div className='p-5 mb-5 text-base font-medium bg-white rounded-md shadow-md'>
         <div className='flex items-center'>
           <h3 className=''>Course sections</h3>
           {
@@ -216,7 +224,7 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
               className="bg-gray-50 border border-gray-300 text-gray-900 font-normal text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " />
             <button
               onClick={() => createSection()}
-              className='text-sm rounded-md text-white bg-gray-800 p-2 mt-4 '>
+              className='p-2 mt-4 text-sm text-white bg-gray-800 rounded-md '>
               Create
             </button>
           </div>
@@ -244,7 +252,7 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
               } />
             </div>
         }
-        <p className='text-xs font-normal  text-gray-400 mt-8'>Drag and drop to reorder your sections</p>
+        <p className='mt-8 text-xs font-normal text-gray-400'>Drag and drop to reorder your sections</p>
       </div>
       {CreateCourseButtons(createCourseOption, setCreateCourseOption)}
     </motion.div>
@@ -280,7 +288,7 @@ export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption, 
               task={task}
             />
           </div>
-          <div style={{ width: '45rem' }} className=' ml-auto items-center flex flex-col'>
+          <div style={{ width: '45rem' }} className='flex flex-col items-center ml-auto '>
             <ButtonCreateCourse createCourseSectionsList={createCourseSectionsList} courseBasicInfo={courseBasicInfo} />
             <div className='w-full'>
               <AccordionCourse
@@ -316,7 +324,7 @@ export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption, 
             </button>
           </> :
           <>
-            <div className='flex justify-center items-center w-full mt-20'>
+            <div className='flex items-center justify-center w-full mt-20'>
               <div class="text-center">
                 <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                   <path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
