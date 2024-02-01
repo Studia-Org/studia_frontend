@@ -1,13 +1,10 @@
 import { API } from "../constant";
 
-export async function fetchAverageCourse({ courseId, userId = null }) {
+export async function fetchAverageCourse({ courseId, user }) {
+    let userId = user.id;
+    console.log(user.qualifications);
     try {
-        const response = await fetch(`${API}/courses/${courseId}?` +
-            `populate[sections][fields][0]=id&` +
-            `populate[sections][populate][activity][fields][0]=ponderation&` +
-            `populate[sections][populate][activity][populate][qualifications][fields][0]=qualification&` +
-            `populate[sections][populate][activity][populate][qualifications][populate][user][fields][0]=id&` +
-            `populate[sections][populate][subsections][fields][0]=id`);
+        const response = await fetch(`${API}/courses/${courseId}?populate=sections.subsections.activity.qualifications`);
 
         const data = await response.json();
         const sectionData = data.data.attributes.sections.data;
@@ -16,51 +13,80 @@ export async function fetchAverageCourse({ courseId, userId = null }) {
             return { averageMainActivity: 0, averageMainActivityUser: 0 };
         }
 
-        const ponderations = sectionData
-            .flatMap(section => section.attributes.activity.data.attributes.ponderation)
-            .filter(ponderation => ponderation !== null);
+        const averagesMainActivity = [];
+        const totalQualifications = {};
 
-        let averagesMainActivity = [];
-        let totalQualifications = {}
-        sectionData.forEach(section => {
-            if (section.attributes.activity.data.attributes.qualifications.data.length === 0) {
-                averagesMainActivity.push(0);
-                return;
-            }
-            const qualifications = section.attributes.activity.data.attributes.qualifications.data
-                .map(qualification => qualification.attributes.qualification)
-                .filter(qualification => qualification !== null);
-            qualifications.forEach(qualification => {
-                const rounded = Math.round(qualification);
-                totalQualifications[rounded] = totalQualifications[rounded] + 1 || 1;
-            })
-            let averageMainActivity = qualifications.reduce((acc, qualification) => acc + qualification, 0);
-            if (qualifications.length !== 0) averagesMainActivity.push(averageMainActivity /= qualifications.length)
-        })
+        sectionData.forEach((section) => {
+            const subsections = section.attributes.subsections.data;
 
-        averagesMainActivity.forEach((averageMainActivity, index) => {
-            averagesMainActivity[index] = averageMainActivity * ponderations[index]
-        })
+            subsections.forEach((subsection) => {
+                const activity = subsection.attributes.activity.data?.attributes;
+                if (activity) {
+                    const ponderation = activity.ponderation || 0;
+                    const qualifications = activity.qualifications.data.map(
+                        (qualification) => qualification.attributes.qualification
+                    );
+                    qualifications.forEach((qualification) => {
+                        const rounded = Math.round(qualification);
+                        totalQualifications[rounded] = (totalQualifications[rounded] || 0) + 1;
+                    });
+                    const averageMainActivity =
+                        qualifications.reduce((acc, qualification) => acc + qualification, 0) / Math.max(qualifications.length, 1);
+                    averagesMainActivity.push(averageMainActivity * ponderation);
+                }
+            });
+        });
 
 
-        const averageMainActivity = averagesMainActivity.reduce((acc, averageMainActivity) => acc + averageMainActivity, 0);
+
+        const totalPonderation = sectionData.reduce((acc, section) => {
+            const subsections = section.attributes.subsections.data;
+            subsections.forEach((subsection) => {
+                if (subsection.attributes && subsection.attributes.activity.data?.attributes) {
+                    const ponderation = subsection.attributes.activity.data.attributes.ponderation || 0;
+                    acc += ponderation;
+                }
+            });
+            return acc;
+        }, 0);
+
+        const averageMainActivity = averagesMainActivity.reduce((acc, value) => acc + value, 0) / Math.max(totalPonderation, 1);
 
         if (userId === null) {
             return { averageMainActivity };
         }
-        const userQualifications = sectionData
-            .flatMap(section => section.attributes.activity.data.attributes.qualifications.data)
-            .filter(qualification => qualification.attributes.user.data.id === userId)
-            .map(qualification => qualification.attributes.qualification)
-            .filter(qualification => qualification !== null);
+        let userQualifications = [];
+        sectionData.forEach((section) => {
+            const subsections = section.attributes.subsections.data;
+            subsections.forEach((subsection) => {
+                const activity = subsection.attributes.activity.data?.attributes;
+                if (activity) {
+                    const ponderation = activity.ponderation || 0;
+                    user.qualifications.forEach((qualification) => {
+                        activity.qualifications.data.forEach((qualificationActivity) => {
+                            if (qualificationActivity.id === qualification.id) {
+                                userQualifications.push(qualification.qualification * (ponderation / 100));
+                            }
+                        })
+                    })
+                }
+            });
+        })
+        console.log(userQualifications);
+        const sumAllQualifications = userQualifications.reduce((acc, qualification) => acc + qualification, 0);
+        console.log(sumAllQualifications);
+        const averageMainActivityUser =
+            userQualifications.reduce((acc, qualification) => acc + qualification, 0) / Math.max(sectionData.length, 1);
 
-        userQualifications.forEach((qualification, index) => userQualifications[index] = qualification * ponderations[index]);
-        const averageMainActivityUser = userQualifications.reduce((acc, qualification) => acc + qualification, 0);
-
-        return { averageMainActivity, averageMainActivityUser, totalQualifications };
+        return {
+            averageMainActivity: parseFloat(averageMainActivity.toFixed(2)),
+            averageMainActivityUser: parseFloat(averageMainActivityUser.toFixed(2)),
+            totalQualifications
+        };
 
     } catch (error) {
-        console.error(courseId);
+        console.error(error);
         return { averageMainActivity: 0, averageMainActivityUser: 0, totalQualifications: 0 };
     }
 }
+
