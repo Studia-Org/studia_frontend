@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import MainScreen from "./Components/PeerReview/MainScreen";
+import MainScreen from "./Components/PeerReview/MainScreen/MainScreen";
 import EvaluateScreen from "./Components/PeerReview/EvaluateScreen";
 import { API } from "../../../../constant";
 import { getToken } from "../../../../helpers";
@@ -21,7 +21,7 @@ export default function PeerReviewComponent({ activityData }) {
     const [qualificationIds, setQualificationIds] = useState(null);
     const [answersDelivered, setAnswersDelivered] = useState(null);
     ////////////////////eleccion de la data del user////////////////////////
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const { user } = useAuthContext();
 
     useEffect(() => {
@@ -284,7 +284,7 @@ export default function PeerReviewComponent({ activityData }) {
                             </div>
                             : qualificationIds !== null &&
                             <>
-                                <div className="max-w-[calc(100vw-2rem)] min-w-[calc(100vw-2rem)] xl:min-w-[calc(100vw-21rem)]">
+                                <div className="max-w-[calc(100vw-2rem)] min-w-[calc(100vw-2rem)] xl:min-w-[calc(100vw-22rem)]">
                                     <MainScreen
                                         activityData={activityData}
                                         setShowEvaluate={setShowEvaluate}

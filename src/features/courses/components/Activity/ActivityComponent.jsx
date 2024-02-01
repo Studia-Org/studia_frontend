@@ -17,7 +17,9 @@ import BackToCourse from './Components/BackToCourse';
 import { Empty, Button, message, Popconfirm } from 'antd';
 import MDEditor from '@uiw/react-md-editor';
 import { SwitchEdit } from '../CoursesInside/SwitchEdit';
-
+import { getUserGroup } from '../../../../fetches/getUserGroup.js';
+import { set } from 'date-fns';
+import { Avatar } from 'rsuite';
 
 registerPlugin(FilePondPluginImagePreview);
 
@@ -40,6 +42,21 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   const navigate = useNavigate();
   const USER_OBJECTIVES = [...new Set(user?.user_objectives?.map((objective) => objective.categories.map((category) => category)).flat() || [])];
   const passedDeadline = activityData?.activity?.data?.attributes?.deadline ? new Date(activityData?.activity?.data?.attributes?.deadline) < new Date() : false;
+  const [activityGroup, setActivityGroup] = useState(null);
+
+  useEffect(() => {
+    async function getGroup() {
+      const group = await getUserGroup({ user, activityId });
+      console.log(group);
+      setActivityGroup(group);
+    }
+    if (activityData.activity.data.attributes.groupActivity) getGroup();
+
+  }, [activityData])
+
+
+
+
   function handleFileUpload(file) {
     const dataCopy = formData;
     dataCopy.append('files', file);
@@ -524,6 +541,26 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                 className="ml-auto " type='primary'>
                 Submit
               </Button>
+              {activityGroup &&
+                <section className="flex flex-col flex-1 w-full ">
+                  <p className="text-xl ">Group members</p>
+                  <div className="flex flex-col px-5 my-2">
+                    {activityGroup.users.data.map((user, index) => {
+                      return (
+                        <a key={index}
+                          href={`/app/profile/${user.id}`}
+                          rel='noreferrer'
+                          target='_blank'
+                          className="flex cursor-pointer hover:scale-105 duration-150  px-3 py-1 w-[250px]
+                           border-2 border-gray-700 bg-white rounded-md items-center gap-2 mt-3">
+                          <Avatar size="large" src={user.attributes.profile_photo.data?.attributes?.url} />
+                          <p className="text-lg text-black">{user.attributes.username}</p>
+                        </a>
+                      )
+                    })}
+                  </div>
+                </section>
+              }
             </div>
       }
     </div >

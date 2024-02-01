@@ -42,7 +42,6 @@ export const Sidebar = (props) => {
     setShowSidebar(document.location.pathname !== '/app/courses/create');
   }, [document.location.pathname]);
   const [showSidebar, setShowSidebar] = useState(document.location.pathname !== '/app/courses/create');
-  console.log(showSidebar);
 
   function handleClick() {
     const sidebar = document.getElementById("default-sidebar");
