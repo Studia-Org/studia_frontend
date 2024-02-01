@@ -161,7 +161,14 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                                 'Content-Type': 'application/json',
                                 Authorization: `Bearer ${getToken()}`,
                             },
-                            body: JSON.stringify({ data: { ...subsection.activity, title: subsection.title, categories: Object.keys(subsection.activity.categories) } }),
+                            body: JSON.stringify({
+                                data:
+                                {
+                                    ...subsection.activity,
+                                    title: subsection.title,
+                                    categories: Object.keys(subsection.activity.categories)
+                                }
+                            }),
                         })
                         const dataActivity = await createActivity.json();
                         createdActivities[subsection.id] = dataActivity.data.id

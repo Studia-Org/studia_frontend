@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { QuestionnaireComponentEditable } from './QuestionnaireComponentEditable';
 import { PeerReviewRubricModal } from './PeerReviewRubricModal';
 import dayjs from 'dayjs';
 import { motion } from "framer-motion";
 import { TableCategories } from './TableCategories';
-import { message, Button, DatePicker, Input, Switch, InputNumber, Select } from 'antd';
+import { message, Button, DatePicker, Input, Switch, InputNumber, Select, Divider, Space } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import { SubsectionContentModal } from './SubsectionContentModal';
 import { UploadFiles } from './UploadFiles';
 import '../../../styles/antdButtonStyles.css'
 import { PonderationWarning } from './PonderationWarning';
 import { debounce } from 'lodash';
+import { sub } from 'date-fns';
 
 
 const { RangePicker } = DatePicker;
@@ -32,6 +34,13 @@ export const CreateCourseEditSubsection = ({
   const [markdownContent, setMarkdownContent] = useState(subsection.content);
   const [files, setFiles] = useState([]);
   const filteredSubsections = allSubsections.subsections.filter((sub) => sub.type.toLowerCase() === 'task')
+  const [items, setItems] = useState([1, 2, 3]);
+  const [name, setName] = useState('');
+  const inputRef = useRef(null);
+
+  if (subsection.activity?.groupActivity === undefined) subsection.activity.groupActivity = false;
+  if (subsection.activity?.numberOfStudentsperGroup === undefined) subsection.activity.numberOfStudentsperGroup = 2;
+
   useEffect(() => {
     const matchingSubsection = createCourseSectionsList
       .flatMap((section) => section.subsections)
@@ -79,7 +88,16 @@ export const CreateCourseEditSubsection = ({
               subsectionCopy.activity.task_to_review = newValue;
               break;
             case 'usersToPair':
-              subsectionCopy.activity.usersToPair = newValue;
+              subsectionCopy.activity.usersToPair = +newValue;
+              break;
+            case 'group':
+              subsectionCopy.activity.groupActivity = newValue;
+              if (!newValue) {
+                subsectionCopy.activity.numberOfStudentsperGroup = 1;
+              }
+              break;
+            case 'numberOfStudentsperGroup':
+              subsectionCopy.activity.numberOfStudentsperGroup = +newValue;
               break;
             default:
               break;
@@ -217,11 +235,62 @@ export const CreateCourseEditSubsection = ({
                     defaultValue={subsection.activity.usersToPair || 1}
                     style={{ width: '100%' }}
                     onChange={(number) => { handleSubsectionChange('usersToPair', number) }}
-                    options={[
-                      { value: 1, label: 1 },
-                      { value: 2, label: 2 },
-                      { value: 3, label: 3 },
-                    ]}
+                    dropdownRender={(menu) => (
+                      <>
+                        {menu}
+                        <Divider
+                          style={{
+                            margin: '8px 0',
+                          }}
+                        />
+                        <Space
+                          style={{
+                            padding: '0 8px 4px',
+                          }}
+                        >
+                          <Input
+                            placeholder="Enter number of students"
+                            className='rounded-md border border-[#d9d9d9] min-w-[230px]'
+                            type='number'
+                            min={1}
+                            ref={inputRef}
+                            value={name}
+                            onChange={(event) => {
+                              setName(event.target.value);
+                            }}
+                            onKeyDown={(e) => e.stopPropagation()}
+                          />
+
+                          <Button type="text" icon={<PlusOutlined />} onClick={(e) => {
+                            e.preventDefault();
+                            if (!name) {
+                              message.error('Please enter a number')
+                              return;
+                            }
+                            if (items.includes(name)) {
+                              message.error('This number is already added')
+                              return;
+                            }
+                            if (name <= 0) {
+                              message.error('Negative students are not allowed')
+                              return;
+                            }
+                            setItems([...items, name]);
+                            setName('');
+                            setTimeout(() => {
+                              inputRef.current?.focus();
+                            }, 0);
+                          }}>
+                            Add item
+                          </Button>
+                        </Space>
+                      </>
+                    )}
+                    options={items.map((item) => ({
+                      label: item,
+                      value: item,
+                    }))}
+
                   />
 
                 </div>
@@ -229,12 +298,39 @@ export const CreateCourseEditSubsection = ({
             }
             {
               subsection?.type === 'task' && (
-                <div className='mb-5 space-y-2'>
+                <div className='mb-5 space-y-3'>
                   <label className='text-sm text-gray-500' htmlFor=''>
                     Cover (image)
                   </label>
                   <UploadFiles fileList={landscape_photo} setFileList={setLandscape_photo} listType={'picture'} maxCount={1} />
+                  <div>
+                    <label className='text-sm text-gray-500 ' htmlFor=''>
+                      Will the activity be carried out in pairs or individually? *
+                    </label>
+                    <Select
+                      defaultValue={subsection.activity.group}
+                      style={{ width: '100%', marginTop: '5px' }}
+                      onChange={(number) => { handleSubsectionChange('group', number) }}
+                      options={[{ label: 'Individual', value: false }, { label: 'Groups', value: true }]}
+                    />
+                    {
+                      subsection.activity.group && (
+                        <div className='mt-4'>
+                          <label className='text-sm text-gray-500 ' htmlFor=''>
+                            How many students per group? *
+                          </label>
+                          <Select
+                            defaultValue={subsection.activity.numberOfStudentsperGroup}
+                            style={{ width: '100%', marginTop: '5px' }}
+                            onChange={(number) => { handleSubsectionChange('numberOfStudentsperGroup', number) }}
+                            options={[{ label: '2', value: 2 }, { label: '3', value: 3 }, { label: '4', value: 4 }, { label: '5', value: 5 }]}
+                          />
+                        </div>
+                      )
+                    }
+                  </div>
                 </div>
+
               )
             }
             <div className='flex flex-col mb-4'>

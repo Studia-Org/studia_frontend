@@ -116,8 +116,6 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
         }
     ];
 
-    console.log(createCourseSectionsListCopy)
-
 
     useEffect(() => {
         setSubsectionsToEdit((createCourseSectionsListCopy.filter((section) => section.id === sectionToEdit.id)[0]))
