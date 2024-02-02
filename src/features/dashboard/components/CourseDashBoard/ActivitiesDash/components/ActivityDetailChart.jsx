@@ -22,6 +22,21 @@ export const ActivityDetailChart = ({ data }) => {
         plotOptions: {
             bar: {
                 horizontal: true,
+                colors: {
+                    ranges: [{
+                        from: 0,
+                        to: 5,
+                        color: '#60a5fa',
+                    }, {
+                        from: 5.01,
+                        to: 8,
+                        color: '#2563eb',
+                    }, {
+                        from: 8.01,
+                        to: 10,
+                        color: '#1e40af',
+                    }]
+                },
             }
         },
         dataLabels: {

@@ -24,10 +24,11 @@ export const StudentGradesProfessor = ({ data }) => {
                     strokeDashArray: 2,
                     strokeColor: 'red'
                 }
-            ]
+            ],
         }
         finalChartData.push(chartInfo)
     })
+
     const series = [{
         name: 'Grades',
         data: finalChartData
@@ -69,14 +70,18 @@ export const StudentGradesProfessor = ({ data }) => {
             max: 10,
         },
         xaxis: {
+            labels: {
+                rotate: -45,
+            },
             categories: categories,
+            tickPlacement: 'on'
         }
     };
 
     return (
         <>
             <p className="mb-1 text-lg font-medium">Students average</p>
-            <p className="pb-5 text-sm font-normal text-gray-600">Check how are your students progressing on the course.</p>
+            <p className="pb-5 text-sm font-normal text-gray-600">Check how are your students progressing in the course.</p>
             <div id="chart">
                 <ReactApexChart options={options} series={series} type="bar" height={350} />
             </div>
