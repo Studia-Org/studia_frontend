@@ -7,38 +7,150 @@ import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { motion } from 'framer-motion';
 import { SubsectionItems } from '../CreateCourses/CourseSections/SubsectionItems';
+import { sub } from 'date-fns';
 
 
 
 export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseContentInformation, setSectionToEdit }) => {
-    const confirm = (e) => {
-        try {
-            setCourseContentInformation((prev) => {
-                const updatedSections = prev.filter((section) => section.id !== sectionToEdit.id);
-                return updatedSections;
-            });
-            setEditSectionFlag(false);
-            deleteSection();
-            message.success('Section deleted');
-        } catch (error) {
-            message.error(error.message);
+    const [disabled, setDisabled] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const [sectionToEditTemp, setSectionToEditTemp] = useState(sectionToEdit);
+
+    useEffect(() => {
+        if (sectionToEditTemp !== sectionToEdit) {
+            setDisabled(false);
         }
-    };
+    }, [sectionToEditTemp, sectionToEdit])
 
     const handleDragEnd = (event) => {
 
     }
 
-    const saveChanges = async () => {
-        setCourseContentInformation((prev) => {
-            const updatedSections = prev.map((section) =>
-                section.id === sectionToEdit.id ? sectionToEdit : section
-            );
 
+    const saveChanges = async () => {
+        setLoading(true);
+
+        const addedSubsections = sectionToEditTemp.attributes.subsections.data.filter(
+            (tempSubsection) =>
+                !sectionToEdit.attributes.subsections.data.some(
+                    (originalSubsection) => originalSubsection.id === tempSubsection.id
+                )
+        );
+
+        const deletedSubsections = sectionToEdit.attributes.subsections.data.filter(
+            (originalSubsection) =>
+                !sectionToEditTemp.attributes.subsections.data.some(
+                    (tempSubsection) => tempSubsection.id === originalSubsection.id
+                )
+        );
+        console.log(addedSubsections);
+        console.log(deletedSubsections);
+        let newSubsectionTemp = []
+
+        await Promise.all([
+
+            // Eliminar subsections
+            Promise.all(
+                deletedSubsections.map(async (subSection) => {
+                    await fetch(`${API}/subsections/${subSection.id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${getToken()}`,
+                        },
+                    });
+                })
+            ),
+
+            Promise.all(
+                addedSubsections.map(async (subSection) => {
+                    let activityResponse = null;
+                    let questionnaireResponse = null;
+
+                    if (subSection.attributes.activity) {
+                        const activity = await fetch(`${API}/activities`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                Authorization: `Bearer ${getToken()}`,
+                            },
+                            body: JSON.stringify({
+                                data: subSection.attributes.activity,
+                            }),
+                        });
+                        activityResponse = await activity.json();
+                    }
+
+                    if (subSection.attributes.questionnaire) {
+                        const questionnaire = await fetch(`${API}/questionnaires`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                Authorization: `Bearer ${getToken()}`,
+                            },
+                            body: JSON.stringify({
+                                data: subSection.attributes.questionnaire,
+                            }),
+                        })
+                        questionnaireResponse = await questionnaire.json();
+                    }
+
+                    const newSubsection = await fetch(`${API}/subsections`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${getToken()}`,
+                        },
+                        body: JSON.stringify({
+                            data: {
+                                ...subSection,
+                                attributes: {
+                                    ...subSection.attributes,
+                                    activity: activityResponse?.id,
+                                    questionnaire: questionnaireResponse?.id,
+                                }
+                            },
+                        }),
+                    });
+                    newSubsectionTemp.push(await (newSubsection.json()).id);
+                })
+            ),
+
+            fetch(`${API}/sections/${sectionToEdit.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${getToken()}`,
+                },
+                body: JSON.stringify({
+                    data: {
+                        // Aquí puedes incluir cualquier otro dato que necesites actualizar en la sección
+                        subsections: {
+                            connect:
+                                [newSubsectionTemp.id]
+                        }
+                    },
+                }),
+            }),
+        ]);
+
+        setCourseContentInformation((prev) => {
+            const updatedSections = prev.map((section) => {
+                if (section.id === sectionToEdit.id) {
+                    return sectionToEditTemp;
+                }
+                return section;
+            });
             return updatedSections;
         })
+        setSectionToEdit(sectionToEditTemp);
+
+
+
         setEditSectionFlag(false);
+
         message.success('Changes saved');
+        setLoading(false);
     }
 
 
@@ -50,66 +162,80 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
                 Authorization: `Bearer ${getToken()}`,
             }
         })
+        setCourseContentInformation((prev) => {
+            const updatedSections = prev.filter((section) => section.id !== sectionToEdit.id);
+            return updatedSections;
+        })
+        setEditSectionFlag(false);
+        message.success('Section deleted');
     }
 
     return (
         <>
-            <button className='text-sm flex items-center mt-5 duration-150 hover:-translate-x-1 ' onClick={() => setEditSectionFlag(false)}>
+            <button className='flex items-center mt-5 text-sm duration-150 hover:-translate-x-1 ' onClick={() => setEditSectionFlag(false)}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                     <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
                 </svg>
                 <p className='ml-1'>Go back to course</p>
             </button>
-            <div className='mt-5 flex gap-3 mr-9'>
-                <Popconfirm
-                    title="Delete the section"
-                    description="Are you sure you want to save changes?"
-                    onConfirm={confirm}
-                    okText="Yes"
-                    cancelText="No"
-                    okButtonProps={{ className: 'bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5' }}
-                >
-                    <Button onClick={() => saveChanges()} type="primary" className='ml-auto bg-blue-600'>
-                        Save changes
-                    </Button>
-                </Popconfirm>
-                <Popconfirm
-                    title="Delete the section"
-                    description="Are you sure to delete this section?"
-                    onConfirm={confirm}
-                    okText="Yes"
-                    cancelText="No"
-                    okButtonProps={{ className: 'bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5' }}
-                >
+            <div className='flex gap-3 mt-5'>
+                <div>
+                    <p className='text-lg font-medium'>Edit course section</p>
+                    <p className='text-sm text-gray-600'>Reorder the sequence or edit the content of your course.</p>
+                </div>
+                <div className='ml-auto'>
+                    <Popconfirm
+                        title="Save changes"
+                        description="Are you sure you want to save changes?"
+                        onConfirm={saveChanges}
+                        disabled={disabled}
+                        okText="Yes"
+                        cancelText="No"
+                        okButtonProps={{ className: 'bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5' }}
+                    >
+                        <Button loading={loading} disabled={disabled} type="primary" className='mr-3'>
+                            Save changes
+                        </Button>
+                    </Popconfirm>
+                    <Popconfirm
+                        title="Delete the section"
+                        description="Are you sure to delete this section?"
+                        onConfirm={deleteSection}
+                        okText="Yes"
+                        cancelText="No"
+                        okButtonProps={{ className: 'bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5' }}
+                    >
 
-                    <Button type="primary" danger className=''>
-                        Delete Section
-                    </Button>
-                </Popconfirm>
+                        <Button type="" danger className='bg-[#ff4d4f] hover:bg-[#ff4d50c5] !text-white'>
+                            Delete Section
+                        </Button>
+                    </Popconfirm>
+                </div>
             </div>
-            <div className='mt-5 flex gap-10'>
-                <div className='ml-8 bg-white rounded-md shadow-md p-5 font-medium text-base mb-5 mt-5 h-full pr-24'>
+            <hr className='mt-3' />
+            <div className='flex gap-10 '>
+                <div className='h-full p-5 pr-24 mt-5 mb-5 text-base font-medium bg-white rounded-md shadow-md'>
                     <h3 className=''>Course sequence</h3>
                     {
-                        sectionToEdit.attributes.subsections.data.length > 0 ?
-                            <div className='mt-6 space-y-3  duration-700 '>
+                        sectionToEditTemp.attributes.subsections.data.length > 0 ?
+                            <div className='mt-6 space-y-3 duration-700 '>
                                 <DndContext
                                     collisionDetection={closestCenter}
                                     onDragEnd={handleDragEnd}>
                                     <SortableContext
-                                        items={sectionToEdit.attributes.subsections.data}
+                                        items={sectionToEditTemp.attributes.subsections.data}
                                         strategy={verticalListSortingStrategy}>
-                                        <ol className="relative border-l border-dashed border-gray-300 ml-10">
+                                        <ol className="relative ml-10 border-l border-gray-300 border-dashed">
                                             {
-                                                sectionToEdit.attributes?.subsections?.data.map((subsection) => (
+                                                sectionToEditTemp.attributes?.subsections?.data.map((subsection) => (
                                                     <motion.li
                                                         key={subsection.id}
                                                         initial={{ opacity: 0, x: -50 }}
                                                         animate={{ opacity: 1, x: 0 }}
                                                         exit={{ opacity: 0, x: 50 }}>
                                                         <SubsectionList key={subsection.id}
-                                                            subsection={subsection} sectionToEdit={sectionToEdit}
-                                                            setCourseContentInformation={setCourseContentInformation}
+                                                            subsection={subsection}
+                                                            setSectionToEditTemp={setSectionToEditTemp}
                                                         />
                                                     </motion.li>
                                                 ))
@@ -120,13 +246,13 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
                             </div>
                             :
                             <div>
-                                <p className='text-sm font-normal italic text-gray-500 mt-6'>Start defining the sequence!</p>
+                                <p className='mt-6 text-sm italic font-normal text-gray-500'>Start defining the sequence!</p>
                             </div>
                     }
-                    <p className='text-xs font-normal  text-gray-400 mt-8'>Drag and drop to reorder the sequence</p>
+                    <p className='mt-8 text-xs font-normal text-gray-400'>Drag and drop to reorder the sequence</p>
                 </div>
                 <div className='-mr-7'>
-                    <SubsectionItems setCreateCourseSectionsList={setSectionToEdit} sectionToEdit={sectionToEdit} context={'coursesInside'} />
+                    <SubsectionItems setCreateCourseSectionsList={setSectionToEditTemp} sectionToEdit={sectionToEditTemp} context={'coursesInside'} />
                 </div>
             </div>
         </>

@@ -124,13 +124,13 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
 
     if (user?.role_str === 'professor' || user?.role_str === 'admin') {
       return (
-        <li className="mb-10 ml-8 mt-8 flex items-center" key={index}>
+        <li className="flex items-center mt-8 mb-10 ml-8" key={index}>
           <span className={` absolute flex items-center justify-center w-8 h-8 bg-indigo-500 rounded-full -left-4  ring-white `}>
             {switchSVG(subsection.attributes.activity?.data?.attributes.type)}
           </span>
           <button
             onClick={() => handleSections(titulo, subsection)}
-            className="flex items-center mb-1 font-medium text-gray-900 line-clamp-2 w-3/4 hover:translate-x-2 duration-200 text-left"
+            className="flex items-center w-3/4 mb-1 font-medium text-left text-gray-900 duration-200 line-clamp-2 hover:translate-x-2"
           >
             {" "}
             {subsection.attributes.title}
@@ -147,7 +147,7 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
       )
     } else {
       return (
-        <li className="mb-10 ml-8 mt-8 flex items-center" key={index}>
+        <li className="flex items-center mt-8 mb-10 ml-8" key={index}>
           {getIcon(subsection, subsectionsCompleted, isFirstSubsection, prevSubsectionFinished)}
           <button
             onClick={handleClick}
@@ -245,11 +245,11 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
         <Panel
           header={
             <div className='flex items-center py-4 '>
-              <div className='ml-2 items-center flex'>
+              <div className='flex items-center ml-2'>
                 {
                   user?.role_str === 'student' &&
-                  <div className='w-20 h-20 items-center flex text-sm'>
-                    <CircularProgressbar className='font-medium text-sm' value={percentageFinished} text={`${percentageFinished}%`} styles={buildStyles({
+                  <div className='flex items-center w-20 h-20 text-sm'>
+                    <CircularProgressbar className='text-sm font-medium' value={percentageFinished} text={`${percentageFinished}%`} styles={buildStyles({
                       textSize: '22px',
                       pathColor: '#6366f1',
                       textColor: 'black',
@@ -259,20 +259,22 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
               </div>
               {
                 (user?.role_str === 'professor' || user?.role_str === 'admin') && (
-                  <button onClick={(e) => {
-                    e.stopPropagation();
-                    setSectionToEdit(section);
-                    setEditSectionFlag(true);
-                  }}>
+                  <Button
+                    className='flex items-center py-6'
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSectionToEdit(section);
+                      setEditSectionFlag(true);
+                    }}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                       <path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 00-1.32 2.214l-.8 2.685a.75.75 0 00.933.933l2.685-.8a5.25 5.25 0 002.214-1.32l8.4-8.4z" />
                       <path d="M5.25 5.25a3 3 0 00-3 3v10.5a3 3 0 003 3h10.5a3 3 0 003-3V13.5a.75.75 0 00-1.5 0v5.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5V8.25a1.5 1.5 0 011.5-1.5h5.25a.75.75 0 000-1.5H5.25z" />
                     </svg>
-                  </button>
+                  </Button>
                 )
               }
-              <div className='flex flex-col ml-9 w-full text-left'>
-                <p className='text-sm mb-1'>Section {sectionNumber}</p>
+              <div className='flex flex-col w-full text-left ml-9'>
+                <p className='mb-1 text-sm'>Section {sectionNumber}</p>
                 <h2 className='w-3/4 text-lg font-medium text-left line-clamp-2'>
                   {section.attributes.title}
                 </h2>
@@ -281,7 +283,7 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
           }
           key={sectionNumber}
         >
-          <ol className="relative border-l border-dashed border-gray-300 ml-10 text-base">
+          <ol className="relative ml-10 text-base border-l border-gray-300 border-dashed">
             {section.attributes.subsections.data.map((subsection, index) => {
               let isFirstSubsection = false;
               if (sectionNumber === 1 && index === 0) {
@@ -324,7 +326,7 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
                   <form>
                     <div className="mb-4 border border-gray-200 rounded-lg bg-gray-50 ">
                       <div className="px-4 py-2 bg-white rounded-t-lg ">
-                        <textarea onChange={(e) => setNewSection(e.target.value)} id="comment" rows="4" value={newSection} className="w-full  text-sm text-gray-900 bg-white p-3 " placeholder="Section name" required></textarea>
+                        <textarea onChange={(e) => setNewSection(e.target.value)} id="comment" rows="4" value={newSection} className="w-full p-3 text-sm text-gray-900 bg-white " placeholder="Section name" required></textarea>
                       </div>
                       <div className="flex items-center justify-between px-3 py-2 border-t ">
                         <Button loading={addSectionLoading} onClick={() => addNewSection()} type="button" className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-indigo-500 rounded-lg focus:ring-4 focus:ring-blue-200  hover:bg-blue-800">
