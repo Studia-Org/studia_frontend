@@ -7,13 +7,14 @@ import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { motion } from 'framer-motion';
 import { SubsectionItems } from '../CreateCourses/CourseSections/SubsectionItems';
-import { sub } from 'date-fns';
+import { set } from 'date-fns';
 
 
 
 export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseContentInformation, setSectionToEdit }) => {
     const [disabled, setDisabled] = useState(true);
     const [loading, setLoading] = useState(false);
+    const [loadingDelete, setLoadingDelete] = useState(false);
     const [sectionToEditTemp, setSectionToEditTemp] = useState(sectionToEdit);
 
     useEffect(() => {
@@ -26,6 +27,7 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
 
     }
 
+    console.log(sectionToEditTemp);
 
     const saveChanges = async () => {
         setLoading(true);
@@ -43,8 +45,6 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
                     (tempSubsection) => tempSubsection.id === originalSubsection.id
                 )
         );
-        console.log(addedSubsections);
-        console.log(deletedSubsections);
         let newSubsectionTemp = []
 
         await Promise.all([
@@ -74,14 +74,13 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
                                 'Content-Type': 'application/json',
                                 Authorization: `Bearer ${getToken()}`,
                             },
-                            body: JSON.stringify({
-                                data: subSection.attributes.activity,
-                            }),
+                            body: JSON.stringify({ data: subSection.attributes.activity }),
                         });
                         activityResponse = await activity.json();
                     }
 
-                    if (subSection.attributes.questionnaire) {
+                    if (subSection?.attributes?.questionnaire?.attributes) {
+                        console.log(subSection.attributes.questionnaire.attributes);
                         const questionnaire = await fetch(`${API}/questionnaires`, {
                             method: 'POST',
                             headers: {
@@ -89,10 +88,11 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
                                 Authorization: `Bearer ${getToken()}`,
                             },
                             body: JSON.stringify({
-                                data: subSection.attributes.questionnaire,
+                                data: subSection.attributes.questionnaire.attributes,
                             }),
                         })
                         questionnaireResponse = await questionnaire.json();
+                        console.log(questionnaireResponse);
                     }
 
                     const newSubsection = await fetch(`${API}/subsections`, {
@@ -103,36 +103,36 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
                         },
                         body: JSON.stringify({
                             data: {
-                                ...subSection,
-                                attributes: {
-                                    ...subSection.attributes,
-                                    activity: activityResponse?.id,
-                                    questionnaire: questionnaireResponse?.id,
-                                }
+                                ...subSection.attributes,
+                                activity: activityResponse?.data?.id,
+                                questionnaire: questionnaireResponse?.data?.id,
                             },
                         }),
                     });
-                    newSubsectionTemp.push(await (newSubsection.json()).id);
+                    const responseSubsection = await newSubsection.json();
+                    newSubsectionTemp.push(responseSubsection.data.id);
+
                 })
             ),
 
-            fetch(`${API}/sections/${sectionToEdit.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${getToken()}`,
-                },
-                body: JSON.stringify({
-                    data: {
-                        // Aquí puedes incluir cualquier otro dato que necesites actualizar en la sección
-                        subsections: {
-                            connect:
-                                [newSubsectionTemp.id]
-                        }
-                    },
-                }),
-            }),
+
         ]);
+
+        fetch(`${API}/sections/${sectionToEdit.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${getToken()}`,
+            },
+            body: JSON.stringify({
+                data: {
+                    // Aquí puedes incluir cualquier otro dato que necesites actualizar en la sección
+                    subsections: {
+                        connect: newSubsectionTemp
+                    }
+                },
+            }),
+        })
 
         setCourseContentInformation((prev) => {
             const updatedSections = prev.map((section) => {
@@ -155,19 +155,90 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
 
 
     const deleteSection = async () => {
-        await fetch(`${API}/sections/${sectionToEdit.id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${getToken()}`,
-            }
-        })
-        setCourseContentInformation((prev) => {
-            const updatedSections = prev.filter((section) => section.id !== sectionToEdit.id);
-            return updatedSections;
-        })
-        setEditSectionFlag(false);
-        message.success('Section deleted');
+        //Debemos eliminar las subsections que estén relacionadas con la sección, tambien la actividad, el cuestionario y las qualifications de la activity
+        setLoadingDelete(true);
+        try {
+            const subsections = sectionToEdit.attributes.subsections.data;
+            const activities = subsections.map((subsection) => subsection.attributes.activity);
+            const questionnaires = subsections.map((subsection) => subsection.attributes.questionnaire);
+            const qualifications = activities.flatMap((activity) => activity.data?.attributes.qualifications?.data.map((qualification) => qualification.id) || []);
+
+            await Promise.all([
+                // Eliminar las actividades
+                Promise.all(
+                    activities.map(async (activity) => {
+                        if (activity.data) {
+                            await fetch(`${API}/activities/${activity.data.id}`, {
+                                method: 'DELETE',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    Authorization: `Bearer ${getToken()}`,
+                                },
+                            });
+                        }
+                    })
+                ),
+                // Eliminar los cuestionarios
+                Promise.all(
+                    questionnaires.map(async (questionnaire) => {
+                        if (questionnaire.data) {
+                            await fetch(`${API}/questionnaires/${questionnaire.data.id}`, {
+                                method: 'DELETE',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    Authorization: `Bearer ${getToken()}`,
+                                },
+                            });
+                        }
+                    })
+                ),
+                // Eliminar las subsections
+                Promise.all(
+                    subsections.map(async (subsection) => {
+                        await fetch(`${API}/subsections/${subsection.id}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                Authorization: `Bearer ${getToken()}`,
+                            },
+                        });
+                    })
+                ),
+                // Eliminar las qualifications
+                Promise.all(
+                    qualifications.map(async (qualification) => {
+                        await fetch(`${API}/qualifications/${qualification}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                Authorization: `Bearer ${getToken()}`,
+                            },
+                        });
+                    })
+                ),
+            ])
+
+            await fetch(`${API}/sections/${sectionToEdit.id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${getToken()}`,
+                }
+            })
+
+            setCourseContentInformation((prev) => {
+                const updatedSections = prev.filter((section) => section.id !== sectionToEdit.id);
+                return updatedSections;
+            })
+            setLoadingDelete(false);
+            setEditSectionFlag(false);
+            message.success('Section deleted');
+
+        } catch (error) {
+            setLoadingDelete(false);
+            console.error(error);
+            message.error('An error occurred while deleting the section');
+        }
     }
 
     return (
@@ -181,7 +252,7 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
             <div className='flex gap-3 mt-5'>
                 <div>
                     <p className='text-lg font-medium'>Edit course section</p>
-                    <p className='text-sm text-gray-600'>Reorder the sequence or edit the content of your course.</p>
+                    <p className='text-sm text-gray-600'>Reorder the sequence or edit the content of your course section.</p>
                 </div>
                 <div className='ml-auto'>
                     <Popconfirm

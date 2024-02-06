@@ -34,32 +34,32 @@ export const SubsectionItems = ({ setCreateCourseSectionsList, sectionToEdit, co
             case 0:
                 return (
                     <>
-                        <SequenceDevelop setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} sectionTask={sectionTask} />
-                        <SequenceDevelopNoMSLQForum setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} sectionTask={sectionTask} />
+                        <SequenceDevelop setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} sectionTask={sectionTask} context={context} />
+                        <SequenceDevelopNoMSLQForum setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} sectionTask={sectionTask} context={context} />
                     </>
                 )
             case 1:
                 return (
-                    <SequenceDevelopEducation1 setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} sectionTask={sectionTask} />
+                    <SequenceDevelopEducation1 setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} sectionTask={sectionTask} context={context} />
                 )
             case 2:
                 return (
                     <>
-                        <SequenceDevelopEducation2 setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} sectionTask={sectionTask} />
-                        <SequenceFeedUP setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} sectionTask={sectionTask} />
+                        <SequenceDevelopEducation2 setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} sectionTask={sectionTask} context={context} />
+                        <SequenceFeedUP setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} sectionTask={sectionTask} context={context} />
                     </>
                 )
             case 3:
                 return (
                     <>
-                        <SequenceThinkAloud setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} sectionTask={sectionTask} />
+                        <SequenceThinkAloud setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} sectionTask={sectionTask} context={context} />
                     </>
                 )
             default:
                 return (
                     <>
-                        <SequenceDevelop setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} sectionTask={sectionTask} />
-                        <SequenceDevelopNoMSLQForum setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} sectionTask={sectionTask} />
+                        <SequenceDevelop setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} sectionTask={sectionTask} context={context} />
+                        <SequenceDevelopNoMSLQForum setCreateCourseSectionsList={setCreateCourseSectionsList} sectionToEdit={sectionToEdit} sectionTask={sectionTask} context={context} />
                     </>
                 )
         }
@@ -110,6 +110,8 @@ export const SubsectionItems = ({ setCreateCourseSectionsList, sectionToEdit, co
                         context === 'coursesInside' ?
                             <>
                                 <button onClick={() => setAddItemsOrPreMade('addItems')} className={`${addItemsOrPreMade === 'addItems' ? ' bg-[#45406f]' : ''} font-medium inline-block px-4 ml-2 hover:bg-[#45406f] duration-100  mt-[2.5rem] rounded-t-lg text-white p-2`}>Add items to the sequence</button>
+                                <button onClick={() => setAddItemsOrPreMade('preMade')} className={`${addItemsOrPreMade === 'preMade' ? ' bg-[#45406f]' : ''} font-medium inline-block ml-4 px-4 hover:bg-[#45406f] duration-100  mt-[2.5rem] rounded-t-lg text-white p-2`}>Pre-Made sequences</button>
+
                             </>
                             :
                             <>
