@@ -1,66 +1,96 @@
 import { API } from "../constant";
 
-export async function fetchAverageCourse({ courseId, userId = null }) {
+export async function fetchAverageCourse({ courseId, user }) {
     try {
-        const response = await fetch(`${API}/courses/${courseId}?` +
-            `populate[sections][fields][0]=id&` +
-            `populate[sections][populate][activity][fields][0]=ponderation&` +
-            `populate[sections][populate][activity][populate][qualifications][fields][0]=qualification&` +
-            `populate[sections][populate][activity][populate][qualifications][populate][user][fields][0]=id&` +
-            `populate[sections][populate][subsections][fields][0]=id`);
-
+        const response = await fetch(`${API}/courses/${courseId}?populate=sections.subsections.activity.qualifications`);
         const data = await response.json();
         const sectionData = data.data.attributes.sections.data;
 
         if (sectionData.length === 0) {
-            return { averageMainActivity: 0, averageMainActivityUser: 0 };
+            return { averageMainActivity: 0, averageMainActivityUser: 0, totalQualifications: 0 };
         }
 
-        const ponderations = sectionData
-            .flatMap(section => section.attributes.activity.data.attributes.ponderation)
-            .filter(ponderation => ponderation !== null);
+        const { averagesMainActivity, totalQualifications } = processSectionData(sectionData);
+        const userQualifications = processUserQualifications(sectionData, user);
 
-        let averagesMainActivity = [];
-        let totalQualifications = {}
-        sectionData.forEach(section => {
-            if (section.attributes.activity.data.attributes.qualifications.data.length === 0) {
-                averagesMainActivity.push(0);
-                return;
-            }
-            const qualifications = section.attributes.activity.data.attributes.qualifications.data
-                .map(qualification => qualification.attributes.qualification)
-                .filter(qualification => qualification !== null);
-            qualifications.forEach(qualification => {
-                const rounded = Math.round(qualification);
-                totalQualifications[rounded] = totalQualifications[rounded] + 1 || 1;
-            })
-            let averageMainActivity = qualifications.reduce((acc, qualification) => acc + qualification, 0);
-            if (qualifications.length !== 0) averagesMainActivity.push(averageMainActivity /= qualifications.length)
-        })
+        const averageMainActivity = calculateWeightedAverage(averagesMainActivity) / Math.max(sectionData.length, 1);
+        const averageMainActivityUser = calculateWeightedAverage(userQualifications) / Math.max(sectionData.length, 1);
 
-        averagesMainActivity.forEach((averageMainActivity, index) => {
-            averagesMainActivity[index] = averageMainActivity * ponderations[index]
-        })
-
-
-        const averageMainActivity = averagesMainActivity.reduce((acc, averageMainActivity) => acc + averageMainActivity, 0);
-
-        if (userId === null) {
-            return { averageMainActivity };
-        }
-        const userQualifications = sectionData
-            .flatMap(section => section.attributes.activity.data.attributes.qualifications.data)
-            .filter(qualification => qualification.attributes.user.data.id === userId)
-            .map(qualification => qualification.attributes.qualification)
-            .filter(qualification => qualification !== null);
-
-        userQualifications.forEach((qualification, index) => userQualifications[index] = qualification * ponderations[index]);
-        const averageMainActivityUser = userQualifications.reduce((acc, qualification) => acc + qualification, 0);
-
-        return { averageMainActivity, averageMainActivityUser, totalQualifications };
-
+        return {
+            averageMainActivity: parseFloat(averageMainActivity.toFixed(2)),
+            averageMainActivityUser: parseFloat(averageMainActivityUser.toFixed(2)),
+            totalQualifications
+        };
     } catch (error) {
-        console.error(courseId);
+        console.error(error);
         return { averageMainActivity: 0, averageMainActivityUser: 0, totalQualifications: 0 };
     }
+}
+
+function processSectionData(sectionData) {
+    const averagesMainActivity = [];
+    const totalQualifications = {};
+
+    sectionData.forEach((section) => {
+        const subsections = section.attributes.subsections.data;
+
+        subsections.forEach((subsection) => {
+            const activity = subsection.attributes.activity.data?.attributes;
+
+            if (activity) {
+                const { ponderation, qualifications } = processActivity(activity);
+
+                qualifications.forEach((qualification) => {
+                    const rounded = Math.round(qualification);
+                    totalQualifications[rounded] = (totalQualifications[rounded] || 0) + 1;
+                });
+
+                const averageMainActivity =
+                    qualifications.reduce((acc, qualification) => acc + qualification, 0) / Math.max(qualifications.length, 1);
+
+                averagesMainActivity.push(averageMainActivity * (ponderation / 100));
+            }
+        });
+    });
+
+    return { averagesMainActivity, totalQualifications };
+}
+
+function processActivity(activity) {
+    const ponderation = activity.ponderation || 0;
+    const qualifications = activity.qualifications.data.map(
+        (qualification) => qualification.attributes.qualification
+    );
+
+    return { ponderation, qualifications };
+}
+
+
+function processUserQualifications(sectionData, user) {
+    const userQualifications = [];
+
+    sectionData.forEach((section) => {
+        const subsections = section.attributes.subsections.data;
+
+        subsections.forEach((subsection) => {
+            const activity = subsection.attributes.activity.data?.attributes;
+            if (activity) {
+                const ponderation = activity.ponderation || 0;
+
+                user.qualifications.forEach((qualification) => {
+                    activity.qualifications.data.forEach((qualificationActivity) => {
+                        if (qualificationActivity.id === qualification.id) {
+                            userQualifications.push(qualification.qualification * (ponderation / 100));
+                        }
+                    });
+                });
+            }
+        });
+    });
+
+    return userQualifications;
+}
+
+function calculateWeightedAverage(values) {
+    return values.reduce((acc, value) => acc + value, 0);
 }

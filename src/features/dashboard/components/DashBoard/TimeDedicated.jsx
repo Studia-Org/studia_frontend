@@ -56,8 +56,9 @@ export function TimeDedicated({ courses }) {
 
       // Utilizar Promise.all para esperar a que todas las promesas se resuelvan
       await Promise.all(courses.map(async (course) => {
-        dict[course.title] = await fetchAverageCourse({ courseId: course.id, userId });
+        dict[course.title] = await fetchAverageCourse({ courseId: course.id, user: user });
       }));
+      console.log(dict);
       // Imprimir el diccionario después de que todas las promesas se hayan resuelto
       setCharData(
         Object.keys(dict).map((key) => {
@@ -80,7 +81,7 @@ export function TimeDedicated({ courses }) {
 
 
   return (
-    <section className=" p-5 bg-white shadow-lg w-full rounded-lg box-border">
+    <section className="box-border w-full p-5 bg-white rounded-lg shadow-lg ">
       <Title>Average course marks</Title>
       <ReactApexChart
         options={{
@@ -115,6 +116,9 @@ export function TimeDedicated({ courses }) {
           xaxis: {
             categories: Object.keys(charData).map((key) => charData[key].name),
           },
+          yaxis: {
+            max: 10, // Establecer el valor máximo del eje Y
+          },
           fill: {
             opacity: 1
           },
@@ -127,17 +131,28 @@ export function TimeDedicated({ courses }) {
           }
         }
         }
-        series={[
-          {
-            name: 'Average course grade',
-            data: Object.keys(charData).map((key) => charData[key]["Average course"])
-          }, {
-            name: 'Your grade',
-            data: Object.keys(charData).map((key) => charData[key]["Your mark"])
-          }
+        series={
+          user.role_str !== "student" ?
+            [
+              {
+                name: 'Average course grade',
+                data: Object.keys(charData).map((key) => charData[key]["Average course"])
+              }
+            ]
+            :
+            [
+              {
+                name: 'Average course grade',
+                data: Object.keys(charData).map((key) => charData[key]["Average course"])
+              }, {
+                name: 'Your grade',
+                data: Object.keys(charData).map((key) => charData[key]["Your mark"])
+              }
+            ]
 
+        }
 
-        ]} type="bar" height={'95%'} />
+        type="bar" height={'95%'} />
 
     </section>
   );
