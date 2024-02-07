@@ -192,7 +192,7 @@ const CourseInside = () => {
   }
 
   useEffect(() => {
-    if (courseSubsection.length !== 0) {
+    if (courseSubsection?.length && courseSubsection?.length !== 0) {
       setSubsectionsLandscapePhoto(
         courseSubsection.attributes.landscape_photo?.data?.attributes?.url ??
         null
@@ -257,7 +257,7 @@ const CourseInside = () => {
           <div id="flex_wrap" className="flex-1 max-w-full min-w-0 sm:w-auto mt-3 md:ml-8 md:mr-8 p-5 md:p-0 md:basis-[600px]">
             {editSectionFlag && sectionToEdit !== null ? (
               <EditSection setEditSectionFlag={setEditSectionFlag} sectionToEdit={sectionToEdit} setCourseContentInformation={setCourseContentInformation}
-                setSectionToEdit={setSectionToEdit} />
+                setSectionToEdit={setSectionToEdit} setCourseSection={setCourseSection} setCourseSubsection={setCourseSubsection} courseContentInformation={courseContentInformation} />
             ) : !forumFlag ? (
               <div>
                 {

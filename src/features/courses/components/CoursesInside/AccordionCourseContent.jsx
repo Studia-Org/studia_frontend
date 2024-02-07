@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import { Collapse, Button, message, Badge, Popover } from 'antd';
+import { Collapse, Button, message, Badge, Popover, Empty } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 import '../../styles/utils.css'
 import { AccordionButton, Accordion, AccordionItem, AccordionPanel } from '@chakra-ui/accordion';
@@ -234,7 +234,6 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
       percentageFinished = 0;
     }
 
-
     return (
       <Collapse
         expandIcon={({ isActive }) => <CaretRightOutlined className='absolute top-0 bottom-0 right-5 ' rotate={isActive ? 90 : 0} />}
@@ -283,17 +282,22 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
           }
           key={sectionNumber}
         >
-          <ol className="relative ml-10 text-base border-l border-gray-300 border-dashed">
-            {section.attributes.subsections.data.map((subsection, index) => {
-              let isFirstSubsection = false;
-              if (sectionNumber === 1 && index === 0) {
-                isFirstSubsection = true;
-              }
-              const content = RenderCourseInsideSectionContent(subsection, section.attributes.title, prevSubsectionFinished, isFirstSubsection);
-              prevSubsectionFinished = subsectionsCompleted.some(subsectionTemp => subsectionTemp.id === subsection.id);
-              return content;
-            })}
-          </ol>
+          {
+            section.attributes.subsections.data.length > 0 ?
+              <ol className="relative ml-10 text-base border-l border-gray-300 border-dashed">
+                {section.attributes.subsections.data.map((subsection, index) => {
+                  let isFirstSubsection = false;
+                  if (sectionNumber === 1 && index === 0) {
+                    isFirstSubsection = true;
+                  }
+                  const content = RenderCourseInsideSectionContent(subsection, section.attributes.title, prevSubsectionFinished, isFirstSubsection);
+                  prevSubsectionFinished = subsectionsCompleted.some(subsectionTemp => subsectionTemp.id === subsection.id);
+                  return content;
+                })}
+              </ol>
+              :
+              <Empty description={'There are no subsections'} />
+          }
         </Panel>
       </Collapse>
     )
@@ -326,7 +330,7 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
                   <form>
                     <div className="mb-4 border border-gray-200 rounded-lg bg-gray-50 ">
                       <div className="px-4 py-2 bg-white rounded-t-lg ">
-                        <textarea onChange={(e) => setNewSection(e.target.value)} id="comment" rows="4" value={newSection} className="w-full p-3 text-sm text-gray-900 bg-white " placeholder="Section name" required></textarea>
+                        <input onChange={(e) => setNewSection(e.target.value)} id="comment" rows="4" value={newSection} className="w-full p-3 text-sm text-gray-900 duration-150 bg-white border rounded-md hover:border-blue-600 placeholder:text-gray-400 placeholder:font-light" placeholder="Section name" required></input>
                       </div>
                       <div className="flex items-center justify-between px-3 py-2 border-t ">
                         <Button loading={addSectionLoading} onClick={() => addNewSection()} type="button" className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-indigo-500 rounded-lg focus:ring-4 focus:ring-blue-200  hover:bg-blue-800">

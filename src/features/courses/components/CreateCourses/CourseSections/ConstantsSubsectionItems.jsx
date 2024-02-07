@@ -37,7 +37,6 @@ function createSubsection(subsectionName, fase, questionnaireData, setCreateCour
                 users: null
             }
         };
-        console.log(newSubsection);
 
         setCreateCourseSectionsList(prev => {
             const updatedSectionToEdit = JSON.parse(JSON.stringify(prev));

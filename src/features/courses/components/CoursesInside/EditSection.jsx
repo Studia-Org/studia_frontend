@@ -11,11 +11,13 @@ import { set } from 'date-fns';
 
 
 
-export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseContentInformation, setSectionToEdit }) => {
+export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseContentInformation, setSectionToEdit, setCourseSection, setCourseSubsection, courseContentInformation }) => {
     const [disabled, setDisabled] = useState(true);
     const [loading, setLoading] = useState(false);
     const [loadingDelete, setLoadingDelete] = useState(false);
     const [sectionToEditTemp, setSectionToEditTemp] = useState(sectionToEdit);
+
+    console.log(courseContentInformation);
 
     useEffect(() => {
         if (sectionToEditTemp !== sectionToEdit) {
@@ -26,8 +28,6 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
     const handleDragEnd = (event) => {
 
     }
-
-    console.log(sectionToEditTemp);
 
     const saveChanges = async () => {
         setLoading(true);
@@ -48,7 +48,6 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
         let newSubsectionTemp = []
 
         await Promise.all([
-
             // Eliminar subsections
             Promise.all(
                 deletedSubsections.map(async (subSection) => {
@@ -62,8 +61,10 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
                 })
             ),
 
-            Promise.all(
-                addedSubsections.map(async (subSection) => {
+            // Agregar nuevas subsections
+            (async () => {
+
+                for (const subSection of addedSubsections) {
                     let activityResponse = null;
                     let questionnaireResponse = null;
 
@@ -111,12 +112,10 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
                     });
                     const responseSubsection = await newSubsection.json();
                     newSubsectionTemp.push(responseSubsection.data.id);
-
-                })
-            ),
-
-
+                }
+            })(),
         ]);
+
 
         fetch(`${API}/sections/${sectionToEdit.id}`, {
             method: 'PUT',
@@ -146,10 +145,10 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
         setSectionToEdit(sectionToEditTemp);
 
 
-
         setEditSectionFlag(false);
 
         message.success('Changes saved');
+        window.location.reload();
         setLoading(false);
     }
 
@@ -230,6 +229,8 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
                 const updatedSections = prev.filter((section) => section.id !== sectionToEdit.id);
                 return updatedSections;
             })
+            setCourseSection(courseContentInformation[0].attributes.title)
+            setCourseSubsection(courseContentInformation[0].attributes.subsections.data[0])
             setLoadingDelete(false);
             setEditSectionFlag(false);
             message.success('Section deleted');
