@@ -2,8 +2,6 @@ import React from 'react'
 import ReactApexChart from 'react-apexcharts'
 
 export const StudentGradesProfessor = ({ data }) => {
-    console.log(data)
-
     const dataEntries = Object.entries(data);
 
     // Extraer los nombres y las calificaciones para las categorías y los datos del gráfico
@@ -18,7 +16,7 @@ export const StudentGradesProfessor = ({ data }) => {
             y: value,
             goals: [
                 {
-                    name: 'Student average',
+                    name: 'Course average',
                     value: average,
                     strokeHeight: 2,
                     strokeDashArray: 2,
