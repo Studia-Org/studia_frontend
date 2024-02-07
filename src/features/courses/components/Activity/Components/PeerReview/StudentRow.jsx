@@ -40,7 +40,6 @@ export const StudentRow = ({ student, activityToReviewID, activityTitle, peerRev
                     <Button onClick={() => handleRubricModalOpen(givenQualification)} className='flex items-center h-full overflow-x-clip' >
                         <AvatarGroup stack>
                             {givenQualification.attributes.qualifications.data.map((qualification, index) => {
-                                console.log(qualification)
                                 return (
                                     <Avatar
                                         circle
