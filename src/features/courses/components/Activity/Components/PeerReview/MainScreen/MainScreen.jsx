@@ -10,7 +10,11 @@ import UsersToReview from "./UsersToReview.jsx"
 import { Button } from "antd"
 
 
-function MainScreen({ qualificationIds, activityData, setShowEvaluate, data, userIndexSelected, setUserIndexSelected, usersToPair, resetUser }) {
+function MainScreen({
+    qualificationIds,
+    activityData, setShowEvaluate, data,
+    userIndexSelected, setUserIndexSelected,
+    usersToPair, resetUser, correctActivityGroup }) {
     const { user } = useAuthContext();
     const navigate = useNavigate();
     const evaluated = activityData.qualification ? true : false;
@@ -20,14 +24,26 @@ function MainScreen({ qualificationIds, activityData, setShowEvaluate, data, use
     /////////// coger user index selected////////////////   
     const PeerReview = activityData?.peer_review_qualifications.data[userIndexSelected]
 
-    const usersToCorrect = activityData?.peer_review_qualifications.data
-        .map((peerReview) => peerReview.attributes.user.data)
+    const usersToCorrect = correctActivityGroup ?
+        activityData?.peer_review_qualifications.data
+            .map((peerReview) => peerReview.attributes.group.data)
+        : activityData?.peer_review_qualifications.data
+            .map((peerReview) => peerReview.attributes.user.data)
 
-    const usersWithAnswers = activityData?.user.data.attributes.PeerReviewAnswers.data
-        .filter((answer) =>
-            qualificationIds.find((qualification) => qualification.id === answer.attributes.qualification.data.id) &&
-            usersToCorrect.find((userToCorrect) => userToCorrect.id === answer.attributes.qualification.data.attributes.user.data.id))
-        .map((answer) => answer.attributes.qualification.data.attributes.user.data)
+
+    const usersWithAnswers = activityData?.user.data.attributes.PeerReviewAnswers.data //cambiar para grupos    
+        .filter((answer) => qualificationIds.find((qualification) =>
+            answer.attributes.qualifications.data.find((qualificationAnswer) => {
+                return qualificationAnswer.id === qualification.id
+            }
+            ))
+            &&
+            usersToCorrect.find((userToCorrect) => answer.attributes.qualifications.data.find(
+                (qualificationAnswer) => {
+                    return userToCorrect.id === qualificationAnswer.attributes.user.data.id
+                }
+            )))
+        .flatMap((answer) => answer.attributes.qualifications.data.flatMap((qualification) => qualification.attributes.user.data))
 
 
     ///////////coger user index selected////////////////
@@ -51,9 +67,12 @@ function MainScreen({ qualificationIds, activityData, setShowEvaluate, data, use
 
             {userIndexSelected !== null && PeerReview !== undefined && PeerReview !== null && deadLine > new Date() ?
                 <section className="flex-1 flex md3:justify-center min-w-[250px] md3:ms-3 px-5">
-                    <div className="max-w-[70%] flex-1">
+                    <div className="flex flex-col max-w-[70%] flex-1 gap-y-1">
                         <h3 className='text-2xl font-semibold'>Peer Review</h3>
-                        <p className='mt-5 mb-3 text-lg'>Correct {PeerReview.attributes.user.data.attributes.username}'s task!</p>
+
+                        <p className='mt-5 text-lg'>Correct {" "}
+                            {!correctActivityGroup ?
+                                PeerReview.attributes.user.data.attributes.username + "'s" : PeerReview.attributes.group.data.attributes.users.data.map((user, index) => user.attributes.username).join(", ")} task/s!</p>
                         {PeerReview?.attributes?.file?.data?.map(renderFiles)}
                     </div>
                 </section> : null
@@ -70,6 +89,7 @@ function MainScreen({ qualificationIds, activityData, setShowEvaluate, data, use
                             setUserIndexSelected={setUserIndexSelected}
                             data={data}
                             usersToPair={usersToPair}
+                            correctActivityGroup={correctActivityGroup}
                         />
 
                         :

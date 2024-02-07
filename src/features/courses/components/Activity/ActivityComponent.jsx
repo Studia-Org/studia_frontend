@@ -20,6 +20,8 @@ import { SwitchEdit } from '../CoursesInside/SwitchEdit';
 import { getUserGroup } from '../../../../fetches/getUserGroup.js';
 import { set } from 'date-fns';
 import { Avatar } from 'rsuite';
+import useGetGroup from './hooks/useGetGroup.jsx';
+import { MoonLoader } from 'react-spinners';
 
 registerPlugin(FilePondPluginImagePreview);
 
@@ -42,19 +44,9 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   const navigate = useNavigate();
   const USER_OBJECTIVES = [...new Set(user?.user_objectives?.map((objective) => objective.categories.map((category) => category)).flat() || [])];
   const passedDeadline = activityData?.activity?.data?.attributes?.deadline ? new Date(activityData?.activity?.data?.attributes?.deadline) < new Date() : false;
-  const [activityGroup, setActivityGroup] = useState(null);
 
-  useEffect(() => {
-    async function getGroup() {
-      const group = await getUserGroup({ user, activityId });
-      console.log(group);
-      setActivityGroup(group);
-    }
-    if (activityData.activity.data.attributes.groupActivity) getGroup();
-
-  }, [activityData])
-
-
+  const [IDQualification, setIDQualification] = useState(idQualification);
+  const { activityGroup, loadingGroup } = useGetGroup({ user, activityData, activityId, IDQualification });
 
 
   function handleFileUpload(file) {
@@ -69,6 +61,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
     setSubsectionContent(activityData.activity.data.attributes.description);
     setTitle(activityData.activity.data.attributes.title);
   }, [enableEdit])
+
 
   async function saveChanges() {
     setLoading(true);
@@ -142,18 +135,24 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
 
       files = filesUploaded.map((file) => file.id);
       files = files.concat(result.map((file) => file.id));
+
       const qualificationData = {
         data: {
           activity: activityId,
           file: files,
-          user: user.id,
           delivered: true,
           delivered_data: new Date(),
         }
       };
-      if (activityData.delivered && !evaluated) {
+      if (activityGroup !== null) {
+        qualificationData.data.group = activityGroup.id;
+      }
+      else {
+        qualificationData.data.user = user.id;
+      }
+      if ((activityData.delivered || IDQualification) && !evaluated) {
         response2 =
-          await fetch(`${API}/qualifications/${idQualification}`, {
+          await fetch(`${API}/qualifications/${IDQualification}`, {
             method: 'PUT',
             headers: {
               "Content-Type": "application/json",
@@ -172,13 +171,15 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
             },
             body: JSON.stringify(qualificationData),
           });
-
+        let jsonresponse = await response2.json();
+        setIDQualification(jsonresponse.data.id);
       }
       return response2;
     } catch (error) {
       console.error(error);
     }
   }
+
   async function sendData() {
     try {
       setUploadLoading(true);
@@ -350,219 +351,231 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
       message.error('Something went wrong: ', error);
     }
   };
+
+
   return (
     <div className='flex max-w-[calc(100vw)] flex-col 1.5xl:flex-row items-start 1.5xl:items-start 1.5xl:space-x-24 p-5 sm:p-10'>
-      <div className='1.5xl:w-2/4 lg:w-10/12 w-full'>
-        <BackToCourse navigate={navigate} courseId={courseId} />
-        <ActivityTitle
-          type={type}
-          title={activityData.activity.data.attributes.title}
-          evaluated={evaluated}
-          qualification={activityData.qualification}
-          setTitle={setTitle}
-          titleState={title}
-          enableEdit={enableEdit}
-          passedDeadline={passedDeadline}
-          userRole={user?.role_str}
-        />
-        <ObjectivesTags USER_OBJECTIVES={USER_OBJECTIVES} categories={activityData?.activity.data.attributes.categories} />
+      {
+        loadingGroup ?
+          <div className="flex items-center justify-center w-full h-full">
+            <MoonLoader color="#1E40AF" size={80} />
+          </div>
+          :
+          <>
+            <div className='1.5xl:w-2/4 lg:w-10/12 w-full'>
+              <BackToCourse navigate={navigate} courseId={courseId} />
+              <ActivityTitle
+                type={type}
+                title={activityData.activity.data.attributes.title}
+                evaluated={evaluated}
+                qualification={activityData.qualification}
+                setTitle={setTitle}
+                titleState={title}
+                enableEdit={enableEdit}
+                passedDeadline={passedDeadline}
+                userRole={user?.role_str}
+              />
+              <ObjectivesTags USER_OBJECTIVES={USER_OBJECTIVES} categories={activityData?.activity.data.attributes.categories} />
 
-        {
-          user.role_str === 'professor' || user.role_str === 'admin' ?
-            <div className='flex items-center ml-auto'>
-              <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} />
-            </div> : null
-        }
-
-        {
-          evaluated && (
-            <>
-              <p className='mt-5 mb-1 text-xs text-gray-400'>Comments</p>
-              <hr />
               {
-                activityData.comments === null || activityData.comments === '' ?
-                  <p className='mt-3'>There are no comments for your submission.</p>
-                  :
-                  <p className='mt-3'>{activityData.comments}</p>
+                user.role_str === 'professor' || user.role_str === 'admin' ?
+                  <div className='flex items-center ml-auto'>
+                    <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} />
+                  </div> : null
               }
 
-            </>
-          )
-        }
-
-
-        <p className='mt-5 mb-1 text-xs text-gray-400'>Task description</p>
-        <hr />
-        <div className='prose my-3 text-gray-600 ml-5 max-w-[calc(100vw-1.25rem)] box-content mt-5 '>
-          {
-            !enableEdit ?
-              <ReactMarkdown className=''>{activityData.activity.data.attributes.description}</ReactMarkdown>
-              :
-              <div className="flex flex-col">
-                <MDEditor height="30rem" className='mt-2 mb-8' data-color-mode='light' onChange={setSubsectionContent} value={subsectionContent} />
-                <Button onClick={() => saveChanges()} type="primary" loading={loading}
-                  className="inline-flex justify-center px-4 ml-auto text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                  Save Changes
-                </Button>
-              </div>
-          }
-        </div>
-
-      </div >
-      {
-        user.role_str === 'professor' || user.role_str === 'admin' ?
-          <div className='flex flex-col'>
-            <p className='mb-3 text-xs text-gray-400' > Task Files</ p>
-            <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)]  w-[30rem]'>
-              {(!activityFiles.length ||
-                activityFiles?.length === 0) ? (
-                enableEdit ? (
-                  <FilePond allowMultiple={true} maxFiles={5} onupdatefiles={setFilesTask} />
-                ) : (
-                  <Empty
-                    image={Empty.PRESENTED_IMAGE_SIMPLE}
-                    className='mt-6'
-                    description={
-                      <span className='font-normal text-gray-400'>
-                        There are no files
-                      </span>
-                    }
-                  />
-                )
-              ) : (
-                enableEdit ? (
-                  <section className='max-w-[calc(100vw-1.25rem)]'>
-                    <FilePond allowMultiple={true} maxFiles={5} onupdatefiles={setFilesTask} />
-                    <div className='space-y-2'>
-                      {activityFiles.map((file) => renderFiles(file))}
-                    </div>
-
-                  </section>
-                ) : (
-                  <div className='space-y-2 max-w-[calc(100vw-1.25rem)]'>
-                    {activityFiles.map((file) => renderFiles(file))}
-                  </div>
-
-                )
-              )}
-            </div>
-          </div> :
-          evaluated || passedDeadline ?
-            <div className='flex flex-col max-w-[calc(100vw-1.25rem)]'>
-              <p className='mb-3 text-xs text-gray-400' > Task Files</ p>
-              <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)] w-[30rem]'>
-                {
-                  activityData.activity.data.attributes.file?.data === null || activityData.activity.data.attributes.file?.data?.length === 0 ?
-                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
-                      <span className='font-normal text-gray-400 '>
-                        There are no files
-                      </span>
-                    } />
-                    :
-                    <section className='flex flex-col gap-y-3'>
-                      {activityFiles.map((file, index) => renderFiles(file))}
-                    </section>
-                }
-              </div>
               {
-                activityData.evaluator.data && (
+                evaluated && (
                   <>
-                    <p className='mb-1 text-xs text-gray-400' > Evaluator</ p>
-                    <div className='pl-1'>
-                      <ProfessorData professor={{ attributes: activityData.evaluator.data.attributes }} evaluatorFlag={true} />
-                    </div>
+                    <p className='mt-5 mb-1 text-xs text-gray-400'>Comments</p>
+                    <hr />
+                    {
+                      activityData.comments === null || activityData.comments === '' ?
+                        <p className='mt-3'>There are no comments for your submission.</p>
+                        :
+                        <p className='mt-3'>{activityData.comments}</p>
+                    }
+
                   </>
                 )
               }
-              <p className='mt-5 mb-3 text-xs text-gray-400'>Your submission</p>
-              {
-                filesUploaded.length === 0 ?
-                  <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)] w-[30rem]'>
-                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
-                      <span className='font-normal text-gray-400 '>
-                        You did not submit any files
-                      </span>
-                    } />
-                  </div> :
-                  <div className='flex flex-col p-5 bg-white rounded-md mb-14 gap-y-3'>
-                    {filesUploaded && filesUploaded.map(renderFiles)}
-                  </div>
-              }
-            </div >
-            :
-            <div className='flex flex-col w-[30rem] mt-1 max-w-[calc(100vw-2.5rem)]'>
-              <p className='mb-3 text-xs text-gray-400' > Task Files</ p>
-              {
-                activityData.activity.data.attributes.file?.data === null ||
-                  activityData.activity.data.attributes.file?.data?.length === 0 ?
-                  <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
-                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
-                      <span className='font-normal text-gray-400 '>
-                        There are no files
-                      </span>
-                    } />
-                  </div>
-                  :
-                  <div className='flex flex-col gap-y-3'>
-                    {activityFiles.map((file, index) => renderFiles(file))}
-                  </div>
-              }
-              <p className='mt-5 mb-1 text-xs text-gray-400'>Your submission</p>
-              <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
-                {filesUploaded && filesUploaded.map((file) => renderFiles(file, true))}
+
+
+              <p className='mt-5 mb-1 text-xs text-gray-400'>Task description</p>
+              <hr />
+              <div className='prose my-3 text-gray-600 ml-5 max-w-[calc(100vw-1.25rem)] box-content mt-5 '>
+                {
+                  !enableEdit ?
+                    <ReactMarkdown className=''>{activityData.activity.data.attributes.description}</ReactMarkdown>
+                    :
+                    <div className="flex flex-col">
+                      <MDEditor height="30rem" className='mt-2 mb-8' data-color-mode='light' onChange={setSubsectionContent} value={subsectionContent} />
+                      <Button onClick={() => saveChanges()} type="primary" loading={loading}
+                        className="inline-flex justify-center px-4 ml-auto text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Save Changes
+                      </Button>
+                    </div>
+                }
               </div>
 
-              <FilePond
-                files={formData.getAll('files')}
-                allowMultiple={true}
-                maxFiles={5}
-                onaddfile={(err, item) => {
-                  if (!err) {
-                    handleFileUpload(item.file);
-                  }
-                }}
-                onremovefile={(err, item) => {
-                  if (!err) {
-                    const dataCopy = formData;
-                    dataCopy.forEach((value, key) => {
-                      if (value.name === item.file.name) {
-                        dataCopy.delete(key);
-                      }
-                    });
-                    document.getElementById('submit-button-activity').disabled = formData.getAll('files').length === 0;
-                    setFormData(dataCopy);
-                  }
-                }}
-              />
-              <Button
-                loading={uploadLoading}
-                id='submit-button-activity'
-                onClick={() => { sendData() }}
-                className="ml-auto " type='primary'>
-                Submit
-              </Button>
-              {activityGroup &&
-                <section className="flex flex-col flex-1 w-full ">
-                  <p className="text-xl ">Group members</p>
-                  <div className="flex flex-col px-5 my-2">
-                    {activityGroup.users.data.map((user, index) => {
-                      return (
-                        <a key={index}
-                          href={`/app/profile/${user.id}`}
-                          rel='noreferrer'
-                          target='_blank'
-                          className="flex cursor-pointer hover:scale-105 duration-150  px-3 py-1 w-[250px]
-                           border-2 border-gray-700 bg-white rounded-md items-center gap-2 mt-3">
-                          <Avatar size="large" src={user.attributes.profile_photo.data?.attributes?.url} />
-                          <p className="text-lg text-black">{user.attributes.username}</p>
-                        </a>
+            </div >
+            {
+              user.role_str === 'professor' || user.role_str === 'admin' ?
+                <div className='flex flex-col'>
+                  <p className='mb-3 text-xs text-gray-400' > Task Files</ p>
+                  <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)]  w-[30rem]'>
+                    {(!activityFiles.length ||
+                      activityFiles?.length === 0) ? (
+                      enableEdit ? (
+                        <FilePond allowMultiple={true} maxFiles={5} onupdatefiles={setFilesTask} />
+                      ) : (
+                        <Empty
+                          image={Empty.PRESENTED_IMAGE_SIMPLE}
+                          className='mt-6'
+                          description={
+                            <span className='font-normal text-gray-400'>
+                              There are no files
+                            </span>
+                          }
+                        />
                       )
-                    })}
+                    ) : (
+                      enableEdit ? (
+                        <section className='max-w-[calc(100vw-1.25rem)]'>
+                          <FilePond allowMultiple={true} maxFiles={5} onupdatefiles={setFilesTask} />
+                          <div className='space-y-2'>
+                            {activityFiles.map((file) => renderFiles(file))}
+                          </div>
+
+                        </section>
+                      ) : (
+                        <div className='space-y-2 max-w-[calc(100vw-1.25rem)]'>
+                          {activityFiles.map((file) => renderFiles(file))}
+                        </div>
+
+                      )
+                    )}
                   </div>
-                </section>
-              }
-            </div>
+                </div> :
+                evaluated || passedDeadline ?
+                  <div className='flex flex-col max-w-[calc(100vw-1.25rem)]'>
+                    <p className='mb-3 text-xs text-gray-400' > Task Files</ p>
+                    <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)] w-[30rem]'>
+                      {
+                        activityData.activity.data.attributes.file?.data === null || activityData.activity.data.attributes.file?.data?.length === 0 ?
+                          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
+                            <span className='font-normal text-gray-400 '>
+                              There are no files
+                            </span>
+                          } />
+                          :
+                          <section className='flex flex-col gap-y-3'>
+                            {activityFiles.map((file, index) => renderFiles(file))}
+                          </section>
+                      }
+                    </div>
+                    {
+                      activityData.evaluator.data && (
+                        <>
+                          <p className='mb-1 text-xs text-gray-400' > Evaluator</ p>
+                          <div className='pl-1'>
+                            <ProfessorData professor={{ attributes: activityData.evaluator.data.attributes }} evaluatorFlag={true} />
+                          </div>
+                        </>
+                      )
+                    }
+                    <p className='mt-5 mb-3 text-xs text-gray-400'>Your submission</p>
+                    {
+                      filesUploaded.length === 0 ?
+                        <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)] w-[30rem]'>
+                          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
+                            <span className='font-normal text-gray-400 '>
+                              You did not submit any files
+                            </span>
+                          } />
+                        </div> :
+                        <div className='flex flex-col p-5 bg-white rounded-md mb-14 gap-y-3'>
+                          {filesUploaded && filesUploaded.map(renderFiles)}
+                        </div>
+                    }
+                  </div >
+                  :
+                  <div className='flex flex-col w-[30rem] mt-1 max-w-[calc(100vw-2.5rem)]'>
+                    <p className='mb-3 text-xs text-gray-400' > Task Files</ p>
+                    {
+                      activityData.activity.data.attributes.file?.data === null ||
+                        activityData.activity.data.attributes.file?.data?.length === 0 ?
+                        <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
+                          <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
+                            <span className='font-normal text-gray-400 '>
+                              There are no files
+                            </span>
+                          } />
+                        </div>
+                        :
+                        <div className='flex flex-col gap-y-3'>
+                          {activityFiles.map((file, index) => renderFiles(file))}
+                        </div>
+                    }
+                    <p className='mt-5 mb-1 text-xs text-gray-400'>Your submission</p>
+                    <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
+                      {filesUploaded && filesUploaded.map((file) => renderFiles(file, true))}
+                    </div>
+
+                    <FilePond
+                      files={formData.getAll('files')}
+                      allowMultiple={true}
+                      maxFiles={5}
+                      onaddfile={(err, item) => {
+                        if (!err) {
+                          handleFileUpload(item.file);
+                        }
+                      }}
+                      onremovefile={(err, item) => {
+                        if (!err) {
+                          const dataCopy = formData;
+                          dataCopy.forEach((value, key) => {
+                            if (value.name === item.file.name) {
+                              dataCopy.delete(key);
+                            }
+                          });
+                          document.getElementById('submit-button-activity').disabled = formData.getAll('files').length === 0;
+                          setFormData(dataCopy);
+                        }
+                      }}
+                    />
+                    <Button
+                      loading={uploadLoading}
+                      id='submit-button-activity'
+                      onClick={() => { sendData() }}
+                      className="ml-auto " type='primary'>
+                      Submit
+                    </Button>
+                    {activityGroup !== null &&
+                      <section className="flex flex-col flex-1 w-full ">
+                        <p className="text-xl ">Group members</p>
+                        <div className="flex flex-col px-5 my-2">
+                          {activityGroup.users.data.map((user, index) => {
+                            return (
+                              <a key={index}
+                                href={`/app/profile/${user.id}`}
+                                rel='noreferrer'
+                                target='_blank'
+                                className="flex cursor-pointer hover:scale-105 duration-150  px-3 py-1 w-[250px]
+                           border-2 border-gray-700 bg-white rounded-md items-center gap-2 mt-3">
+                                <Avatar size="large" src={user.attributes.profile_photo.data?.attributes?.url} />
+                                <p className="text-lg text-black">{user.attributes.username}</p>
+                              </a>
+                            )
+                          })}
+                        </div>
+                      </section>
+                    }
+                  </div>
+            }
+          </>
       }
+
     </div >
   )
 }
