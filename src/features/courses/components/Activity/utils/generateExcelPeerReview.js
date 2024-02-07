@@ -1,5 +1,5 @@
 import * as ExcelJS from 'exceljs';
-export default function generateExcelPeerReview(students, peerReviewAnswers, activityToReviewID) {
+export default function generateExcelPeerReview(students, peerReviewAnswers, activityToReviewID, peerReviewinGroups) {
 
     let activityGroup = false;
     const categories = Object.keys(peerReviewAnswers[0].attributes.Answers);
@@ -16,7 +16,6 @@ export default function generateExcelPeerReview(students, peerReviewAnswers, act
     const answersKeys = transformCategories(categories);
 
     const studentQualifications = students.map((student) => {
-
         const studentQualificationsGiven = peerReviewAnswers.filter((answer) =>
             answer.attributes.user?.data.id === student.id).map((answer) => {
                 if (answer.attributes.qualifications.data.length > 1) {
@@ -35,24 +34,25 @@ export default function generateExcelPeerReview(students, peerReviewAnswers, act
             });
 
         const studentQualificationsReceived = peerReviewAnswers.filter((answer) =>
-            answer.attributes.qualifications?.data[0].attributes.user.data.id === student.id).map((answer) => {
-                if (answer.attributes.qualifications.data.length > 1) {
-                    activityGroup = true;
-                    const qual = answer.attributes.user.data.attributes.groups?.data
-                        .filter((group) => group?.attributes?.activity?.data?.id === activityToReviewID)
-                    const name2 = qual[0].attributes.users.data.find((user) => user.id !== student.id).attributes.name
+            answer.attributes.qualifications?.data.some((qualification) =>
+                qualification.attributes.user.data.id === student.id)).map((answer) => {
+                    if (answer.attributes.qualifications.data.length > 1 && peerReviewinGroups) {
+                        activityGroup = true;
+                        const qual = answer.attributes.user.data.attributes.groups?.data
+                            .filter((group) => group?.attributes?.activity?.data?.id === activityToReviewID)
+                        const name2 = qual[0].attributes.users.data.find((user) => user.id !== student.id).attributes.name
+                        return {
+                            name: answer.attributes.user.data.attributes.name,
+                            name2: name2,
+                            answer: answer.attributes.Answers
+                        }
+                    }
                     return {
                         name: answer.attributes.user.data.attributes.name,
-                        name2: name2,
+                        email: answer.attributes.user.data.attributes.email,
                         answer: answer.attributes.Answers
                     }
-                }
-                return {
-                    name: answer.attributes.user.data.attributes.name,
-                    email: answer.attributes.user.data.attributes.email,
-                    answer: answer.attributes.Answers
-                }
-            })
+                })
 
         return {
             name: student.attributes.name,
@@ -64,19 +64,19 @@ export default function generateExcelPeerReview(students, peerReviewAnswers, act
     })
 
 
-    generateExcel({ categories, answersKeys, studentQualifications, activityName, activityGroup });
+    generateExcel({ categories, answersKeys, studentQualifications, activityName, activityGroup, peerReviewinGroups });
 
 }
 
-const generateExcel = async ({ categories, answersKeys, studentQualifications, activityName }) => {
+const generateExcel = async ({ categories, answersKeys, studentQualifications, activityName, peerReviewinGroups }) => {
     // Crear un nuevo libro de Excel
     const workbook = new ExcelJS.Workbook();
     workbook.creator = 'Uptitude';
     workbook.created = new Date();
     workbook.modified = new Date();
 
-    const nameOrMail = studentQualifications[0].activityGroup ? 'Evaluator' : 'Email';
-    const nameOrMailEvaluated = studentQualifications[0].activityGroup ? 'Evaluated' : 'Email';
+    const nameOrMail = peerReviewinGroups ? 'Evaluator' : 'Email';
+    const nameOrMailEvaluated = studentQualifications.some((qual) => qual.activityGroup === true) ? 'Evaluated' : 'Email';
 
     // Agregar una hoja de cálculo por cada estudiante
     studentQualifications.forEach((user, index) => {

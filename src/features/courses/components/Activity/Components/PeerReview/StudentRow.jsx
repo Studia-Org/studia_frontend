@@ -4,7 +4,7 @@ import { ModalRubrica } from './ModalRubrica'
 import { ModalFilesPR } from './ModalFilesPR'
 import { AvatarGroup, Avatar } from "rsuite"
 
-export const StudentRow = ({ student, activityToReviewID, activityTitle, peerReviewAnswers }) => {
+export const StudentRow = ({ student, activityToReviewID, activityTitle, peerReviewAnswers, peerReviewinGroups }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isRubricModalOpen, setIsRubricModalOpen] = useState(false);
     const [rubricData, setRubricData] = useState({})
@@ -26,6 +26,7 @@ export const StudentRow = ({ student, activityToReviewID, activityTitle, peerRev
             qualification.attributes.user.data.id === student.id))
 
     const studentFiles = studentQualifications[0]?.attributes.file?.data
+
     function handleRubricModalOpen(qualification) {
         setRubricData(qualification)
         setIsRubricModalOpen(true)
@@ -78,7 +79,7 @@ export const StudentRow = ({ student, activityToReviewID, activityTitle, peerRev
 
     function renderAllRecievedQualifications(recievedQualification) {
         const activityGroup = recievedQualification.attributes.user.data.attributes.groups?.data.find((group) => group.attributes.activity.data.id === activityToReviewID)
-        if (activityGroup) {
+        if (activityGroup && peerReviewinGroups) {
             return (
                 <>
                     <Button onClick={() => handleRubricModalOpen(recievedQualification)} className='flex items-center h-full overflow-x-clip' >
