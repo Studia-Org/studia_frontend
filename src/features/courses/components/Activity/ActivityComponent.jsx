@@ -351,7 +351,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
       message.error('Something went wrong: ', error);
     }
   };
-
+  console.log(activityData)
 
   return (
     <div className='flex max-w-[calc(100vw)] flex-col 1.5xl:flex-row items-start 1.5xl:items-start 1.5xl:space-x-24 p-5 sm:p-10'>
@@ -475,7 +475,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                       }
                     </div>
                     {
-                      activityData.evaluator.data && (
+                      activityData.evaluator?.data && (
                         <>
                           <p className='mb-1 text-xs text-gray-400' > Evaluator</ p>
                           <div className='pl-1'>
