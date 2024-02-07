@@ -55,10 +55,10 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
 
   async function saveChanges() {
     setLoading(true);
+    console.log('honor');
     const formData = new FormData();
     let filesId = [];
     try {
-      if (filesTask.length === 0) return
       if (filesTask.length > 0) {
         filesTask.forEach((file) => {
           formData.append('files', file.file);
@@ -78,6 +78,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
           filesId = filesId.concat(activityFiles.map((file) => file.id));
         }
       }
+      console.log('honor');
       const response = await fetch(`${API}/activities/${activityId}?populate[file][fields][0]=*`, {
         method: 'PUT',
         headers: {
@@ -383,7 +384,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
               :
               <div className="flex flex-col">
                 <MDEditor height="30rem" className='mt-2 mb-8' data-color-mode='light' onChange={setSubsectionContent} value={subsectionContent} />
-                <Button onClick={() => saveChanges()} type="primary" loading={loading}
+                <Button onClick={() => saveChanges()} type="" loading={loading}
                   className="inline-flex justify-center px-4 ml-auto text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                   Save Changes
                 </Button>

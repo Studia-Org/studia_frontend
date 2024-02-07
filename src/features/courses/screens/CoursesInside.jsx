@@ -126,7 +126,7 @@ const CourseInside = () => {
   const fetchCourseInformation = async () => {
     try {
       const response = await fetch(
-        `${API}/courses/${courseId}?populate=sections.subsections.activity,cover,sections.subsections.paragraphs,sections.subsections.files,students.profile_photo,professor.profile_photo,evaluators.profile_photo,sections.subsections.landscape_photo,sections.subsections.questionnaire`
+        `${API}/courses/${courseId}?populate=sections.subsections.activity.qualifications,cover,sections.subsections.paragraphs,sections.subsections.files,students.profile_photo,professor.profile_photo,evaluators.profile_photo,sections.subsections.landscape_photo,sections.subsections.questionnaire`
       );
       const data = await response.json();
       document.title = `${data?.data?.attributes.title} - Uptitude`
@@ -192,7 +192,7 @@ const CourseInside = () => {
   }
 
   useEffect(() => {
-    if (courseSubsection.length !== 0) {
+    if (courseSubsection?.length && courseSubsection?.length !== 0) {
       setSubsectionsLandscapePhoto(
         courseSubsection.attributes.landscape_photo?.data?.attributes?.url ??
         null
@@ -256,7 +256,8 @@ const CourseInside = () => {
         <div className="container-fluid min-h-screen w-screen max-w-full rounded-tl-3xl bg-[#e7eaf886] flex flex-wrap flex-col-reverse md:flex-row  ">
           <div id="flex_wrap" className="flex-1 max-w-full min-w-0 sm:w-auto mt-3 md:ml-8 md:mr-8 p-5 md:p-0 md:basis-[600px]">
             {editSectionFlag && sectionToEdit !== null ? (
-              <EditSection setEditSectionFlag={setEditSectionFlag} sectionToEdit={sectionToEdit} setCourseContentInformation={setCourseContentInformation} setSectionToEdit={setSectionToEdit} />
+              <EditSection setEditSectionFlag={setEditSectionFlag} sectionToEdit={sectionToEdit} setCourseContentInformation={setCourseContentInformation}
+                setSectionToEdit={setSectionToEdit} setCourseSection={setCourseSection} setCourseSubsection={setCourseSubsection} courseContentInformation={courseContentInformation} />
             ) : !forumFlag ? (
               <div>
                 {

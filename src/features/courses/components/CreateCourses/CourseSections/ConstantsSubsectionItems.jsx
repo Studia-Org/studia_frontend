@@ -7,6 +7,10 @@ function createSubsection(subsectionName, fase, questionnaireData, setCreateCour
     const id = crypto.randomUUID();
 
     if (context === 'coursesInside') {
+        if (activityData?.id) {
+            delete activityData.id
+        }
+
         const newSubsection = {
             id: id,
             attributes: {
@@ -15,18 +19,25 @@ function createSubsection(subsectionName, fase, questionnaireData, setCreateCour
                 finished: false,
                 start_date: null,
                 end_date: null,
-                activity: activityData,
+                activity: {
+                    ...activityData,
+                    title: subsectionName,
+                    categories: [],
+                    description: 'Activity',
+                    type: type,
+                    deadline: new Date().toISOString(),
+                },
                 content: '',
                 paragraphs: [],
-                description: null,
+                description: 'Subsection description',
                 landscape_photo: [],
                 files: [],
                 type: type,
                 questionnaire: questionnaireData,
                 users: null
             }
-
         };
+
         setCreateCourseSectionsList(prev => {
             const updatedSectionToEdit = JSON.parse(JSON.stringify(prev));
             updatedSectionToEdit.attributes.subsections.data.push(newSubsection);
@@ -116,6 +127,15 @@ function svgSwitcher(pathDescription) {
     }
 }
 
+const sectionTaskCoursesInside = {
+    title: '',
+    description: '',
+    type: 'task',
+    categories: [],
+    deadline: new Date().toISOString(),
+    id: crypto.randomUUID(),
+}
+
 const QuestionItem = ({ iconColor, iconPath, title }) => (
     <li className="flex items-center mt-8 mb-10 ml-8">
         <span className={`absolute flex items-center justify-center w-8 h-8 bg-[${iconColor}] rounded-full -left-4 ring-white`}>
@@ -128,6 +148,9 @@ const QuestionItem = ({ iconColor, iconPath, title }) => (
 );
 
 function modifySequence(sequence, sectionTask) {
+    if (!sectionTask) {
+        sectionTask = sectionTaskCoursesInside;
+    }
     const modifiedSequence = sequence.map((item, index) => {
         const id = crypto.randomUUID();
 
@@ -161,13 +184,13 @@ function modifySequence(sequence, sectionTask) {
 }
 
 
-function addSequence(modifiedSequence, setCreateCourseSectionsList, sectionToEdit) {
+function addSequence(modifiedSequence, setCreateCourseSectionsList, sectionToEdit, context) {
     for (const item of modifiedSequence) {
-        createSubsection(item.title, item.fase, item.questionnaireData, setCreateCourseSectionsList, sectionToEdit, item.type, '', item.activityData);
+        createSubsection(item.title, item.fase, item.questionnaireData, setCreateCourseSectionsList, sectionToEdit, item.type, context, item.activityData);
     }
 }
 
-export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask }) => {
+export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask, context }) => {
     const sequence = [
         { title: 'MSLQ Questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: MSLQuestionnaireData, type: 'questionnaire', activityData: null },
         { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
@@ -175,6 +198,8 @@ export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit, se
         { title: 'Task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
         { title: 'Peer review', iconColor: '#dc2626', iconPath: svgSwitcher('peerReview'), fase: 'self-reflection', questionnaireData: null, type: 'peerReview', activityData: PeerReviewData },
         { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: 'MSLQ Questionnaire', iconColor: '#dc2626', iconPath: svgSwitcher('questionnaireNormal'), fase: 'self-reflection', questionnaireData: MSLQuestionnaireData, type: 'questionnaire', activityData: null },
+
     ];
 
     const modifiedSequence = modifySequence(sequence, sectionTask);
@@ -189,7 +214,7 @@ export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit, se
                 </ol>
             </div>
             <div className='w-1/2 h-full p-5 text-right bg-white border rounded-md '>
-                <button onClick={() => { addSequence(modifiedSequence, setCreateCourseSectionsList, sectionToEdit) }} className="bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150 mb-5 ml-auto">
+                <button onClick={() => { addSequence(modifiedSequence, setCreateCourseSectionsList, sectionToEdit, context) }} className="bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150 mb-5 ml-auto">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
                     </svg>
@@ -204,7 +229,7 @@ export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit, se
     );
 }
 
-export const SequenceDevelopEducation1 = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask }) => {
+export const SequenceDevelopEducation1 = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask, context }) => {
     const sequence = [
         { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
         { title: 'Forum debate', iconColor: '#15803d', iconPath: svgSwitcher('forum'), fase: 'forethought', questionnaireData: null, type: 'forum', activityData: ForumData },
@@ -232,7 +257,7 @@ export const SequenceDevelopEducation1 = ({ setCreateCourseSectionsList, section
                 </ol>
             </div>
             <div className='w-1/2 h-full p-5 text-right bg-white border rounded-md '>
-                <button onClick={() => { addSequence(modifiedSequence, setCreateCourseSectionsList, sectionToEdit) }} className="bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150 mb-5 ml-auto">
+                <button onClick={() => { addSequence(modifiedSequence, setCreateCourseSectionsList, sectionToEdit, context) }} className="bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150 mb-5 ml-auto">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
                     </svg>
@@ -247,7 +272,7 @@ export const SequenceDevelopEducation1 = ({ setCreateCourseSectionsList, section
     );
 }
 
-export const SequenceDevelopEducation2 = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask }) => {
+export const SequenceDevelopEducation2 = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask, context }) => {
     const sequence = [
         { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
         { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
@@ -270,7 +295,7 @@ export const SequenceDevelopEducation2 = ({ setCreateCourseSectionsList, section
                 </ol>
             </div>
             <div className='w-1/2 h-full p-5 text-right bg-white border rounded-md '>
-                <button onClick={() => { addSequence(modifiedSequence, setCreateCourseSectionsList, sectionToEdit) }} className="bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150 mb-5 ml-auto">
+                <button onClick={() => { addSequence(modifiedSequence, setCreateCourseSectionsList, sectionToEdit, context) }} className="bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150 mb-5 ml-auto">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
                     </svg>
@@ -286,7 +311,7 @@ export const SequenceDevelopEducation2 = ({ setCreateCourseSectionsList, section
 }
 
 
-export const SequenceFeedUP = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask }) => {
+export const SequenceFeedUP = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask, context }) => {
     const sequence = [
         { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
         { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
@@ -309,7 +334,7 @@ export const SequenceFeedUP = ({ setCreateCourseSectionsList, sectionToEdit, sec
                 </ol>
             </div>
             <div className='w-1/2 h-full p-5 text-right bg-white border rounded-md '>
-                <button onClick={() => { addSequence(modifiedSequence, setCreateCourseSectionsList, sectionToEdit) }} className="bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150 mb-5 ml-auto">
+                <button onClick={() => { addSequence(modifiedSequence, setCreateCourseSectionsList, sectionToEdit, context) }} className="bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150 mb-5 ml-auto">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
                     </svg>
@@ -324,7 +349,7 @@ export const SequenceFeedUP = ({ setCreateCourseSectionsList, sectionToEdit, sec
     );
 }
 
-export const SequenceThinkAloud = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask }) => {
+export const SequenceThinkAloud = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask, context }) => {
     const sequence = [
         { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
         { title: 'Rubric analysis ', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: null },
@@ -345,7 +370,7 @@ export const SequenceThinkAloud = ({ setCreateCourseSectionsList, sectionToEdit,
                 </ol>
             </div>
             <div className='w-1/2 h-full p-5 text-right bg-white border rounded-md '>
-                <button onClick={() => { addSequence(modifiedSequence, setCreateCourseSectionsList, sectionToEdit) }} className="bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150 mb-5 ml-auto">
+                <button onClick={() => { addSequence(modifiedSequence, setCreateCourseSectionsList, sectionToEdit, context) }} className="bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150 mb-5 ml-auto">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
                     </svg>
@@ -361,7 +386,7 @@ export const SequenceThinkAloud = ({ setCreateCourseSectionsList, sectionToEdit,
 }
 
 
-export const SequenceDevelopNoMSLQForum = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask }) => {
+export const SequenceDevelopNoMSLQForum = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask, context }) => {
     const sequence = [
         { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
         { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
@@ -370,6 +395,7 @@ export const SequenceDevelopNoMSLQForum = ({ setCreateCourseSectionsList, sectio
         { title: 'Peer review', iconColor: '#dc2626', iconPath: svgSwitcher('peerReview'), fase: 'self-reflection', questionnaireData: null, type: 'peerReview', activityData: PeerReviewData },
         { title: 'Feedback refactor', iconColor: '#dc2626', iconPath: svgSwitcher('taskImplementation'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
         { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: 'MSLQ Questionnaire', iconColor: '#dc2626', iconPath: svgSwitcher('questionnaireNormal'), fase: 'self-reflection', questionnaireData: MSLQuestionnaireData, type: 'questionnaire', activityData: null },
     ];
 
     const modifiedSequence = modifySequence(sequence, sectionTask);
@@ -384,7 +410,7 @@ export const SequenceDevelopNoMSLQForum = ({ setCreateCourseSectionsList, sectio
                 </ol>
             </div>
             <div className='w-1/2 h-full p-5 text-right bg-white border rounded-md '>
-                <button onClick={() => { addSequence(modifiedSequence, setCreateCourseSectionsList, sectionToEdit) }} className="bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150 mb-5 ml-auto">
+                <button onClick={() => { addSequence(modifiedSequence, setCreateCourseSectionsList, sectionToEdit, context) }} className="bg-[#45406f] text-white font-normal text-sm p-2 rounded-md flex gap-2 hover:scale-105 duration-150 mb-5 ml-auto">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
                     </svg>

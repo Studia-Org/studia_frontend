@@ -8,6 +8,7 @@ import '@mdxeditor/editor/style.css'
 import { API } from "../../../../constant";
 import { getToken } from "../../../../helpers";
 import { MoonLoader } from "react-spinners";
+import { sub } from "date-fns";
 
 
 
@@ -16,9 +17,9 @@ export const CourseContent = ({ setForumFlag, courseContentInformation, courseSe
     const section_ = courseContentInformation.find(
         (seccion) => seccion.attributes.title === courseSection
     );
-    const subsection_ = section_.attributes.subsections.data.find(
+    const subsection_ = section_?.attributes.subsections.data.find(
         (subseccion) =>
-            subseccion.attributes.title === courseSubsection.attributes.title
+            subseccion?.attributes.title === courseSubsection?.attributes.title
     );
     const [subsectionContent, setSubsectionContent] = useState(subsection_?.attributes?.content);
 
@@ -107,20 +108,23 @@ export const CourseContent = ({ setForumFlag, courseContentInformation, courseSe
 
     return (
         <>
-            <p className='text-xs font-normal text-gray-400 mb-1'>Activity</p>
+            <p className='mb-1 text-xs font-normal text-gray-400'>Activity</p>
             <hr className='mb-5' />
-            <TaskComponentCard task={subsection_.attributes.activity?.data} context={'coursesInside'} courseId={courseId} setForumFlag={setForumFlag} />
-            <p className='text-xs font-normal text-gray-400 mb-1'>Course content</p>
+            <TaskComponentCard task={subsection_?.attributes.activity?.data} context={'coursesInside'} courseId={courseId} setForumFlag={setForumFlag} />
+            <p className='mb-1 text-xs font-normal text-gray-400'>Course content</p>
             <hr className='mb-5' />
-            <div className='prose max-w-none mb-12'>
+            <div className='mb-12 prose max-w-none'>
                 {
                     !enableEdit
                         ?
-                        <ReactMarkdown>{subsection_?.attributes?.content}</ReactMarkdown>
+                        subsection_?.attributes?.content ?
+                            <ReactMarkdown>{subsection_?.attributes?.content}</ReactMarkdown>
+                            :
+                            <Empty className="mt-10" image={Empty.PRESENTED_IMAGE_SIMPLE} description={'There is no content'} />
                         :
                         <div className="flex flex-col">
                             <MDEditor height="30rem" className='mt-2 mb-8' data-color-mode='light' onChange={setSubsectionContent} value={subsectionContent} />
-                            <Button onClick={() => saveChanges()} type="primary" loading={loading} className=" ml-auto inline-flex justify-center rounded-md border border-transparent bg-blue-600  px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                            <Button onClick={() => saveChanges()} type="primary" loading={loading} className="inline-flex justify-center px-4 ml-auto text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                             >
                                 Save Changes
                             </Button>
@@ -256,23 +260,23 @@ export const CourseFiles = ({ courseContentInformation, courseSection, courseSub
     }
 
     return (
-        <div className='w-full flex flex-row items-center space-x-8'>
+        <div className='flex flex-row items-center w-full space-x-8'>
             <div className='w-full mr-5'>
                 {
                     files?.length > 0 ?
                         (
-                            <ul className="mt-3 flex gap-5 flex-wrap items-center">
+                            <ul className="flex flex-wrap items-center gap-5 mt-3">
                                 {files?.map((file) => (
-                                    <li key={file.id} className=" flex rounded-md shadow-sm" >
+                                    <li key={file.id} className="flex rounded-md shadow-sm " >
                                         <div
-                                            className='bg-indigo-500  flex items-center justify-center  px-4 text-white text-sm font-medium rounded-l-md'>
+                                            className='flex items-center justify-center px-4 text-sm font-medium text-white bg-indigo-500 rounded-l-md'>
                                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
                                                 <path fillRule="evenodd" d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0016.5 9h-1.875a1.875 1.875 0 01-1.875-1.875V5.25A3.75 3.75 0 009 1.5H5.625zM7.5 15a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5A.75.75 0 017.5 15zm.75 2.25a.75.75 0 000 1.5H12a.75.75 0 000-1.5H8.25z" clipRule="evenodd" />
                                                 <path d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z" />
                                             </svg>
                                         </div>
-                                        <div className="flex flex-1 items-center justify-between  rounded-r-md border-t border-r border-b border-gray-200 bg-white">
-                                            <div className="flex-1 truncate px-4 py-2 text-sm">
+                                        <div className="flex items-center justify-between flex-1 bg-white border-t border-b border-r border-gray-200 rounded-r-md">
+                                            <div className="flex-1 px-4 py-2 text-sm truncate">
                                                 <p className="font-medium text-gray-900 hover:text-gray-600">
                                                     {file.attributes.name.length > 30
                                                         ? `${file.attributes.name.slice(0, 30)}...`
@@ -284,7 +288,7 @@ export const CourseFiles = ({ courseContentInformation, courseSection, courseSub
                                                 <button
                                                     type="button"
                                                     onClick={() => downloadFile(file.attributes)}
-                                                    className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-white bg-transparent text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                                                    className="inline-flex items-center justify-center w-8 h-8 text-gray-400 bg-transparent bg-white rounded-full hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                                                 >
                                                     <span className="sr-only">Open options</span>
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -298,7 +302,7 @@ export const CourseFiles = ({ courseContentInformation, courseSection, courseSub
                                 {
                                     enableEdit && (
                                         <li className="flex rounded-md items-center justify-center bg-indigo-500 text-white text-sm w-[3rem] h-[3rem] font-medium duration-100 hover:scale-105 cursor-pointer">
-                                            <label htmlFor="avatar" className="file-input-label flex items-center gap-3 relative">
+                                            <label htmlFor="avatar" className="relative flex items-center gap-3 file-input-label">
                                                 <div className="absolute flex items-center justify-center cursor-pointer" style={{ width: '100%', height: '100%' }}>
                                                     {
                                                         fileUploadLoading && (
@@ -320,8 +324,8 @@ export const CourseFiles = ({ courseContentInformation, courseSection, courseSub
                         (
                             enableEdit ? (
                                 <div className="flex rounded-md items-center justify-center bg-indigo-500 text-white text-sm w-[3rem] h-[3rem] font-medium duration-100 hover:scale-105 cursor-pointer">
-                                    
-                                    <label htmlFor="avatar" className="file-input-label flex items-center gap-3 relative">
+
+                                    <label htmlFor="avatar" className="relative flex items-center gap-3 file-input-label">
                                         <div className="absolute flex items-center justify-center cursor-pointer" style={{ width: '100%', height: '100%' }}>
                                             {
                                                 fileUploadLoading && (
@@ -364,7 +368,7 @@ export const CourseParticipants = ({ students, enableEdit, setSettingsFlag }) =>
         return <Empty />;
     } else {
         return (
-            <div className="flex flex-wrap  mt-3 items-center ">
+            <div className="flex flex-wrap items-center mt-3 ">
                 {students.data.map((student) => (
                     <button
                         key={student.id}
@@ -378,7 +382,7 @@ export const CourseParticipants = ({ students, enableEdit, setSettingsFlag }) =>
                         />
                         <div className="flex flex-col items-start ">
                             <p className="font-medium line-clamp-1">{student.attributes.name}</p>
-                            <p className=" text-gray-500">{student.attributes.email}</p>
+                            <p className="text-gray-500 ">{student.attributes.email}</p>
                         </div>
 
                     </button>
@@ -390,7 +394,7 @@ export const CourseParticipants = ({ students, enableEdit, setSettingsFlag }) =>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-white">
                                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
                             </svg>
-                            <p className="text-white font-medium">Add student</p>
+                            <p className="font-medium text-white">Add student</p>
                         </button>
                     )
                 }
