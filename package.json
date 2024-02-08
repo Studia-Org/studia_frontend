@@ -86,6 +86,7 @@
     "sweetalert2": "^11.7.3",
     "tailwind-datepicker-react": "^1.4.3",
     "typeface-roboto": "^1.1.13",
+    "wavesurfer.js": "^7.7.2",
     "web-vitals": "^2.1.4",
     "xlsx": "^0.18.5"
   },

@@ -1,5 +1,5 @@
 import { MSLQuestionnaireData, EmptyQuestionnaireData, PlannificationQuestionnaireData } from './QuestionnaireData'
-import { PeerReviewData, ForumData } from './ActivityData';
+import { PeerReviewData, ForumData, ThinkAloudData } from './ActivityData';
 import React from 'react'
 
 
@@ -353,9 +353,9 @@ export const SequenceThinkAloud = ({ setCreateCourseSectionsList, sectionToEdit,
     const sequence = [
         { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
         { title: 'Rubric analysis ', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: null },
-        { title: 'Think Aloud ', iconColor: '#15803d', iconPath: svgSwitcher('thinkAloud'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: null },
+        { title: 'Think Aloud ', iconColor: '#15803d', iconPath: svgSwitcher('thinkAloud'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: ThinkAloudData },
         { title: 'Task Implementation and Delivery', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
-        { title: 'Think Aloud and Feed-Forward', iconColor: '#dc2626', iconPath: svgSwitcher('thinkAloud'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: null },
+        { title: 'Think Aloud and Feed-Forward', iconColor: '#dc2626', iconPath: svgSwitcher('thinkAloud'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: ThinkAloudData },
     ];
 
     const modifiedSequence = modifySequence(sequence, sectionTask);
@@ -566,6 +566,24 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, co
                     <p className='text-sm font-normal text-gray-500'>Create a new questionnaire from scratch.</p>
                 </div>
                 <button onClick={() => createSubsection('Questionnaire', 'forethought', EmptyQuestionnaireData, setCreateCourseSectionsList, sectionToEdit, 'questionnaire', context, null)} className='pl-3 mx-3 ml-auto'>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
+                        <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+            <div className='flex items-center p-5 mt-5 border rounded-xl bg-gray-50'>
+                <div className='px-3 py-3 bg-[#15803d] rounded-md flex items-center justify-center '>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-8 h-8 text-white">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z" />
+                    </svg>
+
+                </div>
+                <div className='ml-5'>
+                    <p className='text-base font-normal'>Think Aloud</p>
+                    <p className='text-sm font-normal text-gray-500'>
+                        A Think Aloud is a strategy where you verbalize your thoughts as you work through a problem or task. It helps students understand your reasoning process and learn effective problem-solving strategies.</p>
+                </div>
+                <button onClick={() => createSubsection('Think Aloud', 'forethought', null, setCreateCourseSectionsList, sectionToEdit, 'thinkAloud', context, ThinkAloudData)} className='pl-3 mx-3 ml-auto'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>

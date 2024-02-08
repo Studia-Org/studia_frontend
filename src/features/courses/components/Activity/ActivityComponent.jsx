@@ -17,6 +17,7 @@ import BackToCourse from './Components/BackToCourse';
 import { Empty, Button, message, Popconfirm } from 'antd';
 import MDEditor from '@uiw/react-md-editor';
 import { SwitchEdit } from '../CoursesInside/SwitchEdit';
+import { RecordAudio } from './Components/ThinkAloud/RecordAudio';
 
 
 registerPlugin(FilePondPluginImagePreview);
@@ -493,8 +494,25 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
               }
               <p className='mt-5 mb-1 text-xs text-gray-400'>Your submission</p>
               <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
-                {filesUploaded && filesUploaded.map((file) => renderFiles(file, true))}
+                {
+                  filesUploaded.length === 0 ?
+                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
+                      <span className='font-normal text-gray-400 '>
+                        You did not submit any files
+                      </span>
+                    } />
+                    :
+                    filesUploaded && filesUploaded.map((file) => renderFiles(file, true))
+                }
+
               </div>
+              {
+                activityData.activity.data.attributes.type === 'thinkAloud' &&
+                <>
+                  <RecordAudio />
+                  <p className='my-5 text-xs text-gray-400'>or you can upload an audio file</p>
+                </>
+              }
 
               <FilePond
                 files={formData.getAll('files')}
