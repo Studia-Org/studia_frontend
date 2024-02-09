@@ -34,6 +34,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   const [enableEdit, setEnableEdit] = useState(false);
   const evaluated = activityData.qualification ? true : false;
   const type = activityData?.activity?.data?.attributes?.type;
+  const [audioFile, setAudioFile] = useState(null);
   const [formData, setFormData] = useState(new FormData());
   const { user } = useAuthContext();
   const { activityId } = useParams();
@@ -493,23 +494,27 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                   </div>
               }
               <p className='mt-5 mb-1 text-xs text-gray-400'>Your submission</p>
-              <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
-                {
-                  filesUploaded.length === 0 ?
-                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
-                      <span className='font-normal text-gray-400 '>
-                        You did not submit any files
-                      </span>
-                    } />
-                    :
-                    filesUploaded && filesUploaded.map((file) => renderFiles(file, true))
-                }
+              {
+                activityData.activity.data.attributes.type !== 'thinkAloud' &&
+                <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
+                  {
+                    filesUploaded.length === 0 ?
+                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
+                        <span className='font-normal text-gray-400 '>
+                          You did not submit any files
+                        </span>
+                      } />
+                      :
+                      filesUploaded && filesUploaded.map((file) => renderFiles(file, true))
+                  }
 
-              </div>
+                </div>
+              }
+
               {
                 activityData.activity.data.attributes.type === 'thinkAloud' &&
                 <>
-                  <RecordAudio />
+                  <RecordAudio audioFile={audioFile} setAudioFile={setAudioFile} />
                   <p className='my-5 text-xs text-gray-400'>or you can upload an audio file</p>
                 </>
               }
