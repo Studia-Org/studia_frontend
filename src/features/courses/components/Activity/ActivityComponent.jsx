@@ -18,6 +18,7 @@ import { Empty, Button, message, Popconfirm } from 'antd';
 import MDEditor from '@uiw/react-md-editor';
 import { SwitchEdit } from '../CoursesInside/SwitchEdit';
 import { RecordAudio } from './Components/ThinkAloud/RecordAudio';
+import { is } from 'date-fns/locale';
 
 
 registerPlugin(FilePondPluginImagePreview);
@@ -25,6 +26,7 @@ registerPlugin(FilePondPluginImagePreview);
 
 export const ActivityComponent = ({ activityData, idQualification, setUserQualification }) => {
   const [filesTask, setFilesTask] = useState();
+  const [uploadMode, setUploadMode] = useState('record')
   const [filesUploaded, setFilesUploaded] = useState(activityData?.file?.data || []);
   const [activityFiles, setActivityFiles] = useState(activityData?.activity?.data?.attributes?.file?.data || []);
   const [uploadLoading, setUploadLoading] = useState(false);
@@ -34,7 +36,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   const [enableEdit, setEnableEdit] = useState(false);
   const evaluated = activityData.qualification ? true : false;
   const type = activityData?.activity?.data?.attributes?.type;
-  const [audioFile, setAudioFile] = useState(null);
+  const [audioFile, setAudioFile] = useState(activityData?.file?.data[0]?.attributes);
   const [formData, setFormData] = useState(new FormData());
   const { user } = useAuthContext();
   const { activityId } = useParams();
@@ -57,7 +59,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
 
   async function saveChanges() {
     setLoading(true);
-    console.log('honor');
     const formData = new FormData();
     let filesId = [];
     try {
@@ -80,7 +81,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
           filesId = filesId.concat(activityFiles.map((file) => file.id));
         }
       }
-      console.log('honor');
       const response = await fetch(`${API}/activities/${activityId}?populate[file][fields][0]=*`, {
         method: 'PUT',
         headers: {
@@ -121,8 +121,8 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   }
 
   async function sendFile(result) {
-
     try {
+      const isThinkAloud = activityData.activity.data.attributes.type === 'thinkAloud'
       let response2 = undefined;
       let files = []
 
@@ -131,7 +131,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
       const qualificationData = {
         data: {
           activity: activityId,
-          file: files,
+          file: isThinkAloud ? result[0].id : files,
           user: user.id,
           delivered: true,
           delivered_data: new Date(),
@@ -167,13 +167,20 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   }
   async function sendData() {
     try {
+      const isThinkAloud = (activityData.activity.data.attributes.type === 'thinkAloud' && formData.getAll('files').length === 0)
+      const isBlob = audioFile instanceof Blob;
+      const formDataAudio = new FormData();
+      if (audioFile) {
+        formDataAudio.append('files', audioFile);
+      }
       setUploadLoading(true);
+
       const response = await fetch(`${API}/upload`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${getToken()}`,
         },
-        body: formData,
+        body: (isThinkAloud && isBlob) ? formDataAudio : formData,
       });
       const result = await response.json();
       if (response.ok) {
@@ -206,6 +213,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
           text: 'Something went wrong!',
         })
       }
+
     } catch (error) {
       Swal.fire({
         icon: 'error',
@@ -316,6 +324,15 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
     }
 
   }
+
+  const handleUploadMode = () => {
+    if (uploadMode === 'record') {
+      setUploadMode('upload')
+    } else {
+      setUploadMode('record')
+    }
+  }
+
 
   const downloadFile = async (file) => {
     try {
@@ -512,38 +529,76 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
               }
 
               {
-                activityData.activity.data.attributes.type === 'thinkAloud' &&
-                <>
-                  <RecordAudio audioFile={audioFile} setAudioFile={setAudioFile} />
-                  <p className='my-5 text-xs text-gray-400'>or you can upload an audio file</p>
-                </>
-              }
+                activityData.activity.data.attributes.type === 'thinkAloud' ?
+                  <div className='mb-5 bg-white rounded-md shadow-md'>
+                    <div className='flex items-center gap-5 mx-5 mt-5'>
+                      <p className='text-xs text-gray-400 '>Click on the microphone and start recording your voice, or you can upload an audio file</p>
+                      <Button onClick={() => handleUploadMode()} disabled={passedDeadline}>
+                        Switch mode
+                      </Button>
+                    </div>
+                    {
+                      uploadMode === 'record' ?
+                        <RecordAudio audioFile={audioFile} setAudioFile={setAudioFile} passedDeadline={passedDeadline} />
+                        :
+                        <div className='m-5'>
+                          <FilePond
+                            files={formData.getAll('files')}
+                            allowMultiple={true}
+                            maxFiles={5}
+                            onaddfile={(err, item) => {
+                              if (!err) {
+                                handleFileUpload(item.file);
+                              }
+                            }}
+                            onremovefile={(err, item) => {
+                              if (!err) {
+                                const dataCopy = formData;
+                                dataCopy.forEach((value, key) => {
+                                  if (value.name === item.file.name) {
+                                    dataCopy.delete(key);
+                                  }
+                                });
+                                document.getElementById('submit-button-activity').disabled = formData.getAll('files').length === 0;
+                                setFormData(dataCopy);
+                              }
+                            }}
+                          />
+                        </div>
 
-              <FilePond
-                files={formData.getAll('files')}
-                allowMultiple={true}
-                maxFiles={5}
-                onaddfile={(err, item) => {
-                  if (!err) {
-                    handleFileUpload(item.file);
-                  }
-                }}
-                onremovefile={(err, item) => {
-                  if (!err) {
-                    const dataCopy = formData;
-                    dataCopy.forEach((value, key) => {
-                      if (value.name === item.file.name) {
-                        dataCopy.delete(key);
+
+                    }
+                    <p className='mb-2 ml-5 text-xs text-gray-400'>Remember to submit your file once you finished.</p>
+
+                  </div>
+                  :
+                  <FilePond
+                    files={formData.getAll('files')}
+                    allowMultiple={true}
+                    maxFiles={5}
+                    onaddfile={(err, item) => {
+                      if (!err) {
+                        handleFileUpload(item.file);
                       }
-                    });
-                    document.getElementById('submit-button-activity').disabled = formData.getAll('files').length === 0;
-                    setFormData(dataCopy);
-                  }
-                }}
-              />
+                    }}
+                    onremovefile={(err, item) => {
+                      if (!err) {
+                        const dataCopy = formData;
+                        dataCopy.forEach((value, key) => {
+                          if (value.name === item.file.name) {
+                            dataCopy.delete(key);
+                          }
+                        });
+                        document.getElementById('submit-button-activity').disabled = formData.getAll('files').length === 0;
+                        setFormData(dataCopy);
+                      }
+                    }}
+                  />
+              }
               <Button
                 loading={uploadLoading}
                 id='submit-button-activity'
+                disabled={formData.getAll('files').length === 0 && audioFile === null}
                 onClick={() => { sendData() }}
                 className="ml-auto " type='primary'>
                 Submit

@@ -59,6 +59,7 @@
     "randomcolor": "^0.6.2",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.1",
+    "react-audio-voice-recorder": "^2.2.0",
     "react-calendar-timeline": "^0.28.0",
     "react-circular-progressbar": "^2.1.0",
     "react-confetti": "^6.1.0",

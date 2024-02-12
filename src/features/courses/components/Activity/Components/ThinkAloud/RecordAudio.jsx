@@ -1,32 +1,37 @@
-import React, { useEffect } from "react";
-import { useVoiceVisualizer, VoiceVisualizer } from "react-voice-visualizer";
+import React from 'react';
+import { AudioRecorder } from 'react-audio-voice-recorder';
 
-export const RecordAudio = ({ audioFile, setAudioFile }) => {
-    const recorderControls = useVoiceVisualizer();
-    const {
-        // ... (Extracted controls and states, if necessary)
-        recordedBlob,
-        error,
-        audioRef,
-    } = recorderControls;
+export const RecordAudio = ({ audioFile, setAudioFile, passedDeadline }) => {
+    const addAudioElement = (blob) => {
+        setAudioFile(blob);
+    };
 
-    // Get the recorded audio blob
-    useEffect(() => {
-        if (!recordedBlob) return;
-        setAudioFile(recordedBlob);
-    }, [recordedBlob, error]);
-
-    // Get the error when it occurs
-    useEffect(() => {
-        if (!error) return;
-
-        console.error(error);
-    }, [error]);
 
     return (
-        <div className="bg-white rounded-md shadow-md">
-            <VoiceVisualizer ref={audioRef} controls={recorderControls} mainBarColor="black" secondaryBarColor='black' />
+        <div className='mx-5 my-10 space-y-5'>
+            {
+                !passedDeadline && (
+                    <AudioRecorder
+                        onRecordingComplete={addAudioElement}
+                        audioTrackConstraints={{
+                            noiseSuppression: true,
+                            echoCancellation: true,
+                        }}
+                        onNotAllowedOrFound={(err) => console.table(err)}
+                        downloadOnSavePress={false}
+                        downloadFileExtension="webm"
+                        mediaRecorderOptions={{
+                            audioBitsPerSecond: 128000,
+                        }}
+                        showVisualizer={true}
+                        disabled={true} // Deshabilitar la grabación si hay un archivo de audio proporcionado
+                    />
+                )
+            }
 
+            {audioFile && (
+                <audio controls className='w-full' src={audioFile?.url || URL.createObjectURL(audioFile)} />
+            )}
         </div>
     );
 };

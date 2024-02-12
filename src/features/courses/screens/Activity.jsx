@@ -34,6 +34,7 @@ const Activity = () => {
 
 
       const data = await response.json();
+      console.log(data);
       if (data.data.length > 0) {
         setUserQualification({ activity: data.data[0].attributes, idQualification: data.data[0]["id"] });
       } else {
