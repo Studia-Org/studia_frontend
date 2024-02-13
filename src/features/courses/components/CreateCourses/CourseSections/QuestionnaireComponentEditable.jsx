@@ -7,8 +7,7 @@ import RadioGroup, { useRadioGroup } from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
 import Radio from '@mui/material/Radio';
 import { TableCategories } from './TableCategories';
-
-import { message, DatePicker, Input, Switch, InputNumber } from 'antd';
+import { message, DatePicker, Input, Switch, InputNumber, Button, Tooltip } from 'antd';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
@@ -42,14 +41,18 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
     const [currentPage, setCurrentPage] = useState(1);
     const [selectorValue, setSelectorValue] = useState('open-ended-short')
     const [newOption, setNewOption] = useState('')
-    const [addQuestionText, setAddQuestionText] = useState({ question: '', options: null })
+    const [addQuestionText, setAddQuestionText] = useState({ question: '', options: [] })
     const totalQuestions = subsection?.questionnaire?.attributes?.Options?.questionnaire?.questions.length;
     const totalPages = Math.ceil(totalQuestions / questionsPerPage);
+    const [title, setTitle] = useState(subsection.title)
     const [description, setDescription] = useState(subsection.questionnaire.attributes.description);
     const [editQuestionFlags, setEditQuestionFlags] = useState(Array(totalQuestions).fill(false));
+    const [autocorrectTest, setAutocorrectTest] = useState(subsection.questionnaire.attributes.autocorrect);
 
     useEffect(() => {
+        setTitle(subsection.title)
         setDescription(subsection.questionnaire.attributes.description)
+        setAutocorrectTest(subsection.questionnaire.attributes.autocorrect)
     }, [subsection]);
 
     const handleEditQuestionClick = (index) => {
@@ -67,15 +70,52 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
         })
     );
 
-    const MyFormControlLabel = (props) => {
-        const radioGroup = useRadioGroup();
-        let checked = false;
-        if (radioGroup) {
-            checked = radioGroup.value === props.value;
-        }
+    const MyFormControlLabel = ({ value, label, question, ...rest }) => {
+        // Comprueba si el valor del radio actual coincide con la respuesta correcta almacenada en correctAnswers
+        const isChecked = subsection.questionnaire.attributes.Options.questionnaire.correctAnswers[question] === value;
 
-        return <StyledFormControlLabel checked={checked} {...props} />;
+        return <StyledFormControlLabel checked={isChecked} value={value} label={label} {...rest} />;
     };
+
+    const handleCorrectAnswersChange = (event, question) => {
+        const selectedOption = event.target.value; // Valor del radio seleccionado
+        setCreateCourseSectionsList(prevSections => {
+            const updatedSections = prevSections.map(section => {
+                if (section.subsections) {
+                    const updatedSubsections = section.subsections.map(sub => {
+                        if (sub.id === subsection.id) {
+                            return {
+                                ...sub,
+                                questionnaire: {
+                                    ...sub.questionnaire,
+                                    attributes: {
+                                        ...sub.questionnaire.attributes,
+                                        Options: {
+                                            ...sub.questionnaire.attributes.Options,
+                                            questionnaire: {
+                                                ...sub.questionnaire.attributes.Options.questionnaire,
+                                                correctAnswers: {
+                                                    ...sub.questionnaire.attributes.Options.questionnaire.correctAnswers,
+                                                    [question]: selectedOption
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            };
+                        }
+                        return sub;
+                    });
+                    return {
+                        ...section,
+                        subsections: updatedSubsections
+                    };
+                }
+                return section;
+            });
+            return updatedSections;
+        })
+    }
 
     const handleNextPage = () => {
         setCurrentPage((prevPage) => prevPage + 1);
@@ -185,7 +225,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                 });
             }
             setNewOption('')
-            setAddQuestionText({ question: '', options: null })
+            setAddQuestionText({ question: '', options: [] })
         }
     }
 
@@ -231,13 +271,59 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
     }
 
     function addOptionToList() {
-        setAddQuestionText(prev => {
-            return {
-                ...prev,
-                options: [...prev.options, newOption]
-            }
-        })
+        try {
+            setAddQuestionText(prev => {
+                return {
+                    ...prev,
+                    options: [...prev?.options, newOption]
+                }
+            })
+            setNewOption('')
+        } catch (error) {
+            console.log(error)
+        }
+
     }
+
+    const handleChangeAutocorrect = (value) => {
+        setCreateCourseSectionsList((courses) => {
+            return courses.map((course) => {
+                if (course.subsections) {
+                    return {
+                        ...course,
+                        subsections: course.subsections.map((sub) => {
+                            if (sub.id === subsection.id) {
+                                return {
+                                    ...sub,
+                                    questionnaire: {
+                                        ...sub.questionnaire,
+                                        attributes: {
+                                            ...sub.questionnaire.attributes,
+                                            autocorrect: value,
+                                            ...(value === false && {
+                                                Options: {
+                                                    ...sub.questionnaire.attributes.Options,
+                                                    questionnaire: {
+                                                        ...sub.questionnaire.attributes.Options.questionnaire,
+                                                        correctAnswers: {}
+                                                    }
+                                                }
+                                            })
+                                        }
+                                    }
+                                };
+                            }
+                            return sub;
+                        }),
+                    };
+                }
+                return course;
+            });
+        });
+    }
+
+
+
     const handleChangeDescription = (value) => {
         setCreateCourseSectionsList((courses) => {
             return courses.map((course) => {
@@ -267,6 +353,37 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
         });
     };
 
+    // Cambia el valor de el titulo de el questionario
+    const handleChangeTitle = (value) => {
+        setCreateCourseSectionsList((courses) => {
+            return courses.map((course) => {
+                if (course.subsections) {
+                    return {
+                        ...course,
+                        subsections: course.subsections.map((sub) => {
+                            if (sub.id === subsection.id) {
+                                //cambiar el titulo del questionario
+                                return {
+                                    ...sub,
+                                    title: value,
+                                    questionnaire: {
+                                        ...sub.questionnaire,
+                                        attributes: {
+                                            ...sub.questionnaire.attributes,
+                                            Title: value,
+                                        },
+                                    },
+                                };
+                            }
+                            return sub;
+                        }),
+                    };
+                }
+                return course;
+
+            })
+        })
+    }
 
 
     function deleteQuestion(index) {
@@ -353,7 +470,15 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                         <div key={absoluteIndex}>
                             <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} >
                                 {question.options.map((option, optionIndex) => (
-                                    <MyFormControlLabel key={optionIndex} value={option} label={option} control={<Radio disabled readOnly />} />
+                                    //el value del radio es el valor de correctAnswer del question
+                                    <MyFormControlLabel
+                                        key={optionIndex}
+                                        value={option}
+                                        label={option}
+                                        question={question.question}
+                                        onChange={(e) => handleCorrectAnswersChange(e, question.question)}
+                                        control={<Radio disabled={!autocorrectTest} />}
+                                    />
                                 ))}
                             </RadioGroup>
                         </div>
@@ -486,7 +611,8 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
             <div className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1] p-8">
                 <div className="">
                     <div className='flex items-center'>
-                        <p className="mb-5 text-3xl font-semibold text-black ">{subsection.title}</p>
+                        <Input className='px-1 mb-5 border border-[#d9d9d9] rounded-md text-3xl font-semibold text-black pl-3' placeholder="Title" value={title}
+                            onChange={(e) => setTitle(e.target.value)} onBlur={(e) => handleChangeTitle(e.target.value)} />
                     </div>
                 </div>
                 <div className='space-y-4 bg-white rounded-md '>
@@ -510,6 +636,20 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                             <label className='block mr-3 text-sm text-gray-500' htmlFor=''>Evaluable * </label>
                             <Switch checked={subsection.activity?.evaluable} onChange={(e) => handleSwitchChange(e)} className='bg-gray-300' />
                         </div>
+                        {
+                            subsection.activity?.evaluable && (
+                                <div className='flex items-center'>
+                                    <Tooltip title="Check the correct answers to the questions, and the questionnaire will be automatically evaluated once the student submits it.">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 mr-2">
+                                            <path fillRule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a.75.75 0 0 0 0 1.5h.253a.25.25 0 0 1 .244.304l-.459 2.066A1.75 1.75 0 0 0 10.747 15H11a.75.75 0 0 0 0-1.5h-.253a.25.25 0 0 1-.244-.304l.459-2.066A1.75 1.75 0 0 0 9.253 9H9Z" clipRule="evenodd" />
+                                        </svg>
+                                    </Tooltip>
+
+                                    <label className='block mr-3 text-sm text-gray-500' htmlFor=''>Autocorrect * </label>
+                                    <Switch checked={autocorrectTest} onChange={(e) => handleChangeAutocorrect(e)} className='bg-gray-300' />
+                                </div>
+                            )
+                        }
 
                         <div className='flex items-center gap-4'>
                             {
@@ -605,11 +745,11 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
 
                                 }
                                 <div className='flex items-center mt-5'>
-                                    <button onClick={() => addOptionToList()} className='flex items-center p-4 text-sm font-medium '>
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6">
+                                    <Button onClick={() => addOptionToList()} className='flex items-center mr-3 font-medium h-9'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
                                             <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                                         </svg>
-                                    </button>
+                                    </Button>
                                     <TextField
                                         id="outlined-basic"
                                         label=""

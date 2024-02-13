@@ -16,7 +16,7 @@ import { Header } from './Questionnaire/Header';
 import { NavigationButtons } from './Questionnaire/NavigationsButons';
 
 
-export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, enableEdit, setEnableEdit, courseSubsection, setCourseSubsectionQuestionnaire }) => {
+export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, enableEdit, setEnableEdit, courseSubsection, setCourseSubsectionQuestionnaire, professorID }) => {
   const { user } = useAuthContext();
   const [groupValues, setGroupValues] = useState({});
   const questionnaireAnswerData = answers.filter((answer) => answer.questionnaire.id === questionnaire.id);
@@ -108,6 +108,39 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
     return result.isConfirmed;
   };
 
+  const correctQuestionnaire = async (correctAnswers, userResponses) => {
+    const calculatedScore = calcularNota(userResponses, correctAnswers);
+
+    await fetch(`${API}/qualifications`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${getToken()}`,
+      },
+      body: JSON.stringify({
+        data: {
+          activity: courseSubsection.attributes.activity.data.id,
+          user: user.id,
+          comments: 'Automatic evaluation of the questionnaire',
+          evaluator: professorID,
+          qualification: calculatedScore,
+          file: null,
+          delivered: true
+        }
+      })
+    });
+
+  }
+
+  function calcularNota(respuestasUsuario, respuestasCorrectas) {
+    const correctas = respuestasUsuario.reduce((acumulador, respuesta) => {
+      return acumulador + (respuestasCorrectas[respuesta.question] === respuesta.answer ? 1 : 0);
+    }, 0);
+
+    return (correctas / Object.keys(respuestasCorrectas).length) * 10;
+  }
+
+
 
   const handleSubmission = async () => {
     try {
@@ -151,11 +184,6 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
                 { id: subsectionID }
               ]
             };
-            const response3 = await fetch(`${API}/questionnaires/${questionnaire.id}`, {
-              method: 'PUT',
-
-
-            });
             const response2 = await fetch(`${API}/users/${user.id}`, {
               method: 'PUT',
               headers: {
@@ -164,7 +192,11 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
               },
               body: JSON.stringify(newObject)
             });
-            const temp = await response2.json();
+
+            if (Object.keys(questionnaire.attributes.Options.questionnaire.correctAnswers).length > 0) {
+              await correctQuestionnaire(questionnaire.attributes.Options.questionnaire.correctAnswers, formattedObject.responses)
+            }
+
             if (response2.ok) {
               Swal.fire(
                 'Completed!',
