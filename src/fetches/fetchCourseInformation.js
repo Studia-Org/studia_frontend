@@ -1,5 +1,4 @@
 import { API } from "../constant";
-import { getToken } from "../helpers";
 export async function fetchCourseInformation({ courseId }) {
   try {
     const response = await fetch(
