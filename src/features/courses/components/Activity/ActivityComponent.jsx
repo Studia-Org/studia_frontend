@@ -40,7 +40,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   const navigate = useNavigate();
   const USER_OBJECTIVES = [...new Set(user?.user_objectives?.map((objective) => objective.categories.map((category) => category)).flat() || [])];
   const passedDeadline = activityData?.activity?.data?.attributes?.deadline ? new Date(activityData?.activity?.data?.attributes?.deadline) < new Date() : false;
-
+  const [createGroups, setCreateGroups] = useState(false);
   const [IDQualification, setIDQualification] = useState(idQualification);
   const { activityGroup, loadingGroup } = useGetGroup({ user, activityData, activityId, IDQualification });
   const isActivityGroup = activityData?.activity?.data?.attributes?.groupActivity;
@@ -352,7 +352,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
     <div className='flex max-w-[calc(100vw)] flex-col 1.5xl:flex-row items-start 1.5xl:items-start 1.5xl:space-x-24 p-5 sm:p-10'>
 
       <>
-        <div className='1.5xl:w-2/4 lg:w-10/12 w-full'>
+        <div className={`${!createGroups ? "1.5xl:w-2/4 lg:w-10/12" : ""} w-full`}>
           <BackToCourse navigate={navigate} courseId={courseId} />
           <ActivityTitle
             type={type}
@@ -365,52 +365,61 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
             passedDeadline={passedDeadline}
             userRole={user?.role_str}
           />
-          <ObjectivesTags USER_OBJECTIVES={USER_OBJECTIVES} categories={activityData?.activity.data.attributes.categories} />
-
+          <div className='flex items-center my-5'>
+            <ObjectivesTags USER_OBJECTIVES={USER_OBJECTIVES} categories={activityData?.activity.data.attributes.categories} />
+          </div>
           {
-            user.role_str === 'professor' || user.role_str === 'admin' ?
-              <div className='flex items-center ml-auto'>
-                <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} />
-              </div> : null
-          }
-
-          {
-            evaluated && (
+            createGroups ?
+              <div className='mt-10'>
+                <CreateGroups activityId={activityId} activityData={activityData} courseId={courseId} />
+              </div>
+              :
               <>
-                <p className='mt-5 mb-1 text-xs text-gray-400'>Comments</p>
-                <hr />
                 {
-                  activityData.comments === null || activityData.comments === '' ?
-                    <p className='mt-3'>There are no comments for your submission.</p>
-                    :
-                    <p className='mt-3'>{activityData.comments}</p>
+                  user.role_str === 'professor' || user.role_str === 'admin' ?
+                    <div className='flex items-center ml-auto'>
+                      <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} />
+                    </div> : null
                 }
 
-              </>
-            )
-          }
+                {
+                  evaluated && (
+                    <>
+                      <p className='mt-5 mb-1 text-xs text-gray-400'>Comments</p>
+                      <hr />
+                      {
+                        activityData.comments === null || activityData.comments === '' ?
+                          <p className='mt-3'>There are no comments for your submission.</p>
+                          :
+                          <p className='mt-3'>{activityData.comments}</p>
+                      }
+
+                    </>
+                  )
+                }
 
 
-          <p className='mt-5 mb-1 text-xs text-gray-400'>Task description</p>
-          <hr />
-          <div className='prose my-3 text-gray-600 ml-5 max-w-[calc(100vw-1.25rem)] box-content mt-5 '>
-            {
-              !enableEdit ?
-                <ReactMarkdown className=''>{activityData.activity.data.attributes.description}</ReactMarkdown>
-                :
-                <div className="flex flex-col">
-                  <MDEditor height="30rem" className='mt-2 mb-8' data-color-mode='light' onChange={setSubsectionContent} value={subsectionContent} />
-                  <Button onClick={() => saveChanges()} type="primary" loading={loading}
-                    className="inline-flex justify-center px-4 ml-auto text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                    Save Changes
-                  </Button>
+                <p className='mt-5 mb-1 text-xs text-gray-400'>Task description</p>
+                <hr />
+                <div className='prose my-3 text-gray-600 ml-5 max-w-[calc(100vw-1.25rem)] box-content mt-5 '>
+                  {
+                    !enableEdit ?
+                      <ReactMarkdown className=''>{activityData.activity.data.attributes.description}</ReactMarkdown>
+                      :
+                      <div className="flex flex-col">
+                        <MDEditor height="30rem" className='mt-2 mb-8' data-color-mode='light' onChange={setSubsectionContent} value={subsectionContent} />
+                        <Button onClick={() => saveChanges()} type="primary" loading={loading}
+                          className="inline-flex justify-center px-4 ml-auto text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                          Save Changes
+                        </Button>
+                      </div>
+                  }
                 </div>
-            }
-          </div>
-
+              </>
+          }
         </div >
         {
-          user.role_str === 'professor' || user.role_str === 'admin' ?
+          (user.role_str === 'professor' || user.role_str === 'admin') && !createGroups ?
             <div className='flex flex-col'>
               <p className='mb-3 text-xs text-gray-400' > Task Files</ p>
               <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)] w-[30rem]'>
@@ -446,10 +455,10 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                   )
                 )}
               </div>
-              {isActivityGroup && < CreateGroups activityId={activityId} activityData={activityData} courseId={courseId} />}
+              {isActivityGroup && <Button type='primary' onClick={() => setCreateGroups(true)} >Create students groups</Button>}
 
             </div> :
-            evaluated || passedDeadline ?
+            (evaluated || passedDeadline) && !(user.role_str === 'professor' || user.role_str === 'admin') ?
               <div className='flex flex-col max-w-[calc(100vw-1.25rem)]'>
                 <p className='mb-3 text-xs text-gray-400' > Task Files</ p>
                 <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)] w-[30rem]'>
@@ -492,6 +501,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                 }
               </div >
               :
+              !(user.role_str === 'professor' || user.role_str === 'admin') &&
               <div className='flex flex-col w-[30rem] mt-1 max-w-[calc(100vw-2.5rem)]'>
                 <p className='mb-3 text-xs text-gray-400' > Task Files</ p>
                 {
@@ -551,7 +561,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
               </div>
         }
       </>
-
     </div >
   )
 }
