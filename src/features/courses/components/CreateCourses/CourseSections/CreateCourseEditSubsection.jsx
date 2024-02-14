@@ -180,10 +180,14 @@ export const CreateCourseEditSubsection = ({
 
               subsection?.type === 'peerReview' && (
                 <div className='flex flex-col justify-center mb-5 space-y-2'>
-                  <PeerReviewRubricModal isModalOpen={isModalOpen}
+                  <PeerReviewRubricModal
+                    isModalOpen={isModalOpen}
                     setIsModalOpen={setIsModalOpen}
+                    setCreateCourseSectionsList={setCreateCourseSectionsList}
                     rubricData={subsection.activity.PeerReviewRubrica}
-                    setSubsectionEditing={setSubsectionEditing} />
+                    setSubsectionEditing={setSubsectionEditing}
+                    subsectionEditing={subsection}
+                  />
                   <label className='text-sm text-gray-500 '>
                     Peer review rubric *
                   </label>

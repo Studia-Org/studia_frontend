@@ -193,7 +193,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
               body: JSON.stringify(newObject)
             });
 
-            if (Object.keys(questionnaire.attributes.Options.questionnaire.correctAnswers).length > 0) {
+            if (Object.keys(questionnaire.attributes.Options.questionnaire?.correctAnswers).length > 0) {
               await correctQuestionnaire(questionnaire.attributes.Options.questionnaire.correctAnswers, formattedObject.responses)
             }
 

@@ -15,6 +15,8 @@ import { PonderationWarning } from './PonderationWarning';
 
 
 const { RangePicker } = DatePicker;
+const { TextArea } = Input;
+
 
 
 const list = {
@@ -271,6 +273,10 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
     }
 
     function addOptionToList() {
+        if (newOption === '') {
+            message.error('Please fill in the option field')
+            return
+        }
         try {
             setAddQuestionText(prev => {
                 return {
@@ -362,7 +368,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                         ...course,
                         subsections: course.subsections.map((sub) => {
                             if (sub.id === subsection.id) {
-                                //cambiar el titulo del questionario
+                                // Cambiar el título del cuestionario
                                 return {
                                     ...sub,
                                     title: value,
@@ -371,6 +377,13 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                                         attributes: {
                                             ...sub.questionnaire.attributes,
                                             Title: value,
+                                            Options: {
+                                                ...sub.questionnaire.attributes.Options,
+                                                questionnaire: {
+                                                    ...sub.questionnaire.attributes.Options.questionnaire,
+                                                    title: value,
+                                                },
+                                            },
                                         },
                                     },
                                 };
@@ -380,10 +393,11 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                     };
                 }
                 return course;
+            });
+        });
+    };
 
-            })
-        })
-    }
+
 
 
     function deleteQuestion(index) {
@@ -616,7 +630,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                     </div>
                 </div>
                 <div className='space-y-4 bg-white rounded-md '>
-                    <label className='text-sm text-gray-500' htmlFor="" >Questionnaire Date</label>
+                    <label className='text-sm text-gray-500' htmlFor="" >Questionnaire Date *</label>
                     <RangePicker
                         className='w-full py-4'
                         showTime={{
@@ -716,16 +730,12 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                         </FormControl>
                     </div>
                     <label className='mb-3 text-sm text-gray-500' htmlFor="" >Question</label>
-                    <TextField
-                        id="outlined-basic"
-                        label=""
+                    <TextArea
                         value={addQuestionText.question}
-                        onChange={(e) => setAddQuestionText(prevQuestionText => ({ ...prevQuestionText, question: e.target.value }))}
-
-                        variant="outlined"
                         className='w-full'
-                        rows={1}
-                        multiline
+                        allowClear
+                        onChange={(e) => setAddQuestionText(prevQuestionText => ({ ...prevQuestionText, question: e.target.value }))}
+                        rows={3}
                     />
 
                     {
@@ -745,20 +755,16 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
 
                                 }
                                 <div className='flex items-center mt-5'>
-                                    <Button onClick={() => addOptionToList()} className='flex items-center mr-3 font-medium h-9'>
+                                    <Button onClick={() => addOptionToList()} className='flex items-center px-2 mr-3 font-medium h-9'>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
                                             <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                                         </svg>
                                     </Button>
-                                    <TextField
-                                        id="outlined-basic"
-                                        label=""
+                                    <TextArea
                                         value={newOption}
                                         onChange={(e) => { setNewOption(e.target.value) }}
-                                        variant="outlined"
                                         className='w-full'
-                                        rows={1}
-                                        multiline
+                                        rows={2}
                                     />
                                 </div>
 
