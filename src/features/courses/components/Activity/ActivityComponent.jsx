@@ -18,13 +18,12 @@ import { Empty, Button, message, Popconfirm } from 'antd';
 import MDEditor from '@uiw/react-md-editor';
 import { SwitchEdit } from '../CoursesInside/SwitchEdit';
 import { RecordAudio } from './Components/ThinkAloud/RecordAudio';
-import { is } from 'date-fns/locale';
 
 
 registerPlugin(FilePondPluginImagePreview);
 
 
-export const ActivityComponent = ({ activityData, idQualification, setUserQualification }) => {
+export const ActivityComponent = ({ activityData, idQualification, setUserQualification, userQualification }) => {
   const [filesTask, setFilesTask] = useState();
   const [uploadMode, setUploadMode] = useState('record')
   const [filesUploaded, setFilesUploaded] = useState(activityData?.file?.data || []);
@@ -166,6 +165,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
       console.error(error);
     }
   }
+
   async function sendData() {
     try {
       const isThinkAloud = (activityData.activity.data.attributes.type === 'thinkAloud' && formData.getAll('files').length === 0)
@@ -191,7 +191,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
             icon: 'success',
             title: 'Success',
             text: 'Files uploaded successfully',
-          }).then((re) => {
+          }).then(async (re) => {
             const parsedResults = result.map((file) => {
               return {
                 id: file.id,
@@ -200,7 +200,8 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                 }
               }
             })
-
+            const data = await response_upload.json();
+            setUserQualification({ ...userQualification, idQualification: data.data.id });
             setFilesUploaded(prev => [...prev, ...parsedResults]);
             setFormData(new FormData());
           })
@@ -225,7 +226,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
       setUploadLoading(false);
     }
   }
-
+  console.log('ActivityComponent', userQualification)
   async function deleteFile(fileId) {
     setFilesTask((prev) => {
       const updatedFiles = prev.filter((file) => file.id !== fileId);
@@ -534,13 +535,16 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                   <div className='mb-5 bg-white rounded-md shadow-md'>
                     <div className='flex items-center gap-5 mx-5 mt-5'>
                       <p className='text-xs text-gray-400 '>Click on the microphone and start recording your voice, or you can upload an audio file</p>
+
                       <Button onClick={() => handleUploadMode()} disabled={passedDeadline}>
                         Switch mode
                       </Button>
                     </div>
+                    <hr className='mx-10 mt-5' />
                     {
                       uploadMode === 'record' ?
-                        <RecordAudio audioFile={audioFile} setAudioFile={setAudioFile} passedDeadline={passedDeadline} />
+                        <RecordAudio audioFile={audioFile} setAudioFile={setAudioFile} passedDeadline={passedDeadline} idQualification={idQualification}
+                          setUserQualification={setUserQualification} />
                         :
                         <div className='m-5'>
                           <FilePond
