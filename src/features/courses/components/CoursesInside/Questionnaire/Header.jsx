@@ -98,19 +98,19 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
 
     return (
         <div className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1]">
-            <div className="my-7 mx-7 flex w-full flex-col">
+            <div className="flex flex-col w-full my-7 mx-7">
                 <div className='flex items-center w-full '>
                     {enableEdit ? (
-                        <input type="text" value={titleEdit} className='font-semibold text-3xl w-full' onChange={(e) => setTitleEdit(e.target.value)} />
+                        <input type="text" value={titleEdit} className='w-full text-3xl font-semibold' onChange={(e) => setTitleEdit(e.target.value)} />
                     ) : (
-                        <div className='gap-3 flex items-center w-full'>
-                            <p className="text-black font-semibold text-3xl">{questionnaire.attributes.Title}</p>
+                        <div className='flex items-center w-full gap-3'>
+                            <p className="text-3xl font-semibold text-black">{questionnaire.attributes.Title}</p>
                             <Badge color="#6366f1" className='ml-auto mr-10' count={new Date(courseSubsection.attributes.end_date).toDateString()} />
                         </div>
                     )}
                     {(questionnaireAnswerData.length > 0 && user?.role_str === 'student') && (
-                        <div className='flex justify-end items-center'>
-                            <Chip className=' mr-10' label="Completed" color="success" />
+                        <div className='flex items-center justify-end'>
+                            <Chip className='mr-10 ' label="Completed" color="success" />
                         </div>
                     )}
                 </div>
@@ -121,14 +121,14 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
                         <p>{questionnaire.attributes.description}</p>
                     )}
                     {completed === true ? (
-                        <span className='text-gray-500 pl-2 mr-10'>{"Completed in: " + format(questionnaireAnswerData[0]?.timeToComplete)}</span>
+                        <span className='pl-2 mr-10 text-gray-500'>{"Completed in: " + format(questionnaireAnswerData[0]?.timeToComplete)}</span>
                     ) : null}
                 </div>
 
                 {
                     enableEdit && (
                         <>
-                            <p className='text-sm text-gray-500 mt-3'>Deadline</p>
+                            <p className='mt-3 text-sm text-gray-500'>Deadline</p>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DemoContainer components={['DateTimePicker']}>
                                     <DateTimePicker className='w-1/2'
@@ -144,7 +144,7 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
             <div className='mr-3'>
                 {
                     user.role_str !== 'student' && (
-                        <div className='flex flex-col space-y-5 justify-end items-end mb-10'>
+                        <div className='flex flex-col items-end justify-end mb-10 space-y-5'>
                             <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} />
                             <AnimatePresence>
                                 {enableEdit && (
@@ -165,7 +165,7 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
                                                 <Button
                                                     type="primary"
                                                     loading={loading}
-                                                    className="mb-5 duration-150 justify-center rounded-md border border-transparent bg-blue-600 px-4 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                                    className="justify-center px-4 mb-5 text-sm font-medium text-white duration-150 bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                                                     Save Changes
                                                 </Button>
 

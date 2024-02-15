@@ -43,6 +43,7 @@ const CourseInside = () => {
   const { user } = useAuthContext()
   const whisper = useRef(null);
 
+
   function handleLandscapePhotoChange(event) {
     setBackgroundPhotoSubsection(event.target.files[0]);
   }
@@ -338,6 +339,7 @@ const CourseInside = () => {
                     setEnableEdit={setEnableEdit}
                     courseSubsection={courseSubsection}
                     setCourseSubsectionQuestionnaire={setCourseSubsectionQuestionnaire}
+                    professorID={professor.id}
                   />
                 ) : courseSection && courseContentInformation.length > 0 && (
                   <>

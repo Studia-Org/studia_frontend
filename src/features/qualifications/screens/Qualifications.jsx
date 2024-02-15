@@ -190,7 +190,7 @@ const Qualifications = () => {
     function RenderQualifications({ qualification }) {
         return (
             <tr onClick={() => {
-                if (qualification.activity.type !== 'forum') {
+                if (qualification.activity.type !== 'forum' && qualification.activity.type !== 'questionnaire') {
                     navigate(`/app/courses/${JSON.parse(courseSelected.value).id}/activity/${qualification.activity?.id}`)
                 }
             }}
