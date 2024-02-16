@@ -17,14 +17,20 @@ import { getToken } from '../../../../../helpers';
 export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, completed, setEnableEdit, courseSubsection, editedQuestions, setQuestionnaireAnswerData }) => {
     const { user } = useAuthContext()
     const [titleEdit, setTitleEdit] = useState(questionnaire.attributes.Title)
+    const [titleEditFinal, setTitleEditFinal] = useState(questionnaire.attributes.Title)
     const [descriptionEdit, setDescriptionEdit] = useState(questionnaire.attributes.description)
+    const [descriptionEditFinal, setDescriptionEditFinal] = useState(questionnaire.attributes.description)
     const [deadline, setDeadline] = useState(new Date(questionnaire.attributes.deadline))
+    const [deadlineFinal, setDeadlineFinal] = useState(new Date(questionnaire.attributes.deadline))
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         setTitleEdit(questionnaire.attributes.Title);
         setDescriptionEdit(questionnaire.attributes.description);
         setDeadline(dayjs(courseSubsection.attributes.end_date))
+        setTitleEditFinal(questionnaire.attributes.Title);
+        setDescriptionEditFinal(questionnaire.attributes.description);
+        setDeadlineFinal(dayjs(courseSubsection.attributes.end_date))
     }, [questionnaire])
 
 
@@ -71,9 +77,13 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
                 }
             })
         });
+        setTitleEditFinal(titleEdit);
+        setDescriptionEditFinal(descriptionEdit);
+        setDeadlineFinal(deadline);
 
         if (response2.ok) {
             setLoading(false);
+            setEnableEdit(false);
             message.success('Changes saved, Refresh the page to see the changes');
         } else {
             setLoading(false);
@@ -105,8 +115,8 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
                         <Input value={titleEdit} className='w-full text-3xl font-semibold rounded-md mr-14' onChange={(e) => setTitleEdit(e.target.value)} />
                     ) : (
                         <div className='flex items-center w-full gap-3'>
-                            <p className="text-3xl font-semibold text-black">{questionnaire.attributes.Title}</p>
-                            <Badge color="#6366f1" className='ml-auto mr-10' count={new Date(courseSubsection.attributes.end_date).toDateString()} />
+                            <p className="text-3xl font-semibold text-black">{titleEditFinal}</p>
+                            <Badge color="#6366f1" className='ml-auto mr-10' count={new Date(deadlineFinal).toDateString()} />
                         </div>
                     )}
                     {(questionnaireAnswerData.length > 0 && user?.role_str === 'student') && (
@@ -119,7 +129,7 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
                     {enableEdit ? (
                         <Input type="text" value={descriptionEdit} className='w-full rounded-md mr-14' onChange={(e) => setDescriptionEdit(e.target.value)} />
                     ) : (
-                        <p>{questionnaire.attributes.description}</p>
+                        <p>{descriptionEditFinal}</p>
                     )}
                     {completed === true ? (
                         <span className='pl-2 mr-10 text-gray-500'>{"Completed in: " + format(questionnaireAnswerData[0]?.timeToComplete)}</span>

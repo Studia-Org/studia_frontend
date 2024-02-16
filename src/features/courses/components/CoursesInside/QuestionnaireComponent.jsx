@@ -8,6 +8,7 @@ import { Button, Input, message, Popconfirm, Empty } from "antd";
 import { API } from "../../../../constant";
 import { getToken } from "../../../../helpers";
 import Swal from 'sweetalert2'
+import { MoonLoader } from "react-spinners";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import { useTimer } from "../../../../shared/elements/useTimer";
@@ -17,10 +18,10 @@ import { fetchUserResponsesQuestionnaires } from "../../../../fetches/fetchUserR
 import { NavigationButtons } from './Questionnaire/NavigationsButons';
 import { CardQuestionnaireUser } from './Questionnaire/CardQuestionnaireUser';
 
-
 export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, enableEdit, setEnableEdit, courseSubsection, setCourseSubsectionQuestionnaire, professorID }) => {
   const { user } = useAuthContext();
   const [groupValues, setGroupValues] = useState({});
+  const [loadingData, setLoadingData] = useState(true);
   const [userResponses, setUserResponses] = useState([]);
   const [questionnaireAnswerData, setQuestionnaireAnswerData] = useState(answers.filter((answer) => answer.questionnaire.id === questionnaire.id));
   const [completed, setCompleted] = useState(questionnaireAnswerData.length > 0);
@@ -46,13 +47,15 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
 
 
   useEffect(() => {
+    setCurrentPage(1);
+    setUserResponses([]);
+    setLoadingData(true);
     const fetchData = async () => {
       setUserResponses(await fetchUserResponsesQuestionnaires(questionnaire.id));
+      setLoadingData(false);
     };
-
     fetchData();
   }, [questionnaire.id]);
-
 
   const list = {
     visible: { opacity: 1 },
@@ -241,8 +244,6 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
     }
   }
 
-  console.log(questionnaireAnswerData)
-
   async function deleteQuestion(index) {
     try {
       setEditedQuestions((prev) => {
@@ -323,7 +324,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
                 <div key={absoluteIndex}>
                   {
                     (questionnaireAnswerData.length > 0) ?
-                      <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} defaultValue={questionnaireAnswerData[0].responses.responses[absoluteIndex].answer}>
+                      <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} defaultValue={questionnaireAnswerData[0].responses.responses[absoluteIndex]?.answer}>
                         {question.options.map((option, optionIndex) => (
                           <MyFormControlLabel key={optionIndex} value={option} label={option} control={<Radio disabled readOnly />} />
                         ))}
@@ -364,7 +365,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
                     </RadioGroup>
                   </div>
             ) : (
-              user.role_str === "student" ?
+              user.role_str === "student" || (user.role_str !== "student" && questionnaireAnswerData.length > 0) ?
                 <div key={absoluteIndex} className='flex w-full mt-5'>
                   {
                     questionnaireAnswerData.length > 0 ?
@@ -467,18 +468,23 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
           :
           <>
             {
-              userResponses.length > 0 ?
-                <div className='mt-5 space-y-3'>
-                  {
-                    userResponses.map((response, index) => (
-                      <CardQuestionnaireUser key={index} user={response} setQuestionnaireAnswerData={setQuestionnaireAnswerData} />
-                    ))
-                  }
+              loadingData ?
+                <div className='flex items-center justify-center p-5 bg-white rounded-md shadow-md'>
+                  <MoonLoader color="#363cd6" />
                 </div>
                 :
-                <div className='py-5 mt-5 bg-white rounded-md shadow-md'>
-                  <Empty description='There are no user responses to this questionnaire.' />
-                </div>
+                userResponses.length > 0 ?
+                  <div className='space-y-3'>
+                    {
+                      userResponses.map((response, index) => (
+                        <CardQuestionnaireUser key={index} user={response} setQuestionnaireAnswerData={setQuestionnaireAnswerData} />
+                      ))
+                    }
+                  </div>
+                  :
+                  <div className='py-5 mt-5 bg-white rounded-md shadow-md'>
+                    <Empty description='There are no user responses to this questionnaire.' />
+                  </div>
             }
           </>
       }
