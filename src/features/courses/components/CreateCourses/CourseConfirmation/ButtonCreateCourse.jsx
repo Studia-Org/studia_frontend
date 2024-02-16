@@ -88,6 +88,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
 
                         const activity = {
                             title: subsection.title,
+                            start_date: new Date(subsection.start_date).toISOString(),
                             deadline: new Date(subsection.end_date).toISOString(),
                             ponderation: 0,
                             type: 'questionnaire',

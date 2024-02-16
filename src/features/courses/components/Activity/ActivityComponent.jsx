@@ -365,12 +365,15 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
             passedDeadline={passedDeadline}
             userRole={user?.role_str}
           />
-          <div className='flex items-center my-5'>
-            <ObjectivesTags USER_OBJECTIVES={USER_OBJECTIVES} categories={activityData?.activity.data.attributes.categories} />
-          </div>
+          {
+            !createGroups &&
+            <div className='flex items-center my-5'>
+              {<ObjectivesTags USER_OBJECTIVES={USER_OBJECTIVES} categories={activityData?.activity.data.attributes.categories} />}
+            </div>
+          }
           {
             createGroups ?
-              <div className='mt-10'>
+              <div >
                 <CreateGroups activityId={activityId} activityData={activityData} courseId={courseId} />
               </div>
               :
