@@ -63,7 +63,7 @@ const Home = () => {
                                 Welcome to the new era of Learning </h1>
                             <p class="pr-0 mt-7 text-base text-gray-900 sm:text-lg xl:text-xl lg:pr-20 z-20 ">Join the future of
                                 education with our user-friendly e-learning platform designed for the University of Barcelona.</p>
-                            <div className='lg:left-48 relative py-6 top-5 z-20'>
+                            <div className='relative z-20 py-6 lg:left-48 top-5'>
                                 <a href="/auth/login
                                 ">
                                     <button class="inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900  rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white  focus:ring-4 focus:outline-none focus:ring-blue-300 ">
@@ -73,8 +73,8 @@ const Home = () => {
                                     </button>
                                 </a>
                             </div>
-                            <p className="mt-24 -translate-x-32 text-gray-500 mb-5 lg:mb-0">Funded by:</p>
-                            <div className="flex flex-wrap lg:flex-nowrap lg:items-center lg:space-x-4 space-y-4 lg:-translate-x-32 mb-5">
+                            <p className="mt-24 mb-5 text-gray-500 -translate-x-32 lg:mb-0">Funded by:</p>
+                            <div className="flex flex-wrap mb-5 space-y-4 lg:flex-nowrap lg:items-center lg:space-x-4 lg:-translate-x-32">
                                 <img className="w-60 h-14 " src="https://res.cloudinary.com/dnmlszkih/image/upload/v1706026314/iqehusa8b2l5xdyjubgf.png" alt="" />
                                 <Divider type="vertical" />
                                 <img className="w-52 h-14" src="https://res.cloudinary.com/dnmlszkih/image/upload/v1706026555/yifow75yq6pzoskyojgj.jpg" alt="" />
@@ -111,7 +111,7 @@ const Home = () => {
                             </svg>
                         </div>
                         <div class="relative z-50 hidden flex-col items-end justify-center w-full h-full lg:w-1/2 ms:pl-10  lg:flex">
-                            <div class="container relative left-0 w-full max-w-4xl lg:absolute xl:max-w-6xl lg:w-screen">
+                            <div class="container  left-0 w-full max-w-4xl lg:absolute xl:max-w-6xl lg:w-screen">
                                 <img src={bg_img} alt="Uptitude - E-learning platform"
                                     class="w-full h-auto  mb-20 ml-0 lg:mt-24 xl:mt-40 lg:-mb-16 lg:h-full lg:ml-20" />
                             </div>

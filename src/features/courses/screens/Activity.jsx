@@ -11,6 +11,7 @@ const Activity = () => {
   const [userQualification, setUserQualification] = useState([]);
   const [idPartnerReview, setIdPartnerReview] = useState(null);
 
+  console.log(userQualification);
   const { user } = useAuthContext();
 
   const fetchUserQualificationsData = async () => {
@@ -61,7 +62,8 @@ const Activity = () => {
       case "peerReview":
         return <PeerReviewComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} />;
       default:
-        return <ActivityComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} setUserQualification={setUserQualification} />;
+        return <ActivityComponent activityData={userQualification.activity} idQualification={userQualification.idQualification}
+          setUserQualification={setUserQualification} userQualification={userQualification} />;
 
     }
 
