@@ -9,7 +9,8 @@ import { MoonLoader } from "react-spinners";
 
 function CreateGroups({ activityId, courseId, activityData }) {
     const [students, setStudents] = useState([])
-    const numberOfStudentsPerGroup = activityData.activity.data.attributes.numberOfStudentsperGroup
+    // const numberOfStudentsPerGroup = activityData.activity.data.attributes.numberOfStudentsperGroup
+    const numberOfStudentsPerGroup = 3
     const [totalStudents, setTotalStudents] = useState(0)
     const [loading, setLoading] = useState(true)
     const [creatingGroups, setCreatingGroups] = useState(false)
@@ -101,6 +102,15 @@ function CreateGroups({ activityId, courseId, activityData }) {
 
     function createGroupsAutomatically() {
         let studentsCopy = [...students]
+
+        // move all students to the first group
+        studentsCopy.forEach((group, index) => {
+            if (index !== 0) {
+                studentsCopy[0] = [...studentsCopy[0], ...group]
+                studentsCopy[index] = []
+            }
+        })
+
         const studentsToDistribute = studentsCopy[0]
         //shuffle students
         for (let i = studentsToDistribute.length - 1; i > 0; i--) {
@@ -121,6 +131,15 @@ function CreateGroups({ activityId, courseId, activityData }) {
             }
         })
         studentsCopy[0] = []
+        if (studentsCopy[studentsCopy.length - 1].length <= numberOfStudentsPerGroup / 2) {
+            const studentsToDistribute = studentsCopy[studentsCopy.length - 1]
+            studentsToDistribute.forEach(student => {
+                let groupIndex = 1
+                studentsCopy[groupIndex].push(student)
+                groupIndex++
+            })
+            studentsCopy.pop()
+        }
         setStudents(studentsCopy)
     }
 
@@ -128,7 +147,14 @@ function CreateGroups({ activityId, courseId, activityData }) {
         //save groups in the backend
         //fetch to update groups
         if (students[0].length !== 0) return message.error("There are students without group")
+        // check if groups are balanced
+        const groupsBalanced = students.slice(1).every(group => group.length === numberOfStudentsPerGroup)
+        const groupsWithMoreStudents = students.slice(1).filter(group => group.length > numberOfStudentsPerGroup)
+        const groupsWithLessStudents = students.slice(1).filter(group => group.length < numberOfStudentsPerGroup)
 
+        if (!groupsBalanced && (groupsWithLessStudents.length > 0 && groupsWithMoreStudents.length > 0)) {
+            return message.error("Groups are not balanced")
+        }
         try {
 
             setCreatingGroups(true)

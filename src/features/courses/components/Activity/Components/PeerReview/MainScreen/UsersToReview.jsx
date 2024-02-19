@@ -3,11 +3,13 @@ import { AvatarGroup, Avatar } from "rsuite"
 
 
 export default function UsersToReview({ usersToCorrect, usersWithAnswers, setUserIndexSelected, data, usersToPair, correctActivityGroup }) {
+
+    const usersToPairAdapted = correctActivityGroup ? usersToCorrect.length : usersToPair
     return (
         <section className="flex flex-wrap flex-1 w-full gap-x-10 ">
             <div className="flex flex-col px-5 my-2">
-                <h3 className="mb-2"> You have to review {usersToPair} colleagues to finish the activity</h3>
-                <h3 >Left to review: {usersToPair - usersWithAnswers.length} </h3>
+                <h3 className="mb-2"> You have to review {usersToPairAdapted} colleagues to finish the activity</h3>
+                <h3 >Left to review: {usersToPairAdapted - usersWithAnswers.length} </h3>
                 {usersToCorrect.map((user, index) => {
                     return (
                         <div key={index}

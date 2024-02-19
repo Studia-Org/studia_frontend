@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { ActivityComponent } from "../components/Activity/ActivityComponent";
 import PeerReviewComponent from "../components/Activity/PeerReviewComponent.jsx";
 import { useParams } from "react-router-dom";
-import { API } from "../../../constant";
+import { API, BEARER } from "../../../constant";
 import { useAuthContext } from "../../../context/AuthContext";
+import { getToken } from "../../../helpers.js";
 
 const Activity = () => {
   const { courseId, activityId } = useParams();
@@ -50,7 +51,9 @@ const Activity = () => {
           `&populate[peer_review_qualifications][populate][group][populate][users][populate][profile_photo][fields][0]=url` +
 
           filters
-
+          , {
+            headers: { Authorization: `${BEARER} ${getToken()}` },
+          }
         )
 
       const data = await response.json();

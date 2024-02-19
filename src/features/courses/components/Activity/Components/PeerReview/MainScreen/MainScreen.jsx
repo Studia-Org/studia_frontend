@@ -31,20 +31,39 @@ function MainScreen({
             .map((peerReview) => peerReview.attributes.user.data)
 
 
-    const usersWithAnswers = activityData?.user.data.attributes.PeerReviewAnswers.data //cambiar para grupos    
-        .filter((answer) => qualificationIds.find((qualification) =>
-            answer.attributes.qualifications.data.find((qualificationAnswer) => {
-                return qualificationAnswer.id === qualification.id
-            }
-            ))
-            &&
-            usersToCorrect.find((userToCorrect) => answer.attributes.qualifications.data.find(
-                (qualificationAnswer) => {
-                    return userToCorrect.id === qualificationAnswer.attributes.user.data.id
-                }
-            )))
-        .flatMap((answer) => answer.attributes.qualifications.data.flatMap((qualification) => qualification.attributes.user.data))
+    const usersWithAnswers = correctActivityGroup ?
+        usersToCorrect.filter((userToCorrect) =>
+            activityData?.user.data.attributes.PeerReviewAnswers.data
+                .find((answer) => qualificationIds.find((qualification) =>
+                    answer.attributes.qualifications.data.find((qualificationAnswer) => {
+                        return qualificationAnswer.id === qualification.id
+                    }
+                    ))
+                    &&
+                    answer.attributes.qualifications.data.find(
+                        (qualificationAnswer) => {
+                            return userToCorrect.attributes.users.data.some((user) => user.id === qualificationAnswer.attributes.user.data.id)
+                        }
+                    )
+                )
+        )
 
+        :
+        activityData?.user.data.attributes.PeerReviewAnswers.data //cambiar para grupos    
+            .filter((answer) => qualificationIds.find((qualification) =>
+                answer.attributes.qualifications.data.find((qualificationAnswer) => {
+                    return qualificationAnswer.id === qualification.id
+                }
+                ))
+                &&
+                usersToCorrect.find((userToCorrect) => answer.attributes.qualifications.data.find(
+                    (qualificationAnswer) => {
+                        return userToCorrect.id === qualificationAnswer.attributes.user.data.id
+                    }
+                )))
+            .flatMap((answer) => answer.attributes.qualifications.data.flatMap((qualification) => qualification.attributes.user.data))
+
+    console.log({ usersWithAnswers })
 
     ///////////coger user index selected////////////////
     const answers = activityData?.PeerReviewAnswers.data // answers que nos han hecho los otros usuarios
@@ -72,7 +91,7 @@ function MainScreen({
 
                         <p className='mt-5 text-lg'>Correct {" "}
                             {!correctActivityGroup ?
-                                PeerReview.attributes.user.data.attributes.username + "'s" : PeerReview.attributes.group.data.attributes.users.data.map((user, index) => user.attributes.username).join(", ")} task/s!</p>
+                                PeerReview.attributes.user.data.attributes.username + "'s" : "Group " + (userIndexSelected + 1)} task/s!</p>
                         {PeerReview?.attributes?.file?.data?.map(renderFiles)}
                     </div>
                 </section> : null
