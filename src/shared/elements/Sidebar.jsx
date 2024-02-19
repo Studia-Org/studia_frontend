@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { IconContext } from "react-icons";
 import { Link } from "react-router-dom";
+import { fetchUserHasNotReadNotificationDashboard } from "../../fetches/fetchUserHasNotReadNotification";
 
 import {
   FiGrid,
@@ -11,8 +12,19 @@ import {
 } from "react-icons/fi";
 
 import { MdTimeline } from "react-icons/md";
+import { useAuthContext } from "../../context/AuthContext";
 
 export const Sidebar = (props) => {
+  const [dashboardNotification, setDashboardNotification] = useState(false);
+  const { user } = useAuthContext();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setDashboardNotification(await fetchUserHasNotReadNotificationDashboard(user.id));
+    };
+    fetchData();
+  }, []);
+
   const iconProps = {
     courses: {},
     events: {},
@@ -42,7 +54,6 @@ export const Sidebar = (props) => {
     setShowSidebar(document.location.pathname !== '/app/courses/create');
   }, [document.location.pathname]);
   const [showSidebar, setShowSidebar] = useState(document.location.pathname !== '/app/courses/create');
-  console.log(showSidebar);
 
   function handleClick() {
     const sidebar = document.getElementById("default-sidebar");
@@ -187,26 +198,35 @@ export const Sidebar = (props) => {
             </Link>
             <Link to={"/app/dashboard"} style={{ textDecoration: "none" }}>
               <li
-                className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all  rounded-lg ${Object.keys(iconProps.dashboard).length > 0
+                onClick={() => setDashboardNotification(false)}
+                className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all rounded-lg ${Object.keys(iconProps.dashboard).length > 0
                   ? "bg-gradient-to-r from-[#657DE9] to-[#6E66D6] rounded-lg py-3"
                   : ""
                   }`}
               >
-                <span className="flex items-center font-semibold">
-
+                <span className="relative flex items-center font-semibold">
                   <IconContext.Provider value={iconProps.dashboard}>
                     <FiBarChart size={25} />
                   </IconContext.Provider>
                   <h2
-                    className={`${Object.keys(iconProps.dashboard).length > 0
-                      ? "pl-2 text-white"
-                      : "px-4"
+                    className={`${Object.keys(iconProps.dashboard).length > 0 ? "pl-2 text-white" : "px-4"
                       }`}
                   >
                     Dashboard
                   </h2>
+                  {
+                    Object.keys(iconProps.dashboard).length <= 0 && dashboardNotification && (
+                      <span name="ping" className="absolute top-0 right-0 translate-x-0 -translate-y-1">
+                        <span className="absolute top-0 right-0 w-2 h-2 bg-red-400 rounded-full opacity-75 animate-ping"></span>
+                        <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                      </span>
+                    )
+                  }
+
                 </span>
               </li>
+
+
             </Link>
             <Link to={"/app/qualifications"} style={{ textDecoration: "none" }}>
               <li
