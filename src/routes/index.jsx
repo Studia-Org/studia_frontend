@@ -8,6 +8,7 @@ import { Navbar } from '../shared/elements/Navbar/Navbar';
 import { Sidebar } from '../shared/elements/Sidebar';
 import { useAuthContext } from '../context/AuthContext';
 import { MoonLoader } from 'react-spinners';
+import { WebchatChatbot } from '../shared/elements/WebchatChatbot';
 
 export const AppRoutes = () => {
 
@@ -40,6 +41,7 @@ export const AppRoutes = () => {
                         <div className={`flex min-h-[calc(100vh-8rem)] overflow-x-auto ${!inCourseCreate ? " xl:ml-80 xl:min-w-[calc(100vw-22rem)" : ""} bg-white w-full max-w-[100vw]`}>
                             {element}
                         </div>
+                        <WebchatChatbot />
                     </div>
                 </div>
         )

@@ -11,6 +11,7 @@ import Swal from 'sweetalert2'
 import { MoonLoader } from "react-spinners";
 import { API } from "../../../constant";
 import Confetti from 'react-confetti'
+import { WebchatChatbot } from '../../../shared/elements/WebchatChatbot';
 import { checkAuthenticated } from "../../../helpers";
 import { Whisper, Button, Popover } from 'rsuite';
 import { Chip } from '@mui/material';
@@ -171,15 +172,15 @@ const CoursesHome = () => {
 
     return (
       <div className='relative rounded-2xl border flex p-3 min-w-[350px] md:w-[22rem] lg:w-[24rem] min-h-[5rem]'>
-        <div className="w-2 rounded-md mr-3" style={colorStyle}></div>
+        <div className="w-2 mr-3 rounded-md" style={colorStyle}></div>
         <div className='flex-col flex justify-center w-full max-w-[calc(100%-6rem)]'>
           <div className='flex w-full'>
-            <p className=' font-semibold text-base'>{subsection.subsection.title}</p>
+            <p className='text-base font-semibold '>{subsection.subsection.title}</p>
             {
               isDateDangerous === true ?
                 <div className='flex items-center mr-3'>
                   <Whisper placement="top" className='text-sm shadow-md' trigger="hover" controlId="control-id-hover" speaker={speaker(subsection.subsection.end_date)}>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-red-500 ml-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 ml-2 text-red-500">
                       <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z" clipRule="evenodd" />
                     </svg>
                   </Whisper>
@@ -187,10 +188,10 @@ const CoursesHome = () => {
             }
           </div>
 
-          <p className='font-normal text-sm w-3/4 line-clamp-1 text-gray-500'>{subsection.subsection.description}</p>
+          <p className='w-3/4 text-sm font-normal text-gray-500 line-clamp-1'>{subsection.subsection.description}</p>
         </div>
 
-        <img className='object-cover w-24 top-0 right-0 h-full absolute rounded-r-lg opacity-90' src={subsection.cover} alt="" />
+        <img className='absolute top-0 right-0 object-cover w-24 h-full rounded-r-lg opacity-90' src={subsection.cover} alt="" />
       </div>
     )
   }
@@ -266,8 +267,8 @@ const CoursesHome = () => {
 
   function renderObjectives(objective) {
     return (
-      <div key={objective.id} className='bg-white rounded-lg border flex  p-5 '>
-        <p className='font-medium text-base'>{objective.objective}</p>
+      <div key={objective.id} className='flex p-5 bg-white border rounded-lg '>
+        <p className='text-base font-medium'>{objective.objective}</p>
         {
           objective.completed === true ?
             <div className='ml-auto'>
@@ -287,22 +288,22 @@ const CoursesHome = () => {
     <>
       {
         confettiExplode ?
-          <div className='w-screen absolute -ml-80 -mt-32 min-h-screen'>
+          <div className='absolute w-screen min-h-screen -mt-32 -ml-80'>
             {renderConfeti()}
           </div>
           :
           null
       }
       <div className=' max-h-full rounded-tl-3xl bg-[#e7eaf886] grid w-full'>
-        <div className=' sm:px-12 px-6  font-bold text-2xl flex flex-wrap min-w-full relative flex-col grid-home:flex-row '>
+        <div className='relative flex flex-col flex-wrap min-w-full px-6 text-2xl font-bold sm:px-12 grid-home:flex-row'>
           {
             isLoading ?
-              <div className='w-full h-full flex items-center justify-center' >
+              <div className='flex items-center justify-center w-full h-full' >
                 <MoonLoader color="#363cd6" size={80} />
               </div> :
               <>
                 <div className={`flex flex-col ${user.role_str === 'student' && 'grid-home:max-w-[calc(100%-500px)]'} w-full`}>
-                  <h1 className='py-11 pb-6 font-bold text-xl'>Recent Courses</h1>
+                  <h1 className='pb-6 text-xl font-bold py-11'>Recent Courses</h1>
                   {
                     courses.length !== 0 ?
                       <motion.div id='course-motion-div'
@@ -319,7 +320,7 @@ const CoursesHome = () => {
                         initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
                         <div
                           type="button"
-                          className="relative block w-full rounded-lg border border-gray-300 p-12 text-center bg-white"
+                          className="relative block w-full p-12 text-center bg-white border border-gray-300 rounded-lg"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-12 h-12 mx-auto">
                             <path d="M11.7 2.805a.75.75 0 0 1 .6 0A60.65 60.65 0 0 1 22.83 8.72a.75.75 0 0 1-.231 1.337 49.948 49.948 0 0 0-9.902 3.912l-.003.002c-.114.06-.227.119-.34.18a.75.75 0 0 1-.707 0A50.88 50.88 0 0 0 7.5 12.173v-.224c0-.131.067-.248.172-.311a54.615 54.615 0 0 1 4.653-2.52.75.75 0 0 0-.65-1.352 56.123 56.123 0 0 0-4.78 2.589 1.858 1.858 0 0 0-.859 1.228 49.803 49.803 0 0 0-4.634-1.527.75.75 0 0 1-.231-1.337A60.653 60.653 0 0 1 11.7 2.805Z" />
@@ -327,8 +328,8 @@ const CoursesHome = () => {
                             <path d="M4.462 19.462c.42-.419.753-.89 1-1.395.453.214.902.435 1.347.662a6.742 6.742 0 0 1-1.286 1.794.75.75 0 0 1-1.06-1.06Z" />
                           </svg>
 
-                          <span className="mt-2 block text-base font-medium text-gray-900">There are no courses available for you</span>
-                          <span className="mt-2 block text-sm font-medium text-gray-600">Explore other areas of the platform or check back later for new course options.</span>
+                          <span className="block mt-2 text-base font-medium text-gray-900">There are no courses available for you</span>
+                          <span className="block mt-2 text-sm font-medium text-gray-600">Explore other areas of the platform or check back later for new course options.</span>
                         </div>
                       </motion.div>
                   }
@@ -339,7 +340,7 @@ const CoursesHome = () => {
                   user.role_str === 'student' &&
                   <div className='border border-gray-300 flex flex-col md:w-[480px] min-w-3/4 mt-12 grid-home:absolute right-16 bg-white p-8 rounded-lg'>
                     <section >
-                      <p className='font-semibold text-lg'>Daily Tasks</p>
+                      <p className='text-lg font-semibold'>Daily Tasks</p>
                       <Divider />
                       {
                         dailyTasks.length > 0 ?
@@ -349,25 +350,25 @@ const CoursesHome = () => {
                           </div>
                           :
                           <div className='flex'>
-                            <div className='border rounded-lg p-5 flex mb-10 items-center justify-center w-full space-x-7'>
+                            <div className='flex items-center justify-center w-full p-5 mb-10 border rounded-lg space-x-7'>
                               <Empty description={
-                                <span className='font-medium text-gray-400 text-sm '>You do not have any task for today</span>
+                                <span className='text-sm font-medium text-gray-400 '>You do not have any task for today</span>
                               } />
                             </div>
                           </div>
                       }
                     </section>
                     <section>
-                      <p className='font-semibold text-lg'>Your Objectives</p>
+                      <p className='text-lg font-semibold'>Your Objectives</p>
                       <Divider />
-                      <div className='space-y-5 flex flex-col mb-5'>
+                      <div className='flex flex-col mb-5 space-y-5'>
                         {
                           objectives !== undefined && objectives.length > 0 ?
                             objectives.map(renderObjectives)
                             :
                             <div className='flex'>
-                              <div className='bg-white shadow-md rounded-2xl p-5 flex mb-10 items-center space-x-7'>
-                                <p className='font-medium text-gray-400 text-base '>You did not set any objective yet!</p>
+                              <div className='flex items-center p-5 mb-10 bg-white shadow-md rounded-2xl space-x-7'>
+                                <p className='text-base font-medium text-gray-400 '>You did not set any objective yet!</p>
                                 <img className='opacity-50 w-36' src="https://liferay-support.zendesk.com/hc/article_attachments/360032795211/empty_state.gif" alt="" />
                               </div>
                             </div>
