@@ -13,7 +13,7 @@ import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import Swal from 'sweetalert2';
 import ObjectivesTags from './ObjectivesTag';
 import ActivityTitle from './Components/ActivityTitle';
-import BackToCourse from './Components/BackToCourse';
+import BackToCourse, { BackButton } from './Components/BackToCourse';
 import { Empty, Button, message, Popconfirm } from 'antd';
 import MDEditor from '@uiw/react-md-editor';
 import { SwitchEdit } from '../CoursesInside/SwitchEdit';
@@ -167,6 +167,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
             },
             body: JSON.stringify(qualificationData),
           });
+        if (!response2.ok) return response2;
         let jsonresponse = await response2.json();
         setIDQualification(jsonresponse.data.id);
       }
@@ -214,15 +215,19 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
-          text: 'Something went wrong!',
-        })
+          text: 'Something went wrong!, maybe your page is expired, we are going to reload it.',
+        }).then((re) => {
+          window.location.reload();
+        });
       }
     } catch (error) {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: error.message,
-      })
+        text: error.message + ",  maybe your page is expired, we are going to reload it.",
+      }).then((re) => {
+        window.location.reload();
+      });
     } finally {
       setUploadLoading(false);
     }
@@ -353,7 +358,11 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
 
       <>
         <div className={`${!createGroups ? "1.5xl:w-2/4 lg:w-10/12" : ""} w-full`}>
-          <BackToCourse navigate={navigate} courseId={courseId} />
+          {
+            createGroups ?
+              <BackButton onClick={() => setCreateGroups(false)} text={"Go back to activity"} /> :
+              <BackToCourse navigate={navigate} courseId={courseId} />
+          }
           <ActivityTitle
             type={type}
             title={activityData.activity.data.attributes.title}
