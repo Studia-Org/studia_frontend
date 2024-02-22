@@ -16,6 +16,7 @@ import { useAuthContext } from "../../../context/AuthContext";
 import { EditSection } from "../components/CoursesInside/EditSection";
 import FloatingButtonNavigation from "../components/CoursesInside/FloatingButtonNavigation";
 import { MoonLoader } from "react-spinners";
+import { set } from "lodash";
 
 const CourseInside = () => {
   const inputRefLandscape = useRef(null);
@@ -40,9 +41,9 @@ const CourseInside = () => {
   const [students, setStudents] = useState([]);
   const [professor, setProfessor] = useState([]);
   let { courseId } = useParams();
+  let { activityId } = useParams();
   const { user } = useAuthContext()
   const whisper = useRef(null);
-
 
   function handleLandscapePhotoChange(event) {
     setBackgroundPhotoSubsection(event.target.files[0]);
@@ -160,6 +161,7 @@ const CourseInside = () => {
           setCourseSection(firstSubsection.cursoTitle);
           setCourseSubsection(firstSubsection.subseccion);
         }
+        loadQuestionnaire();
       }
     } else if (
       courseContentInformation.length > 0 &&
@@ -184,6 +186,7 @@ const CourseInside = () => {
         setCourseSection(title);
         setCourseSubsection(subsecciones[0]);
       }
+      loadQuestionnaire();
     }
 
   }, [courseContentInformation, subsectionsCompleted]);
@@ -209,22 +212,39 @@ const CourseInside = () => {
       fetchCourseInformation(),
       fetchPostData(),
     ]).catch((error) => console.error(error)).finally(() => setIsLoading(false));
-
-
-
   }, []);
 
   useEffect(() => {
     const handleResize = (e) => {
       whisper.current?.close();
     };
-
     window.addEventListener("resize", handleResize);
-
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  const loadQuestionnaire = () => {
+    if (activityId && courseContentInformation.length > 0 && user.role_str !== 'student') {
+      const data = locateFromActivityId(Number(activityId));
+      if (data) {
+        setCourseSubsection(data.subsection);
+        setCourseSection(data.section.attributes.title);
+        setCourseSubsectionQuestionnaire(data.subsection.attributes.questionnaire.data);
+        setQuestionnaireFlag(true);
+      }
+    }
+  }
+
+  const locateFromActivityId = (activityId) => {
+    for (const section of courseContentInformation) {
+      for (const subsection of section.attributes.subsections.data) {
+        if (subsection.attributes.activity.data.id === activityId) {
+          return { section, subsection };
+        }
+      }
+    }
+  }
 
   const items = [
     {

@@ -133,13 +133,12 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
 
     }
 
-
     return (
         <>
             <ModalFiles grade={grade} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} student={student} />
             <tr onClick={() => {
                 if (filteredActivity[0]?.attributes?.type === 'questionnaire' && !isEditChecked) {
-                    navigate(`/app/courses/${courseID}/`)
+                    navigate(`/app/courses/${courseID}/${filteredActivity[0].id}/`)
                 }
             }} class={`bg-white border-b  hover:bg-gray-50 ${filteredActivity[0]?.attributes?.type === 'questionnaire' ? 'cursor-pointer' : ''}`}>
                 <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
