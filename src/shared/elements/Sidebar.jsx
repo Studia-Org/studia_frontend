@@ -216,13 +216,12 @@ export const Sidebar = (props) => {
                   </h2>
                   {
                     Object.keys(iconProps.dashboard).length <= 0 && dashboardNotification && (
-                      <span name="ping" className="absolute top-0 right-0 translate-x-0 -translate-y-1">
-                        <span className="absolute top-0 right-0 w-2 h-2 bg-red-400 rounded-full opacity-75 animate-ping"></span>
-                        <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+                      <span name="ping" className="flex items-center">
+                        <span className="absolute  w-2.5 h-2.5 bg-red-400 rounded-full opacity-75 animate-ping"></span>
+                        <span className="absolute  w-2.5 h-2.5 bg-red-500 rounded-full"></span>
                       </span>
                     )
                   }
-
                 </span>
               </li>
 
