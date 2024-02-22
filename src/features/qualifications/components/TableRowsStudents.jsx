@@ -7,7 +7,7 @@ const { TextArea } = Input;
 
 
 
-export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIsChanges, editedGrades, setEditedGrades }) => {
+export function TableRowsStudents({ student, activity, isEditChecked, setThereIsChanges, editedGrades, setEditedGrades }) {
     const grade = student.attributes.qualifications.data.find(qualification => qualification.attributes.activity.data?.id === JSON.parse(activity).id)
     const [files, setFiles] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,8 +42,6 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
             },
         });
     };
-
-
 
     const showModal = (files) => {
         setFiles(files);

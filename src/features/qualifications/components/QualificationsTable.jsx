@@ -1,20 +1,24 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { TableRowsStudents } from './TableRowsStudents'
+import { TableRowsGroups, saveChangesButtonGroups } from './TableRowsGroups'
 import { Button, Select, message } from "antd"
 import { API } from '../../../constant';
 import { getToken } from '../../../helpers';
 import { useAuthContext } from '../../../context/AuthContext';
+import { set } from 'date-fns';
 
 
 
 export const QualificationsTable = ({ students, activities, setStudents, setUploadQualificationsFlag }) => {
     const [isEditChecked, setIsEditChecked] = useState(false);
-    const [selectedActivity, setSelectedActivity] = useState(JSON.stringify({ id: activities[0].id, title: activities[0].attributes.title }));
+    const [selectedActivity, setSelectedActivity] = useState
+        (JSON.stringify({ id: activities[0].id, title: activities[0].attributes.title, groupActivity: activities[0].attributes.groupActivity }));
     const [thereIsChanges, setThereIsChanges] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [editedGrades, setEditedGrades] = useState({});
     const { user } = useAuthContext()
     const [loading, setLoading] = useState(false)
+    const [groups, setGroups] = useState([])
 
     const handleToggleChange = () => {
         setIsEditChecked(!isEditChecked);
@@ -23,7 +27,12 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
     const saveChangesButton = async () => {
         setLoading(true)
         for (const studentId in editedGrades) {
-            let grade = students.find(student => student.id === Number(studentId))?.attributes.qualifications.data.find(qualification => qualification?.attributes.activity.data?.id === JSON.parse(selectedActivity).id)
+            let grade =
+                students
+                    .find(student => student.id === Number(studentId))?.attributes.qualifications.data
+                    .find(qualification => qualification?.attributes.activity.data?.id === JSON.parse(selectedActivity).id)
+
+
             const student = editedGrades[studentId];
             if (grade) {
                 const response = await fetch(`${API}/qualifications/${grade.id}`, {
@@ -86,25 +95,64 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
 
     };
 
+    useEffect(() => {
+        const parsedActivityFull = JSON.parse(selectedActivity)
+        const AllFilteredGroups = students.filter((student) => student.attributes.groups?.data
+            .find(group => group.attributes.activity?.data?.id === parsedActivityFull.id))
+            .map((group) => group.attributes.groups.data.find(group => group.attributes.activity?.data?.id === parsedActivityFull.id))
+
+        const filteredGroupsIds = AllFilteredGroups.map(group => group.id)
+        const filteredGroupsIdsUnique = [...new Set(filteredGroupsIds)]
+        const filteredGroups = filteredGroupsIdsUnique.map(id => AllFilteredGroups.find(group => group.id === id))
+        setGroups(filteredGroups)
+    }, [students])
+
     function renderTableRows() {
-        const filteredStudents = students.filter((student) =>
-            student.attributes.name.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-        return (
-            <>
-                {filteredStudents.map((student) => (
-                    <TableRowsStudents
-                        key={student.id}
-                        student={student}
-                        activity={selectedActivity}
+        const parsedActivityFull = JSON.parse(selectedActivity)
+        if (parsedActivityFull.groupActivity) {
+            const AllFilteredGroups = students.filter((student) => student.attributes.groups?.data
+                .find(group => group.attributes.activity?.data?.id === parsedActivityFull.id))
+                .map((group) => group.attributes.groups.data.find(group => group.attributes.activity?.data?.id === parsedActivityFull.id))
+
+            const filteredGroupsIds = AllFilteredGroups.map(group => group.id)
+            const filteredGroupsIdsUnique = [...new Set(filteredGroupsIds)]
+            const filteredGroups = filteredGroupsIdsUnique.map(id => AllFilteredGroups.find(group => group.id === id))
+            if (groups.length === 0) setGroups(filteredGroups)
+            return (
+                filteredGroups.map((group) => {
+                    return <TableRowsGroups
+                        key={group.id}
+                        group={group}
+                        activity={parsedActivityFull}
                         isEditChecked={isEditChecked}
                         setThereIsChanges={setThereIsChanges}
                         editedGrades={editedGrades}
                         setEditedGrades={setEditedGrades}
+                        setStudents={setStudents}
                     />
-                ))}
-            </>
-        );
+                })
+            )
+
+        } else {
+            const filteredStudents = students.filter((student) =>
+                student.attributes.name.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+            return (
+                <>
+                    {filteredStudents.map((student) => {
+                        return <TableRowsStudents
+                            key={student.id}
+                            student={student}
+                            activity={selectedActivity}
+                            isEditChecked={isEditChecked}
+                            setThereIsChanges={setThereIsChanges}
+                            editedGrades={editedGrades}
+                            setEditedGrades={setEditedGrades}
+                        />
+                    })}
+                </>
+            );
+        }
     }
 
     const filterOption = (input, option) =>
@@ -113,7 +161,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
     const activityOptions = activities
         .filter(activity => activity.attributes.evaluable === true)
         .map(activity => ({
-            value: JSON.stringify({ id: activity.id, title: activity.attributes.title }),
+            value: JSON.stringify({ id: activity.id, title: activity.attributes.title, groupActivity: activity.attributes.groupActivity }),
             label: activity.attributes.title,
         }));
 
@@ -139,7 +187,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                         class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
                                         placeholder="Search for users" />
                                 </div>
-                                <label className="relative inline-flex items-center cursor-pointer mr-auto ml-5">
+                                <label className="relative inline-flex items-center ml-5 mr-auto cursor-pointer">
                                     <input
                                         type="checkbox"
                                         value=""
@@ -155,20 +203,32 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                     Upload qualifications
                                 </Button>
                             </div>
-                            <div className='flex justify-between items-center'>
+                            <div className='flex items-center justify-between mt-5 gap-x-5 '>
                                 <Select
+
                                     showSearch
-                                    className='mt-5 w-full mr-10'
+                                    className='w-full'
                                     placeholder="Select an activity"
                                     optionFilterProp="children"
                                     value={selectedActivity}
-                                    onChange={(value) => setSelectedActivity(value)}
+                                    onChange={(value) => { console.log(value); setSelectedActivity(value) }}
                                     filterOption={filterOption}
                                     options={activityOptions}
                                 />
                                 {
                                     isEditChecked && (
-                                        <Button loading={loading} type='primary' disabled={!thereIsChanges} onClick={() => saveChangesButton()}>
+                                        <Button loading={loading} type='primary' disabled={!thereIsChanges} onClick={() => {
+                                            if (JSON.parse(selectedActivity).groupActivity) {
+                                                setLoading(true)
+                                                saveChangesButtonGroups(editedGrades, groups, selectedActivity, user, students, setStudents)
+                                                setThereIsChanges(false);
+                                                setIsEditChecked(false);
+                                                setLoading(false)
+                                            } else {
+                                                saveChangesButton()
+                                            }
+                                        }
+                                        }>
                                             Save Changes
                                         </Button>
                                     )
@@ -178,9 +238,16 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                         <table class="w-full text-sm text-left text-gray-500 ">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50  ">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3">
-                                        Name
-                                    </th>
+                                    {
+                                        JSON.parse(selectedActivity).activityGroup ?
+                                            <th scope="col" class="px-6 py-3">
+                                                Groups
+                                            </th>
+                                            :
+                                            <th scope="col" class="px-6 py-3">
+                                                Name
+                                            </th>
+                                    }
                                     <th scope="col" class="px-6 py-3">
                                         Qualification
                                     </th>
@@ -195,22 +262,22 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody key={selectedActivity}>
                                 {students && renderTableRows()}
                             </tbody>
                         </table>
                     </div>
                     :
-                    <div className='relative bg-white rounded-md shadow-md mt-20 flex flex-col items-center justify-center w-2/4 px-20 mx-auto'>
-                        <h1 className='text-2xl text-black font-bold mt-10 text-center'>There are no evaluable activities on this course!</h1>
-                        <p className='font-medium my-6 text-sm text-center text-gray-600'>To add activities to your course, you can follow these simple steps: </p>
-                        <ol className='text-sm font-medium mb-5 text-gray-600'>
+                    <div className='relative flex flex-col items-center justify-center w-2/4 px-20 mx-auto mt-20 bg-white rounded-md shadow-md'>
+                        <h1 className='mt-10 text-2xl font-bold text-center text-black'>There are no evaluable activities on this course!</h1>
+                        <p className='my-6 text-sm font-medium text-center text-gray-600'>To add activities to your course, you can follow these simple steps: </p>
+                        <ol className='mb-5 text-sm font-medium text-gray-600'>
                             <li>1. Navigate to 'Home' menu.</li>
                             <li>2. Access the course you are teaching.</li>
                             <li>3. Navigate to the 'Edit Course' menu or 'Course Content' section.</li>
                             <li>4. Here, you will find the option to 'Add Activities' or 'Create New Content.'</li>
                         </ol>
-                        <img className='mb-10 w-48' src="https://liferay-support.zendesk.com/hc/article_attachments/360032795211/empty_state.gif" alt="" />
+                        <img className='w-48 mb-10' src="https://liferay-support.zendesk.com/hc/article_attachments/360032795211/empty_state.gif" alt="" />
                     </div>
             }
         </>
