@@ -17,12 +17,16 @@ import { Header } from './Questionnaire/Header';
 import { fetchUserResponsesQuestionnaires } from "../../../../fetches/fetchUserResponsesQuestionnaires";
 import { NavigationButtons } from './Questionnaire/NavigationsButons';
 import { CardQuestionnaireUser } from './Questionnaire/CardQuestionnaireUser';
+import { UserQuestionnaireAnswerTable } from './Questionnaire/UserQuestionnaireAnswerTable';
+
+const { Search } = Input;
 
 export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, enableEdit, setEnableEdit, courseSubsection, setCourseSubsectionQuestionnaire, professorID }) => {
   const { user } = useAuthContext();
   const [groupValues, setGroupValues] = useState({});
   const [loadingData, setLoadingData] = useState(true);
   const [userResponses, setUserResponses] = useState([]);
+  const [searchUser, setSearchUser] = useState('');
   const [questionnaireAnswerData, setQuestionnaireAnswerData] = useState(answers.filter((answer) => answer.questionnaire.id === questionnaire.id));
   const [completed, setCompleted] = useState(questionnaireAnswerData.length > 0);
   const [sendingData, setSendingData] = useState(false);
@@ -474,13 +478,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
                 </div>
                 :
                 userResponses.length > 0 ?
-                  <div className='space-y-3'>
-                    {
-                      userResponses.map((response, index) => (
-                        <CardQuestionnaireUser key={index} user={response} setQuestionnaireAnswerData={setQuestionnaireAnswerData} />
-                      ))
-                    }
-                  </div>
+                  <UserQuestionnaireAnswerTable userResponses={userResponses} setQuestionnaireAnswerData={setQuestionnaireAnswerData} />
                   :
                   <div className='py-5 mt-5 bg-white rounded-md shadow-md'>
                     <Empty description='There are no user responses to this questionnaire.' />
