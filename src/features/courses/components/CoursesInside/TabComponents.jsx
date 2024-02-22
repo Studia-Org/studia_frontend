@@ -376,7 +376,7 @@ export const CourseParticipants = ({ students, enableEdit, setSettingsFlag }) =>
                         onClick={() => navigate(`/app/profile/${student.id}/`)}
                     >
                         <img
-                            src={student.attributes.profile_photo.data.attributes.url}
+                            src={student.attributes.profile_photo.data?.attributes?.url}
                             alt=""
                             className="rounded-l w-14 h-[4rem] object-cover"
                         />

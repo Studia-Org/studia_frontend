@@ -5,26 +5,32 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { SwitchEdit } from '../SwitchEdit'
 import Chip from '@mui/material/Chip';
-import { Button, Popconfirm, Badge } from "antd";
+import { Button, Popconfirm, Badge, Input } from "antd";
 import { motion, AnimatePresence } from "framer-motion";
-import { message } from 'antd';
+import { message, Avatar } from 'antd';
 import { useAuthContext } from '../../../../../context/AuthContext';
 import { API } from '../../../../../constant';
 import dayjs from 'dayjs';
 import { getToken } from '../../../../../helpers';
 
 
-export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, completed, setEnableEdit, courseSubsection, editedQuestions }) => {
+export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, completed, setEnableEdit, courseSubsection, editedQuestions, setQuestionnaireAnswerData }) => {
     const { user } = useAuthContext()
     const [titleEdit, setTitleEdit] = useState(questionnaire.attributes.Title)
+    const [titleEditFinal, setTitleEditFinal] = useState(questionnaire.attributes.Title)
     const [descriptionEdit, setDescriptionEdit] = useState(questionnaire.attributes.description)
+    const [descriptionEditFinal, setDescriptionEditFinal] = useState(questionnaire.attributes.description)
     const [deadline, setDeadline] = useState(new Date(questionnaire.attributes.deadline))
+    const [deadlineFinal, setDeadlineFinal] = useState(new Date(questionnaire.attributes.deadline))
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         setTitleEdit(questionnaire.attributes.Title);
         setDescriptionEdit(questionnaire.attributes.description);
         setDeadline(dayjs(courseSubsection.attributes.end_date))
+        setTitleEditFinal(questionnaire.attributes.Title);
+        setDescriptionEditFinal(questionnaire.attributes.description);
+        setDeadlineFinal(dayjs(courseSubsection.attributes.end_date))
     }, [questionnaire])
 
 
@@ -71,9 +77,13 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
                 }
             })
         });
+        setTitleEditFinal(titleEdit);
+        setDescriptionEditFinal(descriptionEdit);
+        setDeadlineFinal(deadline);
 
         if (response2.ok) {
             setLoading(false);
+            setEnableEdit(false);
             message.success('Changes saved, Refresh the page to see the changes');
         } else {
             setLoading(false);
@@ -96,16 +106,17 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
         return formattedTime;
     }
 
+
     return (
-        <div className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1]">
+        <div className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1] mb-5">
             <div className="flex flex-col w-full my-7 mx-7">
                 <div className='flex items-center w-full '>
                     {enableEdit ? (
-                        <input type="text" value={titleEdit} className='w-full text-3xl font-semibold' onChange={(e) => setTitleEdit(e.target.value)} />
+                        <Input value={titleEdit} className='w-full text-3xl font-semibold rounded-md mr-14' onChange={(e) => setTitleEdit(e.target.value)} />
                     ) : (
                         <div className='flex items-center w-full gap-3'>
-                            <p className="text-3xl font-semibold text-black">{questionnaire.attributes.Title}</p>
-                            <Badge color="#6366f1" className='ml-auto mr-10' count={new Date(courseSubsection.attributes.end_date).toDateString()} />
+                            <p className="text-3xl font-semibold text-black">{titleEditFinal}</p>
+                            <Badge color="#6366f1" className='ml-auto mr-10' count={new Date(deadlineFinal).toDateString()} />
                         </div>
                     )}
                     {(questionnaireAnswerData.length > 0 && user?.role_str === 'student') && (
@@ -116,9 +127,9 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
                 </div>
                 <div className='flex justify-between mt-7'>
                     {enableEdit ? (
-                        <input type="text" value={descriptionEdit} className='w-full' onChange={(e) => setDescriptionEdit(e.target.value)} />
+                        <Input type="text" value={descriptionEdit} className='w-full rounded-md mr-14' onChange={(e) => setDescriptionEdit(e.target.value)} />
                     ) : (
-                        <p>{questionnaire.attributes.description}</p>
+                        <p>{descriptionEditFinal}</p>
                     )}
                     {completed === true ? (
                         <span className='pl-2 mr-10 text-gray-500'>{"Completed in: " + format(questionnaireAnswerData[0]?.timeToComplete)}</span>
@@ -141,11 +152,11 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
                 }
 
             </div>
+
             <div className='mr-3'>
                 {
                     user.role_str !== 'student' && (
-                        <div className='flex flex-col items-end justify-end mb-10 space-y-5'>
-                            <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} />
+                        <div className='flex items-center justify-between w-full mb-10 space-y-5 '>
                             <AnimatePresence>
                                 {enableEdit && (
                                     <motion.div
@@ -165,7 +176,7 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
                                                 <Button
                                                     type="primary"
                                                     loading={loading}
-                                                    className="justify-center px-4 mb-5 text-sm font-medium text-white duration-150 bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                                    className="justify-center px-4 text-sm font-medium text-white duration-150 bg-blue-600 border border-transparent rounded-md shadow-sm ml-7 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                                                     Save Changes
                                                 </Button>
 
@@ -175,6 +186,19 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
                                     </motion.div>
                                 )}
                             </AnimatePresence>
+                            {
+                                (user.role_str !== 'student' && questionnaireAnswerData.length > 0 && enableEdit === false) && (
+                                    <div className='flex items-center gap-1 ml-7'>
+                                        <Avatar shape="square" size="large" src={questionnaireAnswerData[0]?.user.data.attributes.profile_photo.data.attributes.url} />
+                                        <p className='text-sm text-gray-800'>{questionnaireAnswerData[0]?.user.data.attributes.name}</p>
+                                    </div>
+                                )
+                            }
+
+                            <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} context={'questionnaire'}
+                                setQuestionnaireAnswerData={setQuestionnaireAnswerData} />
+
+
                         </div>
                     )
                 }

@@ -14,6 +14,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
     const [searchTerm, setSearchTerm] = useState('');
     const [editedGrades, setEditedGrades] = useState({});
     const { user } = useAuthContext()
+    const filteredActivity = activities.filter(activity => activity.id === JSON.parse(selectedActivity).id)
     const [loading, setLoading] = useState(false)
 
     const handleToggleChange = () => {
@@ -86,6 +87,8 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
 
     };
 
+
+
     function renderTableRows() {
         const filteredStudents = students.filter((student) =>
             student.attributes.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -101,6 +104,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                         setThereIsChanges={setThereIsChanges}
                         editedGrades={editedGrades}
                         setEditedGrades={setEditedGrades}
+                        activities={activities}
                     />
                 ))}
             </>
@@ -139,7 +143,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                         class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
                                         placeholder="Search for users" />
                                 </div>
-                                <label className="relative inline-flex items-center cursor-pointer mr-auto ml-5">
+                                <label className="relative inline-flex items-center ml-5 mr-auto cursor-pointer">
                                     <input
                                         type="checkbox"
                                         value=""
@@ -155,10 +159,10 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                     Upload qualifications
                                 </Button>
                             </div>
-                            <div className='flex justify-between items-center'>
+                            <div className='flex items-center justify-between'>
                                 <Select
                                     showSearch
-                                    className='mt-5 w-full mr-10'
+                                    className='w-full mt-5 mr-10'
                                     placeholder="Select an activity"
                                     optionFilterProp="children"
                                     value={selectedActivity}
@@ -187,9 +191,17 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                     <th scope="col" class="px-6 py-3  w-2/4 ">
                                         Comment
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Files
-                                    </th>
+                                    {
+                                        filteredActivity[0]?.attributes?.type !== 'questionnaire' ? (
+                                            <th scope="col" class="px-6 py-3">
+                                                Files
+                                            </th>
+                                        ) : (
+                                            <th scope="col" class="px-6 py-3">
+                                                Questionnaire Completed
+                                            </th>
+                                        )
+                                    }
                                     <th scope="col" class="px-6 py-3">
                                         Last modified
                                     </th>
@@ -201,16 +213,16 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                         </table>
                     </div>
                     :
-                    <div className='relative bg-white rounded-md shadow-md mt-20 flex flex-col items-center justify-center w-2/4 px-20 mx-auto'>
-                        <h1 className='text-2xl text-black font-bold mt-10 text-center'>There are no evaluable activities on this course!</h1>
-                        <p className='font-medium my-6 text-sm text-center text-gray-600'>To add activities to your course, you can follow these simple steps: </p>
-                        <ol className='text-sm font-medium mb-5 text-gray-600'>
+                    <div className='relative flex flex-col items-center justify-center w-2/4 px-20 mx-auto mt-20 bg-white rounded-md shadow-md'>
+                        <h1 className='mt-10 text-2xl font-bold text-center text-black'>There are no evaluable activities on this course!</h1>
+                        <p className='my-6 text-sm font-medium text-center text-gray-600'>To add activities to your course, you can follow these simple steps: </p>
+                        <ol className='mb-5 text-sm font-medium text-gray-600'>
                             <li>1. Navigate to 'Home' menu.</li>
                             <li>2. Access the course you are teaching.</li>
                             <li>3. Navigate to the 'Edit Course' menu or 'Course Content' section.</li>
                             <li>4. Here, you will find the option to 'Add Activities' or 'Create New Content.'</li>
                         </ol>
-                        <img className='mb-10 w-48' src="https://liferay-support.zendesk.com/hc/article_attachments/360032795211/empty_state.gif" alt="" />
+                        <img className='w-48 mb-10' src="https://liferay-support.zendesk.com/hc/article_attachments/360032795211/empty_state.gif" alt="" />
                     </div>
             }
         </>
