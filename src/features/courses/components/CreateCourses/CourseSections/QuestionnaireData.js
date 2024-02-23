@@ -2,6 +2,7 @@ export const MSLQuestionnaireData = {
     attributes: {
         Title: "MSLQ Questionnaire",
         description: "Questionnaire for measuring student learning and motivation",
+        autocorrect: false,
         Options: {
             questionnaire: {
                 title: "MSLQ Questionnaire",
@@ -47,7 +48,8 @@ export const MSLQuestionnaireData = {
                         "question": "I enjoy collaborating with classmates on group projects.",
                         "options": ["Strongly Disagree", "Disagree", "Neutral", "Agree", "Strongly Agree"]
                     }
-                ]
+                ],
+                correctAnswers: {}
             }
         }
     }
@@ -57,14 +59,17 @@ export const EmptyQuestionnaireData = {
     attributes: {
         Title: "Empty Questionnaire",
         description: "Empty Questionnaire",
+        autocorrect: false,
         Options: {
             questionnaire: {
                 title: "Empty Questionnaire",
                 description: "Empty Questionnaire",
                 questions:
-                    []
+                    [],
+                correctAnswers: {}
             }
         }
+
     }
 }
 
@@ -72,6 +77,7 @@ export const PlannificationQuestionnaireData = {
     attributes: {
         Title: "Plannification Questionnaire",
         description: "Questionnaire for measuring student plannification",
+        autocorrect: false,
         Options: {
             questionnaire: {
                 title: "Plannification Questionnaire",
@@ -102,7 +108,8 @@ export const PlannificationQuestionnaireData = {
                             "question": "What strategies do you plan to use for self-regulated learning during this task?",
                             "options": "open-ended"
                         }
-                    ]
+                    ],
+                correctAnswers: {}
             }
         }
     }

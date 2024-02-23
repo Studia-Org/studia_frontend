@@ -12,6 +12,7 @@ export const CoursesRoutes = () => {
         <Routes>
             <Route path="/" element={<CoursesHome />} />
             <Route path=":courseId" element={<CoursesInside />} />
+            <Route path=":courseId/:activityId" element={<CoursesInside />} />
             <Route path=":courseId/activity/:activityId" element={<Activity />} />
             <Route path="/create" element={<CreateCourse />} />
             <Route path="*" element={<Page404Screen />} />

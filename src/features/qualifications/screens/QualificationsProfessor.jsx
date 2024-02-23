@@ -22,7 +22,7 @@ const QualificationsProfessor = () => {
 
     const fetchCourseData = async () => {
         try {
-            const response = await fetch(`${API}/courses/${courseID}?populate=sections.subsections.activity,cover,students.profile_photo,students.qualifications.activity,students.qualifications.file`);
+            const response = await fetch(`${API}/courses/${courseID}?populate=sections.subsections.activity,cover,students.profile_photo,students.qualifications.activity,students.qualifications.file,students.user_response_questionnaires.questionnaire.subsection.activity`);
             const data = await response.json();
             const evaluableActivities = []
             data.data?.attributes.sections.data.forEach(
@@ -47,6 +47,7 @@ const QualificationsProfessor = () => {
         }
     }
 
+
     useEffect(() => {
         fetchCourseData();
     }, [])
@@ -56,7 +57,7 @@ const QualificationsProfessor = () => {
             {
                 isLoading === false ?
                     <>
-                        <section className='absolute block top-0 left-0 w-full'>
+                        <section className='absolute top-0 left-0 block w-full'>
                             {
                                 cover && <img alt='' src={`${cover}`}
                                     className="absolute top-0 left-0 w-full h-[20rem] object-fill lg:rounded-tl-3xl" />
@@ -69,15 +70,16 @@ const QualificationsProfessor = () => {
                         <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
                             {
                                 uploadQualificationsFlag ?
-                                    <UploadQualifications setUploadQualificationsFlag={setUploadQualificationsFlag} activities={activities} students={students}/>
+                                    <UploadQualifications setUploadQualificationsFlag={setUploadQualificationsFlag} activities={activities} students={students} />
                                     :
-                                    <QualificationsTable setUploadQualificationsFlag={setUploadQualificationsFlag} students={students} activities={activities} setStudents={setStudents} />
+                                    <QualificationsTable setUploadQualificationsFlag={setUploadQualificationsFlag} students={students}
+                                        activities={activities} setStudents={setStudents} />
                             }
                         </motion.div>
 
                     </>
                     :
-                    <div className='w-full h-full flex items-center justify-center' >
+                    <div className='flex items-center justify-center w-full h-full' >
                         <MoonLoader color="#363cd6" size={80} />
                     </div>
             }

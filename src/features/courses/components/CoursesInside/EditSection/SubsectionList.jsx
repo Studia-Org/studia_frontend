@@ -4,10 +4,21 @@ import { CSS } from '@dnd-kit/utilities';
 import { Button, Popconfirm, message } from 'antd';
 
 
-export const SubsectionList = ({ subsection, sectionToEdit, setCourseContentInformation }) => {
+export const SubsectionList = ({ subsection, setSectionToEditTemp }) => {
 
     function deleteSubsection(subsection) {
-
+        setSectionToEditTemp((prev) => {
+            const updatedSubsections = prev.attributes.subsections.data.filter((sub) => sub.id !== subsection.id);
+            return {
+                ...prev,
+                attributes: {
+                    ...prev.attributes,
+                    subsections: {
+                        data: updatedSubsections
+                    }
+                }
+            };
+        });
     }
 
     function switchFaseColor(fase) {

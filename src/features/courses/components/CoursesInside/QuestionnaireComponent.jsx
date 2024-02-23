@@ -4,22 +4,30 @@ import RadioGroup, { useRadioGroup } from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
 import { motion } from "framer-motion";
 import { useAuthContext } from "../../../../context/AuthContext";
-import { Button, message, Popconfirm } from "antd";
+import { Button, Input, message, Popconfirm, Empty } from "antd";
 import { API } from "../../../../constant";
 import { getToken } from "../../../../helpers";
 import Swal from 'sweetalert2'
+import { MoonLoader } from "react-spinners";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import { useTimer } from "../../../../shared/elements/useTimer";
 import { AddQuestionButton } from './EditSection/AddQuestionButton';
 import { Header } from './Questionnaire/Header';
+import { fetchUserResponsesQuestionnaires } from "../../../../fetches/fetchUserResponsesQuestionnaires";
 import { NavigationButtons } from './Questionnaire/NavigationsButons';
+import { CardQuestionnaireUser } from './Questionnaire/CardQuestionnaireUser';
+import { UserQuestionnaireAnswerTable } from './Questionnaire/UserQuestionnaireAnswerTable';
 
+const { Search } = Input;
 
-export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, enableEdit, setEnableEdit, courseSubsection, setCourseSubsectionQuestionnaire }) => {
+export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, enableEdit, setEnableEdit, courseSubsection, setCourseSubsectionQuestionnaire, professorID }) => {
   const { user } = useAuthContext();
   const [groupValues, setGroupValues] = useState({});
-  const questionnaireAnswerData = answers.filter((answer) => answer.questionnaire.id === questionnaire.id);
+  const [loadingData, setLoadingData] = useState(true);
+  const [userResponses, setUserResponses] = useState([]);
+  const [searchUser, setSearchUser] = useState('');
+  const [questionnaireAnswerData, setQuestionnaireAnswerData] = useState(answers.filter((answer) => answer.questionnaire.id === questionnaire.id));
   const [completed, setCompleted] = useState(questionnaireAnswerData.length > 0);
   const [sendingData, setSendingData] = useState(false);
   const questionsPerPage = 5;
@@ -39,9 +47,19 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
     } else {
       setCompleted(false);
     }
-  }, [questionnaireAnswerData.length]);
+  }, [questionnaireAnswerData.length, stopTimer, questionnaire.id]);
 
 
+  useEffect(() => {
+    setCurrentPage(1);
+    setUserResponses([]);
+    setLoadingData(true);
+    const fetchData = async () => {
+      setUserResponses(await fetchUserResponsesQuestionnaires(questionnaire.id));
+      setLoadingData(false);
+    };
+    fetchData();
+  }, [questionnaire.id]);
 
   const list = {
     visible: { opacity: 1 },
@@ -108,6 +126,39 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
     return result.isConfirmed;
   };
 
+  const correctQuestionnaire = async (correctAnswers, userResponses) => {
+    const calculatedScore = calcularNota(userResponses, correctAnswers);
+
+    await fetch(`${API}/qualifications`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${getToken()}`,
+      },
+      body: JSON.stringify({
+        data: {
+          activity: courseSubsection.attributes.activity.data.id,
+          user: user.id,
+          comments: 'Automatic evaluation of the questionnaire',
+          evaluator: professorID,
+          qualification: calculatedScore,
+          file: null,
+          delivered: true
+        }
+      })
+    });
+
+  }
+
+  function calcularNota(respuestasUsuario, respuestasCorrectas) {
+    const correctas = respuestasUsuario.reduce((acumulador, respuesta) => {
+      return acumulador + (respuestasCorrectas[respuesta.question] === respuesta.answer ? 1 : 0);
+    }, 0);
+
+    return (correctas / Object.keys(respuestasCorrectas).length) * 10;
+  }
+
+
 
   const handleSubmission = async () => {
     try {
@@ -151,11 +202,6 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
                 { id: subsectionID }
               ]
             };
-            const response3 = await fetch(`${API}/questionnaires/${questionnaire.id}`, {
-              method: 'PUT',
-
-
-            });
             const response2 = await fetch(`${API}/users/${user.id}`, {
               method: 'PUT',
               headers: {
@@ -164,7 +210,11 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
               },
               body: JSON.stringify(newObject)
             });
-            const temp = await response2.json();
+
+            if (Object.keys(questionnaire.attributes.Options.questionnaire?.correctAnswers).length > 0) {
+              await correctQuestionnaire(questionnaire.attributes.Options.questionnaire.correctAnswers, formattedObject.responses)
+            }
+
             if (response2.ok) {
               Swal.fire(
                 'Completed!',
@@ -251,9 +301,9 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
             {
               enableEdit ?
                 <div className='flex items-center'>
-                  <input
+                  <Input
                     type="text"
-                    className='w-full'
+                    className='w-full rounded-md'
                     value={initialValue.question}
                     onChange={(e) => handleInputChange({ question: e.target.value, options: question.options }, absoluteIndex)}
                   />
@@ -274,11 +324,11 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
             }
 
             {Array.isArray(question.options) ? (
-              user.role_str === "student" ?
+              user.role_str === "student" || (user.role_str !== "student" && questionnaireAnswerData.length > 0) ?
                 <div key={absoluteIndex}>
                   {
-                    questionnaireAnswerData.length > 0 ?
-                      <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} defaultValue={questionnaireAnswerData[0].responses.responses[absoluteIndex].answer}>
+                    (questionnaireAnswerData.length > 0) ?
+                      <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} defaultValue={questionnaireAnswerData[0].responses.responses[absoluteIndex]?.answer}>
                         {question.options.map((option, optionIndex) => (
                           <MyFormControlLabel key={optionIndex} value={option} label={option} control={<Radio disabled readOnly />} />
                         ))}
@@ -301,7 +351,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
                       {initialValue.options.map((option, optionIndex) => (
                         <div className='flex items-center gap-2 space-y-2'>
                           <div className='w-5 h-5 border-2 border-gray-400 rounded-full '> </div>
-                          <input type="text" value={option} onChange={(e) => {
+                          <Input type="text" className='rounded-md' value={option} onChange={(e) => {
                             const updatedOptions = initialValue.options.map((o, index) =>
                               index === optionIndex ? e.target.value : o
                             );
@@ -319,7 +369,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
                     </RadioGroup>
                   </div>
             ) : (
-              user.role_str === "student" ?
+              user.role_str === "student" || (user.role_str !== "student" && questionnaireAnswerData.length > 0) ?
                 <div key={absoluteIndex} className='flex w-full mt-5'>
                   {
                     questionnaireAnswerData.length > 0 ?
@@ -369,42 +419,73 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
   return (
     <div className="flex flex-col mt-5">
       <Header enableEdit={enableEdit} questionnaire={questionnaire} questionnaireAnswerData={questionnaireAnswerData}
-        completed={completed} setEnableEdit={setEnableEdit} courseSubsection={courseSubsection} editedQuestions={editedQuestions} />
-      <motion.ul
-        initial="hidden"
-        animate="visible"
-        variants={list}
-      >
-        <div className="mt-5 space-y-5 ">{renderQuestionsForPage()}</div>
-        {
-          (enableEdit === true && user?.role_str !== 'student' && (totalPages === 0 || currentPage === totalPages)) && (
-            <AddQuestionButton setCourseSubsectionQuestionnaire={setCourseSubsectionQuestionnaire} />
-          )
-        }
-      </motion.ul>
-      {isLastPage && (
-        <div className="flex justify-end mt-5">
-          {
-            completed === false &&
-            <>
+        completed={completed} setEnableEdit={setEnableEdit} courseSubsection={courseSubsection} editedQuestions={editedQuestions}
+        setQuestionnaireAnswerData={setQuestionnaireAnswerData}
+      />
+      {
+        user?.role_str === 'student' || ((questionnaireAnswerData.length > 0 && user?.role_str !== 'student') || enableEdit === true) ?
+          <>
+            {
+              enableEdit === false && (
+                <Button onClick={() => setQuestionnaireAnswerData([])} className='mb-5 bg-white shadow-md'>
+                  Go back to users
+                </Button>
+              )
+            }
+
+            <motion.ul
+              initial="hidden"
+              animate="visible"
+              variants={list}
+            >
+              <div className="space-y-5 ">{renderQuestionsForPage()}</div>
               {
-                user.role_str === 'student' && (
-                  <>
-                    <span className='inline-flex w-[60px] text-gray-500'>{minutes}:{seconds < 10 ? "0" + seconds : seconds}</span>
-                    <Button type='primary' loading={sendingData} onClick={handleSubmission}
-                      className="ml-auto ">
-                      Submit
-                    </Button>
-                  </>
+                (enableEdit === true && user?.role_str !== 'student' && (totalPages === 0 || currentPage === totalPages)) && (
+                  <AddQuestionButton setCourseSubsectionQuestionnaire={setCourseSubsectionQuestionnaire} />
                 )
               }
-            </>
-          }
-        </div>
-      )}
-      <div className="flex items-center justify-between mt-5 mb-8 bg-white rounded-md shadow-md p-5 border-b-8 border-[#6366f1]">
-        <NavigationButtons setCurrentPage={setCurrentPage} currentPage={currentPage} totalPages={totalPages} />
-      </div>
+            </motion.ul>
+            {isLastPage && (
+              <div className="flex justify-end mt-5">
+                {
+                  completed === false &&
+                  <>
+                    {
+                      user.role_str === 'student' && (
+                        <>
+                          <span className='inline-flex w-[60px] text-gray-500'>{minutes}:{seconds < 10 ? "0" + seconds : seconds}</span>
+                          <Button type='primary' loading={sendingData} onClick={handleSubmission}
+                            className="ml-auto ">
+                            Submit
+                          </Button>
+                        </>
+                      )
+                    }
+                  </>
+                }
+              </div>
+            )}
+            <div className="flex items-center justify-between mt-5 mb-8 bg-white rounded-md shadow-md p-5 border-b-8 border-[#6366f1]">
+              <NavigationButtons setCurrentPage={setCurrentPage} currentPage={currentPage} totalPages={totalPages} />
+            </div>
+          </>
+          :
+          <>
+            {
+              loadingData ?
+                <div className='flex items-center justify-center p-5 bg-white rounded-md shadow-md'>
+                  <MoonLoader color="#363cd6" />
+                </div>
+                :
+                userResponses.length > 0 ?
+                  <UserQuestionnaireAnswerTable userResponses={userResponses} setQuestionnaireAnswerData={setQuestionnaireAnswerData} />
+                  :
+                  <div className='py-5 mt-5 bg-white rounded-md shadow-md'>
+                    <Empty description='There are no user responses to this questionnaire.' />
+                  </div>
+            }
+          </>
+      }
     </div>
   );
 };

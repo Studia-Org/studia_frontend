@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Button, Popconfirm, message, Popover } from 'antd';
-import { sub } from 'date-fns';
+import { Button, Popconfirm, message } from 'antd';
+import { CheckSubsectionErrors } from './CheckSubsectionErrors';
 
 export const CreateCourseSubsectionsList = ({
     subsection,
@@ -11,36 +11,6 @@ export const CreateCourseSubsectionsList = ({
     setEditSubsectionFlag,
     setSubsectionEditing,
 }) => {
-    const [isCompleted, setIsCompleted] = useState(false);
-
-    useEffect(() => {
-        const checkCompletion = () => {
-            switch (subsection.type) {
-                case 'questionnaire':
-                    return subsection.start_date && subsection.end_date;
-                case 'peerReview':
-
-                    return (
-                        subsection.title &&
-                        subsection.content &&
-                        subsection.start_date &&
-                        subsection.end_date &&
-                        subsection.activity.task_to_review &&
-                        Object.keys(subsection.activity.PeerReviewRubrica).length !== 0
-                    );
-                case 'task':
-                    return (
-                        subsection.title &&
-                        subsection.content &&
-                        subsection.start_date &&
-                        subsection.end_date
-                    );
-                default:
-                    return false;
-            }
-        };
-        setIsCompleted(checkCompletion());
-    }, [subsection]);
 
     const deleteSubsection = () => {
         setCreateCourseSectionsList((prevSections) =>
@@ -120,21 +90,7 @@ export const CreateCourseSubsectionsList = ({
                 <div className="flex flex-col justify-center ml-5">
                     <p className="">{subsection.title}</p>
                 </div>
-
-                {!isCompleted && (
-                    <Popover content={<p>Complete it or you will not be able to create a course.</p>} title="Subsection is incomplete">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="w-5 h-5 text-red-600"
-                        >
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
-                        </svg>
-                    </Popover>
-                )}
+                <CheckSubsectionErrors subsection={subsection} />
             </div>
 
             <Popconfirm

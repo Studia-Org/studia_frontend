@@ -9,7 +9,7 @@ export const CoursesCardHome = ({ course }) => {
     function renderCourseTags(tag) {
         return (
             <div className=' bg-[#1677ff] p-1 h-6 rounded-md text-white my-1 mr-3 px-2'>
-                <p className='font-normal text-xs'>{tag}</p>
+                <p className='text-xs font-normal'>{tag}</p>
             </div>
         )
     }
@@ -19,15 +19,15 @@ export const CoursesCardHome = ({ course }) => {
             <Link to={`/app/courses/${course.id}`}>
                 <div className="2xl:w-[24rem] mb-8 2xl:h-[26rem] lg:w-[20rem] lg:min-h-[24rem] md:w-[16rem] md:min-h-[23rem] w-[22rem] min-h-[24rem] bg-white rounded-3xl shadow-md cursor-pointer shadow2 relative flex flex-col">
                     <img className="rounded-t-3xl w-full min-h-[12rem] max-h-[12rem] object-cover" src={course.cover} alt="" />
-                    <div className="p-3 flex flex-col ml-5 mr-5 h-full">
+                    <div className="flex flex-col h-full p-3 ml-5 mr-5">
                         <div className='flex flex-wrap flex-grow '>
                             {course.tags?.map(renderCourseTags)}
                         </div>
-                        <h3 className='text-left text-xl font-bold w-full overflow-hidden line-clamp-2 mt-2 items-center'>{course.title}</h3>
+                        <h3 className='items-center w-full mt-2 overflow-hidden text-xl font-bold text-left line-clamp-2'>{course.title}</h3>
                         <div className='flex items-center flex-grow mt-3' name='studentData'>
                             <img src={course.professor_profile_photo} className='w-8 h-8 rounded-full' alt="" />
-                            <p className='font-normal text-xs ml-2'>{course.professor_name}</p>
-                            <div className='ml-auto pb-3 flex items-center '>
+                            <p className='ml-2 text-xs font-normal'>{course.professor_name}</p>
+                            <div className='flex items-center pb-3 ml-auto '>
                                 <AvatarGroup stack>
                                     {course.students
                                         .filter((user, i) => i < 2)
