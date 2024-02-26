@@ -16,6 +16,7 @@ import { useAuthContext } from "../../../context/AuthContext";
 import { EditSection } from "../components/CoursesInside/EditSection";
 import FloatingButtonNavigation from "../components/CoursesInside/FloatingButtonNavigation";
 import { MoonLoader } from "react-spinners";
+import { set } from "lodash";
 
 const CourseInside = () => {
   const inputRefLandscape = useRef(null);
@@ -40,6 +41,7 @@ const CourseInside = () => {
   const [students, setStudents] = useState([]);
   const [professor, setProfessor] = useState([]);
   let { courseId } = useParams();
+  let { activityId } = useParams();
   const { user } = useAuthContext()
   const whisper = useRef(null);
 
@@ -126,7 +128,7 @@ const CourseInside = () => {
   const fetchCourseInformation = async () => {
     try {
       const response = await fetch(
-        `${API}/courses/${courseId}?populate=sections.subsections.activity,cover,sections.subsections.paragraphs,sections.subsections.files,students.profile_photo,professor.profile_photo,evaluators.profile_photo,sections.subsections.landscape_photo,sections.subsections.questionnaire`
+        `${API}/courses/${courseId}?populate=sections.subsections.activity.qualifications,cover,sections.subsections.paragraphs,sections.subsections.files,students.profile_photo,professor.profile_photo,evaluators.profile_photo,sections.subsections.landscape_photo,sections.subsections.questionnaire`
       );
       const data = await response.json();
       document.title = `${data?.data?.attributes.title} - Uptitude`
@@ -159,6 +161,7 @@ const CourseInside = () => {
           setCourseSection(firstSubsection.cursoTitle);
           setCourseSubsection(firstSubsection.subseccion);
         }
+        loadQuestionnaire();
       }
     } else if (
       courseContentInformation.length > 0 &&
@@ -183,6 +186,7 @@ const CourseInside = () => {
         setCourseSection(title);
         setCourseSubsection(subsecciones[0]);
       }
+      loadQuestionnaire();
     }
 
   }, [courseContentInformation, subsectionsCompleted]);
@@ -192,7 +196,7 @@ const CourseInside = () => {
   }
 
   useEffect(() => {
-    if (courseSubsection.length !== 0) {
+    if (courseSubsection?.length && courseSubsection?.length !== 0) {
       setSubsectionsLandscapePhoto(
         courseSubsection.attributes.landscape_photo?.data?.attributes?.url ??
         null
@@ -208,22 +212,39 @@ const CourseInside = () => {
       fetchCourseInformation(),
       fetchPostData(),
     ]).catch((error) => console.error(error)).finally(() => setIsLoading(false));
-
-
-
   }, []);
 
   useEffect(() => {
     const handleResize = (e) => {
       whisper.current?.close();
     };
-
     window.addEventListener("resize", handleResize);
-
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  const loadQuestionnaire = () => {
+    if (activityId && courseContentInformation.length > 0 && user.role_str !== 'student') {
+      const data = locateFromActivityId(Number(activityId));
+      if (data) {
+        setCourseSubsection(data.subsection);
+        setCourseSection(data.section.attributes.title);
+        setCourseSubsectionQuestionnaire(data.subsection.attributes.questionnaire.data);
+        setQuestionnaireFlag(true);
+      }
+    }
+  }
+
+  const locateFromActivityId = (activityId) => {
+    for (const section of courseContentInformation) {
+      for (const subsection of section.attributes.subsections.data) {
+        if (subsection.attributes.activity.data.id === activityId) {
+          return { section, subsection };
+        }
+      }
+    }
+  }
 
   const items = [
     {
@@ -256,7 +277,8 @@ const CourseInside = () => {
         <div className="container-fluid min-h-screen w-screen max-w-full rounded-tl-3xl bg-[#e7eaf886] flex flex-wrap flex-col-reverse md:flex-row  ">
           <div id="flex_wrap" className="flex-1 max-w-full min-w-0 sm:w-auto mt-3 md:ml-8 md:mr-8 p-5 md:p-0 md:basis-[600px]">
             {editSectionFlag && sectionToEdit !== null ? (
-              <EditSection setEditSectionFlag={setEditSectionFlag} sectionToEdit={sectionToEdit} setCourseContentInformation={setCourseContentInformation} setSectionToEdit={setSectionToEdit} />
+              <EditSection setEditSectionFlag={setEditSectionFlag} sectionToEdit={sectionToEdit} setCourseContentInformation={setCourseContentInformation}
+                setSectionToEdit={setSectionToEdit} setCourseSection={setCourseSection} setCourseSubsection={setCourseSubsection} courseContentInformation={courseContentInformation} />
             ) : !forumFlag ? (
               <div>
                 {
@@ -337,6 +359,7 @@ const CourseInside = () => {
                     setEnableEdit={setEnableEdit}
                     courseSubsection={courseSubsection}
                     setCourseSubsectionQuestionnaire={setCourseSubsectionQuestionnaire}
+                    professorID={professor.id}
                   />
                 ) : courseSection && courseContentInformation.length > 0 && (
                   <>

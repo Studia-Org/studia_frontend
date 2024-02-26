@@ -7,13 +7,18 @@ import { useNavigate } from "react-router-dom";
 import { fetchAverageCourse } from "../../../../../fetches/fetchAverageCourse";
 import { fetchAllActivitiesObjectives } from "../../../../../fetches/fetchAllActivitiesObjectives";
 import { fetchNumbersOfPosts } from "../../../../../fetches/fetchNumbersOfPosts";
+import { ActivityDetailChart } from "./components/ActivityDetailChart";
+import { StudentGradesProfessor } from "./components/StudentGradesProfessor";
 import { fetchQuestionnaireTimeByCourse } from "../../../../../fetches/fetchQuestionnaireTimeByCourse";
 import { ProgressChart } from "./components/ProgressChart";
 import { Empty } from "antd";
+import { fetchStudentsAverageWithLabel } from "../../../../../fetches/fetchStudentsAverageWithLabel";
 
 export function ActivitiesDash({ courseInformation, styles, courseId }) {
 
     const [loading, setLoading] = useState(true);
+    const [studentsAverage, setStudentsAverage] = useState()
+    const [activitiesAverage, setActivitiesAverage] = useState();
     const [objectives, setObjectives] = useState()
     const [averageQualification, setAverageQualification] = useState(0);
     const [qualification, setQualification] = useState(0);
@@ -29,12 +34,16 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
             const userId = user.id
             setLoading(true)
 
-            const { averageMainActivity, averageMainActivityUser, totalQualifications } = await fetchAverageCourse({ courseId, userId })
+            const { averageMainActivity, averageMainActivityUser, totalQualifications } = await fetchAverageCourse({ courseId, user })
             const objectives = await fetchAllActivitiesObjectives({ courseId })
             setAverageQualification(averageMainActivity)
             setObjectives(objectives)
             setQualification(averageMainActivityUser)
-
+            if (user.role_str !== "student") {
+                let data = await fetchStudentsAverageWithLabel(courseId)
+                setStudentsAverage(data.students)
+                setActivitiesAverage(data.activities)
+            }
             let { tiempoPromedio, tiempoPromedioFormateado, tiempoUsuario, tiempoUsuarioFormateado, totalQuestionnaire } =
                 await fetchQuestionnaireTimeByCourse({ courseId, userId })
             if (isNaN(tiempoPromedio)) tiempoPromedio = 0
@@ -66,8 +75,8 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
         return (
             !loading ?
                 <>
-                    <p className="text-lg font-medium mb-1">Objective progress</p>
-                    <p className="text-sm font-normal pb-5 text-gray-600">Check how are you progressing on the objectives of the course.</p>
+                    <p className="mb-1 text-lg font-medium">Objective progress</p>
+                    <p className="pb-5 text-sm font-normal text-gray-600">Check how are you progressing on the objectives of the course.</p>
                     <div className="">
                         {
                             objectives.length !== 0 ?
@@ -90,8 +99,8 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
     function generatePieChart() {
         return (
             <>
-                <p className="text-lg font-medium mb-1">Qualifications distribution</p>
-                <p className="text-sm font-normal pb-5 text-gray-600">Distribution of the qualifiactions based on the activities of the course.</p>
+                <p className="mb-1 text-lg font-medium">Qualifications distribution</p>
+                <p className="pb-5 text-sm font-normal text-gray-600">Distribution of the qualifiactions based on the activities of the course.</p>
                 {
                     checkIfNoQualifications(totalQualifications) ?
                         <div className="flex items-center justify-center h-full pb-32">
@@ -114,8 +123,8 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
     function QuestionnarieTime() {
         return (
             <>
-                <p className="text-lg font-medium mb-1">Questionnarie time (min)</p>
-                <p className="text-sm font-normal pb-5 text-gray-600">Compare the time you dedicated to the questionnaires against other students.</p>
+                <p className="mb-1 text-lg font-medium">Questionnarie time (min)</p>
+                <p className="pb-5 text-sm font-normal text-gray-600">Compare the time you dedicated to the questionnaires against other students.</p>
                 {
                     questionnaireTime[0] === '0.00' && questionnaireTime[1] === '0.00' ?
                         <div className="flex items-center justify-center h-full pb-32">
@@ -189,8 +198,8 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
     function PostChart() {
         return (
             <>
-                <p className="text-lg font-medium mb-1">Participation in Forums</p>
-                <p className="text-sm font-normal pb-5 text-gray-600">Measure your engagement in forum discussions.</p>
+                <p className="mb-1 text-lg font-medium">Participation in Forums</p>
+                <p className="pb-5 text-sm font-normal text-gray-600">Measure the engagement in forum discussions.</p>
                 {
                     posts.totalPosts === 0 && posts.totalRespuestas === 0 ?
                         <div className="flex items-center justify-center h-full pb-32">
@@ -280,34 +289,53 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
         <section className={`flex flex-col p-2 lg:p-5 rounded-lg  ${styles}`}>
             {
                 loading ?
-                    <div className=" flex items-center justify-center w-full h-full">
+                    <div className="flex items-center justify-center w-full h-full ">
                         <MoonLoader color="#363cd6" size={80} />
                     </div>
                     :
                     <main className="h-full mb-10">
-                        <button className='text-sm flex md:-mt-4 pb-2  w-fit hover:-translate-x-2 duration-150 mb-4 '
+                        <button className='flex pb-2 mb-4 text-sm duration-150 md:-mt-4 w-fit hover:-translate-x-2 '
                             onClick={() => navigate(`/app/dashboard`)}>
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                                 <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
                             </svg>
                             <p className='ml-1 '>Go back to dashboard</p>
                         </button>
-                        <h2 className="font-semibold text-xl mb-1">Course Dashboard</h2>
-                        <p className="text-gray-500 mb-5 text-sm">Explore your performance metrics and track your progress throughout the course.</p>
+                        <h2 className="mb-1 text-xl font-semibold">Course Dashboard</h2>
+                        <p className="mb-5 text-sm text-gray-500">Explore your performance metrics and track your progress throughout the course.</p>
 
-                        <div className="grid gap-6 pb-16 h-full grid-cols-1 lg:grid-cols-[repeat(auto-fit,minmax(30vw,1fr))] ">
-                            <section className="rounded-lg bg-white p-5 overflow-x-auto overflow-y-clip max-w-[calc(100vw-2rem)]  
-                            shadow-lg">
-                                <CourseProgress />
-                            </section>
-                            <section className="rounded-lg bg-white p-5 overflow-x-auto overflow-y-clip max-w-[calc(100vw-2rem)] 
-                              shadow-lg">
-                                {totalQualifications && generatePieChart()}
-                            </section>
-                            <section className="rounded-lg bg-white p-5 overflow-x-auto overflow-y-clip max-w-[calc(100vw-2rem)] 
-                            shadow-lg">
-                                {questionnaireTime && QuestionnarieTime()}
-                            </section>
+                        <div className="grid gap-6 pb-16  grid-cols-1 lg:grid-cols-[repeat(auto-fit,minmax(30vw,1fr))] ">
+                            {
+                                user.role_str === "student" ?
+                                    <>
+                                        <section className="rounded-lg bg-white p-5 overflow-x-auto overflow-y-clip max-w-[calc(100vw-2rem)]  
+                                    shadow-lg">
+                                            <CourseProgress />
+                                        </section>
+                                        <section className="rounded-lg bg-white p-5 overflow-x-auto overflow-y-clip max-w-[calc(100vw-2rem)] 
+                                      shadow-lg">
+                                            {totalQualifications && generatePieChart()}
+                                        </section>
+                                    </>
+                                    :
+                                    <>
+                                        <section className="rounded-lg col-span-full bg-white p-5 overflow-x-auto overflow-y-clip max-w-[calc(100vw-2rem)]  
+                                    shadow-lg">
+                                            {studentsAverage && <StudentGradesProfessor data={studentsAverage} />}
+                                        </section>
+                                    </>
+                            }
+                            {
+                                user.role_str === "student" ?
+                                    <section className="rounded-lg bg-white p-5 overflow-x-auto overflow-y-clip max-w-[calc(100vw-2rem)] 
+                                shadow-lg">
+                                        {questionnaireTime && QuestionnarieTime()}
+                                    </section>
+                                    :
+                                    <section className="rounded-lg bg-white p-5 overflow-x-auto overflow-y-clip max-w-[calc(100vw-2rem)] shadow-lg">
+                                        {activitiesAverage && <ActivityDetailChart data={activitiesAverage} />}
+                                    </section>
+                            }
                             <section className="rounded-lg bg-white overflow-x-auto p-5 overflow-y-clip max-w-[calc(100vw-2rem)] 
                              shadow-lg">
                                 {posts && <PostChart />}

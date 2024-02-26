@@ -16,6 +16,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
     const [searchTerm, setSearchTerm] = useState('');
     const [editedGrades, setEditedGrades] = useState({});
     const { user } = useAuthContext()
+    const filteredActivity = activities.filter(activity => activity.id === JSON.parse(selectedActivity).id)
     const [loading, setLoading] = useState(false)
     const [groups, setGroups] = useState([])
 
@@ -128,6 +129,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                         editedGrades={editedGrades}
                         setEditedGrades={setEditedGrades}
                         setStudents={setStudents}
+                        activities={activities}
                     />
                 })
             )
@@ -253,9 +255,17 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                     <th scope="col" class="px-6 py-3  w-2/4 ">
                                         Comment
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Files
-                                    </th>
+                                    {
+                                        filteredActivity[0]?.attributes?.type !== 'questionnaire' ? (
+                                            <th scope="col" class="px-6 py-3">
+                                                Files
+                                            </th>
+                                        ) : (
+                                            <th scope="col" class="px-6 py-3">
+                                                Questionnaire Completed
+                                            </th>
+                                        )
+                                    }
                                     <th scope="col" class="px-6 py-3">
                                         Last modified
                                     </th>

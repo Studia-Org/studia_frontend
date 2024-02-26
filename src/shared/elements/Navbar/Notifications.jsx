@@ -27,7 +27,7 @@ export const Notifications = () => {
                     )
                     :
                     (
-                        <div className='flex items-center justify-center h-full w-full'>
+                        <div className='flex items-center justify-center w-full h-full'>
                             <Empty description={'There are no notifications'} />
                         </div>
                     )
@@ -72,13 +72,19 @@ export const Notifications = () => {
                 Authorization: `Bearer ${getToken()}`,
             },
         });
-
         const data = await response.json();
-        const sortedNotifications = data.notifications.sort((a, b) => {
-            return new Date(b.createdAt) - new Date(a.createdAt);
-        });
-
-        setNotifications(sortedNotifications);
+        const filteredNotifications = data.notifications
+            .sort((a, b) => {
+                const aReadStatus = a.readJSON[user.id] || false;
+                const bReadStatus = b.readJSON[user.id] || false;
+                if (aReadStatus !== bReadStatus) {
+                    return aReadStatus ? 1 : -1;
+                } else {
+                    return new Date(b.createdAt) - new Date(a.createdAt);
+                }
+            })
+            .slice(0, 10);
+        setNotifications(filteredNotifications);
     }
 
 
@@ -89,7 +95,7 @@ export const Notifications = () => {
     const contentTitle = (
         <>
             <div className='flex items-center justify-between'>
-                <h1 className='font-medium text-base'>Notifications</h1>
+                <h1 className='text-base font-medium'>Notifications</h1>
                 <Button loading={loading} className='ml-auto mr-4' onClick={readAllNotifications}>
                     Read all notifications
                 </Button>

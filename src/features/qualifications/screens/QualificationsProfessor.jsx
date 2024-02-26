@@ -23,7 +23,7 @@ const QualificationsProfessor = () => {
 
     const fetchCourseData = async () => {
         try {
-            const response = await fetch(`${API}/courses/${courseID}?populate=sections.subsections.activity,cover,students.profile_photo,students.qualifications.activity,students.qualifications.file,students.groups.qualification.file,students.groups.activity,students.groups.users.profile_photo`,
+            const response = await fetch(`${API}/courses/${courseID}?populate=sections.subsections.activity,cover,students.profile_photo,students.qualifications.activity,students.qualifications.file,students.user_response_questionnaires.questionnaire.subsection.activity,students.groups.qualification.file,students.groups.activity,students.groups.users.profile_photo`,
                 {
                     headers: {
                         Authorization: `${BEARER} ${getToken()}`
@@ -53,6 +53,7 @@ const QualificationsProfessor = () => {
         }
     }
 
+
     useEffect(() => {
         fetchCourseData();
     }, [])
@@ -77,7 +78,8 @@ const QualificationsProfessor = () => {
                                 uploadQualificationsFlag ?
                                     <UploadQualifications setUploadQualificationsFlag={setUploadQualificationsFlag} activities={activities} students={students} />
                                     :
-                                    <QualificationsTable setUploadQualificationsFlag={setUploadQualificationsFlag} students={students} activities={activities} setStudents={setStudents} />
+                                    <QualificationsTable setUploadQualificationsFlag={setUploadQualificationsFlag} students={students}
+                                        activities={activities} setStudents={setStudents} />
                             }
                         </motion.div>
 

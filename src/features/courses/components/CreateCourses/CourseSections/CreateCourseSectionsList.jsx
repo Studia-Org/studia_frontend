@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Popconfirm, Button, message } from 'antd';
+import { Popconfirm, Button, message, Divider } from 'antd';
 
 export const CreateCourseSectionsList = ({ section, deleteSection, setEditCourseSectionFlag, setSectionToEdit }) => {
     const {
@@ -22,7 +22,7 @@ export const CreateCourseSectionsList = ({ section, deleteSection, setEditCourse
             setEditCourseSectionFlag(true)
             setSectionToEdit(section)
         }}
-            className='cursor-pointer relative rounded-md bg-[#d3d7f2] text-gray-800 p-3 h-[4rem] flex items-center  border-[#6458aa] border-t-[0.5rem]'>
+            className='cursor-pointer relative rounded-md bg-[#d3d7f2] text-gray-800 p-3 h-[4rem] flex items-center  border-[#6458aa] border-t-[0.5rem] hover:bg-indigo-200 duration-100'>
             <div
                 {...attributes}
                 {...listeners}
@@ -31,7 +31,8 @@ export const CreateCourseSectionsList = ({ section, deleteSection, setEditCourse
                     <path fillRule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10zm0 5.25a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75a.75.75 0 01-.75-.75z" clipRule="evenodd" />
                 </svg>
             </div>
-            <p className='ml-20 w-full'>{section.name}</p>
+            <Divider className='ml-20 bg-gray-400' type='vertical' />
+            <p className='w-full ml-5'>{section.name}</p>
 
             <Popconfirm
                 title="Delete the section"

@@ -116,9 +116,9 @@ export const CreateCourseEditSubsection = ({
           }
           if (type === 'ponderation') {
             subsectionCopy.activity.ponderation = newValue;
-
           }
-          if ((subsection?.type === 'peerReview' || subsection?.type === 'forum') && type === 'date') {
+
+          if ((subsection?.type === 'peerReview' || subsection?.type === 'forum' || subsection?.type === 'thinkAloud') && type === 'date') {
             subsectionCopy.activity.deadline = newValue[1];
           }
           sectionCopy.subsections = sectionCopy.subsections.map((sub) => (sub.id === subsection.id ? subsectionCopy : sub));
@@ -207,10 +207,14 @@ export const CreateCourseEditSubsection = ({
 
               subsection?.type === 'peerReview' && (
                 <div className='flex flex-col justify-center mb-5 space-y-2'>
-                  <PeerReviewRubricModal isModalOpen={isModalOpen}
+                  <PeerReviewRubricModal
+                    isModalOpen={isModalOpen}
                     setIsModalOpen={setIsModalOpen}
+                    setCreateCourseSectionsList={setCreateCourseSectionsList}
                     rubricData={subsection.activity.PeerReviewRubrica}
-                    setSubsectionEditing={setSubsectionEditing} />
+                    setSubsectionEditing={setSubsectionEditing}
+                    subsectionEditing={subsection}
+                  />
                   <label className='text-sm text-gray-500 '>
                     Peer review rubric *
                   </label>

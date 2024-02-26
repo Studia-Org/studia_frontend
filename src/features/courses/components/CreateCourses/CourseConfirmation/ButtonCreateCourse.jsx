@@ -156,6 +156,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                         if (subsection.activity.type === 'peerReview') {
                             subsection.activity.task_to_review = createdActivities[subsection.activity.task_to_review]
                         }
+
                         const createActivity = await fetch(`${API}/activities`, {
                             method: 'POST',
                             headers: {

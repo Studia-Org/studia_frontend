@@ -61,7 +61,7 @@ const rubricDataConverter = (rubricData) => {
     }
 }
 
-export const PeerReviewRubricModal = ({ isModalOpen, setIsModalOpen, rubricData, setSubsectionEditing }) => {
+export const PeerReviewRubricModal = ({ isModalOpen, setIsModalOpen, rubricData, setSubsectionEditing, setCreateCourseSectionsList, subsectionEditing }) => {
 
     const [form] = Form.useForm();
     const [data, setData] = useState(rubricData ? rubricDataConverter(rubricData) : null);
@@ -112,6 +112,25 @@ export const PeerReviewRubricModal = ({ isModalOpen, setIsModalOpen, rubricData,
             const sectionCopy = { ...subsection };
             sectionCopy.activity.PeerReviewRubrica = finalJson;
             return sectionCopy;
+        })
+        setCreateCourseSectionsList((prevSections) => {
+            return prevSections.map((section) => {
+                return {
+                    ...section,
+                    subsections: section.subsections.map((sub) => {
+                        if (sub.id === subsectionEditing.id) {
+                            return {
+                                ...sub,
+                                activity: {
+                                    ...sub.activity,
+                                    PeerReviewRubrica: finalJson
+                                }
+                            }
+                        }
+                        return sub
+                    })
+                }
+            })
         })
         setIsModalOpen(false);
     };
@@ -202,7 +221,7 @@ export const PeerReviewRubricModal = ({ isModalOpen, setIsModalOpen, rubricData,
                         </Popconfirm>
                     </span>
                 ) : (
-                    <div className='justify-between flex'>
+                    <div className='flex justify-between'>
                         <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
                             Edit
                         </Typography.Link>

@@ -276,12 +276,12 @@ END:VCALENDAR
                             </div>
                         </div>
                     </div>
-                    <div className='fixed right-10 bottom-10'>
+                    <div className='fixed right-[6.5rem] bottom-12'>
                         <button
                             type="button"
                             data-dial-toggle="speed-dial-menu-dropdown"
                             aria-controls="speed-dial-menu-dropdown"
-                            className="flex items-center justify-center ml-auto text-white transition bg-blue-600 rounded-full shadow-lg w-14 h-14 hover:bg-blue-600 hover-scale active-scale "
+                            className="flex items-center justify-center w-[3.2rem] h-[3.2rem] ml-auto text-white transition bg-[#3c3c3c] rounded-full shadow-xl hover:bg-[#4f4f4f] hover-scale active-scale "
                             onClick={handleOpen}
                         >
                             <FiPlus size={26} />
