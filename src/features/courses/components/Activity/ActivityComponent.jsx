@@ -50,7 +50,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   const [IDQualification, setIDQualification] = useState(idQualification);
   const { activityGroup, loadingGroup } = useGetGroup({ user, activityData, activityId, IDQualification });
   const isActivityGroup = activityData?.activity?.data?.attributes?.groupActivity;
-
+  const isThinkAloud = activityData.activity.data.attributes.type === 'thinkAloud'
   function handleFileUpload(file) {
     const dataCopy = formData;
     dataCopy.append('files', file);
@@ -130,7 +130,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
 
   async function sendFile(result) {
     try {
-      const isThinkAloud = activityData.activity.data.attributes.type === 'thinkAloud'
+
       let response2 = undefined;
       let files = []
 
@@ -193,7 +193,11 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
         formDataAudio.append('files', audioFile);
       }
       setUploadLoading(true);
-
+      if (formData.getAll('files').length === 0 && !isThinkAloud) {
+        message.error('You must upload a file');
+        setUploadLoading(false);
+        return
+      }
       const response = await fetch(`${API}/upload`, {
         method: 'POST',
         headers: {
