@@ -17,7 +17,6 @@ export async function saveChangesButtonGroups(editedGrades, groups, selectedActi
 
         const comments = editedGrades[groupId].comments;
         const qualification = editedGrades[groupId].qualification;
-
         if (group.attributes.qualification.data === null) {
             const response = await fetch(`${API}/qualifications`, {
                 method: 'POST',
@@ -69,16 +68,14 @@ export async function saveChangesButtonGroups(editedGrades, groups, selectedActi
         const studentsWithThisGroup = studentsCopy.filter(student => student?.attributes?.groups?.data?.find(group => group.id === +groupId));
         studentsWithThisGroup.forEach(student => {
             student.attributes.groups.data.forEach(groupItr => {
-                if (group.id === +groupId) {
-                    const file = groupItr.attributes.qualification?.data?.attributes?.file?.data;
-                    groupItr = group;
-                    groupItr.attributes.qualification.data.attributes = {
-                        ...groupItr.attributes.qualification.data.attributes,
-                        file: {
-                            data: file
-                        }
-
+                const file = groupItr.attributes.qualification?.data?.attributes?.file?.data;
+                groupItr = group;
+                groupItr.attributes.qualification.data.attributes = {
+                    ...groupItr.attributes.qualification.data.attributes,
+                    file: {
+                        data: file
                     }
+
                 }
             });
         })

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Select, Input } from 'antd';
+import { Select, Input, Button } from 'antd';
 import { UploadFiles } from '../../../courses/components/CreateCourses/CourseSections/UploadFiles';
-
-export const CSVConfiguration = ({ activities, formValues, setFormValues, file, setFile }) => {
+import { createCSVTemplate } from './helpers';
+export const CSVConfiguration = ({ students, activities, formValues, setFormValues, file, setFile }) => {
     const filterOption = (input, option) =>
         (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
@@ -16,11 +16,11 @@ export const CSVConfiguration = ({ activities, formValues, setFormValues, file, 
     }, [file])
 
     const activityOptions = activities
-    .filter(activity => activity.attributes.evaluable === true)
-    .map(activity => ({
-        value: JSON.stringify({ id: activity.id, title: activity.attributes.title }),
-        label: activity.attributes.title,
-    }));
+        .filter(activity => activity.attributes.evaluable === true)
+        .map(activity => ({
+            value: JSON.stringify({ id: activity.id, title: activity.attributes.title, groupActivity: activity.attributes.groupActivity }),
+            label: activity.attributes.title,
+        }));
 
 
     const handleInputChange = (e) => {
@@ -37,21 +37,27 @@ export const CSVConfiguration = ({ activities, formValues, setFormValues, file, 
             selectedActivity: value,
         });
     }
-
     return (
         <>
-            <p className='text-sm mt-4 text-gray-600 mb-3'>First of all, select the activity to upload the grades:</p>
-            <Select
-                showSearch
-                className='w-full'
-                placeholder="Select an activity"
-                optionFilterProp="children"
-                filterOption={filterOption}
-                options={activityOptions}
-                value={formValues.selectedActivity}
-                onChange={handleActivityChange}
-            />
-            <p className='text-sm mt-4 text-gray-600 mb-3'>Now, introduce the relation in the columns and rows on your CSV spreadsheet:</p>
+            <p className='mt-4 mb-3 text-sm text-gray-600'>First of all, select the activity to upload the grades:</p>
+            <div className='flex gap-x-3'>
+                <Select
+                    showSearch
+                    className='w-full'
+                    placeholder="Select an activity"
+                    optionFilterProp="children"
+                    filterOption={filterOption}
+                    options={activityOptions}
+                    value={formValues.selectedActivity}
+                    onChange={handleActivityChange}
+                />
+                <Button
+                    onClick={() => createCSVTemplate(formValues.selectedActivity, students)}
+                >
+                    Download template CSV with students
+                </Button>
+            </div>
+            <p className='mt-4 mb-3 text-sm text-gray-600'>Now, introduce the relation in the columns and rows on your CSV spreadsheet:</p>
             <div className='flex space-x-3'>
                 <Input
                     placeholder='Student column and row, ex: B2-B22'
@@ -75,10 +81,29 @@ export const CSVConfiguration = ({ activities, formValues, setFormValues, file, 
                     onChange={handleInputChange}
                 />
             </div>
-            <p className='text-sm mt-4 text-gray-600 mb-3'>For the example below, we would select; B2-B22 (in the student case), D2-D22 (Qualification case), F2-F22 (Comment case): </p>
-            <img src="https://res.cloudinary.com/dnmlszkih/image/upload/v1704732079/k18dfux3qnblwnk98zft.png" className='w-1/2 rounded-md' style={{ border: '1px solid #d9d9d9' }} alt="" />
-            <p className='text-sm mt-4 text-gray-600 mb-3'>Finally, upload the CSV spreadsheet file (comma or semi-colon separated).</p>
-            <UploadFiles fileList={file} setFileList={setFile} listType={'picture'} maxCount={1} />
+            {
+                formValues.selectedActivity !== null ?
+                    <>
+                        {JSON.parse(formValues.selectedActivity)?.groupActivity ?
+                            <>
+                                <p className='mt-4 mb-3 text-sm text-gray-600'>For the example below, we would select; A2-A8 (in the student case), B2-B8 (Qualification case), C2-C8 (Comment case): </p>
+                                <img src="https://res.cloudinary.com/dnmlszkih/image/upload/v1708682854/csvgroups_16a6d46027.png" className='w-1/2 rounded-md' style={{ border: '1px solid #d9d9d9' }} alt="" />
+                            </>
+                            :
+                            <>
+                                <p className='mt-4 mb-3 text-sm text-gray-600'>For the example below, we would select; B2-B22 (in the student case), D2-D22 (Qualification case), F2-F22 (Comment case): </p>
+                                <img src="https://res.cloudinary.com/dnmlszkih/image/upload/v1704732079/k18dfux3qnblwnk98zft.png" className='w-1/2 rounded-md' style={{ border: '1px solid #d9d9d9' }} alt="" />
+
+                            </>
+                        }
+                        <p className='mt-4 mb-3 text-sm text-gray-600'>Finally, upload the CSV spreadsheet file (comma or semi-colon separated).</p>
+                        <UploadFiles fileList={file} setFileList={setFile} listType={'picture'} maxCount={1} />
+                    </>
+                    : null
+
+
+            }
+
         </>
     );
 }
