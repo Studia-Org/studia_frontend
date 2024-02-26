@@ -18,6 +18,8 @@ import { fetchUserResponsesQuestionnaires } from "../../../../fetches/fetchUserR
 import { NavigationButtons } from './Questionnaire/NavigationsButons';
 import { CardQuestionnaireUser } from './Questionnaire/CardQuestionnaireUser';
 import { UserQuestionnaireAnswerTable } from './Questionnaire/UserQuestionnaireAnswerTable';
+import { getRecommendationsSRLO } from './Questionnaire/getRecommendationsSRLO';
+import { RecommendationCard } from './Questionnaire/RecommendationCard';
 
 const { Search } = Input;
 
@@ -26,8 +28,8 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
   const [groupValues, setGroupValues] = useState({});
   const [loadingData, setLoadingData] = useState(true);
   const [userResponses, setUserResponses] = useState([]);
-  const [searchUser, setSearchUser] = useState('');
   const [questionnaireAnswerData, setQuestionnaireAnswerData] = useState(answers.filter((answer) => answer.questionnaire.id === questionnaire.id));
+  const [recommendationList, setRecommendationList] = useState([]);
   const [completed, setCompleted] = useState(questionnaireAnswerData.length > 0);
   const [sendingData, setSendingData] = useState(false);
   const questionsPerPage = 5;
@@ -42,12 +44,17 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
 
   useEffect(() => {
     if (questionnaireAnswerData.length > 0) {
+      if (questionnaire.attributes.Options.questionnaire?.type === 'SRL-O') {
+        setRecommendationList(getRecommendationsSRLO(questionnaireAnswerData[0].responses.responses))
+      }
       setCompleted(true);
       stopTimer()
     } else {
       setCompleted(false);
     }
   }, [questionnaireAnswerData.length, stopTimer, questionnaire.id]);
+
+  console.log(recommendationList)
 
 
   useEffect(() => {
@@ -426,10 +433,16 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
         user?.role_str === 'student' || ((questionnaireAnswerData.length > 0 && user?.role_str !== 'student') || enableEdit === true) ?
           <>
             {
-              enableEdit === false && (
+              (enableEdit === false && user.role_str !== 'student') && (
                 <Button onClick={() => setQuestionnaireAnswerData([])} className='mb-5 bg-white shadow-md'>
                   Go back to users
                 </Button>
+              )
+            }
+
+            {
+              completed === true && questionnaire.attributes.Options.questionnaire?.type === 'SRL-O' && recommendationList && (
+                <RecommendationCard recommendationList={recommendationList} />
               )
             }
 

@@ -198,7 +198,6 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
                             <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} context={'questionnaire'}
                                 setQuestionnaireAnswerData={setQuestionnaireAnswerData} />
 
-
                         </div>
                     )
                 }
