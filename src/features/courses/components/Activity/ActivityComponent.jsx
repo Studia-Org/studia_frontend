@@ -184,6 +184,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   }
 
   async function sendData() {
+    console.log('sendData');
     try {
       const isThinkAloud = (activityData.activity.data.attributes.type === 'thinkAloud' && formData.getAll('files').length === 0)
       const isBlob = audioFile instanceof Blob;
@@ -247,7 +248,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
       setUploadLoading(false);
     }
   }
-  console.log('ActivityComponent', userQualification)
   async function deleteFile(fileId) {
     setFilesTask((prev) => {
       const updatedFiles = prev.filter((file) => file.id !== fileId);
@@ -646,7 +646,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                 <Button
                   loading={uploadLoading}
                   id='submit-button-activity'
-                  disabled={formData.getAll('files').length === 0 && audioFile === null}
+                  disabled={formData.getAll('files').length === 0}
                   onClick={() => { sendData() }}
                   className="ml-auto " type='primary'>
                   Submit

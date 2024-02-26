@@ -10,7 +10,7 @@ const Activity = () => {
   const { courseId, activityId } = useParams();
   const [userQualification, setUserQualification] = useState([]);
 
-  console.log(userQualification);
+
   const { user } = useAuthContext();
 
   const fetchUserQualificationsData = async () => {
