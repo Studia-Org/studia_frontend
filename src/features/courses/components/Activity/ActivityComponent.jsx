@@ -281,6 +281,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
     else message.error('Something went wrong');
   }
   function DeleteButton({ id }) {
+    console.log('deleteButton', id);
     return (
       <Popconfirm
         title="Delete the file"
@@ -309,10 +310,11 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
 
   function renderFiles(file, editable = false) {
     if (file.attributes) {
+      console.log({ editable, evaluated, passedDeadline, userRole: user.role_str, file: file.attributes });
       return (
         <button key={file.id} onClick={() => downloadFile(file.attributes)}
           className='flex items-center w-full p-3 text-white duration-150 bg-green-700 rounded-md shadow-md gap-x-2 hover:bg-green-800 active:translate-y-1'>
-          {user.role_str === 'student' && editable && !evaluated && <DeleteButton id={file.id} />}
+          <span>{user.role_str === 'student' && editable && !evaluated && !passedDeadline ? <DeleteButton id={file.id} /> : ""}</span>
           <p className='max-w-[calc(100%-4rem)] overflow-hidden text-ellipsis'>{file.attributes.name}</p>
           <div className='ml-auto mr-2'>
 
