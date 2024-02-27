@@ -226,7 +226,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
       setUploadLoading(false);
     }
   }
-  console.log('ActivityComponent', userQualification)
   async function deleteFile(fileId) {
     setFilesTask((prev) => {
       const updatedFiles = prev.filter((file) => file.id !== fileId);
