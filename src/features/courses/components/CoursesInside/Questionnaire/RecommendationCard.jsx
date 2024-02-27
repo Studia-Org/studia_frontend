@@ -2,7 +2,6 @@ import React from 'react'
 import { List, Typography } from 'antd'
 
 export const RecommendationCard = ({ recommendationList }) => {
-    console.log(recommendationList)
 
     return (
         <List

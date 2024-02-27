@@ -14,7 +14,6 @@ export function getRecommendationsSRLO(userResponses) {
         const mediaGrupo = respuestasNumeros.reduce((a, b) => a + b, 0) / size;
         recomendationList.push(returnRecommendation(mediaGrupo, index) || null);
     })
-    console.log(recomendationList)
     return recomendationList
 
 }

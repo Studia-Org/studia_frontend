@@ -106,7 +106,6 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
         return formattedTime;
     }
 
-
     return (
         <div className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1] mb-5">
             <div className="flex flex-col w-full my-7 mx-7">
@@ -194,10 +193,12 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
                                     </div>
                                 )
                             }
-
-                            <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} context={'questionnaire'}
-                                setQuestionnaireAnswerData={setQuestionnaireAnswerData} />
-
+                            {
+                                questionnaire.attributes.Options.questionnaire?.editable === true && (
+                                    <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} context={'questionnaire'}
+                                        setQuestionnaireAnswerData={setQuestionnaireAnswerData} />
+                                )
+                            }
                         </div>
                     )
                 }

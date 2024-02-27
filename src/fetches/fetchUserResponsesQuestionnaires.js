@@ -2,11 +2,10 @@ import { API } from "../constant";
 
 export const fetchUserResponsesQuestionnaires = async (idQuestionnaire) => {
     try {
-        //Necesito agregar un attributo extra que sea la qualification de la activity a la que pertenece el cuestionario
-
         const response = await fetch(`${API}/user-response-questionnaires?populate=questionnaire,user.profile_photo,user.qualifications.activity.subsection.questionnaire`);
         const data = await response.json();
-        const questionnaireResponses = data.data.filter((response) => response.attributes.questionnaire.data.id === idQuestionnaire);
+        console.log('fetchUserResponsesQuestionnaires', data.data);
+        const questionnaireResponses = data.data.filter((response) => response.attributes.questionnaire?.data?.id === idQuestionnaire);
         questionnaireResponses.forEach((response) => {
             response.attributes.user?.data.attributes.qualifications?.data.forEach((qualification) => {
                 if (qualification.attributes.activity?.data?.attributes.subsection?.data?.attributes.questionnaire?.data?.id === idQuestionnaire) {

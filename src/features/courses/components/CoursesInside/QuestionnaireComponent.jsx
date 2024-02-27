@@ -28,7 +28,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
   const [groupValues, setGroupValues] = useState({});
   const [loadingData, setLoadingData] = useState(true);
   const [userResponses, setUserResponses] = useState([]);
-  const [questionnaireAnswerData, setQuestionnaireAnswerData] = useState(answers.filter((answer) => answer.questionnaire.id === questionnaire.id));
+  const [questionnaireAnswerData, setQuestionnaireAnswerData] = useState(answers.filter((answer) => answer.questionnaire?.id === questionnaire?.id));
   const [recommendationList, setRecommendationList] = useState([]);
   const [completed, setCompleted] = useState(questionnaireAnswerData.length > 0);
   const [sendingData, setSendingData] = useState(false);
@@ -53,9 +53,6 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
       setCompleted(false);
     }
   }, [questionnaireAnswerData.length, stopTimer, questionnaire.id]);
-
-  console.log(recommendationList)
-
 
   useEffect(() => {
     setCurrentPage(1);
