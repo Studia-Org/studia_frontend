@@ -12,7 +12,7 @@ function GroupMembers({ activityGroup, loadingGroup }) {
             :
             activityGroup !== null &&
             <section className="flex flex-col flex-1 w-full ">
-                <p className="text-xl ">Group members</p>
+                <p className="text-base font-medium text-gray-800 ">Group members</p>
                 <div className="flex flex-col px-5 my-2">
                     {activityGroup.users.data.map((user, index) => {
                         return (
@@ -20,10 +20,9 @@ function GroupMembers({ activityGroup, loadingGroup }) {
                                 href={`/app/profile/${user.id}`}
                                 rel='noreferrer'
                                 target='_blank'
-                                className="flex cursor-pointer hover:scale-105 duration-150  px-3 py-1 w-[250px]
-                           border-2 border-gray-700 bg-white rounded-md items-center gap-2 mt-3">
+                                className="flex items-center w-full gap-2 py-3 pl-3 mt-3 duration-150 bg-white rounded-md shadow-md cursor-pointer hover:bg-gray-50">
                                 <Avatar size="large" src={user.attributes.profile_photo.data?.attributes?.url} />
-                                <p className="text-lg text-black">{user.attributes.username}</p>
+                                <p className="text-sm text-gray-800">{user.attributes.name} · <span className='font-medium text-black'>{user.attributes.username}</span> </p>
                             </a>
                         )
                     })}
