@@ -9,8 +9,7 @@ import { MoonLoader } from "react-spinners";
 
 function CreateGroups({ activityId, courseId, activityData }) {
     const [students, setStudents] = useState([])
-    // const numberOfStudentsPerGroup = activityData.activity.data.attributes.numberOfStudentsperGroup
-    const numberOfStudentsPerGroup = 3
+    const numberOfStudentsPerGroup = activityData.activity.data.attributes.numberOfStudentsperGroup
     const [totalStudents, setTotalStudents] = useState(0)
     const [loading, setLoading] = useState(true)
     const [creatingGroups, setCreatingGroups] = useState(false)
