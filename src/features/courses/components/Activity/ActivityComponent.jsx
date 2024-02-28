@@ -397,10 +397,12 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
 
         <p className='mt-5 mb-1 text-xs text-gray-400'>Task description</p>
         <hr />
-        <div className='prose my-3 text-gray-600 ml-5 max-w-[calc(100vw-1.25rem)] box-content mt-5 '>
+        <div className=' my-3 text-gray-600 ml-5 max-w-[calc(100vw-1.25rem)] box-content mt-5 '>
           {
             !enableEdit ?
-              <ReactMarkdown className=''>{activityData.activity.data.attributes.description}</ReactMarkdown>
+              <div className='prose max-w-none'>
+                <ReactMarkdown className=''>{activityData.activity.data.attributes.description}</ReactMarkdown>
+              </div>
               :
               <div className="flex flex-col">
                 <MDEditor height="30rem" className='mt-2 mb-8' data-color-mode='light' onChange={setSubsectionContent} value={subsectionContent} />
