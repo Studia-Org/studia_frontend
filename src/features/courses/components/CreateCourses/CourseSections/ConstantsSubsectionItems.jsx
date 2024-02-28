@@ -1,4 +1,4 @@
-import { MSLQuestionnaireData, EmptyQuestionnaireData, PlannificationQuestionnaireData } from './QuestionnaireData'
+import { EmptyQuestionnaireData, PlannificationQuestionnaireData, SRLOQuestionnaireData } from './QuestionnaireData'
 import { PeerReviewData, ForumData, ThinkAloudData } from './ActivityData';
 import React from 'react'
 
@@ -192,13 +192,13 @@ function addSequence(modifiedSequence, setCreateCourseSectionsList, sectionToEdi
 
 export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask, context }) => {
     const sequence = [
-        { title: 'MSLQ Questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: MSLQuestionnaireData, type: 'questionnaire', activityData: null },
+        { title: 'Autoregulation Questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: SRLOQuestionnaireData, type: 'questionnaire', activityData: null },
         { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
         { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
         { title: 'Task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
         { title: 'Peer review', iconColor: '#dc2626', iconPath: svgSwitcher('peerReview'), fase: 'self-reflection', questionnaireData: null, type: 'peerReview', activityData: PeerReviewData },
         { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
-        { title: 'MSLQ Questionnaire', iconColor: '#dc2626', iconPath: svgSwitcher('questionnaireNormal'), fase: 'self-reflection', questionnaireData: MSLQuestionnaireData, type: 'questionnaire', activityData: null },
+        { title: 'Autoregulation Questionnaire', iconColor: '#dc2626', iconPath: svgSwitcher('questionnaireNormal'), fase: 'self-reflection', questionnaireData: SRLOQuestionnaireData, type: 'questionnaire', activityData: null },
 
     ];
 
@@ -395,7 +395,7 @@ export const SequenceDevelopNoMSLQForum = ({ setCreateCourseSectionsList, sectio
         { title: 'Peer review', iconColor: '#dc2626', iconPath: svgSwitcher('peerReview'), fase: 'self-reflection', questionnaireData: null, type: 'peerReview', activityData: PeerReviewData },
         { title: 'Feedback refactor', iconColor: '#dc2626', iconPath: svgSwitcher('taskImplementation'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
         { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
-        { title: 'MSLQ Questionnaire', iconColor: '#dc2626', iconPath: svgSwitcher('questionnaireNormal'), fase: 'self-reflection', questionnaireData: MSLQuestionnaireData, type: 'questionnaire', activityData: null },
+        { title: 'Autoregulation Questionnaire', iconColor: '#dc2626', iconPath: svgSwitcher('questionnaireNormal'), fase: 'self-reflection', questionnaireData: SRLOQuestionnaireData, type: 'questionnaire', activityData: null },
     ];
 
     const modifiedSequence = modifySequence(sequence, sectionTask);
@@ -506,6 +506,7 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, co
                     </svg>
                 </button>
             </div>
+
             <div className='flex items-center p-5 mt-5 border rounded-xl bg-gray-50'>
                 <div className='px-3 py-3 bg-[#15803d] rounded-md flex items-center justify-center '>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 text-white">
@@ -513,15 +514,16 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, co
                     </svg>
                 </div>
                 <div className='ml-5'>
-                    <p className='text-base font-normal'>MSLQ Questionnaire</p>
-                    <p className='text-sm font-normal text-gray-500'>The Motivated Strategies for Learning Questionnaire (MSLQ) is a widely-used tool in education for assessing students' motivation and learning strategies. This questionnaire aims to understand the factors that influence students' engagement and achievement.</p>
+                    <p className='text-base font-normal'>SRL-O Autoregulation Questionnaire</p>
+                    <p className='text-sm font-normal text-gray-500'>The Self-regulation for learning online (SRL-O) questionnaire measures the frequency and quality of learning strategies when applied to online or blended or hybrid environments.</p>
                 </div>
-                <button onClick={() => createSubsection('MSLQ Questionnaire', 'forethought', MSLQuestionnaireData, setCreateCourseSectionsList, sectionToEdit, 'questionnaire', context, null)} className='pl-3 mx-3 ml-auto'>
+                <button onClick={() => createSubsection('SRL-O Questionnaire', 'forethought', SRLOQuestionnaireData, setCreateCourseSectionsList, sectionToEdit, 'questionnaire', context, null)} className='pl-3 mx-3 ml-auto'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
                 </button>
             </div>
+
             <div className='flex items-center p-5 mt-5 border rounded-xl bg-gray-50'>
                 <div className='px-3 py-3 bg-[#15803d] rounded-md flex items-center justify-center '>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 text-white">

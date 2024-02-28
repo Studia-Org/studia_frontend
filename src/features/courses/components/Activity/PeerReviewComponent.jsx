@@ -223,7 +223,6 @@ export default function PeerReviewComponent({ activityData }) {
                                     const answer = (activityData.user.data.attributes.PeerReviewAnswers.data
                                         .find((answer) => answer.attributes.qualification.data.id === QualificationIdPartnerReview))
                                     answer.attributes.Answers = answers
-                                    console.log(activityData.user.data.attributes.PeerReviewAnswers.data)
                                 }
                             })
                         }).catch(err => {

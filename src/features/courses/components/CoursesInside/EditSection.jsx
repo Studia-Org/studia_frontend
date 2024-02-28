@@ -17,7 +17,6 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
     const [loadingDelete, setLoadingDelete] = useState(false);
     const [sectionToEditTemp, setSectionToEditTemp] = useState(sectionToEdit);
 
-    console.log(courseContentInformation);
 
     useEffect(() => {
         if (sectionToEditTemp !== sectionToEdit) {
@@ -81,7 +80,6 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
                     }
 
                     if (subSection?.attributes?.questionnaire?.attributes) {
-                        console.log(subSection.attributes.questionnaire.attributes);
                         const questionnaire = await fetch(`${API}/questionnaires`, {
                             method: 'POST',
                             headers: {
@@ -93,7 +91,6 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
                             }),
                         })
                         questionnaireResponse = await questionnaire.json();
-                        console.log(questionnaireResponse);
                     }
 
                     const newSubsection = await fetch(`${API}/subsections`, {
