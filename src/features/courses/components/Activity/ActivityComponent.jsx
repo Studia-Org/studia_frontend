@@ -544,7 +544,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                 }
               </div >
               :
-              <div className='flex flex-col w-[30rem] mt-1 max-w-[calc(100vw-2.5rem)]'>
+              !createGroups && <div className='flex flex-col w-[30rem] mt-1 max-w-[calc(100vw-2.5rem)]'>
                 <p className='mb-3 text-xs text-gray-400' > Task Files</ p>
                 {
                   activityData.activity.data.attributes.file?.data === null ||
