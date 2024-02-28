@@ -100,6 +100,8 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
     }
   }
 
+
+
   function RenderCourseInsideSectionContent(
     subsection,
     titulo,
@@ -113,7 +115,9 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
     const isBeforeStartDate = dateToday < startDate;
     const disableButton = isBeforeStartDate || (!isFirstSubsection && !prevSubsectionFinished);
 
-
+    if (subsection.attributes.activity?.data?.attributes.type === 'questionnaire') {
+      console.log(subsection.attributes.questionnaire.data.attributes.Title)
+    }
     const handleClick = () => {
       handleSections(titulo, subsection);
     };
@@ -155,7 +159,7 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
             className={buttonClassName}
             disabled={disableButton}
           >
-            {subsection.attributes.title}
+            {subsection.attributes.activity?.data?.attributes.type === 'questionnaire' ? subsection.attributes.questionnaire.data.attributes.Title : subsection.attributes.title}
           </button>
           {selectFaseSectionContent(subsection.attributes.fase)}
         </li>

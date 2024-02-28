@@ -17,6 +17,7 @@ import { EditSection } from "../components/CoursesInside/EditSection";
 import FloatingButtonNavigation from "../components/CoursesInside/FloatingButtonNavigation";
 import { MoonLoader } from "react-spinners";
 import { set } from "lodash";
+import { CourseHasNotStarted } from "../components/CoursesInside/CourseHasNotStarted";
 
 const CourseInside = () => {
   const inputRefLandscape = useRef(null);
@@ -47,6 +48,12 @@ const CourseInside = () => {
 
   function handleLandscapePhotoChange(event) {
     setBackgroundPhotoSubsection(event.target.files[0]);
+  }
+
+  const hasCourseStarted = (start_date) => {
+    const currentDate = new Date();
+    const startDate = new Date(start_date);
+    return currentDate >= startDate;
   }
 
   const fetchPostData = async () => {
@@ -351,16 +358,20 @@ const CourseInside = () => {
                 {settingsFlag && (user.role_str === 'professor' || user.role_str === 'admin') ? (
                   <CourseSettings setSettingsFlag={setSettingsFlag} courseData={courseBasicInformation} setCourseData={setCourseBasicInformation} />
                 ) : questionnaireFlag && questionnaireAnswers !== undefined ? (
-                  <QuestionnaireComponent
-                    questionnaire={courseSubsectionQuestionnaire}
-                    answers={questionnaireAnswers}
-                    subsectionID={courseSubsection.id}
-                    enableEdit={enableEdit}
-                    setEnableEdit={setEnableEdit}
-                    courseSubsection={courseSubsection}
-                    setCourseSubsectionQuestionnaire={setCourseSubsectionQuestionnaire}
-                    professorID={professor.id}
-                  />
+                  hasCourseStarted(courseBasicInformation.start_date) ? (
+                    <QuestionnaireComponent
+                      questionnaire={courseSubsectionQuestionnaire}
+                      answers={questionnaireAnswers}
+                      subsectionID={courseSubsection.id}
+                      enableEdit={enableEdit}
+                      setEnableEdit={setEnableEdit}
+                      courseSubsection={courseSubsection}
+                      setCourseSubsectionQuestionnaire={setCourseSubsectionQuestionnaire}
+                      professorID={professor.id}
+                    />
+                  ) :
+                    <CourseHasNotStarted />
+
                 ) : courseSection && courseContentInformation.length > 0 && (
                   <>
                     <div className="flex items-center w-full max-w-full md:my-5">
@@ -388,7 +399,12 @@ const CourseInside = () => {
                           </div> : null
                       }
                     </div>
-                    <Tabs className='font-normal' tabBarStyle={{ borderBottom: '1px solid black' }} defaultActiveKey="1" items={items} />
+                    {
+                      hasCourseStarted(courseBasicInformation.start_date) ?
+                        <Tabs className='font-normal' tabBarStyle={{ borderBottom: '1px solid black' }} defaultActiveKey="1" items={items} />
+                        :
+                        <CourseHasNotStarted />
+                    }
                   </>
                 )}
               </div>
