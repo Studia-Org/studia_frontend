@@ -446,6 +446,57 @@ export const PerformancePage = ({ setCreateCourseSectionsList, sectionToEdit, co
                     </svg>
                 </button>
             </div>
+            <div className='flex items-center p-5 mt-5 border rounded-xl bg-gray-50 '>
+                <div className='px-3 py-3 bg-[#f59e0b] rounded-md flex items-center justify-center '>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-8 h-8 text-white">
+                        <path d="M10 9a3 3 0 100-6 3 3 0 000 6zM6 8a2 2 0 11-4 0 2 2 0 014 0zM1.49 15.326a.78.78 0 01-.358-.442 3 3 0 014.308-3.516 6.484 6.484 0 00-1.905 3.959c-.023.222-.014.442.025.654a4.97 4.97 0 01-2.07-.655zM16.44 15.98a4.97 4.97 0 002.07-.654.78.78 0 00.357-.442 3 3 0 00-4.308-3.517 6.484 6.484 0 011.907 3.96 2.32 2.32 0 01-.026.654zM18 8a2 2 0 11-4 0 2 2 0 014 0zM5.304 16.19a.844.844 0 01-.277-.71 5 5 0 019.947 0 .843.843 0 01-.277.71A6.975 6.975 0 0110 18a6.974 6.974 0 01-4.696-1.81z" />
+                    </svg>
+                </div>
+                <div className='ml-5'>
+                    <p className='text-base font-normal'>Peer review</p>
+                    <p className='text-sm font-normal text-gray-500'>This review method aims to provide constructive feedback, validate the quality and accuracy of the work, and ensure it meets established standards or criteria.</p>
+                </div>
+                <button onClick={() => createSubsection('Peer review', 'performance', null, setCreateCourseSectionsList, sectionToEdit, 'peerReview', context, PeerReviewData)} className='pl-3 mx-3 ml-auto'>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
+                        <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+
+            <div className='flex items-center p-5 mt-5 border rounded-xl bg-gray-50'>
+                <div className='px-3 py-3 bg-[#f59e0b] rounded-md flex items-center justify-center'>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-8 h-8 text-white">
+                        <path fillRule="evenodd" d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5zm4.75 11.25a.75.75 0 001.5 0v-2.546l.943 1.048a.75.75 0 101.114-1.004l-2.25-2.5a.75.75 0 00-1.114 0l-2.25 2.5a.75.75 0 101.114 1.004l.943-1.048v2.546z" clipRule="evenodd" />
+                    </svg>
+                </div>
+                <div className='ml-5'>
+                    <p className='text-base font-normal'>Task delivery</p>
+                    <p className='text-sm font-normal text-gray-500'>Delivery of the task.</p>
+                </div>
+                <button onClick={() => createSubsection('Task delivery', 'performance', null, setCreateCourseSectionsList, sectionToEdit, 'task', context, sectionTask)} className='pl-3 mx-3 ml-auto'>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f] ">
+                        <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+
+            <div className='flex items-center p-5 mt-5 border rounded-xl bg-gray-50'>
+                <div className='px-3 py-3 bg-[#f59e0b] rounded-md flex items-center justify-center '>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 text-white">
+                        <path d="M5.625 3.75a2.625 2.625 0 100 5.25h12.75a2.625 2.625 0 000-5.25H5.625zM3.75 11.25a.75.75 0 000 1.5h16.5a.75.75 0 000-1.5H3.75zM3 15.75a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75zM3.75 18.75a.75.75 0 000 1.5h16.5a.75.75 0 000-1.5H3.75z" />
+                    </svg>
+                </div>
+                <div className='ml-5'>
+                    <p className='text-base font-normal'>Empty Questionnaire</p>
+                    <p className='text-sm font-normal text-gray-500'>Create a new questionnaire from scratch.</p>
+                </div>
+                <button onClick={() => createSubsection('Questionnaire', 'performance', EmptyQuestionnaireData, setCreateCourseSectionsList, sectionToEdit, 'questionnaire', context, null)} className='pl-3 mx-3 ml-auto'>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
+                        <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+
             <div className='flex items-center p-5 mt-5 border rounded-xl bg-gray-50'>
                 <div className='px-3 py-3 bg-[#f59e0b] rounded-md flex items-center justify-center '>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 text-white">

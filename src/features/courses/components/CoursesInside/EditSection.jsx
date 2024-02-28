@@ -7,8 +7,6 @@ import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { motion } from 'framer-motion';
 import { SubsectionItems } from '../CreateCourses/CourseSections/SubsectionItems';
-import { set } from 'date-fns';
-
 
 
 export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseContentInformation, setSectionToEdit, setCourseSection, setCourseSubsection, courseContentInformation }) => {
@@ -24,12 +22,74 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
         }
     }, [sectionToEditTemp, sectionToEdit])
 
-    const handleDragEnd = (event) => {
+    const isValidMove = (subsections, oldIndex, newIndex) => {
+        const movedSubsection = subsections[oldIndex].attributes;
+        if (newIndex < 0 || newIndex >= subsections.length) {
+            return false;
+        }
 
+        const validFasesOrder = ['forethought', 'performance', 'self-reflection'];
+        const currentFase = movedSubsection.fase;
+        const targetFase = subsections[newIndex].attributes.fase;
+        const currentIndex = validFasesOrder.indexOf(currentFase);
+        const targetIndex = validFasesOrder.indexOf(targetFase);
+
+        if (currentIndex < targetIndex && newIndex !== targetIndex - 1) {
+            return false;
+        }
+
+        if (currentIndex > targetIndex && newIndex !== targetIndex + 1) {
+            return false;
+        }
+
+        if (currentFase === 'self-reflection' && (targetFase === 'forethought' || targetFase === 'performance')) {
+            return false;
+        }
+
+        if (currentFase === 'performance' && targetFase === 'forethought') {
+            return false;
+        }
+
+        return true;
+    };
+
+    const handleDragEnd = (event) => {
+        const { active, over } = event;
+        try {
+            //Cuando se mueva una subseccion, primero se tiene que comprobar si es un movimiento valido y luego se actualiza el estado(se reordena la subseccion en funcion de su nuevo indice), la variable donde se encuentran las subsecciones es sectionToEditTemp
+            if (active.id !== over.id) {
+                const oldIndex = sectionToEditTemp.attributes.subsections.data.findIndex(c => c.id === active.id);
+                const newIndex = sectionToEditTemp.attributes.subsections.data.findIndex(c => c.id === over.id);
+                if (isValidMove(sectionToEditTemp.attributes.subsections.data, oldIndex, newIndex)) {
+                    setSectionToEditTemp((prev) => {
+                        const newSubsections = arrayMove(prev.attributes.subsections.data, oldIndex, newIndex);
+                        return {
+                            ...prev,
+                            attributes: {
+                                ...prev.attributes,
+                                subsections: {
+                                    data: newSubsections,
+                                },
+                            },
+                        };
+                    });
+                }
+            }
+        } catch (error) {
+            message.error(error.message);
+        }
+    }
+
+    const checkIfSectionHadReorder = () => {
+        return sectionToEdit.attributes.subsections.data.some(
+            (subsection, index) => subsection.id !== sectionToEditTemp.attributes.subsections.data[index].id
+        );
     }
 
     const saveChanges = async () => {
         setLoading(true);
+
+        //Tambien hay que comprobar si se ha cambiado el orden de las subsecciones, si es asi, se actualiza el orden de las subsecciones en la base de datos poniendo en una lista en orden las id de las subsecciones
 
         const addedSubsections = sectionToEditTemp.attributes.subsections.data.filter(
             (tempSubsection) =>
@@ -60,7 +120,6 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
                 })
             ),
 
-            // Agregar nuevas subsections
             (async () => {
 
                 for (const subSection of addedSubsections) {
@@ -122,7 +181,6 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
             },
             body: JSON.stringify({
                 data: {
-                    // Aquí puedes incluir cualquier otro dato que necesites actualizar en la sección
                     subsections: {
                         connect: newSubsectionTemp
                     }
@@ -141,9 +199,26 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
         })
         setSectionToEdit(sectionToEditTemp);
 
+        // Finalmente comprobamos si se ha cambiado el orden de las subsecciones, si es asi, se actualiza el estado de la seccion
+        if (checkIfSectionHadReorder()) {
+            const subsectionListId = sectionToEditTemp.attributes.subsections.data.map((subsection) => subsection.id);
+            await fetch(`${API}/sections/${sectionToEdit.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${getToken()}`,
+                },
+                body: JSON.stringify({
+                    data: {
+                        subsections: {
+                            connect: subsectionListId
+                        }
+                    },
+                }),
+            })
+        }
 
         setEditSectionFlag(false);
-
         message.success('Changes saved');
         window.location.reload();
         setLoading(false);
@@ -298,11 +373,11 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
                                             {
                                                 sectionToEditTemp.attributes?.subsections?.data.map((subsection) => (
                                                     <motion.li
-                                                        key={subsection.id}
+                                                        key={subsection?.id}
                                                         initial={{ opacity: 0, x: -50 }}
                                                         animate={{ opacity: 1, x: 0 }}
                                                         exit={{ opacity: 0, x: 50 }}>
-                                                        <SubsectionList key={subsection.id}
+                                                        <SubsectionList key={subsection?.id}
                                                             subsection={subsection}
                                                             setSectionToEditTemp={setSectionToEditTemp}
                                                         />

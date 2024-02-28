@@ -121,7 +121,6 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
     const buttonClassName = `flex items-center mb-1 font-medium ${!disableButton ? 'text-gray-900 hover:translate-x-2' : 'text-gray-500'
       } line-clamp-2 w-3/4 duration-200 text-left`;
 
-
     if (user?.role_str === 'professor' || user?.role_str === 'admin') {
       return (
         <li className="flex items-center mt-8 mb-10 ml-8" key={index}>
@@ -133,7 +132,9 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
             className="flex items-center w-3/4 mb-1 font-medium text-left text-gray-900 duration-200 line-clamp-2 hover:translate-x-2"
           >
             {" "}
-            {subsection.attributes.title}
+            {
+              subsection.attributes.activity?.data?.attributes.type === 'questionnaire' ? subsection.attributes.questionnaire.data.attributes.Title : subsection.attributes.title
+            }
             {
               selectedSubsection && (
                 <span class="relative flex h-3 w-3 ml-3">
