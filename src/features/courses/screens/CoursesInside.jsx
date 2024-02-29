@@ -51,7 +51,8 @@ const CourseInside = () => {
   }
 
   const hasCourseStarted = (start_date) => {
-    const currentDate = new Date();
+    //const currentDate = new Date();
+    const currentDate = new Date('2024-03-10');
     const startDate = new Date(start_date);
     return currentDate >= startDate;
   }
@@ -88,7 +89,8 @@ const CourseInside = () => {
   };
 
   function obtenerPrimeraSubseccion() {
-    const currentDate = new Date();
+    //const currentDate = new Date();
+    const currentDate = new Date('2024-03-10');
     let lastCompletedSubseccion = null;
     let cursoTitle = null;
 
@@ -100,6 +102,8 @@ const CourseInside = () => {
           subsections: { data: subsecciones },
         },
       } = curso;
+
+      console.log(subsecciones);
 
       for (const subseccion of subsecciones) {
         const subseccionId = subseccion.id;
@@ -157,6 +161,7 @@ const CourseInside = () => {
         courseContentInformation,
         subsectionsCompleted
       );
+      console.log(firstSubsection);
       if (firstSubsection) {
         if (firstSubsection?.subseccion?.attributes?.activity?.data?.attributes?.type === 'questionnaire') {
           setCourseSubsection(firstSubsection.subseccion);
