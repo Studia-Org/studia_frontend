@@ -3,7 +3,7 @@ import { TaskComponentCard } from "../CreateCourses/CourseConfirmation/TaskCompo
 import ReactMarkdown from "react-markdown";
 import { Empty, Button, message } from "antd";
 import { useNavigate } from "react-router-dom";
-import MDEditor from "@uiw/react-md-editor";
+import MDEditor, { image } from "@uiw/react-md-editor";
 import '@mdxeditor/editor/style.css'
 import { API } from "../../../../constant";
 import { getToken } from "../../../../helpers";
@@ -120,7 +120,9 @@ export const CourseContent = ({ setForumFlag, courseContentInformation, courseSe
                         subsection_?.attributes?.content ?
                             <ReactMarkdown>{subsection_?.attributes?.content}</ReactMarkdown>
                             :
-                            <Empty className="mt-10" image={Empty.PRESENTED_IMAGE_SIMPLE} description={'There is no content'} />
+                            <div className="p-5 bg-white rounded-md shadow-md">
+                                <Empty className="mt-10" image={Empty.PRESENTED_IMAGE_SIMPLE} description={'There is no content'} />
+                            </div>
                         :
                         <div className="flex flex-col">
                             <MDEditor height="30rem" className='mt-2 mb-8' data-color-mode='light' onChange={setSubsectionContent} value={subsectionContent} />
@@ -341,16 +343,17 @@ export const CourseFiles = ({ courseContentInformation, courseSection, courseSub
                                 </div>
                             ) :
                                 (
-                                    <>
+                                    <div className="p-5 bg-white rounded-md shadow-md">
                                         <Empty
                                             className="mt-5"
+                                            image={Empty.PRESENTED_IMAGE_SIMPLE}
                                             description={
                                                 <span>
                                                     There are no files
                                                 </span>
                                             }
                                         />
-                                    </>
+                                    </div>
                                 )
 
                         )
@@ -365,7 +368,9 @@ export const CourseParticipants = ({ students, enableEdit, setSettingsFlag }) =>
     const navigate = useNavigate()
 
     if (students.data.length === 0) {
-        return <Empty />;
+        return <div className="p-5 bg-white rounded-md shadow-md">
+            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='There are no other participants' />
+        </div>;
     } else {
         return (
             <div className="flex flex-wrap items-center mt-3 ">

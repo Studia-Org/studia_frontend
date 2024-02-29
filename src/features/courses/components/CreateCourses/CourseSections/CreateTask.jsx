@@ -21,6 +21,7 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
             setTitle(task[section.id].title);
             setDeadline(task[section.id].deadline);
             setFiles(task[section.id].files.map(file => (file)));
+            setCategoriesInside(categories[section.id]);
         }
     }, [])
 
@@ -144,9 +145,11 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
         }
     };
 
+    console.log('task', categoriesInside);
+
     function createTaskButton() {
         try {
-            if (!title || !content || !deadline || categories.length === 0) {
+            if (!title || !content || !deadline || categoriesInside.length === 0 || categoriesInside.length === undefined) {
                 throw new Error('Please complete all required fields.');
             }
             const activity = {

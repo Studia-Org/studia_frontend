@@ -3,7 +3,6 @@ import Chip from '@mui/material/Chip';
 
 
 function ActivityTitle({ type, title, evaluated, qualification, setTitle, enableEdit, userRole, titleState, passedDeadline }) {
-    console.log('ActivityTitle', type)
     return (
         <div className='relative flex items-center p-5 mt-5 mb-6 bg-white rounded-md shadow-md'>
             <div className='flex items-center w-full space-x-3'>

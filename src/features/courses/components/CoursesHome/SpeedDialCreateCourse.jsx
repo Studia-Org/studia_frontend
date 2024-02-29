@@ -44,7 +44,7 @@ export const SpeedDialCreateCourse = () => {
                 type="button"
                 data-dial-toggle="speed-dial-menu-dropdown"
                 aria-controls="speed-dial-menu-dropdown"
-                className="flex items-center justify-center w-[3.2rem] h-[3.2rem] ml-auto text-white transition bg-[#3c3c3c] rounded-full shadow-xl hover:bg-[#4f4f4f] hover-scale active-scale "
+                className="flex items-center justify-center w-[3.2rem] h-[3.2rem] ml-auto text-white transition bg-[#3c3c3c] rounded-full shadow-xl hover:bg-[#4f4f4f] duration-100 hover-scale active-scale "
                 onClick={() => setIsExpanded(!isExpanded)}
             >
                 <FiPlus size={26} />

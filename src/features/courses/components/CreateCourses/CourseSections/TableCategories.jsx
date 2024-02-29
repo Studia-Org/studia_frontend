@@ -142,7 +142,7 @@ export const TableCategories = ({ categories, setCreateCourseSectionsList, subse
     })
 
     const [dataSource, setDataSource] = useState(dataSourceMap(categories[0], createCourseSectionsList, subsection));
-    const [selectOption, setSelectOption] = useState(categoriesOptions[0].label);
+    const [selectOption, setSelectOption] = useState(categoriesOptions[0]?.label);
 
 
     useEffect(() => {
