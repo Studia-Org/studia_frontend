@@ -567,22 +567,28 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                       {activityFiles.map((file, index) => renderFiles(file))}
                     </div>
                 }
-                <p className='mt-5 mb-1 text-xs text-gray-400'>Your submission</p>
                 {
-                  activityData.activity.data.attributes.type !== 'thinkAloud' &&
-                  <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
-                    {
-                      filesUploaded.length === 0 ?
-                        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
-                          <span className='font-normal text-gray-400 '>
-                            You did not submit any files
-                          </span>
-                        } />
-                        :
-                        filesUploaded && filesUploaded.map((file) => renderFiles(file, true))
-                    }
+                  isActivityEvaluable && (
+                    <>
+                      <p className='mt-5 mb-1 text-xs text-gray-400'>Your submission</p>
+                      {
+                        activityData.activity.data.attributes.type !== 'thinkAloud' &&
+                        <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
+                          {
+                            filesUploaded.length === 0 ?
+                              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
+                                <span className='font-normal text-gray-400 '>
+                                  You did not submit any files
+                                </span>
+                              } />
+                              :
+                              filesUploaded && filesUploaded.map((file) => renderFiles(file, true))
+                          }
 
-                  </div>
+                        </div>
+                      }
+                    </>
+                  )
                 }
 
                 {
@@ -632,41 +638,45 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
 
                     </div>
                     :
-                    <FilePond
-                      files={formData.getAll('files')}
-                      allowMultiple={true}
-                      maxFiles={5}
-                      onaddfile={(err, item) => {
-                        if (!err) {
-                          handleFileUpload(item.file);
-                        }
-                      }}
-                      onremovefile={(err, item) => {
-                        if (!err) {
-                          const dataCopy = formData;
-                          dataCopy.forEach((value, key) => {
-                            if (value.name === item.file.name) {
-                              dataCopy.delete(key);
+                    isActivityEvaluable && (
+                      <>
+                        <FilePond
+                          files={formData.getAll('files')}
+                          allowMultiple={true}
+                          maxFiles={5}
+                          onaddfile={(err, item) => {
+                            if (!err) {
+                              handleFileUpload(item.file);
                             }
-                          });
-                          document.getElementById('submit-button-activity').disabled = formData.getAll('files').length === 0;
-                          setFormData(dataCopy);
-                        }
-                      }}
-                    />
+                          }}
+                          onremovefile={(err, item) => {
+                            if (!err) {
+                              const dataCopy = formData;
+                              dataCopy.forEach((value, key) => {
+                                if (value.name === item.file.name) {
+                                  dataCopy.delete(key);
+                                }
+                              });
+                              document.getElementById('submit-button-activity').disabled = formData.getAll('files').length === 0;
+                              setFormData(dataCopy);
+                            }
+                          }}
+                        />
+                        <Button
+                          loading={uploadLoading}
+                          id='submit-button-activity'
+                          disabled={formData.getAll('files').length === 0}
+                          onClick={() => { sendData() }}
+                          className="ml-auto " type='primary'>
+                          Submit
+                        </Button>
+                        <GroupMembers
+                          activityGroup={activityGroup}
+                          loadingGroup={loadingGroup}
+                        />
+                      </>
+                    )
                 }
-                <Button
-                  loading={uploadLoading}
-                  id='submit-button-activity'
-                  disabled={formData.getAll('files').length === 0}
-                  onClick={() => { sendData() }}
-                  className="ml-auto " type='primary'>
-                  Submit
-                </Button>
-                <GroupMembers
-                  activityGroup={activityGroup}
-                  loadingGroup={loadingGroup}
-                />
               </div>
         }
       </>
