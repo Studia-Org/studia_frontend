@@ -5,7 +5,7 @@ import { ForumClickable } from './Forum/ForumClickable';
 import { ProfessorData } from './ProfessorData';
 function FloatingButtonNavigation({ whisper, allForums, professor, courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setCourseContentInformation, setEditSectionFlag, setSectionToEdit, courseSubsection, courseSection, posts }) {
     return (
-        <div className=' right-5 bottom-5  flexible:hidden xl:flex accordion:hidden fixed'>
+        <div className='fixed right-[6.5rem] bottom-12 flexible:hidden xl:flex accordion:hidden'>
             <Whisper
                 ref={whisper}
                 placement="autoVerticalEnd"
@@ -39,7 +39,7 @@ function FloatingButtonNavigation({ whisper, allForums, professor, courseContent
                         }
                         {professor.attributes && <section className='ml-10'> <ProfessorData professor={professor} evaluatorFlag={false} /></section>}
                     </Popover>}>
-                <div className={`bg-indigo-700 rounded-full w-[64px] h-[64px] p-[14px] cursor-pointer`}>
+                <div className={` rounded-full w-[3.2rem] h-[3.2rem] p-[14px] text-white transition bg-[#3c3c3c] cursor-pointer shadow-xl hover:bg-[#4f4f4f] duration-100`}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
                         stroke="white" className="w-full h-full">
                         <path strokeLinecap="round" strokeLinejoin="round"

@@ -25,13 +25,20 @@ export default function PeerReviewComponent({ activityData }) {
     const { user } = useAuthContext();
 
     useEffect(() => {
-        if (user === null || user === undefined || user.role_str !== 'student') { setLoading(false); return }
-        if (activityData.peer_review_qualifications.data[0] === undefined || activityData.peer_review_qualifications.data === null) {
+        try {
+
+            if (user === null || user === undefined || user.role_str !== 'student') { setLoading(false); return }
+            if (activityData.peer_review_qualifications.data[0] === undefined || activityData.peer_review_qualifications?.data === null) {
+                setLoading(false);
+                setQualificationIdPartnerReview("Error")
+                return
+            }
+            if (userIndexSelected === null) return
+        }
+        catch (err) {
             setLoading(false);
             setQualificationIdPartnerReview("Error")
-            return
         }
-        if (userIndexSelected === null) return
 
     }, [user, userIndexSelected]);
 

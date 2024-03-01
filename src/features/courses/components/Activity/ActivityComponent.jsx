@@ -42,7 +42,10 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   const [audioFile, setAudioFile] = useState(audioUser);
   const [formData, setFormData] = useState(new FormData());
   const { user } = useAuthContext();
-  const { activityId, courseId } = useParams();
+  let { activityId, courseId } = useParams();
+
+  const isActivityEvaluable = activityData?.activity?.data?.attributes.evaluable
+
   const navigate = useNavigate();
   const USER_OBJECTIVES = [...new Set(user?.user_objectives?.map((objective) => objective.categories.map((category) => category)).flat() || [])];
   const passedDeadline = activityData?.activity?.data?.attributes?.deadline ? new Date(activityData?.activity?.data?.attributes?.deadline) < new Date() : false;
@@ -186,6 +189,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   async function sendData() {
     console.log('sendData');
     try {
+      console.log('activityData', activityData);
       const isThinkAloud = (activityData.activity.data.attributes.type === 'thinkAloud' && formData.getAll('files').length === 0)
       const isBlob = audioFile instanceof Blob;
       const formDataAudio = new FormData();
@@ -441,10 +445,12 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
 
                 <p className='mt-5 mb-1 text-xs text-gray-400'>Task description</p>
                 <hr />
-                <div className='prose my-3 text-gray-600 ml-5 max-w-[calc(100vw-1.25rem)] box-content mt-5 '>
+                <div className=' my-3 text-gray-600 ml-5 max-w-[calc(100vw-1.25rem)] box-content mt-5 '>
                   {
                     !enableEdit ?
-                      <ReactMarkdown className=''>{activityData.activity.data.attributes.description}</ReactMarkdown>
+                      <div className='prose max-w-none'>
+                        <ReactMarkdown className=''>{activityData.activity.data.attributes.description}</ReactMarkdown>
+                      </div>
                       :
                       <div className="flex flex-col">
                         <MDEditor height="30rem" className='mt-2 mb-8' data-color-mode='light' onChange={setSubsectionContent} value={subsectionContent} />
@@ -559,22 +565,28 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                       {activityFiles.map((file, index) => renderFiles(file))}
                     </div>
                 }
-                <p className='mt-5 mb-1 text-xs text-gray-400'>Your submission</p>
                 {
-                  activityData.activity.data.attributes.type !== 'thinkAloud' &&
-                  <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
-                    {
-                      filesUploaded.length === 0 ?
-                        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
-                          <span className='font-normal text-gray-400 '>
-                            You did not submit any files
-                          </span>
-                        } />
-                        :
-                        filesUploaded && filesUploaded.map((file) => renderFiles(file, true))
-                    }
+                  isActivityEvaluable && (
+                    <>
+                      <p className='mt-5 mb-1 text-xs text-gray-400'>Your submission</p>
+                      {
+                        activityData.activity.data.attributes.type !== 'thinkAloud' &&
+                        <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
+                          {
+                            filesUploaded.length === 0 ?
+                              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
+                                <span className='font-normal text-gray-400 '>
+                                  You did not submit any files
+                                </span>
+                              } />
+                              :
+                              filesUploaded && filesUploaded.map((file) => renderFiles(file, true))
+                          }
 
-                  </div>
+                        </div>
+                      }
+                    </>
+                  )
                 }
 
                 {
@@ -624,41 +636,45 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
 
                     </div>
                     :
-                    <FilePond
-                      files={formData.getAll('files')}
-                      allowMultiple={true}
-                      maxFiles={5}
-                      onaddfile={(err, item) => {
-                        if (!err) {
-                          handleFileUpload(item.file);
-                        }
-                      }}
-                      onremovefile={(err, item) => {
-                        if (!err) {
-                          const dataCopy = formData;
-                          dataCopy.forEach((value, key) => {
-                            if (value.name === item.file.name) {
-                              dataCopy.delete(key);
+                    isActivityEvaluable && (
+                      <>
+                        <FilePond
+                          files={formData.getAll('files')}
+                          allowMultiple={true}
+                          maxFiles={5}
+                          onaddfile={(err, item) => {
+                            if (!err) {
+                              handleFileUpload(item.file);
                             }
-                          });
-                          document.getElementById('submit-button-activity').disabled = formData.getAll('files').length === 0;
-                          setFormData(dataCopy);
-                        }
-                      }}
-                    />
+                          }}
+                          onremovefile={(err, item) => {
+                            if (!err) {
+                              const dataCopy = formData;
+                              dataCopy.forEach((value, key) => {
+                                if (value.name === item.file.name) {
+                                  dataCopy.delete(key);
+                                }
+                              });
+                              document.getElementById('submit-button-activity').disabled = formData.getAll('files').length === 0;
+                              setFormData(dataCopy);
+                            }
+                          }}
+                        />
+                        <Button
+                          loading={uploadLoading}
+                          id='submit-button-activity'
+                          disabled={formData.getAll('files').length === 0}
+                          onClick={() => { sendData() }}
+                          className="ml-auto " type='primary'>
+                          Submit
+                        </Button>
+                        <GroupMembers
+                          activityGroup={activityGroup}
+                          loadingGroup={loadingGroup}
+                        />
+                      </>
+                    )
                 }
-                <Button
-                  loading={uploadLoading}
-                  id='submit-button-activity'
-                  disabled={formData.getAll('files').length === 0}
-                  onClick={() => { sendData() }}
-                  className="ml-auto " type='primary'>
-                  Submit
-                </Button>
-                <GroupMembers
-                  activityGroup={activityGroup}
-                  loadingGroup={loadingGroup}
-                />
               </div>
         }
       </>

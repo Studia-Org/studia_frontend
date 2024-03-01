@@ -5,7 +5,7 @@ export const getIcon = (subsection, subsectionsCompleted, isFirstSubsection, pre
     const dateToday = new Date();
     const dateTemp = new Date(subsection.attributes.start_date);
     const isSubsectionCompleted = subsectionsCompleted.some((subsectionTemp) => subsectionTemp.id === subsection.id);
-    const dateToStart = differenceInDays(parseISO(subsection.attributes.start_date), new Date());
+    const dateToStart = differenceInDays(parseISO(subsection.attributes.start_date), dateToday);
 
 
     const contentOpenSubsection =
@@ -19,9 +19,13 @@ export const getIcon = (subsection, subsectionsCompleted, isFirstSubsection, pre
             </div>
         )
 
+    if (subsection.id === 226) {
+        console.log('dateToday', isSubsectionCompleted);
+    }
+
     if (isSubsectionCompleted) {
         return (
-            <span className="absolute flex items-center justify-center w-8 h-8 bg-indigo-500 rounded-full -left-4  ring-white">
+            <span className="absolute flex items-center justify-center w-8 h-8 bg-indigo-500 rounded-full -left-4 ring-white">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -54,7 +58,7 @@ export const getIcon = (subsection, subsectionsCompleted, isFirstSubsection, pre
     if (prevSubsectionFinished === false) {
         return (
             <Popover content={contentOpenSubsection} title='Subsection is locked'>
-                <span className="absolute flex items-center justify-center w-8 h-8 bg-white rounded-full border border-gray-300 -left-4  ring-black ">
+                <span className="absolute flex items-center justify-center w-8 h-8 bg-white border border-gray-300 rounded-full -left-4 ring-black ">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -72,7 +76,7 @@ export const getIcon = (subsection, subsectionsCompleted, isFirstSubsection, pre
 
     if (dateTemp < dateToday) {
         return (
-            <span className="absolute flex items-center justify-center w-8 h-8 bg-indigo-200 rounded-full -left-4  ring-white ">
+            <span className="absolute flex items-center justify-center w-8 h-8 bg-indigo-200 rounded-full -left-4 ring-white ">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
@@ -85,7 +89,7 @@ export const getIcon = (subsection, subsectionsCompleted, isFirstSubsection, pre
         );
     }
     return (
-        <span className="absolute flex items-center justify-center w-8 h-8 bg-white rounded-full border border-gray-300 -left-4  ring-black ">
+        <span className="absolute flex items-center justify-center w-8 h-8 bg-white border border-gray-300 rounded-full -left-4 ring-black ">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
