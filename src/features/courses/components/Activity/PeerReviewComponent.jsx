@@ -28,7 +28,7 @@ export default function PeerReviewComponent({ activityData }) {
         try {
 
             if (user === null || user === undefined || user.role_str !== 'student') { setLoading(false); return }
-            if (activityData.peer_review_qualifications.data[0] === undefined || activityData.peer_review_qualifications.data === null) {
+            if (activityData.peer_review_qualifications.data[0] === undefined || activityData.peer_review_qualifications?.data === null) {
                 setLoading(false);
                 setQualificationIdPartnerReview("Error")
                 return
