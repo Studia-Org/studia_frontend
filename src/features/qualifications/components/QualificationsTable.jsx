@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { TableRowsStudents } from './TableRowsStudents'
+import { TableRowsGroups, saveChangesButtonGroups } from './TableRowsGroups'
 import { Button, Select, message } from "antd"
 import { API } from '../../../constant';
 import { getToken } from '../../../helpers';
@@ -9,13 +10,15 @@ import { useAuthContext } from '../../../context/AuthContext';
 
 export const QualificationsTable = ({ students, activities, setStudents, setUploadQualificationsFlag }) => {
     const [isEditChecked, setIsEditChecked] = useState(false);
-    const [selectedActivity, setSelectedActivity] = useState(JSON.stringify({ id: activities[0].id, title: activities[0].attributes.title }));
+    const [selectedActivity, setSelectedActivity] = useState
+        (JSON.stringify({ id: activities[0].id, title: activities[0].attributes.title, groupActivity: activities[0].attributes.groupActivity }));
     const [thereIsChanges, setThereIsChanges] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [editedGrades, setEditedGrades] = useState({});
     const { user } = useAuthContext()
     const filteredActivity = activities.filter(activity => activity.id === JSON.parse(selectedActivity).id)
     const [loading, setLoading] = useState(false)
+    const [groups, setGroups] = useState([])
 
     const handleToggleChange = () => {
         setIsEditChecked(!isEditChecked);
@@ -24,7 +27,12 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
     const saveChangesButton = async () => {
         setLoading(true)
         for (const studentId in editedGrades) {
-            let grade = students.find(student => student.id === Number(studentId))?.attributes.qualifications.data.find(qualification => qualification?.attributes.activity.data?.id === JSON.parse(selectedActivity).id)
+            let grade =
+                students
+                    .find(student => student.id === Number(studentId))?.attributes.qualifications.data
+                    .find(qualification => qualification?.attributes.activity.data?.id === JSON.parse(selectedActivity).id)
+
+
             const student = editedGrades[studentId];
             if (grade) {
                 const response = await fetch(`${API}/qualifications/${grade.id}`, {
@@ -87,28 +95,65 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
 
     };
 
+    useEffect(() => {
+        const parsedActivityFull = JSON.parse(selectedActivity)
+        const AllFilteredGroups = students.filter((student) => student.attributes.groups?.data
+            .find(group => group.attributes.activity?.data?.id === parsedActivityFull.id))
+            .map((group) => group.attributes.groups.data.find(group => group.attributes.activity?.data?.id === parsedActivityFull.id))
 
+        const filteredGroupsIds = AllFilteredGroups.map(group => group.id)
+        const filteredGroupsIdsUnique = [...new Set(filteredGroupsIds)]
+        const filteredGroups = filteredGroupsIdsUnique.map(id => AllFilteredGroups.find(group => group.id === id))
+        setGroups(filteredGroups)
+    }, [students])
 
     function renderTableRows() {
-        const filteredStudents = students.filter((student) =>
-            student.attributes.name.toLowerCase().includes(searchTerm.toLowerCase())
-        )
-        return (
-            <>
-                {filteredStudents.map((student) => (
-                    <TableRowsStudents
-                        key={student.id}
-                        student={student}
-                        activity={selectedActivity}
+        const parsedActivityFull = JSON.parse(selectedActivity)
+        if (parsedActivityFull.groupActivity) {
+            const AllFilteredGroups = students.filter((student) => student.attributes.groups?.data
+                .find(group => group.attributes.activity?.data?.id === parsedActivityFull.id))
+                .map((group) => group.attributes.groups.data.find(group => group.attributes.activity?.data?.id === parsedActivityFull.id))
+
+            const filteredGroupsIds = AllFilteredGroups.map(group => group.id)
+            const filteredGroupsIdsUnique = [...new Set(filteredGroupsIds)]
+            const filteredGroups = filteredGroupsIdsUnique.map(id => AllFilteredGroups.find(group => group.id === id))
+            if (groups.length === 0) setGroups(filteredGroups)
+            return (
+                filteredGroups.map((group) => {
+                    return <TableRowsGroups
+                        key={group.id}
+                        group={group}
+                        activity={parsedActivityFull}
                         isEditChecked={isEditChecked}
                         setThereIsChanges={setThereIsChanges}
                         editedGrades={editedGrades}
                         setEditedGrades={setEditedGrades}
+                        setStudents={setStudents}
                         activities={activities}
                     />
-                ))}
-            </>
-        );
+                })
+            )
+
+        } else {
+            const filteredStudents = students.filter((student) =>
+                student.attributes.name.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+            return (
+                <>
+                    {filteredStudents.map((student) => {
+                        return <TableRowsStudents
+                            key={student.id}
+                            student={student}
+                            activity={selectedActivity}
+                            isEditChecked={isEditChecked}
+                            setThereIsChanges={setThereIsChanges}
+                            editedGrades={editedGrades}
+                            setEditedGrades={setEditedGrades}
+                        />
+                    })}
+                </>
+            );
+        }
     }
 
     const filterOption = (input, option) =>
@@ -117,7 +162,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
     const activityOptions = activities
         .filter(activity => activity.attributes.evaluable === true)
         .map(activity => ({
-            value: JSON.stringify({ id: activity.id, title: activity.attributes.title }),
+            value: JSON.stringify({ id: activity.id, title: activity.attributes.title, groupActivity: activity.attributes.groupActivity }),
             label: activity.attributes.title,
         }));
 
@@ -159,20 +204,32 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                     Upload qualifications
                                 </Button>
                             </div>
-                            <div className='flex items-center justify-between'>
+                            <div className='flex items-center justify-between mt-5 gap-x-5 '>
                                 <Select
+
                                     showSearch
-                                    className='w-full mt-5 mr-10'
+                                    className='w-full'
                                     placeholder="Select an activity"
                                     optionFilterProp="children"
                                     value={selectedActivity}
-                                    onChange={(value) => setSelectedActivity(value)}
+                                    onChange={(value) => { console.log(value); setSelectedActivity(value) }}
                                     filterOption={filterOption}
                                     options={activityOptions}
                                 />
                                 {
                                     isEditChecked && (
-                                        <Button loading={loading} type='primary' disabled={!thereIsChanges} onClick={() => saveChangesButton()}>
+                                        <Button loading={loading} type='primary' disabled={!thereIsChanges} onClick={() => {
+                                            if (JSON.parse(selectedActivity).groupActivity) {
+                                                setLoading(true)
+                                                saveChangesButtonGroups(editedGrades, groups, selectedActivity, user, students, setStudents)
+                                                setThereIsChanges(false);
+                                                setIsEditChecked(false);
+                                                setLoading(false)
+                                            } else {
+                                                saveChangesButton()
+                                            }
+                                        }
+                                        }>
                                             Save Changes
                                         </Button>
                                     )
@@ -182,9 +239,16 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                         <table class="w-full text-sm text-left text-gray-500 ">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50  ">
                                 <tr>
-                                    <th scope="col" class="px-6 py-3">
-                                        Name
-                                    </th>
+                                    {
+                                        JSON.parse(selectedActivity).activityGroup ?
+                                            <th scope="col" class="px-6 py-3">
+                                                Groups
+                                            </th>
+                                            :
+                                            <th scope="col" class="px-6 py-3">
+                                                Name
+                                            </th>
+                                    }
                                     <th scope="col" class="px-6 py-3">
                                         Qualification
                                     </th>
@@ -207,7 +271,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody key={selectedActivity}>
                                 {students && renderTableRows()}
                             </tbody>
                         </table>

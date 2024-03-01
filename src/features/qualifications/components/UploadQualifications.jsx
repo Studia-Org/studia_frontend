@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react'
 import { Steps, Button, message, Popconfirm } from 'antd';
 import { CSVConfiguration } from './UploadQualifications/CSVConfiguration';
-import { Confirmation } from './UploadQualifications/Confirmation';
+import { Confirmation, uploadQualifications, uploadQualificationsPerGroup } from './UploadQualifications/Confirmation';
 import { Visualization } from './UploadQualifications/Visualization';
 import { extractDataFromSpreadsheet, parseData } from './UploadQualifications/helpers.js';
-
+import { useAuthContext } from '../../../context/AuthContext';
+import { useNavigate, useParams } from 'react-router-dom';
 export const UploadQualifications = ({ setUploadQualificationsFlag, activities, students }) => {
     const [steps, setSteps] = useState(0)
+    const { user } = useAuthContext();
     const [file, setFile] = useState([]);
     const [dataVisualization, setDataVisualization] = useState([])
     const [dataTable, setDataTable] = useState([])
+    const { courseID } = useParams();
+    const navigate = useNavigate()
     const [formValues, setFormValues] = useState({
         selectedActivity: null,
         studentInputColumn: '',
@@ -21,11 +25,11 @@ export const UploadQualifications = ({ setUploadQualificationsFlag, activities, 
     function stepRenderer() {
         switch (steps) {
             case 0:
-                return <CSVConfiguration activities={activities} formValues={formValues} setFormValues={setFormValues} file={file} setFile={setFile} />
+                return <CSVConfiguration students={students} activities={activities} formValues={formValues} setFormValues={setFormValues} file={file} setFile={setFile} />
             case 1:
                 return <Visualization formValues={formValues} data={dataTable} />
             case 2:
-                return <Confirmation dataTable={dataTable} activity={formValues.selectedActivity} setUploadQualificationsFlag={setUploadQualificationsFlag} />
+                return <Confirmation />
             default:
                 break;
         }
@@ -41,13 +45,13 @@ export const UploadQualifications = ({ setUploadQualificationsFlag, activities, 
 
     useEffect(() => {
         if (dataVisualization.length > 0) {
-            setDataTable(parseData(dataVisualization, students));
+            setDataTable(parseData(JSON.parse(formValues.selectedActivity), dataVisualization, students));
         }
     }, [dataVisualization, formValues, students])
 
     const ButtonSteps = () => {
         return (
-            <div className='gap-3 flex ml-auto'>
+            <div className='flex gap-3 ml-auto'>
                 <Button onClick={() => setSteps(steps - 1)}>
                     Back
                 </Button>
@@ -59,7 +63,24 @@ export const UploadQualifications = ({ setUploadQualificationsFlag, activities, 
                     ) : (
                         <Popconfirm
                             title="Are you sure to continue?"
-                            onConfirm={handleContinue}
+                            onConfirm={() => {
+                                handleContinue();
+                                if (JSON.parse(formValues.selectedActivity).groupActivity) {
+                                    console.log('uploading per group')
+                                    uploadQualificationsPerGroup({
+                                        dataTable,
+                                        activity: formValues.selectedActivity,
+                                        user
+                                    })
+                                }
+                                else {
+                                    uploadQualifications({
+                                        dataTable,
+                                        activity: formValues.selectedActivity,
+                                        user
+                                    })
+                                }
+                            }}
                             onCancel={() => { }}
                             okText="Yes"
                             cancelText="No"
@@ -88,48 +109,53 @@ export const UploadQualifications = ({ setUploadQualificationsFlag, activities, 
     }
 
     const checkIfDataIsCorrect = () => {
-        if (steps === 0) {
-            const { selectedActivity, studentInputColumn, qualificationInputColumn, commentsInputColumn, file } = formValues;
-            if (selectedActivity && studentInputColumn && qualificationInputColumn && commentsInputColumn && file) {
-                const isValidFile = checkIfFileIsCSV(file);
-                const isValidStudentInputColumn = checkIfExcelRangeFormat(studentInputColumn);
-                const isValidQualificationInputColumn = checkIfExcelRangeFormat(qualificationInputColumn);
-                const isValidCommentsInputColumn = checkIfExcelRangeFormat(commentsInputColumn);
-                if (isValidStudentInputColumn && isValidQualificationInputColumn && isValidCommentsInputColumn && isValidFile) {
-                    return true;
-                }
-                else if (!isValidFile) {
-                    message.error('File must be a CSV or spreadsheet file');
-                    return false;
+        try {
 
-                } else {
-                    message.error('The input columns must have Excel range format, e.g., B2-B22');
-                    return false;
-                }
-            } else {
-                message.error('You must fill all the fields');
-                return false;
-            }
-        } else if (steps === 1) {
-            if (dataTable.length === 0) {
-                message.error('There is no data to visualize');
-                return false;
-            }
-            else {
-                for (let i = 0; i < dataTable.length; i++) {
-                    const student = dataTable[i];
+            if (steps === 0) {
+                const { selectedActivity, studentInputColumn, qualificationInputColumn, commentsInputColumn, file } = formValues;
+                if (selectedActivity && studentInputColumn && qualificationInputColumn && commentsInputColumn && file) {
+                    const isValidFile = checkIfFileIsCSV(file);
+                    const isValidStudentInputColumn = checkIfExcelRangeFormat(studentInputColumn);
+                    const isValidQualificationInputColumn = checkIfExcelRangeFormat(qualificationInputColumn);
+                    const isValidCommentsInputColumn = checkIfExcelRangeFormat(commentsInputColumn);
+                    if (isValidStudentInputColumn && isValidQualificationInputColumn && isValidCommentsInputColumn && isValidFile) {
+                        return true;
+                    }
+                    else if (!isValidFile) {
+                        message.error('File must be a CSV or spreadsheet file');
+                        return false;
 
-                    if (!student.Qualification || !student.Comments) {
-                        message.error(`Student ${student.Name.student.attributes.name} does not have a qualification or comments. Please check the data.`);
+                    } else {
+                        message.error('The input columns must have Excel range format, e.g., B2-B22');
                         return false;
                     }
+                } else {
+                    message.error('You must fill all the fields');
+                    return false;
                 }
+            } else if (steps === 1) {
+                if (dataTable.length === 0) {
+                    message.error('There is no data to visualize');
+                    return false;
+                }
+                else {
+                    for (let i = 0; i < dataTable.length; i++) {
+                        const student = dataTable[i];
+                        if ((!student.Qualification || !student.Comments) && (!student.group.Qualification || !student.group.Comments)) {
+                            message.error(`Student ${student.Name.student.attributes.name} does not have a qualification or comments. Please check the data.`);
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+
+            }
+            else {
                 return true;
             }
-
-        }
-        else {
-            return true;
+        } catch (error) {
+            message.error('An error occurred while checking the data. Please try again');
+            return false;
         }
     };
 
@@ -143,7 +169,7 @@ export const UploadQualifications = ({ setUploadQualificationsFlag, activities, 
     return (
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-20">
             <div class=" items-center justify-between pb-4 bg-white  p-10">
-                <button className='text-sm flex items-center w-fit hover:-translate-x-6 duration-150 -translate-x-4 -translate-y-6' onClick={() => setUploadQualificationsFlag(false)}>
+                <button className='flex items-center text-sm duration-150 -translate-x-4 -translate-y-6 w-fit hover:-translate-x-6' onClick={() => setUploadQualificationsFlag(false)}>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                         <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
                     </svg>
@@ -166,15 +192,16 @@ export const UploadQualifications = ({ setUploadQualificationsFlag, activities, 
                         }
                     ]}
                 />
-                <h3 className='mt-10 font-medium text-lg'>Upload Qualifications</h3>
+                <h3 className='mt-10 text-lg font-medium'>Upload Qualifications</h3>
                 {stepRenderer()}
                 {
                     steps !== 2 && (
-                        <div className='mt-10 flex w-full'>
+                        <div className='flex w-full mt-10'>
                             <ButtonSteps />
                         </div>
                     )
                 }
+
             </div>
         </div>
     )
