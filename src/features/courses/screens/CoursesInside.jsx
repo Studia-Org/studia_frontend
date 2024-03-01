@@ -51,8 +51,7 @@ const CourseInside = () => {
   }
 
   const hasCourseStarted = (start_date) => {
-    //const currentDate = new Date();
-    const currentDate = new Date('2024-03-10');
+    const currentDate = new Date();
     const startDate = new Date(start_date);
     return currentDate >= startDate;
   }
@@ -89,8 +88,7 @@ const CourseInside = () => {
   };
 
   function obtenerPrimeraSubseccion() {
-    //const currentDate = new Date();
-    const currentDate = new Date('2024-03-10');
+    const currentDate = new Date();
     let lastCompletedSubseccion = null;
     let cursoTitle = null;
 

@@ -2,8 +2,7 @@ import { Popover } from "antd";
 import { differenceInDays, parseISO } from "date-fns";
 
 export const getIcon = (subsection, subsectionsCompleted, isFirstSubsection, prevSubsectionFinished) => {
-    //const dateToday = new Date();
-    const dateToday = new Date('2024-03-10');
+    const dateToday = new Date();
     const dateTemp = new Date(subsection.attributes.start_date);
     const isSubsectionCompleted = subsectionsCompleted.some((subsectionTemp) => subsectionTemp.id === subsection.id);
     const dateToStart = differenceInDays(parseISO(subsection.attributes.start_date), dateToday);
