@@ -2,25 +2,30 @@ import React, { useState } from 'react'
 import { Button } from "antd"
 import { ModalRubrica } from './ModalRubrica'
 import { ModalFilesPR } from './ModalFilesPR'
+import { AvatarGroup, Avatar } from "rsuite"
 
-export const StudentRow = ({ student, activityToReviewID, activityTitle, peerReviewAnswers }) => {
+export const StudentRow = ({ student, activityToReviewID, activityTitle, peerReviewAnswers, peerReviewinGroups }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isRubricModalOpen, setIsRubricModalOpen] = useState(false);
     const [rubricData, setRubricData] = useState({})
-    const studentQualifications = student.attributes.qualifications.data.filter((qualification) => {
+
+    const studentQualifications = [...student.attributes.qualifications.data.filter((qualification) => {
 
         if (qualification.attributes.activity.data === null) return false
 
         return qualification.attributes.activity.data.id === activityToReviewID
-    })
+    }),
+    ...student.attributes.groups?.data?.filter((group) => group.attributes.activity.data.id === activityToReviewID)
+        .map((group) => group?.attributes?.qualification.data)]
 
     const studentQualificationsGiven = peerReviewAnswers.filter((answer) =>
         answer.attributes.user?.data.id === student.id)
 
     const studentQualificationsReceived = peerReviewAnswers.filter((answer) =>
-        answer.attributes.qualification?.data.attributes.user.data.id === student.id)
+        answer.attributes.qualifications?.data.some((qualification) =>
+            qualification.attributes.user.data.id === student.id))
 
-    const studentFiles = studentQualifications[0]?.attributes.file.data
+    const studentFiles = studentQualifications[0]?.attributes.file?.data
 
     function handleRubricModalOpen(qualification) {
         setRubricData(qualification)
@@ -28,13 +33,44 @@ export const StudentRow = ({ student, activityToReviewID, activityTitle, peerRev
     }
 
     function renderAllGivenQualifications(givenQualification) {
+        const activityGroup = givenQualification.attributes.user.data.attributes.groups?.data.find((group) =>
+            group.attributes.activity.data.id === activityToReviewID)
+        if (activityGroup) {
+            return (
+                <>
+                    <Button onClick={() => handleRubricModalOpen(givenQualification)} className='flex items-center h-full overflow-x-clip' >
+                        <AvatarGroup stack>
+                            {givenQualification.attributes.qualifications.data.map((qualification, index) => {
+                                return (
+                                    <Avatar
+                                        circle
+                                        src={qualification.attributes.user.data.attributes.profile_photo.data?.attributes?.url}
+                                        style={{ background: '#3730a3', width: '2rem', height: '2rem', fontSize: '0.75rem', fontWeight: '400' }} />
+                                )
+                            })}
+                        </AvatarGroup>
+                        <div className="pl-3 text-left">
+                            {givenQualification.attributes.qualifications.data.map((qualification, index) => {
+                                return (
+                                    <>
+                                        <p className="text-sm font-semibold">{qualification.attributes.user.data.attributes.name}</p>
+                                    </>
+                                )
+
+                            })}
+                        </div>
+                    </Button>
+                </>
+            )
+        }
         return (
             <>
-                <Button onClick={() => handleRubricModalOpen(givenQualification)} className='flex items-center h-full' >
-                    <img alt='' className="w-6 h-6 rounded-full" src={givenQualification.attributes.qualification?.data?.attributes?.user?.data?.attributes.profile_photo.data.attributes.url} />
+                <Button onClick={() => handleRubricModalOpen(givenQualification)} className='flex items-center h-full overflow-x-clip' >
+                    <img alt='' className="w-6 h-6 rounded-full"
+                        src={givenQualification.attributes.qualifications?.data[0]?.attributes?.user?.data?.attributes.profile_photo.data.attributes.url} />
                     <div className="pl-3 text-left">
-                        <p className="text-sm font-semibold">{givenQualification.attributes.qualification?.data?.attributes?.user?.data?.attributes.name}</p>
-                        <p className="text-xs font-normal text-gray-500">{givenQualification.attributes.qualification?.data?.attributes?.user?.data?.attributes.email}</p>
+                        <p className="text-sm font-semibold">{givenQualification.attributes.qualifications.data[0]?.attributes?.user?.data?.attributes.name}</p>
+                        <p className="text-xs font-normal text-gray-500">{givenQualification.attributes.qualifications.data[0]?.attributes?.user?.data?.attributes.email}</p>
                     </div>
                 </Button>
             </>
@@ -42,9 +78,38 @@ export const StudentRow = ({ student, activityToReviewID, activityTitle, peerRev
     }
 
     function renderAllRecievedQualifications(recievedQualification) {
+        const activityGroup = recievedQualification.attributes.user.data.attributes.groups?.data.find((group) => group.attributes.activity.data.id === activityToReviewID)
+        if (activityGroup && peerReviewinGroups) {
+            return (
+                <>
+                    <Button onClick={() => handleRubricModalOpen(recievedQualification)} className='flex items-center h-full overflow-x-clip' >
+                        <AvatarGroup stack>
+                            {activityGroup.attributes.users.data.map((user, index) => {
+                                return (
+                                    <Avatar
+                                        circle
+                                        src={user.attributes.profile_photo.data?.attributes?.url}
+                                        style={{ background: '#3730a3', width: '2rem', height: '2rem', fontSize: '0.75rem', fontWeight: '400' }} />
+                                )
+                            })}
+                        </AvatarGroup>
+                        <div className="pl-3 text-left">
+                            {activityGroup.attributes.users.data.map((user, index) => {
+                                return (
+                                    <>
+                                        <p className="text-sm font-semibold">{user.attributes.name}</p>
+                                    </>
+                                )
+
+                            })}
+                        </div>
+                    </Button>
+                </>
+            )
+        }
         return (
             <>
-                <Button onClick={() => handleRubricModalOpen(recievedQualification)} className='flex items-center h-full' >
+                <Button onClick={() => handleRubricModalOpen(recievedQualification)} className='flex items-center h-full overflow-x-clip' >
                     <img alt='' className="w-6 h-6 rounded-full" src={recievedQualification.attributes.user?.data?.attributes.profile_photo.data.attributes.url} />
                     <div className="pl-3 text-left">
                         <p className="text-sm font-semibold">{recievedQualification.attributes.user?.data?.attributes.name}</p>
@@ -61,7 +126,7 @@ export const StudentRow = ({ student, activityToReviewID, activityTitle, peerRev
             <ModalRubrica isModalOpen={isRubricModalOpen} setIsModalOpen={setIsRubricModalOpen} rubricData={rubricData} />
             <th scope="row" className="px-6 py-4 text-gray-900 whitespace-nowrap">
                 <div className='flex items-center '>
-                    <img alt='' className="w-10 h-10 rounded-full" src={student.attributes.profile_photo.data.attributes.url} />
+                    <img alt='profile_photo' className="w-10 h-10 rounded-full" src={student.attributes.profile_photo?.data?.attributes?.url} />
                     <div className="pl-3">
                         <div className="text-base font-semibold">{student.attributes.name}</div>
                         <div className="font-normal text-gray-500">{student.attributes.email}</div>

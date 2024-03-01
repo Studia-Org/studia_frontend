@@ -13,10 +13,10 @@ export default function PeerReviewComponent({ activityData }) {
     const [sendDataLoader, setSendDataLoader] = useState(false);
     const data = activityData?.activity?.data?.attributes?.PeerReviewRubrica
     const usersToPair = activityData.activity.data.attributes.usersToPair
+    const correctActivityGroup = activityData.activity.data.attributes.task_to_review.data.attributes.groupActivity
 
     ////////////////////eleccion de la data del user////////////////////////
     const [userIndexSelected, setUserIndexSelected] = useState(null)
-    const [idQualification, setIdQualification] = useState(null)
     const [QualificationIdPartnerReview, setQualificationIdPartnerReview] = useState(null);
     const [qualificationIds, setQualificationIds] = useState(null);
     const [answersDelivered, setAnswersDelivered] = useState(null);
@@ -25,13 +25,20 @@ export default function PeerReviewComponent({ activityData }) {
     const { user } = useAuthContext();
 
     useEffect(() => {
-        if (user === null || user === undefined || user.role_str !== 'student') { setLoading(false); return }
-        if (activityData.peer_review_qualifications.data[0] === undefined || activityData.peer_review_qualifications.data === null) {
+        try {
+
+            if (user === null || user === undefined || user.role_str !== 'student') { setLoading(false); return }
+            if (activityData.peer_review_qualifications.data[0] === undefined || activityData.peer_review_qualifications?.data === null) {
+                setLoading(false);
+                setQualificationIdPartnerReview("Error")
+                return
+            }
+            if (userIndexSelected === null) return
+        }
+        catch (err) {
             setLoading(false);
             setQualificationIdPartnerReview("Error")
-            return
         }
-        if (userIndexSelected === null) return
 
     }, [user, userIndexSelected]);
 
@@ -41,7 +48,9 @@ export default function PeerReviewComponent({ activityData }) {
             fetch(`${API}/qualifications?qualification` +
                 `&populate[activity][fields][0]=id` +
                 `&populate[user][fields][0]=username` +
-                `&populate[PeerReviewQualifications][fields][0]=*` +
+                `&populate[peer_review_qualifications][fields][0]=*` +
+                `&populate[peer_review_qualifications][populate][group][fields][0]=*` +
+
                 `&filters[activity][id]=${activityData.activity.data.id}`, {
                 headers: {
                     "Content-Type": "application/json",
@@ -56,12 +65,26 @@ export default function PeerReviewComponent({ activityData }) {
                 }
             }).then(data => {
 
-                const usersToCorrect = activityData?.peer_review_qualifications.data
-                    .map((peerReview) => peerReview.attributes.user.data)
+                const usersToCorrect = correctActivityGroup ?
+                    activityData?.peer_review_qualifications.data
+                        .map((peerReview) => peerReview.attributes.group.data)
+                    :
+                    activityData?.peer_review_qualifications.data
+                        .map((peerReview) => peerReview.attributes.user.data)
 
-                const idQualifications = data.data
-                    .filter((qualification) =>
-                        usersToCorrect.find((userToCorrect) => userToCorrect.id === qualification.attributes.user.data.id))
+
+                const idQualifications = correctActivityGroup ?
+                    data.data
+                        .filter((qualification) =>
+                            usersToCorrect.find((userToCorrect) => {
+                                return userToCorrect.attributes.users.data.some(
+                                    (user) => user.id === qualification.attributes.user.data.id)
+                            }))
+                    :
+                    data.data
+                        .filter((qualification) =>
+                            usersToCorrect.find((userToCorrect) => userToCorrect.id === qualification.attributes.user.data.id))
+
                 setQualificationIds(idQualifications)
 
             }).catch(err => {
@@ -72,18 +95,26 @@ export default function PeerReviewComponent({ activityData }) {
         }
         if (usersToPair === 1 && userIndexSelected === null) setUserIndexSelected(0)
         if (userIndexSelected === null) return
+        if (qualificationIds === null) return
+        const idQualification =
+            correctActivityGroup ?
+                qualificationIds.filter((qual) => {
+                    return activityData.peer_review_qualifications.data[userIndexSelected].attributes.group.data.attributes.users.data.some(
+                        (user) => user.id === qual.attributes.user.data.id
+                    );
+                }).map(qual => qual.id)
 
-        const idQualification = qualificationIds.find((qual) => {
-            return activityData.peer_review_qualifications.data[userIndexSelected].attributes.user.data.id ===
-                qual.attributes.user.data.id
-        }).id
+                :
+                qualificationIds.find((qual) => {
+                    return activityData.peer_review_qualifications.data[userIndexSelected].attributes.user.data.id ===
+                        qual.attributes.user.data.id
+                }).id
 
         setQualificationIdPartnerReview(idQualification)
 
         const answersdel = idQualification
-
         const answers = activityData.user.data.attributes.PeerReviewAnswers.data
-            .find((answer) => answer.attributes.qualification.data.id === answersdel)
+            .find((answer) => answer.attributes.qualifications.data.find((qualification) => Array.isArray(answersdel) ? answersdel.includes(qualification.id) : qualification.id === answersdel))
 
         if (answers !== undefined) {
             setAnswersDelivered(answers.attributes.Answers)
@@ -91,9 +122,8 @@ export default function PeerReviewComponent({ activityData }) {
             const overpassDeadLine = deadLine < new Date()
             if (!overpassDeadLine) setShowEvaluate(true)
         }
-        setIdQualification(activityData.peer_review_qualifications.data[userIndexSelected].id)
 
-    }, [userIndexSelected])
+    }, [userIndexSelected, qualificationIds])
 
     function sendEvalution() {
         try {
@@ -136,16 +166,25 @@ export default function PeerReviewComponent({ activityData }) {
                 data: {
                     Answers: answers,
                     user: user.id,
-                    qualification: QualificationIdPartnerReview,
+                    qualifications: Array.isArray(QualificationIdPartnerReview) ?
+                        QualificationIdPartnerReview :
+                        [QualificationIdPartnerReview],
                 }
             }
+
+            const filter = correctActivityGroup ?
+                `&filters[group][id]=${activityData.peer_review_qualifications.data[userIndexSelected].attributes.group.data.id}`
+                :
+                `&filters[qualifications][user][id]=${activityData.peer_review_qualifications.data[userIndexSelected].attributes.user.data.id}`
+
+
             fetch(`${API}/peer-review-answers?populate[user]=*` +
                 `&filters[user][id]=${user.id}` +
-                `&populate[qualification][fields][0]=*` +
-                `&populate[qualification][populate][activity][fields][0]=id` +
-                `&filters[qualification][activity][id]=${activityData.activity.data.id}` +
+                `&populate[qualifications][fields][0]=*` +
+                `&populate[qualifications][populate][activity][fields][0]=id` +
+                `&filters[qualifications][activity][id]=${activityData.activity.data.id}` +
                 `&populate[qualification][populate][user][fields][0]=*` +
-                `&filters[qualification][user][id]=${activityData.peer_review_qualifications.data[userIndexSelected].attributes.user.data.id}`
+                { filter }
                 , {
                     method: 'GET',
                     headers: {
@@ -160,7 +199,7 @@ export default function PeerReviewComponent({ activityData }) {
                     }
                 }).then((data) => {
                     if (data.data.length === 0) {
-                        fetch(`${API}/peer-review-answers?populate[qualification][populate][user][fields][0]=*`, {
+                        fetch(`${API}/peer-review-answers?populate[qualifications][populate][user][fields][0]=*`, {
                             method: 'POST',
                             headers: {
                                 "Content-Type": "application/json",
@@ -221,7 +260,7 @@ export default function PeerReviewComponent({ activityData }) {
                                     setShowEvaluate(false)
                                     resetUser()
                                     const answer = (activityData.user.data.attributes.PeerReviewAnswers.data
-                                        .find((answer) => answer.attributes.qualification.data.id === QualificationIdPartnerReview))
+                                        .find((answer) => answer.attributes.qualification.data.find((qualification) => qualification.id === QualificationIdPartnerReview)))
                                     answer.attributes.Answers = answers
                                 }
                             })
@@ -258,7 +297,6 @@ export default function PeerReviewComponent({ activityData }) {
     function resetUser() {
         setQualificationIdPartnerReview(null)
         setAnswersDelivered(null)
-        setIdQualification(null)
         setUserIndexSelected(null)
 
     }
@@ -293,6 +331,7 @@ export default function PeerReviewComponent({ activityData }) {
                                         usersToPair={usersToPair}
                                         resetUser={resetUser}
                                         qualificationIds={qualificationIds}
+                                        correctActivityGroup={correctActivityGroup}
                                     />
                                 </div>
                                 <div key={userIndexSelected} className={`${!showEvaluate ? 'w-0 h-0 overflow-hidden absolute' : 'min-w-[calc(100vw)] xl:min-w-[calc(100vw-22rem)] overflow-x-hidden  '}`}>

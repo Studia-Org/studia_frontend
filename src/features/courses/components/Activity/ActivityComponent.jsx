@@ -13,10 +13,13 @@ import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import Swal from 'sweetalert2';
 import ObjectivesTags from './ObjectivesTag';
 import ActivityTitle from './Components/ActivityTitle';
-import BackToCourse from './Components/BackToCourse';
+import BackToCourse, { BackButton } from './Components/BackToCourse';
 import { Empty, Button, message, Popconfirm } from 'antd';
 import MDEditor from '@uiw/react-md-editor';
 import { SwitchEdit } from '../CoursesInside/SwitchEdit';
+import GroupMembers from './Components/GroupMembers.jsx';
+import useGetGroup from './hooks/useGetGroup.jsx';
+import CreateGroups from './Components/CreateGroups.jsx';
 import { RecordAudio } from './Components/ThinkAloud/RecordAudio';
 
 
@@ -39,13 +42,18 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   const [audioFile, setAudioFile] = useState(audioUser);
   const [formData, setFormData] = useState(new FormData());
   const { user } = useAuthContext();
-  const { activityId } = useParams();
+  let { activityId, courseId } = useParams();
+
   const isActivityEvaluable = activityData?.activity?.data?.attributes.evaluable
 
-  let { courseId } = useParams();
   const navigate = useNavigate();
   const USER_OBJECTIVES = [...new Set(user?.user_objectives?.map((objective) => objective.categories.map((category) => category)).flat() || [])];
   const passedDeadline = activityData?.activity?.data?.attributes?.deadline ? new Date(activityData?.activity?.data?.attributes?.deadline) < new Date() : false;
+  const [createGroups, setCreateGroups] = useState(false);
+  const [IDQualification, setIDQualification] = useState(idQualification);
+  const { activityGroup, loadingGroup } = useGetGroup({ user, activityData, activityId, IDQualification });
+  const isActivityGroup = activityData?.activity?.data?.attributes?.groupActivity;
+  const isThinkAloud = activityData.activity.data.attributes.type === 'thinkAloud'
   function handleFileUpload(file) {
     const dataCopy = formData;
     dataCopy.append('files', file);
@@ -58,6 +66,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
     setSubsectionContent(activityData.activity.data.attributes.description);
     setTitle(activityData.activity.data.attributes.title);
   }, [enableEdit])
+
 
   async function saveChanges() {
     setLoading(true);
@@ -124,12 +133,13 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
 
   async function sendFile(result) {
     try {
-      const isThinkAloud = activityData.activity.data.attributes.type === 'thinkAloud'
+
       let response2 = undefined;
       let files = []
 
       files = filesUploaded.map((file) => file.id);
       files = files.concat(result.map((file) => file.id));
+
       const qualificationData = {
         data: {
           activity: activityId,
@@ -139,9 +149,15 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
           delivered_data: new Date(),
         }
       };
-      if (activityData.delivered && !evaluated) {
+      if (activityGroup !== null) {
+        qualificationData.data.group = activityGroup.id;
+      }
+      else {
+        qualificationData.data.user = user.id;
+      }
+      if ((activityData.delivered || IDQualification) && !evaluated) {
         response2 =
-          await fetch(`${API}/qualifications/${idQualification}`, {
+          await fetch(`${API}/qualifications/${IDQualification}`, {
             method: 'PUT',
             headers: {
               "Content-Type": "application/json",
@@ -160,7 +176,9 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
             },
             body: JSON.stringify(qualificationData),
           });
-
+        if (!response2.ok) return response2;
+        let jsonresponse = await response2.json();
+        setIDQualification(jsonresponse.data.id);
       }
       return response2;
     } catch (error) {
@@ -169,6 +187,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   }
 
   async function sendData() {
+    console.log('sendData');
     try {
       console.log('activityData', activityData);
       const isThinkAloud = (activityData.activity.data.attributes.type === 'thinkAloud' && formData.getAll('files').length === 0)
@@ -178,7 +197,11 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
         formDataAudio.append('files', audioFile);
       }
       setUploadLoading(true);
-
+      if (formData.getAll('files').length === 0 && !isThinkAloud) {
+        message.error('You must upload a file');
+        setUploadLoading(false);
+        return
+      }
       const response = await fetch(`${API}/upload`, {
         method: 'POST',
         headers: {
@@ -215,16 +238,20 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
         Swal.fire({
           icon: 'error',
           title: 'Oops...',
-          text: 'Something went wrong!',
-        })
+          text: 'Something went wrong!, maybe your page is expired, we are going to reload it.',
+        }).then((re) => {
+          window.location.reload();
+        });
       }
 
     } catch (error) {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: error.message,
-      })
+        text: error.message + ",  maybe your page is expired, we are going to reload it.",
+      }).then((re) => {
+        window.location.reload();
+      });
     } finally {
       setUploadLoading(false);
     }
@@ -258,6 +285,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
     else message.error('Something went wrong');
   }
   function DeleteButton({ id }) {
+    console.log('deleteButton', id);
     return (
       <Popconfirm
         title="Delete the file"
@@ -286,10 +314,11 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
 
   function renderFiles(file, editable = false) {
     if (file.attributes) {
+      console.log({ editable, evaluated, passedDeadline, userRole: user.role_str, file: file.attributes });
       return (
         <button key={file.id} onClick={() => downloadFile(file.attributes)}
           className='flex items-center w-full p-3 text-white duration-150 bg-green-700 rounded-md shadow-md gap-x-2 hover:bg-green-800 active:translate-y-1'>
-          {user.role_str === 'student' && editable && !evaluated && <DeleteButton id={file.id} />}
+          <span>{user.role_str === 'student' && editable && !evaluated && !passedDeadline ? <DeleteButton id={file.id} /> : ""}</span>
           <p className='max-w-[calc(100%-4rem)] overflow-hidden text-ellipsis'>{file.attributes.name}</p>
           <div className='ml-auto mr-2'>
 
@@ -357,272 +386,300 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
       message.error('Something went wrong: ', error);
     }
   };
+
   return (
     <div className='flex max-w-[calc(100vw)] flex-col 1.5xl:flex-row items-start 1.5xl:items-start 1.5xl:space-x-24 p-5 sm:p-10'>
-      <div className='1.5xl:w-2/4 lg:w-10/12 w-full'>
-        <BackToCourse navigate={navigate} courseId={courseId} />
-        <ActivityTitle
-          type={type}
-          title={activityData.activity.data.attributes.title}
-          evaluated={evaluated}
-          qualification={activityData.qualification}
-          setTitle={setTitle}
-          titleState={title}
-          enableEdit={enableEdit}
-          passedDeadline={passedDeadline}
-          userRole={user?.role_str}
-        />
-        <ObjectivesTags USER_OBJECTIVES={USER_OBJECTIVES} categories={activityData?.activity.data.attributes.categories} />
 
-        {
-          user.role_str === 'professor' || user.role_str === 'admin' ?
-            <div className='flex items-center ml-auto'>
-              <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} />
-            </div> : null
-        }
-
-        {
-          evaluated && (
-            <>
-              <p className='mt-5 mb-1 text-xs text-gray-400'>Comments</p>
-              <hr />
-              {
-                activityData.comments === null || activityData.comments === '' ?
-                  <p className='mt-3'>There are no comments for your submission.</p>
-                  :
-                  <p className='mt-3'>{activityData.comments}</p>
-              }
-
-            </>
-          )
-        }
-
-
-        <p className='mt-5 mb-1 text-xs text-gray-400'>Task description</p>
-        <hr />
-        <div className=' my-3 text-gray-600 ml-5 max-w-[calc(100vw-1.25rem)] box-content mt-5 '>
+      <>
+        <div className={`${!createGroups ? "1.5xl:w-2/4 lg:w-10/12" : ""} w-full`}>
           {
-            !enableEdit ?
-              <div className='prose max-w-none'>
-                <ReactMarkdown className=''>{activityData.activity.data.attributes.description}</ReactMarkdown>
+            createGroups ?
+              <BackButton onClick={() => setCreateGroups(false)} text={"Go back to activity"} /> :
+              <BackToCourse navigate={navigate} courseId={courseId} />
+          }
+          <ActivityTitle
+            type={type}
+            title={activityData.activity.data.attributes.title}
+            evaluated={evaluated}
+            qualification={activityData.qualification}
+            setTitle={setTitle}
+            titleState={title}
+            enableEdit={enableEdit}
+            passedDeadline={passedDeadline}
+            userRole={user?.role_str}
+          />
+          {
+            !createGroups &&
+            <div className='flex items-center my-5'>
+              {<ObjectivesTags USER_OBJECTIVES={USER_OBJECTIVES} categories={activityData?.activity.data.attributes.categories} />}
+            </div>
+          }
+          {
+            createGroups ?
+              <div >
+                <CreateGroups activityId={activityId} activityData={activityData} courseId={courseId} />
               </div>
               :
-              <div className="flex flex-col">
-                <MDEditor height="30rem" className='mt-2 mb-8' data-color-mode='light' onChange={setSubsectionContent} value={subsectionContent} />
-                <Button onClick={() => saveChanges()} type="" loading={loading}
-                  className="inline-flex justify-center px-4 ml-auto text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                  Save Changes
-                </Button>
-              </div>
-          }
-        </div>
+              <>
+                {
+                  user.role_str === 'professor' || user.role_str === 'admin' ?
+                    <div className='flex items-center ml-auto'>
+                      <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} />
+                    </div> : null
+                }
 
-      </div >
-      {
-        user.role_str === 'professor' || user.role_str === 'admin' ?
-          <div className='flex flex-col'>
-            <p className='mb-3 text-xs text-gray-400' > Task Files</ p>
-            <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)]  w-[30rem]'>
-              {(!activityFiles.length ||
-                activityFiles?.length === 0) ? (
-                enableEdit ? (
-                  <FilePond allowMultiple={true} maxFiles={5} onupdatefiles={setFilesTask} />
-                ) : (
-                  <Empty
-                    image={Empty.PRESENTED_IMAGE_SIMPLE}
-                    className='mt-6'
-                    description={
-                      <span className='font-normal text-gray-400'>
-                        There are no files
-                      </span>
-                    }
-                  />
-                )
-              ) : (
-                enableEdit ? (
-                  <section className='max-w-[calc(100vw-1.25rem)]'>
+                {
+                  evaluated && (
+                    <>
+                      <p className='mt-5 mb-1 text-xs text-gray-400'>Comments</p>
+                      <hr />
+                      {
+                        activityData.comments === null || activityData.comments === '' ?
+                          <p className='mt-3'>There are no comments for your submission.</p>
+                          :
+                          <p className='mt-3'>{activityData.comments}</p>
+                      }
+
+                    </>
+                  )
+                }
+
+
+                <p className='mt-5 mb-1 text-xs text-gray-400'>Task description</p>
+                <hr />
+                <div className=' my-3 text-gray-600 ml-5 max-w-[calc(100vw-1.25rem)] box-content mt-5 '>
+                  {
+                    !enableEdit ?
+                      <div className='prose max-w-none'>
+                        <ReactMarkdown className=''>{activityData.activity.data.attributes.description}</ReactMarkdown>
+                      </div>
+                      :
+                      <div className="flex flex-col">
+                        <MDEditor height="30rem" className='mt-2 mb-8' data-color-mode='light' onChange={setSubsectionContent} value={subsectionContent} />
+                        <Button onClick={() => saveChanges()} type="primary" loading={loading}
+                          className="inline-flex justify-center px-4 ml-auto text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                          Save Changes
+                        </Button>
+                      </div>
+                  }
+                </div>
+              </>
+          }
+        </div >
+        {
+          (user.role_str === 'professor' || user.role_str === 'admin') && !createGroups ?
+            <div className='flex flex-col'>
+              <p className='mb-3 text-xs text-gray-400' > Task Files</ p>
+              <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)] w-[30rem]'>
+                {(!activityFiles.length ||
+                  activityFiles?.length === 0) ? (
+                  enableEdit ? (
                     <FilePond allowMultiple={true} maxFiles={5} onupdatefiles={setFilesTask} />
-                    <div className='space-y-2'>
+                  ) : (
+                    <Empty
+                      image={Empty.PRESENTED_IMAGE_SIMPLE}
+                      className='mt-6'
+                      description={
+                        <span className='font-normal text-gray-400'>
+                          There are no files
+                        </span>
+                      }
+                    />
+                  )
+                ) : (
+                  enableEdit ? (
+                    <section className='max-w-[calc(100vw-1.25rem)]'>
+                      <FilePond allowMultiple={true} maxFiles={5} onupdatefiles={setFilesTask} />
+                      <div className='space-y-2'>
+                        {activityFiles.map((file) => renderFiles(file))}
+                      </div>
+
+                    </section>
+                  ) : (
+                    <div className='space-y-2 max-w-[calc(100vw-1.25rem)]'>
                       {activityFiles.map((file) => renderFiles(file))}
                     </div>
 
-                  </section>
-                ) : (
-                  <div className='space-y-2 max-w-[calc(100vw-1.25rem)]'>
-                    {activityFiles.map((file) => renderFiles(file))}
-                  </div>
-
-                )
-              )}
-            </div>
-          </div> :
-          evaluated || passedDeadline ?
-            <div className='flex flex-col max-w-[calc(100vw-1.25rem)]'>
-              <p className='mb-3 text-xs text-gray-400' > Task Files</ p>
-              <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)] w-[30rem]'>
-                {
-                  activityData.activity.data.attributes.file?.data === null || activityData.activity.data.attributes.file?.data?.length === 0 ?
-                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
-                      <span className='font-normal text-gray-400 '>
-                        There are no files
-                      </span>
-                    } />
-                    :
-                    <section className='flex flex-col gap-y-3'>
-                      {activityFiles.map((file, index) => renderFiles(file))}
-                    </section>
-                }
+                  )
+                )}
               </div>
-              {
-                activityData.evaluator.data && (
-                  <>
-                    <p className='mb-1 text-xs text-gray-400' > Evaluator</ p>
-                    <div className='pl-1'>
-                      <ProfessorData professor={{ attributes: activityData.evaluator.data.attributes }} evaluatorFlag={true} />
-                    </div>
-                  </>
-                )
-              }
-              <p className='mt-5 mb-3 text-xs text-gray-400'>Your submission</p>
-              {
-                filesUploaded.length === 0 ?
-                  <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)] w-[30rem]'>
-                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
-                      <span className='font-normal text-gray-400 '>
-                        You did not submit any files
-                      </span>
-                    } />
-                  </div> :
-                  <div className='flex flex-col p-5 bg-white rounded-md mb-14 gap-y-3'>
-                    {filesUploaded && filesUploaded.map(renderFiles)}
-                  </div>
-              }
-            </div >
-            :
-            <div className='flex flex-col w-[30rem] mt-1 max-w-[calc(100vw-2.5rem)]'>
-              <p className='mb-3 text-xs text-gray-400' > Task Files</ p>
-              {
-                activityData.activity.data.attributes.file?.data === null ||
-                  activityData.activity.data.attributes.file?.data?.length === 0 ?
-                  <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
-                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
-                      <span className='font-normal text-gray-400 '>
-                        There are no files
-                      </span>
-                    } />
-                  </div>
-                  :
-                  <div className='flex flex-col gap-y-3'>
-                    {activityFiles.map((file, index) => renderFiles(file))}
-                  </div>
-              }
-              {
-                isActivityEvaluable && (
-                  <>
-                    <p className='mt-5 mb-1 text-xs text-gray-400'>Your submission</p>
-                    {
-                      activityData.activity.data.attributes.type !== 'thinkAloud' &&
-                      <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
-                        {
-                          filesUploaded.length === 0 ?
-                            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
-                              <span className='font-normal text-gray-400 '>
-                                You did not submit any files
-                              </span>
-                            } />
-                            :
-                            filesUploaded && filesUploaded.map((file) => renderFiles(file, true))
-                        }
+              {isActivityGroup && <Button type='primary' onClick={() => setCreateGroups(true)} >Create students groups</Button>}
 
+            </div> :
+            (evaluated || passedDeadline) && !(user.role_str === 'professor' || user.role_str === 'admin') ?
+              <div className='flex flex-col max-w-[calc(100vw-1.25rem)]'>
+                <p className='mb-3 text-xs text-gray-400' > Task Files</ p>
+                <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)] w-[30rem]'>
+                  {
+                    activityData.activity.data.attributes.file?.data === null || activityData.activity.data.attributes.file?.data?.length === 0 ?
+                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
+                        <span className='font-normal text-gray-400 '>
+                          There are no files
+                        </span>
+                      } />
+                      :
+                      <section className='flex flex-col gap-y-3'>
+                        {activityFiles.map((file, index) => renderFiles(file))}
+                      </section>
+                  }
+                </div>
+                {
+                  activityData.evaluator?.data && (
+                    <>
+                      <p className='mb-1 text-xs text-gray-400' > Evaluator</ p>
+                      <div className='pl-1'>
+                        <ProfessorData professor={{ attributes: activityData.evaluator.data.attributes }} evaluatorFlag={true} />
                       </div>
-                    }
-                  </>
-                )
-              }
-              {
-                activityData.activity.data.attributes.type === 'thinkAloud' ?
-                  <div className='mb-5 bg-white rounded-md shadow-md'>
-                    <div className='flex items-center gap-5 mx-5 mt-5'>
-                      <p className='text-xs text-gray-400 '>Click on the microphone and start recording your voice, or you can upload an audio file</p>
+                    </>
 
-                      <Button onClick={() => handleUploadMode()} disabled={passedDeadline}>
-                        Switch mode
-                      </Button>
+                  )
+                }
+                <p className='mt-5 mb-3 text-xs text-gray-400'>Your submission</p>
+                {
+                  filesUploaded.length === 0 ?
+                    <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)] w-[30rem]'>
+                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
+                        <span className='font-normal text-gray-400 '>
+                          You did not submit any files
+                        </span>
+                      } />
+                    </div> :
+                    <div className='flex flex-col p-5 bg-white rounded-md mb-14 gap-y-3'>
+                      {filesUploaded && filesUploaded.map(renderFiles)}
                     </div>
-                    <hr className='mx-10 mt-5' />
-                    {
-                      uploadMode === 'record' ?
-                        <RecordAudio audioFile={audioFile} setAudioFile={setAudioFile} passedDeadline={passedDeadline} idQualification={idQualification}
-                          setUserQualification={setUserQualification} />
-                        :
-                        <div className='m-5'>
-                          <FilePond
-                            files={formData.getAll('files')}
-                            allowMultiple={true}
-                            maxFiles={5}
-                            onaddfile={(err, item) => {
-                              if (!err) {
-                                handleFileUpload(item.file);
-                              }
-                            }}
-                            onremovefile={(err, item) => {
-                              if (!err) {
-                                const dataCopy = formData;
-                                dataCopy.forEach((value, key) => {
-                                  if (value.name === item.file.name) {
-                                    dataCopy.delete(key);
-                                  }
-                                });
-                                document.getElementById('submit-button-activity').disabled = formData.getAll('files').length === 0;
-                                setFormData(dataCopy);
-                              }
-                            }}
-                          />
-                        </div>
-
-
-                    }
-                    <p className='mb-2 ml-5 text-xs text-gray-400'>Remember to submit your file once you finished.</p>
-
-                  </div>
-                  :
+                }
+              </div >
+              :
+              !createGroups && <div className='flex flex-col w-[30rem] mt-1 max-w-[calc(100vw-2.5rem)]'>
+                <p className='mb-3 text-xs text-gray-400' > Task Files</ p>
+                {
+                  activityData.activity.data.attributes.file?.data === null ||
+                    activityData.activity.data.attributes.file?.data?.length === 0 ?
+                    <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
+                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
+                        <span className='font-normal text-gray-400 '>
+                          There are no files
+                        </span>
+                      } />
+                    </div>
+                    :
+                    <div className='flex flex-col gap-y-3'>
+                      {activityFiles.map((file, index) => renderFiles(file))}
+                    </div>
+                }
+                {
                   isActivityEvaluable && (
                     <>
-                      <FilePond
-                        files={formData.getAll('files')}
-                        allowMultiple={true}
-                        maxFiles={5}
-                        onaddfile={(err, item) => {
-                          if (!err) {
-                            handleFileUpload(item.file);
+                      <p className='mt-5 mb-1 text-xs text-gray-400'>Your submission</p>
+                      {
+                        activityData.activity.data.attributes.type !== 'thinkAloud' &&
+                        <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
+                          {
+                            filesUploaded.length === 0 ?
+                              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
+                                <span className='font-normal text-gray-400 '>
+                                  You did not submit any files
+                                </span>
+                              } />
+                              :
+                              filesUploaded && filesUploaded.map((file) => renderFiles(file, true))
                           }
-                        }}
-                        onremovefile={(err, item) => {
-                          if (!err) {
-                            const dataCopy = formData;
-                            dataCopy.forEach((value, key) => {
-                              if (value.name === item.file.name) {
-                                dataCopy.delete(key);
-                              }
-                            });
-                            document.getElementById('submit-button-activity').disabled = formData.getAll('files').length === 0;
-                            setFormData(dataCopy);
-                          }
-                        }}
-                      />
-                      <Button
-                        loading={uploadLoading}
-                        id='submit-button-activity'
-                        disabled={formData.getAll('files').length === 0 && audioFile === null}
-                        onClick={() => { sendData() }}
-                        className="ml-auto " type='primary'>
-                        Submit
-                      </Button>
+
+                        </div>
+                      }
                     </>
                   )
-              }
-            </div>
-      }
+                }
+
+                {
+                  activityData.activity.data.attributes.type === 'thinkAloud' ?
+                    <div className='mb-5 bg-white rounded-md shadow-md'>
+                      <div className='flex items-center gap-5 mx-5 mt-5'>
+                        <p className='text-xs text-gray-400 '>Click on the microphone and start recording your voice, or you can upload an audio file</p>
+
+                        <Button onClick={() => handleUploadMode()} disabled={passedDeadline}>
+                          Switch mode
+                        </Button>
+                      </div>
+                      <hr className='mx-10 mt-5' />
+                      {
+                        uploadMode === 'record' ?
+                          <RecordAudio audioFile={audioFile} setAudioFile={setAudioFile} passedDeadline={passedDeadline} idQualification={idQualification}
+                            setUserQualification={setUserQualification} />
+                          :
+                          <div className='m-5'>
+                            <FilePond
+                              files={formData.getAll('files')}
+                              allowMultiple={true}
+                              maxFiles={5}
+                              onaddfile={(err, item) => {
+                                if (!err) {
+                                  handleFileUpload(item.file);
+                                }
+                              }}
+                              onremovefile={(err, item) => {
+                                if (!err) {
+                                  const dataCopy = formData;
+                                  dataCopy.forEach((value, key) => {
+                                    if (value.name === item.file.name) {
+                                      dataCopy.delete(key);
+                                    }
+                                  });
+                                  document.getElementById('submit-button-activity').disabled = formData.getAll('files').length === 0;
+                                  setFormData(dataCopy);
+                                }
+                              }}
+                            />
+                          </div>
+
+
+                      }
+                      <p className='mb-2 ml-5 text-xs text-gray-400'>Remember to submit your file once you finished.</p>
+
+                    </div>
+                    :
+                    isActivityEvaluable && (
+                      <>
+                        <FilePond
+                          files={formData.getAll('files')}
+                          allowMultiple={true}
+                          maxFiles={5}
+                          onaddfile={(err, item) => {
+                            if (!err) {
+                              handleFileUpload(item.file);
+                            }
+                          }}
+                          onremovefile={(err, item) => {
+                            if (!err) {
+                              const dataCopy = formData;
+                              dataCopy.forEach((value, key) => {
+                                if (value.name === item.file.name) {
+                                  dataCopy.delete(key);
+                                }
+                              });
+                              document.getElementById('submit-button-activity').disabled = formData.getAll('files').length === 0;
+                              setFormData(dataCopy);
+                            }
+                          }}
+                        />
+                        <Button
+                          loading={uploadLoading}
+                          id='submit-button-activity'
+                          disabled={formData.getAll('files').length === 0}
+                          onClick={() => { sendData() }}
+                          className="ml-auto " type='primary'>
+                          Submit
+                        </Button>
+                        <GroupMembers
+                          activityGroup={activityGroup}
+                          loadingGroup={loadingGroup}
+                        />
+                      </>
+                    )
+                }
+              </div>
+        }
+      </>
     </div >
   )
 }

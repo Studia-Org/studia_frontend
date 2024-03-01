@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { API } from '../../../constant'
+import { API, BEARER } from '../../../constant'
 import { MoonLoader } from 'react-spinners'
 import { motion } from 'framer-motion';
 import { QualificationsTable } from '../components/QualificationsTable'
 import { UploadQualifications } from '../components/UploadQualifications';
+import { getToken } from '../../../helpers';
 
 const QualificationsProfessor = () => {
     const [uploadQualificationsFlag, setUploadQualificationsFlag] = useState(false);
@@ -22,7 +23,12 @@ const QualificationsProfessor = () => {
 
     const fetchCourseData = async () => {
         try {
-            const response = await fetch(`${API}/courses/${courseID}?populate=sections.subsections.activity,cover,students.profile_photo,students.qualifications.activity,students.qualifications.file,students.user_response_questionnaires.questionnaire.subsection.activity`);
+            const response = await fetch(`${API}/courses/${courseID}?populate=sections.subsections.activity,cover,students.profile_photo,students.qualifications.activity,students.qualifications.file,students.user_response_questionnaires.questionnaire.subsection.activity,students.groups.qualification.file,students.groups.activity,students.groups.users.profile_photo`,
+                {
+                    headers: {
+                        Authorization: `${BEARER} ${getToken()}`
+                    }
+                });
             const data = await response.json();
             const evaluableActivities = []
             data.data?.attributes.sections.data.forEach(

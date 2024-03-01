@@ -1,8 +1,9 @@
 import * as ExcelJS from 'exceljs';
-export default function generateExcelPeerReview(students, peerReviewAnswers) {
+export default function generateExcelPeerReview(students, peerReviewAnswers, activityToReviewID, peerReviewinGroups) {
 
+    let activityGroup = false;
     const categories = Object.keys(peerReviewAnswers[0].attributes.Answers);
-    const activityName = peerReviewAnswers[0].attributes.qualification.data.attributes.activity.data.attributes.title;
+    const activityName = peerReviewAnswers[0].attributes.qualifications.data[0].attributes.activity.data.attributes.title;
     const transformCategories = (categories) => {
         return categories.map(category => {
             // Puedes ajustar esta lógica según la estructura real de tus datos
@@ -15,40 +16,67 @@ export default function generateExcelPeerReview(students, peerReviewAnswers) {
     const answersKeys = transformCategories(categories);
 
     const studentQualifications = students.map((student) => {
-
         const studentQualificationsGiven = peerReviewAnswers.filter((answer) =>
             answer.attributes.user?.data.id === student.id).map((answer) => {
+                if (answer.attributes.qualifications.data.length > 1) {
+                    activityGroup = true;
+                    return {
+                        name: answer.attributes.qualifications.data[0].attributes.user.data.attributes.name,
+                        name2: answer.attributes.qualifications.data[1].attributes.user.data.attributes.name,
+                        answer: answer.attributes.Answers
+                    }
+                }
                 return {
-                    name: answer.attributes.qualification?.data.attributes.user.data.attributes.name,
-                    email: answer.attributes.qualification?.data.attributes.user.data.attributes.email,
+                    name: answer.attributes.qualifications?.data[0].attributes.user.data.attributes.name,
+                    email: answer.attributes.qualifications?.data[0].attributes.user.data.attributes.email,
                     answer: answer.attributes.Answers
                 }
             });
 
         const studentQualificationsReceived = peerReviewAnswers.filter((answer) =>
-            answer.attributes.qualification?.data.attributes.user.data.id === student.id).map((answer) => {
-                return {
-                    name: answer.attributes.user.data.attributes.name,
-                    email: answer.attributes.user.data.attributes.email,
-                    answer: answer.attributes.Answers
-                }
-            })
+            answer.attributes.qualifications?.data.some((qualification) =>
+                qualification.attributes.user.data.id === student.id)).map((answer) => {
+                    if (answer.attributes.qualifications.data.length > 1 && peerReviewinGroups) {
+                        activityGroup = true;
+                        const qual = answer.attributes.user.data.attributes.groups?.data
+                            .filter((group) => group?.attributes?.activity?.data?.id === activityToReviewID)
+                        const name2 = qual[0].attributes.users.data.find((user) => user.id !== student.id).attributes.name
+                        return {
+                            name: answer.attributes.user.data.attributes.name,
+                            name2: name2,
+                            answer: answer.attributes.Answers
+                        }
+                    }
+                    return {
+                        name: answer.attributes.user.data.attributes.name,
+                        email: answer.attributes.user.data.attributes.email,
+                        answer: answer.attributes.Answers
+                    }
+                })
 
         return {
             name: student.attributes.name,
             email: student.attributes.email,
             qualificationsGiven: studentQualificationsGiven,
             qualificationsReceived: studentQualificationsReceived,
+            activityGroup: activityGroup
         }
     })
 
-    generateExcel({ categories, answersKeys, studentQualifications, activityName });
+
+    generateExcel({ categories, answersKeys, studentQualifications, activityName, activityGroup, peerReviewinGroups });
 
 }
 
-const generateExcel = async ({ categories, answersKeys, studentQualifications, activityName }) => {
+const generateExcel = async ({ categories, answersKeys, studentQualifications, activityName, peerReviewinGroups }) => {
     // Crear un nuevo libro de Excel
     const workbook = new ExcelJS.Workbook();
+    workbook.creator = 'Uptitude';
+    workbook.created = new Date();
+    workbook.modified = new Date();
+
+    const nameOrMail = peerReviewinGroups ? 'Evaluator' : 'Email';
+    const nameOrMailEvaluated = studentQualifications.some((qual) => qual.activityGroup === true) ? 'Evaluated' : 'Email';
 
     // Agregar una hoja de cálculo por cada estudiante
     studentQualifications.forEach((user, index) => {
@@ -67,16 +95,22 @@ const generateExcel = async ({ categories, answersKeys, studentQualifications, a
                 color: { argb: 'FFFFFF' },
             };
         });
-        const headerRow = sheet.addRow(['Evaluator', 'Email', ...answersKeys.flatMap((key, index) => key)]);
+        const headerRow = sheet.addRow(['Evaluator', nameOrMail, ...answersKeys.flatMap((key, index) => key)]);
         headerRow.fill = {
             type: 'pattern',
             pattern: 'solid',
-            fgColor: { argb: 'D3D3D3' },
+            fgColor: { argb: '5353EC' },
         };
+        headerRow.eachCell(cell => {
+            cell.font = {
+                color: { argb: 'FFFFFF' },
+            };
+        });
+
         qualificationsReceived.forEach((qualification, index) => {
             const row = sheet.addRow([
                 qualification.name,
-                qualification.email,
+                qualification.email ? qualification.email : qualification.name2,
                 ...categories.flatMap((key, index) => {
                     const answer = qualification.answer[key] || {};
                     const Key = (Object.keys(answer)[0]);
@@ -102,16 +136,21 @@ const generateExcel = async ({ categories, answersKeys, studentQualifications, a
                 color: { argb: 'FFFFFF' },
             };
         });
-        const headerRow2 = sheet.addRow(['Evaluated', 'Email', ...answersKeys.flatMap((key, index) => key)]);
+        const headerRow2 = sheet.addRow(['Evaluated', nameOrMailEvaluated, ...answersKeys.flatMap((key, index) => key)]);
         headerRow2.fill = {
             type: 'pattern',
             pattern: 'solid',
-            fgColor: { argb: 'D3D3D3' },
+            fgColor: { argb: '5353EC' },
         };
+        headerRow2.eachCell(cell => {
+            cell.font = {
+                color: { argb: 'FFFFFF' },
+            };
+        });
         qualificationsGiven.forEach((qualification, index) => {
             const row = sheet.addRow([
                 qualification.name,
-                qualification.email,
+                qualification.email ? qualification.email : qualification.name2,
                 ...categories.flatMap((key, index) => {
                     const answer = qualification.answer[key] || {};
                     const Key = (Object.keys(answer)[0]);

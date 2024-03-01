@@ -50,8 +50,6 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
         });
     };
 
-
-
     const showModal = (files) => {
         setFiles(files);
         setIsModalOpen(true);

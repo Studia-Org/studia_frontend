@@ -1,7 +1,7 @@
 import React from 'react'
 import { Modal, Button, Empty } from 'antd'
 
-export const ModalFiles = ({ grade, isModalOpen, setIsModalOpen, student }) => {
+export const ModalFiles = ({ grade, isModalOpen, setIsModalOpen, student, group = false }) => {
     const title = grade?.attributes?.activity?.data?.attributes?.title
     const downloadFile = async (file) => {
         try {
@@ -23,10 +23,10 @@ export const ModalFiles = ({ grade, isModalOpen, setIsModalOpen, student }) => {
         }
     };
 
-    function renderFiles(file) {
+    function renderFiles(file, index) {
 
         return (
-            <Button onClick={() => downloadFile(file.attributes)} className='flex items-center rounded-md border p-7 w-full'>
+            <Button key={index} onClick={() => downloadFile(file.attributes)} className='flex items-center w-full border rounded-md p-7'>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 mr-5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z" />
                 </svg>
@@ -41,12 +41,12 @@ export const ModalFiles = ({ grade, isModalOpen, setIsModalOpen, student }) => {
                     OK
                 </Button>
             ]}>
-            <p className='text-gray-700 text-sm'>Files delivered by {student.attributes.name} on activity {title}</p>
+            {group === false && <p className='text-sm text-gray-700'>Files delivered by {student.attributes.name} on activity {title}</p>}
             {
                 (grade?.attributes?.file?.data?.length === 0 || !grade?.attributes?.file.data) &&
-                <Empty className='mt-7' description='There are no files delivered'/>
+                <Empty className='mt-7' description='There are no files delivered' />
             }
-            <div className='space-y-5 mt-3'>
+            <div className='mt-3 space-y-5'>
                 {grade?.attributes?.file?.data?.map(renderFiles)}
             </div>
         </Modal>
