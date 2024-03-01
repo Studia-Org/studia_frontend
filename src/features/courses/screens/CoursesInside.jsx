@@ -101,6 +101,8 @@ const CourseInside = () => {
         },
       } = curso;
 
+      console.log(subsecciones);
+
       for (const subseccion of subsecciones) {
         const subseccionId = subseccion.id;
         const subseccionCompletada = subsectionsCompleted.find(
@@ -157,6 +159,7 @@ const CourseInside = () => {
         courseContentInformation,
         subsectionsCompleted
       );
+      console.log(firstSubsection);
       if (firstSubsection) {
         if (firstSubsection?.subseccion?.attributes?.activity?.data?.attributes?.type === 'questionnaire') {
           setCourseSubsection(firstSubsection.subseccion);

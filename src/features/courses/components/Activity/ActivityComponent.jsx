@@ -42,7 +42,10 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   const [audioFile, setAudioFile] = useState(audioUser);
   const [formData, setFormData] = useState(new FormData());
   const { user } = useAuthContext();
-  const { activityId, courseId } = useParams();
+  let { activityId, courseId } = useParams();
+
+  const isActivityEvaluable = activityData?.activity?.data?.attributes.evaluable
+
   const navigate = useNavigate();
   const USER_OBJECTIVES = [...new Set(user?.user_objectives?.map((objective) => objective.categories.map((category) => category)).flat() || [])];
   const passedDeadline = activityData?.activity?.data?.attributes?.deadline ? new Date(activityData?.activity?.data?.attributes?.deadline) < new Date() : false;
@@ -186,6 +189,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   async function sendData() {
     console.log('sendData');
     try {
+      console.log('activityData', activityData);
       const isThinkAloud = (activityData.activity.data.attributes.type === 'thinkAloud' && formData.getAll('files').length === 0)
       const isBlob = audioFile instanceof Blob;
       const formDataAudio = new FormData();

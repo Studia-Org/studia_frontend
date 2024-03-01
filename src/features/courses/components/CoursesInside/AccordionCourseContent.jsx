@@ -115,9 +115,6 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
     const isBeforeStartDate = dateToday < startDate;
     const disableButton = isBeforeStartDate || (!isFirstSubsection && !prevSubsectionFinished);
 
-    if (subsection.attributes.activity?.data?.attributes.type === 'questionnaire') {
-      console.log(subsection.attributes.questionnaire.data.attributes.Title)
-    }
     const handleClick = () => {
       handleSections(titulo, subsection);
     };
