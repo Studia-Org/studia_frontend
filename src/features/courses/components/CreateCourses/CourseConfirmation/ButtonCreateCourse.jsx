@@ -4,14 +4,11 @@ import { message } from 'antd';
 import { getToken } from '../../../../../helpers';
 import { API } from '../../../../../constant';
 import LoadingBar from 'react-top-loading-bar'
-import { BeatLoader, BounceLoader, DotLoader, SyncLoader } from 'react-spinners';
-import { sub } from 'date-fns';
+import { BeatLoader } from 'react-spinners';
 
 
 export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }) => {
 
-
-    console.log(createCourseSectionsList[0].task)
     const [isLoading, setIsLoading] = useState(false);
     const [progress, setProgress] = useState(0);
 
@@ -68,14 +65,16 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
             for (const section of createCourseSectionsList) {
                 let allSubsections = []
                 for (const subsection of section.subsections) {
+                    setProgress((prev) => prev + 100 / totalIterations)
                     let newSubsection = {}
                     if (subsection?.questionnaire) {
                         const questionnaire = {
                             Title: subsection.questionnaire.attributes.Title,
+                            type: subsection.questionnaire.attributes.type,
                             description: subsection.questionnaire.attributes.description,
+                            editable: subsection.questionnaire.attributes.editable,
                             Options: subsection.questionnaire.attributes.Options,
                         };
-                        setProgress(progress + 10)
                         const response = await fetch(`${API}/questionnaires`, {
                             method: 'POST',
                             headers: {
@@ -135,7 +134,6 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                     } else {
                         const formData = new FormData();
                         let filesData = null
-                        setProgress(progress + 10)
                         if (subsection.files.length > 0) {
                             for (const file of subsection.files) {
                                 formData.append('files', file.originFileObj);

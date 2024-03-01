@@ -11,17 +11,23 @@ registerPlugin(FilePondPluginImagePreview);
 export const UserInformation = ({ onChange, formData, username, email, university, password, repassword, name, setPageSelector, setProfilePhoto, profilePhoto }) => {
 
     function handleContinue() {
-        if (!username || !email || !university || !password || !repassword || !name) {
+        if (!username || !email || !university || !password || !repassword || !name || profilePhoto.length === 0) {
             message.error('Please fill in all fields')
-        } else {
+        }
+        else if (password !== repassword) {
+            message.error('Passwords do not match')
+        }
+        else {
             setPageSelector(2)
         }
     }
 
+    console.log(profilePhoto, 'profilePhoto')
+
     return (
         <div class="bg-gray-100 text-gray-500 rounded-3xl shadow-xl w-full overflow-hidden " style={{ maxWidth: '1000px' }} >
-            <div className="md:flex w-full ">
-                <div className="hidden md:block w-1/2 bg-image py-10 px-10 relative ">
+            <div className="w-full md:flex ">
+                <div className="relative hidden w-1/2 px-10 py-10 md:block bg-image ">
                     <div className='w-[2rem]'>
                         <a href="/">
                             <BsFillArrowLeftSquareFill size={30} style={{ cursor: "pointer", color: "rgba(255, 255, 255, 1)" }} />
@@ -29,19 +35,19 @@ export const UserInformation = ({ onChange, formData, username, email, universit
                     </div>
                     <div className='flex justify-center'>
                         <div className='absolute top-[16rem] w-2/4   '>
-                            <h1 className='text-white font-medium text-4xl '>Learn from anywhere, anytime</h1>
-                            <p className='text-white my-5 '>Register now and start acquiring new knowledge with our online courses. <br /> Learning has never been easier!</p>
+                            <h1 className='text-4xl font-medium text-white '>Learn from anywhere, anytime</h1>
+                            <p className='my-5 text-white '>Register now and start acquiring new knowledge with our online courses. <br /> Learning has never been easier!</p>
                         </div>
                     </div>
-                    <div className='absolute bottom-7 inset-x-0 flex flex-col items-center'>
-                        <p className='text-white text-sm text-center' >In case you have an account already</p>
+                    <div className='absolute inset-x-0 flex flex-col items-center bottom-7'>
+                        <p className='text-sm text-center text-white' >In case you have an account already</p>
                         <Link to="/auth/login" class="my-3 bg-white text-gray-800 font-bold rounded border-b-2 border-indigo-400  transition-all hover:border-indigo-400 hover:bg-indigo-400 hover:text-white shadow-md py-2 px-6 inline-flex items-center">
                             <span class="">Login</span>
                         </Link>
                     </div>
                 </div>
                 <div class="w-full md:w-1/2 py-10 px-5 md:px-10">
-                    <div className="text-center mb-10">
+                    <div className="mb-10 text-center">
                         <h1 class="font-bold text-3xl text-gray-900">Register</h1>
                         <p>Enter your information to register</p>
                     </div>
@@ -112,7 +118,7 @@ export const UserInformation = ({ onChange, formData, username, email, universit
                         </div>
                         <div className='flex -mx-3'>
                             <div className="w-full px-3 mb-5">
-                                <label for="" className="text-xs font-semibold px-1">Add a profile photo *</label>
+                                <label for="" className="px-1 text-xs font-semibold">Add a profile photo *</label>
                                 <FilePond
                                     files={profilePhoto}
                                     onupdatefiles={setProfilePhoto}
@@ -150,7 +156,6 @@ export const UserInformation = ({ onChange, formData, username, email, universit
                                         minLength='8'
                                         required />
                                 </div>
-                                <a href="" className='absolute right-0 '>  <p className='  text-xs my-3 mr-4 '>Forgot password?</p> </a>
                             </div>
                         </div>
                         <div class="flex justify-center pt-7 mb-5">
