@@ -2,27 +2,38 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { StrictModeDroppable } from "../CreateGroups"
 import { BackButton } from '../BackToCourse'
 import { useEffect, useState } from "react";
-import { Divider } from "antd";
+import { Button, Divider, message } from "antd";
+import { useParams } from "react-router-dom";
+import { API } from "../../../../../../constant";
+import { getToken } from "../../../../../../helpers";
 
 
 
 
-function CreatePeers({ students: allStudents, setCreatePeerReview, activityToReview }) {
+function CreatePeers({ students: allStudents, setCreatePeerReview, activityToReview, activity }) {
 
     const [students, setStudents] = useState([])
     const [studentsToReview, setStudentsToReview] = useState([])
-    const activityToReviewWasInGroups = activityToReview?.attributes?.groupActivity
+    const [creatingGroups, setCreatingGroups] = useState(false)
+    const { activityId } = useParams()
+    const activityToReviewWasInGroups = activityToReview?.attributes?.groupActivity || false
     const studentsPerGroup = activityToReview?.attributes?.numberOfStudentsperGroup
-    const height = studentsPerGroup * 52 + "px"
+    const usersToPair = activity?.attributes?.usersToPair
+    const [activityHasStarted] = useState(new Date(activity.attributes.start_date) < new Date())
+    const [groupWithMoreStudents, setGroupWithMoreStudents] = useState(null)
+    const height = Math.max(studentsPerGroup, 1) * 52 + "px"
+
     useEffect(() => {
         const added = []
 
         const qualificationsToReview = allStudents.map((student) => {
             const studentQualification = !activityToReviewWasInGroups ?
                 student.attributes.qualifications.data
-                    .find((qualification) => qualification.attributes.activity?.data.id === activityToReview.id)
+                    .find((qualification) => {
+                        return qualification.attributes.activity?.data?.id === activityToReview.id
+                    })
                 : student.attributes.groups?.data?.find((group) =>
-                    group.attributes.activity?.data.id === activityToReview.id
+                    group.attributes.activity?.data?.id === activityToReview.id
                 )
             if (activityToReviewWasInGroups) {
                 // check if qualification has already been created
@@ -40,13 +51,33 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                         users: studentQualification.attributes.users.data.map((user) => user)
                     }
                 }
+            } else {
+                if (studentQualification && !added.includes(studentQualification.id)) {
+                    added.push(studentQualification.id)
+                    studentQualification.attributes.id = studentQualification.id
+                    return {
+                        qualification: studentQualification.attributes,
+                        users: [student]
+                    }
+                }
             }
         }).filter(Boolean)
         const groups = []
-        groups.push(allStudents)
+        // multiplacte each student hisself by the number of times they have to review usersToPair
+        const studentsDuplicated = []
+        allStudents.forEach((student, index) => {
+            for (let i = 0; i < usersToPair; i++) {
+                const studentCopy = { ...student }
+                studentCopy.draggableId = Math.random().toString(36)
+                studentsDuplicated.push(studentCopy)
+            }
+        })
+        groups.push(studentsDuplicated)
         for (let i = 0; i < qualificationsToReview.length; i++) {
             groups.push([])
         }
+        const groupWithMoreStudents = qualificationsToReview.find((group) => group.users.length > studentsPerGroup)
+        setGroupWithMoreStudents(groupWithMoreStudents)
         setStudents(groups)
         setStudentsToReview(qualificationsToReview)
 
@@ -75,13 +106,24 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
         return result;
     };
     function onDragEnd(result) {
-        const { source, destination } = result;
+        const { source, destination, draggableId } = result;
         // dropped outside the list
         if (!destination) {
             return;
         }
         const sInd = +source.droppableId;
         const dInd = +destination.droppableId;
+        const student = students[sInd].find((student) => student.draggableId === draggableId)
+        const studentExistInDestination = students[dInd].find((user) => user.id === student.id)
+        const studentExist = studentsToReview[dInd - 1].users.find((user) => user.id === student.id)
+        if (studentExistInDestination) {
+            message.error("Student already exists in this group")
+            return
+        }
+        if (studentExist) {
+            message.error("Student can't review his own activity")
+            return
+        }
 
         if (sInd === dInd) {
             const items = reorder(students[sInd], source.index, destination.index);
@@ -90,6 +132,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
             setStudents(newState);
 
         } else {
+
             const result = move(students[sInd], students[dInd], source, destination);
             const newState = [...students];
 
@@ -98,15 +141,138 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
             setStudents(newState);
         }
     }
+    function createGroupsAutomatically() {
+        let studentsCopy = [...students]
+        // move all students to the first group
+        studentsCopy.forEach((group, index) => {
+            if (index !== 0) {
+                studentsCopy[0] = [...studentsCopy[0], ...group]
+                studentsCopy[index] = []
+            }
+        })
+        const studentsToDistribute = studentsCopy[0]
+        //shuffle students
+        for (let i = studentsToDistribute.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [studentsToDistribute[i], studentsToDistribute[j]] = [studentsToDistribute[j], studentsToDistribute[i]];
+        }
+
+        studentsToDistribute.forEach(student => {
+            let groupIndex = 1
+            while (groupIndex < studentsToReview.length + 1) {
+                studentsCopy[groupIndex] = studentsCopy[groupIndex] || []
+
+                const studentExist = studentsToReview[groupIndex - 1].users.find((user) => user.id === student.id)
+                const studentExistInDestination = studentsCopy[groupIndex].find((user) => user.id === student.id)
+                if (studentsCopy[groupIndex].length < usersToPair && !studentExist && !studentExistInDestination) {
+                    studentsCopy[groupIndex].push(student)
+                    break
+                }
+                groupIndex++
+            }
+        })
+        //delete students from the first group that were moved to another group
+        studentsCopy[0] = studentsCopy[0].filter((student) => studentsCopy.find((user, index) => {
+            if (index === 0) return false
+            return user.find((user) => user.draggableId === student.draggableId)
+        }) === undefined)
+
+        //distribute students that were left 
+        studentsCopy[0].forEach(student => {
+            let groupIndex = 1
+            while (groupIndex < studentsToReview.length + 1) {
+                studentsCopy[groupIndex] = studentsCopy[groupIndex] || []
+
+                const studentExist = studentsToReview[groupIndex - 1].users.find((user) => user.id === student.id)
+                const studentExistInDestination = studentsCopy[groupIndex].find((user) => user.id === student.id)
+                if (!studentExist && !studentExistInDestination) {
+                    studentsCopy[groupIndex].push(student)
+                    break
+                }
+                groupIndex++
+            }
+        })
+        studentsCopy[0] = studentsCopy[0].filter((student) => studentsCopy.find((user, index) => {
+            if (index === 0) return false
+            return user.find((user) => user.draggableId === student.draggableId)
+        }) === undefined)
+        //sort students by name
+        studentsCopy.forEach((group) => {
+            group.sort((a, b) => {
+                if (a.attributes.name < b.attributes.name) {
+                    return -1;
+                }
+                if (a.attributes.name > b.attributes.name) {
+                    return 1;
+                }
+                return 0;
+            })
+        })
+
+        setStudents(studentsCopy)
+    }
+
+    function saveGroups() {
+        setCreatingGroups(true)
+        const peers = students.map((group, index) => {
+            if (index === 0) return null
+            console.log(studentsToReview[index - 1])
+            return {
+                users: group.map((student) => student.id),
+                qualifications: studentsToReview[index - 1].qualification.id,
+                activity: +activityId
+            }
+        }).filter(Boolean)
+        console.log(peers)
+        // fetch(`${API}/create_peers`,
+        //     {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             "Bearer": getToken()
+        //         },
+        //         body: JSON.stringify({ peers })
+        //     }
+        // )
+
+        setCreatingGroups(false)
+
+    }
 
     return (
         <div className='p-5'>
             <BackButton text={"Back to peer reviews"} onClick={() => setCreatePeerReview(false)} />
             <h2 className='mt-10 mb-2 text-lg font-medium'>Peer Review </h2>
-            <p className='mb-1 text-sm text-gray-700'>Peer review was designed to be reviewed by {studentsPerGroup} students each activity</p>
+            <p className='mb-1 text-sm text-gray-700'>Peer review was designed to <b>each student review {usersToPair} activities</b></p>
             <p className='mb-1 text-sm text-gray-700'>Assign students to review each activity</p>
 
-            <Divider />
+            <div className="flex gap-2 mt-5">
+                <Button
+                    className="mb-4"
+                    type="primary"
+                    disabled={!activityHasStarted}
+                    onClick={createGroupsAutomatically}
+                >
+                    Create peers automatically
+                </Button>
+                <Button
+                    className="mb-4"
+                    type="primary"
+                    loading={creatingGroups}
+                    disabled={!activityHasStarted}
+                    onClick={saveGroups}>
+                    Save peers
+                </Button >
+            </div>
+            {activityHasStarted && <p className="text-xs text-red-500">Activity has started, you can't modify the peers</p>}
+            <Divider className="mt-2" />
+            {!activityToReviewWasInGroups && studentsToReview.length < students[0]?.length / usersToPair
+                && <p className="mb-2 text-sm text-red-500">There are students who have not delivered the activity</p>}
+            {activityToReviewWasInGroups &&
+                (studentsToReview.length > (groupWithMoreStudents ?
+                    Math.floor((students[0]?.length / usersToPair) / studentsPerGroup) :
+                    Math.ceil((students[0]?.length / usersToPair) / studentsPerGroup)))
+                && <p className="mb-2 text-sm text-red-500">There are groups who have not delivered the activity</p>}
             <section>
                 <DragDropContext className="mt-5" onDragEnd={onDragEnd}  >
                     <div className="flex gap-3">
@@ -120,7 +286,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                                         {
                                             students.length > 0 && students[0].map((student, index) => {
                                                 return (
-                                                    <Draggable key={student.id} draggableId={student.id.toString()} index={index}>
+                                                    <Draggable key={student.draggableId} draggableId={student.draggableId} index={index}>
                                                         {(provided) => (
                                                             <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
                                                                 className="p-2 shadow-md list-none active::cursor-grabbing bg-white  w-[280px] overflow-x-clip rounded-lg ">
@@ -144,6 +310,10 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                                 </section>
                             )}
                         </StrictModeDroppable>
+                        <section>
+                            {studentsToReview.length === 0 && <p className="text-sm text-red-500">No students to review</p>}
+                            {studentsToReview.length === 0 && <p className="text-sm text-red-500">Any student has delivered the activity</p>}
+                        </section>
                         <section className="flex flex-wrap max-w-[100%] h-fit gap-3 mt-2">
                             {
                                 studentsToReview.map((student, index) => {
@@ -175,7 +345,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                                                         {
                                                             students.length > 0 && students[index + 1].map((student, index) => {
                                                                 return (
-                                                                    <Draggable key={student.id} draggableId={student.id.toString()} index={index}>
+                                                                    <Draggable key={student.draggableId} draggableId={student.draggableId} index={index}>
                                                                         {(provided) => (
                                                                             <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
                                                                                 className="p-2 shadow-md list-none active::cursor-grabbing bg-white  w-[280px] overflow-x-clip rounded-lg ">

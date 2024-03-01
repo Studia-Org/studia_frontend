@@ -59,6 +59,7 @@ export const ProfessorPeerReview = ({ activityData }) => {
       <CreatePeers
         students={courseContentInformation.students.data}
         setCreatePeerReview={setCreatePeerReview}
+        activity={activityData.activity?.data}
         activityToReview={activityData.activity?.data.attributes.task_to_review?.data} />
     )
   }
