@@ -110,8 +110,7 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
     index
   ) {
     const selectedSubsection = subsection.id === courseSubsection.id;
-    //const dateToday = new Date();
-    const dateToday = new Date('2024-03-10');
+    const dateToday = new Date();
     const startDate = new Date(subsection.attributes.start_date);
     const isBeforeStartDate = dateToday < startDate;
     const disableButton = isBeforeStartDate || (!isFirstSubsection && !prevSubsectionFinished);
