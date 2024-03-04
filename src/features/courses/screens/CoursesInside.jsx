@@ -68,6 +68,7 @@ const CourseInside = () => {
     } catch (error) {
       console.error(error);
     }
+
   };
 
   const fetchUserResponsesData = async () => {
@@ -100,6 +101,8 @@ const CourseInside = () => {
           subsections: { data: subsecciones },
         },
       } = curso;
+
+      console.log(subsecciones);
 
       for (const subseccion of subsecciones) {
         const subseccionId = subseccion.id;
@@ -157,6 +160,7 @@ const CourseInside = () => {
         courseContentInformation,
         subsectionsCompleted
       );
+      console.log(firstSubsection);
       if (firstSubsection) {
         if (firstSubsection?.subseccion?.attributes?.activity?.data?.attributes?.type === 'questionnaire') {
           setCourseSubsection(firstSubsection.subseccion);

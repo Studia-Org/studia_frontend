@@ -17,10 +17,14 @@ export const ProfessorPeerReview = ({ activityData }) => {
     student.attributes.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const peerReviewinGroups = activityData.activity?.data.attributes.groupActivity
+
+  const activityToReviewID = activityData.activity?.data.attributes.task_to_review?.data?.id
   useEffect(() => {
     async function fetchCourseData() {
       const { courseInformation, students, professors } =
         await fetchCourseInformation({ courseId });
+
       setCourseContentInformation({ courseInformation, students, professors });
     }
     fetchCourseData();
@@ -39,8 +43,8 @@ export const ProfessorPeerReview = ({ activityData }) => {
     return (
       <>
         {filteredStudents.map((student) => (
-          <StudentRow student={student} peerReviewAnswers={peerReviewAnswers} activityToReviewID={activityData.activity?.data.attributes.task_to_review?.data?.id}
-            activityTitle={activityData.activity?.data.attributes.title} key={student?.id} />
+          <StudentRow student={student} peerReviewAnswers={peerReviewAnswers} activityToReviewID={activityToReviewID}
+            activityTitle={activityData.activity?.data.attributes.title} key={student?.id} peerReviewinGroups={peerReviewinGroups} />
         ))}
       </>
     );
@@ -57,11 +61,11 @@ export const ProfessorPeerReview = ({ activityData }) => {
         <p className='mb-4 text-sm text-gray-500'>In this section, you will be able to see the evaluations that students have given to their peers.</p>
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
           <div className="flex items-center justify-between p-5 pb-4 bg-white">
-            <label for="table-search" className="sr-only">Search</label>
+            <label htmlFor="table-search" className="sr-only">Search</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                 <svg className="w-4 h-4 text-gray-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                 </svg>
               </div>
               <input
@@ -71,7 +75,7 @@ export const ProfessorPeerReview = ({ activityData }) => {
                 className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
                 placeholder="Search for users" />
             </div>
-            <Button onClick={() => generateExcelPeerReview(courseContentInformation.students.data, peerReviewAnswers)} type="default" className='flex items-center gap-x-1'>
+            <Button onClick={() => generateExcelPeerReview(courseContentInformation.students.data, peerReviewAnswers, activityToReviewID, peerReviewinGroups)} type="default" className='flex items-center gap-x-1'>
               Download all
               <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />

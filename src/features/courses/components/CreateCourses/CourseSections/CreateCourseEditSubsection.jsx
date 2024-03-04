@@ -11,7 +11,7 @@ import { UploadFiles } from './UploadFiles';
 import '../../../styles/antdButtonStyles.css'
 import { PonderationWarning } from './PonderationWarning';
 import { debounce } from 'lodash';
-import { sub } from 'date-fns';
+import { set, sub } from 'date-fns';
 
 
 const { RangePicker } = DatePicker;
@@ -37,10 +37,13 @@ export const CreateCourseEditSubsection = ({
   const [items, setItems] = useState([1, 2, 3]);
   const [name, setName] = useState('');
   const inputRef = useRef(null);
+  const [isGroup, setIsGroup] = useState(subsection.activity?.groupActivity === undefined ? false : subsection.activity.groupActivity);
+  const [numberOfStudentsperGroup, setNumberOfStudentsperGroup] = useState(subsection.activity?.numberOfStudentsperGroup === undefined ? 1 : subsection.activity.numberOfStudentsperGroup);
 
   if (subsection.activity?.groupActivity === undefined) subsection.activity.groupActivity = false;
-  if (subsection.activity?.numberOfStudentsperGroup === undefined) subsection.activity.numberOfStudentsperGroup = 2;
+  if (subsection.activity?.numberOfStudentsperGroup === undefined) subsection.activity.numberOfStudentsperGroup = 1;
 
+  console.log(subsection.activity?.groupActivity, subsection.activity?.numberOfStudentsperGroup)
   useEffect(() => {
     const matchingSubsection = createCourseSectionsList
       .flatMap((section) => section.subsections)
@@ -94,10 +97,16 @@ export const CreateCourseEditSubsection = ({
               subsectionCopy.activity.groupActivity = newValue;
               if (!newValue) {
                 subsectionCopy.activity.numberOfStudentsperGroup = 1;
+                setNumberOfStudentsperGroup(1);
+              } else if (numberOfStudentsperGroup === 1) {
+                setNumberOfStudentsperGroup(2);
+                if (subsectionCopy.activity.numberOfStudentsperGroup === 1) subsectionCopy.activity.numberOfStudentsperGroup = 2;
               }
+              setIsGroup(newValue);
               break;
             case 'numberOfStudentsperGroup':
               subsectionCopy.activity.numberOfStudentsperGroup = +newValue;
+              setNumberOfStudentsperGroup(+newValue);
               break;
             default:
               break;
@@ -312,19 +321,19 @@ export const CreateCourseEditSubsection = ({
                       Will the activity be carried out in pairs or individually? *
                     </label>
                     <Select
-                      defaultValue={subsection.activity.group}
+                      defaultValue={isGroup}
                       style={{ width: '100%', marginTop: '5px' }}
                       onChange={(number) => { handleSubsectionChange('group', number) }}
                       options={[{ label: 'Individual', value: false }, { label: 'Groups', value: true }]}
                     />
                     {
-                      subsection.activity.group && (
+                      isGroup && (
                         <div className='mt-4'>
                           <label className='text-sm text-gray-500 ' htmlFor=''>
                             How many students per group? *
                           </label>
                           <Select
-                            defaultValue={subsection.activity.numberOfStudentsperGroup}
+                            defaultValue={numberOfStudentsperGroup}
                             style={{ width: '100%', marginTop: '5px' }}
                             onChange={(number) => { handleSubsectionChange('numberOfStudentsperGroup', number) }}
                             options={[{ label: '2', value: 2 }, { label: '3', value: 3 }, { label: '4', value: 4 }, { label: '5', value: 5 }]}
