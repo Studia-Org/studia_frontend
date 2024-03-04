@@ -68,6 +68,7 @@ const CourseInside = () => {
     } catch (error) {
       console.error(error);
     }
+
   };
 
   const fetchUserResponsesData = async () => {
