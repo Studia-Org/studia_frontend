@@ -1,6 +1,7 @@
 import { useRoutes } from 'react-router-dom'
 import { protectedRoutes } from './protected';
 import { publicRoutes } from './public';
+import { ErrorBoundary } from "react-error-boundary";
 import { checkAuthenticated } from '../helpers';
 import Home from '../shared/home';
 import Page404Screen from '../features/404/screens/Page404Screen';
@@ -9,6 +10,7 @@ import { Sidebar } from '../shared/elements/Sidebar';
 import { useAuthContext } from '../context/AuthContext';
 import { MoonLoader } from 'react-spinners';
 import { WebchatChatbot } from '../shared/elements/WebchatChatbot';
+import { ErrorBoundaryScreen } from './ErrorBoundaryScreen';
 
 export const AppRoutes = () => {
 
@@ -39,7 +41,9 @@ export const AppRoutes = () => {
                     <div className='flex'>
                         <Sidebar section={path} />
                         <div className={`flex min-h-[calc(100vh-8rem)] overflow-x-auto ${!inCourseCreate ? " xl:ml-80 xl:min-w-[calc(100vw-22rem)" : ""} bg-white w-full max-w-[100vw]`}>
-                            {element}
+                            <ErrorBoundary fallback={<ErrorBoundaryScreen />}>
+                                {element}
+                            </ErrorBoundary>
                         </div>
                         <WebchatChatbot />
                     </div>
