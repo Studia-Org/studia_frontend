@@ -40,7 +40,7 @@ const Activity = () => {
           `&populate[file][fields][0]=*` +
           `&populate[activity][populate][evaluators][fields][0]=*` +
           `&populate[activity][populate][file][fields][0]=*` +
-          `&populate[activity][populate][task_to_review][fields][0]=*` +
+          `&populate[activity][populate][task_to_review][populate][peer_review_qualifications][fields][0]=*` +
           `&filters[activity][id]=${activityId}` +
           `&populate[user][populate][PeerReviewAnswers][populate][qualifications][populate][user][fields][0]=username` +
           `&populate[evaluator][populate][profile_photo][fields][0]=url` +
@@ -56,7 +56,6 @@ const Activity = () => {
             headers: { Authorization: `${BEARER} ${getToken()}` },
           }
         )
-
       const data = await response.json();
       if (data.data.length > 0) {
         setUserQualification({

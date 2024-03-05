@@ -7,9 +7,6 @@ import { useParams } from "react-router-dom";
 import { API } from "../../../../../../constant";
 import { getToken } from "../../../../../../helpers";
 
-
-
-
 function CreatePeers({ students: allStudents, setCreatePeerReview, activityToReview, activity }) {
 
     const [students, setStudents] = useState([])
@@ -25,7 +22,6 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
 
     useEffect(() => {
         const added = []
-
         const qualificationsToReview = allStudents.map((student) => {
             const studentQualification = !activityToReviewWasInGroups ?
                 student.attributes.qualifications.data
@@ -62,6 +58,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                 }
             }
         }).filter(Boolean)
+
         const groups = []
         // multiplacte each student hisself by the number of times they have to review usersToPair
         const studentsDuplicated = []
@@ -73,14 +70,41 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
             }
         })
         groups.push(studentsDuplicated)
-        for (let i = 0; i < qualificationsToReview.length; i++) {
-            groups.push([])
-        }
-        const groupWithMoreStudents = qualificationsToReview.find((group) => group.users.length > studentsPerGroup)
-        setGroupWithMoreStudents(groupWithMoreStudents)
-        setStudents(groups)
-        setStudentsToReview(qualificationsToReview)
+        let query = `populate[qualifications][populate][peer_review_qualifications]=id` +
+            `&populate[qualifications][populate][user][fields][0]=id`
 
+        fetch(`${API}/activities/${activity.id}?${query}`, {
+            headers: {
+                Authorization: `Bearer ${getToken()}`,
+                'Content-Type': 'application/json'
+            }
+        }).then((response) => response.json())
+            .then(({ data }) => {
+                const qualificationsAlreadyDone = data.attributes.qualifications.data
+                for (let i = 0; i < qualificationsToReview.length; i++) {
+                    const group = []
+                    const qualificationToReview = qualificationsToReview[i].qualification
+
+                    const find = qualificationsAlreadyDone
+                        .filter((qualification) => qualification.attributes.peer_review_qualifications.data?.find((peer) => {
+                            return peer.id === qualificationToReview.id
+                        }))
+
+                    if (find.length > 0) {
+                        find.forEach((qualification) => {
+                            const student = studentsDuplicated.find((user) => user.id === qualification.attributes.user.data.id)
+                            const studentIndex = studentsDuplicated.findIndex((user) => user.id === qualification.attributes.user.data.id)
+                            studentsDuplicated.splice(studentIndex, 1)
+                            group.push({ ...student, draggableId: Math.random().toString(36) })
+                        })
+                    }
+                    groups.push(group)
+                }
+                const groupWithMoreStudents = qualificationsToReview.find((group) => group.users.length > studentsPerGroup)
+                setGroupWithMoreStudents(groupWithMoreStudents)
+                setStudents(groups)
+                setStudentsToReview(qualificationsToReview)
+            })
 
     }, [allStudents])
 
@@ -108,21 +132,24 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
     function onDragEnd(result) {
         const { source, destination, draggableId } = result;
         // dropped outside the list
+        if (activityHasStarted) return message.error("Activity has started, you can't modify the peers")
         if (!destination) {
-            return;
+            return message.error("You can't drop the student outside the list")
         }
         const sInd = +source.droppableId;
         const dInd = +destination.droppableId;
-        const student = students[sInd].find((student) => student.draggableId === draggableId)
-        const studentExistInDestination = students[dInd].find((user) => user.id === student.id)
-        const studentExist = studentsToReview[dInd - 1].users.find((user) => user.id === student.id)
-        if (studentExistInDestination) {
-            message.error("Student already exists in this group")
-            return
-        }
-        if (studentExist) {
-            message.error("Student can't review his own activity")
-            return
+        if (dInd !== 0) {
+            const student = students[sInd].find((student) => student.draggableId === draggableId)
+            const studentExistInDestination = students[dInd].find((user) => user.id === student.id)
+            const studentExist = studentsToReview[dInd - 1].users.find((user) => user.id === student.id)
+            if (studentExistInDestination) {
+                message.error("Student already exists in this group")
+                return
+            }
+            if (studentExist) {
+                message.error("Student can't review his own activity")
+                return
+            }
         }
 
         if (sInd === dInd) {
@@ -224,21 +251,20 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
             }
         }).filter(Boolean)
         console.log(peers)
-        // fetch(`${API}/create_peers`,
-        //     {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             "Bearer": getToken()
-        //         },
-        //         body: JSON.stringify({ peers })
-        //     }
-        // )
+        fetch(`${API}/create_peers`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getToken()}`
+                },
+                body: JSON.stringify({ peers })
+            }
+        )
 
         setCreatingGroups(false)
 
     }
-
     return (
         <div className='p-5'>
             <BackButton text={"Back to peer reviews"} onClick={() => setCreatePeerReview(false)} />
@@ -250,7 +276,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                 <Button
                     className="mb-4"
                     type="primary"
-                    disabled={!activityHasStarted}
+                    disabled={activityHasStarted}
                     onClick={createGroupsAutomatically}
                 >
                     Create peers automatically
@@ -259,24 +285,24 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                     className="mb-4"
                     type="primary"
                     loading={creatingGroups}
-                    disabled={!activityHasStarted}
+                    disabled={activityHasStarted}
                     onClick={saveGroups}>
                     Save peers
                 </Button >
             </div>
             {activityHasStarted && <p className="text-xs text-red-500">Activity has started, you can't modify the peers</p>}
             <Divider className="mt-2" />
-            {!activityToReviewWasInGroups && studentsToReview.length < students[0]?.length / usersToPair
+            {!activityToReviewWasInGroups && studentsToReview.length < allStudents.length
                 && <p className="mb-2 text-sm text-red-500">There are students who have not delivered the activity</p>}
             {activityToReviewWasInGroups &&
                 (studentsToReview.length > (groupWithMoreStudents ?
-                    Math.floor((students[0]?.length / usersToPair) / studentsPerGroup) :
-                    Math.ceil((students[0]?.length / usersToPair) / studentsPerGroup)))
+                    Math.floor((allStudents.length) / studentsPerGroup) :
+                    Math.ceil((allStudents.length) / studentsPerGroup)))
                 && <p className="mb-2 text-sm text-red-500">There are groups who have not delivered the activity</p>}
             <section>
-                <DragDropContext className="mt-5" onDragEnd={onDragEnd}  >
+                <DragDropContext className="mt-5" onDragEnd={onDragEnd}   >
                     <div className="flex gap-3">
-                        <StrictModeDroppable key={0} droppableId={`${0}`} >
+                        <StrictModeDroppable key={0} droppableId={`${0}`} isDropDisabled={activityHasStarted} >
                             {(provided) => (
                                 <section className={`flex flex-col gap-2 p-2 sticky}`}>
                                     <p>Students</p>
@@ -319,7 +345,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                                 studentsToReview.map((student, index) => {
                                     return (
                                         <section className="flex flex-col gap-y-2">
-                                            <p className="text-sm text-gray-700">Activity from </p>
+                                            <p className="text-sm text-gray-700">Activity done by </p>
                                             <ul style={{ height: height }} className="bg-white rounded-lg">
                                                 {
                                                     student.users.map((user, index) => {
@@ -337,7 +363,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                                                 }
                                             </ul>
                                             <p className="text-sm text-gray-700">Users who are going to review</p>
-                                            <StrictModeDroppable key={index + 1} droppableId={`${index + 1}`}>
+                                            <StrictModeDroppable key={index + 1} droppableId={`${index + 1}`} isDropDisabled={activityHasStarted}>
                                                 {(provided) => (
                                                     <ul className={`flex flex-col gap-y-4 w-[300px] min-h-[200px] bg-white rounded-lg p-2 overflow-x-clip`}
                                                         {...provided.droppableProps}
