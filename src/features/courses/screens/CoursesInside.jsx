@@ -68,6 +68,7 @@ const CourseInside = () => {
     } catch (error) {
       console.error(error);
     }
+
   };
 
   const fetchUserResponsesData = async () => {
@@ -256,6 +257,8 @@ const CourseInside = () => {
     }
   }
 
+  console.log(user.role_str)
+
   const items = [
     {
       key: '1',
@@ -361,7 +364,7 @@ const CourseInside = () => {
                 {settingsFlag && (user.role_str === 'professor' || user.role_str === 'admin') ? (
                   <CourseSettings setSettingsFlag={setSettingsFlag} courseData={courseBasicInformation} setCourseData={setCourseBasicInformation} />
                 ) : questionnaireFlag && questionnaireAnswers !== undefined ? (
-                  hasCourseStarted(courseBasicInformation.start_date) ? (
+                  (hasCourseStarted(courseBasicInformation.start_date) || user.role_str !== 'student') ? (
                     <QuestionnaireComponent
                       questionnaire={courseSubsectionQuestionnaire}
                       answers={questionnaireAnswers}
@@ -403,7 +406,7 @@ const CourseInside = () => {
                       }
                     </div>
                     {
-                      hasCourseStarted(courseBasicInformation.start_date) ?
+                      (hasCourseStarted(courseBasicInformation.start_date) || user.role_str !== 'student') ?
                         <Tabs className='font-normal' tabBarStyle={{ borderBottom: '1px solid black' }} defaultActiveKey="1" items={items} />
                         :
                         <CourseHasNotStarted />

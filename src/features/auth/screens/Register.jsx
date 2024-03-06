@@ -22,7 +22,7 @@ const Register = () => {
     description: '',
     role_str: 'student',
     profile_photo: null,
-    landscape_photo: [300],
+    landscape_photo: [1],
   });
   const { email, password, username, name, repassword, university, description } = formData;
   const [profilePhoto, setProfilePhoto] = useState([]);
