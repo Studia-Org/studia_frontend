@@ -84,7 +84,6 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                             body: JSON.stringify({ data: questionnaire }),
                         });
                         const data = await response.json();
-
                         const activity = {
                             title: subsection.title,
                             start_date: new Date(subsection.start_date).toISOString(),
@@ -166,6 +165,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                                 {
                                     ...subsection.activity,
                                     title: subsection.title,
+                                    start_date: new Date(subsection.start_date).toISOString(),
                                     categories: Object.keys(subsection.activity.categories)
                                 }
                             }),
@@ -230,7 +230,6 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                     });
                     filesdata2 = await uploadFiles.json();
                 }
-
                 const activity = {
                     title: section.task.title,
                     deadline: new Date(section.task.deadline).toISOString(),

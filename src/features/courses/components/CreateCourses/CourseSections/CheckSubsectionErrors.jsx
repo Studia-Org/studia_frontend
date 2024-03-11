@@ -93,11 +93,12 @@ export const CheckSubsectionErrors = ({ subsection }) => {
                     newErrorsList.push({ svg: dangerSvg, comment: 'Peer review rubric is empty' });
                     setColor('text-red-500')
                 }
+                if (subsection.activity?.task_to_review === '' || subsection.activity?.task_to_review === null) {
+                    newErrorsList.push({ svg: dangerSvg, comment: 'No task to review' });
+                    setColor('text-red-500')
+                }
                 if (subsection.description === '' || subsection.description === null) {
                     newErrorsList.push({ svg: warningSvg, comment: 'No description' });
-                }
-                if (subsection.activity?.task_to_review === '' || subsection.activity?.task_to_review === null) {
-                    newErrorsList.push({ svg: warningSvg, comment: 'No task to review' });
                 }
                 if (subsection.content === '' || subsection.content === null) {
                     newErrorsList.push({ svg: warningSvg, comment: 'No content' });
