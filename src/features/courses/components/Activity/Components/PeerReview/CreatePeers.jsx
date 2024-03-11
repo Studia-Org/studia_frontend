@@ -266,143 +266,147 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
 
     }
     return (
-        <div className='p-5'>
-            <BackButton text={"Back to peer reviews"} onClick={() => setCreatePeerReview(false)} />
-            <h2 className='mt-10 mb-2 text-lg font-medium'>Peer Review </h2>
-            <p className='mb-1 text-sm text-gray-700'>Peer review was designed to <b>each student review {usersToPair} activities</b></p>
-            <p className='mb-1 text-sm text-gray-700'>Assign students to review each activity</p>
+        <>
+            <div className='p-10'>
+                <div className="-m-5">
+                    <BackButton text={"Back to peer reviews"} onClick={() => setCreatePeerReview(false)} />
+                </div>
+                <h2 className='mt-10 mb-2 text-lg font-medium'>Peer Review </h2>
+                <p className='mb-1 text-sm text-gray-700'>Peer review was designed to <b>each student review {usersToPair} activities</b></p>
+                <p className='mb-1 text-sm text-gray-700'>Assign students to review each activity</p>
 
-            <div className="flex gap-2 mt-5">
-                <Button
-                    className="mb-4"
-                    type="primary"
-                    disabled={activityHasStarted}
-                    onClick={createGroupsAutomatically}
-                >
-                    Create peers automatically
-                </Button>
-                <Button
-                    className="mb-4"
-                    type="primary"
-                    loading={creatingGroups}
-                    disabled={activityHasStarted}
-                    onClick={saveGroups}>
-                    Save peers
-                </Button >
-            </div>
-            {activityHasStarted && <p className="text-xs text-red-500">Activity has started, you can't modify the peers</p>}
-            <Divider className="mt-2" />
-            {!activityToReviewWasInGroups && studentsToReview.length < allStudents.length
-                && <p className="mb-2 text-sm text-red-500">There are students who have not delivered the activity</p>}
-            {activityToReviewWasInGroups &&
-                (studentsToReview.length > (groupWithMoreStudents ?
-                    Math.floor((allStudents.length) / studentsPerGroup) :
-                    Math.ceil((allStudents.length) / studentsPerGroup)))
-                && <p className="mb-2 text-sm text-red-500">There are groups who have not delivered the activity</p>}
-            <section>
-                <DragDropContext className="mt-5" onDragEnd={onDragEnd}   >
-                    <div className="flex gap-3">
-                        <StrictModeDroppable key={0} droppableId={`${0}`} isDropDisabled={activityHasStarted} >
-                            {(provided) => (
-                                <section className={`flex flex-col gap-2 p-2 sticky}`}>
-                                    <p>Students</p>
-                                    <ul className={`flex flex-col gap-y-4 w-[300px] min-h-[200px] bg-white rounded-lg p-2 overflow-x-clip`}
-                                        {...provided.droppableProps}
-                                        ref={provided.innerRef}>
-                                        {
-                                            students.length > 0 && students[0].map((student, index) => {
-                                                return (
-                                                    <Draggable key={student.draggableId} draggableId={student.draggableId} index={index}>
-                                                        {(provided) => (
-                                                            <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
-                                                                className="p-2 shadow-md list-none active::cursor-grabbing bg-white  w-[280px] overflow-x-clip rounded-lg ">
+                <div className="flex gap-2 mt-5">
+                    <Button
+                        className="mb-4"
+                        type="primary"
+                        disabled={activityHasStarted}
+                        onClick={createGroupsAutomatically}
+                    >
+                        Create peers automatically
+                    </Button>
+                    <Button
+                        className="mb-4"
+                        type="primary"
+                        loading={creatingGroups}
+                        disabled={activityHasStarted}
+                        onClick={saveGroups}>
+                        Save peers
+                    </Button >
+                </div>
+                {activityHasStarted && <p className="text-xs text-red-500">Activity has started, you can't modify the peers</p>}
+                <Divider className="mt-2" />
+                {!activityToReviewWasInGroups && studentsToReview.length < allStudents.length
+                    && <p className="mb-2 text-sm text-red-500">There are students who have not delivered the activity</p>}
+                {activityToReviewWasInGroups &&
+                    (studentsToReview.length > (groupWithMoreStudents ?
+                        Math.floor((allStudents.length) / studentsPerGroup) :
+                        Math.ceil((allStudents.length) / studentsPerGroup)))
+                    && <p className="mb-2 text-sm text-red-500">There are groups who have not delivered the activity</p>}
+                <section>
+                    <DragDropContext className="mt-5" onDragEnd={onDragEnd}   >
+                        <div className="flex gap-3">
+                            <StrictModeDroppable key={0} droppableId={`${0}`} isDropDisabled={activityHasStarted} >
+                                {(provided) => (
+                                    <section className={`flex flex-col gap-2 p-2 sticky}`}>
+                                        <p>Students</p>
+                                        <ul className={`flex flex-col gap-y-4 w-[300px] min-h-[200px] bg-white rounded-lg p-2 overflow-x-clip`}
+                                            {...provided.droppableProps}
+                                            ref={provided.innerRef}>
+                                            {
+                                                students.length > 0 && students[0].map((student, index) => {
+                                                    return (
+                                                        <Draggable key={student.draggableId} draggableId={student.draggableId} index={index}>
+                                                            {(provided) => (
+                                                                <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
+                                                                    className="p-2 shadow-md list-none active::cursor-grabbing bg-white  w-[280px] overflow-x-clip rounded-lg ">
+                                                                    <article className='flex items-center h-full '>
+                                                                        <img alt='profile student' className="w-6 h-6 rounded-full"
+                                                                            src={student?.attributes?.profile_photo?.data?.attributes?.url} />
+                                                                        <div className="pl-3 text-left">
+                                                                            <p className="text-sm font-semibold">{student?.attributes.name}</p>
+                                                                            <p className="text-xs font-normal text-gray-500">{student?.attributes.email}</p>
+                                                                        </div>
+                                                                    </article>
+                                                                </li>
+                                                            )}
+                                                        </Draggable>
+                                                    )
+                                                })
+                                            }
+                                            {provided.placeholder}
+
+                                        </ul>
+                                    </section>
+                                )}
+                            </StrictModeDroppable>
+                            <section>
+                                {studentsToReview.length === 0 && <p className="text-sm text-red-500">No students to review</p>}
+                                {studentsToReview.length === 0 && <p className="text-sm text-red-500">Any student has delivered the activity</p>}
+                            </section>
+                            <section className="flex flex-wrap max-w-[100%] h-fit gap-3 mt-2">
+                                {
+                                    studentsToReview.map((student, index) => {
+                                        return (
+                                            <section className="flex flex-col gap-y-2">
+                                                <p className="text-sm text-gray-700">Activity done by </p>
+                                                <ul style={{ height: height }} className="bg-white rounded-lg">
+                                                    {
+                                                        student.users.map((user, index) => {
+                                                            return <li key={user.id} className={`p-2 list-none w-[300px] overflow-x-clip `}>
                                                                 <article className='flex items-center h-full '>
                                                                     <img alt='profile student' className="w-6 h-6 rounded-full"
-                                                                        src={student?.attributes?.profile_photo?.data?.attributes?.url} />
+                                                                        src={user?.attributes?.profile_photo?.data?.attributes?.url} />
                                                                     <div className="pl-3 text-left">
-                                                                        <p className="text-sm font-semibold">{student?.attributes.name}</p>
-                                                                        <p className="text-xs font-normal text-gray-500">{student?.attributes.email}</p>
+                                                                        <p className="text-sm font-semibold">{user?.attributes.name}</p>
+                                                                        <p className="text-xs font-normal text-gray-500">{user?.attributes.email}</p>
                                                                     </div>
                                                                 </article>
                                                             </li>
-                                                        )}
-                                                    </Draggable>
-                                                )
-                                            })
-                                        }
-                                        {provided.placeholder}
+                                                        })
+                                                    }
+                                                </ul>
+                                                <p className="text-sm text-gray-700">Users who are going to review</p>
+                                                <StrictModeDroppable key={index + 1} droppableId={`${index + 1}`} isDropDisabled={activityHasStarted}>
+                                                    {(provided) => (
+                                                        <ul className={`flex flex-col gap-y-4 w-[300px] min-h-[200px] bg-white rounded-lg p-2 overflow-x-clip`}
+                                                            {...provided.droppableProps}
+                                                            ref={provided.innerRef}>
+                                                            {
+                                                                students.length > 0 && students[index + 1].map((student, index) => {
+                                                                    return (
+                                                                        <Draggable key={student.draggableId} draggableId={student.draggableId} index={index}>
+                                                                            {(provided) => (
+                                                                                <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
+                                                                                    className="p-2 shadow-md list-none active::cursor-grabbing bg-white  w-[280px] overflow-x-clip rounded-lg ">
+                                                                                    <article className='flex items-center h-full '>
+                                                                                        <img alt='profile student' className="w-6 h-6 rounded-full"
+                                                                                            src={student?.attributes?.profile_photo?.data?.attributes?.url} />
+                                                                                        <div className="pl-3 text-left">
+                                                                                            <p className="text-sm font-semibold">{student?.attributes.name}</p>
+                                                                                            <p className="text-xs font-normal text-gray-500">{student?.attributes.email}</p>
+                                                                                        </div>
+                                                                                    </article>
+                                                                                </li>
+                                                                            )}
+                                                                        </Draggable>
+                                                                    )
+                                                                })
+                                                            }
+                                                            {provided.placeholder}
 
-                                    </ul>
-                                </section>
-                            )}
-                        </StrictModeDroppable>
-                        <section>
-                            {studentsToReview.length === 0 && <p className="text-sm text-red-500">No students to review</p>}
-                            {studentsToReview.length === 0 && <p className="text-sm text-red-500">Any student has delivered the activity</p>}
-                        </section>
-                        <section className="flex flex-wrap max-w-[100%] h-fit gap-3 mt-2">
-                            {
-                                studentsToReview.map((student, index) => {
-                                    return (
-                                        <section className="flex flex-col gap-y-2">
-                                            <p className="text-sm text-gray-700">Activity done by </p>
-                                            <ul style={{ height: height }} className="bg-white rounded-lg">
-                                                {
-                                                    student.users.map((user, index) => {
-                                                        return <li key={user.id} className={`p-2 list-none w-[300px] overflow-x-clip `}>
-                                                            <article className='flex items-center h-full '>
-                                                                <img alt='profile student' className="w-6 h-6 rounded-full"
-                                                                    src={user?.attributes?.profile_photo?.data?.attributes?.url} />
-                                                                <div className="pl-3 text-left">
-                                                                    <p className="text-sm font-semibold">{user?.attributes.name}</p>
-                                                                    <p className="text-xs font-normal text-gray-500">{user?.attributes.email}</p>
-                                                                </div>
-                                                            </article>
-                                                        </li>
-                                                    })
-                                                }
-                                            </ul>
-                                            <p className="text-sm text-gray-700">Users who are going to review</p>
-                                            <StrictModeDroppable key={index + 1} droppableId={`${index + 1}`} isDropDisabled={activityHasStarted}>
-                                                {(provided) => (
-                                                    <ul className={`flex flex-col gap-y-4 w-[300px] min-h-[200px] bg-white rounded-lg p-2 overflow-x-clip`}
-                                                        {...provided.droppableProps}
-                                                        ref={provided.innerRef}>
-                                                        {
-                                                            students.length > 0 && students[index + 1].map((student, index) => {
-                                                                return (
-                                                                    <Draggable key={student.draggableId} draggableId={student.draggableId} index={index}>
-                                                                        {(provided) => (
-                                                                            <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
-                                                                                className="p-2 shadow-md list-none active::cursor-grabbing bg-white  w-[280px] overflow-x-clip rounded-lg ">
-                                                                                <article className='flex items-center h-full '>
-                                                                                    <img alt='profile student' className="w-6 h-6 rounded-full"
-                                                                                        src={student?.attributes?.profile_photo?.data?.attributes?.url} />
-                                                                                    <div className="pl-3 text-left">
-                                                                                        <p className="text-sm font-semibold">{student?.attributes.name}</p>
-                                                                                        <p className="text-xs font-normal text-gray-500">{student?.attributes.email}</p>
-                                                                                    </div>
-                                                                                </article>
-                                                                            </li>
-                                                                        )}
-                                                                    </Draggable>
-                                                                )
-                                                            })
-                                                        }
-                                                        {provided.placeholder}
-
-                                                    </ul>
-                                                )}
-                                            </StrictModeDroppable>
-                                        </section>
-                                    )
-                                })
-                            }
-                        </section>
-                    </div>
-                </DragDropContext>
-            </section >
-        </div>
+                                                        </ul>
+                                                    )}
+                                                </StrictModeDroppable>
+                                            </section>
+                                        )
+                                    })
+                                }
+                            </section>
+                        </div>
+                    </DragDropContext>
+                </section >
+            </div>
+        </>
     )
 }
 
