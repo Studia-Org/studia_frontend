@@ -41,9 +41,8 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                         else user.attributes.profile_photo = allStudents.find((student) => student.id === user.id).attributes.profile_photo
                         return user
                     })
-
                     return {
-                        qualification: studentQualification.attributes.qualification.data,
+                        qualification: studentQualification.attributes.qualifications.data[0],
                         users: studentQualification.attributes.users.data.map((user) => user)
                     }
                 }
@@ -89,7 +88,6 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                         .filter((qualification) => qualification.attributes.peer_review_qualifications.data?.find((peer) => {
                             return peer.id === qualificationToReview.id
                         }))
-
                     if (find.length > 0) {
                         find.forEach((qualification) => {
                             const student = studentsDuplicated.find((user) => user.id === qualification.attributes.user.data.id)
@@ -239,7 +237,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
         setStudents(studentsCopy)
     }
 
-    function saveGroups() {
+    async function saveGroups() {
         setCreatingGroups(true)
         const peers = students.map((group, index) => {
             if (index === 0) return null
@@ -251,7 +249,8 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
             }
         }).filter(Boolean)
         console.log(peers)
-        fetch(`${API}/create_peers`,
+
+        const response = await fetch(`${API}/create_peers`,
             {
                 method: 'POST',
                 headers: {
@@ -261,6 +260,10 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                 body: JSON.stringify({ peers })
             }
         )
+        console.log(response)
+        if (response.ok) {
+            message.success("Peers created successfully")
+        }
 
         setCreatingGroups(false)
 

@@ -54,7 +54,6 @@ export const ProfessorPeerReview = ({ activityData }) => {
   }
 
   if (createPeerReview) {
-
     return (
       <CreatePeers
         students={courseContentInformation.students.data}

@@ -15,8 +15,9 @@ export const StudentRow = ({ student, activityToReviewID, activityTitle, peerRev
 
         return qualification.attributes.activity.data.id === activityToReviewID
     }),
-    ...student.attributes.groups?.data?.filter((group) => group.attributes.activity.data.id === activityToReviewID)
-        .map((group) => group?.attributes?.qualification.data)]
+    ...student.attributes.groups?.data?.filter((group) => {
+        return group.attributes.activity.data.id === activityToReviewID
+    }).flatMap((group) => group?.attributes?.qualifications?.data)]
 
     const studentQualificationsGiven = peerReviewAnswers.filter((answer) =>
         answer.attributes.user?.data.id === student.id)
@@ -26,7 +27,6 @@ export const StudentRow = ({ student, activityToReviewID, activityTitle, peerRev
             qualification.attributes.user.data.id === student.id))
 
     const studentFiles = studentQualifications[0]?.attributes.file?.data
-
     function handleRubricModalOpen(qualification) {
         setRubricData(qualification)
         setIsRubricModalOpen(true)

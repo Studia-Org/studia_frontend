@@ -14,6 +14,7 @@ export default function PeerReviewComponent({ activityData }) {
     const data = activityData?.activity?.data?.attributes?.PeerReviewRubrica
     const usersToPair = activityData.activity.data.attributes.usersToPair
     const correctActivityGroup = activityData.activity.data.attributes.task_to_review.data.attributes.groupActivity
+    const peerReviewInGroups = activityData.activity.data.attributes.groupActivity
 
     ////////////////////eleccion de la data del user////////////////////////
     const [userIndexSelected, setUserIndexSelected] = useState(null)
@@ -26,7 +27,6 @@ export default function PeerReviewComponent({ activityData }) {
 
     useEffect(() => {
         try {
-
             if (user === null || user === undefined || user.role_str !== 'student') { setLoading(false); return }
             if (activityData.peer_review_qualifications.data[0] === undefined || activityData.peer_review_qualifications?.data === null) {
                 setLoading(false);
@@ -41,13 +41,13 @@ export default function PeerReviewComponent({ activityData }) {
         }
 
     }, [user, userIndexSelected]);
-
     useEffect(() => {
         if (user.role_str !== 'student') return
         if (qualificationIds === null) {
             fetch(`${API}/qualifications?qualification` +
-                `&populate[activity][fields][0]=id` +
+                `&populate[activity][fields][0]=groupActivity` +
                 `&populate[user][fields][0]=username` +
+                `&populate[group][populate][users][fields][0]=*` +
                 `&populate[peer_review_qualifications][fields][0]=*` +
                 `&populate[peer_review_qualifications][populate][group][fields][0]=*` +
 
@@ -64,7 +64,6 @@ export default function PeerReviewComponent({ activityData }) {
                     throw new Error(res.status)
                 }
             }).then(data => {
-
                 const usersToCorrect = correctActivityGroup ?
                     activityData?.peer_review_qualifications.data
                         .map((peerReview) => peerReview.attributes.group.data)
@@ -72,18 +71,25 @@ export default function PeerReviewComponent({ activityData }) {
                     activityData?.peer_review_qualifications.data
                         .map((peerReview) => peerReview.attributes.user.data)
 
-
-                const idQualifications = correctActivityGroup ?
-                    data.data
-                        .filter((qualification) =>
+                console.log(usersToCorrect)
+                console.log(data.data)
+                const idQualifications =
+                    peerReviewInGroups ?
+                        data.data.filter((qualification) =>
                             usersToCorrect.find((userToCorrect) => {
-                                return userToCorrect.attributes.users.data.some(
-                                    (user) => user.id === qualification.attributes.user.data.id)
+                                return userToCorrect.id === qualification.attributes.group.data.id
                             }))
-                    :
-                    data.data
-                        .filter((qualification) =>
-                            usersToCorrect.find((userToCorrect) => userToCorrect.id === qualification.attributes.user.data.id))
+                        : correctActivityGroup ?
+                            data.data
+                                .filter((qualification) =>
+                                    usersToCorrect.find((userToCorrect) => {
+                                        return userToCorrect.attributes.users.data.some(
+                                            (user) => user.id === qualification.attributes.user.data.id)
+                                    }))
+                            :
+                            data.data
+                                .filter((qualification) =>
+                                    usersToCorrect.find((userToCorrect) => userToCorrect.id === qualification.attributes.user.data.id))
 
                 setQualificationIds(idQualifications)
 
@@ -96,25 +102,40 @@ export default function PeerReviewComponent({ activityData }) {
         if (usersToPair === 1 && userIndexSelected === null) setUserIndexSelected(0)
         if (userIndexSelected === null) return
         if (qualificationIds === null) return
-        const idQualification =
-            correctActivityGroup ?
-                qualificationIds.filter((qual) => {
-                    return activityData.peer_review_qualifications.data[userIndexSelected].attributes.group.data.attributes.users.data.some(
-                        (user) => user.id === qual.attributes.user.data.id
-                    );
-                }).map(qual => qual.id)
 
-                :
+        const idQualification =
+            peerReviewInGroups ?
                 qualificationIds.find((qual) => {
-                    return activityData.peer_review_qualifications.data[userIndexSelected].attributes.user.data.id ===
-                        qual.attributes.user.data.id
+                    return activityData.peer_review_qualifications.data[userIndexSelected].attributes.group.data.id === qual.attributes.group.data.id
                 }).id
+                :
+                correctActivityGroup ?
+                    qualificationIds.filter((qual) => {
+                        return activityData.peer_review_qualifications.data[userIndexSelected].attributes.group.data.attributes.users.data.some(
+                            (user) => user.id === qual.attributes.user.data.id
+                        );
+                    }).map(qual => qual.id)
+
+                    :
+                    qualificationIds.find((qual) => {
+                        return activityData.peer_review_qualifications.data[userIndexSelected].attributes.user.data.id ===
+                            qual.attributes.user.data.id
+                    }).id
+
 
         setQualificationIdPartnerReview(idQualification)
 
         const answersdel = idQualification
-        const answers = activityData.user.data.attributes.PeerReviewAnswers.data
-            .find((answer) => answer.attributes.qualifications.data.find((qualification) => Array.isArray(answersdel) ? answersdel.includes(qualification.id) : qualification.id === answersdel))
+
+        const answersList =
+            peerReviewInGroups ?
+                activityData.group.data.attributes.PeerReviewAnswers.data
+                :
+                activityData.user.data.attributes.PeerReviewAnswers.data
+
+        const answers = answersList
+            ?.find((answer) => answer.attributes.qualifications.data
+                ?.find((qualification) => Array.isArray(answersdel) ? answersdel.includes(qualification.id) : qualification.id === answersdel))
 
         if (answers !== undefined) {
             setAnswersDelivered(answers.attributes.Answers)
@@ -124,6 +145,7 @@ export default function PeerReviewComponent({ activityData }) {
         }
 
     }, [userIndexSelected, qualificationIds])
+    console.log(activityData)
 
     function sendEvalution() {
         try {
@@ -161,7 +183,6 @@ export default function PeerReviewComponent({ activityData }) {
             })
 
             if (emptyFields) return
-
             const payload = {
                 data: {
                     Answers: answers,
@@ -171,20 +192,30 @@ export default function PeerReviewComponent({ activityData }) {
                         [QualificationIdPartnerReview],
                 }
             }
+            if (peerReviewInGroups) {
+                payload.data.group = activityData.group.data.id
+                delete payload.data.user
+            }
 
-            const filter = correctActivityGroup ?
-                `&filters[group][id]=${activityData.peer_review_qualifications.data[userIndexSelected].attributes.group.data.id}`
-                :
-                `&filters[qualifications][user][id]=${activityData.peer_review_qualifications.data[userIndexSelected].attributes.user.data.id}`
+            const filter = (correctActivityGroup && !peerReviewInGroups) ?
+                `&filters[qualifications][user][groups][id]=${activityData.peer_review_qualifications.data[userIndexSelected].attributes.group.data.id}` +
+                `&filters[user][id]=${user.id}`
+                : !peerReviewInGroups ?
+                    `&filters[qualifications][user][id]=${activityData.peer_review_qualifications.data[userIndexSelected].attributes.user.data.id}` +
+                    `&filters[user][id]=${user.id}`
+                    :
+                    `&filters[qualifications][group][id]=${activityData.peer_review_qualifications.data[userIndexSelected].attributes.group.data.id}` +
+                    `&filters[group][id]=${activityData.group.data.id}`
+
 
 
             fetch(`${API}/peer-review-answers?populate[user]=*` +
-                `&filters[user][id]=${user.id}` +
                 `&populate[qualifications][fields][0]=*` +
                 `&populate[qualifications][populate][activity][fields][0]=id` +
                 `&filters[qualifications][activity][id]=${activityData.activity.data.id}` +
-                `&populate[qualification][populate][user][fields][0]=*` +
-                { filter }
+                `&populate[qualifications][populate][user][populate][groups][fields][0]=*` +
+                `&populate[qualifications][populate][group][fields][0]=*` +
+                filter
                 , {
                     method: 'GET',
                     headers: {
@@ -199,7 +230,8 @@ export default function PeerReviewComponent({ activityData }) {
                     }
                 }).then((data) => {
                     if (data.data.length === 0) {
-                        fetch(`${API}/peer-review-answers?populate[qualifications][populate][user][fields][0]=*`, {
+                        fetch(`${API}/peer-review-answers?populate[qualifications][populate][user][fields][0]=*` +
+                            `&populate[qualifications][populate][group][fields][0]=*`, {
                             method: 'POST',
                             headers: {
                                 "Content-Type": "application/json",
@@ -220,9 +252,15 @@ export default function PeerReviewComponent({ activityData }) {
                                 showConfirmButton: true,
                             }).then(() => {
                                 if (usersToPair > 1) {
+                                    console.log('entra', data.data)
                                     setShowEvaluate(false)
                                     resetUser()
-                                    activityData.user.data.attributes.PeerReviewAnswers.data.push(data.data)
+                                    if (peerReviewInGroups) {
+                                        activityData.group.data.attributes.PeerReviewAnswers.data.push(data.data)
+                                    }
+                                    else {
+                                        activityData.user.data.attributes.PeerReviewAnswers.data.push(data.data)
+                                    }
                                 }
                             })
                         })
@@ -259,8 +297,21 @@ export default function PeerReviewComponent({ activityData }) {
                                 if (usersToPair > 1) {
                                     setShowEvaluate(false)
                                     resetUser()
-                                    const answer = (activityData.user.data.attributes.PeerReviewAnswers.data
-                                        .find((answer) => answer.attributes.qualification.data.find((qualification) => qualification.id === QualificationIdPartnerReview)))
+                                    console.log(data)
+                                    console.log(activityData)
+                                    console.log(QualificationIdPartnerReview)
+                                    const answer = peerReviewInGroups ?
+                                        activityData.group.data.attributes.PeerReviewAnswers.data
+                                            .find((answer) => answer.attributes.qualifications.data.find((qualification) => qualification.id === QualificationIdPartnerReview))
+                                        :
+                                        correctActivityGroup ?
+                                            (activityData.user.data.attributes.PeerReviewAnswers.data
+                                                .find((answer) => answer.attributes.qualifications.data
+                                                    .every((qualification) => QualificationIdPartnerReview.includes(qualification.id))))
+                                            :
+                                            (activityData.user.data.attributes.PeerReviewAnswers.data
+                                                .find((answer) => answer.attributes.qualifications.data.find((qualification) => qualification.id === QualificationIdPartnerReview)))
+                                    console.log(answer)
                                     answer.attributes.Answers = answers
                                 }
                             })
@@ -332,6 +383,7 @@ export default function PeerReviewComponent({ activityData }) {
                                         resetUser={resetUser}
                                         qualificationIds={qualificationIds}
                                         correctActivityGroup={correctActivityGroup}
+                                        peerReviewInGroups={peerReviewInGroups}
                                     />
                                 </div>
                                 <div key={userIndexSelected} className={`${!showEvaluate ? 'w-0 h-0 overflow-hidden absolute' : 'min-w-[calc(100vw)] xl:min-w-[calc(100vw-22rem)] overflow-x-hidden  '}`}>
