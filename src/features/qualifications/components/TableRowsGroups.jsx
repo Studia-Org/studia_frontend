@@ -14,10 +14,14 @@ export async function saveChangesButtonGroups(editedGrades, groups, selectedActi
         const group = groupsCopy.find(group => {
             return group.id === +groupId;
         });
-
+        console.log(group);
         const comments = editedGrades[groupId].comments;
         const qualification = editedGrades[groupId].qualification;
-        if (group.attributes.qualification.data === null) {
+
+        let qual = group.attributes.qualifications?.data?.find((qual) => {
+            return qual.attributes.activity.data.id === JSON.parse(selectedActivity).id
+        })
+        if (!qual) {
             const response = await fetch(`${API}/qualifications`, {
                 method: 'POST',
                 headers: {
@@ -37,13 +41,14 @@ export async function saveChangesButtonGroups(editedGrades, groups, selectedActi
             })
             if (response.ok) {
                 const data = await response.json();
-                group.attributes.qualification.data = data.data;
+                // group.attributes.qualifications.data = data.data;
+                qual = data.data;
                 console.log(groupsCopy);
 
             }
         }
         else {
-            const response = await fetch(`${API}/qualifications/${group.attributes.qualification.data.id}`, {
+            const response = await fetch(`${API}/qualifications/${qual.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -60,7 +65,8 @@ export async function saveChangesButtonGroups(editedGrades, groups, selectedActi
             })
             if (response.ok) {
                 const data = await response.json();
-                group.attributes.qualification.data = data.data;
+                qual = data.data
+                //group.attributes.qualifications.data = data.data;
 
             }
         }
@@ -68,17 +74,16 @@ export async function saveChangesButtonGroups(editedGrades, groups, selectedActi
         const studentsWithThisGroup = studentsCopy.filter(student => student?.attributes?.groups?.data?.find(group => group.id === +groupId));
         studentsWithThisGroup.forEach(student => {
             student.attributes.groups.data.forEach(groupItr => {
-                const file = groupItr.attributes.qualification?.data?.attributes?.file?.data;
-                groupItr = group;
-                groupItr.attributes.qualification.data.attributes = {
-                    ...groupItr.attributes.qualification.data.attributes,
-                    file: {
-                        data: file
+                groupItr.attributes.qualifications?.data?.forEach((quali) => {
+                    if (quali.attributes.activity.data.id === JSON.parse(selectedActivity).id) {
+                        quali.attributes.comments = comments;
+                        quali.attributes.qualification = qualification;
                     }
-
-                }
+                })
             });
-        })
+
+
+        });
 
         setStudents(studentsCopy);
 
@@ -93,7 +98,7 @@ export async function saveChangesButtonGroups(editedGrades, groups, selectedActi
 export const TableRowsGroups = ({ group, activity, isEditChecked, setThereIsChanges, editedGrades, setEditedGrades }) => {
     const [files, setFiles] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const grade = group.attributes.qualification?.data
+    const grade = group.attributes.qualifications?.data.find(qualification => qualification.attributes.activity.data.id === activity.id)
     const [qualification, setQualification] = useState(grade?.attributes?.qualification ? grade.attributes.qualification : null);
     const [comments, setComments] = useState(grade?.attributes?.comments ? grade.attributes.comments : null);
 
