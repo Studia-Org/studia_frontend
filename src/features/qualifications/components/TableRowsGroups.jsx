@@ -43,7 +43,6 @@ export async function saveChangesButtonGroups(editedGrades, groups, selectedActi
                 const data = await response.json();
                 // group.attributes.qualifications.data = data.data;
                 qual = data.data;
-                console.log(groupsCopy);
 
             }
         }

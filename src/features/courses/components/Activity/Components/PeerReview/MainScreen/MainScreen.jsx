@@ -86,10 +86,10 @@ function MainScreen({
 
     return (
         <div className={`flex ${overpassDeadLine || userIndexSelected === null ? `flex-col h-full` : ""} content-start items-start 1.5xl:justify-between flex-wrap space-y-3 `}>
-            <div className={`flex flex-col ${userIndexSelected !== null ? "" : "w-full"} ${overpassDeadLine ? "sm:p-10 p-5" : "p-5"}`}>
+            <div className={`flex flex-col ${userIndexSelected !== null ? "flex-1" : "w-full"} ${overpassDeadLine ? "sm:p-10 p-5" : "p-5"}`}>
                 <BackToCourse courseId={courseId} navigate={navigate} />
-                <div className="flex flex-wrap w-full mb-2 lg:mb-0 gap-x-10">
-                    <div>
+                <div className="flex flex-wrap flex-1 max-w-[50%] mb-2 lg:mb-0 gap-x-10">
+                    <div className="w-full">
                         <ActivityTitle type='peerReview'
                             title={activityData.activity.data.attributes.title}
                             evaluated={evaluated}
@@ -108,9 +108,9 @@ function MainScreen({
             </div>
 
             {userIndexSelected !== null && PeerReview !== undefined && PeerReview !== null && deadLine > new Date() ?
-                <section className="flex-1 flex md3:justify-center min-w-[300px] max-w-full md3:ms-3 px-5">
-                    <div className="flex flex-col max-w-[70%] flex-1 gap-y-1">
-                        <h3 className='text-2xl font-semibold'>Peer Review</h3>
+                <section className="flex-1 flex md3:justify-end min-w-[300px] max-w-full xl:max-w-[30%] md3:ms-3 xl:pr-10 p-5">
+                    <div className="flex flex-col w-full gap-y-1">
+                        <h3 className='text-xl font-semibold'>Peer Review</h3>
 
                         <p className='mt-5 text-lg'>Correct {" "}
                             {!correctActivityGroup ?
