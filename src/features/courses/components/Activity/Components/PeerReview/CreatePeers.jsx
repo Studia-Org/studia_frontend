@@ -344,7 +344,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                             </StrictModeDroppable>
                             <section>
                                 {studentsToReview.length === 0 && <p className="text-sm text-red-500">No students to review</p>}
-                                {studentsToReview.length === 0 && <p className="text-sm text-red-500">Any student has delivered the activity</p>}
+                                {studentsToReview.length === 0 && <p className="text-sm text-red-500">No students have submitted the activity</p>}
                             </section>
                             <section className="flex flex-wrap max-w-[100%] h-fit gap-3 mt-2">
                                 {
