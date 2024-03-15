@@ -143,7 +143,6 @@ export default function PeerReviewComponent({ activityData }) {
         }
 
     }, [userIndexSelected, qualificationIds])
-    console.log(activityData)
 
     function sendEvalution() {
         try {

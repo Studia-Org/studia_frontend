@@ -8,7 +8,6 @@ export const StudentRow = ({ student, activityToReviewID, activityTitle, peerRev
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isRubricModalOpen, setIsRubricModalOpen] = useState(false);
     const [rubricData, setRubricData] = useState({})
-
     const studentQualifications = [...student.attributes.qualifications.data.filter((qualification) => {
 
         if (qualification.attributes.activity.data === null) return false
@@ -16,15 +15,15 @@ export const StudentRow = ({ student, activityToReviewID, activityTitle, peerRev
         return qualification.attributes.activity.data.id === activityToReviewID
     }),
     ...student.attributes.groups?.data?.filter((group) => {
-        return group.attributes.activity.data.id === activityToReviewID
+        return group?.attributes?.activity?.data?.id === activityToReviewID
     }).flatMap((group) => group?.attributes?.qualifications?.data)]
 
     const studentQualificationsGiven = peerReviewAnswers.filter((answer) =>
-        answer.attributes.user?.data.id === student.id)
+        answer.attributes?.user?.data?.id === student.id)
 
     const studentQualificationsReceived = peerReviewAnswers.filter((answer) =>
-        answer.attributes.qualifications?.data.some((qualification) =>
-            qualification.attributes.user.data.id === student.id))
+        answer.attributes?.qualifications?.data.some((qualification) =>
+            qualification?.attributes?.user?.data?.id === student.id))
 
     const studentFiles = studentQualifications[0]?.attributes.file?.data
     function handleRubricModalOpen(qualification) {
@@ -33,8 +32,9 @@ export const StudentRow = ({ student, activityToReviewID, activityTitle, peerRev
     }
 
     function renderAllGivenQualifications(givenQualification) {
-        const activityGroup = givenQualification.attributes.user.data.attributes.groups?.data.find((group) =>
-            group.attributes.activity.data.id === activityToReviewID)
+        const activityGroup = givenQualification.attributes.user.data.attributes.groups?.data.find((group) => {
+            return group?.attributes?.activity?.data?.id === activityToReviewID
+        })
         if (activityGroup) {
             return (
                 <>
@@ -78,7 +78,7 @@ export const StudentRow = ({ student, activityToReviewID, activityTitle, peerRev
     }
 
     function renderAllRecievedQualifications(recievedQualification) {
-        const activityGroup = recievedQualification.attributes.user.data.attributes.groups?.data.find((group) => group.attributes.activity.data.id === activityToReviewID)
+        const activityGroup = recievedQualification.attributes.user.data.attributes.groups?.data.find((group) => group?.attributes?.activity?.data?.id === activityToReviewID)
         if (activityGroup && peerReviewinGroups) {
             return (
                 <>

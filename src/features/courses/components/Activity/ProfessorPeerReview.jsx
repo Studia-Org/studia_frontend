@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { fetchCourseInformation } from '../../../../fetches/fetchCourseInformation'
 import { fetchPeerReviewAnswers } from '../../../../fetches/fetchPeerReviewAnswers';
 import { StudentRow } from './Components/PeerReview/StudentRow';
+import { GroupRows } from './Components/PeerReview/GroupRows.jsx';
 import { Button, Empty } from 'antd';
 import generateExcelPeerReview from './utils/generateExcelPeerReview';
 import CreatePeers from './Components/PeerReview/CreatePeers';
@@ -13,23 +14,48 @@ export const ProfessorPeerReview = ({ activityData }) => {
   const [courseContentInformation, setCourseContentInformation] = useState({});
   const [peerReviewAnswers, setPeerReviewAnswers] = useState([]);
   const [createPeerReview, setCreatePeerReview] = useState(false);
-
-  const navigate = useNavigate()
-  const { courseId, activityId } = useParams()
-  const filteredStudents = courseContentInformation.students?.data.filter((student) =>
-    student.attributes.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
+  const [studentGroups, setStudentGroups] = useState([])
   const peerReviewinGroups = activityData.activity?.data.attributes.groupActivity
 
   const activityToReviewID = activityData.activity?.data.attributes.task_to_review?.data?.id
+  const navigate = useNavigate()
+  const { courseId, activityId } = useParams()
+
+  const filteredStudents = peerReviewinGroups ?
+    studentGroups.filter((group) => {
+      return group.attributes?.users?.data.some((user) => {
+        return user.attributes.name.toLowerCase().includes(searchTerm.toLowerCase())
+      })
+    })
+
+    : courseContentInformation.students?.data.filter((student) =>
+      student.attributes.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+
   useEffect(() => {
     async function fetchCourseData() {
       const { courseInformation, students, professors } =
         await fetchCourseInformation({ courseId });
 
       setCourseContentInformation({ courseInformation, students, professors });
+
+      if (peerReviewinGroups) {
+
+        const idAdded = []
+        const groups = students.data.flatMap((student) => {
+          return student.attributes.groups?.data.filter((group) => {
+            if (idAdded.includes(group.id)) return false
+            idAdded.push(group.id)
+            return group.attributes?.activity?.data?.id === activityToReviewID
+          })
+        })
+
+        setStudentGroups(groups)
+      }
+
     }
+
     fetchCourseData();
   }, [courseId]);
 
@@ -43,6 +69,14 @@ export const ProfessorPeerReview = ({ activityData }) => {
   }, []);
 
   function renderTableRows() {
+    if (peerReviewinGroups) {
+      return (
+        filteredStudents.map((group) => (
+          <GroupRows group={group} peerReviewAnswers={peerReviewAnswers} key={group?.id}
+            activityTitle={activityData.activity?.data.attributes.title} activityToReviewID={activityToReviewID} />
+        ))
+      )
+    }
     return (
       <>
         {filteredStudents.map((student) => (
