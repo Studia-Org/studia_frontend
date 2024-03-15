@@ -71,8 +71,6 @@ export default function PeerReviewComponent({ activityData }) {
                     activityData?.peer_review_qualifications.data
                         .map((peerReview) => peerReview.attributes.user.data)
 
-                console.log(usersToCorrect)
-                console.log(data.data)
                 const idQualifications =
                     peerReviewInGroups ?
                         data.data.filter((qualification) =>
