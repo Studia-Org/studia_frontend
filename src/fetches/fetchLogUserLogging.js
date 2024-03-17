@@ -3,7 +3,7 @@ import { API, BEARER } from "../constant";
 export function fetchLogUserLogging({ data, token }) {
     let log = data.log;
     const currentDate = new Date().toLocaleString();
-    if (log === undefined || log === null) {
+    if (data.log === null || log.logins === undefined || log.logins === null) {
         log = {
             logins: {}
         };
@@ -11,19 +11,43 @@ export function fetchLogUserLogging({ data, token }) {
     let logData = log.logins;
     logData[currentDate] = navigator.userAgent;
 
-    fetch(`${API}/logs/${log.id}`, {
-        method: "PUT",
-        headers: {
-            Authorization: `${BEARER} ${token}`,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            data: log,
-        }),
-    })
-        .then(res => res.json())
-        .then(updatedData => {
+    if (data.log === null) {
+        fetch(`${API}/logs`, {
+            method: "POST",
+            headers: {
+                Authorization: `${BEARER} ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                data: {
+                    logins: logData,
+                    user: data.id
+
+                },
+            }),
         })
-        .catch(error => {
-        });
+            .then(res => res.json())
+            .then(updatedData => {
+            })
+            .catch(error => {
+            });
+    }
+    else {
+        fetch(`${API}/logs/${data.log.id}`, {
+            method: "PUT",
+            headers: {
+                Authorization: `${BEARER} ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                data: log,
+            }),
+        })
+            .then(res => res.json())
+            .then(updatedData => {
+            })
+            .catch(error => {
+            });
+    }
+
 }
