@@ -1,9 +1,14 @@
 import { API, BEARER } from "../constant";
 
 export function fetchLogUserLogging({ data, token }) {
-    const log = data.log;
-    const logData = log.logins;
+    let log = data.log;
     const currentDate = new Date().toLocaleString();
+    if (log === undefined || log === null) {
+        log = {
+            logins: {}
+        };
+    }
+    let logData = log.logins;
     logData[currentDate] = navigator.userAgent;
 
     fetch(`${API}/logs/${log.id}`, {
