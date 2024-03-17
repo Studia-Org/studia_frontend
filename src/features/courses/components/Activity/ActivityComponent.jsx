@@ -134,7 +134,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   async function sendFile(result) {
     try {
 
-      let response2 = undefined;
       let files = []
 
       files = filesUploaded.map((file) => file.id);
@@ -156,7 +155,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
         qualificationData.data.user = user.id;
       }
       if ((activityData.delivered || IDQualification) && !evaluated) {
-        response2 =
+        const response2 =
           await fetch(`${API}/qualifications/${IDQualification}`, {
             method: 'PUT',
             headers: {
@@ -165,9 +164,10 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
             },
             body: JSON.stringify(qualificationData),
           });
+        return { response_upload: response2 };
       }
       else if (!evaluated) {
-        response2 =
+        const response =
           await fetch(`${API}/qualifications`, {
             method: 'POST',
             headers: {
@@ -176,20 +176,18 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
             },
             body: JSON.stringify(qualificationData),
           });
-        if (!response2.ok) return response2;
-        let jsonresponse = await response2.json();
+        if (!response.ok) return response;
+        let jsonresponse = await response.json();
         setIDQualification(jsonresponse.data.id);
+        return { response_upload: response, json: jsonresponse };
       }
-      return response2;
     } catch (error) {
       console.error(error);
     }
   }
 
   async function sendData() {
-    console.log('sendData');
     try {
-      console.log('activityData', activityData);
       const isThinkAloud = (activityData.activity.data.attributes.type === 'thinkAloud' && formData.getAll('files').length === 0)
       const isBlob = audioFile instanceof Blob;
       const formDataAudio = new FormData();
@@ -211,7 +209,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
       });
       const result = await response.json();
       if (response.ok) {
-        const response_upload = await sendFile(result);
+        const { response_upload, json } = await sendFile(result);
         if (response_upload.ok) {
           Swal.fire({
             icon: 'success',
@@ -226,8 +224,15 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                 }
               }
             })
-            const data = await response_upload.json();
-            setUserQualification({ ...userQualification, idQualification: data.data.id });
+
+            //check if its json and not response
+            if (json) {
+              setUserQualification({ ...userQualification, idQualification: json.data.id });
+            }
+            else {
+              const data = await response_upload.json();
+              setUserQualification({ ...userQualification, idQualification: data.data.id });
+            }
             setFilesUploaded(prev => [...prev, ...parsedResults]);
             setFormData(new FormData());
           })
