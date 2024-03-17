@@ -665,7 +665,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                         <Button
                           loading={uploadLoading}
                           id='submit-button-activity'
-                          disabled={formData.getAll('files').length === 0}
                           onClick={() => { sendData() }}
                           className="ml-auto " type='primary'>
                           Submit
