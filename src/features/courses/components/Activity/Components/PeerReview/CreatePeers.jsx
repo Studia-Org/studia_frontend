@@ -57,20 +57,41 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                 }
             }
         }).filter(Boolean)
-
         const groups = []
         // multiplacte each student hisself by the number of times they have to review usersToPair
         const studentsDuplicated = []
-        allStudents.forEach((student, index) => {
-            for (let i = 0; i < usersToPair; i++) {
-                const studentCopy = { ...student }
-                studentCopy.draggableId = Math.random().toString(36)
-                studentsDuplicated.push(studentCopy)
-            }
-        })
+        if (activity.attributes.groupActivity) {
+            const add = []
+            const groups = allStudents.map((student) => {
+                return student.attributes.groups?.data?.find((group) => {
+                    if (add.includes(group.id)) return false
+                    add.push(group.id)
+                    return group.attributes.activity?.data?.id === activityToReview.id
+                })
+            }).filter(Boolean)
+
+            groups.forEach((group, index) => {
+                for (let i = 0; i < usersToPair; i++) {
+                    const groupCopy = { ...group }
+                    groupCopy.draggableId = Math.random().toString(36)
+                    studentsDuplicated.push(groupCopy)
+                }
+            })
+        }
+        else {
+            allStudents.forEach((student, index) => {
+                for (let i = 0; i < usersToPair; i++) {
+                    const studentCopy = { ...student }
+                    studentCopy.draggableId = Math.random().toString(36)
+                    studentsDuplicated.push(studentCopy)
+                }
+            })
+        }
+
         groups.push(studentsDuplicated)
         let query = `populate[qualifications][populate][peer_review_qualifications]=id` +
-            `&populate[qualifications][populate][user][fields][0]=id`
+            `&populate[qualifications][populate][user][fields][0]=id` +
+            `&populate[qualifications][populate][group][fields][0]=id`
 
         fetch(`${API}/activities/${activity.id}?${query}`, {
             headers: {
@@ -83,17 +104,25 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                 for (let i = 0; i < qualificationsToReview.length; i++) {
                     const group = []
                     const qualificationToReview = qualificationsToReview[i].qualification
-
                     const find = qualificationsAlreadyDone
                         .filter((qualification) => qualification.attributes.peer_review_qualifications.data?.find((peer) => {
                             return peer.id === qualificationToReview.id
                         }))
+
                     if (find.length > 0) {
                         find.forEach((qualification) => {
-                            const student = studentsDuplicated.find((user) => user.id === qualification.attributes.user.data.id)
-                            const studentIndex = studentsDuplicated.findIndex((user) => user.id === qualification.attributes.user.data.id)
-                            studentsDuplicated.splice(studentIndex, 1)
-                            group.push({ ...student, draggableId: Math.random().toString(36) })
+                            if (activity.attributes.groupActivity) {
+                                const group_qualification = studentsDuplicated.find((group) => group.id === qualification.attributes.group.data.id)
+                                const studentIndex = studentsDuplicated.findIndex((group) => group.id === qualification.attributes.group.data.id)
+                                studentsDuplicated.splice(studentIndex, 1)
+                                group.push({ ...group_qualification, draggableId: Math.random().toString(36) })
+                            }
+                            else {
+                                const student = studentsDuplicated.find((user) => user.id === qualification.attributes.user.data.id)
+                                const studentIndex = studentsDuplicated.findIndex((user) => user.id === qualification.attributes.user.data.id)
+                                studentsDuplicated.splice(studentIndex, 1)
+                                group.push({ ...student, draggableId: Math.random().toString(36) })
+                            }
                         })
                     }
                     groups.push(group)
@@ -241,29 +270,33 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
         setCreatingGroups(true)
         const peers = students.map((group, index) => {
             if (index === 0) return null
-            console.log(studentsToReview[index - 1])
-            return {
-                users: group.map((student) => student.id),
+            const data = {
+
                 qualifications: studentsToReview[index - 1].qualification.id,
                 activity: +activityId
             }
+            if (activity.attributes.groupActivity) {
+                data.groups = group.map((group) => group.id)
+            } else {
+                data.users = group.map((student) => student.id)
+            }
+            return data
         }).filter(Boolean)
         console.log(peers)
-
-        const response = await fetch(`${API}/create_peers`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getToken()}`
-                },
-                body: JSON.stringify({ peers })
-            }
-        )
-        console.log(response)
-        if (response.ok) {
-            message.success("Peers created successfully")
-        }
+        // const response = await fetch(`${API}/create_peers`,
+        //     {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'Authorization': `Bearer ${getToken()}`
+        //         },
+        //         body: JSON.stringify({ peers, peerInGroups: activity.attributes.groupActivity })
+        //     }
+        // )
+        // console.log(response)
+        // if (response.ok) {
+        //     message.success("Peers created successfully")
+        // }
 
         setCreatingGroups(false)
 
@@ -291,7 +324,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                         className="mb-4"
                         type="primary"
                         loading={creatingGroups}
-                        disabled={activityHasStarted}
+                        disabled={!activityHasStarted}
                         onClick={saveGroups}>
                         Save peers
                     </Button >
@@ -311,12 +344,45 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                             <StrictModeDroppable key={0} droppableId={`${0}`} isDropDisabled={activityHasStarted} >
                                 {(provided) => (
                                     <section className={`flex flex-col gap-2 p-2 sticky}`}>
-                                        <p>Students</p>
+                                        {
+                                            activity.attributes.groupActivity ?
+                                                <p>Groups</p>
+                                                : <p>Students</p>
+                                        }
                                         <ul className={`flex flex-col gap-y-4 w-[300px] min-h-[200px] bg-white rounded-lg p-2 overflow-x-clip`}
                                             {...provided.droppableProps}
                                             ref={provided.innerRef}>
                                             {
                                                 students.length > 0 && students[0].map((student, index) => {
+                                                    if (activity.attributes.groupActivity) {
+                                                        return (
+                                                            <Draggable key={student.draggableId} draggableId={student.draggableId} index={index}>
+                                                                {(provided) => (
+                                                                    <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
+                                                                        className="p-2 shadow-md list-none active::cursor-grabbing bg-white  w-[280px] overflow-x-clip rounded-lg ">
+                                                                        <article className='flex flex-col h-full gap-y-2 '>
+                                                                            {
+                                                                                student.attributes.users.data.map((user, index) => {
+                                                                                    return (
+                                                                                        <section className="flex">
+                                                                                            <img alt='profile student' className="w-6 h-6 rounded-full"
+                                                                                                src={user?.attributes?.profile_photo?.data?.attributes?.url} />
+                                                                                            <div className="pl-3 text-left">
+                                                                                                <p className="text-sm font-semibold">{user?.attributes.name}</p>
+                                                                                                <p className="text-xs font-normal text-gray-500">{user?.attributes.email}</p>
+                                                                                            </div>
+
+                                                                                        </section>
+                                                                                    )
+                                                                                })
+                                                                            }
+
+                                                                        </article>
+                                                                    </li>
+                                                                )}
+                                                            </Draggable>
+                                                        )
+                                                    }
                                                     return (
                                                         <Draggable key={student.draggableId} draggableId={student.draggableId} index={index}>
                                                             {(provided) => (
@@ -368,7 +434,11 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                                                         })
                                                     }
                                                 </ul>
-                                                <p className="text-sm text-gray-700">Users who are going to review</p>
+                                                {
+                                                    activity.attributes.groupActivity ?
+                                                        <p className="text-sm text-gray-700">Group who are going to review</p>
+                                                        : <p className="text-sm text-gray-700">Users who are going to review</p>
+                                                }
                                                 <StrictModeDroppable key={index + 1} droppableId={`${index + 1}`} isDropDisabled={activityHasStarted}>
                                                     {(provided) => (
                                                         <ul className={`flex flex-col gap-y-4 w-[300px] min-h-[200px] bg-white rounded-lg p-2 overflow-x-clip`}
@@ -376,6 +446,35 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                                                             ref={provided.innerRef}>
                                                             {
                                                                 students.length > 0 && students[index + 1].map((student, index) => {
+                                                                    if (activity.attributes.groupActivity) {
+                                                                        return (
+                                                                            <Draggable key={student.draggableId} draggableId={student.draggableId} index={index}>
+                                                                                {(provided) => (
+                                                                                    <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
+                                                                                        className="p-2 shadow-md list-none active::cursor-grabbing bg-white  w-[280px] overflow-x-clip rounded-lg ">
+                                                                                        <article className='flex flex-col h-full gap-y-2 '>
+                                                                                            {
+                                                                                                student.attributes.users.data.map((user, index) => {
+                                                                                                    return (
+                                                                                                        <section className="flex">
+                                                                                                            <img alt='profile student' className="w-6 h-6 rounded-full"
+                                                                                                                src={user?.attributes?.profile_photo?.data?.attributes?.url} />
+                                                                                                            <div className="pl-3 text-left">
+                                                                                                                <p className="text-sm font-semibold">{user?.attributes.name}</p>
+                                                                                                                <p className="text-xs font-normal text-gray-500">{user?.attributes.email}</p>
+                                                                                                            </div>
+
+                                                                                                        </section>
+                                                                                                    )
+                                                                                                })
+                                                                                            }
+
+                                                                                        </article>
+                                                                                    </li>
+                                                                                )}
+                                                                            </Draggable>
+                                                                        )
+                                                                    }
                                                                     return (
                                                                         <Draggable key={student.draggableId} draggableId={student.draggableId} index={index}>
                                                                             {(provided) => (
