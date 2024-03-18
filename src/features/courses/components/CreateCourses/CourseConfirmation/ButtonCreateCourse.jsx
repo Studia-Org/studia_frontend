@@ -12,6 +12,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
     const [isLoading, setIsLoading] = useState(false);
     const [progress, setProgress] = useState(0);
 
+    console.log('createCourseSectionsList', createCourseSectionsList)
     const navigate = useNavigate();
 
     const isValidCourseBasicInfo = (courseBasicInfo) => {
