@@ -16,6 +16,7 @@ import { checkAuthenticated } from "../../../helpers";
 import { Whisper, Button, Popover } from 'rsuite';
 import { Chip } from '@mui/material';
 import { SpeedDialCreateCourse } from '../components/CoursesHome/SpeedDialCreateCourse';
+import { ModalCreateCourseStudent } from '../components/CoursesHome/AddCourseStudent/ModalCreateCourseStudent';
 
 const CoursesHome = () => {
   const { user } = useAuthContext();
@@ -26,6 +27,7 @@ const CoursesHome = () => {
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [dailyTasks, setDailyTasks] = useState([]);
+  const [expandCreateCourseStudent, setExpandCreateCourseStudent] = useState(false);
   const [openObjectivesModal, setOpenObjectivesModal] = useState(false);
 
   document.title = 'Home - Uptitude'
@@ -380,11 +382,11 @@ const CoursesHome = () => {
               </>
           }
         </div>
+        <ModalCreateCourseStudent expandCreateCourseStudent={expandCreateCourseStudent} setExpandCreateCourseStudent={setExpandCreateCourseStudent} />
       </div>
       {
-        user && (user.role_str === 'admin' || user.role_str === 'professor') ?
-          <SpeedDialCreateCourse />
-          : null
+        user &&
+        <SpeedDialCreateCourse setExpandCreateCourseStudent={setExpandCreateCourseStudent} />
       }
     </>
   )
