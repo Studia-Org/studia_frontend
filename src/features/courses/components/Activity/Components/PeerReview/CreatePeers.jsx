@@ -282,21 +282,20 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
             }
             return data
         }).filter(Boolean)
-        console.log(peers)
-        // const response = await fetch(`${API}/create_peers`,
-        //     {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //             'Authorization': `Bearer ${getToken()}`
-        //         },
-        //         body: JSON.stringify({ peers, peerInGroups: activity.attributes.groupActivity })
-        //     }
-        // )
-        // console.log(response)
-        // if (response.ok) {
-        //     message.success("Peers created successfully")
-        // }
+        const response = await fetch(`${API}/create_peers`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getToken()}`
+                },
+                body: JSON.stringify({ peers, peerInGroups: activity.attributes.groupActivity })
+            }
+        )
+        console.log(response)
+        if (response.ok) {
+            message.success("Peers created successfully")
+        }
 
         setCreatingGroups(false)
 
