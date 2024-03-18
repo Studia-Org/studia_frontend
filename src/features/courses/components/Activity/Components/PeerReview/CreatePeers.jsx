@@ -33,7 +33,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                 )
             if (activityToReviewWasInGroups) {
                 // check if qualification has already been created
-                if (studentQualification && !added.includes(studentQualification.id)) {
+                if (studentQualification && studentQualification?.attributes?.qualifications?.data?.length > 0 && !added.includes(studentQualification.id)) {
                     added.push(studentQualification.id)
                     // add profile photo to the user
                     studentQualification.attributes.users.data = studentQualification.attributes.users.data.map((user) => {
@@ -129,6 +129,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                 }
                 const groupWithMoreStudents = qualificationsToReview.find((group) => group.users.length > studentsPerGroup)
                 setGroupWithMoreStudents(groupWithMoreStudents)
+
                 setStudents(groups)
                 setStudentsToReview(qualificationsToReview)
             })
@@ -300,6 +301,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
         setCreatingGroups(false)
 
     }
+    console.table(studentsToReview.length, allStudents.length, studentsPerGroup, groupWithMoreStudents, Math.ceil((allStudents.length) / studentsPerGroup))
     return (
         <>
             <div className='p-10'>
@@ -323,7 +325,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                         className="mb-4"
                         type="primary"
                         loading={creatingGroups}
-                        disabled={!activityHasStarted}
+                        disabled={activityHasStarted}
                         onClick={saveGroups}>
                         Save peers
                     </Button >
@@ -333,7 +335,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                 {!activityToReviewWasInGroups && studentsToReview.length < allStudents.length
                     && <p className="mb-2 text-sm text-red-500">There are students who have not delivered the activity</p>}
                 {activityToReviewWasInGroups &&
-                    (studentsToReview.length > (groupWithMoreStudents ?
+                    (studentsToReview.length < (groupWithMoreStudents ?
                         Math.floor((allStudents.length) / studentsPerGroup) :
                         Math.ceil((allStudents.length) / studentsPerGroup)))
                     && <p className="mb-2 text-sm text-red-500">There are groups who have not delivered the activity</p>}
