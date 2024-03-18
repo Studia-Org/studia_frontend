@@ -168,8 +168,33 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
         const dInd = +destination.droppableId;
         if (dInd !== 0) {
             const student = students[sInd].find((student) => student.draggableId === draggableId)
-            const studentExistInDestination = students[dInd].find((user) => user.id === student.id)
-            const studentExist = studentsToReview[dInd - 1].users.find((user) => user.id === student.id)
+
+            let studentExistInDestination = students[dInd].find((user) => user.id === student.id)
+            let studentExist = studentsToReview[dInd - 1].users.find((user) => user.id === student.id)
+
+            let groupExistInDestination = students[dInd].find((group) => group.id === student.id)
+            let groupExist = studentsToReview[dInd - 1].users.some((user) => {
+                return student.attributes.users.data.find((student) => {
+                    return student.id === user.id
+                })
+            })
+            if (activity.attributes.groupActivity) {
+                studentExist = false;
+                studentExistInDestination = false;
+            }
+            else {
+                groupExist = false;
+                groupExistInDestination = false;
+            }
+
+            if (groupExistInDestination) {
+                message.error("Group already exists in this group")
+                return
+            }
+            if (groupExist) {
+                message.error("Group can't review his own activity")
+                return
+            }
             if (studentExistInDestination) {
                 message.error("Student already exists in this group")
                 return
@@ -217,9 +242,25 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
             while (groupIndex < studentsToReview.length + 1) {
                 studentsCopy[groupIndex] = studentsCopy[groupIndex] || []
 
-                const studentExist = studentsToReview[groupIndex - 1].users.find((user) => user.id === student.id)
-                const studentExistInDestination = studentsCopy[groupIndex].find((user) => user.id === student.id)
-                if (studentsCopy[groupIndex].length < usersToPair && !studentExist && !studentExistInDestination) {
+                let studentExist = studentsToReview[groupIndex - 1].users.find((user) => user.id === student.id)
+                let studentExistInDestination = studentsCopy[groupIndex].find((user) => user.id === student.id)
+                let groupExistInDestination = studentsCopy[groupIndex].find((group) => group.id === student.id)
+                let groupExist = studentsToReview[groupIndex - 1].users.some((user) => {
+                    return student.attributes.users.data.find((student) => {
+                        return student.id === user.id
+                    })
+
+                })
+                if (activity.attributes.groupActivity) {
+                    studentExist = false;
+                    studentExistInDestination = false;
+                }
+                else {
+                    groupExist = false;
+                    groupExistInDestination = false;
+                }
+
+                if (studentsCopy[groupIndex].length < usersToPair && !studentExist && !studentExistInDestination && !groupExistInDestination && !groupExist) {
                     studentsCopy[groupIndex].push(student)
                     break
                 }
@@ -240,7 +281,15 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
 
                 const studentExist = studentsToReview[groupIndex - 1].users.find((user) => user.id === student.id)
                 const studentExistInDestination = studentsCopy[groupIndex].find((user) => user.id === student.id)
-                if (!studentExist && !studentExistInDestination) {
+                const groupExistInDestination = studentsCopy[groupIndex].find((group) => group.id === student.id)
+                const groupExist = studentsToReview[groupIndex - 1].users.some((user) => {
+                    return student.attributes.users.data.find((student) => {
+
+                        return student.id === user.id
+                    })
+
+                })
+                if (!studentExist && !studentExistInDestination && !groupExistInDestination && !groupExist) {
                     studentsCopy[groupIndex].push(student)
                     break
                 }
@@ -301,7 +350,6 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
         setCreatingGroups(false)
 
     }
-    console.table(studentsToReview.length, allStudents.length, studentsPerGroup, groupWithMoreStudents, Math.ceil((allStudents.length) / studentsPerGroup))
     return (
         <>
             <div className='p-10'>
