@@ -16,10 +16,14 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
     const [searchTerm, setSearchTerm] = useState('');
     const [editedGrades, setEditedGrades] = useState({});
     const { user } = useAuthContext()
-    const filteredActivity = activities.filter(activity => activity.id === JSON.parse(selectedActivity).id)
+    const filteredActivity = activities.find(activity => activity.id === JSON.parse(selectedActivity).id)
     const [loading, setLoading] = useState(false)
     const [groups, setGroups] = useState([])
 
+    const tableOptions = {
+        "questionnaire": "Questionnaire Completed",
+        "peerReview": "Average grade received",
+    }
     const handleToggleChange = () => {
         setIsEditChecked(!isEditChecked);
     };
@@ -111,13 +115,24 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
         const parsedActivityFull = JSON.parse(selectedActivity)
         if (parsedActivityFull.groupActivity) {
             const AllFilteredGroups = students.filter((student) => student.attributes.groups?.data
-                .find(group => group.attributes.activity?.data?.id === parsedActivityFull.id))
-                .map((group) => group.attributes.groups.data.find(group => group.attributes.activity?.data?.id === parsedActivityFull.id))
+                .find(group => {
+                    if (filteredActivity.attributes.type === 'peerReview') {
+                        return group.attributes.activity?.data?.id === filteredActivity?.attributes?.task_to_review?.data?.id
+                    }
+                    return group.attributes.activity?.data?.id === parsedActivityFull.id
+                }))
+                .map((group) => group.attributes.groups.data.find(group => {
+                    if (filteredActivity.attributes.type === 'peerReview') {
+                        return group.attributes.activity?.data?.id === filteredActivity?.attributes?.task_to_review?.data?.id
+                    }
+                    return group.attributes.activity?.data?.id === parsedActivityFull.id
+                }))
 
             const filteredGroupsIds = AllFilteredGroups.map(group => group.id)
             const filteredGroupsIdsUnique = [...new Set(filteredGroupsIds)]
             const filteredGroups = filteredGroupsIdsUnique.map(id => AllFilteredGroups.find(group => group.id === id))
             if (groups.length === 0) setGroups(filteredGroups)
+
             return (
                 filteredGroups.map((group) => {
                     return <TableRowsGroups
@@ -130,6 +145,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                         setEditedGrades={setEditedGrades}
                         setStudents={setStudents}
                         activities={activities}
+                        isPeerReview={filteredActivity.attributes.type === 'peerReview'}
                     />
                 })
             )
@@ -138,6 +154,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
             const filteredStudents = students.filter((student) =>
                 student.attributes.name.toLowerCase().includes(searchTerm.toLowerCase())
             )
+
             return (
                 <>
                     {filteredStudents.map((student) => {
@@ -149,6 +166,9 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                             setThereIsChanges={setThereIsChanges}
                             editedGrades={editedGrades}
                             setEditedGrades={setEditedGrades}
+                            activities={activities}
+                            isPeerReview={filteredActivity.attributes.type === 'peerReview'}
+
                         />
                     })}
                 </>
@@ -160,7 +180,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
         (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
     const activityOptions = activities
-        .filter(activity => activity.attributes.evaluable === true)
+        .filter(activity => activity.attributes.evaluable === true || activity.attributes.type === 'peerReview')
         .map(activity => ({
             value: JSON.stringify({ id: activity.id, title: activity.attributes.title, groupActivity: activity.attributes.groupActivity }),
             label: activity.attributes.title,
@@ -255,17 +275,17 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                     <th scope="col" class="px-6 py-3  w-2/4 ">
                                         Comment
                                     </th>
-                                    {
-                                        filteredActivity[0]?.attributes?.type !== 'questionnaire' ? (
-                                            <th scope="col" class="px-6 py-3">
-                                                Files
-                                            </th>
-                                        ) : (
-                                            <th scope="col" class="px-6 py-3">
-                                                Questionnaire Completed
-                                            </th>
-                                        )
+                                    {filteredActivity.attributes.type === "peerReview" &&
+                                        <th scope="col" class="px-6 py-3">
+                                            Professor - Students ponderation
+                                        </th>
                                     }
+                                    <th scope="col" class="px-6 py-3">
+                                        {
+                                            tableOptions[filteredActivity.attributes.type] || 'Files'
+                                        }
+                                    </th>
+
                                     <th scope="col" class="px-6 py-3">
                                         Last modified
                                     </th>

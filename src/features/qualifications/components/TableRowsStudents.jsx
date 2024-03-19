@@ -16,7 +16,6 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [qualification, setQualification] = useState(grade?.attributes?.qualification ? grade.attributes.qualification : null);
     const [comments, setComments] = useState(grade?.attributes?.comments ? grade.attributes.comments : null);
-    console.log(activities)
     const filteredActivity = activities?.filter(activityTemp => activityTemp.id === JSON.parse(activity).id)
 
     const { courseID } = useParams();

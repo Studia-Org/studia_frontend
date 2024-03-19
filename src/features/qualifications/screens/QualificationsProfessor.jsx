@@ -23,7 +23,11 @@ const QualificationsProfessor = () => {
 
     const fetchCourseData = async () => {
         try {
-            const response = await fetch(`${API}/courses/${courseID}?populate=sections.subsections.activity,cover,students.profile_photo,students.qualifications.activity,students.qualifications.file,students.user_response_questionnaires.questionnaire.subsection.activity,,students.groups.qualifications.activity,students.groups.qualifications.file,students.groups.activity,students.groups.users.profile_photo`,
+            const response = await fetch(`${API}/courses/${courseID}?populate=sections.subsections.activity.task_to_review,cover,` +
+                `students.profile_photo,students.qualifications.activity,students.qualifications.file,` +
+                `students.user_response_questionnaires.questionnaire.subsection.activity,` +
+                `students.groups.qualifications.activity,students.groups.qualifications.file,students.groups.qualifications.PeerReviewAnswers,` +
+                `students.groups.activity,students.groups.users.profile_photo`,
                 {
                     headers: {
                         Authorization: `${BEARER} ${getToken()}`
@@ -36,7 +40,9 @@ const QualificationsProfessor = () => {
                     section?.attributes.subsections.data.forEach(
                         subsection => {
                             if (subsection?.attributes.activity.data) {
-                                if (subsection?.attributes?.activity.data.attributes.evaluable === true) {
+
+                                if (subsection?.attributes?.activity.data.attributes.evaluable === true
+                                    || subsection?.attributes?.activity.data.attributes.type === 'peerReview') {
                                     evaluableActivities.push(subsection.attributes.activity.data)
                                 }
                             }
