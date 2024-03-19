@@ -3,6 +3,7 @@ const TFGCourseData = {
     description: 'Make a planning for your TFG.',
     type: 'TFG',
     subtype: 'Learning',
+    tags: ['TFG', 'Planning', 'Learning'],
     image: 'https://wuolah.com/blog/wp-content/uploads/sites/2/2023/12/tema-de-TFG-845x321.jpg',
     creator: 'Uptitude team',
     verified: true,
@@ -14,7 +15,7 @@ const TFGCourseData = {
 export const TFGExtendedCourseData = [
     {
         "id": "59ed95fd36a32",
-        "name": "dwad",
+        "name": "TFG Planning",
         "subsections": [
             {
                 "id": "1b4751ec-e334-4644-94f4-736370c46566",
