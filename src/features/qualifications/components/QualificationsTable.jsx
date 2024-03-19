@@ -15,6 +15,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
     const [thereIsChanges, setThereIsChanges] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [editedGrades, setEditedGrades] = useState({});
+    const [editActivity, setSetEditActivity] = useState({});
     const { user } = useAuthContext()
     const filteredActivity = activities.find(activity => activity.id === JSON.parse(selectedActivity).id)
     const [loading, setLoading] = useState(false)
@@ -146,6 +147,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                         setStudents={setStudents}
                         activities={activities}
                         isPeerReview={filteredActivity.attributes.type === 'peerReview'}
+                        setEditActivity={setSetEditActivity}
                     />
                 })
             )
@@ -247,6 +249,10 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                                 setLoading(false)
                                             } else {
                                                 saveChangesButton()
+                                            }
+                                            if (Object.keys(editActivity).length > 0) {
+                                                //TODO save changes for peer review ponderation
+                                                setSetEditActivity({})
                                             }
                                         }
                                         }>

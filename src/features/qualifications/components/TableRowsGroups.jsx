@@ -94,15 +94,14 @@ export async function saveChangesButtonGroups(editedGrades, groups, selectedActi
 }
 
 
-export const TableRowsGroups = ({ group, activity, isEditChecked, setThereIsChanges, editedGrades, setEditedGrades, isPeerReview }) => {
+export const TableRowsGroups = ({ group, activity, isEditChecked, setThereIsChanges, editedGrades, setEditedGrades, isPeerReview, setEditActivity }) => {
     const [files, setFiles] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const grade = group.attributes.qualifications?.data.find(qualification => qualification.attributes.activity.data.id === activity.id)
     const [qualification, setQualification] = useState(grade?.attributes?.qualification ? grade.attributes.qualification : null);
     const [comments, setComments] = useState(grade?.attributes?.comments ? grade.attributes.comments : null);
-    const [ponderationProfessor, setPonderationProfessor] = useState(null);
-    const [ponderationStudent, setPonderationStudent] = useState(null);
-
+    const [ponderationProfessor, setPonderationProfessor] = useState(grade?.attributes?.activity?.data?.attributes?.ponderationStudent ? 100 - grade?.attributes?.activity?.data?.attributes?.ponderationStudent : 100);
+    const [ponderationStudent, setPonderationStudent] = useState(grade?.attributes?.activity?.data?.attributes?.ponderationStudent ? grade?.attributes?.activity?.data?.attributes?.ponderationStudent : 0);
 
 
     const handleQualificationChange = (value) => {
@@ -138,14 +137,14 @@ export const TableRowsGroups = ({ group, activity, isEditChecked, setThereIsChan
             setPonderationProfessor(100 - value);
         }
         setThereIsChanges(value !== grade?.attributes?.ponderationProfessor || value !== grade?.attributes?.ponderationStudent);
-        setEditedGrades({
-            ...editedGrades,
-            [group.id]: {
-                qualification: qualification,
-                comments: comments,
-                ponderationProfessor: ponderationProfessor,
-                ponderationStudent: ponderationStudent
-            },
+        setEditActivity((prev) => {
+            return {
+                ...prev,
+                [activity.id]: {
+                    ponderationProfessor: ponderationProfessor,
+                    ponderationStudent: ponderationStudent
+                }
+            }
         });
 
     }
