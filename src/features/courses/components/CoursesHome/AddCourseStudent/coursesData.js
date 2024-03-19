@@ -736,9 +736,9 @@ export const TFGExtendedCourseData = [
         ],
         "task": {
             "id": "797377528074d",
-            "title": "dwad",
-            "description": "dwadw",
-            "deadline": "2024-03-12T16:12:45.000Z",
+            "title": "TFG Planning",
+            "description": "TFG Planning",
+            "deadline": null,
             "ponderation": 0,
             "categories": [],
             "type": "task",

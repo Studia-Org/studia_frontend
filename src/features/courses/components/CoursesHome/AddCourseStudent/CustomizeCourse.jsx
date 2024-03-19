@@ -3,14 +3,25 @@ import { motion } from 'framer-motion'
 import { Button, DatePicker, Input, message } from 'antd'
 import { UploadFiles } from '../../CreateCourses/CourseSections/UploadFiles';
 import { createCourse } from './createCourse';
-import { set } from 'date-fns';
+import { TFGExtendedCourseData } from './coursesData';
+import { useAuthContext } from '../../../../../context/AuthContext';
+import dayjs from 'dayjs';
+
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
 
+
+
 export const CustomizeCourse = ({ setCustomizeCourse, seletedCourse, fileList, setFileList, setExpandCreateCourseStudent }) => {
     const [loading, setLoading] = useState(false)
     const [seletedCourseTemp, setSeletedCourseTemp] = useState(seletedCourse)
+    const { user } = useAuthContext()
+
+    const disabledDate = (current) => {
+        // Can not select days before today and today
+        return current && current < dayjs().endOf('day');
+    };
 
     const handleDateChange = (date) => {
         setSeletedCourseTemp({ ...seletedCourseTemp, startDate: date[0], endDate: date[1] })
@@ -23,7 +34,13 @@ export const CustomizeCourse = ({ setCustomizeCourse, seletedCourse, fileList, s
     async function handleCreateCourse() {
         setLoading(true)
         if (!checkErrors()) {
-            await createCourse(seletedCourseTemp)
+            switch (seletedCourseTemp.type) {
+                case 'TFG':
+                    await createCourse(seletedCourseTemp, user.id, TFGExtendedCourseData)
+                    break;
+                default:
+                    break;
+            }
             setLoading(false)
             setCustomizeCourse(false)
             setExpandCreateCourseStudent(false)
@@ -84,12 +101,12 @@ export const CustomizeCourse = ({ setCustomizeCourse, seletedCourse, fileList, s
                     style={{ resize: 'none' }}
                 />
                 <p className='mt-3 mb-2 text-gray-500'>Select when do you plan to start and end the course *</p>
-                <RangePicker className='w-full' onChange={(e) => handleDateChange(e)} />
+                <RangePicker disabledDate={disabledDate} className='w-full' onChange={(e) => handleDateChange(e)} />
 
                 <p className='mt-3 mb-2 text-gray-500'>If you need it, add a custom cover (optional)</p>
                 <UploadFiles fileList={fileList} setFileList={setFileList} listType={'picture'} maxCount={1} />
 
-                <Button onClick={() => handleCreateCourse()} className='flex mt-5 ml-auto'>
+                <Button loading={loading} onClick={() => handleCreateCourse()} className='flex mt-5 ml-auto'>
                     Create course
                 </Button>
             </section>

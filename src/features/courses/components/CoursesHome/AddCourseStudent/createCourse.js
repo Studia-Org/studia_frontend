@@ -1,16 +1,43 @@
 import { message } from "antd";
-import { TFGExtendedCourseData } from "./coursesData";
 import { API } from "../../../../../constant";
 
-export async function createCourse(seletedCourseTemp) {
+function calculateListOfDates(startDate, endDate, numberOfSubsections) {
+    //En funcion de las fechas de inicio y fin y el numbero de subsections, se genera una lista de tuplas con start_date y end_date, la start_date de la primera tupla es la fecha de inicio del curso y la end_date de la ultima tupla es la fecha de fin del curso, 
+    // las fechas intermedias se calculan en funcion del numero de subsections, por ejemplo si el curso dura 30 dias y tiene 3 subsections, la primera fecha sera la fecha de inicio, la segunda fecha sera la fecha de inicio + 10 dias, la tercera fecha sera la fecha de inicio + 20 dias y la cuarta fecha sera la fecha de fin
+    // la start_date tiene que empezar a las 00:00:00 y la end_date tiene que terminar a las 23:59:59
+
+    const diffDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+    const daysPerSubsection = diffDays / numberOfSubsections
+    let dates = []
+    let currentDate = startDate
+    const MS_PER_DAY = 1000 * 60 * 60 * 24;
+    for (let i = 0; i < numberOfSubsections; i++) {
+        let newDate = new Date(currentDate)
+        newDate.setDate(newDate.getDate() + daysPerSubsection)
+        let start_date_hours = new Date(currentDate).setUTCHours(0, 0, 0)
+        let end_date_hours = new Date(newDate).setUTCHours(23, 59, 59)
+        dates.push([new Date(start_date_hours).toISOString(), new Date(end_date_hours).toISOString()])
+        currentDate = new Date(newDate.getTime() + MS_PER_DAY)
+    }
+    return dates
+
+}
+
+export async function createCourse(seletedCourseTemp, userID, data) {
     const token = '13a85ddfa7db25ae924218cb1a1dcb4cc939375fa4ffa718684e3a298a0689f96416b76e0ac96879926eb07d6bd2ffebe922f9d3e3ec9bfcb267d743bb946b6541af0e1c8cc01609e2316325f6269a7dd0b9c7c6d697687603e5344134e8591ee25f91565bcebedd1d757d8c3c098b83e654d0f098b0228920121b94d8e300e5'
-    const createdActivities = {}
-    let allSections = []
-    let forumIds = []
+    let allSections = [], forumIds = [], startDate = null, endDate = null, createdActivities = {}, index = 0
+    console.log(data[0].subsections.length)
+    const courseDates = calculateListOfDates(seletedCourseTemp.startDate, seletedCourseTemp.endDate, data[0].subsections.length)
+
+    console.log(courseDates)
+
+
     try {
-        for (const section of TFGExtendedCourseData) {
+        for (const section of data) {
             let allSubsections = []
             for (const subsection of section.subsections) {
+                startDate = courseDates[index][0]
+                endDate = courseDates[index][1]
                 let newSubsection = {}
                 if (subsection?.questionnaire) {
                     const questionnaire = {
@@ -32,8 +59,8 @@ export async function createCourse(seletedCourseTemp) {
 
                     const activity = {
                         title: subsection.title,
-                        start_date: new Date(subsection.start_date).toISOString(),
-                        deadline: new Date(subsection.end_date).toISOString(),
+                        start_date: startDate,
+                        deadline: endDate,
                         ponderation: 0,
                         type: 'questionnaire',
                         file: null,
@@ -66,8 +93,8 @@ export async function createCourse(seletedCourseTemp) {
                         title: subsection.title,
                         fase: subsection.fase,
                         finished: false,
-                        start_date: new Date(subsection.start_date).toISOString(),
-                        end_date: new Date(subsection.end_date).toISOString(),
+                        start_date: startDate,
+                        end_date: endDate,
                         description: subsection.questionnaire.attributes.description?.slice(0, 140) || 'description',
                         landscape_photo: null,
                         questionnaire: data.data.id,
@@ -100,6 +127,7 @@ export async function createCourse(seletedCourseTemp) {
                         subsection.activity.task_to_review = createdActivities[subsection.activity.task_to_review]
                     }
 
+
                     const createActivity = await fetch(`${API}/activities`, {
                         method: 'POST',
                         headers: {
@@ -110,6 +138,7 @@ export async function createCourse(seletedCourseTemp) {
                             data:
                             {
                                 ...subsection.activity,
+                                deadline: endDate,
                                 title: subsection.title,
                                 categories: Object.keys(subsection.activity.categories)
                             }
@@ -122,8 +151,8 @@ export async function createCourse(seletedCourseTemp) {
                         title: subsection.title,
                         fase: subsection.fase,
                         finished: false,
-                        start_date: new Date(subsection.start_date).toISOString(),
-                        end_date: new Date(subsection.end_date).toISOString(),
+                        start_date: startDate,
+                        end_date: endDate,
                         description: subsection.description?.slice(0, 140) || 'description',
                         landscape_photo: null,
                         questionnaire: null,
@@ -178,7 +207,7 @@ export async function createCourse(seletedCourseTemp) {
 
             const activity = {
                 title: section.task.title,
-                deadline: new Date(section.task.deadline).toISOString(),
+                deadline: endDate,
                 ponderation: 0,
                 type: section.task.type,
                 file: filesdata2?.map((file) => file.id),
@@ -252,7 +281,9 @@ export async function createCourse(seletedCourseTemp) {
             title: seletedCourseTemp.title,
             description: seletedCourseTemp.description,
             tags: seletedCourseTemp.tags,
+            studentManaged: true,
             sections: allSections,
+            students: [userID],
             start_date: seletedCourseTemp.startDate,
             end_date: seletedCourseTemp.endDate,
         }
@@ -270,7 +301,7 @@ export async function createCourse(seletedCourseTemp) {
             const data = await coverUpload.json();
             newCourse.cover = data[0].id;
         } else {
-            const imageUrl = 'https://www.21kschool.com/es/wp-content/uploads/sites/36/2021/01/rptgtpxd-1396254731.jpg';
+            const imageUrl = 'https://res.cloudinary.com/dnmlszkih/image/upload/v1710869993/oe3b0pbbss7m671e3gbx.jpg';
             const response = await fetch(imageUrl);
             const blob = await response.blob();
             const fileName = imageUrl.substring(imageUrl.lastIndexOf('/') + 1);
