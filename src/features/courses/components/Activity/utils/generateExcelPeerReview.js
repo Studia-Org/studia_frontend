@@ -1,74 +1,30 @@
 import * as ExcelJS from 'exceljs';
 export default function generateExcelPeerReview(students, peerReviewAnswers, activityToReviewID, peerReviewinGroups) {
 
-    let activityGroup = false;
     const categories = Object.keys(peerReviewAnswers[0].attributes.Answers);
     const activityName = peerReviewAnswers[0].attributes.qualifications.data[0].attributes.activity.data.attributes.title;
     const transformCategories = (categories) => {
         return categories.map(category => {
-            // Puedes ajustar esta lógica según la estructura real de tus datos
             return [
-                `Score ${category}`,
-                `Comments ${category}`
+                `Score: ${category}`,
+                `Comments: ${category}`
             ];
         });
     };
+
+
     const answersKeys = transformCategories(categories);
+    let { studentQualifications, maximumStudentsPerGroup, activityGroup } = peerReviewinGroups ?
+        getStudentQualificationsPeerInGroups(students, peerReviewAnswers, activityToReviewID) :
+        getStudentQualificationsNotPeerInGroups(students, peerReviewAnswers, peerReviewinGroups, activityToReviewID);
 
-    const studentQualifications = students.map((student) => {
-        const studentQualificationsGiven = peerReviewAnswers.filter((answer) =>
-            answer.attributes.user?.data.id === student.id).map((answer) => {
-                if (answer.attributes.qualifications.data.length > 1) {
-                    activityGroup = true;
-                    return {
-                        name: answer.attributes.qualifications.data[0].attributes.user.data.attributes.name,
-                        name2: answer.attributes.qualifications.data[1].attributes.user.data.attributes.name,
-                        answer: answer.attributes.Answers
-                    }
-                }
-                return {
-                    name: answer.attributes.qualifications?.data[0].attributes.user.data.attributes.name,
-                    email: answer.attributes.qualifications?.data[0].attributes.user.data.attributes.email,
-                    answer: answer.attributes.Answers
-                }
-            });
-
-        const studentQualificationsReceived = peerReviewAnswers.filter((answer) =>
-            answer.attributes.qualifications?.data.some((qualification) =>
-                qualification.attributes.user.data.id === student.id)).map((answer) => {
-                    if (answer.attributes.qualifications.data.length > 1 && peerReviewinGroups) {
-                        activityGroup = true;
-                        const qual = answer.attributes.user.data.attributes.groups?.data
-                            .filter((group) => group?.attributes?.activity?.data?.id === activityToReviewID)
-                        const name2 = qual[0].attributes.users.data.find((user) => user.id !== student.id).attributes.name
-                        return {
-                            name: answer.attributes.user.data.attributes.name,
-                            name2: name2,
-                            answer: answer.attributes.Answers
-                        }
-                    }
-                    return {
-                        name: answer.attributes.user.data.attributes.name,
-                        email: answer.attributes.user.data.attributes.email,
-                        answer: answer.attributes.Answers
-                    }
-                })
-
-        return {
-            name: student.attributes.name,
-            email: student.attributes.email,
-            qualificationsGiven: studentQualificationsGiven,
-            qualificationsReceived: studentQualificationsReceived,
-            activityGroup: activityGroup
-        }
-    })
-
-
-    generateExcel({ categories, answersKeys, studentQualifications, activityName, activityGroup, peerReviewinGroups });
+    maximumStudentsPerGroup = peerReviewinGroups ? maximumStudentsPerGroup : maximumStudentsPerGroup - 1;
+    console.log({ studentQualifications })
+    generateExcel({ categories, answersKeys, studentQualifications, activityName, activityGroup, peerReviewinGroups, maximumStudentsPerGroup });
 
 }
 
-const generateExcel = async ({ categories, answersKeys, studentQualifications, activityName, peerReviewinGroups }) => {
+const generateExcel = async ({ categories, answersKeys, studentQualifications, activityName, peerReviewinGroups, maximumStudentsPerGroup }) => {
     // Crear un nuevo libro de Excel
     const workbook = new ExcelJS.Workbook();
     workbook.creator = 'Uptitude';
@@ -76,7 +32,7 @@ const generateExcel = async ({ categories, answersKeys, studentQualifications, a
     workbook.modified = new Date();
 
     const nameOrMail = peerReviewinGroups ? 'Evaluator' : 'Email';
-    const nameOrMailEvaluated = studentQualifications.some((qual) => qual.activityGroup === true) ? 'Evaluated' : 'Email';
+    const nameOrMailEvaluated = studentQualifications.some((qual) => qual.activityGroup === true) || peerReviewinGroups ? 'Evaluated' : 'Email';
 
     // Agregar una hoja de cálculo por cada estudiante
     studentQualifications.forEach((user, index) => {
@@ -87,7 +43,6 @@ const generateExcel = async ({ categories, answersKeys, studentQualifications, a
         rowPeerReviewReceived.fill = {
             type: 'pattern',
             pattern: 'solid',
-            //color blue
             fgColor: { argb: '5353EC' },
         };
         rowPeerReviewReceived.eachCell(cell => {
@@ -95,7 +50,19 @@ const generateExcel = async ({ categories, answersKeys, studentQualifications, a
                 color: { argb: 'FFFFFF' },
             };
         });
-        const headerRow = sheet.addRow(['Evaluator', nameOrMail, ...answersKeys.flatMap((key, index) => key)]);
+        const rowForEvaluator = ['Evaluator']
+
+        if (nameOrMail === 'Evaluator') {
+            for (let i = 0; i < maximumStudentsPerGroup; i++) { rowForEvaluator.push(`Evaluator`) }
+            rowForEvaluator.pop()
+
+        }
+        else {
+            rowForEvaluator.push(nameOrMail)
+        }
+        rowForEvaluator.push(...answersKeys.flatMap((key, index) => key))
+
+        const headerRow = sheet.addRow(rowForEvaluator);
         headerRow.fill = {
             type: 'pattern',
             pattern: 'solid',
@@ -108,15 +75,34 @@ const generateExcel = async ({ categories, answersKeys, studentQualifications, a
         });
 
         qualificationsReceived.forEach((qualification, index) => {
-            const row = sheet.addRow([
-                qualification.name,
-                qualification.email ? qualification.email : qualification.name2,
-                ...categories.flatMap((key, index) => {
-                    const answer = qualification.answer[key] || {};
-                    const Key = (Object.keys(answer)[0]);
-                    return [Key || '', answer[Key] || ''];
-                }),
-            ]);
+            const data = [qualification.name]
+            if (qualification.email) {
+                data.push(qualification.email)
+            }
+            else if (qualification.name2) {
+                data.push(...qualification.name2)
+                if (qualification.name2.length < maximumStudentsPerGroup) {
+                    for (let i = 0; i < maximumStudentsPerGroup - qualification.name2.length; i++) {
+                        data.push('')
+                    }
+                }
+            }
+            else {
+                data.pop()
+                data.push(...qualification.name)
+                if (qualification.name.length < maximumStudentsPerGroup) {
+                    for (let i = 0; i < maximumStudentsPerGroup - qualification.name.length; i++) {
+                        data.push('')
+                    }
+                }
+            }
+            data.push(...categories.flatMap((key, index) => {
+                const answer = qualification.answer[key] || {};
+                const Key = (Object.keys(answer)[0]);
+                return [Key || '', answer[Key] || ''];
+            }))
+
+            const row = sheet.addRow(data);
             const fillColor = index % 2 === 0 ? 'FFFFFF' : 'D3D3D3';
             row.fill = {
                 type: 'pattern',
@@ -136,7 +122,21 @@ const generateExcel = async ({ categories, answersKeys, studentQualifications, a
                 color: { argb: 'FFFFFF' },
             };
         });
-        const headerRow2 = sheet.addRow(['Evaluated', nameOrMailEvaluated, ...answersKeys.flatMap((key, index) => key)]);
+
+        const rowForEvaluated = [
+            'Evaluated',
+        ]
+        if (nameOrMailEvaluated === 'Evaluated') {
+            for (let i = 0; i < maximumStudentsPerGroup; i++) { rowForEvaluated.push(`Evaluated`) }
+            if (peerReviewinGroups) {
+                rowForEvaluated.pop()
+            }
+        }
+        else {
+            rowForEvaluated.push(nameOrMailEvaluated)
+        }
+        rowForEvaluated.push(...answersKeys.flatMap((key, index) => key))
+        const headerRow2 = sheet.addRow(rowForEvaluated);
         headerRow2.fill = {
             type: 'pattern',
             pattern: 'solid',
@@ -148,15 +148,34 @@ const generateExcel = async ({ categories, answersKeys, studentQualifications, a
             };
         });
         qualificationsGiven.forEach((qualification, index) => {
-            const row = sheet.addRow([
-                qualification.name,
-                qualification.email ? qualification.email : qualification.name2,
-                ...categories.flatMap((key, index) => {
-                    const answer = qualification.answer[key] || {};
-                    const Key = (Object.keys(answer)[0]);
-                    return [Key || '', answer[Key] || ''];
-                }),
-            ]);
+            const data = [qualification.name]
+            if (qualification.email) {
+                data.push(qualification.email)
+            }
+            else if (qualification.name2) {
+                data.push(...qualification.name2)
+                if (qualification.name2.length < maximumStudentsPerGroup) {
+                    for (let i = 0; i < maximumStudentsPerGroup - qualification.name2.length; i++) {
+                        data.push('')
+                    }
+                }
+            }
+            else {
+                data.pop()
+                data.push(...qualification.name)
+                if (qualification.name.length < maximumStudentsPerGroup) {
+                    for (let i = 0; i < maximumStudentsPerGroup - qualification.name.length; i++) {
+                        data.push('')
+                    }
+                }
+            }
+            data.push(...categories.flatMap((key, index) => {
+                const answer = qualification.answer[key] || {};
+                const Key = (Object.keys(answer)[0]);
+                return [Key || '', answer[Key] || ''];
+            }))
+            const row = sheet.addRow(data);
+
             const fillColor = index % 2 === 0 ? 'FFFFFF' : 'D3D3D3';
             row.fill = {
                 type: 'pattern',
@@ -188,3 +207,102 @@ const generateExcel = async ({ categories, answersKeys, studentQualifications, a
     link.click();
     document.body.removeChild(link);
 };
+
+const getStudentQualificationsPeerInGroups = (students, peerReviewAnswers, activityToReviewID) => {
+    const idAdded = []
+    const groups = students.flatMap((student) => {
+        return student.attributes.groups?.data.filter((group) => {
+            if (idAdded.includes(group.id)) return false
+            idAdded.push(group.id)
+            return group.attributes?.activity?.data?.id === activityToReviewID
+        })
+    }).filter(Boolean)
+
+    const groupsQualifications = groups.map((group) => {
+        const studentQualificationsGiven = peerReviewAnswers.filter((answer) =>
+            answer.attributes.group?.data.id === group.id).map((answer) => {
+                return {
+                    name: answer.attributes.qualifications.data[0].attributes.group.data.attributes.users.data.map((user) => user.attributes.name),
+                    answer: answer.attributes.Answers
+                }
+            });
+        const studentQualificationsReceived = peerReviewAnswers.filter((answer) =>
+            answer.attributes.qualifications?.data.some((qualification) =>
+                qualification.attributes.group.data.id === group.id)).map((answer) => {
+                    return {
+                        name: answer.attributes.group.data.attributes.users.data.map((user) => user.attributes.name),
+                        answer: answer.attributes.Answers
+                    }
+                })
+        return {
+            name: group.attributes.users.data.map((user) => user.attributes.name),
+            qualificationsGiven: studentQualificationsGiven,
+            qualificationsReceived: studentQualificationsReceived
+        }
+    })
+    const maximumStudentsPerGroup = groupsQualifications.reduce((max, group) => {
+        return group.name.length > max ? group.name.length : max
+    }, 0)
+
+    return { studentQualifications: groupsQualifications, maximumStudentsPerGroup, activityGroup: true }
+}
+const getStudentQualificationsNotPeerInGroups = (students, peerReviewAnswers, peerReviewinGroups, activityToReviewID) => {
+    let maximumStudentsPerGroup = 0
+    let activityGroup = false;
+    const studentQualifications = students.map((student) => {
+        const studentQualificationsGiven = peerReviewAnswers.filter((answer) =>
+            answer.attributes.user?.data.id === student.id).map((answer) => {
+                if (answer.attributes.qualifications.data.length > 1) {
+                    activityGroup = true;
+                    if (answer.attributes.qualifications.data.length > maximumStudentsPerGroup) {
+                        maximumStudentsPerGroup = answer.attributes.qualifications.data.length
+                    }
+                    return {
+                        name: answer.attributes.qualifications.data[0].attributes.user.data.attributes.name,
+                        name2: answer.attributes.qualifications.data
+                            .map((qual, index) => {
+                                if (index !== 0) {
+                                    return qual.attributes.user.data.attributes.name
+                                }
+                            }).filter(Boolean),
+                        answer: answer.attributes.Answers
+                    }
+                }
+                return {
+                    name: answer.attributes.qualifications?.data[0].attributes.user.data.attributes.name,
+                    email: answer.attributes.qualifications?.data[0].attributes.user.data.attributes.email,
+                    answer: answer.attributes.Answers
+                }
+            });
+        const studentQualificationsReceived = peerReviewAnswers.filter((answer) =>
+            answer.attributes.qualifications?.data.some((qualification) =>
+                qualification.attributes.user.data.id === student.id)).map((answer) => {
+                    if (answer.attributes.qualifications.data.length > 1 && peerReviewinGroups) {
+                        activityGroup = true;
+                        const qual = answer.attributes.user.data.attributes.groups?.data
+                            .filter((group) => group?.attributes?.activity?.data?.id === activityToReviewID)
+                        const name2 = qual[0].attributes.users.data.find((user) => user.id !== student.id).attributes.name
+                        return {
+                            name: answer.attributes.user.data.attributes.name,
+                            name2: name2,
+                            answer: answer.attributes.Answers
+                        }
+                    }
+                    return {
+                        name: answer.attributes.user.data.attributes.name,
+                        email: answer.attributes.user.data.attributes.email,
+                        answer: answer.attributes.Answers
+                    }
+                })
+
+        return {
+            name: student.attributes.name,
+            email: student.attributes.email,
+            qualificationsGiven: studentQualificationsGiven,
+            qualificationsReceived: studentQualificationsReceived,
+            activityGroup: activityGroup
+        }
+    })
+
+    return { studentQualifications, maximumStudentsPerGroup, activityGroup }
+}

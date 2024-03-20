@@ -1,32 +1,61 @@
 import React, { useState, useEffect } from 'react'
-import BackToCourse from './Components/BackToCourse'
+import BackToCourse, { BackButton } from './Components/BackToCourse'
 import { useNavigate, useParams } from 'react-router-dom';
 import { fetchCourseInformation } from '../../../../fetches/fetchCourseInformation'
 import { fetchPeerReviewAnswers } from '../../../../fetches/fetchPeerReviewAnswers';
 import { StudentRow } from './Components/PeerReview/StudentRow';
+import { GroupRows } from './Components/PeerReview/GroupRows.jsx';
 import { Button, Empty } from 'antd';
 import generateExcelPeerReview from './utils/generateExcelPeerReview';
+import CreatePeers from './Components/PeerReview/CreatePeers';
 
 export const ProfessorPeerReview = ({ activityData }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [courseContentInformation, setCourseContentInformation] = useState({});
   const [peerReviewAnswers, setPeerReviewAnswers] = useState([]);
-  const navigate = useNavigate()
-  const { courseId, activityId } = useParams()
-  const filteredStudents = courseContentInformation.students?.data.filter((student) =>
-    student.attributes.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
+  const [createPeerReview, setCreatePeerReview] = useState(false);
+  const [studentGroups, setStudentGroups] = useState([])
   const peerReviewinGroups = activityData.activity?.data.attributes.groupActivity
 
   const activityToReviewID = activityData.activity?.data.attributes.task_to_review?.data?.id
+  const navigate = useNavigate()
+  const { courseId, activityId } = useParams()
+
+  const filteredStudents = peerReviewinGroups ?
+    studentGroups.filter((group) => {
+      return group.attributes?.users?.data.some((user) => {
+        return user.attributes.name.toLowerCase().includes(searchTerm.toLowerCase())
+      })
+    })
+
+    : courseContentInformation.students?.data.filter((student) =>
+      student.attributes.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+
   useEffect(() => {
     async function fetchCourseData() {
       const { courseInformation, students, professors } =
         await fetchCourseInformation({ courseId });
 
       setCourseContentInformation({ courseInformation, students, professors });
+
+      if (peerReviewinGroups) {
+
+        const idAdded = []
+        const groups = students.data.flatMap((student) => {
+          return student.attributes.groups?.data.filter((group) => {
+            if (idAdded.includes(group.id)) return false
+            idAdded.push(group.id)
+            return group.attributes?.activity?.data?.id === activityToReviewID
+          })
+        })
+
+        setStudentGroups(groups)
+      }
+
     }
+
     fetchCourseData();
   }, [courseId]);
 
@@ -40,6 +69,14 @@ export const ProfessorPeerReview = ({ activityData }) => {
   }, []);
 
   function renderTableRows() {
+    if (peerReviewinGroups) {
+      return (
+        filteredStudents.map((group) => (
+          <GroupRows group={group} peerReviewAnswers={peerReviewAnswers} key={group?.id}
+            activityTitle={activityData.activity?.data.attributes.title} activityToReviewID={activityToReviewID} />
+        ))
+      )
+    }
     return (
       <>
         {filteredStudents.map((student) => (
@@ -50,15 +87,24 @@ export const ProfessorPeerReview = ({ activityData }) => {
     );
   }
 
-
+  if (createPeerReview) {
+    return (
+      <CreatePeers
+        students={courseContentInformation.students.data}
+        setCreatePeerReview={setCreatePeerReview}
+        activity={activityData.activity?.data}
+        activityToReview={activityData.activity?.data.attributes.task_to_review?.data} />
+    )
+  }
 
 
   return (
     <div className='p-5'>
       <BackToCourse courseId={courseId} navigate={navigate} />
       <div className='mx-5'>
-        <h2 className='mt-10 text-lg font-medium'>Peer Review</h2>
-        <p className='mb-4 text-sm text-gray-500'>In this section, you will be able to see the evaluations that students have given to their peers.</p>
+        <h2 className='mt-10 mb-2 text-lg font-medium'>Peer Review</h2>
+        <p className='mb-1 text-sm text-gray-500'>In this section, you will be able to see the evaluations that students have given to their peers.</p>
+        <p className='mb-4 text-sm text-gray-500'>Peers will be created automatically if you don't create them manually</p>
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
           <div className="flex items-center justify-between p-5 pb-4 bg-white">
             <label htmlFor="table-search" className="sr-only">Search</label>
@@ -75,12 +121,20 @@ export const ProfessorPeerReview = ({ activityData }) => {
                 className="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
                 placeholder="Search for users" />
             </div>
-            <Button onClick={() => generateExcelPeerReview(courseContentInformation.students.data, peerReviewAnswers, activityToReviewID, peerReviewinGroups)} type="default" className='flex items-center gap-x-1'>
-              Download all
-              <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-              </svg>
-            </Button>
+            <section className='flex gap-x-2'>
+              <Button onClick={() => setCreatePeerReview(true)} type="default" className='flex items-center gap-x-1'>
+                Create peers manually
+                <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+                </svg>
+              </Button>
+              <Button onClick={() => generateExcelPeerReview(courseContentInformation.students.data, peerReviewAnswers, activityToReviewID, peerReviewinGroups)} type="default" className='flex items-center gap-x-1'>
+                Download all
+                <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+              </Button>
+            </section>
           </div>
           <table className="w-full text-sm text-left text-gray-500 ">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">

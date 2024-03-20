@@ -11,7 +11,7 @@ import { useAuthContext } from '../../../context/AuthContext';
 export const QualificationsTable = ({ students, activities, setStudents, setUploadQualificationsFlag }) => {
     const [isEditChecked, setIsEditChecked] = useState(false);
     const [selectedActivity, setSelectedActivity] = useState
-        (JSON.stringify({ id: activities[0].id, title: activities[0].attributes.title, groupActivity: activities[0].attributes.groupActivity }));
+        (JSON.stringify({ id: activities[0]?.id, title: activities[0]?.attributes?.title, groupActivity: activities[0]?.attributes?.groupActivity }));
     const [thereIsChanges, setThereIsChanges] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [editedGrades, setEditedGrades] = useState({});

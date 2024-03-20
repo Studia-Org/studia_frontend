@@ -85,7 +85,6 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                             body: JSON.stringify({ data: questionnaire }),
                         });
                         const data = await response.json();
-
                         const activity = {
                             title: subsection.title,
                             start_date: new Date(subsection.start_date).toISOString(),
@@ -155,7 +154,6 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                         if (subsection.activity.type === 'peerReview') {
                             subsection.activity.task_to_review = createdActivities[subsection.activity.task_to_review]
                         }
-
                         const createActivity = await fetch(`${API}/activities`, {
                             method: 'POST',
                             headers: {
@@ -167,10 +165,15 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                                 {
                                     ...subsection.activity,
                                     title: subsection.title,
+                                    start_date: new Date(subsection.start_date).toISOString(),
+                                    deadline: new Date(subsection.end_date).toISOString(),
                                     categories: Object.keys(subsection.activity.categories)
                                 }
                             }),
                         })
+                        if (!createActivity.ok) {
+                            throw new Error('Error creating activity')
+                        }
                         const dataActivity = await createActivity.json();
                         createdActivities[subsection.id] = dataActivity.data.id
                         newSubsection =
@@ -231,7 +234,6 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                     });
                     filesdata2 = await uploadFiles.json();
                 }
-
                 const activity = {
                     title: section.task.title,
                     deadline: new Date(section.task.deadline).toISOString(),
@@ -303,7 +305,19 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
             })
             const newsForum = await createNewsForum.json();
             forumIds.push(newsForum.data.id)
-
+            //search last date of the course from subsections
+            const lastDate = createCourseSectionsList.reduce((acc, section) => {
+                const lastSubsection = section.subsections.reduce((acc, subsection) => {
+                    if (new Date(subsection.end_date) > new Date(acc)) {
+                        return subsection.end_date
+                    }
+                    return acc
+                }, 0)
+                if (new Date(lastSubsection) > new Date(acc)) {
+                    return lastSubsection
+                }
+                return acc
+            }, 0)
             const newCourse = {
                 title: courseBasicInfo.courseName,
                 description: courseBasicInfo.description,
@@ -313,7 +327,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                 tags: courseBasicInfo.tags,
                 sections: allSections,
                 start_date: new Date(),
-                end_date: new Date(),
+                end_date: new Date(lastDate),
             }
             const formData = new FormData();
             formData.append('files', courseBasicInfo.cover[0].file);
