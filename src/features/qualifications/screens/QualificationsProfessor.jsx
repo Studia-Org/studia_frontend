@@ -24,7 +24,7 @@ const QualificationsProfessor = () => {
     const fetchCourseData = async () => {
         try {
             const response = await fetch(`${API}/courses/${courseID}?populate=sections.subsections.activity.task_to_review,cover,` +
-                `students.profile_photo,students.qualifications.activity,students.qualifications.file,` +
+                `students.profile_photo,students.qualifications.activity,students.qualifications.file,students.qualifications.PeerReviewAnswers,` +
                 `students.user_response_questionnaires.questionnaire.subsection.activity,` +
                 `students.groups.qualifications.activity,students.groups.qualifications.file,students.groups.qualifications.PeerReviewAnswers,` +
                 `students.groups.activity,students.groups.users.profile_photo`,

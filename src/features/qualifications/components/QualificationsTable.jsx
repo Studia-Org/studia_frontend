@@ -170,6 +170,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                             setEditedGrades={setEditedGrades}
                             activities={activities}
                             isPeerReview={filteredActivity.attributes.type === 'peerReview'}
+                            setEditActivity={setSetEditActivity}
 
                         />
                     })}
@@ -228,9 +229,8 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                             </div>
                             <div className='flex items-center justify-between mt-5 gap-x-5 '>
                                 <Select
-
                                     showSearch
-                                    className='w-full'
+                                    className='w-full cursor-pointer'
                                     placeholder="Select an activity"
                                     optionFilterProp="children"
                                     value={selectedActivity}

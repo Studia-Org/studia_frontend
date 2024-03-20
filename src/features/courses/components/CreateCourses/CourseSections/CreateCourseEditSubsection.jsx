@@ -41,7 +41,7 @@ export const CreateCourseEditSubsection = ({
   const [numberOfStudentsperGroup, setNumberOfStudentsperGroup] =
     useState(subsection.activity?.numberOfStudentsperGroup === undefined ?
       1 : subsection.activity.numberOfStudentsperGroup);
-
+  const [typingTimeout, setTypingTimeout] = useState(null);
   if (subsection.activity?.groupActivity === undefined) subsection.activity.groupActivity = false;
   if (subsection.activity?.numberOfStudentsperGroup === undefined) subsection.activity.numberOfStudentsperGroup = 1;
 
@@ -82,6 +82,14 @@ export const CreateCourseEditSubsection = ({
             case 'landscape_photo':
             case 'files':
             case 'content':
+              console.log({ subsectionCopy })
+              const beingReviewed = allSubsections.subsections.find((sub) => {
+                console.log(sub, subsection.activity.task_to_review)
+                return sub.activity.task_to_review === subsectionCopy.id
+              })
+              if (beingReviewed) {
+                beingReviewed["title"] = "Peer Review for " + newValue;
+              }
               subsectionCopy[type] = newValue;
               break;
             case 'date':
@@ -90,6 +98,9 @@ export const CreateCourseEditSubsection = ({
               break;
             case 'peer_review':
               subsectionCopy.activity.task_to_review = newValue;
+              console.log(newValue)
+              const task_to_review = filteredSubsections.find((sub) => sub.id === subsection.activity.task_to_review)
+              subsectionCopy["title"] = "Peer Review for " + task_to_review.title;
               break;
             case 'usersToPair':
               subsectionCopy.activity.usersToPair = +newValue;
@@ -142,10 +153,19 @@ export const CreateCourseEditSubsection = ({
   };
 
   const handleTitleChange = (newTitle) => {
+    console.log(newTitle)
     if (newTitle === '') {
       message.error('Title cannot be empty');
     } else {
-      handleSubsectionChange('title', newTitle);
+      if (typingTimeout) {
+        clearTimeout(typingTimeout);
+      }
+      const newTimeout = setTimeout(() => {
+        handleSubsectionChange('title', newTitle);
+
+      }, 350);
+
+      setTypingTimeout(newTimeout);
     }
   };
 
@@ -204,7 +224,9 @@ export const CreateCourseEditSubsection = ({
               Title  *
             </label>
             <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-lg pl-3 mb-4 font-medium' placeholder="Description"
-              onChange={(e) => handleTitleChange(e.target.value)} value={subsection.title} />
+              onChange={(e) => {
+                handleTitleChange(e.target.value)
+              }} defaultValue={subsection.title} />
             {
 
               subsection?.type === 'peerReview' && (
@@ -243,12 +265,23 @@ export const CreateCourseEditSubsection = ({
                     onChange={(task) => { handleSubsectionChange('peer_review', task) }}
                     options={filteredSubsections.map((sub) => ({ label: sub.title, value: sub.id }))}
                   />
-                  <label className='text-sm text-gray-500 !mt-4'>
-                    How many students are going to review each other  *
+                  <label className='text-sm text-gray-500 ' htmlFor=''>
+                    Will the activity be carried out in pairs or individually? *
+                  </label>
+                  <Select
+                    key={subsection.id + "grouppeerreview"}
+                    defaultValue={isGroup}
+                    style={{ width: '100%', marginTop: '5px' }}
+                    onChange={(number) => { handleSubsectionChange('group', number) }}
+                    options={[{ label: 'Individual', value: false }, { label: 'Groups', value: true }]}
+                  />
+                  
+                  <label className='text-sm text-gray-500'>
+                    How many {isGroup ? "groups" : "students"} are going to review each other  *
                   </label>
                   <Select
                     defaultValue={subsection.activity.usersToPair || 1}
-                    style={{ width: '100%' }}
+                    style={{ width: '100%', marginTop: '5px' }}
                     onChange={(number) => { handleSubsectionChange('usersToPair', number) }}
                     dropdownRender={(menu) => (
                       <>
@@ -307,19 +340,17 @@ export const CreateCourseEditSubsection = ({
                     }))}
 
                   />
-                  <div>
-                    <label className='text-sm text-gray-500 ' htmlFor=''>
-                      Will the activity be carried out in pairs or individually? *
-                    </label>
-                    <Select
-                      key={subsection.id + "grouppeerreview"}
-                      defaultValue={isGroup}
-                      style={{ width: '100%', marginTop: '5px' }}
-                      onChange={(number) => { handleSubsectionChange('group', number) }}
-                      options={[{ label: 'Individual', value: false }, { label: 'Groups', value: true }]}
-                    />
-                  </div>
-
+                  <label className='text-sm text-gray-500 ' htmlFor=''>
+                    What percentage of the grade given by the student will be applied to the final grade? *
+                  </label>
+                  <InputNumber
+                    defaultValue={0}
+                    onChange={() => console.log('change')}
+                    min={0}
+                    max={100}
+                    formatter={(value) => `${value}%`}
+                    parser={(value) => value.replace('%', '')}
+                  />
                 </div>
               )
             }

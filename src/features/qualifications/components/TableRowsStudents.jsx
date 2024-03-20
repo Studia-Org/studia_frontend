@@ -9,7 +9,7 @@ const { TextArea } = Input;
 
 
 
-export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIsChanges, editedGrades, setEditedGrades, activities }) => {
+export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIsChanges, editedGrades, setEditedGrades, activities, isPeerReview ,setEditActivity}) => {
     const navigate = useNavigate();
     const grade = student.attributes.qualifications.data.find(qualification => qualification.attributes.activity.data?.id === JSON.parse(activity).id)
     const [files, setFiles] = useState();
@@ -17,7 +17,10 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
     const [qualification, setQualification] = useState(grade?.attributes?.qualification ? grade.attributes.qualification : null);
     const [comments, setComments] = useState(grade?.attributes?.comments ? grade.attributes.comments : null);
     const filteredActivity = activities?.filter(activityTemp => activityTemp.id === JSON.parse(activity).id)
-
+    const [ponderationProfessor, setPonderationProfessor] =
+        useState(grade?.attributes?.activity?.data?.attributes?.ponderationStudent ? 100 - grade?.attributes?.activity?.data?.attributes?.ponderationStudent : 100);
+    const [ponderationStudent, setPonderationStudent] =
+        useState(grade?.attributes?.activity?.data?.attributes?.ponderationStudent ? grade?.attributes?.activity?.data?.attributes?.ponderationStudent : 0);
     const { courseID } = useParams();
 
 
@@ -49,12 +52,48 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
             },
         });
     };
+    function handlePonderation(value, type) {
+        if (type === 'professor') {
+            setPonderationProfessor(value);
+            setPonderationStudent(100 - value);
+        } else {
+            setPonderationStudent(value);
+            setPonderationProfessor(100 - value);
+        }
+        setThereIsChanges(value !== grade?.attributes?.ponderationProfessor || value !== grade?.attributes?.ponderationStudent);
+        setEditActivity((prev) => {
+            return {
+                ...prev,
+                [activity.id]: {
+                    ponderationProfessor: ponderationProfessor,
+                    ponderationStudent: ponderationStudent
+                }
+            }
+        });
+
+    }
 
     const showModal = (files) => {
         setFiles(files);
         setIsModalOpen(true);
     };
 
+    function calculateAverage() {
+        let sum = 0;
+        console.log(grade)
+        grade?.attributes?.PeerReviewAnswers?.data?.forEach(answer => {
+            let internAverage = 0
+            const Answer = answer?.attributes?.Answers;
+            Object.keys(Answer).forEach((value) => {
+                const dict = Answer[value];
+                internAverage += Object.keys(dict)[0];
+            })
+            sum += (internAverage / Object.keys(Answer).length);
+        });
+        if (!grade) return "No grade yet";
+        const average = sum / grade?.attributes?.PeerReviewAnswers?.data?.length;
+        return isNaN(average)? "-" : average.toFixed(2);
+    }
     function renderQualifications() {
         if (isEditChecked) {
             return (
@@ -82,7 +121,52 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
             }
         }
     }
-
+    function renderPonderations() {
+        if (isEditChecked) {
+            return (
+                <td className="px-6 py-4">
+                    <div className='flex items-center'>
+                        <p className='min-w-[90px]'>Professor %:</p>
+                        <InputNumber
+                            min={1}
+                            max={100}
+                            value={ponderationProfessor}
+                            onChange={(value) => { handlePonderation(value, 'professor') }}
+                        />
+                    </div>
+                    <div className='flex items-center mt-2'>
+                        <p className='min-w-[90px]'>Student %:</p>
+                        <InputNumber
+                            min={1}
+                            max={100}
+                            value={ponderationStudent}
+                            onChange={(value) => { handlePonderation(value, 'student') }}
+                        />
+                    </div>
+                </td>
+            );
+        } else {
+            if (grade) {
+                return (
+                    <td className="px-6 py-4">
+                        <div className='flex items-center'>
+                            <p className='min-w-[80px]'>Professor:</p>
+                            <p>{ponderationProfessor}%</p>
+                        </div>
+                        <div className='flex items-center mt-2'>
+                            <p className='min-w-[80px]'>Student:</p>
+                            <p>{ponderationStudent}%</p>
+                        </div>
+                    </td>
+                )
+            } else {
+                return (
+                    <td className="px-6 py-4">
+                    </td>
+                )
+            }
+        }
+    }
     function renderComments() {
         if (isEditChecked) {
             return (
@@ -153,23 +237,32 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
                 {renderQualifications()}
                 {renderComments()}
                 {
-                    filteredActivity && filteredActivity.length > 0 && filteredActivity[0]?.attributes?.type !== 'questionnaire' ?
+                    isPeerReview && renderPonderations()
+                }
+                {
+                    isPeerReview  ?
                         (
-                            <td class="px-6 py-4">
-                                <div>
-                                    <Button onClick={() => showModal(files)} className='bg-gray-200  rounded-md p-2 h-[2rem] w-[2rem] mx-1 flex items-center justify-center'>
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
-                                            <path fillRule="evenodd" d="M18.97 3.659a2.25 2.25 0 00-3.182 0l-10.94 10.94a3.75 3.75 0 105.304 5.303l7.693-7.693a.75.75 0 011.06 1.06l-7.693 7.693a5.25 5.25 0 11-7.424-7.424l10.939-10.94a3.75 3.75 0 115.303 5.304L9.097 18.835l-.008.008-.007.007-.002.002-.003.002A2.25 2.25 0 015.91 15.66l7.81-7.81a.75.75 0 011.061 1.06l-7.81 7.81a.75.75 0 001.054 1.068L18.97 6.84a2.25 2.25 0 000-3.182z" clipRule="evenodd" />
-                                        </svg>
-                                    </Button>
-                                </div>
+                            <td class="px-6 py-4 text-center">
+                                {calculateAverage()}
                             </td>
                         ) :
-                        (
-                            <td class="px-6 py-4">
-                                {checkIfQuestionnaireHasBeenAnswered()}
-                            </td>
-                        )
+                        filteredActivity && filteredActivity.length > 0 && filteredActivity?.attributes?.type === 'questionnaire' ?
+                            (
+                                <td class="px-6 py-4">
+                                    {checkIfQuestionnaireHasBeenAnswered()}
+                                </td>
+                            ) :
+                            (
+                                <td class="px-6 py-4">
+                                    <div>
+                                        <Button onClick={() => showModal(files)} className='bg-gray-200  rounded-md p-2 h-[2rem] w-[2rem] mx-1 flex items-center justify-center'>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+                                                <path fillRule="evenodd" d="M18.97 3.659a2.25 2.25 0 00-3.182 0l-10.94 10.94a3.75 3.75 0 105.304 5.303l7.693-7.693a.75.75 0 011.06 1.06l-7.693 7.693a5.25 5.25 0 11-7.424-7.424l10.939-10.94a3.75 3.75 0 115.303 5.304L9.097 18.835l-.008.008-.007.007-.002.002-.003.002A2.25 2.25 0 015.91 15.66l7.81-7.81a.75.75 0 011.061 1.06l-7.81 7.81a.75.75 0 001.054 1.068L18.97 6.84a2.25 2.25 0 000-3.182z" clipRule="evenodd" />
+                                            </svg>
+                                        </Button>
+                                    </div>
+                                </td>
+                            )
                 }
                 {
                     grade ?
