@@ -668,7 +668,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                         <Button
                           loading={uploadLoading}
                           id='submit-button-activity'
-                          onClick={() => { console.log("hola"); sendData() }}
+                          onClick={() => { sendData() }}
                           className="ml-auto " type='primary'>
                           Submit
                         </Button>
