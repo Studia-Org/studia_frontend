@@ -26,9 +26,18 @@ const Activity = () => {
       if (activityDataa.data.attributes.groupActivity) {
         filters = `&populate[group][populate][users][fields][0]=*` +
           `&populate[group][populate][users][populate][profile_photo][fields][0]=url` +
+          `&populate[group][populate][PeerReviewAnswers][populate][qualifications][populate][user][fields][0]=username` +
+          `&populate[group][populate][PeerReviewAnswers][populate][qualifications][populate][group][fields][0]=id` +
           `&populate[group][populate][activity][fields][0]=id` +
-          `&filters[group][users][id]=${user.id}` +
-          `&filters[group][activity][id]=${activityId}`
+          `&filters[group][users][id]=${user.id}`
+
+        if (activityDataa.data.attributes.type === "peerReview") {
+          filters += `&filters[group][activity][id]=${activityDataa.data.attributes.task_to_review.data.id}`
+
+        }
+        else {
+          filters += `&filters[group][activity][id]=${activityId}`
+        }
       }
       else {
         filters = `&filters[user][id]=${user.id}`
@@ -40,7 +49,7 @@ const Activity = () => {
           `&populate[file][fields][0]=*` +
           `&populate[activity][populate][evaluators][fields][0]=*` +
           `&populate[activity][populate][file][fields][0]=*` +
-          `&populate[activity][populate][task_to_review][fields][0]=*` +
+          `&populate[activity][populate][task_to_review][populate][peer_review_qualifications][fields][0]=*` +
           `&filters[activity][id]=${activityId}` +
           `&populate[user][populate][PeerReviewAnswers][populate][qualifications][populate][user][fields][0]=username` +
           `&populate[evaluator][populate][profile_photo][fields][0]=url` +
@@ -56,7 +65,6 @@ const Activity = () => {
             headers: { Authorization: `${BEARER} ${getToken()}` },
           }
         )
-
       const data = await response.json();
       if (data.data.length > 0) {
         setUserQualification({

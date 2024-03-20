@@ -38,12 +38,13 @@ export const CreateCourseEditSubsection = ({
   const [name, setName] = useState('');
   const inputRef = useRef(null);
   const [isGroup, setIsGroup] = useState(subsection.activity?.groupActivity === undefined ? false : subsection.activity.groupActivity);
-  const [numberOfStudentsperGroup, setNumberOfStudentsperGroup] = useState(subsection.activity?.numberOfStudentsperGroup === undefined ? 1 : subsection.activity.numberOfStudentsperGroup);
+  const [numberOfStudentsperGroup, setNumberOfStudentsperGroup] =
+    useState(subsection.activity?.numberOfStudentsperGroup === undefined ?
+      1 : subsection.activity.numberOfStudentsperGroup);
 
   if (subsection.activity?.groupActivity === undefined) subsection.activity.groupActivity = false;
   if (subsection.activity?.numberOfStudentsperGroup === undefined) subsection.activity.numberOfStudentsperGroup = 1;
 
-  console.log(subsection.activity?.groupActivity, subsection.activity?.numberOfStudentsperGroup)
   useEffect(() => {
     const matchingSubsection = createCourseSectionsList
       .flatMap((section) => section.subsections)
@@ -95,6 +96,7 @@ export const CreateCourseEditSubsection = ({
               break;
             case 'group':
               subsectionCopy.activity.groupActivity = newValue;
+              console.log(subsectionCopy)
               if (!newValue) {
                 subsectionCopy.activity.numberOfStudentsperGroup = 1;
                 setNumberOfStudentsperGroup(1);
@@ -160,7 +162,7 @@ export const CreateCourseEditSubsection = ({
     }
   }
 
-
+  console.log(isGroup)
   return (
     <motion.div
       key={subsection.id}
@@ -305,6 +307,18 @@ export const CreateCourseEditSubsection = ({
                     }))}
 
                   />
+                  <div>
+                    <label className='text-sm text-gray-500 ' htmlFor=''>
+                      Will the activity be carried out in pairs or individually? *
+                    </label>
+                    <Select
+                      key={subsection.id + "grouppeerreview"}
+                      defaultValue={isGroup}
+                      style={{ width: '100%', marginTop: '5px' }}
+                      onChange={(number) => { handleSubsectionChange('group', number) }}
+                      options={[{ label: 'Individual', value: false }, { label: 'Groups', value: true }]}
+                    />
+                  </div>
 
                 </div>
               )
@@ -322,6 +336,7 @@ export const CreateCourseEditSubsection = ({
                     </label>
                     <Select
                       defaultValue={isGroup}
+                      key={subsection.id + "grouptask"}
                       style={{ width: '100%', marginTop: '5px' }}
                       onChange={(number) => { handleSubsectionChange('group', number) }}
                       options={[{ label: 'Individual', value: false }, { label: 'Groups', value: true }]}
@@ -333,6 +348,7 @@ export const CreateCourseEditSubsection = ({
                             How many students per group? *
                           </label>
                           <Select
+                            key={subsection.id + "numberofstudents"}
                             defaultValue={numberOfStudentsperGroup}
                             style={{ width: '100%', marginTop: '5px' }}
                             onChange={(number) => { handleSubsectionChange('numberOfStudentsperGroup', number) }}

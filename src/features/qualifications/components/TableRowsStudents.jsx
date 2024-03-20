@@ -16,7 +16,8 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [qualification, setQualification] = useState(grade?.attributes?.qualification ? grade.attributes.qualification : null);
     const [comments, setComments] = useState(grade?.attributes?.comments ? grade.attributes.comments : null);
-    const filteredActivity = activities.filter(activityTemp => activityTemp.id === JSON.parse(activity).id)
+    console.log(activities)
+    const filteredActivity = activities?.filter(activityTemp => activityTemp.id === JSON.parse(activity).id)
 
     const { courseID } = useParams();
 
@@ -113,9 +114,13 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
     }
 
     const checkIfQuestionnaireHasBeenAnswered = () => {
+
+
         const hasCompleted = student.attributes.user_response_questionnaires.data.some(
             userResponse => {
-                return userResponse.attributes.questionnaire.data.attributes.subsection.data.attributes.activity.data.id === filteredActivity[0]?.id;
+                if (filteredActivity) {
+                    return userResponse.attributes.questionnaire.data.attributes.subsection.data.attributes.activity.data.id === filteredActivity[0]?.id;
+                } return false;
             }
         );
 
@@ -135,10 +140,10 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
         <>
             <ModalFiles grade={grade} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} student={student} />
             <tr onClick={() => {
-                if (filteredActivity[0]?.attributes?.type === 'questionnaire' && !isEditChecked) {
-                    navigate(`/app/courses/${courseID}/${filteredActivity[0].id}/`)
+                if (filteredActivity && filteredActivity[0]?.attributes?.type === 'questionnaire' && !isEditChecked) {
+                    navigate(`/app/courses/${courseID}/${filteredActivity[0]?.id}/`)
                 }
-            }} class={`bg-white border-b  hover:bg-gray-50 ${filteredActivity[0]?.attributes?.type === 'questionnaire' ? 'cursor-pointer' : ''}`}>
+            }} className={`bg-white border-b  hover:bg-gray-50 ${filteredActivity && filteredActivity.length > 0 && filteredActivity[0]?.attributes?.type === 'questionnaire' ? 'cursor-pointer' : ''}`}>
                 <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
                     <img alt='' class="w-10 h-10 rounded-full" src={student?.attributes.profile_photo.data?.attributes?.url} />
                     <div class="pl-3">
@@ -149,7 +154,7 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
                 {renderQualifications()}
                 {renderComments()}
                 {
-                    filteredActivity[0]?.attributes?.type !== 'questionnaire' ?
+                    filteredActivity && filteredActivity.length > 0 && filteredActivity[0]?.attributes?.type !== 'questionnaire' ?
                         (
                             <td class="px-6 py-4">
                                 <div>
