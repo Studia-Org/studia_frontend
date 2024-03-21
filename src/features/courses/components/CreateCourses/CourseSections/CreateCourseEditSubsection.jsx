@@ -69,7 +69,6 @@ export const CreateCourseEditSubsection = ({
     handleSubsectionChange('files', files);
   }, [files])
 
-
   const handleSubsectionChange = (type, newValue) => {
     setCreateCourseSectionsList((courses) => {
       const updatedCourses = courses.map((course) => {
@@ -78,13 +77,7 @@ export const CreateCourseEditSubsection = ({
           const subsectionCopy = { ...subsection };
           switch (type) {
             case 'title':
-            case 'description':
-            case 'landscape_photo':
-            case 'files':
-            case 'content':
-              console.log({ subsectionCopy })
               const beingReviewed = allSubsections.subsections.find((sub) => {
-                console.log(sub, subsection.activity.task_to_review)
                 return sub.activity.task_to_review === subsectionCopy.id
               })
               if (beingReviewed) {
@@ -92,13 +85,23 @@ export const CreateCourseEditSubsection = ({
               }
               subsectionCopy[type] = newValue;
               break;
+            case 'description':
+            case 'landscape_photo':
+            case 'files':
+            case 'content':
+              break;
+            case "ponderationStudent":
+              const task_to_review_ponderation = filteredSubsections.find((sub) => sub.id === subsection.activity.task_to_review)
+              if (task_to_review_ponderation) {
+                task_to_review_ponderation.activity.ponderationStudent = +newValue;
+              }
+              break;
             case 'date':
               subsectionCopy.start_date = newValue[0];
               subsectionCopy.end_date = newValue[1];
               break;
             case 'peer_review':
               subsectionCopy.activity.task_to_review = newValue;
-              console.log(newValue)
               const task_to_review = filteredSubsections.find((sub) => sub.id === subsection.activity.task_to_review)
               subsectionCopy["title"] = "Peer Review for " + task_to_review.title;
               break;
@@ -107,7 +110,6 @@ export const CreateCourseEditSubsection = ({
               break;
             case 'group':
               subsectionCopy.activity.groupActivity = newValue;
-              console.log(subsectionCopy)
               if (!newValue) {
                 subsectionCopy.activity.numberOfStudentsperGroup = 1;
                 setNumberOfStudentsperGroup(1);
@@ -151,9 +153,19 @@ export const CreateCourseEditSubsection = ({
       handleSubsectionChange('date', value);
     }
   };
+  const handlePonderationChange = (newPonderation) => {
+    if (typingTimeout) {
+      clearTimeout(typingTimeout);
+    }
+    const newTimeout = setTimeout(() => {
+      handleSubsectionChange('ponderationStudent', newPonderation);
+
+    }, 350);
+
+    setTypingTimeout(newTimeout);
+  };
 
   const handleTitleChange = (newTitle) => {
-    console.log(newTitle)
     if (newTitle === '') {
       message.error('Title cannot be empty');
     } else {
@@ -182,7 +194,6 @@ export const CreateCourseEditSubsection = ({
     }
   }
 
-  console.log(isGroup)
   return (
     <motion.div
       key={subsection.id}
@@ -275,7 +286,7 @@ export const CreateCourseEditSubsection = ({
                     onChange={(number) => { handleSubsectionChange('group', number) }}
                     options={[{ label: 'Individual', value: false }, { label: 'Groups', value: true }]}
                   />
-                  
+
                   <label className='text-sm text-gray-500'>
                     How many {isGroup ? "groups" : "students"} are going to review each other  *
                   </label>
@@ -344,8 +355,8 @@ export const CreateCourseEditSubsection = ({
                     What percentage of the grade given by the student will be applied to the final grade? *
                   </label>
                   <InputNumber
-                    defaultValue={0}
-                    onChange={() => console.log('change')}
+                    defaultValue={filteredSubsections.find((sub) => sub.id === subsection.activity.task_to_review)?.activity?.ponderationStudent || 0}
+                    onChange={(value) => handlePonderationChange(value)}
                     min={0}
                     max={100}
                     formatter={(value) => `${value}%`}
