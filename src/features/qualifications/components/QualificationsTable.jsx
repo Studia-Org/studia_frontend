@@ -146,7 +146,9 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                         setEditedGrades={setEditedGrades}
                         setStudents={setStudents}
                         activities={activities}
-                        isPeerReview={filteredActivity.attributes.type === 'peerReview'}
+                        activityFull={filteredActivity}
+                        isPeerReview={filteredActivity.attributes.BeingReviewedBy.data !== null}
+                        BeingReviewedBy={filteredActivity.attributes.BeingReviewedBy.data}
                         setEditActivity={setSetEditActivity}
                     />
                 })
@@ -169,7 +171,8 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                             editedGrades={editedGrades}
                             setEditedGrades={setEditedGrades}
                             activities={activities}
-                            isPeerReview={filteredActivity.attributes.type === 'peerReview'}
+                            isPeerReview={filteredActivity.attributes.BeingReviewedBy.data !== null}
+                            activityFull={filteredActivity}
                             setEditActivity={setSetEditActivity}
 
                         />
@@ -234,7 +237,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                     placeholder="Select an activity"
                                     optionFilterProp="children"
                                     value={selectedActivity}
-                                    onChange={(value) => { console.log(value); setSelectedActivity(value) }}
+                                    onChange={(value) => { setSelectedActivity(value) }}
                                     filterOption={filterOption}
                                     options={activityOptions}
                                 />
@@ -281,14 +284,16 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                     <th scope="col" class="px-6 py-3  w-2/4 ">
                                         Comment
                                     </th>
-                                    {filteredActivity.attributes.type === "peerReview" &&
+                                    {filteredActivity.attributes.BeingReviewedBy.data !== null &&
                                         <th scope="col" class="px-6 py-3">
                                             Professor - Students ponderation
                                         </th>
                                     }
                                     <th scope="col" class="px-6 py-3">
                                         {
-                                            tableOptions[filteredActivity.attributes.type] || 'Files'
+                                            filteredActivity.attributes.BeingReviewedBy.data !== null ?
+                                                tableOptions["peerReview"] :
+                                                tableOptions[filteredActivity.attributes.type] || 'Files'
                                         }
                                     </th>
 

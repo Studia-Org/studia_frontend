@@ -9,20 +9,21 @@ const { TextArea } = Input;
 
 
 
-export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIsChanges, editedGrades, setEditedGrades, activities, isPeerReview ,setEditActivity}) => {
+export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIsChanges, editedGrades, setEditedGrades, activities, isPeerReview, setEditActivity, activityFull }) => {
     const navigate = useNavigate();
     const grade = student.attributes.qualifications.data.find(qualification => qualification.attributes.activity.data?.id === JSON.parse(activity).id)
     const [files, setFiles] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [qualification, setQualification] = useState(grade?.attributes?.qualification ? grade.attributes.qualification : null);
     const [comments, setComments] = useState(grade?.attributes?.comments ? grade.attributes.comments : null);
-    const filteredActivity = activities?.filter(activityTemp => activityTemp.id === JSON.parse(activity).id)
     const [ponderationProfessor, setPonderationProfessor] =
-        useState(grade?.attributes?.activity?.data?.attributes?.ponderationStudent ? 100 - grade?.attributes?.activity?.data?.attributes?.ponderationStudent : 100);
+        useState(activityFull.attributes.ponderationStudent ? 100 - activityFull.attributes.ponderationStudent : 100);
     const [ponderationStudent, setPonderationStudent] =
-        useState(grade?.attributes?.activity?.data?.attributes?.ponderationStudent ? grade?.attributes?.activity?.data?.attributes?.ponderationStudent : 0);
-    const { courseID } = useParams();
+        useState(activityFull.attributes.ponderationStudent ? activityFull.attributes.ponderationStudent : 0);
 
+    const { courseID } = useParams();
+    const BeingReviewedBy = grade?.attributes?.activity?.data?.attributes?.BeingReviewedBy?.data?.id;
+    const peerReviewAnswers = student.attributes.qualifications?.data.find(qualification => qualification?.attributes?.activity?.data?.id === BeingReviewedBy)
 
     useEffect(() => {
         setQualification(grade?.attributes?.qualification)
@@ -60,12 +61,11 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
             setPonderationStudent(value);
             setPonderationProfessor(100 - value);
         }
-        setThereIsChanges(value !== grade?.attributes?.ponderationProfessor || value !== grade?.attributes?.ponderationStudent);
+        setThereIsChanges(value !== grade?.attributes?.ponderationStudent);
         setEditActivity((prev) => {
             return {
                 ...prev,
                 [activity.id]: {
-                    ponderationProfessor: ponderationProfessor,
                     ponderationStudent: ponderationStudent
                 }
             }
@@ -80,8 +80,7 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
 
     function calculateAverage() {
         let sum = 0;
-        console.log(grade)
-        grade?.attributes?.PeerReviewAnswers?.data?.forEach(answer => {
+        peerReviewAnswers?.attributes?.PeerReviewAnswers?.data?.forEach(answer => {
             let internAverage = 0
             const Answer = answer?.attributes?.Answers;
             Object.keys(Answer).forEach((value) => {
@@ -91,8 +90,8 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
             sum += (internAverage / Object.keys(Answer).length);
         });
         if (!grade) return "No grade yet";
-        const average = sum / grade?.attributes?.PeerReviewAnswers?.data?.length;
-        return isNaN(average)? "-" : average.toFixed(2);
+        const average = sum / peerReviewAnswers?.attributes?.PeerReviewAnswers?.data?.length;
+        return isNaN(average) ? "-" : average.toFixed(2);
     }
     function renderQualifications() {
         if (isEditChecked) {
@@ -146,25 +145,19 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
                 </td>
             );
         } else {
-            if (grade) {
-                return (
-                    <td className="px-6 py-4">
-                        <div className='flex items-center'>
-                            <p className='min-w-[80px]'>Professor:</p>
-                            <p>{ponderationProfessor}%</p>
-                        </div>
-                        <div className='flex items-center mt-2'>
-                            <p className='min-w-[80px]'>Student:</p>
-                            <p>{ponderationStudent}%</p>
-                        </div>
-                    </td>
-                )
-            } else {
-                return (
-                    <td className="px-6 py-4">
-                    </td>
-                )
-            }
+            return (
+                <td className="px-6 py-4">
+                    <div className='flex items-center'>
+                        <p className='min-w-[80px]'>Professor:</p>
+                        <p>{ponderationProfessor}%</p>
+                    </div>
+                    <div className='flex items-center mt-2'>
+                        <p className='min-w-[80px]'>Student:</p>
+                        <p>{ponderationStudent}%</p>
+                    </div>
+                </td>
+            )
+
         }
     }
     function renderComments() {
@@ -201,8 +194,8 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
 
         const hasCompleted = student.attributes.user_response_questionnaires.data.some(
             userResponse => {
-                if (filteredActivity) {
-                    return userResponse.attributes.questionnaire.data.attributes.subsection.data.attributes.activity.data.id === filteredActivity[0]?.id;
+                if (activityFull) {
+                    return userResponse.attributes.questionnaire.data.attributes.subsection.data.attributes.activity.data.id === activityFull?.id;
                 } return false;
             }
         );
@@ -223,10 +216,10 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
         <>
             <ModalFiles grade={grade} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} student={student} />
             <tr onClick={() => {
-                if (filteredActivity && filteredActivity[0]?.attributes?.type === 'questionnaire' && !isEditChecked) {
-                    navigate(`/app/courses/${courseID}/${filteredActivity[0]?.id}/`)
+                if (activityFull && activityFull?.attributes?.type === 'questionnaire' && !isEditChecked) {
+                    navigate(`/app/courses/${courseID}/${activityFull?.id}/`)
                 }
-            }} className={`bg-white border-b  hover:bg-gray-50 ${filteredActivity && filteredActivity.length > 0 && filteredActivity[0]?.attributes?.type === 'questionnaire' ? 'cursor-pointer' : ''}`}>
+            }} className={`bg-white border-b  hover:bg-gray-50 ${activityFull && activityFull.length > 0 && activityFull?.attributes?.type === 'questionnaire' ? 'cursor-pointer' : ''}`}>
                 <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap">
                     <img alt='' class="w-10 h-10 rounded-full" src={student?.attributes.profile_photo.data?.attributes?.url} />
                     <div class="pl-3">
@@ -240,13 +233,13 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
                     isPeerReview && renderPonderations()
                 }
                 {
-                    isPeerReview  ?
+                    isPeerReview ?
                         (
                             <td class="px-6 py-4 text-center">
                                 {calculateAverage()}
                             </td>
                         ) :
-                        filteredActivity && filteredActivity.length > 0 && filteredActivity?.attributes?.type === 'questionnaire' ?
+                        activityFull && activityFull.length > 0 && activityFull?.attributes?.type === 'questionnaire' ?
                             (
                                 <td class="px-6 py-4">
                                     {checkIfQuestionnaireHasBeenAnswered()}

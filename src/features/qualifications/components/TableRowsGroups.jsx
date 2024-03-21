@@ -94,16 +94,19 @@ export async function saveChangesButtonGroups(editedGrades, groups, selectedActi
 }
 
 
-export const TableRowsGroups = ({ group, activity, isEditChecked, setThereIsChanges, editedGrades, setEditedGrades, isPeerReview, setEditActivity }) => {
+export const TableRowsGroups = ({ group, activity, isEditChecked, setThereIsChanges, editedGrades, setEditedGrades, isPeerReview, setEditActivity, activityFull }) => {
     const [files, setFiles] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const grade = group.attributes.qualifications?.data.find(qualification => qualification.attributes.activity.data.id === activity.id)
     const [qualification, setQualification] = useState(grade?.attributes?.qualification ? grade.attributes.qualification : null);
     const [comments, setComments] = useState(grade?.attributes?.comments ? grade.attributes.comments : null);
     const [ponderationProfessor, setPonderationProfessor] =
-        useState(grade?.attributes?.activity?.data?.attributes?.ponderationStudent ? 100 - grade?.attributes?.activity?.data?.attributes?.ponderationStudent : 100);
+        useState(activityFull.attributes.ponderationStudent ? 100 - activityFull.attributes.ponderationStudent : 100);
     const [ponderationStudent, setPonderationStudent] =
-        useState(grade?.attributes?.activity?.data?.attributes?.ponderationStudent ? grade?.attributes?.activity?.data?.attributes?.ponderationStudent : 0);
+        useState(activityFull.attributes.ponderationStudent ? activityFull.attributes.ponderationStudent : 0);
+
+    const BeingReviewedBy = grade?.attributes?.activity?.data?.attributes?.BeingReviewedBy?.data?.id;
+    const peerReviewAnswers = group.attributes.qualifications?.data.find(qualification => qualification.attributes.activity.data.id === BeingReviewedBy)
 
 
     const handleQualificationChange = (value) => {
@@ -138,12 +141,11 @@ export const TableRowsGroups = ({ group, activity, isEditChecked, setThereIsChan
             setPonderationStudent(value);
             setPonderationProfessor(100 - value);
         }
-        setThereIsChanges(value !== grade?.attributes?.ponderationProfessor || value !== grade?.attributes?.ponderationStudent);
+        setThereIsChanges(value !== grade?.attributes?.ponderationStudent);
         setEditActivity((prev) => {
             return {
                 ...prev,
                 [activity.id]: {
-                    ponderationProfessor: ponderationProfessor,
                     ponderationStudent: ponderationStudent
                 }
             }
@@ -263,8 +265,7 @@ export const TableRowsGroups = ({ group, activity, isEditChecked, setThereIsChan
 
     function calculateAverage() {
         let sum = 0;
-
-        grade?.attributes?.PeerReviewAnswers?.data?.forEach(answer => {
+        peerReviewAnswers?.attributes?.PeerReviewAnswers?.data?.forEach(answer => {
             let internAverage = 0
             const Answer = answer?.attributes?.Answers;
             Object.keys(Answer).forEach((value) => {
@@ -273,8 +274,9 @@ export const TableRowsGroups = ({ group, activity, isEditChecked, setThereIsChan
             })
             sum += (internAverage / Object.keys(Answer).length);
         });
-        if(!grade) return "No grade yet";
-        return sum / grade?.attributes?.PeerReviewAnswers?.data?.length;
+        if (!grade) return "No grade yet";
+        const average = sum / peerReviewAnswers?.attributes?.PeerReviewAnswers?.data?.length;
+        return isNaN(average) ? "-" : average.toFixed(2);
     }
     return (
         <>
