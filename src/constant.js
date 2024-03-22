@@ -1,7 +1,7 @@
 //export const API = "https://studia-backend-prod.1.ie-1.fl0.io/api";
 const port = process.env.REACT_APP_API_PORT || 1337;
 const host = process.env.REACT_APP_API_HOST || "localhost";
-//export const API = `http://${host}:${port}/api`;
+export const API = `http://${host}:${port}/api`;
 export const AUTH_TOKEN = "authToken";
 export const BEARER = "Bearer";
 export const ACTIVITY_CATEGORIES = {

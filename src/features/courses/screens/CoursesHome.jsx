@@ -73,7 +73,8 @@ const CoursesHome = () => {
       const data = await response.json();
       const coursesFiltered = filterCoursesByRole(data, user);
       const finalCourses = coursesFiltered.map(mapCourseData);
-      setCourses(finalCourses ?? []);
+      const sortedCourses = finalCourses.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      setCourses(sortedCourses ?? []);
       setIsLoading(false);
     } catch (error) {
       console.error(error);
@@ -88,12 +89,14 @@ const CoursesHome = () => {
   };
   const mapCourseData = course => ({
     id: course.id,
+    createdAt: course.createdAt || course.attributes.createdAt,
     title: course.title || course.attributes.title,
     cover: course.cover ? course.cover.url : course.attributes.cover.data?.attributes.url,
     professor_name: course.professor ? course.professor.name : course.attributes.professor.data.attributes.name,
     tags: course?.tags || course.attributes?.tags,
     professor_profile_photo: course.professor ? course.professor.profile_photo.url : course.attributes.professor.data.attributes.profile_photo.data.attributes.url,
-    students: course.students || course.attributes.students.data
+    students: course.students || course.attributes.students.data,
+    studentManaged: course?.studentManaged || course.attributes?.studentManaged,
   });
 
 
