@@ -24,7 +24,7 @@ function calculateListOfDates(startDate, endDate, numberOfSubsections) {
 }
 
 export async function createCourse(seletedCourseTemp, userID, data) {
-    const token = process.env.REACT_APP_API_TOKEN;
+    const token = process.env.REACT_APP_ADMIN_TOKEN;
     let allSections = [], forumIds = [], startDate = null, endDate = null, createdActivities = {}, index = 0
     console.log(data[0].subsections.length)
     const courseDates = calculateListOfDates(seletedCourseTemp.startDate, seletedCourseTemp.endDate, data[0].subsections.length)
@@ -38,6 +38,7 @@ export async function createCourse(seletedCourseTemp, userID, data) {
             for (const subsection of section.subsections) {
                 startDate = courseDates[index][0]
                 endDate = courseDates[index][1]
+                index++
                 let newSubsection = {}
                 if (subsection?.questionnaire) {
                     const questionnaire = {

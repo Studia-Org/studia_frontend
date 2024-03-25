@@ -4,7 +4,6 @@ import { AvatarGroup, Avatar } from 'rsuite';
 import { Badge, Tag } from 'antd';
 
 export const CoursesCardHome = ({ course }) => {
-    console.log(course.createdAt)
 
     const isCourseNew = () => {
         const courseDate = new Date(course.createdAt);
@@ -14,19 +13,18 @@ export const CoursesCardHome = ({ course }) => {
         return diffDays <= 7;
     }
 
-
     function renderCourseTags(tag) {
         return (
-            <Tag className='font-normal' color="#108ee9">{tag}</Tag>
+            <Tag className='font-normal ' color="#108ee9">{tag}</Tag>
         )
     }
 
     const CardContent = () => {
         return (
-            <div className="2xl:w-[24rem] mb-8 2xl:h-[26rem] lg:w-[20rem] lg:min-h-[24rem] md:w-[16rem] md:min-h-[23rem] w-[22rem] min-h-[24rem] bg-white rounded-3xl shadow-md cursor-pointer shadow2 relative flex flex-col">
+            <div className="2xl:w-[24rem] mb-8 2xl:h-[26rem] lg:w-[17.5rem] lg:min-h-[24rem] md:w-[16rem] md:min-h-[23rem] w-[22rem] min-h-[24rem] bg-white rounded-3xl shadow-md cursor-pointer shadow2  flex flex-col">
                 <img className="rounded-t-3xl w-full min-h-[12rem] max-h-[12rem] object-cover" src={course.cover} alt="" />
-                <div className="flex flex-col h-full p-3 ml-5 mr-5">
-                    <div className='flex flex-wrap flex-grow '>
+                <div className="flex flex-col justify-center flex-grow h-full p-3 ml-5 mr-5">
+                    <div className='flex flex-wrap '>
                         {course.tags?.map(renderCourseTags)}
                     </div>
                     <h3 className='items-center w-full mt-2 overflow-hidden text-xl font-bold text-left line-clamp-2'>{course.title}</h3>

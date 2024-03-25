@@ -6,15 +6,13 @@ import '../styles/utils.css'
 import { getToken } from '../../../helpers';
 import { useAuthContext } from "../../../context/AuthContext";
 import { CoursesCardHome } from '../components/CoursesHome/CoursesCardHome';
-import { Divider, Empty } from 'antd';
+import { Badge, Divider, Empty, Tag } from 'antd';
 import Swal from 'sweetalert2'
 import { MoonLoader } from "react-spinners";
 import { API } from "../../../constant";
 import Confetti from 'react-confetti'
-import { WebchatChatbot } from '../../../shared/elements/WebchatChatbot';
 import { checkAuthenticated } from "../../../helpers";
 import { Whisper, Button, Popover } from 'rsuite';
-import { Chip } from '@mui/material';
 import { SpeedDialCreateCourse } from '../components/CoursesHome/SpeedDialCreateCourse';
 import { ModalCreateCourseStudent } from '../components/CoursesHome/AddCourseStudent/ModalCreateCourseStudent';
 
@@ -272,16 +270,16 @@ const CoursesHome = () => {
 
   function renderObjectives(objective) {
     return (
-      <div key={objective.id} className='flex p-5 bg-white border rounded-lg '>
+      <div key={objective.id} className='flex items-center p-5 bg-white border rounded-lg '>
         <p className='text-base font-medium'>{objective.objective}</p>
         {
           objective.completed === true ?
             <div className='ml-auto'>
-              <Chip label='Completed' color='success' className='ml-auto ' onClick={() => handleObjectiveCompleted(objective)} />
+              <Tag onClick={() => handleObjectiveCompleted(objective)} className='p-1 ml-auto cursor-pointer hover:scale-95' color="#008000">Completed</Tag>
             </div>
             :
             <div className='ml-auto'>
-              <Chip label='Not Completed' color='info' className='ml-auto' onClick={() => handleObjectiveCompleted(objective)} />
+              <Tag onClick={() => handleObjectiveCompleted(objective)} className='p-1 ml-auto cursor-pointer hover:scale-95' color="#f50 ">Not Completed</Tag>
             </div>
         }
       </div>

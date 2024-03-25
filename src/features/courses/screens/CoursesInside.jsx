@@ -257,7 +257,6 @@ const CourseInside = () => {
     }
   }
 
-  console.log(user.role_str)
 
   const items = [
     {
@@ -275,7 +274,12 @@ const CourseInside = () => {
       label: 'Participants',
       children: <CourseParticipants students={students} enableEdit={enableEdit} setSettingsFlag={setSettingsFlag} />,
     }
-  ];
+  ].filter(item => {
+    if (item.label === 'Participants') {
+      return courseBasicInformation && courseBasicInformation.studentManaged !== true;
+    }
+    return true;
+  });
 
   return (
     <>
@@ -361,7 +365,7 @@ const CourseInside = () => {
                   )
                 }
 
-                {settingsFlag && (user.role_str === 'professor' || user.role_str === 'admin') ? (
+                {settingsFlag && (user.role_str === 'professor' || user.role_str === 'admin' || courseBasicInformation?.studentManaged === true) ? (
                   <CourseSettings setSettingsFlag={setSettingsFlag} courseData={courseBasicInformation} setCourseData={setCourseBasicInformation} />
                 ) : questionnaireFlag && questionnaireAnswers !== undefined ? (
                   (hasCourseStarted(courseBasicInformation.start_date) || user.role_str !== 'student') ? (
@@ -428,7 +432,7 @@ const CourseInside = () => {
             editSectionFlag && sectionToEdit !== null && (user?.role_str !== 'professor' || user?.role_str !== 'admin') ? null :
               (
                 <div>
-                  {(user?.role_str === 'professor' || user?.role_str === 'admin') ?
+                  {(user?.role_str === 'professor' || user?.role_str === 'admin' || courseBasicInformation?.studentManaged === true) ?
                     <button onClick={() => setSettingsFlag(true)} className="bg-white ml-8 p-3 rounded-md shadow-md flex items-center mt-8 w-[30rem]">
                       <div className="flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 ml-2">
@@ -484,15 +488,19 @@ const CourseInside = () => {
                       }}
                     />
                   </div>
-                  <div className="hidden flexible:block xl:hidden accordion:block ">
-                    {allForums[0]?.attributes &&
-                      <ForumClickable posts={allForums[0].attributes.posts.data} setForumFlag={setForumFlag} />
-                    }
-                    {professor.attributes &&
-                      <section className="ml-8">
-                        <ProfessorData professor={professor} evaluatorFlag={false} />
-                      </section>}
-                  </div>
+                  {
+                    !courseBasicInformation?.studentManaged === true && (
+                      <div className="hidden flexible:block xl:hidden accordion:block ">
+                        {allForums[0]?.attributes &&
+                          <ForumClickable posts={allForums[0].attributes.posts.data} setForumFlag={setForumFlag} />
+                        }
+                        {professor.attributes &&
+                          <section className="ml-8">
+                            <ProfessorData professor={professor} evaluatorFlag={false} />
+                          </section>}
+                      </div>
+                    )
+                  }
                 </div>
               )
           }
