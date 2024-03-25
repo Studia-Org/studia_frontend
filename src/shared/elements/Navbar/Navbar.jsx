@@ -12,12 +12,12 @@ export const Navbar = () => {
         <nav className="h-[8rem] w-full bg-white">
             <div className="container flex flex-wrap items-center ">
 
-                <Link to={'/app/courses'}><h1 className='p-10 sm:px-16 font-bold text-3xl italic leading-none tracking-tight cursor-pointer'>Uptitude<span className='text-pink-500 text-4xl '>.</span></h1></Link>
-                <div className=' absolute right-0 flex gap-x-6 md:gap-x-6 items-center '>
+                <Link to={'/app/courses'}><h1 className='p-10 ml-6 text-3xl italic font-bold leading-none tracking-tight cursor-pointer sm:px-16'>Uptitude<span className='text-4xl text-pink-500 '>.</span></h1></Link>
+                <div className='absolute right-0 flex items-center gap-x-6 md:gap-x-6'>
                     <Notifications />
                     <Tag className={'hidden lg:block'} User={user} />
-                    {user && <p className='font-medium hidden lg:block'>{user['name']}</p>}
-                    <button onClick={() => navigate(`/app/profile/${user.id}/`)} className='rounded  mr-11'>
+                    {user && <p className='hidden font-medium lg:block'>{user['name']}</p>}
+                    <button onClick={() => navigate(`/app/profile/${user.id}/`)} className='rounded mr-11'>
                         {user && user['profile_photo'] ? (
                             <img
                                 src={user['profile_photo'].url}

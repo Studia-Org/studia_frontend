@@ -13,9 +13,13 @@ import {
 
 import { MdTimeline } from "react-icons/md";
 import { useAuthContext } from "../../context/AuthContext";
+import { set } from "date-fns";
+import { Button } from "antd";
 
 export const Sidebar = (props) => {
   const [dashboardNotification, setDashboardNotification] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+
   const { user } = useAuthContext();
 
   useEffect(() => {
@@ -55,10 +59,48 @@ export const Sidebar = (props) => {
   }, [document.location.pathname]);
   const [showSidebar, setShowSidebar] = useState(document.location.pathname !== '/app/courses/create');
 
+  function oscurecerScrollbar() {
+    const style = document.createElement('style');
+    style.innerHTML = `
+      /* Estilos para la barra de desplazamiento */
+      ::-webkit-scrollbar {
+        width: 0px; /* Ancho de la barra de desplazamiento */
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function mostrarScrollbar() {
+    const style = document.createElement('style');
+    style.innerHTML = `
+    ::-webkit-scrollbar-thumb:hover {
+      background-color: #a8bbbf;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+      background-color: #d6dee1;
+      border-radius: 20px;
+      border: 6px solid transparent;
+      background-clip: content-box;
+  }
+  
+  ::-webkit-scrollbar-track {
+      background-color: transparent;
+  }
+  
+  ::-webkit-scrollbar {
+      width: 20px;
+  }
+    `;
+    document.head.appendChild(style);
+  }
+
   function handleClick() {
     const sidebar = document.getElementById("default-sidebar");
     if (sidebar === null || sidebar === undefined) return;
     sidebar.classList.toggle("-translate-x-full");
+    setExpanded(!expanded);
+    oscurecerScrollbar();
   }
   window.addEventListener("resize", function (event) {
     const sidebar = document.getElementById("default-sidebar");
@@ -73,6 +115,8 @@ export const Sidebar = (props) => {
     if (sidebar === null || sidebar === undefined) return;
     if (window.innerWidth < 1280) {
       sidebar.classList.add("-translate-x-full");
+      setExpanded(false);
+      mostrarScrollbar();
     }
   });
   window.addEventListener("click", function (event) {
@@ -86,6 +130,8 @@ export const Sidebar = (props) => {
       const sidebar = document.getElementById("default-sidebar");
       if (sidebar === null || sidebar === undefined) return;
       sidebar.classList.add("-translate-x-full");
+      setExpanded(false);
+      mostrarScrollbar();
     }
   });
   return (
@@ -121,10 +167,42 @@ export const Sidebar = (props) => {
       <aside
         id="default-sidebar"
         className={`absolute flex min-h-screen xl:min-h-[calc(100vh-8rem)] bg-white z-[1000] pl-8 
-         xl:pl-16 top-5 left-0 w-80 xl:top-32 transition-transform -translate-x-full ${showSidebar ? "xl:translate-x-0" : "-translate-x-full"} `}
+         xl:pl-16 top-0 left-0 w-80 xl:top-32 transition-transform -translate-x-full ${showSidebar ? "xl:translate-x-0" : "-translate-x-full"} `}
         aria-label="Sidebar"
       >
         <div className="min-h-[100%]">
+          <Button
+            data-drawer-target="default-sidebar"
+            id="button-sidebar"
+            data-drawer-toggle="default-sidebar"
+            aria-controls="default-sidebar"
+
+            onClick={handleClick}
+            className={` z-10 items-center flex   mt-4 mb-16 py-5 px-3 text-sm text-gray-500 rounded-lg top-8 xl:${!showSidebar ? "block" : "hidden"} hover:bg-gray-100 
+        focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600`}
+          >
+            <span className="sr-only">Open sidebar</span>
+            <svg
+              className="w-6 h-6 "
+              id="svg-sidebar"
+              aria-hidden="true"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                clipRule="evenodd"
+                id="path-sidebar"
+                fillRule="evenodd"
+                d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
+              ></path>
+            </svg>
+          </Button>
+          {
+            expanded && (
+              <hr className="w-64 " />
+            )
+          }
           <ul className="w-48 ml-3 font-medium space-y-96 xl:ml-0 ">
             <Link to={"/app/courses"} style={{ textDecoration: "none" }}>
               <li
@@ -275,6 +353,7 @@ export const Sidebar = (props) => {
           </ul>
         </div>
       </aside>
+      <main className={`absolute right-0 top-0 h-screen xl:w-1/3 xl:relative ${expanded ? 'w-full h-screen bg-black bg-opacity-30 z-40' : 'hidden'}`}></main>
     </>
   );
 };
