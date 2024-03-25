@@ -83,7 +83,7 @@ const QualificationsProfessor = () => {
                                     <UploadQualifications setUploadQualificationsFlag={setUploadQualificationsFlag} activities={activities} students={students} />
                                     :
                                     <QualificationsTable setUploadQualificationsFlag={setUploadQualificationsFlag} students={students}
-                                        activities={activities} setStudents={setStudents} />
+                                        activities={activities} setActivities={setActivities} setStudents={setStudents} />
                             }
                         </motion.div>
 

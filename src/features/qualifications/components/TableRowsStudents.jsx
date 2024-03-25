@@ -24,6 +24,18 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
     const { courseID } = useParams();
     const BeingReviewedBy = grade?.attributes?.activity?.data?.attributes?.BeingReviewedBy?.data?.id;
     const peerReviewAnswers = student.attributes.qualifications?.data.find(qualification => qualification?.attributes?.activity?.data?.id === BeingReviewedBy)
+    const [professorQualification, setProfessorQualification] = useState(0);
+
+    useEffect(() => {
+        const average = calculateAverage();
+        if (isNaN(average)) {
+            setProfessorQualification(qualification);
+            return
+        }
+        if (qualification) setProfessorQualification((qualification / (ponderationProfessor / 100)).toFixed(2));
+        else setProfessorQualification(null);
+    }, [])
+
 
     useEffect(() => {
         setQualification(grade?.attributes?.qualification)
@@ -54,22 +66,38 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
         });
     };
     function handlePonderation(value, type) {
+        let ponderationProfessor = 0;
+        let ponderationStudent = 0;
         if (type === 'professor') {
-            setPonderationProfessor(value);
-            setPonderationStudent(100 - value);
+            ponderationProfessor = value;
+            ponderationStudent = 100 - value;
         } else {
-            setPonderationStudent(value);
-            setPonderationProfessor(100 - value);
+            ponderationStudent = value;
+            ponderationProfessor = 100 - value;
         }
-        setThereIsChanges(value !== grade?.attributes?.ponderationStudent);
-        setEditActivity((prev) => {
-            return {
-                ...prev,
-                [activity.id]: {
-                    ponderationStudent: ponderationStudent
+        setPonderationProfessor(ponderationProfessor);
+        setPonderationStudent(ponderationStudent);
+
+        const qual = (professorQualification * ponderationProfessor / 100) + (calculateAverage() * ponderationStudent / 100);
+        setQualification(qual.toFixed(2));
+
+        setThereIsChanges(qualification !== grade?.attributes?.qualification || comments !== grade?.attributes?.comments ||
+            ponderationStudent !== grade?.attributes?.ponderationStudent);
+
+        if (ponderationStudent !== grade?.attributes?.ponderationStudent) {
+            setEditActivity((prev) => {
+                return {
+                    ...prev,
+                    [activity.id]: {
+                        ponderationStudent: ponderationStudent,
+                        id: activity.id
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            setEditActivity({})
+        }
+
 
     }
 
@@ -94,7 +122,7 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
         return isNaN(average) ? "-" : average.toFixed(2);
     }
     function renderQualifications() {
-        if (isEditChecked) {
+        if (isEditChecked && !isPeerReview) {
             return (
                 <td className="px-6 py-4">
                     <InputNumber
@@ -106,45 +134,48 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
                 </td>
             );
         } else {
-            if (grade) {
+            if (grade && !isEditChecked) {
                 return (
-                    <td class="px-6 py-4">
+                    <td className="px-6 py-4 text-center">
                         {grade.attributes.qualification}
                     </td>
                 )
             } else {
                 return (
-                    <td class="px-6 py-4">
+                    <td className="px-6 py-4 text-center">
+                        {qualification ? qualification : "-"}
                     </td>
                 )
             }
         }
     }
+
     function renderPonderations() {
-        if (isEditChecked) {
-            return (
-                <td className="px-6 py-4">
-                    <div className='flex items-center'>
-                        <p className='min-w-[90px]'>Professor %:</p>
-                        <InputNumber
-                            min={1}
-                            max={100}
-                            value={ponderationProfessor}
-                            onChange={(value) => { handlePonderation(value, 'professor') }}
-                        />
-                    </div>
-                    <div className='flex items-center mt-2'>
-                        <p className='min-w-[90px]'>Student %:</p>
-                        <InputNumber
-                            min={1}
-                            max={100}
-                            value={ponderationStudent}
-                            onChange={(value) => { handlePonderation(value, 'student') }}
-                        />
-                    </div>
-                </td>
-            );
-        } else {
+        // if (isEditChecked) {
+        //     return (
+        //         <td className="px-6 py-4">
+        //             <div className='flex items-center'>
+        //                 <p className='min-w-[90px]'>Professor %:</p>
+        //                 <InputNumber
+        //                     min={1}
+        //                     max={100}
+        //                     value={ponderationProfessor}
+        //                     onChange={(value) => { handlePonderation(value, 'professor') }}
+        //                 />
+        //             </div>
+        //             <div className='flex items-center mt-2'>
+        //                 <p className='min-w-[90px]'>Student %:</p>
+        //                 <InputNumber
+        //                     min={1}
+        //                     max={100}
+        //                     value={ponderationStudent}
+        //                     onChange={(value) => { handlePonderation(value, 'student') }}
+        //                 />
+        //             </div>
+        //         </td>
+        //     );
+        // } else {
+        if (grade) {
             return (
                 <td className="px-6 py-4">
                     <div className='flex items-center'>
@@ -157,7 +188,12 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
                     </div>
                 </td>
             )
-
+        } else {
+            return (
+                <td className="px-6 py-4">
+                </td>
+            )
+            // }
         }
     }
     function renderComments() {
@@ -212,6 +248,36 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
 
     }
 
+    function renderProfessorQualification() {
+        if (isEditChecked) {
+            return (
+                <td className="px-6 py-4">
+                    <InputNumber
+                        min={0}
+                        max={10}
+                        value={professorQualification}
+                        onChange={(value) => {
+                            const average = calculateAverage();
+                            let qual = 0
+                            if (isNaN(average)) {
+                                qual = value;
+                            } else {
+                                qual = (value * ponderationProfessor / 100) + (calculateAverage() * ponderationStudent / 100);
+                            }
+
+                            setProfessorQualification(value.toFixed(2));
+                            handleQualificationChange(qual.toFixed(2))
+                        }}
+                    />
+                </td>
+            );
+        }
+        return (
+            <td className="px-6 py-4 text-center">
+                {professorQualification ? professorQualification : "-"}
+            </td>
+        )
+    }
     return (
         <>
             <ModalFiles grade={grade} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} student={student} />
@@ -230,8 +296,10 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
                 {renderQualifications()}
                 {renderComments()}
                 {
-                    isPeerReview && renderPonderations()
+                    isPeerReview &&
+                    renderProfessorQualification()
                 }
+
                 {
                     isPeerReview ?
                         (
@@ -256,6 +324,9 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
                                     </div>
                                 </td>
                             )
+                }
+                {
+                    isPeerReview && renderPonderations()
                 }
                 {
                     grade ?
