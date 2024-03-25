@@ -41,6 +41,7 @@ const CourseInside = () => {
   const [courseContentInformation, setCourseContentInformation] = useState([]);
   const [students, setStudents] = useState([]);
   const [professor, setProfessor] = useState([]);
+
   let { courseId } = useParams();
   let { activityId } = useParams();
   const { user } = useAuthContext()
@@ -53,6 +54,7 @@ const CourseInside = () => {
   const hasCourseStarted = (start_date) => {
     const currentDate = new Date();
     const startDate = new Date(start_date);
+    console.log(currentDate >= startDate);
     return currentDate >= startDate;
   }
 
@@ -101,8 +103,6 @@ const CourseInside = () => {
           subsections: { data: subsecciones },
         },
       } = curso;
-
-      console.log(subsecciones);
 
       for (const subseccion of subsecciones) {
         const subseccionId = subseccion.id;
@@ -160,6 +160,7 @@ const CourseInside = () => {
         courseContentInformation,
         subsectionsCompleted
       );
+
       console.log(firstSubsection);
       if (firstSubsection) {
         if (firstSubsection?.subseccion?.attributes?.activity?.data?.attributes?.type === 'questionnaire') {
@@ -364,6 +365,13 @@ const CourseInside = () => {
                     </div>
                   )
                 }
+                {
+                  (!hasCourseStarted(courseBasicInformation.start_date) && settingsFlag === false) && (
+                    <CourseHasNotStarted startDate={courseBasicInformation.start_date} />
+                  )
+                }
+
+
 
                 {settingsFlag && (user.role_str === 'professor' || user.role_str === 'admin' || courseBasicInformation?.studentManaged === true) ? (
                   <CourseSettings setSettingsFlag={setSettingsFlag} courseData={courseBasicInformation} setCourseData={setCourseBasicInformation} />
@@ -380,7 +388,7 @@ const CourseInside = () => {
                       professorID={professor.id}
                     />
                   ) :
-                    <CourseHasNotStarted />
+                    <CourseHasNotStarted startDate={courseBasicInformation.start_date} />
 
                 ) : courseSection && courseContentInformation.length > 0 && (
                   <>
@@ -413,7 +421,7 @@ const CourseInside = () => {
                       (hasCourseStarted(courseBasicInformation.start_date) || user.role_str !== 'student') ?
                         <Tabs className='font-normal' tabBarStyle={{ borderBottom: '1px solid black' }} defaultActiveKey="1" items={items} />
                         :
-                        <CourseHasNotStarted />
+                        <CourseHasNotStarted startDate={courseBasicInformation.start_date} />
                     }
                   </>
                 )}

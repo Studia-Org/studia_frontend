@@ -23,14 +23,27 @@ function calculateListOfDates(startDate, endDate, numberOfSubsections) {
 
 }
 
+const searchUserByName = async (name) => {
+    const token = process.env.REACT_APP_ADMIN_TOKEN;
+    const response = await fetch(`${API}/users?filters[username][$eq]=${name}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+        },
+    });
+    const data = await response.json();
+    return data[0].id
+}
+
 export async function createCourse(seletedCourseTemp, userID, data) {
     const token = process.env.REACT_APP_ADMIN_TOKEN;
+
+    const creatorId = await searchUserByName(seletedCourseTemp.creator)
+    console.log(creatorId)
     let allSections = [], forumIds = [], startDate = null, endDate = null, createdActivities = {}, index = 0
     console.log(data[0].subsections.length)
     const courseDates = calculateListOfDates(seletedCourseTemp.startDate, seletedCourseTemp.endDate, data[0].subsections.length)
-
-    console.log(courseDates)
-
 
     try {
         for (const section of data) {
@@ -284,6 +297,8 @@ export async function createCourse(seletedCourseTemp, userID, data) {
             tags: seletedCourseTemp.tags,
             studentManaged: true,
             sections: allSections,
+            professor: [creatorId],
+            evaluators: [creatorId],
             students: [userID],
             start_date: seletedCourseTemp.startDate,
             end_date: seletedCourseTemp.endDate,
