@@ -6,23 +6,23 @@ function PeerReviewAnswers({ answers, data }) {
         answers !== undefined && answers !== null ?
             <section className=" h-full max-h-[600px]">
                 <div className="grid font-semibold h-[calc(100%-4rem)] max-h-[600px]
-                     grid-cols-2  shadow-lg rounded-[14px] sm:border-2 sm:border-gray-700">
+                     grid-cols-2 shadow-md rounded-md  ">
 
                     {Object.keys(answers).map((criterion, index) => {
                         const range = Object.keys(answers[criterion])[0];
                         const feedback = answers[criterion][range];
                         const isFirstRow = index === 0;
                         const isLastRow = index === Object.keys(answers).length - 1;
-                        const cornerClasses = isFirstRow ? "rounded-tl-xl " : (isLastRow ? " " : "");
+                        const cornerClasses = isFirstRow ? "rounded-tl-md " : (isLastRow ? " " : "");
 
 
                         return (
                             <>
-                                <div className={`flex items-center p-4 break-allbg-purple-300 text-gray-900 bg-purple-300  ${cornerClasses}`}>{criterion}</div>
-                                <div className={`${isFirstRow ? "rounded-tr-xl" : ""} break-all bg-purple-300 
+                                <div className={`flex items-center p-4 break-allbg-purple-300 text-gray-900 bg-[#ced6ef]  ${cornerClasses}`}>{criterion}</div>
+                                <div className={`${isFirstRow ? "rounded-tr-md" : ""} break-all bg-[#ced6ef] 
                                                 flex items-center p-4  text-gray-900`}>{range + (number ? "/" + data[data.length - 1].split("-")[1] : "")}</div>
                                 <div className={`col-span-2 break-all flex items-center p-4 h-full bg-white 
-                                                ${isLastRow ? "rounded-bl-xl  rounded-br-xl" : "border-b-2 border-gray-700"}`}>{feedback}</div>
+                                                ${isLastRow ? "rounded-bl-md  rounded-br-md" : ""}`}>{feedback}</div>
                             </>
                         );
                     })}
