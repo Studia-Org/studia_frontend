@@ -148,6 +148,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                             isEditChecked={isEditChecked}
                             setThereIsChanges={setThereIsChanges}
                             editedGrades={editedGrades}
+                            activities={activities}
                             setEditedGrades={setEditedGrades}
                         />
                     })}
