@@ -168,6 +168,7 @@ const CourseInside = () => {
       console.log(firstSubsection);
       if (firstSubsection) {
         if (firstSubsection?.subseccion?.attributes?.activity?.data?.attributes?.type === 'questionnaire') {
+          setCourseSection(firstSubsection?.cursoTitle);
           setCourseSubsection(firstSubsection.subseccion);
           setQuestionnaireFlag(true);
           setCourseSubsectionQuestionnaire(
@@ -193,6 +194,7 @@ const CourseInside = () => {
         subsecciones[0]?.attributes?.activity?.data?.attributes?.type ===
         "questionnaire"
       ) {
+        setCourseSection(title);
         setCourseSubsection(subsecciones[0]);
         setQuestionnaireFlag(true);
         setCourseSubsectionQuestionnaire(

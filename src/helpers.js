@@ -16,5 +16,6 @@ export const removeToken = () => {
 
 export const checkAuthenticated = () => {
   const token = getToken();
+  console.log(token);
   return token ? true : false;
 }
