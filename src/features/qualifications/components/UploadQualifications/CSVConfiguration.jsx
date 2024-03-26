@@ -3,6 +3,7 @@ import { Select, Input, Button } from 'antd';
 import { UploadFiles } from '../../../courses/components/CreateCourses/CourseSections/UploadFiles';
 import { createCSVTemplate } from './helpers';
 export const CSVConfiguration = ({ students, activities, formValues, setFormValues, file, setFile }) => {
+
     const filterOption = (input, option) =>
         (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
@@ -18,7 +19,12 @@ export const CSVConfiguration = ({ students, activities, formValues, setFormValu
     const activityOptions = activities
         .filter(activity => activity.attributes.evaluable === true)
         .map(activity => ({
-            value: JSON.stringify({ id: activity.id, title: activity.attributes.title, groupActivity: activity.attributes.groupActivity }),
+            value: JSON.stringify({
+                id: activity.id,
+                title: activity.attributes.title,
+                groupActivity: activity.attributes.groupActivity,
+                isPeerReview: activity.attributes.BeingReviewedBy.data !== null
+            }),
             label: activity.attributes.title,
         }));
 
@@ -51,9 +57,7 @@ export const CSVConfiguration = ({ students, activities, formValues, setFormValu
                     value={formValues.selectedActivity}
                     onChange={handleActivityChange}
                 />
-                <Button
-                    onClick={() => createCSVTemplate(formValues.selectedActivity, students)}
-                >
+                <Button onClick={() => createCSVTemplate(formValues.selectedActivity, students, activities)}>
                     Download template CSV with students
                 </Button>
             </div>
@@ -80,6 +84,18 @@ export const CSVConfiguration = ({ students, activities, formValues, setFormValu
                     value={formValues.commentsInputColumn}
                     onChange={handleInputChange}
                 />
+                {
+                    JSON.parse(formValues.selectedActivity)?.isPeerReview ?
+                        <Input
+                            placeholder='Average peer review grades column and row, ex: F2-F22'
+                            name='gradeAverageInputColumn'
+                            className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3'
+                            value={formValues.gradeAverageInputColumn}
+                            onChange={handleInputChange}
+                        />
+                        : null
+                }
+
             </div>
             {
                 formValues.selectedActivity !== null ?

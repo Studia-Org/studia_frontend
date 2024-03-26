@@ -3,7 +3,7 @@ import * as ExcelJS from 'exceljs';
 import { message } from 'antd';
 
 export function extractDataFromSpreadsheet(formValues) {
-    const { studentInputColumn, qualificationInputColumn, commentsInputColumn, file } = formValues;
+    const { studentInputColumn, qualificationInputColumn, commentsInputColumn, gradeAverageInputColumn, file } = formValues;
 
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -18,11 +18,17 @@ export function extractDataFromSpreadsheet(formValues) {
                 const studentData = extractColumnData(sheet, studentInputColumn);
                 const qualificationData = extractColumnData(sheet, qualificationInputColumn);
                 const commentsData = extractColumnData(sheet, commentsInputColumn);
+                let gradeAverageData = null;
+                if (gradeAverageInputColumn) {
+                    gradeAverageData = extractColumnData(sheet, gradeAverageInputColumn);
+                }
 
                 const dataListFinal = studentData.map((student, index) => ({
                     student,
                     qualification: qualificationData[index],
-                    comments: commentsData[index]
+                    comments: commentsData[index],
+                    averageGradePeerReview: gradeAverageData ? gradeAverageData[index] : null
+
                 }));
 
                 resolve(dataListFinal);
@@ -60,7 +66,7 @@ export function extractDataFromSpreadsheet(formValues) {
 }
 
 
-export function parseData(activity, studentsDataCSV, students) {
+export function parseData(activity, studentsDataCSV, students, isPeerReview) {
     if (activity === null) {
         message.error('Select an activity');
         return
@@ -78,14 +84,17 @@ export function parseData(activity, studentsDataCSV, students) {
 
         studentsDataCSV.forEach((studentData, index) => {
             if (studentData.student !== null && studentData.student.includes('Group')) {
-                data.push({
+                const set = {
                     group: {
                         students: [],
                         Qualification: studentData.qualification,
                         Comments: studentData.comments
                     }
                 }
-                )
+                if (isPeerReview) {
+                    set.group.averageGradePeerReview = studentData.averageGradePeerReview
+                }
+                data.push(set)
             }
             else {
                 const student = students.find(student => student.attributes.name === studentData.student);
@@ -102,7 +111,8 @@ export function parseData(activity, studentsDataCSV, students) {
             const groupExists = filteredGroups.find(filteredGroup => filteredGroup.attributes.users.data.every(user => group.students.find(student => student.student.id === user.id)))
             if (groupExists) {
                 group.id = groupExists.id
-                group.qualification = groupExists.attributes?.qualification
+                group.qualification = groupExists.attributes?.qualifications?.data
+                    .find(qualification => qualification.attributes.activity.data.id === activity.id)
             }
             else {
                 group.id = null
@@ -123,12 +133,16 @@ export function parseData(activity, studentsDataCSV, students) {
             .map(studentData => {
                 const student = students.find(student => student.attributes.email === studentData.student);
                 if (student) {
-                    return {
+                    const set = {
                         key: student.id,
                         Name: { student: student },
                         Qualification: studentData.qualification,
                         Comments: studentData.comments
                     };
+                    if (isPeerReview) {
+                        set.averageGradePeerReview = studentData.averageGradePeerReview
+                    }
+                    return set;
                 }
                 return null;
             })
@@ -137,14 +151,29 @@ export function parseData(activity, studentsDataCSV, students) {
     }
 }
 
+function calculateAverage(peerReviewAnswers) {
+    let sum = 0;
+    peerReviewAnswers?.attributes?.PeerReviewAnswers?.data?.forEach(answer => {
+        let internAverage = 0
+        const Answer = answer?.attributes?.Answers;
+        Object.keys(Answer).forEach((value) => {
+            const dict = Answer[value];
+            internAverage += Object.keys(dict)[0];
+        })
+        sum += (internAverage / Object.keys(Answer).length);
+    });
+    if (!peerReviewAnswers) return "No grade yet";
+    const average = sum / peerReviewAnswers?.attributes?.PeerReviewAnswers?.data?.length;
+    return isNaN(average) ? "-" : average.toFixed(2);
+}
 
-
-export async function createCSVTemplate(activity, students) {
+export async function createCSVTemplate(activity, students, activities) {
     if (activity === null) {
         message.error('Select an activity');
         return
     }
     const parsedActivityFull = JSON.parse(activity)
+    const filteredActivity = activities.find(activity => activity.id === parsedActivityFull.id)
 
     const workbook = new ExcelJS.Workbook();
     workbook.creator = 'Uptitude';
@@ -152,6 +181,8 @@ export async function createCSVTemplate(activity, students) {
     workbook.modified = new Date();
 
     const worksheet = workbook.addWorksheet('Sheet 1');
+
+
 
     if (parsedActivityFull.groupActivity) {
 
@@ -163,10 +194,33 @@ export async function createCSVTemplate(activity, students) {
         const filteredGroupsIdsUnique = [...new Set(filteredGroupsIds)]
         const filteredGroups = filteredGroupsIdsUnique.map(id => AllFilteredGroups.find(group => group.id === id))
 
-        worksheet.addRow(['Groups', 'Qualification', 'Comments']);
+        const BeingReviewedBy = filteredActivity?.attributes?.BeingReviewedBy?.data?.id;
+
+        const header = ['Groups', 'Qualification', 'Comments']
+        if (parsedActivityFull.isPeerReview) {
+            header[1] = 'Professor qualification';
+            header.push('Grade from peer review');
+        }
+        const headerr = worksheet.addRow(header);
+        headerr.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: '5353EC' },
+        };
+        headerr.eachCell(cell => {
+            cell.font = {
+                color: { argb: 'FFFFFF' },
+            };
+        });
+
 
         filteredGroups.forEach((group, index) => {
-            const rowGroup = worksheet.addRow(["Group " + (index + 1), '"Qualification here"', '"Comments here"']);
+            const row = ["Group " + (index + 1), '"Qualification here"', '"Comments here"']
+            if (parsedActivityFull.isPeerReview) {
+                const average = calculateAverage(group.attributes.qualifications.data.find(qualification => qualification.attributes.activity.data.id === BeingReviewedBy));
+                row.push(average);
+            }
+            const rowGroup = worksheet.addRow(row);
             rowGroup.font = { bold: true };
             rowGroup.fill = {
                 type: 'pattern',
@@ -176,13 +230,31 @@ export async function createCSVTemplate(activity, students) {
             group.attributes.users.data.forEach(user => {
                 worksheet.addRow([user.attributes.name, user.attributes.email, '']);
             });
+
         });
 
     }
     else {
-        worksheet.addRow(['Name', 'Qualification', 'Comments']);
+        const header = ['Name', 'Qualification', 'Comments']
+        if (parsedActivityFull.isPeerReview) {
+            header.push("Average grade peer review");
+        }
+        const row = worksheet.addRow(header);
+        row.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: '5353EC' },
+        };
+        row.eachCell(cell => {
+            cell.font = {
+                color: { argb: 'FFFFFF' },
+            };
+        });
+        const BeingReviewedBy = filteredActivity?.attributes?.BeingReviewedBy?.data?.id;
         students.forEach(student => {
-            worksheet.addRow([student.attributes.email, '', '']);
+            const average = calculateAverage(student.attributes.qualifications.data.find(qualification => qualification?.attributes?.activity?.data?.id === BeingReviewedBy));
+
+            worksheet.addRow([student.attributes.email, '', '', average]);
         });
     }
 

@@ -32,8 +32,11 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
             setProfessorQualification(qualification);
             return
         }
-        if (qualification) setProfessorQualification((qualification / (ponderationProfessor / 100)).toFixed(2));
-        else setProfessorQualification(null);
+        if (qualification) {
+            const professor = (qualification - (average * ponderationStudent / 100)) / (ponderationProfessor / 100);
+            setProfessorQualification(professor.toFixed(2));
+        }
+        else { setProfessorQualification(null); }
     }, [])
 
 

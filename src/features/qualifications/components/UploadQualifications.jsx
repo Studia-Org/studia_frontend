@@ -19,15 +19,17 @@ export const UploadQualifications = ({ setUploadQualificationsFlag, activities, 
         studentInputColumn: '',
         qualificationInputColumn: '',
         commentsInputColumn: '',
+        gradeAverageInputColumn: '',
         file: null,
     });
+    const [filteredActivity, setFilteredActivity] = useState(activities.find(activity => activity.id === JSON.parse(formValues?.selectedActivity)?.id))
 
     function stepRenderer() {
         switch (steps) {
             case 0:
                 return <CSVConfiguration students={students} activities={activities} formValues={formValues} setFormValues={setFormValues} file={file} setFile={setFile} />
             case 1:
-                return <Visualization formValues={formValues} data={dataTable} />
+                return <Visualization formValues={formValues} data={dataTable} isPeerReview={filteredActivity.attributes.BeingReviewedBy.data !== null} />
             case 2:
                 return <Confirmation />
             default:
@@ -36,6 +38,9 @@ export const UploadQualifications = ({ setUploadQualificationsFlag, activities, 
     }
 
     useEffect(() => {
+        if (formValues.selectedActivity) {
+            setFilteredActivity(activities.find(activity => activity.id === JSON.parse(formValues.selectedActivity)?.id))
+        }
         if (formValues.file) {
             extractDataFromSpreadsheet(formValues).then(dataList => {
                 setDataVisualization(dataList);
@@ -45,7 +50,7 @@ export const UploadQualifications = ({ setUploadQualificationsFlag, activities, 
 
     useEffect(() => {
         if (dataVisualization.length > 0) {
-            setDataTable(parseData(JSON.parse(formValues.selectedActivity), dataVisualization, students));
+            setDataTable(parseData(JSON.parse(formValues.selectedActivity), dataVisualization, students, filteredActivity.attributes.BeingReviewedBy.data !== null));
         }
     }, [dataVisualization, formValues, students])
 
@@ -66,18 +71,20 @@ export const UploadQualifications = ({ setUploadQualificationsFlag, activities, 
                             onConfirm={() => {
                                 handleContinue();
                                 if (JSON.parse(formValues.selectedActivity).groupActivity) {
-                                    console.log('uploading per group')
                                     uploadQualificationsPerGroup({
                                         dataTable,
                                         activity: formValues.selectedActivity,
-                                        user
+                                        user,
+                                        fullActivity: filteredActivity
                                     })
                                 }
                                 else {
                                     uploadQualifications({
                                         dataTable,
                                         activity: formValues.selectedActivity,
-                                        user
+                                        user,
+                                        fullActivity: filteredActivity
+
                                     })
                                 }
                             }}
@@ -160,6 +167,12 @@ export const UploadQualifications = ({ setUploadQualificationsFlag, activities, 
     };
 
     const handleContinue = () => {
+        if (filteredActivity &&
+            filteredActivity.attributes.BeingReviewedBy.data !== null &&
+            new Date(filteredActivity.attributes.BeingReviewedBy.data?.attributes?.deadline) > new Date()) {
+            message.error('Peer review did not finish yet');
+            return
+        }
         if (checkIfDataIsCorrect()) {
             setSteps(steps + 1);
         }
@@ -192,8 +205,18 @@ export const UploadQualifications = ({ setUploadQualificationsFlag, activities, 
                         }
                     ]}
                 />
+
                 <h3 className='mt-10 text-lg font-medium'>Upload Qualifications</h3>
+                {filteredActivity &&
+                    filteredActivity.attributes.BeingReviewedBy.data !== null &&
+                    new Date(filteredActivity.attributes.BeingReviewedBy.data?.attributes?.deadline) > new Date() &&
+                    <div className="px-4 py-2 mt-3 text-red-700 bg-red-100 border border-red-400 rounded w-fit" role="alert">
+                        <strong className="text-sm font-bold">Attention!</strong>
+                        <span className="block text-sm sm:inline"> Peer review deadline is on {new Date(filteredActivity.attributes.BeingReviewedBy.data.attributes.deadline).toLocaleDateString()}</span>
+                    </div>
+                }
                 {stepRenderer()}
+
                 {
                     steps !== 2 && (
                         <div className='flex w-full mt-10'>
@@ -201,6 +224,7 @@ export const UploadQualifications = ({ setUploadQualificationsFlag, activities, 
                         </div>
                     )
                 }
+
 
             </div>
         </div>

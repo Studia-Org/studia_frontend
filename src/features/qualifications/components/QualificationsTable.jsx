@@ -5,9 +5,6 @@ import { Button, Select, message } from "antd"
 import { API } from '../../../constant';
 import { getToken } from '../../../helpers';
 import { useAuthContext } from '../../../context/AuthContext';
-import { fi } from 'date-fns/locale';
-import { updateActivityPonderation } from '../fetches/updateActivityPonderation';
-
 
 
 export const QualificationsTable = ({ students, activities, setStudents, setUploadQualificationsFlag, setActivities }) => {
