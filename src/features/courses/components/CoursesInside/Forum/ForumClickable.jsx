@@ -11,7 +11,7 @@ export const ForumClickable = ({ posts, setForumFlag, whisper }) => {
       return firstTwoPosts.map((post) => renderPostsInside(post));
     } else {
       return (
-        <p className="text-gray-700 text-sm ">
+        <p className="text-sm text-gray-700 ">
           There are no posts yet,{" "}
           <strong className="font-semibold">write your first post now!</strong>{" "}
         </p>
@@ -21,12 +21,12 @@ export const ForumClickable = ({ posts, setForumFlag, whisper }) => {
 
   function renderPostsInside(post) {
     return (
-      <div key={post.id} className="text-sm w-full">
+      <div key={post.id} className="w-full text-sm">
         <p className="font-semibold">{post.attributes.title}</p>
-        <p className="text-gray-700 mt-2 line-clamp-3">
+        <p className="mt-2 text-gray-700 line-clamp-3">
           {post.attributes.content}
         </p>
-        <div className="flex items-center  mt-3 w-full ">
+        <div className="flex items-center w-full mt-3 ">
           <img
             src={
               post.attributes.autor.data.attributes.profile_photo.data
@@ -35,10 +35,10 @@ export const ForumClickable = ({ posts, setForumFlag, whisper }) => {
             className="w-8 rounded-full"
             alt=""
           />
-          <p className="font-medium ml-1">
+          <p className="ml-1 font-medium">
             {post.attributes.autor.data.attributes.name}
           </p>
-          <span className="flex items-center space-x-1 text-black ml-auto font-medium">
+          <span className="flex items-center ml-auto space-x-1 font-medium text-black">
             <FiCornerDownLeft />{" "}
             <p className="ml-auto">
               {" "}
@@ -52,7 +52,7 @@ export const ForumClickable = ({ posts, setForumFlag, whisper }) => {
   }
 
   return (
-    <div className="md:flex-shrink-0 w-full md:w-auto -ml-6 md:ml-0">
+    <div className="w-full -ml-6 md:flex-shrink-0 md:w-auto md:ml-0">
       <div className="mt-4 bg-white rounded-lg  px-5 py-5  sm:mr-9 sm:right-0 sm:w-[30rem]  shadow-md ml-8  sm:block">
         <div className="flex items-center">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 mr-2">
@@ -61,7 +61,7 @@ export const ForumClickable = ({ posts, setForumFlag, whisper }) => {
           <p className="text-lg font-medium">Forum</p>
           <button
             onClick={() => { setForumFlag(true); if (whisper) whisper.current.close() }}
-            className="text-base ml-auto font-medium text-indigo-700"
+            className="ml-auto text-base font-medium text-indigo-700"
           >
             View all posts
           </button>
