@@ -46,6 +46,11 @@ const CourseInside = () => {
   const { user } = useAuthContext()
   const whisper = useRef(null);
 
+  const allPosts = allForums.map((forum) => forum.attributes.posts.data).reduce((accumulator, currentForum) => {
+    return accumulator.concat(currentForum.map(forum => forum));
+  }, [])
+
+
   function handleLandscapePhotoChange(event) {
     setBackgroundPhotoSubsection(event.target.files[0]);
   }
@@ -163,6 +168,7 @@ const CourseInside = () => {
       console.log(firstSubsection);
       if (firstSubsection) {
         if (firstSubsection?.subseccion?.attributes?.activity?.data?.attributes?.type === 'questionnaire') {
+          setCourseSection(firstSubsection?.cursoTitle);
           setCourseSubsection(firstSubsection.subseccion);
           setQuestionnaireFlag(true);
           setCourseSubsectionQuestionnaire(
@@ -188,6 +194,7 @@ const CourseInside = () => {
         subsecciones[0]?.attributes?.activity?.data?.attributes?.type ===
         "questionnaire"
       ) {
+        setCourseSection(title);
         setCourseSubsection(subsecciones[0]);
         setQuestionnaireFlag(true);
         setCourseSubsectionQuestionnaire(
@@ -485,8 +492,8 @@ const CourseInside = () => {
                     />
                   </div>
                   <div className="hidden flexible:block xl:hidden accordion:block ">
-                    {allForums[0]?.attributes &&
-                      <ForumClickable posts={allForums[0].attributes.posts.data} setForumFlag={setForumFlag} />
+                    {allPosts &&
+                      <ForumClickable posts={allPosts} setForumFlag={setForumFlag} />
                     }
                     {professor.attributes &&
                       <section className="ml-8">
