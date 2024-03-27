@@ -50,7 +50,7 @@ export const CardCreateCourse = ({ courseData, setCustomizeCourse, setSeletedCou
                     </div>
                     <p className='text-gray-500'>{courseData.creatorDescription}</p>
                 </div>
-                <Button onClick={() => handleClick()} className='w-full mt-4 bg-white'>
+                <Button disabled onClick={() => handleClick()} className='w-full mt-4 bg-white'>
                     Customize your course
                 </Button>
             </div>
