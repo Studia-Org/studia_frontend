@@ -199,7 +199,7 @@ export async function createCSVTemplate(activity, students, activities) {
         const header = ['Groups', 'Qualification', 'Comments']
         if (parsedActivityFull.isPeerReview) {
             header[1] = 'Professor qualification';
-            header.push('Grade from peer review');
+            header.push('Average grade peer review');
         }
         const headerr = worksheet.addRow(header);
         headerr.fill = {
