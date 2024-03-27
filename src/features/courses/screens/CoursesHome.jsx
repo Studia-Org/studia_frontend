@@ -6,16 +6,14 @@ import '../styles/utils.css'
 import { getToken } from '../../../helpers';
 import { useAuthContext } from "../../../context/AuthContext";
 import { CoursesCardHome } from '../components/CoursesHome/CoursesCardHome';
-import { Divider, Empty } from 'antd';
+import { Badge, Divider, Empty, Tag } from 'antd';
 import Swal from 'sweetalert2'
 import { MoonLoader } from "react-spinners";
 import { API } from "../../../constant";
 import Confetti from 'react-confetti'
-import { WebchatChatbot } from '../../../shared/elements/WebchatChatbot';
-import { checkAuthenticated } from "../../../helpers";
 import { Whisper, Button, Popover } from 'rsuite';
-import { Chip } from '@mui/material';
 import { SpeedDialCreateCourse } from '../components/CoursesHome/SpeedDialCreateCourse';
+import { ModalCreateCourseStudent } from '../components/CoursesHome/AddCourseStudent/ModalCreateCourseStudent';
 
 const CoursesHome = () => {
   const { user } = useAuthContext();
@@ -26,6 +24,7 @@ const CoursesHome = () => {
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [dailyTasks, setDailyTasks] = useState([]);
+  const [expandCreateCourseStudent, setExpandCreateCourseStudent] = useState(false);
   const [openObjectivesModal, setOpenObjectivesModal] = useState(false);
 
   document.title = 'Home - Uptitude'
@@ -50,12 +49,6 @@ const CoursesHome = () => {
     };
   }, [confettiExplode]);
 
-  useEffect(() => {
-    console.log('openObjectivesModal', checkAuthenticated())
-    if (!checkAuthenticated()) {
-      navigate('/');
-    }
-  }, []);
 
   const fetchCoursesCards = async () => {
     setIsLoading(true);
@@ -68,7 +61,8 @@ const CoursesHome = () => {
       const data = await response.json();
       const coursesFiltered = filterCoursesByRole(data, user);
       const finalCourses = coursesFiltered.map(mapCourseData);
-      setCourses(finalCourses ?? []);
+      const sortedCourses = finalCourses.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      setCourses(sortedCourses ?? []);
       setIsLoading(false);
     } catch (error) {
       console.error(error);
@@ -83,12 +77,14 @@ const CoursesHome = () => {
   };
   const mapCourseData = course => ({
     id: course.id,
+    createdAt: course.createdAt || course.attributes.createdAt,
     title: course.title || course.attributes.title,
     cover: course.cover ? course.cover.url : course.attributes.cover.data?.attributes.url,
     professor_name: course.professor ? course.professor.name : course.attributes.professor.data.attributes.name,
     tags: course?.tags || course.attributes?.tags,
     professor_profile_photo: course.professor ? course.professor.profile_photo.url : course.attributes.professor.data.attributes.profile_photo.data.attributes.url,
-    students: course.students || course.attributes.students.data
+    students: course.students || course.attributes.students.data,
+    studentManaged: course?.studentManaged || course.attributes?.studentManaged,
   });
 
 
@@ -264,16 +260,16 @@ const CoursesHome = () => {
 
   function renderObjectives(objective) {
     return (
-      <div key={objective.id} className='flex p-5 bg-white border rounded-lg '>
+      <div key={objective.id} className='flex items-center p-5 bg-white border rounded-lg '>
         <p className='text-base font-medium'>{objective.objective}</p>
         {
           objective.completed === true ?
             <div className='ml-auto'>
-              <Chip label='Completed' color='success' className='ml-auto ' onClick={() => handleObjectiveCompleted(objective)} />
+              <Tag onClick={() => handleObjectiveCompleted(objective)} className='p-1 ml-auto cursor-pointer hover:scale-95' color="#008000">Completed</Tag>
             </div>
             :
             <div className='ml-auto'>
-              <Chip label='Not Completed' color='info' className='ml-auto' onClick={() => handleObjectiveCompleted(objective)} />
+              <Tag onClick={() => handleObjectiveCompleted(objective)} className='p-1 ml-auto cursor-pointer hover:scale-95' color="#f50 ">Not Completed</Tag>
             </div>
         }
       </div>
@@ -377,11 +373,11 @@ const CoursesHome = () => {
               </>
           }
         </div>
+        <ModalCreateCourseStudent expandCreateCourseStudent={expandCreateCourseStudent} setExpandCreateCourseStudent={setExpandCreateCourseStudent} setCourses={setCourses} />
       </div>
       {
-        user && (user.role_str === 'admin' || user.role_str === 'professor') ?
-          <SpeedDialCreateCourse />
-          : null
+        user &&
+        <SpeedDialCreateCourse setExpandCreateCourseStudent={setExpandCreateCourseStudent} />
       }
     </>
   )

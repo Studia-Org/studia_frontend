@@ -41,6 +41,7 @@ const CourseInside = () => {
   const [courseContentInformation, setCourseContentInformation] = useState([]);
   const [students, setStudents] = useState([]);
   const [professor, setProfessor] = useState([]);
+
   let { courseId } = useParams();
   let { activityId } = useParams();
   const { user } = useAuthContext()
@@ -58,6 +59,7 @@ const CourseInside = () => {
   const hasCourseStarted = (start_date) => {
     const currentDate = new Date();
     const startDate = new Date(start_date);
+    console.log(currentDate >= startDate);
     return currentDate >= startDate;
   }
 
@@ -106,8 +108,6 @@ const CourseInside = () => {
           subsections: { data: subsecciones },
         },
       } = curso;
-
-      console.log(subsecciones);
 
       for (const subseccion of subsecciones) {
         const subseccionId = subseccion.id;
@@ -165,6 +165,7 @@ const CourseInside = () => {
         courseContentInformation,
         subsectionsCompleted
       );
+
       console.log(firstSubsection);
       if (firstSubsection) {
         if (firstSubsection?.subseccion?.attributes?.activity?.data?.attributes?.type === 'questionnaire') {
@@ -264,7 +265,6 @@ const CourseInside = () => {
     }
   }
 
-  console.log(user.role_str)
 
   const items = [
     {
@@ -282,7 +282,12 @@ const CourseInside = () => {
       label: 'Participants',
       children: <CourseParticipants students={students} enableEdit={enableEdit} setSettingsFlag={setSettingsFlag} />,
     }
-  ];
+  ].filter(item => {
+    if (item.label === 'Participants') {
+      return courseBasicInformation && courseBasicInformation.studentManaged !== true;
+    }
+    return true;
+  });
 
   return (
     <>
@@ -367,8 +372,15 @@ const CourseInside = () => {
                     </div>
                   )
                 }
+                {
+                  (!hasCourseStarted(courseBasicInformation.start_date) && settingsFlag === false) && (
+                    <CourseHasNotStarted startDate={courseBasicInformation.start_date} />
+                  )
+                }
 
-                {settingsFlag && (user.role_str === 'professor' || user.role_str === 'admin') ? (
+
+
+                {settingsFlag && (user.role_str === 'professor' || user.role_str === 'admin' || courseBasicInformation?.studentManaged === true) ? (
                   <CourseSettings setSettingsFlag={setSettingsFlag} courseData={courseBasicInformation} setCourseData={setCourseBasicInformation} />
                 ) : questionnaireFlag && questionnaireAnswers !== undefined ? (
                   (hasCourseStarted(courseBasicInformation.start_date) || user.role_str !== 'student') ? (
@@ -383,7 +395,7 @@ const CourseInside = () => {
                       professorID={professor.id}
                     />
                   ) :
-                    <CourseHasNotStarted />
+                    <CourseHasNotStarted startDate={courseBasicInformation.start_date} />
 
                 ) : courseSection && courseContentInformation.length > 0 && (
                   <>
@@ -416,7 +428,7 @@ const CourseInside = () => {
                       (hasCourseStarted(courseBasicInformation.start_date) || user.role_str !== 'student') ?
                         <Tabs className='font-normal' tabBarStyle={{ borderBottom: '1px solid black' }} defaultActiveKey="1" items={items} />
                         :
-                        <CourseHasNotStarted />
+                        <CourseHasNotStarted startDate={courseBasicInformation.start_date} />
                     }
                   </>
                 )}
@@ -435,7 +447,7 @@ const CourseInside = () => {
             editSectionFlag && sectionToEdit !== null && (user?.role_str !== 'professor' || user?.role_str !== 'admin') ? null :
               (
                 <div>
-                  {(user?.role_str === 'professor' || user?.role_str === 'admin') ?
+                  {(user?.role_str === 'professor' || user?.role_str === 'admin' || courseBasicInformation?.studentManaged === true) ?
                     <button onClick={() => setSettingsFlag(true)} className="bg-white ml-8 p-3 rounded-md shadow-md flex items-center mt-8 w-[30rem]">
                       <div className="flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 ml-2">
@@ -491,15 +503,19 @@ const CourseInside = () => {
                       }}
                     />
                   </div>
-                  <div className="hidden flexible:block xl:hidden accordion:block ">
-                    {allPosts &&
-                      <ForumClickable posts={allPosts} setForumFlag={setForumFlag} />
-                    }
-                    {professor.attributes &&
-                      <section className="ml-8">
-                        <ProfessorData professor={professor} evaluatorFlag={false} />
-                      </section>}
-                  </div>
+                  {
+                    !courseBasicInformation?.studentManaged === true && (
+                      <div className="hidden flexible:block xl:hidden accordion:block ">
+                        {allPosts &&
+                          <ForumClickable posts={allPosts} setForumFlag={setForumFlag} />
+                        }
+                        {professor.attributes &&
+                          <section className="ml-8">
+                            <ProfessorData professor={professor} evaluatorFlag={false} />
+                          </section>}
+                      </div>
+                    )
+                  }
                 </div>
               )
           }

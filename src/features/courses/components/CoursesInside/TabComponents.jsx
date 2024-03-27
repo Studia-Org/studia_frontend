@@ -247,7 +247,7 @@ export const CourseFiles = ({ courseContentInformation, courseSection, courseSub
                                         return subsection;
                                     }
                                 })]
-                                : [] // Empty array if subsections.data is null
+                                : []
                         }
                     }
                 };
@@ -263,7 +263,9 @@ export const CourseFiles = ({ courseContentInformation, courseSection, courseSub
 
     return (
         <div className='flex flex-row items-center w-full space-x-8'>
+
             <div className='w-full mr-5'>
+                <p className="mb-4 text-xs text-gray-400">These files are uploaded by the professor if it's necessary for this subsection.</p>
                 {
                     files?.length > 0 ?
                         (

@@ -2,11 +2,21 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Badge } from 'antd';
 import { FiChevronRight, FiPlus } from 'react-icons/fi';
+import { useAuthContext } from '../../../../context/AuthContext';
 
 
-export const SpeedDialCreateCourse = () => {
+export const SpeedDialCreateCourse = ({ setExpandCreateCourseStudent }) => {
     const navigate = useNavigate()
+    const { user } = useAuthContext()
     const [isExpanded, setIsExpanded] = useState(false)
+
+    function handleClick() {
+        if (user && user.role_str === 'student') {
+            setExpandCreateCourseStudent(true)
+        } else {
+            setIsExpanded(!isExpanded)
+        }
+    }
 
     return (
         <div className='fixed right-[6.5rem] bottom-12'>
@@ -45,7 +55,7 @@ export const SpeedDialCreateCourse = () => {
                 data-dial-toggle="speed-dial-menu-dropdown"
                 aria-controls="speed-dial-menu-dropdown"
                 className="flex items-center justify-center w-[3.2rem] h-[3.2rem] ml-auto text-white transition bg-[#3c3c3c] rounded-full shadow-xl hover:bg-[#4f4f4f] duration-100 hover-scale active-scale "
-                onClick={() => setIsExpanded(!isExpanded)}
+                onClick={() => handleClick()}
             >
                 <FiPlus size={26} />
                 <span className="sr-only"></span>

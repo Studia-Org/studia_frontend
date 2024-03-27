@@ -6,7 +6,6 @@ import { API } from "../../../constant";
 import { useAuthContext } from "../../../context/AuthContext";
 import { EditPanel } from '../components/EditPanel';
 import { CoursesCardsProfile } from '../components/CoursesCardsProfile';
-import { checkAuthenticated } from "../../../helpers";
 import { MoonLoader } from 'react-spinners';
 
 const UserProfile = () => {
@@ -19,13 +18,6 @@ const UserProfile = () => {
   let { uid } = useParams();
 
   document.title = `${user.name} - Uptitude`
-
-  const navigate = useNavigate();
-  useEffect(() => {
-    if (!checkAuthenticated()) {
-      navigate('/');
-    }
-  }, []);
 
   const handleOpenModal = () => {
     setShowModal(true);
