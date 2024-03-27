@@ -9,10 +9,14 @@ const Home = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (checkAuthenticated()) {
-            navigate("/app/courses/");
-        }
-    }, [checkAuthenticated]);
+        const checkAuthentication = async () => {
+            if (await checkAuthenticated()) {
+                navigate("/app/courses/");
+            }
+        };
+        checkAuthentication();
+    }, []);
+
 
     return (
         <div className='bg-[#f2f2f2] overflow-y-hidden'>
