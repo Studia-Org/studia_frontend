@@ -105,7 +105,7 @@ export const CSVConfiguration = ({ students, activities, formValues, setFormValu
                                 <>
                                     <p className='mt-4 mb-1 text-sm text-gray-600'>For the example below, we would select; A2-A8 (in the student case), B2-B8 (Qualification case), C2-C8 (Comment case), and D2-D8(Grade from peer review): </p>
                                     <p className='mb-3 text-xs text-red-500'>When  "<b> - </b>"  is displayed in 'Average grade peer review' it means that peer review was not evaluated numerically and only professor qualification will be taken into account</p>
-                                    <img src="https://res.cloudinary.com/dnmlszkih/image/upload/v1711539848/Screenshot_1_529678bade.png" className='w-1/2 rounded-md' style={{ border: '1px solid #d9d9d9' }} alt="" />
+                                    <img src="https://res.cloudinary.com/dnmlszkih/image/upload/v1711553756/bcmnydszoqeugcwwg1yy.png" className='w-1/2 rounded-md' style={{ border: '1px solid #d9d9d9' }} alt="" />
                                 </>
                                 :
 
@@ -118,7 +118,7 @@ export const CSVConfiguration = ({ students, activities, formValues, setFormValu
                                 <>
                                     <p className='mt-4 mb-1 text-sm text-gray-600'>For the example below, we would select; A2-A6 (in the student case), B2-B6 (Qualification case), C2-C6 (Comment case), and D2-D6(Grade from peer review): </p>
                                     <p className='mb-3 text-xs text-red-500'>When  "<b> - </b>"  is displayed in 'Average grade peer review' it means that peer review was not evaluated numerically and only professor qualification will be taken into account</p>
-                                    <img src="https://res.cloudinary.com/dnmlszkih/image/upload/v1711539992/Screenshot_1_f8288c8364.png" className='w-1/2 rounded-md' style={{ border: '1px solid #d9d9d9' }} alt="" />
+                                    <img src="https://res.cloudinary.com/dnmlszkih/image/upload/v1711553570/bymzghugjetjcsksxxvm.png" className='w-1/2 rounded-md' style={{ border: '1px solid #d9d9d9' }} alt="" />
                                 </>
                                 :
                                 <>
