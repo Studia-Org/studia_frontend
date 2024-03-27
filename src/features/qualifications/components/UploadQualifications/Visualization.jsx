@@ -1,9 +1,9 @@
 import React from 'react'
 import { Table, Avatar } from 'antd';
+import { is } from 'date-fns/locale';
 const { Column, ColumnGroup } = Table;
 
 export const Visualization = ({ formValues, data }) => {
-
     if (JSON.parse(formValues.selectedActivity).groupActivity) {
         return (
             <>
@@ -33,7 +33,7 @@ export const Visualization = ({ formValues, data }) => {
                             }}
                         />
                         <Column
-                            title="Qualification"
+                            title={JSON.parse(formValues.selectedActivity).isPeerReview ? 'Professor Qualification' : 'Qualification'}
                             dataIndex="Qualification"
                             key="Qualification"
                             render={(text, record) => (record.group.Qualification)}
@@ -44,6 +44,16 @@ export const Visualization = ({ formValues, data }) => {
                             key="Qualification"
                             render={(text, record) => (record.group.Comments)}
                         />
+                        {
+                            JSON.parse(formValues.selectedActivity).isPeerReview &&
+                            <Column
+                                title="Peer Review Grade"
+                                dataIndex="averageGradePeerReview"
+                                key="averageGradePeerReview"
+                                render={(text, record) => (record.group.averageGradePeerReview)}
+                            />
+                        }
+
                     </ColumnGroup>
                 </Table>
                 <p className='mt-2 text-xs text-gray-500'>Students who aren't enrolled in the course won't show up here.</p>
@@ -70,8 +80,22 @@ export const Visualization = ({ formValues, data }) => {
                             </div>
                         )}
                     />
-                    <Column title="Qualification" dataIndex="Qualification" key="Qualification" />
+                    <Column
+                        title={JSON.parse(formValues.selectedActivity).isPeerReview ? 'Professor Qualification' : 'Qualification'}
+                        dataIndex="Qualification"
+                        key="Qualification"
+                        render={(text, record) => (record.Qualification)}
+                    />
                     <Column title="Comments" dataIndex="Comments" key="Comments" />
+                    {
+                        JSON.parse(formValues.selectedActivity).isPeerReview &&
+                        <Column
+                            title="Peer Review Grade"
+                            dataIndex="averageGradePeerReview"
+                            key="averageGradePeerReview"
+                            render={(text, record) => (record.averageGradePeerReview)}
+                        />
+                    }
                 </ColumnGroup>
             </Table>
             <p className='mt-2 text-xs text-gray-500'>Students who aren't enrolled in the course won't show up here.</p>
