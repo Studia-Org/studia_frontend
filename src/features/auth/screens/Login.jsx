@@ -10,6 +10,7 @@ import { setToken } from "../../../helpers";
 
 const Login = () => {
     const navigate = useNavigate();
+    const { setAuthenticated } = useAuthContext();
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -40,8 +41,8 @@ const Login = () => {
                 throw data?.error;
             } else {
                 setToken(data.jwt);
+                setAuthenticated(true);
                 setUser(data.user);
-
                 Toast.fire({
                     icon: 'success',
                     title: 'Signed in successfully'

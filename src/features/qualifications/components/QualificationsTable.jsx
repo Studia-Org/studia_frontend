@@ -7,19 +7,23 @@ import { getToken } from '../../../helpers';
 import { useAuthContext } from '../../../context/AuthContext';
 
 
-
-export const QualificationsTable = ({ students, activities, setStudents, setUploadQualificationsFlag }) => {
+export const QualificationsTable = ({ students, activities, setStudents, setUploadQualificationsFlag, setActivities }) => {
     const [isEditChecked, setIsEditChecked] = useState(false);
     const [selectedActivity, setSelectedActivity] = useState
-        (JSON.stringify({ id: activities[0].id, title: activities[0].attributes.title, groupActivity: activities[0].attributes.groupActivity }));
+        (JSON.stringify({ id: activities[0]?.id, title: activities[0]?.attributes?.title, groupActivity: activities[0]?.attributes?.groupActivity }));
     const [thereIsChanges, setThereIsChanges] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [editedGrades, setEditedGrades] = useState({});
+    const [editActivity, setSetEditActivity] = useState({});
     const { user } = useAuthContext()
-    const filteredActivity = activities.filter(activity => activity.id === JSON.parse(selectedActivity).id)
+    const [filteredActivity, setFilteredActivity] = useState(activities.find(activity => activity.id === JSON.parse(selectedActivity).id))
     const [loading, setLoading] = useState(false)
     const [groups, setGroups] = useState([])
 
+    const tableOptions = {
+        "questionnaire": "Questionnaire Completed",
+        "peerReview": "Average grade received",
+    }
     const handleToggleChange = () => {
         setIsEditChecked(!isEditChecked);
     };
@@ -111,13 +115,24 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
         const parsedActivityFull = JSON.parse(selectedActivity)
         if (parsedActivityFull.groupActivity) {
             const AllFilteredGroups = students.filter((student) => student.attributes.groups?.data
-                .find(group => group.attributes.activity?.data?.id === parsedActivityFull.id))
-                .map((group) => group.attributes.groups.data.find(group => group.attributes.activity?.data?.id === parsedActivityFull.id))
+                .find(group => {
+                    if (filteredActivity.attributes.type === 'peerReview') {
+                        return group.attributes.activity?.data?.id === filteredActivity?.attributes?.task_to_review?.data?.id
+                    }
+                    return group.attributes.activity?.data?.id === parsedActivityFull.id
+                }))
+                .map((group) => group.attributes.groups.data.find(group => {
+                    if (filteredActivity.attributes.type === 'peerReview') {
+                        return group.attributes.activity?.data?.id === filteredActivity?.attributes?.task_to_review?.data?.id
+                    }
+                    return group.attributes.activity?.data?.id === parsedActivityFull.id
+                }))
 
             const filteredGroupsIds = AllFilteredGroups.map(group => group.id)
             const filteredGroupsIdsUnique = [...new Set(filteredGroupsIds)]
             const filteredGroups = filteredGroupsIdsUnique.map(id => AllFilteredGroups.find(group => group.id === id))
             if (groups.length === 0) setGroups(filteredGroups)
+
             return (
                 filteredGroups.map((group) => {
                     return <TableRowsGroups
@@ -130,6 +145,10 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                         setEditedGrades={setEditedGrades}
                         setStudents={setStudents}
                         activities={activities}
+                        activityFull={filteredActivity}
+                        isPeerReview={filteredActivity.attributes.BeingReviewedBy.data !== null}
+                        BeingReviewedBy={filteredActivity.attributes.BeingReviewedBy.data}
+                        setEditActivity={setSetEditActivity}
                     />
                 })
             )
@@ -138,6 +157,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
             const filteredStudents = students.filter((student) =>
                 student.attributes.name.toLowerCase().includes(searchTerm.toLowerCase())
             )
+
             return (
                 <>
                     {filteredStudents.map((student) => {
@@ -150,6 +170,11 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                             editedGrades={editedGrades}
                             activities={activities}
                             setEditedGrades={setEditedGrades}
+                            activities={activities}
+                            isPeerReview={filteredActivity.attributes.BeingReviewedBy.data !== null}
+                            activityFull={filteredActivity}
+                            setEditActivity={setSetEditActivity}
+
                         />
                     })}
                 </>
@@ -166,8 +191,6 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
             value: JSON.stringify({ id: activity.id, title: activity.attributes.title, groupActivity: activity.attributes.groupActivity }),
             label: activity.attributes.title,
         }));
-
-
     return (
         <>
             {
@@ -207,19 +230,24 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                             </div>
                             <div className='flex items-center justify-between mt-5 gap-x-5 '>
                                 <Select
-
                                     showSearch
-                                    className='w-full'
+                                    className='w-full cursor-pointer'
                                     placeholder="Select an activity"
                                     optionFilterProp="children"
                                     value={selectedActivity}
-                                    onChange={(value) => { console.log(value); setSelectedActivity(value) }}
+                                    onChange={(value) => { setSelectedActivity(value) }}
                                     filterOption={filterOption}
                                     options={activityOptions}
                                 />
                                 {
                                     isEditChecked && (
                                         <Button loading={loading} type='primary' disabled={!thereIsChanges} onClick={() => {
+                                            if (filteredActivity.attributes.BeingReviewedBy.data !== null &&
+                                                new Date(filteredActivity.attributes.BeingReviewedBy.data?.attributes?.deadline) > new Date()) {
+                                                message.error('Peer review has not ended yet! You must wait until the deadline to save changes.')
+                                                return
+                                            }
+
                                             if (JSON.parse(selectedActivity).groupActivity) {
                                                 setLoading(true)
                                                 saveChangesButtonGroups(editedGrades, groups, selectedActivity, user, students, setStudents)
@@ -229,6 +257,18 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                             } else {
                                                 saveChangesButton()
                                             }
+                                            if (Object.keys(editActivity).length > 0) {
+                                                //TODO save changes for peer review ponderation
+                                                // const response = updateActivityPonderation({
+                                                //     activityId: editActivity[filteredActivity.id].id,
+                                                //     ponderation: editActivity[filteredActivity.id].ponderationStudent
+                                                // })
+                                                // // edit ponderation
+                                                // let filteredActivityCopy = { ...filteredActivity }
+                                                // filteredActivityCopy.attributes.ponderationStudent = editActivity[filteredActivity.id].ponderationStudent
+                                                // setFilteredActivity(filteredActivityCopy)
+                                                // setSetEditActivity({})
+                                            }
                                         }
                                         }>
                                             Save Changes
@@ -237,6 +277,14 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                 }
                             </div>
                         </div>
+                        {
+                            filteredActivity.attributes.BeingReviewedBy.data !== null &&
+                            new Date(filteredActivity.attributes.BeingReviewedBy.data?.attributes?.deadline) > new Date() &&
+                            <div className="px-4 py-2 text-red-700 bg-red-100 border border-red-400 rounded" role="alert">
+                                <strong className="text-sm font-bold">Attention!</strong>
+                                <span className="block text-sm sm:inline"> Peer review deadline is on {new Date(filteredActivity.attributes.BeingReviewedBy.data.attributes.deadline).toLocaleDateString()}</span>
+                            </div>
+                        }
                         <table class="w-full text-sm text-left text-gray-500 ">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50  ">
                                 <tr>
@@ -253,26 +301,32 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                     <th scope="col" class="px-6 py-3">
                                         Qualification
                                     </th>
-                                    <th scope="col" class="px-6 py-3  w-2/4 ">
+                                    <th scope="col" class="px-6 py-3 ">
                                         Comment
                                     </th>
-                                    {
-                                        filteredActivity[0]?.attributes?.type !== 'questionnaire' ? (
-                                            <th scope="col" class="px-6 py-3">
-                                                Files
-                                            </th>
-                                        ) : (
-                                            <th scope="col" class="px-6 py-3">
-                                                Questionnaire Completed
-                                            </th>
-                                        )
+                                    {filteredActivity.attributes.BeingReviewedBy.data !== null &&
+                                        <th scope="col" class="px-6 py-3">
+                                            Professor qualification
+                                        </th>
+                                    }
+                                    <th scope="col" class="px-6 py-3">
+                                        {
+                                            filteredActivity.attributes.BeingReviewedBy.data !== null ?
+                                                tableOptions["peerReview"] :
+                                                tableOptions[filteredActivity.attributes.type] || 'Files'
+                                        }
+                                    </th>
+                                    {filteredActivity.attributes.BeingReviewedBy.data !== null &&
+                                        <th scope="col" class="px-6 py-3">
+                                            Professor - Students ponderation
+                                        </th>
                                     }
                                     <th scope="col" class="px-6 py-3">
                                         Last modified
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody key={selectedActivity}>
+                            <tbody key={selectedActivity + filteredActivity.attributes.ponderationStudent}>
                                 {students && renderTableRows()}
                             </tbody>
                         </table>

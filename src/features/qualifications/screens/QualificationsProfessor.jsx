@@ -23,7 +23,11 @@ const QualificationsProfessor = () => {
 
     const fetchCourseData = async () => {
         try {
-            const response = await fetch(`${API}/courses/${courseID}?populate=sections.subsections.activity,cover,students.profile_photo,students.qualifications.activity,students.qualifications.file,students.user_response_questionnaires.questionnaire.subsection.activity,students.groups.qualification.file,students.groups.activity,students.groups.users.profile_photo`,
+            const response = await fetch(`${API}/courses/${courseID}?populate=sections.subsections.activity.BeingReviewedBy,cover,` +
+                `students.profile_photo,students.qualifications.activity,students.qualifications.file,students.qualifications.PeerReviewAnswers,` +
+                `students.user_response_questionnaires.questionnaire.subsection.activity,students.qualifications.activity.BeingReviewedBy,` +
+                `students.groups.qualifications.activity.BeingReviewedBy,students.groups.qualifications.file,students.groups.qualifications.PeerReviewAnswers,` +
+                `students.groups.activity,students.groups.users.profile_photo`,
                 {
                     headers: {
                         Authorization: `${BEARER} ${getToken()}`
@@ -79,7 +83,7 @@ const QualificationsProfessor = () => {
                                     <UploadQualifications setUploadQualificationsFlag={setUploadQualificationsFlag} activities={activities} students={students} />
                                     :
                                     <QualificationsTable setUploadQualificationsFlag={setUploadQualificationsFlag} students={students}
-                                        activities={activities} setStudents={setStudents} />
+                                        activities={activities} setActivities={setActivities} setStudents={setStudents} />
                             }
                         </motion.div>
 

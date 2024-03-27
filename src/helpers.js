@@ -1,4 +1,4 @@
-import { AUTH_TOKEN } from "./constant";
+import { API, AUTH_TOKEN, BEARER } from "./constant";
 
 export const getToken = () => {
   return localStorage.getItem(AUTH_TOKEN);
@@ -13,8 +13,3 @@ export const setToken = (token) => {
 export const removeToken = () => {
   localStorage.removeItem(AUTH_TOKEN);
 };
-
-export const checkAuthenticated = () => {
-  const token = getToken();
-  return token ? true : false;
-}

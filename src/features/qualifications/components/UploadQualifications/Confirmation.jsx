@@ -18,11 +18,25 @@ export const Confirmation = () => {
     )
 }
 
-export async function uploadQualificationsPerGroup({ dataTable, activity, user, }) {
+export async function uploadQualificationsPerGroup({ dataTable, activity, user, fullActivity }) {
     try {
 
         for (const { group } of dataTable) {
-            const grade = group.qualification?.data
+            const grade = group.qualification
+
+            const isPeerReview = fullActivity.attributes.BeingReviewedBy.data !== null
+            let qualification = 0;
+            if (isPeerReview) {
+                const isNan = isNaN(group.averageGradePeerReview)
+                const ponderationStudent = fullActivity.attributes.ponderationStudent / 100
+
+                if (isNan) {
+                    qualification = group.Qualification
+                }
+                else {
+                    qualification = group.Qualification * (1 - ponderationStudent) + group.averageGradePeerReview * ponderationStudent
+                }
+            }
             if (grade?.id) {
                 const response = await fetch(`${API}/qualifications/${grade.id}`, {
                     method: 'PUT',
@@ -33,13 +47,12 @@ export async function uploadQualificationsPerGroup({ dataTable, activity, user, 
                     body: JSON.stringify({
                         data: {
                             comments: group.Comments,
-                            qualification: group.Qualification,
+                            qualification: qualification.toFixed(2),
                         }
                     }),
                 }).catch(error => {
                     throw new Error('An error occurred while uploading the qualifications');
                 });
-                console.log(response.status)
                 if (response.status !== 200) throw new Error('An error occurred while uploading the qualifications');
             }
             else {
@@ -55,7 +68,7 @@ export async function uploadQualificationsPerGroup({ dataTable, activity, user, 
                             group: group.id,
                             comments: group.Comments,
                             evaluator: user.id,
-                            qualification: group.Qualification,
+                            qualification: qualification.toFixed(2),
                             file: null,
                             delivered: true
                         }
@@ -63,7 +76,6 @@ export async function uploadQualificationsPerGroup({ dataTable, activity, user, 
                 }).catch(error => {
                     throw new Error('An error occurred while uploading the qualifications');
                 });
-                console.log(response.status)
                 if (response.status !== 200) throw new Error('An error occurred while uploading the qualifications');
             }
         }
@@ -81,12 +93,25 @@ export async function uploadQualificationsPerGroup({ dataTable, activity, user, 
     } finally {
     }
 }
-export async function uploadQualifications({ dataTable, activity, user }) {
+export async function uploadQualifications({ dataTable, activity, user, fullActivity }) {
     for (const student of dataTable) {
         const grade = student.Name.student.attributes.qualifications.data.find(
             qualification => qualification.attributes.activity.data?.id === JSON.parse(activity).id
         );
         const gradeId = grade ? grade.id : null;
+        const isPeerReview = fullActivity.attributes.BeingReviewedBy.data !== null
+        let qualification = 0;
+        if (isPeerReview) {
+            const isNan = isNaN(student.averageGradePeerReview)
+            const ponderationStudent = fullActivity.attributes.ponderationStudent / 100
+
+            if (isNan) {
+                qualification = student.Qualification
+            }
+            else {
+                qualification = student.Qualification * (1 - ponderationStudent) + student.averageGradePeerReview * ponderationStudent
+            }
+        }
         if (gradeId === null || gradeId === undefined) {
             await fetch(`${API}/qualifications`, {
                 method: 'POST',
@@ -100,7 +125,7 @@ export async function uploadQualifications({ dataTable, activity, user }) {
                         user: student.key,
                         comments: student.Comments,
                         evaluator: user.id,
-                        qualification: student.Qualification,
+                        qualification: qualification.toFixed(2),
                         file: null,
                         delivered: true
                     }
@@ -116,7 +141,7 @@ export async function uploadQualifications({ dataTable, activity, user }) {
                 body: JSON.stringify({
                     data: {
                         comments: student.Comments,
-                        qualification: student.Qualification,
+                        qualification: qualification.toFixed(2),
                     }
                 }),
             });

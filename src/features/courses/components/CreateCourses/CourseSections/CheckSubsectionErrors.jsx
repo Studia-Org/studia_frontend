@@ -93,11 +93,12 @@ export const CheckSubsectionErrors = ({ subsection }) => {
                     newErrorsList.push({ svg: dangerSvg, comment: 'Peer review rubric is empty' });
                     setColor('text-red-500')
                 }
+                if (subsection.activity?.task_to_review === '' || subsection.activity?.task_to_review === null) {
+                    newErrorsList.push({ svg: dangerSvg, comment: 'No task to review' });
+                    setColor('text-red-500')
+                }
                 if (subsection.description === '' || subsection.description === null) {
                     newErrorsList.push({ svg: warningSvg, comment: 'No description' });
-                }
-                if (subsection.activity?.task_to_review === '' || subsection.activity?.task_to_review === null) {
-                    newErrorsList.push({ svg: warningSvg, comment: 'No task to review' });
                 }
                 if (subsection.content === '' || subsection.content === null) {
                     newErrorsList.push({ svg: warningSvg, comment: 'No content' });
@@ -158,7 +159,7 @@ export const CheckSubsectionErrors = ({ subsection }) => {
                             viewBox="0 0 24 24"
                             strokeWidth={1.5}
                             stroke="currentColor"
-                            className={`w-5 h-5 ${color}`}
+                            className={`min-h-[20px] min-w-[20px] max-h-[20px] max-w-[20px] ${color}`}
                         >
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
                         </svg>

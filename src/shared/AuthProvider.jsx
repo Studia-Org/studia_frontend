@@ -9,6 +9,7 @@ import { fetchLogUserLogging } from "../fetches/fetchLogUserLogging";
 const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const [authenticated, setAuthenticated] = useState(false);
   const authToken = getToken()
 
 
@@ -18,18 +19,18 @@ const AuthProvider = ({ children }) => {
         headers: { Authorization: `${BEARER} ${token}` },
       });
       const data = await response.json();
-
+      setAuthenticated(true);
       setUserData(data);
       fetchLogUserLogging({ data, token })
-
-
-
     } catch (error) {
+      setAuthenticated(false);
       console.error(error);
     } finally {
       setIsLoading(false);
     }
   };
+
+
 
   const handleUser = (user) => {
     setUserData(user);
@@ -38,12 +39,15 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (authToken) {
       fetchLoggedInUser(authToken);
+    } else {
+      setAuthenticated(false);
+      setIsLoading(false)
     }
   }, [authToken]);
 
   return (
     <AuthContext.Provider
-      value={{ user: userData, setUser: handleUser, isLoading, setIsLoading }}
+      value={{ user: userData, setUser: handleUser, isLoading, setIsLoading, authenticated: authenticated, setAuthenticated: setAuthenticated }}
     >
       {children}
     </AuthContext.Provider>

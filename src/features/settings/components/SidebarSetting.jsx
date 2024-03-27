@@ -5,9 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import { BiHelpCircle } from 'react-icons/bi';
 import Swal from 'sweetalert2'
 import { removeToken } from "../../../helpers";
+import { useAuthContext } from '../../../context/AuthContext';
 
 const SidebarSetting = ({ setSelectedOption }) => {
     const [isOpen, setIsOpen] = useState(false);
+    const { setAuthenticated } = useAuthContext();
     const navigate = useNavigate();
 
     const handleOptionChange = (option) => {
@@ -30,6 +32,7 @@ const SidebarSetting = ({ setSelectedOption }) => {
         }).then((result) => {
             if (result.isConfirmed) {
                 removeToken();
+                setAuthenticated(false);
                 navigate('/');
                 Swal.mixin({
                     toast: true,
@@ -48,7 +51,7 @@ const SidebarSetting = ({ setSelectedOption }) => {
             }
         })
     }
-    window.addEventListener('resize', () => {   
+    window.addEventListener('resize', () => {
         if (window.innerWidth > 1024) {
             setIsOpen(false);
         }
@@ -58,7 +61,7 @@ const SidebarSetting = ({ setSelectedOption }) => {
         <>
             <button
                 onClick={toggleDropdown}
-                className='absolute lg:hidden p-4 text-blue-600'
+                className='absolute p-4 text-blue-600 lg:hidden'
             >
                 <svg
                     className={`w-6 h-6 ${isOpen ? 'transform rotate-90' : ''}`}
@@ -79,7 +82,7 @@ const SidebarSetting = ({ setSelectedOption }) => {
             <div className={`lg:rounded-tl-3xl h-full bg-[#eaedfa] pl-12 p-9 text-base space-y-6 border-r border-[#b7bcd4] ${isOpen ? 'fixed w-96' : 'hidden lg:block'}`}>
                 <button
                     onClick={toggleDropdown}
-                    className='absolute top-0 right-0 lg:hidden p-4 text-blue-600'
+                    className='absolute top-0 right-0 p-4 text-blue-600 lg:hidden'
                 >
                     <svg
                         className={`w-6 h-6  ${isOpen ? 'transform rotate-90' : ''}`}
@@ -97,33 +100,33 @@ const SidebarSetting = ({ setSelectedOption }) => {
                     </svg>
                 </button>
                 <div className='space-y-4'>
-                    <h1 className='text-lg pb-1 font-semibold tracking-tight'>User Account</h1>
+                    <h1 className='pb-1 text-lg font-semibold tracking-tight'>User Account</h1>
                     <button className='flex items-center pl-4 gap-3 hover:text-indigo-600 hover:translate-x-[5px] transition-all' onClick={() => handleOptionChange('password')}>
                         <FiLock />
-                        <h2 className='text-gray-700 font-normal hover:text-indigo-600 text-left tracking-tight'>Change password</h2>
+                        <h2 className='font-normal tracking-tight text-left text-gray-700 hover:text-indigo-600'>Change password</h2>
                     </button>
 
                     <button className='flex items-center pl-4 gap-3 hover:text-indigo-600 hover:translate-x-[5px] transition-all' onClick={() => handleOptionChange('language')}>
                         <FaLanguage />
-                        <h2 className='text-gray-700 font-normal hover:text-indigo-600 text-left tracking-tight'>Language</h2>
+                        <h2 className='font-normal tracking-tight text-left text-gray-700 hover:text-indigo-600'>Language</h2>
                     </button>
                 </div>
                 <div className='space-y-4 '>
-                    <h1 className='text-lg pb-1 font-semibold tracking-tight'>Notifications</h1>
+                    <h1 className='pb-1 text-lg font-semibold tracking-tight'>Notifications</h1>
                     <button className='flex items-center pl-4 gap-3 hover:text-indigo-600 hover:translate-x-[5px] transition-all' onClick={() => handleOptionChange('notification')}>
                         <FiBell />
-                        <h2 className='text-gray-700 font-normal hover:text-indigo-600 text-left tracking-tight'>Notification preferences</h2>
+                        <h2 className='font-normal tracking-tight text-left text-gray-700 hover:text-indigo-600'>Notification preferences</h2>
                     </button>
                 </div>
                 <div className='space-y-3'>
                     <hr className='mt-24 border-[#b7bcd4]' />
                     <button className='flex items-center gap-2 hover:text-indigo-600 hover:translate-x-[5px] transition-all mt-14 pt-2' onClick={() => handleOptionChange('help')}>
                         <BiHelpCircle className='w-5 h-5' />
-                        <h1 className='text-base pb-1 font-medium tracking-tight '>Help</h1>
+                        <h1 className='pb-1 text-base font-medium tracking-tight '>Help</h1>
                     </button>
                     <button className='flex items-center gap-2 hover:text-indigo-600 hover:translate-x-[5px] transition-all' onClick={() => logOut()}>
                         <FiLogOut className='w-5 h-5' />
-                        <h1 className='text-base pb-1 font-medium tracking-tight'>Logout</h1>
+                        <h1 className='pb-1 text-base font-medium tracking-tight'>Logout</h1>
                     </button>
                 </div>
             </div>
