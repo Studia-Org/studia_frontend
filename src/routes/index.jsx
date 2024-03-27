@@ -3,7 +3,6 @@ import { useRoutes } from 'react-router-dom';
 import { protectedRoutes } from './protected';
 import { publicRoutes } from './public';
 import { ErrorBoundary } from "react-error-boundary";
-import { checkAuthenticated } from '../helpers';
 import Home from '../shared/home';
 import Page404Screen from '../features/404/screens/Page404Screen';
 import { Navbar } from '../shared/elements/Navbar/Navbar';
@@ -27,12 +26,10 @@ export const AppRoutes = () => {
         }
     ];
 
-    console.log(authenticated);
     const routes = authenticated ? protectedRoutes : publicRoutes;
     const element = useRoutes([...routes, ...commonRoutes]);
     const pathSegments = new URL(window.location.href).pathname.split('/');
     const path = pathSegments[2];
-    console.log(isLoading);
     const inCourseCreate = pathSegments.join('/') === '/app/courses/create';
 
     if (!isLoading) {

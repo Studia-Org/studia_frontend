@@ -11,7 +11,6 @@ import Swal from 'sweetalert2'
 import { MoonLoader } from "react-spinners";
 import { API } from "../../../constant";
 import Confetti from 'react-confetti'
-import { checkAuthenticated } from "../../../helpers";
 import { Whisper, Button, Popover } from 'rsuite';
 import { SpeedDialCreateCourse } from '../components/CoursesHome/SpeedDialCreateCourse';
 import { ModalCreateCourseStudent } from '../components/CoursesHome/AddCourseStudent/ModalCreateCourseStudent';
@@ -50,11 +49,6 @@ const CoursesHome = () => {
     };
   }, [confettiExplode]);
 
-  useEffect(() => {
-    if (!checkAuthenticated()) {
-      navigate('/');
-    }
-  }, []);
 
   const fetchCoursesCards = async () => {
     setIsLoading(true);

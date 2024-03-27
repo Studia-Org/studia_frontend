@@ -30,6 +30,8 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+
+
   const handleUser = (user) => {
     setUserData(user);
   };
@@ -45,7 +47,7 @@ const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user: userData, setUser: handleUser, isLoading, setIsLoading, authenticated: authenticated }}
+      value={{ user: userData, setUser: handleUser, isLoading, setIsLoading, authenticated: authenticated, setAuthenticated: setAuthenticated }}
     >
       {children}
     </AuthContext.Provider>

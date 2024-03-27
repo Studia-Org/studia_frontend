@@ -2,22 +2,9 @@ import { useEffect, React } from "react";
 import bg_img from '../assets/uptitudenewlogo.png'
 import { useNavigate } from "react-router-dom";
 import { Divider } from 'antd';
-import { checkAuthenticated } from '../helpers'
 import './styles/home.css'
 
 const Home = () => {
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        const checkAuthentication = async () => {
-            if (await checkAuthenticated()) {
-                navigate("/app/courses/");
-            }
-        };
-        checkAuthentication();
-    }, []);
-
-
     return (
         <div className='bg-[#f2f2f2] overflow-y-hidden'>
             <div class="overflow-x-hidden overflow-y-hidden antialiased h-full">
