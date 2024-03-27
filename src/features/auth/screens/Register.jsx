@@ -6,11 +6,13 @@ import { API } from "../../../constant";
 import { getToken, setToken } from "../../../helpers";
 import { UserInformation } from '../components/UserInformation';
 import { UserObjectives } from '../components/UserObjectives';
+import { debounce } from '@mui/material';
 
 
 const Register = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [typingTimeout, setTypingTimeout] = useState(null);
   const { setUser } = useAuthContext();
   const [formData, setFormData] = useState({
     email: '',
@@ -82,6 +84,7 @@ const Register = () => {
 
 
   const registerAccount = async () => {
+    console.log("registering")
     try {
       setLoading(true);
       if (!email || !password || !repassword || !username || !name || !university || !description) {
@@ -118,11 +121,6 @@ const Register = () => {
     }
   };
 
-  window.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      registerAccount();
-    }
-  });
 
   function switchPage() {
     switch (pageSelector) {

@@ -22,8 +22,6 @@ export const UserInformation = ({ onChange, formData, username, email, universit
         }
     }
 
-    console.log(profilePhoto, 'profilePhoto')
-
     return (
         <div class="bg-gray-100 text-gray-500 rounded-3xl shadow-xl w-full overflow-hidden " style={{ maxWidth: '1000px' }} >
             <div className="w-full md:flex ">
