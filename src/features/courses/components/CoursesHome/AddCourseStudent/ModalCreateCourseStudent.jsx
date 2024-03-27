@@ -3,10 +3,12 @@ import { Modal } from 'antd'
 import { CardCreateCourse } from './CardCreateCourse'
 import { coursesData } from './coursesData'
 import { CustomizeCourse } from './CustomizeCourse'
+import LoadingBar from 'react-top-loading-bar'
 
-export const ModalCreateCourseStudent = ({ expandCreateCourseStudent, setExpandCreateCourseStudent }) => {
+export const ModalCreateCourseStudent = ({ expandCreateCourseStudent, setExpandCreateCourseStudent, setCourses }) => {
     const [customizeCourse, setCustomizeCourse] = useState(false)
     const [seletedCourse, setSeletedCourse] = useState({})
+    const [progress, setProgress] = useState(0)
     const [fileList, setFileList] = useState([])
 
     function handleCancel() {
@@ -20,7 +22,7 @@ export const ModalCreateCourseStudent = ({ expandCreateCourseStudent, setExpandC
             {
                 customizeCourse ?
                     <CustomizeCourse setCustomizeCourse={setCustomizeCourse} seletedCourse={seletedCourse} fileList={fileList}
-                        setFileList={setFileList} setExpandCreateCourseStudent={setExpandCreateCourseStudent} />
+                        setFileList={setFileList} setExpandCreateCourseStudent={setExpandCreateCourseStudent} setCourses={setCourses} setProgress={setProgress} />
                     :
                     <>
                         <p className='text-gray-600 mb-7'>Add a course based on your preferences and customize it. </p>
@@ -33,6 +35,7 @@ export const ModalCreateCourseStudent = ({ expandCreateCourseStudent, setExpandC
                         </div>
                     </>
             }
+            <LoadingBar color='#6366f1' height={4} progress={progress} onLoaderFinished={() => setProgress(0)} shadow={true} />
         </Modal>
     )
 }

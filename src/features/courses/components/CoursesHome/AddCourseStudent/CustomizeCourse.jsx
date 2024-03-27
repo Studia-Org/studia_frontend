@@ -6,6 +6,7 @@ import { createCourse } from './createCourse';
 import { TFGExtendedCourseData } from './coursesData';
 import { useAuthContext } from '../../../../../context/AuthContext';
 import dayjs from 'dayjs';
+import { API } from '../../../../../constant';
 
 
 const { RangePicker } = DatePicker;
@@ -13,7 +14,7 @@ const { TextArea } = Input;
 
 
 
-export const CustomizeCourse = ({ setCustomizeCourse, seletedCourse, fileList, setFileList, setExpandCreateCourseStudent }) => {
+export const CustomizeCourse = ({ setCustomizeCourse, seletedCourse, fileList, setFileList, setExpandCreateCourseStudent, setCourses, setProgress }) => {
     const [loading, setLoading] = useState(false)
     const [seletedCourseTemp, setSeletedCourseTemp] = useState(seletedCourse)
     const { user } = useAuthContext()
@@ -31,16 +32,44 @@ export const CustomizeCourse = ({ setCustomizeCourse, seletedCourse, fileList, s
         setSeletedCourseTemp({ ...seletedCourseTemp, cover: fileList[0] })
     }, [fileList])
 
+    const filterCoursesByRole = (data, user) => {
+        if (user.role_str === 'professor' || user.role_str === 'admin') {
+            return data.data.filter(course => course.attributes.professor.data.id === user.id);
+        } else if (user.role_str === 'student') {
+            return data.courses;
+        }
+    };
+
+    const mapCourseData = course => ({
+        id: course.id,
+        createdAt: course.createdAt || course.attributes.createdAt,
+        title: course.title || course.attributes.title,
+        cover: course.cover ? course.cover.url : course.attributes.cover.data?.attributes.url,
+        professor_name: course.professor ? course.professor.name : course.attributes.professor.data.attributes.name,
+        tags: course?.tags || course.attributes?.tags,
+        professor_profile_photo: course.professor ? course.professor.profile_photo.url : course.attributes.professor.data.attributes.profile_photo.data.attributes.url,
+        students: course.students || course.attributes.students.data,
+        studentManaged: course?.studentManaged || course.attributes?.studentManaged,
+    });
+
     async function handleCreateCourse() {
         setLoading(true)
         if (!checkErrors()) {
             switch (seletedCourseTemp.type) {
                 case 'TFG':
-                    await createCourse(seletedCourseTemp, user.id, TFGExtendedCourseData)
+                    await createCourse(seletedCourseTemp, user.id, TFGExtendedCourseData, setProgress)
                     break;
                 default:
                     break;
             }
+            //cargar cursos de nuevo
+            const response = await fetch(`${API}/users/${user?.id}?populate=courses.cover,courses.students.profile_photo,courses.professor,courses.professor.profile_photo,courses.course_tags`)
+            const data = await response.json();
+            const coursesFiltered = filterCoursesByRole(data, user);
+            const finalCourses = coursesFiltered.map(mapCourseData);
+            const sortedCourses = finalCourses.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            setCourses(sortedCourses ?? []);
+
             setLoading(false)
             setCustomizeCourse(false)
             setExpandCreateCourseStudent(false)

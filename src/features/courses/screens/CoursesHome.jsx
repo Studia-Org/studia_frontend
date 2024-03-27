@@ -51,7 +51,6 @@ const CoursesHome = () => {
   }, [confettiExplode]);
 
   useEffect(() => {
-    console.log('openObjectivesModal', checkAuthenticated())
     if (!checkAuthenticated()) {
       navigate('/');
     }
@@ -380,7 +379,7 @@ const CoursesHome = () => {
               </>
           }
         </div>
-        <ModalCreateCourseStudent expandCreateCourseStudent={expandCreateCourseStudent} setExpandCreateCourseStudent={setExpandCreateCourseStudent} />
+        <ModalCreateCourseStudent expandCreateCourseStudent={expandCreateCourseStudent} setExpandCreateCourseStudent={setExpandCreateCourseStudent} setCourses={setCourses} />
       </div>
       {
         user &&

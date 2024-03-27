@@ -14,21 +14,7 @@ export const removeToken = () => {
   localStorage.removeItem(AUTH_TOKEN);
 };
 
-export const checkAuthenticated = async () => {
+export const checkAuthenticated = () => {
   const token = getToken();
-  await fetch(`${API}/users/me`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `${BEARER} ${token}`,
-    },
-  }
-  ).then((response) => {
-    if (response.status !== 200) {
-      removeToken();
-    }
-  }).catch((error) => {
-    console.error(error);
-  });
   return token ? true : false;
 }

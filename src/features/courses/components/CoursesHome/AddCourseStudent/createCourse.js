@@ -32,23 +32,36 @@ const searchUserByName = async (name) => {
             Authorization: `Bearer ${token}`,
         },
     });
+    if (!response.ok) {
+        throw new Error('Error fetching user data');
+    }
+
     const data = await response.json();
-    return data[0].id
+    if (data.length === 0) {
+        throw new Error('No user found with the specified name');
+    }
+
+    return data[0].id;
 }
 
-export async function createCourse(seletedCourseTemp, userID, data) {
-    const token = process.env.REACT_APP_ADMIN_TOKEN;
 
-    const creatorId = await searchUserByName(seletedCourseTemp.creator)
-    console.log(creatorId)
+export async function createCourse(seletedCourseTemp, userID, data, setProgress) {
+    const token = process.env.REACT_APP_ADMIN_TOKEN;
+    let creatorId = null
+    try {
+        creatorId = await searchUserByName(seletedCourseTemp.creator)
+    } catch (error) {
+        message.error(error.message)
+    }
     let allSections = [], forumIds = [], startDate = null, endDate = null, createdActivities = {}, index = 0
-    console.log(data[0].subsections.length)
     const courseDates = calculateListOfDates(seletedCourseTemp.startDate, seletedCourseTemp.endDate, data[0].subsections.length)
+    const allSubsectionsLength = data.reduce((acc, section) => acc + section.subsections.length, 0)
 
     try {
         for (const section of data) {
             let allSubsections = []
             for (const subsection of section.subsections) {
+                setProgress((index / allSubsectionsLength) * 100)
                 startDate = courseDates[index][0]
                 endDate = courseDates[index][1]
                 index++
@@ -152,6 +165,7 @@ export async function createCourse(seletedCourseTemp, userID, data) {
                             data:
                             {
                                 ...subsection.activity,
+                                start_date: startDate,
                                 deadline: endDate,
                                 title: subsection.title,
                                 categories: Object.keys(subsection.activity.categories)
