@@ -37,10 +37,6 @@ const CoursesHome = () => {
   };
   const transition = { duration: 0.3 };
 
-  const handleOpen = value => {
-    setOpen(true);
-  };
-
 
   useEffect(() => {
     if (!confettiExplode) return
@@ -55,6 +51,7 @@ const CoursesHome = () => {
   }, [confettiExplode]);
 
   useEffect(() => {
+    console.log('openObjectivesModal', checkAuthenticated())
     if (!checkAuthenticated()) {
       navigate('/');
     }
