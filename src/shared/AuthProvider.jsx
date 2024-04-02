@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { message } from "antd";
 import { API, BEARER } from "../constant";
 import { useEffect } from "react";
 import { getToken } from "../helpers";
 import { fetchLogUserLogging } from "../fetches/fetchLogUserLogging";
+import { useNavigate } from "react-router-dom";
 
 const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState();
   const [isLoading, setIsLoading] = useState(true);
   const [authenticated, setAuthenticated] = useState(false);
   const authToken = getToken()
-
+  const navigate = useNavigate()
 
   const fetchLoggedInUser = async (token) => {
     try {
@@ -19,9 +19,13 @@ const AuthProvider = ({ children }) => {
         headers: { Authorization: `${BEARER} ${token}` },
       });
       const data = await response.json();
+      if (window.location.pathname === '/') {
+        navigate('/app/courses')
+      }
       setAuthenticated(true);
       setUserData(data);
       fetchLogUserLogging({ data, token })
+
     } catch (error) {
       setAuthenticated(false);
       console.error(error);
@@ -33,7 +37,7 @@ const AuthProvider = ({ children }) => {
 
 
   const handleUser = (user) => {
-    setUserData(user);
+    // setUserData(user);
   };
 
   useEffect(() => {
