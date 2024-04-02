@@ -1,6 +1,6 @@
 export default function renderFiles(file) {
     return (
-        <button key={file.id} onClick={() => downloadFile(file)} className='shadow-md rounded-md flex p-3 w-full bg-green-700 text-white'>
+        <button key={file.id} onClick={() => downloadFile(file)} className='flex w-full p-3 text-white bg-green-700 rounded-md shadow-md'>
             <p className='max-w-[calc(100%-4rem)] overflow-hidden text-ellipsis'>{file.attributes.name}</p>
             <div className='ml-auto mr-2'>
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.0} stroke="currentColor" className="w-5 h-5">
@@ -12,13 +12,13 @@ export default function renderFiles(file) {
 }
 export const downloadFile = async (file) => {
     try {
-        const response = await fetch(file.url);
+        const response = await fetch(file.attributes.url);
         if (response.ok) {
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = file.name;
+            a.download = file.attributes.name;
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
