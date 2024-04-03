@@ -49,7 +49,7 @@ export const NotificationsCard = ({ notification, setNotifications }) => {
         return (
             <>
                 <Badge dot className='w-full'>
-                    <div onClick={() => handleNotificationClick()} className='hover:bg-gray-50 rounded-md p-3 border w-full cursor-pointer'>
+                    <div onClick={() => handleNotificationClick()} className='w-full p-3 border rounded-md cursor-pointer hover:bg-gray-50'>
                         <p>{notification.content}</p>
                     </div>
                 </Badge>
@@ -57,7 +57,7 @@ export const NotificationsCard = ({ notification, setNotifications }) => {
         )
     } else {
         return (
-            <div onClick={() => routeNotification()} className='hover:bg-gray-50 rounded-md p-3 border w-full cursor-pointer'>
+            <div onClick={() => routeNotification()} className='w-full p-3 border rounded-md cursor-pointer hover:bg-gray-50'>
                 <p>{notification.content}</p>
             </div>
         )
