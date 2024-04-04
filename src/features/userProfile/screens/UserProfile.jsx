@@ -63,7 +63,7 @@ const UserProfile = () => {
   }, [uid]);
 
   return (
-    <div className='container-fluid w-full  rounded-tl-3xl bg-[#e7eaf886]  '>
+    <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886]  '>
       {
         loading ?
           <div className='flex items-center justify-center h-screen'>
@@ -71,10 +71,7 @@ const UserProfile = () => {
           </div>
           :
           <>
-            <link
-              rel="stylesheet"
-              href="https://demos.creative-tim.com/notus-js/assets/styles/tailwind.css"
-            />
+
             <link
               rel="stylesheet"
               href="https://demos.creative-tim.com/notus-js/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css"
@@ -85,27 +82,24 @@ const UserProfile = () => {
                   className="absolute top-0 w-full h-full bg-center bg-cover lg:rounded-tl-3xl"
                   style={{
                     backgroundImage: `url(${userProfile?.landscape_photo?.url})`
-                  }}
-                >
-
+                  }}>
                   <span
                     id="blackOverlay"
                     className="absolute w-full h-full bg-black opacity-50 lg:rounded-tl-3xl"
                   />
                 </div>
-
               </section>
               <section className="relative py-16 ">
-                <div className="container px-4 mx-auto">
+                <div className="container mx-auto px-44">
                   <div className="relative flex flex-col w-full min-w-0 mb-6 -mt-64 break-words bg-white rounded-lg shadow-xl">
                     <div className="px-6">
                       <div className="flex flex-wrap justify-center">
-                        <div className="flex justify-center w-full px-4 lg:w-3/12 lg:order-2">
-                          <div className="relative">
+                        <div className="flex justify-center w-full px-4 ">
+                          <div className="flex justify-center w-full">
                             {userProfile && userProfile.profile_photo ? (
                               <img
                                 src={userProfile && userProfile.profile_photo.url}
-                                className="absolute object-cover -m-16 -ml-20 align-middle border-none rounded-lg shadow-xl h-36 w-36 lg:-ml-16 max-w-150-px"
+                                className="object-cover -m-16 border-none rounded-lg shadow-xl w-[150px] h-[150px] lg:-ml-16"
                                 alt=""
                               />
                             ) : (
