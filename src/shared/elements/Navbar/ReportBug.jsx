@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import { Button, Popover, message } from 'antd';
 import { UploadFiles } from '../../../features/courses/components/CreateCourses/CourseSections/UploadFiles';
+import { API } from '../../../constant';
+import { getToken } from '../../../helpers';
 
 export const ReportBug = () => {
     const githubToken = process.env.REACT_APP_GITHUB_SECRET
-    console.log(githubToken)
+    const [open, setOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
+
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -22,14 +26,28 @@ export const ReportBug = () => {
     };
 
     const handleSubmit = async (e) => {
+        let imageDataURL = null;
+        setLoading(true);
         try {
-            const formDataStructure = new FormData();
-            formDataStructure.append('name', formData.name);
-            formDataStructure.append('email', formData.email);
-            formDataStructure.append('message', formData.message);
-            formDataStructure.append('screenshot', formData.screenshot?.originFileObj);
-
+            if (formData.name === '' || formData.email === '' || formData.message === '') {
+                message.error('Please fill all the fields.');
+                return;
+            }
+            if (formData.screenshot?.originFileObj) {
+                const formDataScreenshot = new FormData();
+                formDataScreenshot.append('files', formData.screenshot.originFileObj);
+                const response = await fetch(`${API}/upload`, {
+                    method: 'POST',
+                    headers: {
+                        Authorization: `Bearer ${getToken()}`
+                    },
+                    body: formDataScreenshot,
+                });
+                const data = await response.json();
+                imageDataURL = data[0].url;
+            }
             // Crear la issue en GitHub
+
             const response = await fetch('https://api.github.com/repos/Studia-Org/studia_frontend/issues', {
                 method: 'POST',
                 headers: {
@@ -41,11 +59,11 @@ export const ReportBug = () => {
                     body: `**Nombre:** ${formData.name} \n` +
                         `**Email:** ${formData.email} \n` +
                         `**Mensaje:** ${formData.message} \n` +
-                        `**Screenshot:** ${formData.screenshot}`
+                        `![image-title](${imageDataURL})`
                     ,
+                    labels: ['bug']
                 })
             });
-
             if (response.ok) {
                 // Issue creada exitosamente
                 message.success('Successfully created issue.');
@@ -59,6 +77,15 @@ export const ReportBug = () => {
             // Manejar errores de red u otros errores
             message.error('Error al crear la issue:');
             console.error('Error al enviar la solicitud:', error);
+        } finally {
+            setLoading(false);
+            setFormData({
+                name: '',
+                email: '',
+                screenshot: null,
+                message: ''
+            })
+            setOpen(false);
         }
     };
 
@@ -105,6 +132,7 @@ export const ReportBug = () => {
                     </label>
                     <div className="mb-6">
                         <Button
+                            loading={loading}
                             onClick={handleSubmit}
                             className="h-10 px-5 transition-colors duration-150 rounded-lg focus:shadow-outline "
                         >
@@ -124,7 +152,10 @@ export const ReportBug = () => {
     );
 
     return (
-        <Popover content={content} title={contentTitle} trigger="click">
+        <Popover content={content} title={contentTitle}
+            open={open}
+            onOpenChange={() => setOpen(!open)}
+            trigger="click">
             <Button shape="circle" className="flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" className="w-5 h-5">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M3 3v1.5M3 21v-6m0 0 2.77-.693a9 9 0 0 1 6.208.682l.108.054a9 9 0 0 0 6.086.71l3.114-.732a48.524 48.524 0 0 1-.005-10.499l-3.11.732a9 9 0 0 1-6.085-.711l-.108-.054a9 9 0 0 0-6.208-.682L3 4.5M3 15V4.5" />
