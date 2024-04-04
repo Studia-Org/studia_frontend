@@ -37,13 +37,12 @@ export const ReportBug = () => {
                     'Accept': 'application/vnd.github.v3+json',
                 },
                 body: JSON.stringify({
-                    title: `Bug report ${formData.name}`,
-                    body: `
-                    **Nombre:** ${formData.name}
-                    **Email:** ${formData.email}
-                    **Mensaje:** ${formData.message}
-                    **Screenshot:** ${formData.screenshot}
-                `,
+                    title: `Bug report ${formData.name} \n`,
+                    body: `**Nombre:** ${formData.name} \n` +
+                        `**Email:** ${formData.email} \n` +
+                        `**Mensaje:** ${formData.message} \n` +
+                        `**Screenshot:** ${formData.screenshot}`
+                    ,
                 })
             });
 
