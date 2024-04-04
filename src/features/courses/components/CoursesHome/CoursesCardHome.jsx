@@ -58,9 +58,16 @@ export const CoursesCardHome = ({ course }) => {
                                         <AvatarGroup stack>
                                             {course.students
                                                 .filter((user, i) => i < 2)
-                                                .map(user => (
-                                                    <Avatar circle key={user.id} src={user.attributes ? user.attributes.profile_photo.data.attributes.url : user.profile_photo.url} alt={user.attributes ? user.attributes.username : user.username} style={{ width: '2rem', height: '2rem' }} />
-                                                ))}
+                                                .map(user => {
+                                                    return (
+                                                        <Avatar circle key={user.id}
+                                                            src={user.attributes ?
+                                                                user.attributes.profile_photo?.data?.attributes.url :
+                                                                user.profile_photo.url}
+                                                            alt={user.attributes ? user.attributes.username : user.username}
+                                                            style={{ width: '2rem', height: '2rem' }} />
+                                                    )
+                                                })}
                                             {course.students.length > 2 && (
                                                 <Avatar circle style={{ background: '#3730a3', width: '2rem', height: '2rem', fontSize: '0.75rem', fontWeight: '400' }}>
                                                     +{course.students.length - 2}
