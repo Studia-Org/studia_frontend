@@ -21,7 +21,6 @@ function CreateGroups({ activityId, courseId, activityData }) {
             try {
                 const data = await fetchUsersInformationComplete({ courseId })
                 const dataGroups = await fetchActivityHasGroups({ activityId })
-                //create array of arrays empty to fill with students
                 let groups = []
                 setTotalStudents(data.data.attributes.students.data.length)
                 if (dataGroups.length > 0) {
@@ -33,6 +32,9 @@ function CreateGroups({ activityId, courseId, activityData }) {
                         })
                         groups.push(group.attributes.users.data)
                     })
+                    //check if there are students without group
+                    const studentsWithoutGroup = data.data.attributes.students.data.filter(student => !groups.flat().some(group => +group.id === student.id))
+                    groups[0] = studentsWithoutGroup
                 }
                 else {
                     groups.push(data.data.attributes.students.data)
@@ -53,7 +55,7 @@ function CreateGroups({ activityId, courseId, activityData }) {
         const result = Array.from(list);
         const [removed] = result.splice(startIndex, 1);
         result.splice(endIndex, 0, removed);
-        console.log(result)
+
         return result;
     };
     const move = (source, destination, droppableSource, droppableDestination) => {
