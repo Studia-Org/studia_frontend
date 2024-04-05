@@ -54,6 +54,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   const { activityGroup, loadingGroup } = useGetGroup({ user, activityData, activityId, IDQualification });
   const isActivityGroup = activityData?.activity?.data?.attributes?.groupActivity;
   const isThinkAloud = activityData.activity.data.attributes.type === 'thinkAloud'
+
   function handleFileUpload(file) {
     const dataCopy = formData;
     dataCopy.append('files', file);
@@ -211,6 +212,21 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
       if (response.ok) {
         const { response_upload, json } = await sendFile(result);
         if (response_upload.ok) {
+          // Completar subseccion
+          const subsectionsCompleted = {
+            subsections_completed: [
+              ...user.subsections_completed.map(subsection => ({ id: subsection.id })),
+              { id: activityData.activity.data.attributes.subsection.data.id }
+            ]
+          };
+          await fetch(`${API}/users/${user.id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${getToken()}`,
+            },
+            body: JSON.stringify(subsectionsCompleted)
+          });
           Swal.fire({
             icon: 'success',
             title: 'Success',
