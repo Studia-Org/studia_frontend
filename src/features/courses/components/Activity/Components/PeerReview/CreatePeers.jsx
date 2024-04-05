@@ -160,7 +160,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
     function onDragEnd(result) {
         const { source, destination, draggableId } = result;
         // dropped outside the list
-        if (activityHasStarted) return message.error("Activity has started, you can't modify the peers")
+        // if (activityHasStarted) return message.error("Activity has started, you can't modify the peers")
         if (!destination) {
             return message.error("You can't drop the student outside the list")
         }
@@ -342,7 +342,6 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                 body: JSON.stringify({ peers, peerInGroups: activity.attributes.groupActivity })
             }
         )
-        console.log(response)
         if (response.ok) {
             message.success("Peers created successfully")
         }
@@ -364,7 +363,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                     <Button
                         className="mb-4"
                         type="primary"
-                        disabled={activityHasStarted}
+                        disabled={activityHasStarted && false}
                         onClick={createGroupsAutomatically}
                     >
                         Create peers automatically
@@ -373,12 +372,13 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                         className="mb-4"
                         type="primary"
                         loading={creatingGroups}
-                        disabled={activityHasStarted}
+                        disabled={activityHasStarted && false}
                         onClick={saveGroups}>
                         Save peers
                     </Button >
                 </div>
-                {activityHasStarted && <p className="text-xs text-red-500">Activity has started, you can't modify the peers</p>}
+                {/* disable text for ludmila */}
+                {/* {activityHasStarted && <p className="text-xs text-red-500">Activity has started, you can't modify the peers</p>} */}
                 <Divider className="mt-2" />
                 {!activityToReviewWasInGroups && studentsToReview.length < allStudents.length
                     && <p className="mb-2 text-sm text-red-500">There are students who have not delivered the activity</p>}
@@ -390,7 +390,8 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                 <section>
                     <DragDropContext className="mt-5" onDragEnd={onDragEnd}   >
                         <div className="flex gap-3">
-                            <StrictModeDroppable key={0} droppableId={`${0}`} isDropDisabled={activityHasStarted} >
+                            {/* forzar activacion  */}
+                            <StrictModeDroppable key={0} droppableId={`${0}`} isDropDisabled={activityHasStarted && false} >
                                 {(provided) => (
                                     <section className={`flex flex-col gap-2 p-2 sticky}`}>
                                         {
@@ -488,7 +489,8 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                                                         <p className="text-sm text-gray-700">Group who are going to review</p>
                                                         : <p className="text-sm text-gray-700">Users who are going to review</p>
                                                 }
-                                                <StrictModeDroppable key={index + 1} droppableId={`${index + 1}`} isDropDisabled={activityHasStarted}>
+                                                {/* forzar activacion */}
+                                                <StrictModeDroppable key={index + 1} droppableId={`${index + 1}`} isDropDisabled={activityHasStarted && false}>
                                                     {(provided) => (
                                                         <ul className={`flex flex-col gap-y-4 w-[300px] min-h-[200px] bg-white rounded-lg p-2 overflow-x-clip`}
                                                             {...provided.droppableProps}
