@@ -73,13 +73,14 @@ function CreateGroups({ activityId, courseId, activityData }) {
     };
     function onDragEnd(result) {
         const { source, destination } = result;
-        if (!destination && activityHasStarted) {
-            message.error("Activity has started, you can't modify the groups")
-            return
-        }
+        // if (!destination && activityHasStarted) {
+        //     message.error("Activity has started, you can't modify the groups")
+        //     return
+        // }
 
         // dropped outside the list
         if (!destination) {
+
             return;
         }
         const sInd = +source.droppableId;
@@ -147,7 +148,7 @@ function CreateGroups({ activityId, courseId, activityData }) {
     async function saveGroups() {
         //save groups in the backend
         //fetch to update groups
-        if (students[0].length !== 0) return message.error("There are students without group")
+        // if (students[0].length !== 0) return message.error("There are students without group")
         // check if groups are balanced
         const groupsBalanced = students.slice(1).every(group => group.length === numberOfStudentsPerGroup)
         const groupsWithMoreStudents = students.slice(1).filter(group => group.length > numberOfStudentsPerGroup)
@@ -225,18 +226,20 @@ function CreateGroups({ activityId, courseId, activityData }) {
                     className="mb-4"
                     type="primary"
                     loading={creatingGroups}
-                    disabled={activityHasStarted}
+                    // disabled={activityHasStarted}
                     onClick={saveGroups}>
                     Save groups
                 </Button >
             </div>
-            {activityHasStarted && <p className="text-xs text-red-500">Activity has started, you can't modify the groups</p>}
+            {/* //force enabled for ludmila course  */}
+            {/* {activityHasStarted && <p className="text-xs text-red-500">Activity has started, you can't modify the groups</p>} */}
             <Divider className="mt-1" />
             <h2> Activity was created to have {numberOfStudentsPerGroup} students per group</h2>
             <Divider />
             <DragDropContext className="mt-5" onDragEnd={onDragEnd}  >
                 <div className="flex gap-y-3">
-                    <StrictModeDroppable key={0} droppableId={`${0}`} isDropDisabled={activityHasStarted}>
+                    {/* //force enabled for ludmila course  */}
+                    <StrictModeDroppable key={0} droppableId={`${0}`} isDropDisabled={activityHasStarted && false}>
                         {(provided) => (
                             <article className={`flex flex-col gap-2 p-2 sticky}`}>
                                 <p>Students</p>
@@ -275,7 +278,8 @@ function CreateGroups({ activityId, courseId, activityData }) {
                             students.map((group, index) => {
                                 if (index === 0) return null
                                 return (
-                                    <StrictModeDroppable key={index} droppableId={`${index}`} isDropDisabled={activityHasStarted}>
+                                    //force enabled for ludmila course 
+                                    <StrictModeDroppable key={index} droppableId={`${index}`} isDropDisabled={activityHasStarted && false}>
                                         {(provided) => (
                                             <article className={`flex flex-col gap-2 p-2 `}>
                                                 <p>Group {index}</p>
