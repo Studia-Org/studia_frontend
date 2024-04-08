@@ -39,9 +39,9 @@ export const Visualization = ({ formValues, data }) => {
                             render={(text, record) => (record.group.Qualification)}
                         />
                         <Column
-                            title="Qualification"
-                            dataIndex="Qualification"
-                            key="Qualification"
+                            title="Comments"
+                            dataIndex="Comments"
+                            key="Comments"
                             render={(text, record) => (record.group.Comments)}
                         />
                         {
