@@ -117,9 +117,11 @@ export const EditPanel = ({ onClose, userProfile, uid }) => {
     }
 
     function handleProfilePhoto() {
+        console.log('profile photo');
         inputRefProfile.current.click();
     }
     function handleLandscapePhoto() {
+        console.log('landscape photo');
         inputRefLandscape.current.click();
     }
 
@@ -157,42 +159,42 @@ export const EditPanel = ({ onClose, userProfile, uid }) => {
         <div>
             <Modal backdrop='static' data-dismiss="modal" keyboard={false} open={open} onClose={handleClose} >
                 <Modal.Header closeButton="false" >
-                    <button className='w-full' onClick={handleLandscapePhoto}>
+                    <button className='z-40 w-full' onClick={handleLandscapePhoto}>
                         <input type="file" ref={inputRefLandscape} onChange={handleLandscapePhotoChange} style={{ display: 'none' }} />
-                        <div className='flex items-center relative'>
+                        <div className='relative flex items-center'>
                             {userProfile && (
                                 landscapePhoto ? (
                                     <img
                                         src={URL.createObjectURL(landscapePhoto)}
-                                        className='w-full h-56 object-cover'
+                                        className='object-cover w-full h-56'
                                         alt=''
                                         style={{ filter: 'brightness(50%)' }}
                                     />
                                 ) : (
-                                    <img className='w-full h-56 object-cover' style={{ filter: 'brightness(50%)' }} src={userProfile?.landscape_photo?.url} alt="" />
+                                    <img className='object-cover w-full h-56' style={{ filter: 'brightness(50%)' }} src={userProfile?.landscape_photo?.url} alt="" />
                                 )
                             )}
-                            <div className='absolute flex ml-auto justify-center items-center w-full h-full'>
+                            <div className='absolute flex items-center justify-center w-full h-full ml-auto'>
                                 <div className={`${userProfile.landscape_photo === null ? 'text-black' : 'text-white'}`}>
                                     <FiEdit size={20} />
                                 </div>
                             </div>
                         </div>
                     </button>
-                    <button className='ml-8' onClick={handleProfilePhoto}>
+                    <button className='w-full' onClick={handleProfilePhoto}>
                         <input type="file" ref={inputRefProfile} onChange={handleProfilePhotoChange} style={{ display: 'none' }} />
-                        <div className='flex items-center relative -mt-16'>
+                        <div className='justify-center ml-10 -mt-16 tems-center'>
                             {userProfile && (
                                 profilePhoto ? (
                                     <img
                                         src={URL.createObjectURL(profilePhoto)}
-                                        className='shadow-xl rounded-full border-none max-w-120-px'
+                                        className='border-none rounded-full shadow-xl max-w-[120px] min-w-[120px] min-h-[120px]'
                                         alt=''
                                         style={{ filter: 'brightness(50%)' }}
                                     />
                                 ) : (
                                     <img
-                                        className='shadow-xl rounded-full border-none max-w-120-px'
+                                        className='max-w-[120px] min-w-[120px] min-h-[120px] border-none rounded-full shadow-xl'
                                         src={userProfile.profile_photo.url}
                                         alt=''
                                         style={{ filter: 'brightness(50%)' }}
@@ -200,11 +202,6 @@ export const EditPanel = ({ onClose, userProfile, uid }) => {
                                 )
                             )}
 
-                            <div className='absolute top-0 right-0 flex justify-center items-center w-full h-full'>
-                                <div className='text-white'>
-                                    <FiEdit size={20} />
-                                </div>
-                            </div>
                         </div>
                     </button>
                 </Modal.Header>
