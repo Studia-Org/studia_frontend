@@ -27,6 +27,43 @@ export const Sidebar = (props) => {
       setDashboardNotification(await fetchUserHasNotReadNotificationDashboard(user.id));
     };
     fetchData();
+    const resizeListener = window.addEventListener("resize", function (event) {
+      const sidebar = document.getElementById("default-sidebar");
+      if (sidebar === null || sidebar === undefined) return;
+      if (window.innerWidth > 1280) {
+        sidebar.classList.add("-translate-x-full");
+      }
+    });
+    const scrollListener = window.addEventListener("scroll", function (event) {
+
+      const sidebar = document.getElementById("default-sidebar");
+      if (sidebar === null || sidebar === undefined) return;
+      if (window.innerWidth < 1280) {
+        sidebar.classList.add("-translate-x-full");
+        setExpanded(false);
+        mostrarScrollbar();
+      }
+    });
+    const clickListener = window.addEventListener("click", function (event) {
+      if (
+        event.target.matches("#button-sidebar") ||
+        event.target.matches("#svg-sidebar") ||
+        event.target.matches("#path-sidebar")
+      )
+        return;
+      if (!event.target.matches(".inline-flex")) {
+        const sidebar = document.getElementById("default-sidebar");
+        if (sidebar === null || sidebar === undefined) return;
+        sidebar.classList.add("-translate-x-full");
+        setExpanded(false);
+        mostrarScrollbar();
+      }
+    });
+    return () => {
+      window.removeEventListener("resize", resizeListener);
+      window.removeEventListener("scroll", scrollListener);
+      window.removeEventListener("click", clickListener);
+    };
   }, []);
 
   const iconProps = {
@@ -102,38 +139,7 @@ export const Sidebar = (props) => {
     setExpanded(!expanded);
     oscurecerScrollbar();
   }
-  window.addEventListener("resize", function (event) {
-    const sidebar = document.getElementById("default-sidebar");
-    if (sidebar === null || sidebar === undefined) return;
-    if (window.innerWidth > 1280) {
-      sidebar.classList.add("-translate-x-full");
-    }
-  });
-  window.addEventListener("scroll", function (event) {
 
-    const sidebar = document.getElementById("default-sidebar");
-    if (sidebar === null || sidebar === undefined) return;
-    if (window.innerWidth < 1280) {
-      sidebar.classList.add("-translate-x-full");
-      setExpanded(false);
-      mostrarScrollbar();
-    }
-  });
-  window.addEventListener("click", function (event) {
-    if (
-      event.target.matches("#button-sidebar") ||
-      event.target.matches("#svg-sidebar") ||
-      event.target.matches("#path-sidebar")
-    )
-      return;
-    if (!event.target.matches(".inline-flex")) {
-      const sidebar = document.getElementById("default-sidebar");
-      if (sidebar === null || sidebar === undefined) return;
-      sidebar.classList.add("-translate-x-full");
-      setExpanded(false);
-      mostrarScrollbar();
-    }
-  });
   return (
     <>
       <button
