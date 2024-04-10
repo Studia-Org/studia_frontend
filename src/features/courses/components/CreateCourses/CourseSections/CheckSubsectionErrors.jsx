@@ -38,7 +38,7 @@ export const CheckSubsectionErrors = ({ subsection }) => {
 
     const checkCompletion = () => {
         let newErrorsList = [];
-
+        console.log(subsection.type)
         switch (subsection.type) {
 
             case 'questionnaire':
@@ -63,6 +63,8 @@ export const CheckSubsectionErrors = ({ subsection }) => {
                 }
                 break;
 
+            case 'thinkAloud':
+            case 'selfAssessment':
             case 'task':
                 if (!subsection.start_date && !subsection.end_date) {
                     newErrorsList.push({ svg: dangerSvg, comment: 'Start and end date are missing' });

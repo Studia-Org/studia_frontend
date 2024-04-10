@@ -1,5 +1,5 @@
 import { EmptyQuestionnaireData, PlannificationQuestionnaireData, SRLOQuestionnaireData } from './QuestionnaireData'
-import { PeerReviewData, ForumData, ThinkAloudData } from './ActivityData';
+import { PeerReviewData, ForumData, ThinkAloudData, SelfAssessmentData } from './ActivityData';
 import React from 'react'
 
 
@@ -508,7 +508,7 @@ export const PerformancePage = ({ setCreateCourseSectionsList, sectionToEdit, co
                     <p className='text-sm font-normal text-gray-500'>
                         Self-assessment is a process that allows students to reflect on their learning, identify areas of strength and weakness, and set goals for improvement. It is an essential skill for lifelong learning and personal development.</p>
                 </div>
-                <button onClick={() => createSubsection('Questionnaire', 'performance', EmptyQuestionnaireData, setCreateCourseSectionsList, sectionToEdit, 'questionnaire', context, null)} className='pl-3 mx-3 ml-auto'>
+                <button onClick={() => createSubsection('Self-assesment', 'performance', null, setCreateCourseSectionsList, sectionToEdit, 'selfAssessment', context, SelfAssessmentData)} className='pl-3 mx-3 ml-auto'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -613,22 +613,6 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, co
             <div className='flex items-center p-5 mt-5 border rounded-xl bg-gray-50'>
                 <div className='px-3 py-3 bg-[#15803d] rounded-md flex items-center justify-center '>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 text-white">
-                        <path d="M11.25 4.533A9.707 9.707 0 006 3a9.735 9.735 0 00-3.25.555.75.75 0 00-.5.707v14.25a.75.75 0 001 .707A8.237 8.237 0 016 18.75c1.995 0 3.823.707 5.25 1.886V4.533zM12.75 20.636A8.214 8.214 0 0118 18.75c.966 0 1.89.166 2.75.47a.75.75 0 001-.708V4.262a.75.75 0 00-.5-.707A9.735 9.735 0 0018 3a9.707 9.707 0 00-5.25 1.533v16.103z" />
-                    </svg>
-                </div>
-                <div className='ml-5'>
-                    <p className='text-base font-normal'>Custom field</p>
-                    <p className='text-sm font-normal text-gray-500'>Add a custom field if you need to introduce any theorical subsection between phases.</p>
-                </div>
-                <button onClick={() => createSubsection('Custom field', 'forethought', null, setCreateCourseSectionsList, sectionToEdit, 'task', context, sectionTask)} className='pl-3 mx-3 ml-auto'>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
-                        <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
-                    </svg>
-                </button>
-            </div>
-            <div className='flex items-center p-5 mt-5 border rounded-xl bg-gray-50'>
-                <div className='px-3 py-3 bg-[#15803d] rounded-md flex items-center justify-center '>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 text-white">
                         <path d="M5.625 3.75a2.625 2.625 0 100 5.25h12.75a2.625 2.625 0 000-5.25H5.625zM3.75 11.25a.75.75 0 000 1.5h16.5a.75.75 0 000-1.5H3.75zM3 15.75a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75zM3.75 18.75a.75.75 0 000 1.5h16.5a.75.75 0 000-1.5H3.75z" />
                     </svg>
                 </div>
@@ -671,7 +655,23 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, co
                     <p className='text-sm font-normal text-gray-500'>
                         Self-assessment is a process that allows students to reflect on their learning, identify areas of strength and weakness, and set goals for improvement. It is an essential skill for lifelong learning and personal development.</p>
                 </div>
-                <button onClick={() => createSubsection('Think Aloud', 'forethought', null, setCreateCourseSectionsList, sectionToEdit, 'thinkAloud', context, ThinkAloudData)} className='pl-3 mx-3 ml-auto'>
+                <button onClick={() => createSubsection('Self-assesment', 'forethought', null, setCreateCourseSectionsList, sectionToEdit, 'selfAssessment', context, SelfAssessmentData)} className='pl-3 mx-3 ml-auto'>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
+                        <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+            <div className='flex items-center p-5 mt-5 border rounded-xl bg-gray-50'>
+                <div className='px-3 py-3 bg-[#15803d] rounded-md flex items-center justify-center '>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 text-white">
+                        <path d="M11.25 4.533A9.707 9.707 0 006 3a9.735 9.735 0 00-3.25.555.75.75 0 00-.5.707v14.25a.75.75 0 001 .707A8.237 8.237 0 016 18.75c1.995 0 3.823.707 5.25 1.886V4.533zM12.75 20.636A8.214 8.214 0 0118 18.75c.966 0 1.89.166 2.75.47a.75.75 0 001-.708V4.262a.75.75 0 00-.5-.707A9.735 9.735 0 0018 3a9.707 9.707 0 00-5.25 1.533v16.103z" />
+                    </svg>
+                </div>
+                <div className='ml-5'>
+                    <p className='text-base font-normal'>Custom field</p>
+                    <p className='text-sm font-normal text-gray-500'>Add a custom field if you need to introduce any theorical subsection between phases.</p>
+                </div>
+                <button onClick={() => createSubsection('Custom field', 'forethought', null, setCreateCourseSectionsList, sectionToEdit, 'task', context, sectionTask)} className='pl-3 mx-3 ml-auto'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -729,7 +729,7 @@ export const SelfReflectionPage = ({ setCreateCourseSectionsList, sectionToEdit,
                     <p className='text-sm font-normal text-gray-500'>
                         Self-assessment is a process that allows students to reflect on their learning, identify areas of strength and weakness, and set goals for improvement. It is an essential skill for lifelong learning and personal development.</p>
                 </div>
-                <button onClick={() => createSubsection('Final delivery', 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit, 'task', context, sectionTask)} className='pl-3 mx-3 ml-auto'>
+                <button onClick={() => createSubsection('Self-assesment', 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit, 'selfAssessment', context, SelfAssessmentData)} className='pl-3 mx-3 ml-auto'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f] ">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
