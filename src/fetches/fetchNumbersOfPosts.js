@@ -37,7 +37,7 @@ export async function fetchNumbersOfPosts({ courseId, userId }) {
         return { totalPosts, postsUsuario, totalRespuestas, respuestasUsuario };
 
     } catch (error) {
-        console.log(error);
+        console.error(error);
     }
 
 

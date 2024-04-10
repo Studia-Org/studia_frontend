@@ -19,7 +19,6 @@ export default function generateExcelPeerReview(students, peerReviewAnswers, act
         getStudentQualificationsNotPeerInGroups(students, peerReviewAnswers, peerReviewinGroups, activityToReviewID);
 
     maximumStudentsPerGroup = peerReviewinGroups ? maximumStudentsPerGroup : maximumStudentsPerGroup - 1;
-    console.log({ studentQualifications })
     generateExcel({ categories, answersKeys, studentQualifications, activityName, activityGroup, peerReviewinGroups, maximumStudentsPerGroup });
 
 }

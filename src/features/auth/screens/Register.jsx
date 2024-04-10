@@ -84,7 +84,6 @@ const Register = () => {
 
 
   const registerAccount = async () => {
-    console.log("registering")
     try {
       setLoading(true);
       if (!email || !password || !repassword || !username || !name || !university || !description) {

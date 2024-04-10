@@ -72,7 +72,6 @@ export const SubsectionList = ({ subsection, setSectionToEditTemp }) => {
                 okText="Yes"
                 okType="danger"
                 onConfirm={(e) => {
-                    console.log('delete')
                     e.stopPropagation();
                     deleteSubsection(subsection)
                     message.success('Subection deleted successfully');

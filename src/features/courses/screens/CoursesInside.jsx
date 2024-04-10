@@ -59,7 +59,6 @@ const CourseInside = () => {
   const hasCourseStarted = (start_date) => {
     const currentDate = new Date();
     const startDate = new Date(start_date);
-    console.log(currentDate >= startDate);
     return currentDate >= startDate;
   }
 
@@ -166,7 +165,6 @@ const CourseInside = () => {
         subsectionsCompleted
       );
 
-      console.log(firstSubsection);
       if (firstSubsection) {
         if (firstSubsection?.subseccion?.attributes?.activity?.data?.attributes?.type === 'questionnaire') {
           setCourseSection(firstSubsection?.cursoTitle);

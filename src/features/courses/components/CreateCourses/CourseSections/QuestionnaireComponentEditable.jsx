@@ -288,7 +288,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
             })
             setNewOption('')
         } catch (error) {
-            console.log(error)
+            console.error(error)
         }
 
     }

@@ -19,9 +19,6 @@ export const getIcon = (subsection, subsectionsCompleted, isFirstSubsection, pre
             </div>
         )
 
-    if (subsection.id === 226) {
-        console.log('dateToday', isSubsectionCompleted);
-    }
 
     if (isSubsectionCompleted) {
         return (
