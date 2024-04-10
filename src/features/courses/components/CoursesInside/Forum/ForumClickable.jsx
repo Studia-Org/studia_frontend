@@ -29,8 +29,8 @@ export const ForumClickable = ({ posts, setForumFlag, whisper }) => {
         <div className="flex items-center w-full mt-3 ">
           <img
             src={
-              post.attributes.autor.data.attributes.profile_photo.data
-                .attributes.url
+              post.attributes.autor.data.attributes.profile_photo?.data
+                ?.attributes?.url
             }
             className="w-8 rounded-full"
             alt=""

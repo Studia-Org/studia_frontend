@@ -98,7 +98,7 @@ const UserProfile = () => {
                           <div className="flex justify-center w-full">
                             {userProfile && userProfile.profile_photo ? (
                               <img
-                                src={userProfile && userProfile.profile_photo.url}
+                                src={userProfile && userProfile.profile_photo?.url}
                                 className="object-cover -m-16 border-none rounded-lg shadow-xl w-[150px] h-[150px] lg:-ml-16"
                                 alt=""
                               />

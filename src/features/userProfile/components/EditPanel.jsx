@@ -117,11 +117,9 @@ export const EditPanel = ({ onClose, userProfile, uid }) => {
     }
 
     function handleProfilePhoto() {
-        console.log('profile photo');
         inputRefProfile.current.click();
     }
     function handleLandscapePhoto() {
-        console.log('landscape photo');
         inputRefLandscape.current.click();
     }
 
@@ -195,7 +193,7 @@ export const EditPanel = ({ onClose, userProfile, uid }) => {
                                 ) : (
                                     <img
                                         className='max-w-[120px] min-w-[120px] min-h-[120px] border-none rounded-full shadow-xl'
-                                        src={userProfile.profile_photo.url}
+                                        src={userProfile?.profile_photo?.url}
                                         alt=''
                                         style={{ filter: 'brightness(50%)' }}
                                     />

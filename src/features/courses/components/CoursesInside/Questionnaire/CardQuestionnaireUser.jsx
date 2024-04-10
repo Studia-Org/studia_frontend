@@ -22,7 +22,7 @@ export const CardQuestionnaireUser = ({ user, setQuestionnaireAnswerData }) => {
             whileHover={{ scale: 1.01 }}
         >
             <div className='flex items-center gap-2'>
-                <Avatar shape="square" size="large" src={user.attributes.user.data.attributes.profile_photo.data.attributes.url} />
+                <Avatar shape="square" size="large" src={user.attributes.user.data.attributes.profile_photo?.data?.attributes?.url} />
                 <p className='text-sm font-medium text-gray-600'>{user.attributes.user.data.attributes.name}</p>
             </div>
             <p className='ml-auto text-sm text-gray-600'> <strong> Time to complete:</strong> {user.attributes.timeToComplete}</p>

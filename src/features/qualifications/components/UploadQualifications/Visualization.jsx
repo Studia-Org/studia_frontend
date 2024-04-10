@@ -72,7 +72,7 @@ export const Visualization = ({ formValues, data }) => {
                         key="Name"
                         render={(text, record) => (
                             <div className='flex items-center gap-2'>
-                                <Avatar src={record.Name.student.attributes.profile_photo.data.attributes.url} />
+                                <Avatar src={record.Name.student.attributes.profile_photo?.data?.attributes?.url} />
                                 <div className='flex flex-col'>
                                     <p className='font-medium'>{record.Name.student.attributes.name}</p>
                                     <p className='text-gray-500'>{record.Name.student.attributes.email}</p>
