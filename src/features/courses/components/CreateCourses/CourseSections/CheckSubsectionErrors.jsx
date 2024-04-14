@@ -63,9 +63,30 @@ export const CheckSubsectionErrors = ({ subsection }) => {
                 }
                 break;
 
-            case 'thinkAloud':
             case 'selfAssessment':
+                if (!subsection.start_date && !subsection.end_date) {
+                    newErrorsList.push({ svg: dangerSvg, comment: 'Start and end date are missing' });
+                    setColor('text-red-500')
+                }
+                if (!subsection.activity?.SelfAssesmentRubrica || subsection.activity?.SelfAssesmentRubrica.length < 2) {
+                    newErrorsList.push({ svg: dangerSvg, comment: 'Self assessment rubric is empty' });
+                    setColor('text-red-500')
+                }
+                if (Object.keys(subsection.activity.categories).length === 0) {
+                    newErrorsList.push({ svg: dangerSvg, comment: 'No categories' });
+                    setColor('text-red-500')
+                }
+                if (subsection.description === '' || subsection.description === null) {
+                    newErrorsList.push({ svg: warningSvg, comment: 'No description' });
+                }
+                if (subsection.content === '' || subsection.content === null) {
+                    newErrorsList.push({ svg: warningSvg, comment: 'No content' });
+                }
+                break;
+            case 'thinkAloud':
             case 'task':
+                console.log(subsection.activity?.SelfAssesmentRubrica)
+                console.log(subsection.type === 'selfAssesment')
                 if (!subsection.start_date && !subsection.end_date) {
                     newErrorsList.push({ svg: dangerSvg, comment: 'Start and end date are missing' });
                     setColor('text-red-500')

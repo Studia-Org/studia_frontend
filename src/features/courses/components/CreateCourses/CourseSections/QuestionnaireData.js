@@ -317,3 +317,65 @@ export const PlannificationQuestionnaireData = {
         }
     }
 }
+
+export const SelfAssesmentData = {
+    attributes: {
+        Title: "Self-Assessment Questionnaire",
+        description: "Questionnaire for measuring student self-assessment",
+        autocorrect: false,
+        editable: true,
+        type: "Self-Assessment",
+        Options: {
+            questionnaire: {
+                title: "Self-Assessment Questionnaire",
+                description: "Questionnaire for measuring student self-assessment",
+                editable: true,
+                type: "Self-Assessment",
+                questions:
+                    [
+                        {
+                            "question": "Did I achieve the task's objectives?",
+                            "options": ["Strongly Disagree", "Disagree", "Somewhat Disagree", "Neutral", "Somewhat Agree", "Agree", "Strongly Agree"]
+                        },
+                        {
+                            "question": "Was the quality of my work satisfactory?",
+                            "options": ["Strongly Disagree", "Disagree", "Somewhat Disagree", "Neutral", "Somewhat Agree", "Agree", "Strongly Agree"]
+                        },
+                        {
+                            "question": "Did I manage my time effectively?",
+                            "options": ["Strongly Disagree", "Disagree", "Somewhat Disagree", "Neutral", "Somewhat Agree", "Agree", "Strongly Agree"]
+                        },
+                        {
+                            "question": "Did I handle the task's challenges well?",
+                            "options": ["Strongly Disagree", "Disagree", "Somewhat Disagree", "Neutral", "Somewhat Agree", "Agree", "Strongly Agree"]
+                        },
+                        {
+                            "question": "Was my communication clear and effective?",
+                            "options": ["Strongly Disagree", "Disagree", "Somewhat Disagree", "Neutral", "Somewhat Agree", "Agree", "Strongly Agree"]
+                        },
+                        {
+                            "question": "Did I collaborate well with others?",
+                            "options": ["Strongly Disagree", "Disagree", "Somewhat Disagree", "Neutral", "Somewhat Agree", "Agree", "Strongly Agree"]
+                        },
+                        {
+                            "question": "Did I demonstrate creativity or innovation?",
+                            "options": ["Strongly Disagree", "Disagree", "Somewhat Disagree", "Neutral", "Somewhat Agree", "Agree", "Strongly Agree"]
+                        },
+                        {
+                            "question": "What did I learn from this task?",
+                            "type": "open-ended"
+                        },
+                        {
+                            "question": "How can I improve in the future?",
+                            "type": "open-ended"
+                        },
+                        {
+                            "question": "Overall, how satisfied am I with my performance?",
+                            "type": "open-ended"
+                        },
+                    ],
+                correctAnswers: {}
+            }
+        }
+    }
+}

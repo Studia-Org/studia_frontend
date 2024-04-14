@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { API, BEARER } from "../../../constant";
 import { useAuthContext } from "../../../context/AuthContext";
 import { getToken } from "../../../helpers.js";
+import { SelfAssesmentComponent } from "../components/Activity/SelfAssesmentComponent.jsx";
 
 const Activity = () => {
   const { courseId, activityId } = useParams();
@@ -92,6 +93,8 @@ const Activity = () => {
     switch (type) {
       case "peerReview":
         return <PeerReviewComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} />;
+      case "selfAssessment":
+        return <SelfAssesmentComponent activityData={userQualification.activity} />;
       default:
         return <ActivityComponent activityData={userQualification.activity} idQualification={userQualification.idQualification}
           setUserQualification={setUserQualification} userQualification={userQualification} />;
