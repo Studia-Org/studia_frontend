@@ -36,15 +36,19 @@ const Register = () => {
 
   const handlePhotoUpload = async (data) => {
     const photoFormData = new FormData();
+    let photoId = null;
     photoFormData.append("files", profilePhoto[0].file);
     const uploadPhoto = await fetch(`${API}/upload`, {
       method: 'POST',
       body: photoFormData,
     });
+    if (!uploadPhoto.ok) {
+      photoId = 23
+    }
     const uploadPhotoData = await uploadPhoto.json();
-    const photoId = uploadPhotoData[0].id;
+    photoId = photoId == null ? uploadPhotoData[0].id : photoId;
     formData.profile_photo = photoId;
-    await fetch(`${API}/users/${data.user.id}`, {
+    const updateUser = await fetch(`${API}/users/${data.user.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -54,6 +58,7 @@ const Register = () => {
         profile_photo: photoId,
       }),
     })
+
   }
 
   const handleSetObjectives = async (data) => {
@@ -101,10 +106,17 @@ const Register = () => {
         body: JSON.stringify(formData),
       });
       const data = await response.json();
+
       if (data?.error) {
         throw data?.error;
-      } else {
-        await handlePhotoUpload(data);
+      }
+      else {
+        try {
+          await handlePhotoUpload(data);
+        }
+        catch (error) {
+          throw new Error("Error uploading profile photo");
+        }
         await handleSetObjectives(data);
         setToken(data.jwt);
         setUser(data.user);
