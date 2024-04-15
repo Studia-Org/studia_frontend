@@ -10,12 +10,11 @@ import { UserQuestionnaireAnswerTable } from '../../../CoursesInside/Questionnai
 import { Questions } from './Questions'
 
 
-export const Questionnaire = () => {
+export const Questionnaire = ({ setState }) => {
     const { user } = useAuthContext();
     const [loadingData, setLoadingData] = useState(true);
     const [userResponses, setUserResponses] = useState([]);
     const [questionnaireAnswerData, setQuestionnaireAnswerData] = useState([]);
-    const [recommendationList, setRecommendationList] = useState([]);
     const [completed, setCompleted] = useState(questionnaireAnswerData.length > 0);
     const [sendingData, setSendingData] = useState(false);
     const questionsPerPage = 5;
@@ -23,7 +22,6 @@ export const Questionnaire = () => {
     const totalPages = Math.ceil(totalQuestions / questionsPerPage);
     const [currentPage, setCurrentPage] = useState(1);
     const [enableEdit, setEnableEdit] = useState(false);
-    const [editedQuestions, setEditedQuestions] = useState({});
     const isLastPage = currentPage === totalPages;
 
     const list = {
@@ -39,7 +37,7 @@ export const Questionnaire = () => {
     }
 
     function handleSubmission() {
-
+        console.log('submitted', userResponses)
     }
 
     return (
@@ -61,7 +59,7 @@ export const Questionnaire = () => {
                             animate="visible"
                             variants={list}
                         >
-                            <div className="space-y-5 ">{
+                            <div className="">{
                                 <Questions
                                     currentPage={currentPage}
                                     questionsPerPage={questionsPerPage}
@@ -72,28 +70,25 @@ export const Questionnaire = () => {
                                 />
                             }</div>
                         </motion.ul>
-                        {isLastPage && (
-                            <div className="flex justify-end mt-5">
-                                {
-                                    completed === false &&
-                                    <>
-                                        {
-                                            user.role_str === 'student' && (
-                                                <>
-                                                    <Button type='primary' loading={sendingData} onClick={handleSubmission}
-                                                        className="ml-auto ">
-                                                        Submit
-                                                    </Button>
-                                                </>
-                                            )
-                                        }
-                                    </>
-                                }
-                            </div>
-                        )}
-                        <div className="flex items-center justify-between mt-5 mb-8 bg-white rounded-md shadow-md p-5 border-b-8 border-[#6366f1]">
-                            <NavigationButtons setCurrentPage={setCurrentPage} currentPage={currentPage} totalPages={totalPages} />
+
+                        <div className="flex mt-5">
+                            {
+                                completed === false &&
+                                <>
+                                    {
+                                        user.role_str === 'student' && (
+                                            <>
+                                                <Button type='primary' loading={sendingData} onClick={handleSubmission}
+                                                    className="flex">
+                                                    Submit
+                                                </Button>
+                                            </>
+                                        )
+                                    }
+                                </>
+                            }
                         </div>
+
                     </>
                     :
                     <>

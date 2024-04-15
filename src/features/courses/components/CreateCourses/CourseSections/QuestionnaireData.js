@@ -321,7 +321,7 @@ export const PlannificationQuestionnaireData = {
 export const SelfAssesmentData = {
     attributes: {
         Title: "Self-Assessment Questionnaire",
-        description: "Questionnaire for measuring student self-assessment",
+        description: "Questionnaire for measuring the performance and progress of students.",
         autocorrect: false,
         editable: true,
         type: "Self-Assessment",

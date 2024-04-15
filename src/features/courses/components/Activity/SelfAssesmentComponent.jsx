@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
+import { Questionnaire } from './Components/SelfAssesment/Questionnaire'
+import { Breadcrumb } from './Components/SelfAssesment/Breadcrumb'
 
 export const SelfAssesmentComponent = ({ activityData }) => {
-    console.log(activityData)
-    //Tal vez añadir un broadcrumb para que el usuario sepa en que parte del questionario o de la rubrica se encuentra
+    const [state, setState] = useState(0)
     return (
-        <>
-
-        </>
+        <div className='p-10'>
+            Back to course
+            <Breadcrumb state={state} />
+            <Questionnaire setState={setState} />
+        </div>
     )
 }

@@ -9,7 +9,7 @@ export const Header = ({ questionnaire }) => {
             <div className="flex flex-col w-full my-7 mx-7">
                 <div className='flex items-center w-full '>
                     <div className='flex items-center w-full gap-3'>
-                        <p className="text-3xl font-semibold text-black">{questionnaire.attributes.title}</p>
+                        <p className="text-3xl font-semibold text-black">{questionnaire.attributes.Title}</p>
                         <Badge color="#6366f1" className='ml-auto mr-10' count={new Date().toDateString()} />
                     </div>
                 </div>
