@@ -9,7 +9,7 @@ export const Breadcrumb = ({ state }) => {
             current={state}
             items={[
                 {
-                    title: 'Questionnaire',
+                    title: 'Self-Assessment Questionnaire',
                 },
                 {
                     title: 'Rubric and Autoevaluation',

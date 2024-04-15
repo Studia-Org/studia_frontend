@@ -5,7 +5,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { useRadioGroup } from '@mui/material/RadioGroup';
 import { motion } from 'framer-motion'
 
-export const Questions = ({ currentPage, questionsPerPage, totalQuestions, questionnaire, user, questionnaireAnswerData }) => {
+export const Questions = ({ questionnaire, user, questionnaireAnswerData, setUserResponses, userResponses }) => {
     const item = {
         visible: { opacity: 1, x: 0 },
         hidden: { opacity: 0, x: -100 },
@@ -31,6 +31,16 @@ export const Questions = ({ currentPage, questionsPerPage, totalQuestions, quest
         })
     );
 
+    function handleOnChange(e, index, question) {
+        setUserResponses(prev => {
+            console.log(prev, index)
+            const updatedResponses = [...prev];
+            updatedResponses[index] = { question: question, answer: e.target.value };
+            return updatedResponses;
+        });
+
+    }
+
 
     const renderQuestionsForPage = () => {
         return questionnaire.attributes.Options.questionnaire.questions.map((question, index) => (
@@ -48,7 +58,7 @@ export const Questions = ({ currentPage, questionsPerPage, totalQuestions, quest
                             ))}
                         </RadioGroup>
                         :
-                        <RadioGroup className="mt-4" name={`use-radio-group-${index}`} defaultValue={questionnaireAnswerData[0]?.responses?.responses[index]?.answer}>
+                        <RadioGroup className="mt-4" onChange={(e) => handleOnChange(e, index, question.question)} name={`use-radio-group-${index}`} defaultValue={questionnaireAnswerData[0]?.responses?.responses[index]?.answer}>
                             {question.options.map((option, optionIndex) => (
                                 <MyFormControlLabel key={optionIndex} value={option} label={option} control={<Radio />} />
                             ))}
@@ -69,6 +79,7 @@ export const Questions = ({ currentPage, questionsPerPage, totalQuestions, quest
                         <TextField
                             id="outlined-basic"
                             label=""
+                            onChange={(e) => handleOnChange(e, index, question.question)}
                             variant="filled"
                             className='w-full mt-5'
                             rows={4}

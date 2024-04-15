@@ -55,6 +55,7 @@ const Activity = () => {
           `&populate[user][populate][PeerReviewAnswers][populate][qualifications][populate][user][fields][0]=username` +
           `&populate[evaluator][populate][profile_photo][fields][0]=url` +
           `&populate[PeerReviewAnswers][populate][user][populate][qualifications][populate][Answers][fields][0]=*` +
+          `&populate[SelfAssesmentAnswers][populate][user][populate][qualifications][fields][0]=*` +
           `&populate[peer_review_qualifications][populate][file][fields][0]=*` +
           `&populate[peer_review_qualifications][populate][user][fields][0]=username` +
           `&populate[peer_review_qualifications][populate][user][populate][profile_photo][fields][0]=url` +
