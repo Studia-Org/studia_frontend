@@ -40,7 +40,7 @@ const EditableCell = ({
 
 export const AutoAssesmentRubric = ({ openSelfAssesmentRubricModal, setOpenSelfAssesmentRubricModal, setSubsectionEditing, setCreateCourseSectionsList, subsectionEditing }) => {
     const [form] = Form.useForm();
-    const [data, setData] = useState();
+    const [data, setData] = useState(subsectionEditing?.activity?.SelfAssesmentRubrica);
     const [editingKey, setEditingKey] = useState('');
     const isEditing = (record) => record.key === editingKey;
 
@@ -73,10 +73,10 @@ export const AutoAssesmentRubric = ({ openSelfAssesmentRubricModal, setOpenSelfA
 
     const columns = [
         { title: '    ', dataIndex: 'criteria', editable: true, placeholderText: 'Enter Criteria, e.g.: Listening' },
-        { title: '1', dataIndex: 'evalution1', editable: true, placeholderText: 'Enter Evalution 1, e.g.: I was unable to listen when my teacher gave directions. ' },
-        { title: '2', dataIndex: 'evalution2', editable: true, placeholderText: 'Enter Evalution 2, e.g.: I needed more than 2 prompts to listen whan my teacher gave directions.' },
-        { title: '3', dataIndex: 'evalution3', editable: true, placeholderText: 'Enter Evalution 3, e.g.: I needed 1-2 prompts to listen whan my teacher gave directions.' },
-        { title: '4', dataIndex: 'evalution4', editable: true, placeholderText: 'Enter Evalution 4, e.g.: I listened when my teacher gave directions.' },
+        { title: '1', dataIndex: 'evaluation1', editable: true, placeholderText: 'Enter Evaluation 1, e.g.: I was unable to listen when my teacher gave directions. ' },
+        { title: '2', dataIndex: 'evaluation2', editable: true, placeholderText: 'Enter Evaluation 2, e.g.: I needed more than 2 prompts to listen whan my teacher gave directions.' },
+        { title: '3', dataIndex: 'evaluation3', editable: true, placeholderText: 'Enter Evaluation 3, e.g.: I needed 1-2 prompts to listen whan my teacher gave directions.' },
+        { title: '4', dataIndex: 'evaluation4', editable: true, placeholderText: 'Enter Evaluation 4, e.g.: I listened when my teacher gave directions.' },
         {
             editable: false,
             title: '',
@@ -112,10 +112,10 @@ export const AutoAssesmentRubric = ({ openSelfAssesmentRubricModal, setOpenSelfA
     const edit = (record) => {
         form.setFieldsValue({
             criteria: '',
-            evalution1: '',
-            evalution2: '',
-            evalution3: '',
-            evalution4: '',
+            evaluation1: '',
+            evaluation2: '',
+            evaluation3: '',
+            evaluation4: '',
             ...record,
         });
         setEditingKey(record.key);
@@ -127,7 +127,7 @@ export const AutoAssesmentRubric = ({ openSelfAssesmentRubricModal, setOpenSelfA
     };
 
     const handleOk = () => {
-        const finalJson = {};
+        const finalJson = data;
         setSubsectionEditing((subsection) => {
             const sectionCopy = { ...subsection };
             sectionCopy.activity.SelfAssesmentRubrica = finalJson;
@@ -160,10 +160,10 @@ export const AutoAssesmentRubric = ({ openSelfAssesmentRubricModal, setOpenSelfA
         const newData = {
             key: data?.length ? data?.length + 1 : 1,
             criteria: '',
-            evalution1: '',
-            evalution2: '',
-            evalution3: '',
-            evalution4: '',
+            evaluation1: '',
+            evaluation2: '',
+            evaluation3: '',
+            evaluation4: '',
         };
         setData((prevData) => (prevData ? [...prevData, newData] : [newData]));
     };
@@ -187,7 +187,7 @@ export const AutoAssesmentRubric = ({ openSelfAssesmentRubricModal, setOpenSelfA
     });
 
     return (
-        <Modal title="Peer Review Rubric" open={openSelfAssesmentRubricModal} onOk={handleOk} width={1500} onCancel={handleCancel} okText={'Save Changes'} okButtonProps={{ className: 'bg-blue-500' }}>
+        <Modal title="Self-Assesment Rubric" open={openSelfAssesmentRubricModal} onOk={handleOk} width={1500} onCancel={handleCancel} okText={'Save Changes'} okButtonProps={{ className: 'bg-blue-500' }}>
             <p>Define the criteria on the rubric for evaluating the process and progression of the task. </p>
             <Form form={form} component={false}>
                 <div className="flex gap-3 my-3">

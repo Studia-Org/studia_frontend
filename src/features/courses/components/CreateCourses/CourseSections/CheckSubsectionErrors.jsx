@@ -64,11 +64,12 @@ export const CheckSubsectionErrors = ({ subsection }) => {
                 break;
 
             case 'selfAssessment':
+                console.log(subsection.activity?.SelfAssesmentRubrica)
                 if (!subsection.start_date && !subsection.end_date) {
                     newErrorsList.push({ svg: dangerSvg, comment: 'Start and end date are missing' });
                     setColor('text-red-500')
                 }
-                if (!subsection.activity?.SelfAssesmentRubrica || subsection.activity?.SelfAssesmentRubrica.length < 2) {
+                if (!subsection.activity?.SelfAssesmentRubrica?.length || subsection.activity?.SelfAssesmentRubrica.length < 2) {
                     newErrorsList.push({ svg: dangerSvg, comment: 'Self assessment rubric is empty' });
                     setColor('text-red-500')
                 }
