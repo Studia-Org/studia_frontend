@@ -9,7 +9,6 @@ export async function fetchStudentsAverageWithLabel(courseId) {
 
         const response = await fetch(`${API}/courses/${courseId}?populate=students.qualifications,sections.subsections.activity.qualifications`);
         const data = await response.json();
-        console.log(data);
 
         //Incializamos el objeto que vamos a devolver con los nombres de todos los estudiantes
         data.data.attributes.students.data.forEach(student => {

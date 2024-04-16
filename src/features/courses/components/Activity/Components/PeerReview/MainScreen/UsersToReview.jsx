@@ -22,13 +22,13 @@ export default function UsersToReview({ usersToCorrect, usersWithAnswers, setUse
                                             return (
                                                 <Avatar
                                                     circle
-                                                    src={user.attributes.profile_photo.data?.attributes?.url}
+                                                    src={user.attributes?.profile_photo?.data?.attributes?.url}
                                                     style={{ background: '#3730a3', width: '2rem', height: '2rem', fontSize: '0.75rem', fontWeight: '400' }} />
                                             )
                                         })}
                                     </AvatarGroup> :
                                     <Avatar size="large"
-                                        src={user.attributes.profile_photo.data?.attributes?.url} />
+                                        src={user.attributes?.profile_photo?.data?.attributes?.url} />
                             }
 
                             <p className="text-lg text-black">{

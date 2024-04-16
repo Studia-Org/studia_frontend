@@ -21,17 +21,17 @@ export const CoursesCardsProfile = ({ course, user }) => {
         <div className="w-full p-3 " onClick={() => handleCourseNavigation()}>
             <div className={`w-full lg:max-w-full lg:flex ${isUserMember ? 'shadow2' : ''} cursor-pointer`}>
                 <div
-                    className="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-l text-center overflow-hidden"
+                    className="flex-none h-48 overflow-hidden text-center bg-cover rounded-l lg:h-auto lg:w-48"
                     style={{ backgroundImage: `url(${course?.cover?.url})` }}
                     title=""
                 >
                 </div>
-                <div className="w-full border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+                <div className="flex flex-col justify-between w-full p-4 leading-normal bg-white border-b border-l border-r border-gray-400 rounded-b lg:border-l-0 lg:border-t lg:border-gray-400 lg:rounded-b-none lg:rounded-r">
                     <div className="mb-8">
                         {!isUserMember && (
-                            <p className="text-sm text-gray-600 flex items-center">
+                            <p className="flex items-center text-sm text-gray-600">
                                 <svg
-                                    className="fill-current text-gray-500 w-3 h-3 mr-2"
+                                    className="w-3 h-3 mr-2 text-gray-500 fill-current"
                                     xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 20 20"
                                 >
@@ -40,22 +40,22 @@ export const CoursesCardsProfile = ({ course, user }) => {
                                 Members only
                             </p>
                         )}
-                        <div className="text-gray-900 font-bold text-xl mb-2">
+                        <div className="mb-2 text-xl font-bold text-gray-900">
                             {course.title}
                         </div>
-                        <p className="text-gray-700 text-base">
+                        <p className="text-base text-gray-700">
                             {course.description}
                         </p>
                     </div>
                     <div className="flex items-center">
                         <button className='flex items-center' onClick={handleButtonClick}>
                             <img
-                                className="w-10 h-10 rounded-full mr-4"
-                                src={course.professor.profile_photo.url}
+                                className="w-10 h-10 mr-4 rounded-full"
+                                src={course.professor?.profile_photo?.url}
                                 alt="Avatar of Writer"
                             />
                             <div className="text-sm">
-                                <p className="text-gray-900 leading-none">{course.professor.name}</p>
+                                <p className="leading-none text-gray-900">{course.professor.name}</p>
                             </div>
                         </button>
 

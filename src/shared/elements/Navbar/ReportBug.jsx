@@ -67,7 +67,6 @@ export const ReportBug = () => {
             if (response.ok) {
                 // Issue creada exitosamente
                 message.success('Successfully created issue.');
-                console.log('Issue creada exitosamente.');
             } else {
                 // Manejar errores de la respuesta de GitHub
                 message.error('Error al crear la issue:');

@@ -4,7 +4,7 @@ export async function fetchCoursesInfoDashboard(user) {
     const userId = user.id;
     try {
         const courseList = []
-        const response = await fetch(`${API}/courses?populate=professor.profile_photo,cover`);
+        const response = await fetch(`${API}/courses?populate=professor.profile_photo,cover,students&filters[students]=${userId}`);
         const data = await response.json();
         data.data.forEach(course => {
             if (user.role_str !== 'student') {

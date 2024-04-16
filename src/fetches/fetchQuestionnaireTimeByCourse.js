@@ -42,7 +42,7 @@ export async function fetchQuestionnaireTimeByCourse({ courseId, userId = null }
         return { tiempoPromedio, tiempoPromedioFormateado, tiempoUsuario, tiempoUsuarioFormateado, totalQuestionnaire };
     }
     catch (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 

@@ -92,7 +92,7 @@ export default function PeerReviewComponent({ activityData }) {
                 setQualificationIds(idQualifications)
 
             }).catch(err => {
-                console.log(err.message)
+                console.error(err.message)
             }).finally(() => {
                 setLoading(false)
             })
@@ -249,7 +249,6 @@ export default function PeerReviewComponent({ activityData }) {
                                 showConfirmButton: true,
                             }).then(() => {
                                 if (usersToPair > 1) {
-                                    console.log('entra', data.data)
                                     setShowEvaluate(false)
                                     resetUser()
                                     if (peerReviewInGroups) {
@@ -262,7 +261,7 @@ export default function PeerReviewComponent({ activityData }) {
                             })
                         })
                             .catch(err => {
-                                console.log(err)
+                                console.error(err)
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Your feedback has not been sent, try again later',
@@ -294,9 +293,6 @@ export default function PeerReviewComponent({ activityData }) {
                                 if (usersToPair > 1) {
                                     setShowEvaluate(false)
                                     resetUser()
-                                    console.log(data)
-                                    console.log(activityData)
-                                    console.log(QualificationIdPartnerReview)
                                     const answer = peerReviewInGroups ?
                                         activityData.group.data.attributes.PeerReviewAnswers.data
                                             .find((answer) => answer.attributes.qualifications.data.find((qualification) => qualification.id === QualificationIdPartnerReview))
@@ -308,12 +304,11 @@ export default function PeerReviewComponent({ activityData }) {
                                             :
                                             (activityData.user.data.attributes.PeerReviewAnswers.data
                                                 .find((answer) => answer.attributes.qualifications.data.find((qualification) => qualification.id === QualificationIdPartnerReview)))
-                                    console.log(answer)
                                     answer.attributes.Answers = answers
                                 }
                             })
                         }).catch(err => {
-                            console.log(err)
+                            console.error(err)
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Your feedback has not been sent, try again later',
@@ -323,12 +318,12 @@ export default function PeerReviewComponent({ activityData }) {
                         }).finally(() => { })
                     }
                 }).catch(err => {
-                    console.log(err)
+                    console.error(err)
                     throw new Error(err)
                 })
         }
         catch (err) {
-            console.log(err)
+            console.error(err)
             Swal.fire({
                 icon: 'error',
                 title: 'Your feedback has not been sent, try again later',

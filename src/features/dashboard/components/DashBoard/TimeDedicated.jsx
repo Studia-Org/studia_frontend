@@ -58,7 +58,6 @@ export function TimeDedicated({ courses }) {
       await Promise.all(courses.map(async (course) => {
         dict[course.title] = await fetchAverageCourse({ courseId: course.id, user: user });
       }));
-      console.log(dict);
       // Imprimir el diccionario después de que todas las promesas se hayan resuelto
       setCharData(
         Object.keys(dict).map((key) => {

@@ -245,7 +245,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
       }
     }
     catch (error) {
-      console.log(error)
+      console.error(error)
     }
     finally {
       setSendingData(false);
@@ -282,7 +282,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
 
       message.success('Question deleted');
     } catch (error) {
-      console.log(error);
+      console.error(error);
       message.error(`Error deleting question, ${error}`);
     }
   }
