@@ -96,9 +96,11 @@ export const Sidebar = (props) => {
     const pathSegments = new URL(window.location.href).pathname.split('/');
     const lastElement = pathSegments.pop();
     const inCourseInside = pathSegments.join('/') === '/app/courses' && lastElement !== 'create' && lastElement !== 'courses';
-    inCourseInside ? setCourseInsideStyle('flexible') : setCourseInsideStyle('xl');
+    setCourseInsideStyle(inCourseInside);
 
   }, [document.location.pathname]);
+
+
   const [showSidebar, setShowSidebar] = useState(document.location.pathname !== '/app/courses/create');
   const [courseInsideStyle, setCourseInsideStyle] = useState('xl');
   function oscurecerScrollbar() {
@@ -154,7 +156,7 @@ export const Sidebar = (props) => {
         aria-controls="default-sidebar"
         type="button"
         onClick={handleClick}
-        className={`absolute z-10 items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg top-8 ${courseInsideStyle}:${!showSidebar ? "block" : "hidden"} hover:bg-gray-100 
+        className={`absolute z-10 items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg top-8 ${courseInsideStyle ? `flexible:${!showSidebar ? "block" : "hidden"}` : `xl:${!showSidebar ? "block" : "hidden"}`} hover:bg-gray-100 
         focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600`}
       >
         <span className="sr-only">Open sidebar</span>
@@ -177,8 +179,8 @@ export const Sidebar = (props) => {
 
       <aside
         id="default-sidebar"
-        className={`absolute flex min-h-screen ${courseInsideStyle}:min-h-[calc(100vh-8rem)] bg-white z-[1000] pl-8 
-         ${courseInsideStyle}:pl-16 top-0 left-0 w-80 ${courseInsideStyle}:top-32 transition-transform -translate-x-full ${showSidebar ? `${courseInsideStyle}:translate-x-0` : "-translate-x-full"} `}
+        className={`absolute flex min-h-screen  ${courseInsideStyle ? "flexible:min-h-[calc(100vh-8rem)]" : "xl:min-h-[calc(100vh-8rem)]"} bg-white z-[1000] pl-8 
+         ${courseInsideStyle ? "flexible:pl-16" : "xl:pl-16"} top-0 left-0 w-80 ${courseInsideStyle ? "flexible:top-32" : "xl:top-32"} transition-transform -translate-x-full ${showSidebar ? `${courseInsideStyle ? "flexible:translate-x-0" : "xl:translate-x-0"}` : "-translate-x-full"} `}
         aria-label="Sidebar"
       >
         <div className="min-h-[100%]">
@@ -189,7 +191,7 @@ export const Sidebar = (props) => {
             aria-controls="default-sidebar"
 
             onClick={handleClick}
-            className={` z-10 items-center flex   mt-4 mb-16 py-5 px-3 text-sm text-gray-500 rounded-lg top-8 ${courseInsideStyle}:${!showSidebar ? "block" : "hidden"} hover:bg-gray-100 
+            className={` z-10 items-center flex   mt-4 mb-16 py-5 px-3 text-sm text-gray-500 rounded-lg top-8 ${courseInsideStyle ? `flexible:${!showSidebar ? "block" : "hidden"}` : `xl:${!showSidebar ? "block" : "hidden"}`} hover:bg-gray-100 
         focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600`}
           >
             <span className="sr-only">Open sidebar</span>
@@ -214,7 +216,7 @@ export const Sidebar = (props) => {
               <hr className="w-64 " />
             )
           }
-          <ul className={`w-48 ml-3 font-medium space-y-96 ${courseInsideStyle}:ml-0 `}>
+          <ul className={`w-48 ml-3 font-medium space-y-96 ${courseInsideStyle ? "flexible:ml-0" : "xl:ml-0"} `}>
             <Link to={"/app/courses"} style={{ textDecoration: "none" }}>
               <li
                 className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all  rounded-lg ${Object.keys(iconProps.courses).length > 0
@@ -364,7 +366,7 @@ export const Sidebar = (props) => {
           </ul>
         </div>
       </aside>
-      <main className={`absolute right-0 top-0 h-screen ${courseInsideStyle}:w-1/3 ${courseInsideStyle}:relative ${expanded ? 'w-full h-screen bg-black bg-opacity-30 z-40' : 'hidden'}`}></main>
+      <main className={`absolute right-0 top-0 h-screen  ${courseInsideStyle ? "flexible:w-1/3" : "xl:w-1/3"}  ${courseInsideStyle ? "flexible:relative" : "xl:relative"} ${expanded ? 'w-full h-screen bg-black bg-opacity-30 z-40' : 'hidden'}`}></main>
     </>
   );
 };
