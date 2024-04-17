@@ -306,7 +306,7 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
   }
 
   return (
-    <div className={`flex-shrink-0 w-full max-w-[calc(100vw-4rem)] sm:w-auto z-20  lg:mr-0 ${styles === undefined ? "mt-3 ml-8" : styles}`}>
+    <div className={` w-full max-w-[calc(100vw-4rem)] sm:w-auto z-20  lg:mr-0 ${styles === undefined ? "mt-3 ml-8" : styles}`}>
       <div className={` bg-white rounded-lg p-5 sm:w-[30rem] w-full shadow-md sm:visible ${styles === undefined ? "mt-4 sm:mr-9 sm:right-0" : styles}`}>
         <p className="text-xl font-semibold">Course content</p>
         <hr className="h-px my-8 bg-gray-400 border-0"></hr>

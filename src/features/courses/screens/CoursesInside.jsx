@@ -481,8 +481,7 @@ const CourseInside = () => {
                       }}
                     />
                   }
-
-                  <div className="hidden flexible:flex xl:hidden accordion:flex ">
+                  <section className="hidden xl:block">
                     <AccordionCourseContent
                       {...{
                         courseContentInformation,
@@ -500,10 +499,10 @@ const CourseInside = () => {
                         courseSection,
                       }}
                     />
-                  </div>
+                  </section>
                   {
                     !courseBasicInformation?.studentManaged === true && (
-                      <div className="hidden flexible:block xl:hidden accordion:block ">
+                      <div className="hidden xl:block ">
                         {allPosts &&
                           <ForumClickable posts={allPosts} setForumFlag={setForumFlag} />
                         }

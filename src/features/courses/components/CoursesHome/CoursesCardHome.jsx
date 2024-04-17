@@ -21,7 +21,7 @@ export const CoursesCardHome = ({ course }) => {
 
     const CardContent = () => {
         return (
-            <div className="2xl:w-[24rem] mb-8 2xl:h-[26rem] lg:w-[17.5rem] lg:min-h-[24rem] md:w-[16rem] md:min-h-[23rem] w-[22rem] min-h-[24rem] bg-white rounded-3xl shadow-md cursor-pointer shadow2  flex flex-col">
+            <div className="2xl:w-[24rem] mb-8 2xl:h-[26rem] lg:w-[16rem] lg:min-h-[23rem] sm:w-[16rem] sm:min-h-[23rem] w-[22rem] min-h-[24rem] bg-white rounded-3xl shadow-md cursor-pointer shadow2  flex flex-col">
                 <img className="rounded-t-3xl w-full min-h-[12rem] max-h-[12rem] object-cover" src={course.cover} alt="" />
                 <div className="flex flex-col justify-center flex-grow h-full p-3 ml-5 mr-5">
                     <div className='flex flex-wrap '>

@@ -5,9 +5,9 @@ import { ForumClickable } from './Forum/ForumClickable';
 import { ProfessorData } from './ProfessorData';
 function FloatingButtonNavigation({ whisper, allForums, professor, courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setCourseContentInformation, setEditSectionFlag, setSectionToEdit, courseSubsection, courseSection, posts }) {
     //TODO
-    
+
     return (
-        <div className='fixed right-[6.5rem] bottom-12 flexible:hidden xl:flex accordion:hidden'>
+        <div className='fixed flex xl:hidden right-[6.5rem] bottom-12'>
             <Whisper
                 ref={whisper}
                 placement="auto"

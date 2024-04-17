@@ -2,7 +2,6 @@ import { EmptyQuestionnaireData, PlannificationQuestionnaireData, SRLOQuestionna
 import { PeerReviewData, ForumData, ThinkAloudData } from './ActivityData';
 import React from 'react'
 
-
 function createSubsection(subsectionName, fase, questionnaireData, setCreateCourseSectionsList, sectionToEdit, type, context, activityData) {
     const id = crypto.randomUUID();
 
