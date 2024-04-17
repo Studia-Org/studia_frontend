@@ -19,7 +19,7 @@ const Activity = () => {
       if (!user) return;
 
       const activityData = await fetch(
-        `${API}/activities/${activityId}?populate=*,qualifications,evaluators.profile_photo,section,task_to_review,subsection,selfAssesmentAnswer.user,BeingReviewedBy`
+        `${API}/activities/${activityId}?populate=qualifications,evaluators.profile_photo,section,task_to_review,subsection,selfAssesmentAnswer.user,BeingReviewedBy`
       );
       const activityDataa = await activityData.json();
       let filters;
@@ -96,7 +96,7 @@ const Activity = () => {
       case "peerReview":
         return <PeerReviewComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} />;
       case "selfAssessment":
-        return <SelfAssesmentComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} idSubsection={userQualification.idSubsection} />;
+        return <SelfAssesmentComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} idSubsection={userQualification.idSubsection || userQualification.activity.idSubsection} />;
       default:
         return <ActivityComponent activityData={userQualification.activity} idQualification={userQualification.idQualification}
           setUserQualification={setUserQualification} userQualification={userQualification} />;

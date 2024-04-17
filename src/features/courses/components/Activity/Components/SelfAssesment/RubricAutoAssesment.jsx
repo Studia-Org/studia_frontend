@@ -11,7 +11,7 @@ export const RubricAutoAssesment = ({ activityData, setState, qualificationId, s
     const [grade, setGrade] = useState(1)
     const { user } = useAuthContext()
 
-    console.log(selfAssesmentData)
+    console.log(selfAssesmentData, subsectionID)
 
 
     const columns = [
@@ -82,7 +82,8 @@ export const RubricAutoAssesment = ({ activityData, setState, qualificationId, s
                     { id: subsectionID }
                 ]
             };
-            await fetch(`${API}/users/${user.id}`, {
+            console.log(newObject, subsectionID)
+            const temp = await fetch(`${API}/users/${user.id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -90,6 +91,8 @@ export const RubricAutoAssesment = ({ activityData, setState, qualificationId, s
                 },
                 body: JSON.stringify(newObject)
             });
+            const response = await temp.json();
+            console.log(response)
             setSelfAssesmentData([responseAssesmentData.data]);
             message.success('Your evaluation has been submitted')
             setState(2)

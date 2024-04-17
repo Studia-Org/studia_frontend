@@ -65,7 +65,7 @@ export const Questionnaire = ({ setState, setSelfAssesmentData, setQualification
                         {
                             QuestionnaireAnswers: userResponses,
                             user: user.id,
-                            Activity: activityId,
+                            activity: activityId,
                             qualifications: qualificationsResponse.data.id
                         }
                     }),

@@ -5,13 +5,17 @@ import { BackButton } from './Components/BackToCourse'
 import { useNavigate, useParams } from 'react-router-dom'
 import { RubricAutoAssesment } from './Components/SelfAssesment/RubricAutoAssesment'
 import { FinalResultsAutoAssesment } from './Components/SelfAssesment/FinalResultsAutoAssesment'
+import { useAuthContext } from '../../../../context/AuthContext'
+import { ProfessorAutoAssesment } from './Components/SelfAssesment/ProfessorAutoAssesment'
 
 
 export const SelfAssesmentComponent = ({ activityData, idQualification, idSubsection }) => {
+    console.log(idSubsection)
     const navigate = useNavigate()
     const [selfAssesmentData, setSelfAssesmentData] = useState(activityData.SelfAssesmentAnswers?.data || [])
     const [qualificationId, setQualificationId] = useState(idQualification)
     let { courseId } = useParams()
+    const { user } = useAuthContext()
     const [state, setState] = useState(checkState(activityData))
 
     function checkState(activityData) {
@@ -49,10 +53,18 @@ export const SelfAssesmentComponent = ({ activityData, idQualification, idSubsec
         <div className='p-10'>
             <BackButton onClick={() => navigate(`/app/courses/${courseId}`)} text='Go back to course' />
             <div className='mt-10'>
-                <Breadcrumb state={state} />
-                <SelfAssesmentItem />
+                {
+                    user.role_str === 'student' ?
+                        <>
+                            <Breadcrumb state={state} />
+                            <SelfAssesmentItem />
+                        </>
+                        :
+                        <>
+                            <ProfessorAutoAssesment />
+                        </>
+                }
             </div>
-
         </div>
     )
 }
