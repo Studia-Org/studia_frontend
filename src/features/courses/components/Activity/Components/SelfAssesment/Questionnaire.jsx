@@ -1,24 +1,20 @@
 import React, { useState } from 'react'
-import { Button, Empty, message } from 'antd'
+import { Button, message } from 'antd'
 import { motion } from 'framer-motion'
-import { MoonLoader } from 'react-spinners'
 import { useAuthContext } from '../../../../../../context/AuthContext'
 import { Header } from './Header'
 import { SelfAssesmentData } from '../../../CreateCourses/CourseSections/QuestionnaireData'
-import { NavigationButtons } from '../../../CoursesInside/Questionnaire/NavigationsButons'
-import { UserQuestionnaireAnswerTable } from '../../../CoursesInside/Questionnaire/UserQuestionnaireAnswerTable'
 import { Questions } from './Questions'
 import { API } from '../../../../../../constant'
 import { getToken } from '../../../../../../helpers'
 import { useParams } from 'react-router-dom'
-import Activity from '../../../../screens/Activity'
-import { set } from 'date-fns'
+
 
 
 export const Questionnaire = ({ setState, setSelfAssesmentData, setQualificationId, questionnaireAnswers }) => {
     const { user } = useAuthContext();
     const [userResponses, setUserResponses] = useState([]);
-    const [completed, setCompleted] = useState(questionnaireAnswers.length > 0);
+    const [completed, setCompleted] = useState(questionnaireAnswers?.length > 0);
     const [sendingData, setSendingData] = useState(false);
 
     let { activityId } = useParams()
@@ -88,7 +84,7 @@ export const Questionnaire = ({ setState, setSelfAssesmentData, setQualification
                     })
                 })
                 setSendingData(false)
-                setSelfAssesmentData(response)
+                setSelfAssesmentData([response.data])
                 message.success('Questionnaire submitted successfully')
                 setState(1)
             } else {
@@ -97,6 +93,7 @@ export const Questionnaire = ({ setState, setSelfAssesmentData, setQualification
             }
         } catch (error) {
             setSendingData(false)
+            console.log(error)
             message.error('An error occurred. Please try again')
         }
     }

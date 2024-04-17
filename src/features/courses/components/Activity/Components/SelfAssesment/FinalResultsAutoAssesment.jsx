@@ -5,6 +5,7 @@ const { TextArea } = Input;
 
 
 export const FinalResultsAutoAssesment = ({ selfAssesmentData }) => {
+    console.log('123', selfAssesmentData)
     return (
         <div className='flex flex-wrap'>
             <div className='w-full sm:w-3/4'>

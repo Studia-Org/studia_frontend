@@ -5,13 +5,11 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import { useRadioGroup } from '@mui/material/RadioGroup';
 import { motion } from 'framer-motion'
 
-export const Questions = ({ questionnaire, user, setUserResponses, questionnaireAnswers }) => {
+export const Questions = ({ questionnaire, user, setUserResponses, questionnaireAnswers = [] }) => {
     const item = {
         visible: { opacity: 1, x: 0 },
         hidden: { opacity: 0, x: -100 },
     }
-
-    console.log(questionnaireAnswers)
 
     const MyFormControlLabel = (props) => {
         const radioGroup = useRadioGroup();
@@ -35,7 +33,6 @@ export const Questions = ({ questionnaire, user, setUserResponses, questionnaire
 
     function handleOnChange(e, index, question) {
         setUserResponses(prev => {
-            console.log(prev, index)
             const updatedResponses = [...prev];
             updatedResponses[index] = { question: question, answer: e.target.value };
             return updatedResponses;
@@ -81,7 +78,7 @@ export const Questions = ({ questionnaire, user, setUserResponses, questionnaire
                         <TextField
                             id="outlined-basic"
                             label=""
-                            onChange={(e) => handleOnChange(e, index, question.question)}
+                            onBlur={(e) => handleOnChange(e, index, question.question)}
                             variant="filled"
                             className='w-full mt-5'
                             rows={4}

@@ -9,17 +9,26 @@ import { FinalResultsAutoAssesment } from './Components/SelfAssesment/FinalResul
 
 export const SelfAssesmentComponent = ({ activityData, idQualification, idSubsection }) => {
     const navigate = useNavigate()
-    const [selfAssesmentData, setSelfAssesmentData] = useState(activityData.SelfAssesmentAnswers?.data)
+    const [selfAssesmentData, setSelfAssesmentData] = useState(activityData.SelfAssesmentAnswers?.data || [])
     const [qualificationId, setQualificationId] = useState(idQualification)
     let { courseId } = useParams()
-    const [state, setState] = useState(setStateNumber)
+    const [state, setState] = useState(checkState(activityData))
 
-    function setStateNumber() {
-        if (selfAssesmentData) {
-            if (selfAssesmentData[0]?.attributes?.RubricAnswers && selfAssesmentData[0]?.attributes?.QuestionnaireAnswers?.length > 0) { return 2 }
-            else if (selfAssesmentData[0]?.attributes?.QuestionnaireAnswers.length > 0) { return 1 }
-            else { return 0 }
+    function checkState(activityData) {
+        let RubricAnswers = null, QuestionnaireAnswers = null
+        if (activityData?.qualification === undefined) {
+            return setStateNumber(RubricAnswers, [])
+        } else {
+            RubricAnswers = activityData?.SelfAssesmentAnswers?.data[0]?.attributes?.RubricAnswers
+            QuestionnaireAnswers = activityData?.SelfAssesmentAnswers?.data[0]?.attributes?.QuestionnaireAnswers
+            return setStateNumber(RubricAnswers, QuestionnaireAnswers)
         }
+    }
+
+    function setStateNumber(RubricAnswers, QuestionnaireAnswers) {
+        if (RubricAnswers && QuestionnaireAnswers?.length > 0) { return 2 }
+        else if (QuestionnaireAnswers.length > 0) { return 1 }
+        else { return 0 }
     }
 
     const SelfAssesmentItem = () => {
@@ -32,9 +41,10 @@ export const SelfAssesmentComponent = ({ activityData, idQualification, idSubsec
             case 2:
                 return <FinalResultsAutoAssesment selfAssesmentData={selfAssesmentData} />
             default:
-                return <Questionnaire setState={setState} setSelfAssesmentData={setSelfAssesmentData} />
+                return <Questionnaire setState={setState} setSelfAssesmentData={setSelfAssesmentData} setQualificationId={setQualificationId} />
         }
     }
+
     return (
         <div className='p-10'>
             <BackButton onClick={() => navigate(`/app/courses/${courseId}`)} text='Go back to course' />

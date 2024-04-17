@@ -11,6 +11,8 @@ export const RubricAutoAssesment = ({ activityData, setState, qualificationId, s
     const [grade, setGrade] = useState(1)
     const { user } = useAuthContext()
 
+    console.log(selfAssesmentData)
+
 
     const columns = [
         {
@@ -61,8 +63,8 @@ export const RubricAutoAssesment = ({ activityData, setState, qualificationId, s
                     }
                 })
             })
-            await fetch(`${API}/self-assesment-answers/${selfAssesmentData.data.id}`, {
-                method: 'PUIT',
+            const selfAssesmentDataAwait = await fetch(`${API}/self-assesment-answers/${selfAssesmentData[0].id}`, {
+                method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `Bearer ${getToken()}`,
@@ -73,6 +75,7 @@ export const RubricAutoAssesment = ({ activityData, setState, qualificationId, s
                     }
                 }),
             })
+            const responseAssesmentData = await selfAssesmentDataAwait.json()
             const newObject = {
                 subsections_completed: [
                     ...user.subsections_completed.map(subsection => ({ id: subsection.id })),
@@ -87,18 +90,13 @@ export const RubricAutoAssesment = ({ activityData, setState, qualificationId, s
                 },
                 body: JSON.stringify(newObject)
             });
-            setSelfAssesmentData(prevState => {
-                const newState = [...prevState];
-                if (newState.length > 0) {
-                    newState[0].attributes.RubricAnswers = comments
-                }
-                return newState;
-            });
+            setSelfAssesmentData([responseAssesmentData.data]);
             message.success('Your evaluation has been submitted')
             setState(2)
             setLoading(false)
         } catch (error) {
             setLoading(false)
+            console.error(error)
             message.error('Something went wrong')
         }
     }

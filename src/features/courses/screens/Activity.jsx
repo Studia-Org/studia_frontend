@@ -19,7 +19,7 @@ const Activity = () => {
       if (!user) return;
 
       const activityData = await fetch(
-        `${API}/activities/${activityId}?populate=*`
+        `${API}/activities/${activityId}?populate=*,qualifications,evaluators.profile_photo,section,task_to_review,subsection,selfAssesmentAnswer.user,BeingReviewedBy`
       );
       const activityDataa = await activityData.json();
       let filters;
@@ -79,7 +79,7 @@ const Activity = () => {
         const qualificationData = {
           activity: { data: activityDataa.data },
           idQualification: null,
-          idSubsection: data.data[0].attributes.activity.data.attributes.subsection.data.id
+          idSubsection: activityDataa.data.attributes.subsection.data.id
         }
         setUserQualification({ activity: qualificationData })
       }
