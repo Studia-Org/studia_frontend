@@ -89,6 +89,7 @@ export const CreateCourseEditSubsection = ({
             case 'landscape_photo':
             case 'files':
             case 'content':
+              subsectionCopy[type] = newValue;
               break;
             case "ponderationStudent":
               const task_to_review_ponderation = filteredSubsections.find((sub) => sub.id === subsection.activity.task_to_review)
