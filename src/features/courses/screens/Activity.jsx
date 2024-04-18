@@ -19,7 +19,11 @@ const Activity = () => {
       if (!user) return;
 
       const activityData = await fetch(
-        `${API}/activities/${activityId}?populate=qualifications,evaluators.profile_photo,section,task_to_review,subsection,selfAssesmentAnswer.user,BeingReviewedBy`
+        `${API}/activities/${activityId}?populate=qualifications,evaluators.profile_photo,section,task_to_review,subsection,selfAssesmentAnswer.user,BeingReviewedBy`, {
+        headers: {
+          Authorization: `${BEARER} ${getToken()}`
+        }
+      }
       );
       const activityDataa = await activityData.json();
       let filters;
