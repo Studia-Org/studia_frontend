@@ -156,8 +156,8 @@ export const Sidebar = (props) => {
         aria-controls="default-sidebar"
         type="button"
         onClick={handleClick}
-        className={`absolute z-10 items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg top-8 ${courseInsideStyle ? `flexible:${!showSidebar ? "block" : "hidden"}` : `xl:${!showSidebar ? "block" : "hidden"}`} hover:bg-gray-100 
-        focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600`}
+        className={`${courseInsideStyle ? `${!showSidebar ? "flexible:block" : "flexible:hidden"}` : `${!showSidebar ? "xl:block" : "xl:hidden"}`} absolute z-10 items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg top-8 
+         hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600`}
       >
         <span className="sr-only">Open sidebar</span>
         <svg
@@ -191,7 +191,7 @@ export const Sidebar = (props) => {
             aria-controls="default-sidebar"
 
             onClick={handleClick}
-            className={` z-10 items-center flex   mt-4 mb-16 py-5 px-3 text-sm text-gray-500 rounded-lg top-8 ${courseInsideStyle ? `flexible:${!showSidebar ? "block" : "hidden"}` : `xl:${!showSidebar ? "block" : "hidden"}`} hover:bg-gray-100 
+            className={`z-10 items-center flex mt-4 mb-16 py-5 px-3 text-sm text-gray-500 rounded-lg top-8 ${courseInsideStyle ? `${!showSidebar ? "flexible:block" : "flexible:hidden"}` : `${!showSidebar ? "xl:block" : "xl:hidden"}`} hover:bg-gray-100 
         focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600`}
           >
             <span className="sr-only">Open sidebar</span>
