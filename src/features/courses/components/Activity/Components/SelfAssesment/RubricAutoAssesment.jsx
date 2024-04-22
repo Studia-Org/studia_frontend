@@ -11,9 +11,6 @@ export const RubricAutoAssesment = ({ activityData, setState, qualificationId, s
     const [grade, setGrade] = useState(1)
     const { user } = useAuthContext()
 
-    console.log(selfAssesmentData, subsectionID)
-
-
     const columns = [
         {
             title: '',

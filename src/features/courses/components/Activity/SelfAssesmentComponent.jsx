@@ -10,7 +10,6 @@ import { ProfessorAutoAssesment } from './Components/SelfAssesment/ProfessorAuto
 
 
 export const SelfAssesmentComponent = ({ activityData, idQualification, idSubsection }) => {
-    console.log(idSubsection)
     const navigate = useNavigate()
     const [selfAssesmentData, setSelfAssesmentData] = useState(activityData.SelfAssesmentAnswers?.data || [])
     const [qualificationId, setQualificationId] = useState(idQualification)
@@ -31,7 +30,7 @@ export const SelfAssesmentComponent = ({ activityData, idQualification, idSubsec
 
     function setStateNumber(RubricAnswers, QuestionnaireAnswers) {
         if (RubricAnswers && QuestionnaireAnswers?.length > 0) { return 2 }
-        else if (QuestionnaireAnswers.length > 0) { return 1 }
+        else if (QuestionnaireAnswers?.length > 0) { return 1 }
         else { return 0 }
     }
 
