@@ -31,7 +31,7 @@ const dataSourceMap = (category, createCourseSectionsList, subsection) => {
             })
         })
     } catch (error) {
-        console.log(error)
+        console.error(error)
     }
 
     return resultArray;
@@ -81,7 +81,7 @@ const EditableCell = ({
                 ...values,
             });
         } catch (errInfo) {
-            console.log('Save failed:', errInfo);
+            console.error('Save failed:', errInfo);
         }
     };
     let childNode = children;

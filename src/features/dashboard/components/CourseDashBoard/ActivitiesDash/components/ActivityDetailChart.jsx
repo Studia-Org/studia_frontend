@@ -8,7 +8,6 @@ export const ActivityDetailChart = ({ data }) => {
     const categories = dataEntries.map(([name]) => name);
     const chartData = dataEntries.map(([name, qualification]) => parseFloat(qualification));
 
-    console.log(categories, chartData)
 
     const series = [{
         name: 'Grade',

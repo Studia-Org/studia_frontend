@@ -20,7 +20,6 @@ export const Confirmation = () => {
 
 export async function uploadQualificationsPerGroup({ dataTable, activity, user, fullActivity }) {
     try {
-
         for (const { group } of dataTable) {
             const grade = group.qualification
 
@@ -47,7 +46,7 @@ export async function uploadQualificationsPerGroup({ dataTable, activity, user, 
                     body: JSON.stringify({
                         data: {
                             comments: group.Comments,
-                            qualification: qualification.toFixed(2),
+                            qualification: +qualification.toFixed(2),
                         }
                     }),
                 }).catch(error => {
@@ -68,7 +67,7 @@ export async function uploadQualificationsPerGroup({ dataTable, activity, user, 
                             group: group.id,
                             comments: group.Comments,
                             evaluator: user.id,
-                            qualification: qualification.toFixed(2),
+                            qualification: +qualification.toFixed(2),
                             file: null,
                             delivered: true
                         }

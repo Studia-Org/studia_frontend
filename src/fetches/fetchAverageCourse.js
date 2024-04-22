@@ -1,8 +1,15 @@
 import { API } from "../constant";
+import { getToken } from "../helpers";
 
 export async function fetchAverageCourse({ courseId, user }) {
     try {
-        const response = await fetch(`${API}/courses/${courseId}?populate=sections.subsections.activity.qualifications`);
+        const response = await fetch(`${API}/courses/${courseId}?populate=sections.subsections.activity.qualifications`,
+            {
+                headers: {
+                    Authorization: `Bearer ${getToken()}`
+                }
+
+            });
         const data = await response.json();
         const sectionData = data.data.attributes.sections.data;
 
@@ -30,7 +37,6 @@ export async function fetchAverageCourse({ courseId, user }) {
 function processSectionData(sectionData) {
     const averagesMainActivity = [];
     const totalQualifications = {};
-
     sectionData.forEach((section) => {
         const subsections = section.attributes.subsections.data;
 

@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { API, BEARER } from "../../../constant";
 import { useAuthContext } from "../../../context/AuthContext";
 import { getToken } from "../../../helpers.js";
+import { SelfAssesmentComponent } from "../components/Activity/SelfAssesmentComponent.jsx";
 
 const Activity = () => {
   const { courseId, activityId } = useParams();
@@ -18,7 +19,11 @@ const Activity = () => {
       if (!user) return;
 
       const activityData = await fetch(
-        `${API}/activities/${activityId}?populate=*`
+        `${API}/activities/${activityId}?populate=qualifications,evaluators.profile_photo,section,task_to_review,subsection,selfAssesmentAnswer.user,BeingReviewedBy`, {
+        headers: {
+          Authorization: `${BEARER} ${getToken()}`
+        }
+      }
       );
       const activityDataa = await activityData.json();
       let filters;
@@ -50,10 +55,12 @@ const Activity = () => {
           `&populate[activity][populate][evaluators][fields][0]=*` +
           `&populate[activity][populate][file][fields][0]=*` +
           `&populate[activity][populate][task_to_review][populate][peer_review_qualifications][fields][0]=*` +
+          `&populate[activity][populate][subsection][fields][0]=*` +
           `&filters[activity][id]=${activityId}` +
           `&populate[user][populate][PeerReviewAnswers][populate][qualifications][populate][user][fields][0]=username` +
           `&populate[evaluator][populate][profile_photo][fields][0]=url` +
           `&populate[PeerReviewAnswers][populate][user][populate][qualifications][populate][Answers][fields][0]=*` +
+          `&populate[SelfAssesmentAnswers][populate][user][populate][qualifications][fields][0]=*` +
           `&populate[peer_review_qualifications][populate][file][fields][0]=*` +
           `&populate[peer_review_qualifications][populate][user][fields][0]=username` +
           `&populate[peer_review_qualifications][populate][user][populate][profile_photo][fields][0]=url` +
@@ -68,15 +75,15 @@ const Activity = () => {
       const data = await response.json();
       if (data.data.length > 0) {
         setUserQualification({
-          activity:
-            data.data[0].attributes,
-          idQualification: data.data[0]["id"]
+          activity: data.data[0].attributes,
+          idQualification: data.data[0]["id"],
+          idSubsection: data.data[0].attributes.activity.data.attributes.subsection.data.id
         });
       } else {
         const qualificationData = {
-          activity: {
-            data: activityDataa.data
-          }
+          activity: { data: activityDataa.data },
+          idQualification: null,
+          idSubsection: activityDataa.data.attributes.subsection.data.id
         }
         setUserQualification({ activity: qualificationData })
       }
@@ -92,6 +99,8 @@ const Activity = () => {
     switch (type) {
       case "peerReview":
         return <PeerReviewComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} />;
+      case "selfAssessment":
+        return <SelfAssesmentComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} idSubsection={userQualification.idSubsection || userQualification.activity.idSubsection} />;
       default:
         return <ActivityComponent activityData={userQualification.activity} idQualification={userQualification.idQualification}
           setUserQualification={setUserQualification} userQualification={userQualification} />;

@@ -32,16 +32,16 @@ export const ProfessorData = ({ professor, evaluatorFlag, whisper }) => {
                     <button onClick={() => {
                         navigate(link)
                         if (whisper) whisper.current.close()
-                    }} className='text-base ml-auto font-medium text-indigo-700'>View profile</button>
+                    }} className='ml-auto text-base font-medium text-indigo-700'>View profile</button>
                     <FiChevronRight className='text-indigo-700' />
                 </div>
 
-                <div className='flex my-4 items-center space-x-3'>
+                <div className='flex items-center my-4 space-x-3'>
                     {
                         professor.attributes.profile_photo.url ?
-                            <img className='w-[3rem] rounded' src={professor.attributes.profile_photo.url} alt="" />
+                            <img className='w-[3rem] rounded' src={professor.attributes?.profile_photo?.url} alt="" />
                             :
-                            <img className='w-[3rem] rounded' src={professor.attributes.profile_photo.data.attributes.url} alt="" />
+                            <img className='w-[3rem] rounded' src={professor.attributes?.profile_photo?.data?.attributes?.url} alt="" />
                     }
                     <p className='text-base font-medium'>{professor.attributes.name}</p>
                 </div>

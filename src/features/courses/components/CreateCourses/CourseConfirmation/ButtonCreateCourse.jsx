@@ -12,7 +12,6 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
     const [isLoading, setIsLoading] = useState(false);
     const [progress, setProgress] = useState(0);
 
-    console.log('createCourseSectionsList', createCourseSectionsList)
     const navigate = useNavigate();
 
     const isValidCourseBasicInfo = (courseBasicInfo) => {
@@ -60,9 +59,8 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
             let allSections = []
             let forumIds = []
             const totalIterations = createCourseSectionsList.reduce((acc, section) => acc + section.subsections.length, 0)
-            const createdActivities = {
-
-            }
+            const createdActivities = {}
+            console.log('here', createCourseSectionsList)
             for (const section of createCourseSectionsList) {
                 let allSubsections = []
                 for (const subsection of section.subsections) {

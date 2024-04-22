@@ -4,7 +4,6 @@ export const fetchUserResponsesQuestionnaires = async (idQuestionnaire) => {
     try {
         const response = await fetch(`${API}/user-response-questionnaires?populate=questionnaire,user.profile_photo,user.qualifications.activity.subsection.questionnaire`);
         const data = await response.json();
-        console.log('fetchUserResponsesQuestionnaires', data.data);
         const questionnaireResponses = data.data.filter((response) => response.attributes.questionnaire?.data?.id === idQuestionnaire);
         questionnaireResponses.forEach((response) => {
             response.attributes.user?.data.attributes.qualifications?.data.forEach((qualification) => {

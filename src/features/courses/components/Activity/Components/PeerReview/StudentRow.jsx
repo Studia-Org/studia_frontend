@@ -110,7 +110,7 @@ export const StudentRow = ({ student, activityToReviewID, activityTitle, peerRev
         return (
             <>
                 <Button onClick={() => handleRubricModalOpen(recievedQualification)} className='flex items-center h-full overflow-x-clip' >
-                    <img alt='' className="w-6 h-6 rounded-full" src={recievedQualification.attributes.user?.data?.attributes.profile_photo.data.attributes.url} />
+                    <img alt='' className="w-6 h-6 rounded-full" src={recievedQualification.attributes.user?.data?.attributes.profile_photo?.data?.attributes?.url} />
                     <div className="pl-3 text-left">
                         <p className="text-sm font-semibold">{recievedQualification.attributes.user?.data?.attributes.name}</p>
                         <p className="text-xs font-normal text-gray-500">{recievedQualification.attributes.user?.data?.attributes.email}</p>

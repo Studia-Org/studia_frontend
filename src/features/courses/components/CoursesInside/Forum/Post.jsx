@@ -37,7 +37,7 @@ export const Post = ({ post, setAllForums, forumId }) => {
         return (
             <div className='text-sm'>
                 <div className='flex items-center space-x-2'>
-                    <img className='w-8 rounded-full' src={response.attributes.autor.data.attributes.profile_photo.data.attributes.url} alt="" />
+                    <img className='w-8 rounded-full' src={response.attributes.autor.data.attributes?.profile_photo?.data?.attributes?.url} alt="" />
                     <p className='font-medium'>{response.attributes.autor.data.attributes.name}</p>
                     <p className='text-gray-400'> <span className='text-black'>·</span> {timeAgo}</p>
                 </div>
@@ -118,7 +118,7 @@ export const Post = ({ post, setAllForums, forumId }) => {
         post.attributes.forum_answers.data.forEach((answer) => {
             const answerAuthor = answer.attributes.autor.data.attributes;
             const answerUser = {
-                avatar: answerAuthor.profile_photo.data.attributes.url,
+                avatar: answerAuthor.profile_photo?.data?.attributes?.url,
                 name: answerAuthor.name,
             };
             if (!usersSet.some(user => user.name === answerUser.name)) {
@@ -135,7 +135,7 @@ export const Post = ({ post, setAllForums, forumId }) => {
                     <AccordionItem>
                         <p className='text-2xl font-semibold ml-7'>{post.attributes.title}</p>
                         <div className='flex ml-12 mt-7 '>
-                            <img className='w-12 rounded-lg' src={post.attributes.autor.data.attributes.profile_photo.data.attributes.url} alt="" />
+                            <img className='w-12 rounded-lg' src={post.attributes.autor.data.attributes?.profile_photo?.data?.attributes?.url} alt="" />
                             <div className='flex flex-col ml-3 text-sm'>
                                 <div className='flex gap-x-2'>
                                     <p className='text-gray-800'>{post.attributes.autor.data.attributes.name}</p>

@@ -145,7 +145,6 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
         }
     };
 
-    console.log('task', categoriesInside);
 
     function createTaskButton() {
         try {

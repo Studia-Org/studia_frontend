@@ -82,7 +82,7 @@ const Qualifications = () => {
                             title: course.title,
                             professor: course.professor.name,
                             professor_email: course.professor.email,
-                            professor_photo: course.professor.profile_photo.url,
+                            professor_photo: course.professor?.profile_photo?.url,
                             cover: course.cover.url,
                             last_update: format(dateObj, "yyyy-MM-dd HH:mm:ss"),
                             activities: filteredQualifications

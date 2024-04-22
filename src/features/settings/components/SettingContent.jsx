@@ -81,7 +81,7 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
             setSelectedOption('help')
 
         } catch (error) {
-            console.log(error.error);
+            console.error(error.error);
             Toast.fire({
                 icon: 'error',
                 text: error.error.message,
@@ -94,17 +94,17 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
         <div>
             {selectedOption === 'password' && (
                 <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
-                    <main className="py-14 text-base">
+                    <main className="text-base py-14">
                         <div className="px-4 text-gray-600 md:px-8 ">
                             <SettingsBreadcrumb index={'Change password'} />
                             <div className='mt-16 '>
-                                <div className='text-base font-normal flex flex-col space-y-8'>
+                                <div className='flex flex-col space-y-8 text-base font-normal'>
                                     <div>
-                                        <label className="text-gray-600 font-medium">
+                                        <label className="font-medium text-gray-600">
                                             Old Password
                                         </label>
                                         <div className="relative max-w-xs mt-2">
-                                            <button className="text-gray-400 absolute right-3 inset-y-0 my-auto active:text-gray-600"
+                                            <button className="absolute inset-y-0 my-auto text-gray-400 right-3 active:text-gray-600"
                                                 onClick={() => setOldPasswordHidden(!isOldPasswordHidden)}
                                             >
                                                 {
@@ -125,17 +125,17 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
                                                 type={isOldPasswordHidden ? "password" : "text"}
                                                 placeholder="Enter your old password"
                                                 onChange={(e) => setCurrentPassword(e.target.value)}
-                                                className="w-full pr-12 pl-3 py-2 text-gray-500  outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
+                                                className="w-full py-2 pl-3 pr-12 text-gray-500 border rounded-lg shadow-sm outline-none focus:border-indigo-600"
                                             />
                                         </div>
                                     </div>
                                     <div>
 
-                                        <label className="text-gray-600 font-medium">
+                                        <label className="font-medium text-gray-600">
                                             New password
                                         </label>
                                         <div className="relative max-w-xs mt-2">
-                                            <button className="text-gray-400 absolute right-3 inset-y-0 my-auto active:text-gray-600"
+                                            <button className="absolute inset-y-0 my-auto text-gray-400 right-3 active:text-gray-600"
                                                 onClick={() => setNewPasswordHidden(!isNewPasswordHidden)}
                                             >
                                                 {
@@ -156,16 +156,16 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
                                                 type={isNewPasswordHidden ? "password" : "text"}
                                                 placeholder="Enter your new password"
                                                 onChange={(e) => setNewPassword(e.target.value)}
-                                                className="w-full pr-12 pl-3 py-2 text-gray-500  outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
+                                                className="w-full py-2 pl-3 pr-12 text-gray-500 border rounded-lg shadow-sm outline-none focus:border-indigo-600"
                                             />
                                         </div>
                                     </div>
                                     <div>
-                                        <label className="text-gray-600 font-medium">
+                                        <label className="font-medium text-gray-600">
                                             Rewrite your new password
                                         </label>
                                         <div className="relative max-w-xs mt-2">
-                                            <button className="text-gray-400 absolute right-3 inset-y-0 my-auto active:text-gray-600"
+                                            <button className="absolute inset-y-0 my-auto text-gray-400 right-3 active:text-gray-600"
                                                 onClick={() => setNewRePasswordHidden(!isNewRePasswordHidden)}
                                             >
                                                 {
@@ -186,7 +186,7 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
                                                 type={isNewRePasswordHidden ? "password" : "text"}
                                                 placeholder="Rewrite your password"
                                                 onChange={(e) => setNewPasswordRepeat(e.target.value)}
-                                                className="w-full pr-12 pl-3 py-2 text-gray-500  outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
+                                                className="w-full py-2 pl-3 pr-12 text-gray-500 border rounded-lg shadow-sm outline-none focus:border-indigo-600"
                                             />
                                         </div>
                                     </div>
@@ -203,7 +203,7 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
             )}
             {selectedOption === 'language' && (
                 <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
-                    <main className="py-14 text-base">
+                    <main className="text-base py-14">
                         <div className="max-w-screen-xl px-4 text-gray-600 md:px-8">
                             <SettingsBreadcrumb index={'Language'} />
                             <NotImplemented />
@@ -214,7 +214,7 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
 
             {selectedOption === 'notification' && (
                 <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
-                    <main className="py-14 text-base">
+                    <main className="text-base py-14">
                         <div className="max-w-screen-xl px-4 text-gray-600 md:px-8">
                             <SettingsBreadcrumb index={'Notification preferences'} />
                             <NotImplemented />
@@ -225,27 +225,27 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
 
             {selectedOption === 'help' && (
                 <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
-                    <main className="py-14 text-base">
-                        <div className=" px-4 text-gray-600 md:px-8">
-                            <div className="max-w-lg gap-24  lg:flex lg:max-w-none flex-wrap ">
+                    <main className="text-base py-14">
+                        <div className="px-4 text-gray-600  md:px-8">
+                            <div className="flex-wrap max-w-lg gap-24 lg:flex lg:max-w-none ">
                                 <div className="max-w-lg space-y-3">
-                                    <h3 className="text-indigo-600 font-semibold">
+                                    <h3 className="font-semibold text-indigo-600">
                                         <SettingsBreadcrumb index={'Help'} />
                                     </h3>
                                     <div>
 
                                     </div>
-                                    <p className="text-gray-800 py-10 text-3xl sm:text-4xl font-bold">
+                                    <p className="py-10 text-3xl font-bold text-gray-800 sm:text-4xl">
                                         Let us know how we can help
                                     </p>
                                     <p className='font-medium'>
                                         We’re here to help and answer any question you might have, We look forward to hearing from you! Please fill out the form, or use the contact information below.
                                     </p>
                                     <div>
-                                        <ul className="mt-6 flex flex-wrap gap-x-10 gap-y-6 items-center">
+                                        <ul className="flex flex-wrap items-center mt-6 gap-x-10 gap-y-6">
                                             {
                                                 contactMethods.map((item, idx) => (
-                                                    <li key={idx} className="flex items-center gap-x-3 mt-6">
+                                                    <li key={idx} className="flex items-center mt-6 gap-x-3">
                                                         <div className="flex-none text-gray-400 ">
                                                             {item.icon}
                                                         </div>
@@ -271,7 +271,7 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
                                                 type="text"
                                                 required
                                                 name='name'
-                                                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
+                                                className="w-full px-3 py-2 mt-2 text-gray-500 bg-transparent border rounded-lg shadow-sm outline-none focus:border-indigo-600"
                                             />
                                         </div>
                                         <div>
@@ -282,17 +282,17 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
                                                 type="email"
                                                 required
                                                 name='email'
-                                                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
+                                                className="w-full px-3 py-2 mt-2 text-gray-500 bg-transparent border rounded-lg shadow-sm outline-none focus:border-indigo-600"
                                             />
                                         </div>
                                         <div>
                                             <label className="font-medium">
                                                 Message
                                             </label>
-                                            <textarea required name='message' className="w-full mt-2 h-36 px-3 py-2 resize-none appearance-none bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"></textarea>
+                                            <textarea required name='message' className="w-full px-3 py-2 mt-2 bg-transparent border rounded-lg shadow-sm outline-none appearance-none resize-none h-36 focus:border-indigo-600"></textarea>
                                         </div>
                                         <button
-                                            className="w-full px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150"
+                                            className="w-full px-4 py-2 font-medium text-white duration-150 bg-indigo-600 rounded-lg hover:bg-indigo-500 active:bg-indigo-600"
                                         >
                                             Submit
                                         </button>

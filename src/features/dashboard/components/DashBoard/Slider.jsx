@@ -27,7 +27,7 @@ export default class DemoComponent extends Component {
                         <div className='flex flex-col w-3/4'>
                             <p className='font-semibold '>{course.title}</p>
                             <div className='flex items-center mt-3 ml-auto '>
-                                <img src={course?.professor.attributes.profile_photo?.data.attributes.url} alt="" className='w-6 h-6 rounded-full' />
+                                <img src={course?.professor.attributes.profile_photo?.data?.attributes?.url} alt="" className='w-6 h-6 rounded-full' />
                                 <p className='ml-2 text-sm '>{course?.professor.attributes.name}</p>
                             </div>
                         </div>
