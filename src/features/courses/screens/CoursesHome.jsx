@@ -1,5 +1,5 @@
 import { useEffect, useState, React } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import 'react-loading-skeleton/dist/skeleton.css'
 import '../styles/utils.css'
@@ -103,7 +103,7 @@ const CoursesHome = () => {
 
   const fetchDailyTasks = async () => {
     try {
-      const response = await fetch(`${API}/users/${user.id}?populate=courses.sections.subsections,courses.cover`);
+      const response = await fetch(`${API}/users/${user.id}?populate=courses.sections.subsections.activity,courses.cover`);
       const data = await response.json();
 
       let newDailyTasks = [];
@@ -114,7 +114,7 @@ const CoursesHome = () => {
             const fechaActual = new Date();
             if (fechaActual >= new Date(subsection.start_date) && fechaActual <= new Date(subsection.end_date)) {
               if (!newDailyTasks.some((task) => task.id === subsection.id)) {
-                newDailyTasks.push({ subsection, cover: course.cover.url });
+                newDailyTasks.push({ subsection, cover: course.cover.url, courseId: course.id });
               }
             }
           });
@@ -154,6 +154,11 @@ const CoursesHome = () => {
     const twoDaysBeforeEndDate = new Date(endDate);
     twoDaysBeforeEndDate.setDate(endDate.getDate() - 2);
     const isDateDangerous = twoDaysBeforeEndDate <= today;
+    const courseId = subsection.courseId;
+    const activityId = subsection.subsection.activity.id;
+    const isQuestionnaire = subsection.subsection.activity.type === 'questionnaire';
+    const href = isQuestionnaire ? `/app/courses/${courseId}` :
+      `/app/courses/${courseId}/activity/${activityId}`;
 
     if (subsection.subsection.fase === 'Performance') {
       colorStyle = { backgroundColor: '#eab308' }
@@ -164,9 +169,9 @@ const CoursesHome = () => {
     }
 
     return (
-      <div className='relative rounded-2xl border flex p-3  w-full min-h-[5rem]'>
-        <div className='flex w-full xl:max-w-[calc(100%-6rem)]'>
-          <p className='text-base font-semibold '>{subsection.subsection.title}</p>
+      <Link to={href} className='relative rounded-2xl border flex p-3 group w-full min-h-[5rem]'>
+        <div className='flex w-full items-center lg:max-w-[calc(100%-6rem)]'>
+          <p className='text-base font-semibold group-hover:underline'>{subsection.subsection.title}</p>
           {
             isDateDangerous === true ?
               <div className='flex items-center mr-3'>
@@ -178,8 +183,8 @@ const CoursesHome = () => {
               </div> : null
           }
         </div>
-        <img className='absolute top-0 right-0 hidden object-cover w-24 h-full rounded-r-lg xl:block opacity-90' src={subsection.cover} alt="" />
-      </div>
+        <img className='absolute top-0 right-0 hidden object-cover w-24 h-full rounded-r-lg lg:block opacity-90' src={subsection.cover} alt="" />
+      </Link>
     )
   }
   function renderConfeti() {
