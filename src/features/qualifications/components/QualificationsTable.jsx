@@ -170,7 +170,6 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                             editedGrades={editedGrades}
                             activities={activities}
                             setEditedGrades={setEditedGrades}
-                            activities={activities}
                             isPeerReview={filteredActivity.attributes.BeingReviewedBy.data !== null}
                             activityFull={filteredActivity}
                             setEditActivity={setSetEditActivity}
@@ -235,7 +234,10 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                     placeholder="Select an activity"
                                     optionFilterProp="children"
                                     value={selectedActivity}
-                                    onChange={(value) => { setSelectedActivity(value) }}
+                                    onChange={(value) => {
+                                        setSelectedActivity(value);
+                                        setFilteredActivity(activities.find(activity => activity.id === JSON.parse(value).id))
+                                    }}
                                     filterOption={filterOption}
                                     options={activityOptions}
                                 />
