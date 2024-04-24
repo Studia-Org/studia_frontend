@@ -1,13 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { ACTIVITY_CATEGORIES } from '../../../constant';
 import { BsFillArrowLeftSquareFill } from 'react-icons/bs'
-import { Button, message } from 'antd';
-import { API } from "../../../constant";
+import { Button } from 'antd';
 import { motion } from 'framer-motion';
-import { useAuthContext } from '../../../context/AuthContext';
 
 export const UserObjectives = ({ setPageSelector, description, onChange, registerAccount, profilePhoto, setProfilePhoto, loading, goals, setGoals, user_objectives, setUserObjectives }) => {
-    const { user } = useAuthContext()
 
     function addObjectives(e) {
         e.preventDefault();
@@ -43,7 +40,6 @@ export const UserObjectives = ({ setPageSelector, description, onChange, registe
                                 <div className="z-10 flex items-center justify-center w-10 pl-1 text-center pointer-events-none"><i class="mdi mdi-comment-text text-gray-400 text-lg"></i></div>
                                 <textarea
                                     type="email"
-
                                     className="w-full py-2 pl-10 pr-3 -ml-10 border-2 border-gray-200 rounded-lg outline-none resize-none focus:border-indigo-500"
                                     placeholder=""
                                     rows={3}

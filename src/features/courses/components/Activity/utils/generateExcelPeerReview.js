@@ -219,7 +219,7 @@ const getStudentQualificationsPeerInGroups = (students, peerReviewAnswers, activ
 
     const groupsQualifications = groups.map((group) => {
         const studentQualificationsGiven = peerReviewAnswers.filter((answer) =>
-            answer.attributes.group?.data.id === group.id).map((answer) => {
+            answer.attributes.group?.data?.id === group?.id).map((answer) => {
                 return {
                     name: answer.attributes.qualifications.data[0].attributes.group.data.attributes.users.data.map((user) => user.attributes.name),
                     answer: answer.attributes.Answers
@@ -227,10 +227,10 @@ const getStudentQualificationsPeerInGroups = (students, peerReviewAnswers, activ
             });
         const studentQualificationsReceived = peerReviewAnswers.filter((answer) =>
             answer.attributes.qualifications?.data.some((qualification) =>
-                qualification.attributes.group.data.id === group.id)).map((answer) => {
+                qualification.attributes.group.data?.id === group.id)).map((answer) => {
                     return {
-                        name: answer.attributes.group.data.attributes.users.data.map((user) => user.attributes.name),
-                        answer: answer.attributes.Answers
+                        name: answer?.attributes.group.data?.attributes.users.data.map((user) => user?.attributes.name),
+                        answer: answer?.attributes.Answers
                     }
                 })
         return {
