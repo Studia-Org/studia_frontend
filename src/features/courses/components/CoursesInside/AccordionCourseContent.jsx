@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import { Collapse, Button, message, Badge, Popover, Empty } from 'antd';
+import { Collapse, Button, message, Badge, Empty } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 import '../../styles/utils.css'
 import { AccordionButton, Accordion, AccordionItem, AccordionPanel } from '@chakra-ui/accordion';
@@ -10,11 +10,12 @@ import { getToken } from '../../../../helpers';
 import { API } from '../../../../constant';
 import { useParams } from 'react-router-dom';
 import { getIcon } from './helpers';
+import { Popover, Whisper } from 'rsuite';
 
 
 
 
-export const AccordionCourseContent = ({ whisper, styles, courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag,
+export const AccordionCourseContent = ({ setVisible, whisper, styles, courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag,
   setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setCourseContentInformation, setEditSectionFlag, setSectionToEdit, courseSubsection, courseSection }) => {
   const [sectionNumber, setSectionNumber] = useState(1);
   const [newSection, setNewSection] = useState('');
@@ -41,22 +42,30 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
     setCourseSection(tituloSeccion);
     setForumFlag(false);
     setSettingsFlag(false);
-    if (whisper) whisper.current.close()
+    if (setVisible) setVisible(false)
   }
 
   function selectFaseSectionContent(str) {
     if (str === "forethought") {
       return (
-        <Badge color='#15803d' count='Forethought' />
+        <>
+          <Badge color='#15803d' count='Forethought' />
 
+        </>
       );
     } else if (str === "performance") {
       return (
-        <Badge color='#faad14' count='Performance' />
+        <>
+          <Badge color='#faad14' count='Performance' />
+
+        </>
       );
     } else if (str === "self-reflection") {
       return (
-        <Badge color='#dc2626' count='Self-reflection' />
+        <>
+          <Badge color='#dc2626' count='Self-reflection' />
+
+        </>
       );
     }
   }
@@ -99,8 +108,6 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
         )
     }
   }
-
-
 
   function RenderCourseInsideSectionContent(
     subsection,
@@ -249,8 +256,8 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
               <div className='flex items-center ml-2'>
                 {
                   user?.role_str === 'student' &&
-                  <div className='flex items-center w-20 h-20 text-sm'>
-                    <CircularProgressbar className='text-sm font-medium' value={percentageFinished} text={`${percentageFinished}%`} styles={buildStyles({
+                  <div className='flex items-center w-16 h-16 text-sm xl:w-20 xl:h-20'>
+                    <CircularProgressbar className='text-sm font-medium ' value={percentageFinished} text={`${percentageFinished}%`} styles={buildStyles({
                       textSize: '22px',
                       pathColor: '#6366f1',
                       textColor: 'black',
@@ -276,7 +283,7 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
               }
               <div className='flex flex-col w-full text-left ml-9'>
                 <p className='mb-1 text-sm'>Section {sectionNumber}</p>
-                <h2 className='w-3/4 text-lg font-medium text-left line-clamp-2'>
+                <h2 className='w-3/4 text-base font-medium text-left xl:text-lg line-clamp-2'>
                   {section.attributes.title}
                 </h2>
               </div>
@@ -306,10 +313,10 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
   }
 
   return (
-    <div className={` w-full max-w-[calc(100vw-4rem)] sm:w-auto z-20  lg:mr-0 ${styles === undefined ? "mt-3 ml-8" : styles}`}>
-      <div className={` bg-white rounded-lg p-5 sm:w-[30rem] w-full shadow-md sm:visible ${styles === undefined ? "mt-4 sm:mr-9 sm:right-0" : styles}`}>
-        <p className="text-xl font-semibold">Course content</p>
-        <hr className="h-px my-8 bg-gray-400 border-0"></hr>
+    <div className={` w-full lg:max-w-[calc(100vw-4rem)] sm:w-auto z-20  lg:mr-0`}>
+      <div className={` bg-white rounded-lg xl:p-5 xl:w-[30rem] w-full shadow-md sm:visible `}>
+        <p className="hidden text-xl font-semibold xl:block">Course content</p>
+        <hr className="hidden h-px my-8 bg-gray-400 border-0 xl:block"></hr>
         {courseContentInformation.map((section, index) => (
           <RenderCourseContent
             key={index}

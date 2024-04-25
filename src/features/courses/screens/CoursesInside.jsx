@@ -2,7 +2,7 @@ import { useEffect, useState, React, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { API, BEARER } from "../../../constant";
 import { getToken } from "../../../helpers";
-import { Tabs, Popconfirm, Badge } from "antd";
+import { Tabs, Popconfirm, Badge, Layout } from "antd";
 import { SwitchEdit } from "../components/CoursesInside/SwitchEdit";
 import { FiChevronRight } from "react-icons/fi";
 import { ProfessorData } from "../components/CoursesInside/ProfessorData";
@@ -14,7 +14,7 @@ import { QuestionnaireComponent } from '../components/CoursesInside/Questionnair
 import { CourseParticipants, CourseContent, CourseFiles } from "../components/CoursesInside/TabComponents";
 import { useAuthContext } from "../../../context/AuthContext";
 import { EditSection } from "../components/CoursesInside/EditSection";
-import FloatingButtonNavigation from "../components/CoursesInside/FloatingButtonNavigation";
+import FloatingButtonNavigation, { SideBar } from "../components/CoursesInside/FloatingButtonNavigation";
 import { MoonLoader } from "react-spinners";
 import { set } from "lodash";
 import { CourseHasNotStarted } from "../components/CoursesInside/CourseHasNotStarted";
@@ -274,11 +274,6 @@ const CourseInside = () => {
       key: '2',
       label: 'Files',
       children: <CourseFiles courseContentInformation={courseContentInformation} courseSection={courseSection} courseSubsection={courseSubsection} enableEdit={enableEdit} setCourseContentInformation={setCourseContentInformation} />,
-    },
-    {
-      key: '3',
-      label: 'Participants',
-      children: <CourseParticipants students={students} enableEdit={enableEdit} setSettingsFlag={setSettingsFlag} />,
     }
   ].filter(item => {
     if (item.label === 'Participants') {
@@ -298,6 +293,30 @@ const CourseInside = () => {
 
       ) :
         <div className="container-fluid min-h-screen w-screen max-w-full rounded-tl-3xl bg-[#e7eaf886] flex flex-wrap flex-col-reverse md:flex-row  ">
+          <SideBar
+            {...{
+              whisper,
+              courseContentInformation,
+              setCourseSubsection,
+              setCourseSection,
+              setForumFlag,
+              setQuestionnaireFlag,
+              setSettingsFlag,
+              setCourseSubsectionQuestionnaire,
+              subsectionsCompleted,
+              setCourseContentInformation,
+              setEditSectionFlag,
+              setSectionToEdit,
+              courseSubsection,
+              courseSection,
+              professor,
+              allPosts,
+              students,
+              enableEdit,
+
+            }}
+
+          />
           <div id="flex_wrap" className="flex-1 max-w-full min-w-0 sm:w-auto mt-3 md:ml-8 md:mr-8 p-5 md:p-0 md:basis-[600px]">
             {editSectionFlag && sectionToEdit !== null ? (
               <EditSection setEditSectionFlag={setEditSectionFlag} sectionToEdit={sectionToEdit} setCourseContentInformation={setCourseContentInformation}
@@ -444,7 +463,7 @@ const CourseInside = () => {
           {
             editSectionFlag && sectionToEdit !== null && (user?.role_str !== 'professor' || user?.role_str !== 'admin') ? null :
               (
-                <div>
+                <>
                   {(user?.role_str === 'professor' || user?.role_str === 'admin' || courseBasicInformation?.studentManaged === true) ?
                     <button onClick={() => setSettingsFlag(true)} className="bg-white ml-8 p-3 rounded-md shadow-md flex items-center mt-8 w-[30rem]">
                       <div className="flex items-center gap-2">
@@ -459,61 +478,40 @@ const CourseInside = () => {
                       </div>
                     </button> : null
                   }
-                  {allForums[0]?.attributes &&
-                    <FloatingButtonNavigation
-                      {...{
-                        whisper,
-                        courseContentInformation,
-                        setCourseSubsection,
-                        setCourseSection,
-                        setForumFlag,
-                        setQuestionnaireFlag,
-                        setSettingsFlag,
-                        setCourseSubsectionQuestionnaire,
-                        subsectionsCompleted,
-                        setCourseContentInformation,
-                        setEditSectionFlag,
-                        setSectionToEdit,
-                        courseSubsection,
-                        courseSection,
-                        professor,
-                        allForums
-                      }}
-                    />
-                  }
-                  <section className="hidden xl:block">
-                    <AccordionCourseContent
-                      {...{
-                        courseContentInformation,
-                        setCourseSubsection,
-                        setCourseSection,
-                        setForumFlag,
-                        setQuestionnaireFlag,
-                        setSettingsFlag,
-                        setCourseSubsectionQuestionnaire,
-                        subsectionsCompleted,
-                        setCourseContentInformation,
-                        setEditSectionFlag,
-                        setSectionToEdit,
-                        courseSubsection,
-                        courseSection,
-                      }}
-                    />
-                  </section>
-                  {
-                    !courseBasicInformation?.studentManaged === true && (
-                      <div className="hidden xl:block ">
-                        {allPosts &&
-                          <ForumClickable posts={allPosts} setForumFlag={setForumFlag} />
-                        }
-                        {professor.attributes &&
-                          <section className="ml-8">
-                            <ProfessorData professor={professor} evaluatorFlag={false} />
-                          </section>}
-                      </div>
-                    )
-                  }
-                </div>
+                  <aside className="flex flex-col mb-5 mr-6 mt-7 gap-y-5">
+                    {
+                      !courseBasicInformation?.studentManaged === true && (
+                        <section className="hidden xl:block ">
+                          {allPosts &&
+                            <ForumClickable posts={allPosts} setForumFlag={setForumFlag} />
+                          }
+                        </section>
+                      )
+                    }
+                    <section className="hidden xl:block">
+                      <AccordionCourseContent
+                        {...{
+                          courseContentInformation,
+                          setCourseSubsection,
+                          setCourseSection,
+                          setForumFlag,
+                          setQuestionnaireFlag,
+                          setSettingsFlag,
+                          setCourseSubsectionQuestionnaire,
+                          subsectionsCompleted,
+                          setCourseContentInformation,
+                          setEditSectionFlag,
+                          setSectionToEdit,
+                          courseSubsection,
+                          courseSection,
+                        }}
+                      />
+                    </section>
+                    <section className="hidden xl:block xl:w-30">
+                      <CourseParticipants students={students} enableEdit={enableEdit} setSettingsFlag={setSettingsFlag} />
+                    </section>
+                  </aside>
+                </>
               )
           }
         </div>
