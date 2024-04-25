@@ -14,7 +14,7 @@ export const Notifications = () => {
     const navigate = useNavigate();
 
     const content = (
-        <div className='w-[25rem] h-[25rem] overflow-y-auto overflow-x-hidden px-3'>
+        <div className='w-[25rem] h-[25rem] max-w-[90vw] overflow-y-auto overflow-x-hidden px-3'>
             <hr className='mb-3' />
             {
                 notifications?.length > 0 ?
@@ -90,7 +90,7 @@ export const Notifications = () => {
 
     const contentTitle = (
         <>
-            <div className='flex items-center justify-between'>
+            <div className='flex items-center justify-between max-w-[90vw]'>
                 <h1 className='text-base font-medium'>Notifications</h1>
                 <Button className='flex items-center justify-center' shape="circle" onClick={() => { document.getElementById("notification-button").click(); navigate('/app/settings') }}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
@@ -105,7 +105,7 @@ export const Notifications = () => {
 
 
     return (
-        <Popover content={content} className='' title={contentTitle} trigger="click">
+        <Popover content={content} className='max-w-[100vw]' title={contentTitle} trigger="click">
             <Button id='notification-button' shape="circle" onClick={readAllNotifications}>
                 {user && <Badge count={notifications?.filter((noti) => noti.readJSON[user.id] === false)?.length} className=''>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
