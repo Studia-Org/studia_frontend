@@ -3,32 +3,30 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import 'react-loading-skeleton/dist/skeleton.css'
 import '../styles/utils.css'
-import { getToken } from '../../../helpers';
 import { useAuthContext } from "../../../context/AuthContext";
 import { CoursesCardHome } from '../components/CoursesHome/CoursesCardHome';
-import { Badge, Divider, Empty, Tag } from 'antd';
-import Swal from 'sweetalert2'
+import { Divider, Empty, Tag, Popover } from 'antd';
 import { MoonLoader } from "react-spinners";
 import { API } from "../../../constant";
 import Confetti from 'react-confetti'
-import { Whisper, Button, Popover } from 'rsuite';
 import { SpeedDialCreateCourse } from '../components/CoursesHome/SpeedDialCreateCourse';
 import { ModalCreateCourseStudent } from '../components/CoursesHome/AddCourseStudent/ModalCreateCourseStudent';
+import { ModalCompleteObjectives } from '../components/CoursesHome/ModalCompleteObjectives';
 
 const CoursesHome = () => {
   const { user } = useAuthContext();
   const [confettiActive, setConfettiActive] = useState(false);
-  const [open, setOpen] = useState(false);
   const [objectives, setObjectives] = useState([]);
   const [confettiExplode, setConfettiExplode] = useState(false);
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [dailyTasks, setDailyTasks] = useState([]);
   const [expandCreateCourseStudent, setExpandCreateCourseStudent] = useState(false);
+  const [openModalCompleteObjectives, setOpenModalCompleteObjectives] = useState(false);
   const [openObjectivesModal, setOpenObjectivesModal] = useState(false);
+  const [objectiveSelected, setObjectiveSelected] = useState();
 
   document.title = 'Home - Uptitude'
-  const navigate = useNavigate();
 
   const variants = {
     hidden: { opacity: 0, y: 20 },
@@ -142,7 +140,7 @@ const CoursesHome = () => {
   const speaker = (props) => {
     return (
       <Popover>
-        <p>This task is about to end soon on {new Date(props).toDateString()} </p>
+
       </Popover>
     )
   }
@@ -170,20 +168,28 @@ const CoursesHome = () => {
 
     return (
       <Link to={href} className='relative rounded-2xl border flex p-3 group w-full min-h-[5rem]'>
+
         <div className='flex w-full items-center lg:max-w-[calc(100%-6rem)]'>
-          <p className='text-base font-semibold group-hover:underline'>{subsection.subsection.title}</p>
+
+          <p className='text-base font-semibold group-hover:underline '>{subsection.subsection.title}</p>
           {
             isDateDangerous === true ?
               <div className='flex items-center mr-3'>
-                <Whisper placement="top" className='text-sm shadow-md' trigger="hover" controlId="control-id-hover" speaker={speaker(subsection.subsection.end_date)}>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 ml-2 text-red-500">
-                    <path fillRule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z" clipRule="evenodd" />
+                <Popover
+                  content={(<p>This task is about to <strong>end soon  on {new Date(subsection.subsection.end_date).toDateString()} </strong></p>)}
+                  title="Warning!"
+                  trigger="hover">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 ml-2 text-red-500">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a.75.75 0 0 0 0 1.5h.253a.25.25 0 0 1 .244.304l-.459 2.066A1.75 1.75 0 0 0 10.747 15H11a.75.75 0 0 0 0-1.5h-.253a.25.25 0 0 1-.244-.304l.459-2.066A1.75 1.75 0 0 0 9.253 9H9Z" clipRule="evenodd" />
                   </svg>
-                </Whisper>
+                </Popover>
               </div> : null
           }
         </div>
-        <img className='absolute top-0 right-0 hidden object-cover w-24 h-full rounded-r-lg lg:block opacity-90' src={subsection.cover} alt="" />
+
+
+
+        <img className='absolute top-0 right-0 object-cover w-24 h-full rounded-r-lg opacity-90' src={subsection.cover} alt="" />
       </Link>
     )
   }
@@ -203,59 +209,6 @@ const CoursesHome = () => {
     );
   }
 
-  const handleObjectiveCompleted = async (props) => {
-    const textSwal = props.completed === true ? 'not completed' : 'completed';
-    Swal.fire({
-      title: 'Are you sure?',
-      text: `Do you want to set this objective as ${textSwal}?`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes'
-    }).then(async (result) => {
-
-      if (result.isConfirmed) {
-        const updateUserObjectives = await fetch(`${API}/user-objectives/${props.id}`, {
-          method: 'PUT',
-          headers: {
-            Authorization: `Bearer ${getToken()}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ data: { completed: !props.completed, id: props.id } }),
-        });
-        const data = await updateUserObjectives.json();
-        const updatedObjective = { ...props, completed: !props.completed };
-        setObjectives((prevObjectives) => {
-          return prevObjectives.map((obj) =>
-            obj.id === updatedObjective.id ? updatedObjective : obj
-          );
-        });
-
-        Swal.mixin({
-          toast: true,
-          position: 'top-end',
-          showConfirmButton: false,
-          timer: 3000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer)
-            toast.addEventListener('mouseleave', Swal.resumeTimer)
-            if (props.completed === false) {
-              setConfettiExplode(true);
-              setTimeout(() => {
-                setConfettiExplode(false);
-              }, 10000);
-            }
-          },
-
-        }).fire({
-          icon: 'success',
-          title: 'Status updated successfully'
-        })
-      }
-    })
-  }
 
   function renderObjectives(objective) {
     return (
@@ -264,11 +217,19 @@ const CoursesHome = () => {
         {
           objective.completed === true ?
             <div className='ml-auto'>
-              <Tag onClick={() => handleObjectiveCompleted(objective)} className='p-1 ml-auto cursor-pointer hover:scale-95' color="#008000">Completed</Tag>
+              <Tag onClick={() => {
+                setObjectiveSelected(objective)
+                setOpenModalCompleteObjectives(true)
+              }
+
+              } className='p-1 ml-auto cursor-pointer hover:scale-95' color="#008000">Completed</Tag>
             </div>
             :
             <div className='ml-auto'>
-              <Tag onClick={() => handleObjectiveCompleted(objective)} className='p-1 ml-auto cursor-pointer hover:scale-95' color="#f50 ">Not Completed</Tag>
+              <Tag onClick={() => {
+                setObjectiveSelected(objective)
+                setOpenModalCompleteObjectives(true)
+              }} className='p-1 ml-auto cursor-pointer hover:scale-95' color="#f50 ">Not Completed</Tag>
             </div>
         }
       </div>
@@ -373,6 +334,7 @@ const CoursesHome = () => {
               </>
           }
         </div>
+        <ModalCompleteObjectives isModalOpen={openModalCompleteObjectives} setIsModalOpen={setOpenModalCompleteObjectives} setObjectives={setObjectives} propsObjectives={objectiveSelected} setConfettiExplode={setConfettiExplode} />
         <ModalCreateCourseStudent expandCreateCourseStudent={expandCreateCourseStudent} setExpandCreateCourseStudent={setExpandCreateCourseStudent} setCourses={setCourses} />
       </div>
       {

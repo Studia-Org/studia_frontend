@@ -87,12 +87,14 @@ const Register = () => {
     })
   }
 
-
   const registerAccount = async () => {
     try {
       setLoading(true);
       if (!email || !password || !repassword || !username || !name || !university || !description) {
         throw new Error("Please fill in all fields");
+      }
+      if ((user_objectives && user_objectives.length === 0) || (goals && goals.length === 0)) {
+        throw new Error("Please select at least one objective and categorize it");
       }
       if (!profilePhoto) {
         throw new Error("Please upload a profile photo");

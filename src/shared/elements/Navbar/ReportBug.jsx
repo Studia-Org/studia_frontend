@@ -3,15 +3,15 @@ import { Button, Popover, message } from 'antd';
 import { UploadFiles } from '../../../features/courses/components/CreateCourses/CourseSections/UploadFiles';
 import { API } from '../../../constant';
 import { getToken } from '../../../helpers';
+import { useAuthContext } from '../../../context/AuthContext';
 
 export const ReportBug = () => {
     const githubToken = process.env.REACT_APP_GITHUB_SECRET
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const { user } = useAuthContext();
 
     const [formData, setFormData] = useState({
-        name: '',
-        email: '',
         screenshot: null,
         message: ''
     });
@@ -29,7 +29,7 @@ export const ReportBug = () => {
         let imageDataURL = null;
         setLoading(true);
         try {
-            if (formData.name === '' || formData.email === '' || formData.message === '') {
+            if (formData.message === '') {
                 message.error('Please fill all the fields.');
                 return;
             }
@@ -55,9 +55,9 @@ export const ReportBug = () => {
                     'Accept': 'application/vnd.github.v3+json',
                 },
                 body: JSON.stringify({
-                    title: `Bug report ${formData.name} \n`,
-                    body: `**Nombre:** ${formData.name} \n` +
-                        `**Email:** ${formData.email} \n` +
+                    title: `Bug report ${user.name} \n`,
+                    body: `**Nombre:** ${user.name} \n` +
+                        `**Email:** ${user.email} \n` +
                         `**Mensaje:** ${formData.message} \n` +
                         `![image-title](${imageDataURL})`
                     ,
@@ -93,42 +93,21 @@ export const ReportBug = () => {
             <div className="p-6 mb-8 border border-gray-300 sm:rounded-md">
                 <form>
                     <label className="block mb-6">
-                        <span className="text-gray-700">Your name</span>
-                        <input
-                            name="name"
-                            type="text"
-                            value={formData.name}
-                            onChange={handleInputChange}
-                            className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            placeholder="Joe Bloggs"
-                        />
-                    </label>
-                    <label className="block mb-6">
-                        <span className="text-gray-700">Email address</span>
-                        <input
-                            name="email"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            type="email"
-                            className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            placeholder="joe.bloggs@example.com"
-                        />
-                    </label>
-                    <label className="block mb-6">
-                        <span className="text-gray-700">Screenshot</span>
-                        <UploadFiles fileList={formData.screenshot ? [formData.screenshot] : []} setFileList={handleFileChange} listType={'picture'} maxCount={1} />
-                    </label>
-                    <label className="block mb-6">
                         <span className="text-gray-700">Bug description</span>
                         <textarea
                             name="message"
                             value={formData.message}
                             onChange={handleInputChange}
                             className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                            rows="3"
+                            rows="8"
                             placeholder="Please add as much details as possible."
                         ></textarea>
                     </label>
+                    <label className="block mb-6">
+                        <span className="text-gray-700">Screenshot <span className='text-xs text-gray-500'>(optional)</span></span>
+                        <UploadFiles fileList={formData.screenshot ? [formData.screenshot] : []} setFileList={handleFileChange} listType={'picture'} maxCount={1} />
+                    </label>
+
                     <div className="mb-6">
                         <Button
                             loading={loading}
@@ -145,7 +124,7 @@ export const ReportBug = () => {
 
     const contentTitle = (
         <div className="flex flex-col">
-            <h2 className="text-base font-medium">Report a bug</h2>
+            <h2 className="text-base font-medium">Report a problem</h2>
             <p className="my-2 text-sm font-normal text-gray-400">Use this form to report any bugs or issues you encounter on the app.</p>
         </div>
     );
