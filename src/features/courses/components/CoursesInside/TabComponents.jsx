@@ -375,7 +375,7 @@ export const CourseParticipants = ({ students, enableEdit, setSettingsFlag }) =>
         </div>;
     } else {
         return (
-            <div className="p-5 bg-white rounded-lg shadow-lg">
+            <div className="p-5 bg-white border-2 border-gray-500 border-solid rounded-lg shadow-lg xl:border-none">
                 <h3 className="text-lg font-semibold text-gray-800">Participants</h3>
                 <hr className="h-px my-4 bg-gray-400 border-0"></hr>
                 <div className="flex flex-col items-center mt-3  max-h-[700px] overflow-y-auto overflow-x-hidden">

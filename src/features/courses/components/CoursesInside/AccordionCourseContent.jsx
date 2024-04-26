@@ -246,7 +246,7 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, courseCont
     return (
       <Collapse
         expandIcon={({ isActive }) => <CaretRightOutlined className='absolute top-0 bottom-0 right-5 ' rotate={isActive ? 90 : 0} />}
-        className='mt-5 bg-gray-50'
+        className='border-2 border-gray-500 border-solid bg-gray-50 xl:border-none'
         expandIconPosition="right"
         defaultActiveKey={(courseSection === section.attributes.title) && sectionNumber.toString()}
       >
@@ -313,48 +313,46 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, courseCont
   }
 
   return (
-    <div className={` w-full lg:max-w-[calc(100vw-4rem)] sm:w-auto z-20  lg:mr-0`}>
-      <div className={` bg-white rounded-lg xl:p-5 xl:w-[30rem] w-full shadow-md sm:visible `}>
-        <p className="hidden text-xl font-semibold xl:block">Course content</p>
-        <hr className="hidden h-px my-8 bg-gray-400 border-0 xl:block"></hr>
-        {courseContentInformation.map((section, index) => (
-          <RenderCourseContent
-            key={index}
-            section={section}
-            sectionNumber={sectionNumber + index}
-          />
-        ))}
-        {
-          (user?.role_str === 'professor' || user?.role_str === 'admin') &&
-          <Accordion allowMultiple >
-            <AccordionItem>
-              <AccordionButton className='bg-indigo-500 py-2 w-[4rem] rounded-md mt-5 text-white gap-2 justify-center '>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
-                </svg>
-                Add a new section
-              </AccordionButton>
-              <AccordionPanel>
-                <div className='mt-4'>
-                  <form>
-                    <div className="mb-4 border border-gray-200 rounded-lg bg-gray-50 ">
-                      <div className="px-4 py-2 bg-white rounded-t-lg ">
-                        <input onChange={(e) => setNewSection(e.target.value)} id="comment" rows="4" value={newSection} className="w-full p-3 text-sm text-gray-900 duration-150 bg-white border rounded-md hover:border-blue-600 placeholder:text-gray-400 placeholder:font-light" placeholder="Section name" required></input>
-                      </div>
-                      <div className="flex items-center justify-between px-3 py-2 border-t ">
-                        <Button loading={addSectionLoading} onClick={() => addNewSection()} type="button" className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-indigo-500 rounded-lg focus:ring-4 focus:ring-blue-200  hover:bg-blue-800">
-                          Add section
-                        </Button>
-                      </div>
+    <div className={` bg-white rounded-lg xl:p-5 xl:w-[30rem] w-full shadow-md sm:visible lg:max-w-[calc(100vw-4rem)] sm:w-auto z-20  lg:mr-0 `}>
+      <p className="hidden text-xl font-semibold xl:block">Course content</p>
+      <hr className="hidden h-px my-8 bg-gray-400 border-0 xl:block"></hr>
+      {courseContentInformation.map((section, index) => (
+        <RenderCourseContent
+          key={index}
+          section={section}
+          sectionNumber={sectionNumber + index}
+        />
+      ))}
+      {
+        (user?.role_str === 'professor' || user?.role_str === 'admin') &&
+        <Accordion allowMultiple >
+          <AccordionItem>
+            <AccordionButton className='bg-indigo-500 py-2 w-[4rem] rounded-md mt-5 text-white gap-2 justify-center '>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
+              </svg>
+              Add a new section
+            </AccordionButton>
+            <AccordionPanel>
+              <div className='mt-4 '>
+                <form>
+                  <div className="mb-4 border border-gray-200 rounded-lg bg-gray-50 ">
+                    <div className="px-4 py-2 bg-white rounded-t-lg ">
+                      <input onChange={(e) => setNewSection(e.target.value)} id="comment" rows="4" value={newSection} className="w-full p-3 text-sm text-gray-900 duration-150 bg-white border rounded-md hover:border-blue-600 placeholder:text-gray-400 placeholder:font-light" placeholder="Section name" required></input>
                     </div>
-                  </form>
-                  <hr />
-                </div>
-              </AccordionPanel>
-            </AccordionItem>
-          </Accordion>
-        }
-      </div>
-    </div >
+                    <div className="flex items-center justify-between px-3 py-2 border-t ">
+                      <Button loading={addSectionLoading} onClick={() => addNewSection()} type="button" className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-indigo-500 rounded-lg focus:ring-4 focus:ring-blue-200  hover:bg-blue-800">
+                        Add section
+                      </Button>
+                    </div>
+                  </div>
+                </form>
+                <hr />
+              </div>
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
+      }
+    </div>
   );
 };
