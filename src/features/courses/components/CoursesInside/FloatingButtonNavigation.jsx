@@ -6,6 +6,7 @@ import { ProfessorData } from './ProfessorData';
 import { Button, Drawer } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
 import { CourseParticipants } from './TabComponents';
+import { ButtonSettings } from './EditSection/buttonEditCourse';
 
 function FloatingButtonNavigation({ whisper, allForums, professor, courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setCourseContentInformation, setEditSectionFlag, setSectionToEdit, courseSubsection, courseSection, posts }) {
     //TODO
@@ -57,7 +58,13 @@ function FloatingButtonNavigation({ whisper, allForums, professor, courseContent
     )
 }
 
-export const SideBar = ({ whisper, allPosts, students, enableEdit, courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setCourseContentInformation, setEditSectionFlag, setSectionToEdit, courseSubsection, courseSection, posts }) => {
+export const SideBar = ({
+    allPosts, students, enableEdit, courseContentInformation,
+    setCourseSubsection, setCourseSection, setForumFlag,
+    setQuestionnaireFlag, setSettingsFlag, setCourseSubsectionQuestionnaire,
+    subsectionsCompleted, setCourseContentInformation, setEditSectionFlag,
+    setSectionToEdit, courseSubsection, courseSection,
+    user, courseBasicInformation }) => {
     const [visible, setVisible] = useState(false);
     return (
         <nav className="absolute top-[calc(8rem+7px)] right-0 xl:hidden">
@@ -81,14 +88,16 @@ export const SideBar = ({ whisper, allPosts, students, enableEdit, courseContent
                 open={visible}
                 onClose={() => setVisible(false)}
             >
-                <aside className='flex flex-col mt-5'>
+                <aside className='flex flex-col mt-5 gap-y-3'>
+                    {(user?.role_str === 'professor' || user?.role_str === 'admin' || courseBasicInformation?.studentManaged === true) ?
+                        <ButtonSettings setSettingsFlag={setSettingsFlag} setVisible={setVisible} setForumFlag={setForumFlag} /> : null
+                    }
                     {allPosts &&
                         <ForumClickable posts={allPosts} setForumFlag={setForumFlag} setVisible={setVisible} />
                     }
                     <AccordionCourseContent
                         {...{
-                            whisper,
-                            styles: "shadow-none m-0 px-1",
+                            styles: "shadow-none px-1",
                             courseContentInformation,
                             setCourseSubsection,
                             setCourseSection,
