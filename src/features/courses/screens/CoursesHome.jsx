@@ -167,10 +167,8 @@ const CoursesHome = () => {
     }
 
     return (
-      <Link to={href} className='relative rounded-2xl border flex p-3 group w-full min-h-[5rem]'>
-
+      <Link to={href} className='relative rounded-lg border flex p-3 group w-full min-h-[5rem] hover:bg-gray-50'>
         <div className='flex w-full items-center lg:max-w-[calc(100%-6rem)]'>
-
           <p className='text-base font-semibold group-hover:underline '>{subsection.subsection.title}</p>
           {
             isDateDangerous === true ?

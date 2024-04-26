@@ -5,7 +5,7 @@ import { ForumClickable } from './Forum/ForumClickable';
 import { ProfessorData } from './ProfessorData';
 import { Button, Drawer } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
-import { CourseParticipants } from './TabComponents';
+import { CourseParticipantsClickable } from './TabComponents';
 
 function FloatingButtonNavigation({ whisper, allForums, professor, courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setCourseContentInformation, setEditSectionFlag, setSectionToEdit, courseSubsection, courseSection, posts }) {
     //TODO
@@ -105,7 +105,7 @@ export const SideBar = ({ whisper, allPosts, students, enableEdit, courseContent
                             setVisible
                         }}
                     />
-                    <CourseParticipants students={students} enableEdit={enableEdit} setSettingsFlag={setSettingsFlag} />
+                    <CourseParticipantsClickable students={students} enableEdit={enableEdit} setSettingsFlag={setSettingsFlag} />
 
                 </aside>
 

@@ -366,7 +366,7 @@ export const CourseFiles = ({ courseContentInformation, courseSection, courseSub
     )
 }
 
-export const CourseParticipants = ({ students, enableEdit, setSettingsFlag }) => {
+export const CourseParticipantsClickable = ({ students, enableEdit, setSettingsFlag, setParticipantsFlag }) => {
     const navigate = useNavigate()
 
     if (students.data.length === 0) {
@@ -377,6 +377,9 @@ export const CourseParticipants = ({ students, enableEdit, setSettingsFlag }) =>
         return (
             <div className="p-5 bg-white rounded-lg shadow-lg">
                 <h3 className="text-lg font-semibold text-gray-800">Participants</h3>
+                <button onClick={() => setParticipantsFlag(true)}>
+                    Hola
+                </button>
                 <hr className="h-px my-4 bg-gray-400 border-0"></hr>
                 <div className="flex flex-col items-center mt-3  max-h-[700px] overflow-y-auto overflow-x-hidden">
                     {students.data.map((student) => (
@@ -396,10 +399,9 @@ export const CourseParticipants = ({ students, enableEdit, setSettingsFlag }) =>
                                     <p className="text-gray-500 ">{student.attributes.email}</p>
                                 </div>
                             </button>
-
                         </>
-
                     ))}
+
                     {
                         enableEdit && (
                             <button onClick={() => setSettingsFlag(true)}

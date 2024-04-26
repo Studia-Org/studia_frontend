@@ -2,22 +2,22 @@ import { useEffect, useState, React, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { API, BEARER } from "../../../constant";
 import { getToken } from "../../../helpers";
-import { Tabs, Popconfirm, Badge, Layout } from "antd";
+import { Tabs, Popconfirm, Badge } from "antd";
 import { SwitchEdit } from "../components/CoursesInside/SwitchEdit";
 import { FiChevronRight } from "react-icons/fi";
-import { ProfessorData } from "../components/CoursesInside/ProfessorData";
 import { CourseSettings } from "../components/CoursesInside/Settings/CourseSettings";
 import { AccordionCourseContent } from "../components/CoursesInside/AccordionCourseContent";
 import { ForumClickable } from "../components/CoursesInside/Forum/ForumClickable";
 import { ForumComponent } from '../components/CoursesInside/Forum/ForumComponent'
 import { QuestionnaireComponent } from '../components/CoursesInside/QuestionnaireComponent';
-import { CourseParticipants, CourseContent, CourseFiles } from "../components/CoursesInside/TabComponents";
+import { CourseParticipantsClickable, CourseContent, CourseFiles } from "../components/CoursesInside/TabComponents";
 import { useAuthContext } from "../../../context/AuthContext";
 import { EditSection } from "../components/CoursesInside/EditSection";
-import FloatingButtonNavigation, { SideBar } from "../components/CoursesInside/FloatingButtonNavigation";
+import { SideBar } from "../components/CoursesInside/FloatingButtonNavigation";
 import { MoonLoader } from "react-spinners";
 import { set } from "lodash";
 import { CourseHasNotStarted } from "../components/CoursesInside/CourseHasNotStarted";
+import { Participants } from "../components/CoursesInside/Participants";
 
 const CourseInside = () => {
   const inputRefLandscape = useRef(null);
@@ -32,6 +32,7 @@ const CourseInside = () => {
   const [courseBasicInformation, setCourseBasicInformation] = useState([]);
   const [questionnaireFlag, setQuestionnaireFlag] = useState(false);
   const [settingsFlag, setSettingsFlag] = useState(false);
+  const [participantsFlag, setParticipantsFlag] = useState(false);
   const [questionnaireAnswers, setQuestionnaireAnswers] = useState([]);
   const [subsectionsCompleted, setSubsectionsCompleted] = useState([]);
   const [subsectionsLandscapePhoto, setSubsectionsLandscapePhoto] = useState(null);
@@ -41,6 +42,8 @@ const CourseInside = () => {
   const [courseContentInformation, setCourseContentInformation] = useState([]);
   const [students, setStudents] = useState([]);
   const [professor, setProfessor] = useState([]);
+
+  console.log(participantsFlag)
 
   let { courseId } = useParams();
   let { activityId } = useParams();
@@ -450,15 +453,18 @@ const CourseInside = () => {
                   </>
                 )}
               </div>
-            ) : (
-              <ForumComponent allForums={allForums} setAllForums={setAllForums}
-                courseData={
-                  {
-                    name: courseBasicInformation.title,
-                    students: courseBasicInformation.students.data.map((student) => student.id)
-                  }
-                } />
-            )}
+            ) :
+              participantsFlag ?
+                <Participants students={students} />
+                :
+                <ForumComponent allForums={allForums} setAllForums={setAllForums}
+                  courseData={
+                    {
+                      name: courseBasicInformation.title,
+                      students: courseBasicInformation.students.data.map((student) => student.id)
+                    }
+                  } />
+            }
           </div>
           {
             editSectionFlag && sectionToEdit !== null && (user?.role_str !== 'professor' || user?.role_str !== 'admin') ? null :
@@ -508,7 +514,7 @@ const CourseInside = () => {
                       />
                     </section>
                     <section className="hidden xl:block xl:w-30">
-                      <CourseParticipants students={students} enableEdit={enableEdit} setSettingsFlag={setSettingsFlag} />
+                      <CourseParticipantsClickable students={students} enableEdit={enableEdit} setSettingsFlag={setSettingsFlag} setParticipantsFlag={setParticipantsFlag} />
                     </section>
                   </aside>
                 </>
