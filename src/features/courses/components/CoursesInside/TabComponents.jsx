@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { TaskComponentCard } from "../CreateCourses/CourseConfirmation/TaskComponentCard";
 import ReactMarkdown from "react-markdown";
-import { Empty, Button, message } from "antd";
+import { Empty, Button, message, Divider } from "antd";
 import { useNavigate } from "react-router-dom";
 import MDEditor, { image } from "@uiw/react-md-editor";
 import '@mdxeditor/editor/style.css'
@@ -375,36 +375,43 @@ export const CourseParticipants = ({ students, enableEdit, setSettingsFlag }) =>
         </div>;
     } else {
         return (
-            <div className="flex flex-wrap items-center mt-3 ">
-                {students.data.map((student) => (
-                    <button
-                        key={student.id}
-                        className="bg-white rounded flex items-center space-x-3 shadow w-auto h-[4rem] pr-4 mr-4 mb-4 duration-150 hover:bg-gray-100"
-                        onClick={() => navigate(`/app/profile/${student.id}/`)}
-                    >
-                        <img
-                            src={student.attributes.profile_photo.data?.attributes?.url}
-                            alt=""
-                            className="rounded-l w-14 h-[4rem] object-cover"
-                        />
-                        <div className="flex flex-col items-start ">
-                            <p className="font-medium line-clamp-1">{student.attributes.name}</p>
-                            <p className="text-gray-500 ">{student.attributes.email}</p>
-                        </div>
+            <div className="p-5 bg-white rounded-lg shadow-lg">
+                <h3 className="text-lg font-semibold text-gray-800">Participants</h3>
+                <hr className="h-px my-4 bg-gray-400 border-0"></hr>
+                <div className="flex flex-col items-center mt-3  max-h-[700px] overflow-y-auto overflow-x-hidden">
+                    {students.data.map((student) => (
+                        <>
+                            <button
+                                key={student.id}
+                                className="bg-white rounded flex items-center space-x-3 shadow w-full h-[4rem] max-h-[700px] pr-4 mr-4 mb-4 duration-150 hover:bg-gray-100"
+                                onClick={() => navigate(`/app/profile/${student.id}/`)}
+                            >
+                                <img
+                                    src={student.attributes.profile_photo.data?.attributes?.url}
+                                    alt="profile_photo"
+                                    className="rounded-l w-14 h-[4rem] object-cover "
+                                />
+                                <div className="flex flex-col items-start ">
+                                    <p className="font-medium line-clamp-1">{student.attributes.name}</p>
+                                    <p className="text-gray-500 ">{student.attributes.email}</p>
+                                </div>
+                            </button>
 
-                    </button>
-                ))}
-                {
-                    enableEdit && (
-                        <button onClick={() => setSettingsFlag(true)}
-                            className="bg-indigo-500 rounded flex items-center shadow w-auto duration-150 px-2 h-[2.5rem] gap-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-white">
-                                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
-                            </svg>
-                            <p className="font-medium text-white">Add student</p>
-                        </button>
-                    )
-                }
+                        </>
+
+                    ))}
+                    {
+                        enableEdit && (
+                            <button onClick={() => setSettingsFlag(true)}
+                                className="bg-indigo-500 rounded flex items-center shadow w-auto duration-150 px-2 h-[2.5rem] gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-white">
+                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
+                                </svg>
+                                <p className="font-medium text-white">Add student</p>
+                            </button>
+                        )
+                    }
+                </div>
             </div>
         );
     }
