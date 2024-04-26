@@ -308,8 +308,8 @@ const CourseInside = () => {
               students,
               enableEdit,
               user,
-              courseBasicInformation
-
+              courseBasicInformation,
+              setParticipantsFlag
             }}
 
           />
@@ -317,7 +317,7 @@ const CourseInside = () => {
             {editSectionFlag && sectionToEdit !== null ? (
               <EditSection setEditSectionFlag={setEditSectionFlag} sectionToEdit={sectionToEdit} setCourseContentInformation={setCourseContentInformation}
                 setSectionToEdit={setSectionToEdit} setCourseSection={setCourseSection} setCourseSubsection={setCourseSubsection} courseContentInformation={courseContentInformation} />
-            ) : !forumFlag ? (
+            ) : (!forumFlag && !participantsFlag) ? (
               <div>
                 {
                   backgroundPhotoSubsection && !settingsFlag && (
@@ -470,7 +470,7 @@ const CourseInside = () => {
                     !courseBasicInformation?.studentManaged === true && (
                       <section >
                         {allPosts &&
-                          <ForumClickable posts={allPosts} setForumFlag={setForumFlag} />
+                          <ForumClickable posts={allPosts} setForumFlag={setForumFlag} setParticipantsFlag={setParticipantsFlag} />
                         }
                       </section>
                     )
@@ -491,11 +491,12 @@ const CourseInside = () => {
                         setSectionToEdit,
                         courseSubsection,
                         courseSection,
+                        setParticipantsFlag
                       }}
                     />
                   </section>
                   <section className="xl:w-30">
-                    <CourseParticipants students={students} enableEdit={enableEdit} setSettingsFlag={setSettingsFlag} />
+                    <CourseParticipantsClickable students={students} enableEdit={enableEdit} setSettingsFlag={setSettingsFlag} setParticipantsFlag={setParticipantsFlag} setForumFlag={setForumFlag} />
                   </section>
                 </aside>
               )

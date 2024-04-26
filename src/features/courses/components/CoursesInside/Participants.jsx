@@ -1,34 +1,25 @@
 import React from 'react'
 import { List, Avatar } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 export const Participants = ({ students }) => {
-    console.log(students)
-    const data = [
-        {
-            title: 'Ant Design Title 1',
-        },
-        {
-            title: 'Ant Design Title 2',
-        },
-        {
-            title: 'Ant Design Title 3',
-        },
-        {
-            title: 'Ant Design Title 4',
-        },
-    ];
+
+    const navigate = useNavigate()
 
     return (
-        <div>
+        <div className=''>
+            <h2 className='mt-5 text-xl font-bold'>Participants</h2>
             <List
+                className='p-5 mt-5 mb-10 bg-white border rounded-lg'
                 itemLayout="horizontal"
-                dataSource={data}
+                dataSource={students.data}
                 renderItem={(item, index) => (
-                    <List.Item>
+                    <List.Item className='cursor-pointer hover:bg-gray-50' onClick={() => navigate(`/app/profile/${item.id}/`)}>
                         <List.Item.Meta
-                            avatar={<Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`} />}
-                            title={<a href="https://ant.design">{item.title}</a>}
-                            description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                            avatar={<Avatar src={item.attributes.profile_photo.data?.attributes?.url} alt='profile_photo' size={'large'} />}
+                            title={item.attributes.name}
+                            className='pl-5'
+                            description={item.attributes.email}
                         />
                     </List.Item>
                 )}

@@ -1,7 +1,7 @@
 import React from "react";
 import { FiChevronRight, FiCornerDownLeft } from "react-icons/fi";
 
-export const ForumClickable = ({ posts, setForumFlag, setVisible }) => {
+export const ForumClickable = ({ posts, setForumFlag, setVisible, setParticipantsFlag }) => {
 
   function renderPostsLogic(posts) {
     if (posts.length === 1) {
@@ -56,14 +56,13 @@ export const ForumClickable = ({ posts, setForumFlag, setVisible }) => {
         <p className="text-lg font-medium">Forum</p>
         <div className="flex items-center ml-auto duration-150 hover:translate-x-1">
           <button
-            onClick={() => { setForumFlag(true); if (setVisible) setVisible(false) }}
+            onClick={() => { setForumFlag(true); setParticipantsFlag(false); if (setVisible) setVisible(false) }}
             className="ml-auto text-base font-medium text-indigo-700 "
           >
             View all posts
           </button>
           <FiChevronRight className="text-indigo-700" />
         </div>
-
       </div>
       <div className="mt-3 space-y-4">{renderPostsLogic(posts)}</div>
     </section>

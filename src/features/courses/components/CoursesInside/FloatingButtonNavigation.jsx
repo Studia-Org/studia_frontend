@@ -64,7 +64,7 @@ export const SideBar = ({
     setQuestionnaireFlag, setSettingsFlag, setCourseSubsectionQuestionnaire,
     subsectionsCompleted, setCourseContentInformation, setEditSectionFlag,
     setSectionToEdit, courseSubsection, courseSection,
-    user, courseBasicInformation }) => {
+    user, courseBasicInformation, setParticipantsFlag }) => {
     const [visible, setVisible] = useState(false);
     return (
         <nav className="absolute top-[calc(8rem+7px)] right-0 xl:hidden">
@@ -114,7 +114,13 @@ export const SideBar = ({
                             setVisible
                         }}
                     />
-                    <CourseParticipantsClickable students={students} enableEdit={enableEdit} setSettingsFlag={setSettingsFlag} />
+                    <CourseParticipantsClickable
+                        students={students}
+                        enableEdit={enableEdit}
+                        setSettingsFlag={setSettingsFlag}
+                        setParticipantsFlag={setParticipantsFlag}
+                        setVisible={setVisible}
+                    />
 
                 </aside>
 

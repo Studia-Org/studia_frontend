@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { TaskComponentCard } from "../CreateCourses/CourseConfirmation/TaskComponentCard";
 import ReactMarkdown from "react-markdown";
-import { Empty, Button, message, Divider } from "antd";
+import { Empty, Button, message, Divider, Tooltip } from "antd";
+import { AvatarGroup, Avatar } from 'rsuite';
 import { useNavigate } from "react-router-dom";
 import MDEditor, { image } from "@uiw/react-md-editor";
 import '@mdxeditor/editor/style.css'
 import { API } from "../../../../constant";
 import { getToken } from "../../../../helpers";
+import { FiChevronRight, FiCornerDownLeft } from "react-icons/fi";
 import { MoonLoader } from "react-spinners";
 import { sub } from "date-fns";
 
@@ -366,8 +368,9 @@ export const CourseFiles = ({ courseContentInformation, courseSection, courseSub
     )
 }
 
-export const CourseParticipantsClickable = ({ students, enableEdit, setSettingsFlag, setParticipantsFlag }) => {
-    const navigate = useNavigate()
+
+export const CourseParticipantsClickable = ({ students, enableEdit, setSettingsFlag, setParticipantsFlag, setVisible, setForumFlag }) => {
+    console.log(students)
 
     if (students.data.length === 0) {
         return <div className="p-5 bg-white rounded-md shadow-md">
@@ -376,31 +379,43 @@ export const CourseParticipantsClickable = ({ students, enableEdit, setSettingsF
     } else {
         return (
             <div className="p-5 bg-white border-2 border-gray-500 border-solid rounded-lg shadow-lg xl:border-none">
-                <h3 className="text-lg font-semibold text-gray-800">Participants</h3>
-                <button onClick={() => setParticipantsFlag(true)}>
-                    Hola
-                </button>
-                <hr className="h-px my-4 bg-gray-400 border-0"></hr>
+                <div className="flex items-center">
+                    <h3 className="text-lg font-medium ">Participants</h3>
+                    <div className="flex items-center ml-auto duration-150 hover:translate-x-1">
+                        <button
+                            onClick={() => { setParticipantsFlag(true); setForumFlag(false); if (setVisible) setVisible(false) }}
+                            className="ml-auto text-base font-medium text-indigo-700 "
+                        >
+                            View all participants
+                        </button>
+                        <FiChevronRight className="text-indigo-700" />
+                    </div>
+                </div>
+
+
                 <div className="flex flex-col items-center mt-3  max-h-[700px] overflow-y-auto overflow-x-hidden">
-                    {students.data.map((student) => (
-                        <>
-                            <button
-                                key={student.id}
-                                className="bg-white rounded flex items-center space-x-3 shadow w-full h-[4rem] max-h-[700px] pr-4 mr-4 mb-4 duration-150 hover:bg-gray-100"
-                                onClick={() => navigate(`/app/profile/${student.id}/`)}
-                            >
-                                <img
-                                    src={student.attributes.profile_photo.data?.attributes?.url}
-                                    alt="profile_photo"
-                                    className="rounded-l w-14 h-[4rem] object-cover "
-                                />
-                                <div className="flex flex-col items-start ">
-                                    <p className="font-medium line-clamp-1">{student.attributes.name}</p>
-                                    <p className="text-gray-500 ">{student.attributes.email}</p>
-                                </div>
-                            </button>
-                        </>
-                    ))}
+                    <AvatarGroup stack>
+                        {students.data
+                            .filter((user, i) => i < 10)
+                            .map(user => {
+                                return (
+                                    <Avatar
+                                        circle
+                                        key={user.id}
+                                        src={user.attributes ?
+                                            user.attributes.profile_photo?.data?.attributes?.url :
+                                            user?.profile_photo?.url}
+                                        alt={user.attributes ? user.attributes.username : user.username}
+                                        className="w-full h-full"
+                                        style={{ width: '3rem', height: '3rem' }} />
+                                )
+                            })}
+                        {students.data.length > 10 && (
+                            <Avatar circle style={{ background: '#3730a3', width: '3rem', height: '3rem', fontSize: '1rem', fontWeight: '400' }}>
+                                +{students.data.length - 10}
+                            </Avatar>
+                        )}
+                    </AvatarGroup>
 
                     {
                         enableEdit && (

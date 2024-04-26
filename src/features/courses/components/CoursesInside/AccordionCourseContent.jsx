@@ -16,7 +16,7 @@ import { Popover, Whisper } from 'rsuite';
 
 
 export const AccordionCourseContent = ({ setVisible, whisper, styles, courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag,
-  setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setCourseContentInformation, setEditSectionFlag, setSectionToEdit, courseSubsection, courseSection }) => {
+  setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setCourseContentInformation, setEditSectionFlag, setSectionToEdit, courseSubsection, courseSection, setParticipantsFlag }) => {
   const [sectionNumber, setSectionNumber] = useState(1);
   const [newSection, setNewSection] = useState('');
   const [addSectionLoading, setAddSectionLoading] = useState(false);
@@ -41,6 +41,7 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, courseCont
     setCourseSubsection(subsection);
     setCourseSection(tituloSeccion);
     setForumFlag(false);
+    setParticipantsFlag(false);
     setSettingsFlag(false);
     if (setVisible) setVisible(false)
   }
