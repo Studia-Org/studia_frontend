@@ -51,7 +51,7 @@ export const ForumClickable = ({ posts, setForumFlag, setVisible }) => {
     );
   }
   return (
-    <section className={`px-5 py-5 bg-white rounded-lg shadow-md ${setVisible ? "" : "sm:w-[30rem]"} `}>
+    <section className={`px-5 py-5 bg-white rounded-lg shadow-md ${setVisible ? "border-gray-500 border-solid border-2" : "sm:w-[30rem]"} `}>
       <div className="flex items-center">
         <p className="text-lg font-medium">Forum</p>
         <div className="flex items-center ml-auto duration-150 hover:translate-x-1">

@@ -375,7 +375,7 @@ export const CourseParticipantsClickable = ({ students, enableEdit, setSettingsF
         </div>;
     } else {
         return (
-            <div className="p-5 bg-white rounded-lg shadow-lg">
+            <div className="p-5 bg-white border-2 border-gray-500 border-solid rounded-lg shadow-lg xl:border-none">
                 <h3 className="text-lg font-semibold text-gray-800">Participants</h3>
                 <button onClick={() => setParticipantsFlag(true)}>
                     Hola
