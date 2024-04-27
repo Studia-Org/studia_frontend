@@ -170,7 +170,6 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                             editedGrades={editedGrades}
                             activities={activities}
                             setEditedGrades={setEditedGrades}
-                            activities={activities}
                             isPeerReview={filteredActivity.attributes.BeingReviewedBy.data !== null}
                             activityFull={filteredActivity}
                             setEditActivity={setSetEditActivity}

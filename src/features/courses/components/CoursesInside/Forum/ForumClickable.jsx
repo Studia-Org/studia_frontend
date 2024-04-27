@@ -1,7 +1,7 @@
 import React from "react";
 import { FiChevronRight, FiCornerDownLeft } from "react-icons/fi";
 
-export const ForumClickable = ({ posts, setForumFlag, setVisible, setParticipantsFlag }) => {
+export const ForumClickable = ({ posts, setForumFlag, setVisible, setParticipantsFlag, setSettingsFlag }) => {
 
   function renderPostsLogic(posts) {
     if (posts.length === 1) {
@@ -51,12 +51,12 @@ export const ForumClickable = ({ posts, setForumFlag, setVisible, setParticipant
     );
   }
   return (
-    <section className={`px-5 py-5 bg-white rounded-lg shadow-md ${setVisible ? "border-gray-500 border-solid border-2" : "sm:w-[30rem]"} `}>
+    <section className={`px-5 py-5 bg-white rounded-lg shadow-none xl:shadow-md xl:border-none ${setVisible ? "border border-[#DADADA]" : "sm:w-[30rem]"} `}>
       <div className="flex items-center">
         <p className="text-lg font-medium">Forum</p>
         <div className="flex items-center ml-auto duration-150 hover:translate-x-1">
           <button
-            onClick={() => { setForumFlag(true); setParticipantsFlag(false); if (setVisible) setVisible(false) }}
+            onClick={() => { setForumFlag(true); setParticipantsFlag(false); setSettingsFlag(false); if (setVisible) setVisible(false) }}
             className="ml-auto text-base font-medium text-indigo-700 "
           >
             View all posts

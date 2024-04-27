@@ -198,13 +198,7 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
     return (
         <div className="flex-1 mb-10">
             <div className="max-w-3xl px-4 pt-5 ml-2 sm:px-6 lg:px-8">
-                <button className='flex items-center pb-5 text-sm ' onClick={() => setSettingsFlag(false)}>
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
-                        <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
-                    </svg>
-                    <p className='ml-1'>Go back to course</p>
-                </button>
-                <h1 className="text-3xl font-bold tracking-tight text-blue-gray-900">Edit Course</h1>
+                <h1 className="text-xl font-bold tracking-tight text-blue-gray-900">Edit Course</h1>
                 <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
                     <div className="flex items-center mt-8 sm:col-span-6">
                         <div>

@@ -258,6 +258,7 @@ const CourseInside = () => {
     }
   }
 
+  console.log(participantsFlag, forumFlag, settingsFlag)
 
   const items = [
     {
@@ -317,10 +318,10 @@ const CourseInside = () => {
             {editSectionFlag && sectionToEdit !== null ? (
               <EditSection setEditSectionFlag={setEditSectionFlag} sectionToEdit={sectionToEdit} setCourseContentInformation={setCourseContentInformation}
                 setSectionToEdit={setSectionToEdit} setCourseSection={setCourseSection} setCourseSubsection={setCourseSubsection} courseContentInformation={courseContentInformation} />
-            ) : (!forumFlag && !participantsFlag) ? (
+            ) : (!forumFlag && !participantsFlag && !settingsFlag) ? (
               <div>
                 {
-                  backgroundPhotoSubsection && !settingsFlag && (
+                  backgroundPhotoSubsection && (
                     enableEdit ?
                       <div className="relative w-full mt-5 h-[30rem]">
                         <input type="file" ref={inputRefLandscape} accept="image/*" className="absolute  h-[30rem] w-full top-0 left-0 z-40 opacity-0 cursor-pointer" onChange={handleLandscapePhotoChange} />
@@ -391,72 +392,72 @@ const CourseInside = () => {
                   )
                 }
 
+                {
+                  questionnaireFlag && questionnaireAnswers !== undefined ? (
+                    (hasCourseStarted(courseBasicInformation.start_date) || user.role_str !== 'student') ? (
+                      <QuestionnaireComponent
+                        questionnaire={courseSubsectionQuestionnaire}
+                        answers={questionnaireAnswers}
+                        subsectionID={courseSubsection.id}
+                        enableEdit={enableEdit}
+                        setEnableEdit={setEnableEdit}
+                        courseSubsection={courseSubsection}
+                        setCourseSubsectionQuestionnaire={setCourseSubsectionQuestionnaire}
+                        professorID={professor.id}
+                      />
+                    ) :
+                      <CourseHasNotStarted startDate={courseBasicInformation.start_date} />
 
-
-                {settingsFlag && (user.role_str === 'professor' || user.role_str === 'admin' || courseBasicInformation?.studentManaged === true) ? (
-                  <CourseSettings setSettingsFlag={setSettingsFlag} courseData={courseBasicInformation} setCourseData={setCourseBasicInformation} />
-                ) : questionnaireFlag && questionnaireAnswers !== undefined ? (
-                  (hasCourseStarted(courseBasicInformation.start_date) || user.role_str !== 'student') ? (
-                    <QuestionnaireComponent
-                      questionnaire={courseSubsectionQuestionnaire}
-                      answers={questionnaireAnswers}
-                      subsectionID={courseSubsection.id}
-                      enableEdit={enableEdit}
-                      setEnableEdit={setEnableEdit}
-                      courseSubsection={courseSubsection}
-                      setCourseSubsectionQuestionnaire={setCourseSubsectionQuestionnaire}
-                      professorID={professor.id}
-                    />
-                  ) :
-                    <CourseHasNotStarted startDate={courseBasicInformation.start_date} />
-
-                ) : courseSection && courseContentInformation.length > 0 && (
-                  <>
-                    <div className="flex items-center w-full max-w-full md:my-5">
+                  ) : courseSection && courseContentInformation.length > 0 && (
+                    <>
+                      <div className="flex items-center w-full max-w-full md:my-5">
+                        {
+                          enableEdit ?
+                            <input
+                              type="text"
+                              name="first-name"
+                              value={titleSubsection}
+                              onChange={(e) => setTitleSubsection(e.target.value)}
+                              id="first-name"
+                              autoComplete="given-name"
+                              className="mt-1 rounded-md shadow-sm border-blue-gray-300 text-blue-gray-900 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                            />
+                            :
+                            <div className="flex items-center w-full max-w-full gap-x-5">
+                              <p className="text-2xl font-semibold max-w-[calc(100%-140px)]"> {courseSubsection?.attributes?.title}</p>
+                              <Badge color="#6366f1" count={new Date(courseSubsection?.attributes?.end_date).toDateString()} />
+                            </div>
+                        }
+                        {
+                          user?.role_str === 'professor' || user?.role_str === 'admin' ?
+                            <div className='flex items-center ml-auto'>
+                              <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} />
+                            </div> : null
+                        }
+                      </div>
                       {
-                        enableEdit ?
-                          <input
-                            type="text"
-                            name="first-name"
-                            value={titleSubsection}
-                            onChange={(e) => setTitleSubsection(e.target.value)}
-                            id="first-name"
-                            autoComplete="given-name"
-                            className="mt-1 rounded-md shadow-sm border-blue-gray-300 text-blue-gray-900 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                          />
+                        (hasCourseStarted(courseBasicInformation.start_date) || user.role_str !== 'student') ?
+                          <Tabs className='font-normal' tabBarStyle={{ borderBottom: '1px solid black' }} defaultActiveKey="1" items={items} />
                           :
-                          <div className="flex items-center w-full max-w-full gap-x-5">
-                            <p className="text-2xl font-semibold max-w-[calc(100%-140px)]"> {courseSubsection?.attributes?.title}</p>
-                            <Badge color="#6366f1" count={new Date(courseSubsection?.attributes?.end_date).toDateString()} />
-                          </div>
+                          <CourseHasNotStarted startDate={courseBasicInformation.start_date} />
                       }
-                      {
-                        user?.role_str === 'professor' || user?.role_str === 'admin' ?
-                          <div className='flex items-center ml-auto'>
-                            <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} />
-                          </div> : null
-                      }
-                    </div>
-                    {
-                      (hasCourseStarted(courseBasicInformation.start_date) || user.role_str !== 'student') ?
-                        <Tabs className='font-normal' tabBarStyle={{ borderBottom: '1px solid black' }} defaultActiveKey="1" items={items} />
-                        :
-                        <CourseHasNotStarted startDate={courseBasicInformation.start_date} />
-                    }
-                  </>
-                )}
+                    </>
+                  )}
               </div>
             ) :
               participantsFlag ?
                 <Participants students={students} />
                 :
-                <ForumComponent allForums={allForums} setAllForums={setAllForums}
-                  courseData={
-                    {
-                      name: courseBasicInformation.title,
-                      students: courseBasicInformation.students.data.map((student) => student.id)
-                    }
-                  } />
+                settingsFlag && (user.role_str === 'professor' || user.role_str === 'admin' || courseBasicInformation?.studentManaged === true) ?
+                  <CourseSettings setSettingsFlag={setSettingsFlag} courseData={courseBasicInformation} setCourseData={setCourseBasicInformation} />
+                  :
+                  <ForumComponent allForums={allForums} setAllForums={setAllForums}
+                    courseData={
+                      {
+                        name: courseBasicInformation.title,
+                        students: courseBasicInformation.students.data.map((student) => student.id)
+                      }
+                    } />
             }
           </div>
           {
@@ -464,13 +465,13 @@ const CourseInside = () => {
               (
                 <aside className="flex-col hidden mb-5 mr-6 mt-7 gap-y-5 xl:flex">
                   {(user?.role_str === 'professor' || user?.role_str === 'admin' || courseBasicInformation?.studentManaged === true) ?
-                    <ButtonSettings setSettingsFlag={setSettingsFlag} /> : null
+                    <ButtonSettings setSettingsFlag={setSettingsFlag} setForumFlag={setForumFlag} setParticipantsFlag={setParticipantsFlag} /> : null
                   }
                   {
                     !courseBasicInformation?.studentManaged === true && (
                       <section >
                         {allPosts &&
-                          <ForumClickable posts={allPosts} setForumFlag={setForumFlag} setParticipantsFlag={setParticipantsFlag} />
+                          <ForumClickable posts={allPosts} setForumFlag={setForumFlag} setParticipantsFlag={setParticipantsFlag} setSettingsFlag={setSettingsFlag} />
                         }
                       </section>
                     )

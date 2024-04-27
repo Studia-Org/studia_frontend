@@ -10,7 +10,7 @@ import { API } from "../../../../constant";
 import { getToken } from "../../../../helpers";
 import { FiChevronRight, FiCornerDownLeft } from "react-icons/fi";
 import { MoonLoader } from "react-spinners";
-import { sub } from "date-fns";
+import './participants.css'
 
 
 
@@ -370,7 +370,6 @@ export const CourseFiles = ({ courseContentInformation, courseSection, courseSub
 
 
 export const CourseParticipantsClickable = ({ students, enableEdit, setSettingsFlag, setParticipantsFlag, setVisible, setForumFlag }) => {
-    console.log(students)
 
     if (students.data.length === 0) {
         return <div className="p-5 bg-white rounded-md shadow-md">
@@ -378,12 +377,12 @@ export const CourseParticipantsClickable = ({ students, enableEdit, setSettingsF
         </div>;
     } else {
         return (
-            <div className="p-5 bg-white border-2 border-gray-500 border-solid rounded-lg shadow-lg xl:border-none">
+            <div className="p-5 mb-20 bg-white border border-[#DADADA] rounded-lg shadow-none xl:shadow-md xl:border-none">
                 <div className="flex items-center">
                     <h3 className="text-lg font-medium ">Participants</h3>
                     <div className="flex items-center ml-auto duration-150 hover:translate-x-1">
                         <button
-                            onClick={() => { setParticipantsFlag(true); setForumFlag(false); if (setVisible) setVisible(false) }}
+                            onClick={() => { setParticipantsFlag(true); setForumFlag(false); setSettingsFlag(false); if (setVisible) setVisible(false) }}
                             className="ml-auto text-base font-medium text-indigo-700 "
                         >
                             View all participants
@@ -393,21 +392,24 @@ export const CourseParticipantsClickable = ({ students, enableEdit, setSettingsF
                 </div>
 
 
-                <div className="flex flex-col items-center mt-3  max-h-[700px] overflow-y-auto overflow-x-hidden">
-                    <AvatarGroup stack>
+                <div className="flex flex-col justify-start mt-3">
+                    <AvatarGroup className="mt-4" stack>
                         {students.data
                             .filter((user, i) => i < 10)
                             .map(user => {
                                 return (
                                     <Avatar
                                         circle
+                                        size="lg"
                                         key={user.id}
                                         src={user.attributes ?
                                             user.attributes.profile_photo?.data?.attributes?.url :
                                             user?.profile_photo?.url}
                                         alt={user.attributes ? user.attributes.username : user.username}
+
+                                        style={{ width: '3rem', height: '3rem', fontSize: '1rem', fontWeight: '400', objectFit: 'cover' }}
                                         className="w-full h-full"
-                                        style={{ width: '3rem', height: '3rem' }} />
+                                    />
                                 )
                             })}
                         {students.data.length > 10 && (
@@ -419,13 +421,13 @@ export const CourseParticipantsClickable = ({ students, enableEdit, setSettingsF
 
                     {
                         enableEdit && (
-                            <button onClick={() => setSettingsFlag(true)}
-                                className="bg-indigo-500 rounded flex items-center shadow w-auto duration-150 px-2 h-[2.5rem] gap-2">
+                            <Button onClick={() => { setSettingsFlag(true); setParticipantsFlag(false); setSettingsFlag(false); if (setVisible) setVisible(false) }}
+                                className="bg-indigo-500 rounded flex items-center shadow w-auto duration-150 px-2 h-[2.5rem] gap-2 mt-5 hover:bg-blue-500">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-white">
                                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
                                 </svg>
-                                <p className="font-medium text-white">Add student</p>
-                            </button>
+                                <p className="text-base font-medium text-white">Add student</p>
+                            </Button>
                         )
                     }
                 </div>

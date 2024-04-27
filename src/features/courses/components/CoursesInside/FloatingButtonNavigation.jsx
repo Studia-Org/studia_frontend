@@ -4,11 +4,10 @@ import { AccordionCourseContent } from './AccordionCourseContent';
 import { ForumClickable } from './Forum/ForumClickable';
 import { ProfessorData } from './ProfessorData';
 import { Button, Drawer } from "antd";
-import { MenuOutlined } from "@ant-design/icons";
 import { CourseParticipantsClickable } from './TabComponents';
 import { ButtonSettings } from './EditSection/buttonEditCourse';
 
-function FloatingButtonNavigation({ whisper, allForums, professor, courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setCourseContentInformation, setEditSectionFlag, setSectionToEdit, courseSubsection, courseSection, posts }) {
+function FloatingButtonNavigation({ whisper, allForums, professor, courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setCourseContentInformation, setEditSectionFlag, setSectionToEdit, courseSubsection, courseSection, setParticipantsFlag, posts }) {
     //TODO
 
     return (
@@ -36,12 +35,13 @@ function FloatingButtonNavigation({ whisper, allForums, professor, courseContent
                                 setEditSectionFlag,
                                 setSectionToEdit,
                                 courseSubsection,
+                                setParticipantsFlag,
                                 courseSection,
                             }}
                         />
                         {allForums[0]?.attributes &&
                             <section className='ml-2'>
-                                <ForumClickable posts={allForums[0].attributes.posts.data} setForumFlag={setForumFlag} whisper={whisper} />
+                                <ForumClickable posts={allForums[0].attributes.posts.data} setForumFlag={setForumFlag} setSettingsFlag={setSettingsFlag} setParticipantsFlag={setParticipantsFlag} whisper={whisper} />
                             </section>
                         }
                         {professor.attributes && <section className='ml-10'> <ProfessorData professor={professor} evaluatorFlag={false} /></section>}
@@ -90,10 +90,10 @@ export const SideBar = ({
             >
                 <aside className='flex flex-col mt-5 gap-y-3'>
                     {(user?.role_str === 'professor' || user?.role_str === 'admin' || courseBasicInformation?.studentManaged === true) ?
-                        <ButtonSettings setSettingsFlag={setSettingsFlag} setVisible={setVisible} setForumFlag={setForumFlag} /> : null
+                        <ButtonSettings setSettingsFlag={setSettingsFlag} setVisible={setVisible} setForumFlag={setForumFlag} setParticipantsFlag={setParticipantsFlag} /> : null
                     }
                     {allPosts &&
-                        <ForumClickable posts={allPosts} setForumFlag={setForumFlag} setVisible={setVisible} />
+                        <ForumClickable posts={allPosts} setForumFlag={setForumFlag} setSettingsFlag={setSettingsFlag} setParticipantsFlag={setParticipantsFlag} setVisible={setVisible} />
                     }
                     <AccordionCourseContent
                         {...{
@@ -110,6 +110,7 @@ export const SideBar = ({
                             setEditSectionFlag,
                             setSectionToEdit,
                             courseSubsection,
+                            setParticipantsFlag,
                             courseSection,
                             setVisible
                         }}
@@ -118,6 +119,7 @@ export const SideBar = ({
                         students={students}
                         enableEdit={enableEdit}
                         setSettingsFlag={setSettingsFlag}
+                        setForumFlag={setForumFlag}
                         setParticipantsFlag={setParticipantsFlag}
                         setVisible={setVisible}
                     />
