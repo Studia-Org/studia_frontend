@@ -16,7 +16,7 @@ export const ACTIVITY_CATEGORIES = {
         color: "yellow",
         criteria: [
             "Ability for analysis, synthesis, global perspectives, and practical applications of knowledge",
-            "Ability to make decisions and adapt to new situationsg"
+            "Ability to make decisions and adapt to new situations"
         ],
     },
     "Teamwork": {

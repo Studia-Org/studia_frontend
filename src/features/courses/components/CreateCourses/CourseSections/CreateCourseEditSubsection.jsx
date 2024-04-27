@@ -12,6 +12,7 @@ import '../../../styles/antdButtonStyles.css'
 import { PonderationWarning } from './PonderationWarning';
 import { debounce } from 'lodash';
 import { set, sub } from 'date-fns';
+import { AutoAssesmentRubric } from './AutoAssesmentRubric';
 
 
 const { RangePicker } = DatePicker;
@@ -36,6 +37,7 @@ export const CreateCourseEditSubsection = ({
   const filteredSubsections = allSubsections.subsections.filter((sub) => sub.type.toLowerCase() === 'task')
   const [items, setItems] = useState([1, 2, 3]);
   const [name, setName] = useState('');
+  const [openSelfAssesmentRubricModal, setOpenSelfAssesmentRubricModal] = useState(false);
   const inputRef = useRef(null);
   const [isGroup, setIsGroup] = useState(subsection.activity?.groupActivity === undefined ? false : subsection.activity.groupActivity);
   const [numberOfStudentsperGroup, setNumberOfStudentsperGroup] =
@@ -405,6 +407,30 @@ export const CreateCourseEditSubsection = ({
 
               )
             }
+
+            {
+              subsection?.type === 'selfAssessment' && (
+                <div className='flex flex-col'>
+                  <AutoAssesmentRubric
+                    openSelfAssesmentRubricModal={openSelfAssesmentRubricModal}
+                    setOpenSelfAssesmentRubricModal={setOpenSelfAssesmentRubricModal}
+                    setCreateCourseSectionsList={setCreateCourseSectionsList}
+                    setSubsectionEditing={setSubsectionEditing}
+                    subsectionEditing={subsection}
+                  />
+                  <label className='mb-2 text-sm text-gray-500' htmlFor=''>
+                    Self-Assesment Rubric *
+                  </label>
+                  <Button className='py-5 pb-10 mb-5' onClick={() => {
+                    setOpenSelfAssesmentRubricModal(true);
+                    document.body.style.overflow = 'hidden';
+                  }}>
+                    Edit Self-Assesment Rubric
+                  </Button>
+                </div>
+              )
+            }
+
             <div className='flex flex-col mb-4'>
               <label className='text-sm text-gray-500' htmlFor=''>
                 Subsection content *

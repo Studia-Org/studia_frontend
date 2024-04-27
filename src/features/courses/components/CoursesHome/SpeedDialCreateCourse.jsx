@@ -19,10 +19,10 @@ export const SpeedDialCreateCourse = ({ setExpandCreateCourseStudent }) => {
     }
 
     return (
-        <div className='fixed right-[6.5rem] bottom-12'>
+        <div className='fixed  right-[6.5rem] bottom-12'>
             <div
                 id="speed-dial-menu-dropdown"
-                className={`bg-white shadow rounded-t-2xl rounded-bl-2xl transform scale-0 -translate-x-6 opacity-0 mb-5 h-3 w-[24rem]  duration-200 ${isExpanded ? 'scale-100 h-[10rem] w-[20rem] opacity-100' : ''}`}
+                className={`bg-white shadow rounded-t-2xl rounded-bl-2xl transform scale-0 w-1 -translate-x-6 opacity-0 mb-5 h-3 duration-200 ${isExpanded ? 'scale-100 h-[10rem] w-[24rem] opacity-100' : ''}`}
             >
                 <div className='flex flex-col p-4 space-y-4 text-base font-medium '>
                     <div className='flex items-center'>
@@ -54,7 +54,7 @@ export const SpeedDialCreateCourse = ({ setExpandCreateCourseStudent }) => {
                 type="button"
                 data-dial-toggle="speed-dial-menu-dropdown"
                 aria-controls="speed-dial-menu-dropdown"
-                className="flex items-center justify-center w-[3.2rem] h-[3.2rem] ml-auto text-white transition bg-[#3c3c3c] rounded-full shadow-xl hover:bg-[#4f4f4f] duration-100 hover-scale active-scale "
+                className="flex items-center justify-center ml-auto w-[3.2rem] h-[3.2rem]  text-white transition bg-[#3c3c3c] rounded-full shadow-xl hover:bg-[#4f4f4f] duration-100 hover-scale active-scale "
                 onClick={() => handleClick()}
             >
                 <FiPlus size={26} />

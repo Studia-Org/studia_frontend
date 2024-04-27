@@ -66,3 +66,16 @@ Happy recording and problem-solving!
     order: null,
     evaluable: false,
 };
+
+export const SelfAssessmentData = {
+    id: Math.random().toString(16).slice(2),
+    title: 'Self-Assessment',
+    description: 'Evaluate your own performance',
+    deadline: null,
+    ponderation: null,
+    categories: null,
+    type: 'selfAssessment',
+    files: null,
+    order: null,
+    evaluable: false,
+}

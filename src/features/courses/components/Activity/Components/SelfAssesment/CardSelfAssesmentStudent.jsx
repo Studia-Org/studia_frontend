@@ -1,0 +1,34 @@
+import React from 'react'
+import { Avatar } from 'antd';
+import { motion } from 'framer-motion';
+
+export const CardSelfAssesmentStudent = ({ user, setUserSelected }) => {
+
+    const handleOnClick = () => {
+        setUserSelected([user])
+    }
+
+    const formattedDate = new Date(user.attributes.updatedAt).toLocaleDateString();
+    return (
+        <motion.div
+            onClick={() => handleOnClick()}
+            className='p-5 bg-white rounded-md border border-l-8 border-[#35127775] hover:bg-gray-50 cursor-pointer flex items-center'
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            whileHover={{ scale: 1.01 }}
+        >
+            <div className='flex items-center gap-2'>
+                <Avatar shape="square" size="large" src={user.attributes.user.data.attributes.profile_photo?.data?.attributes?.url} />
+                <p className='text-sm font-medium text-gray-600'>{user.attributes.user.data.attributes.name}</p>
+            </div>
+            <p className='ml-auto text-sm text-gray-600'><strong>Completion date:</strong>  {formattedDate}</p>
+            {
+                user.attributes.qualification?.attributes?.qualification && (
+                    <div className='flex items-center justify-center h-full py-2 ml-auto bg-green-500 rounded-md w-9'>
+                        <p className='text-sm font-medium text-white'>{user.attributes.qualification?.attributes?.qualification}</p>
+                    </div>
+                )
+            }
+        </motion.div>
+    )
+}

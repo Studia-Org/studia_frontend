@@ -1,9 +1,9 @@
 import { API, BEARER } from "../constant";
 import { getToken } from "../helpers";
 
-export async function fetchUserInformationComplete() {
+export async function fetchAllUserObjectivesInfo() {
     try {
-        const response = await fetch(`${API}/users/me?populate=subsections_completed.activity,qualifications.activity`, {
+        const response = await fetch(`${API}/users/me?populate=subsections_completed.activity`, {
             headers: { Authorization: `${BEARER} ${getToken()}` },
         });
         const data = await response.json();

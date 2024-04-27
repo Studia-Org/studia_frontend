@@ -44,7 +44,7 @@ export async function fetchAllActivitiesObjectives({ courseId }) {
             section.attributes.subsections.data.forEach((subsection) => {
                 subsection?.attributes.activity?.data?.attributes.categories?.forEach((category) => {
                     dataUser.subsections_completed.forEach((subsection_completed) => {
-                        if (subsection_completed.activity.id === subsection.attributes.activity.data.id) {
+                        if (subsection_completed?.activity?.id === subsection?.attributes?.activity?.data?.id) {
                             userSubsectionsCompletedCourse.push(subsection_completed)
                         }
                     })

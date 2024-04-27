@@ -1,11 +1,10 @@
 import { useEffect, React, useState } from 'react';
 import { API } from "../../../constant";
 import { motion } from 'framer-motion';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { MoonLoader } from "react-spinners";
 import { Select, Avatar } from 'antd';
-import { Whisper, Button, Popover } from 'rsuite';
 import { useAuthContext } from "../../../context/AuthContext";
 import { ProfessorQualificationsCard } from '../components/ProfessorQualificationsCard';
 
@@ -14,7 +13,6 @@ const Qualifications = () => {
     const { user } = useAuthContext();
     const [loading, setLoading] = useState(true);
     const [qualifications, setQualifications] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
     const [courseSelected, setCourseSelected] = useState();
     const [qualificationsProfessor, setQualificationsProfessor] = useState([]);
     const navigate = useNavigate();

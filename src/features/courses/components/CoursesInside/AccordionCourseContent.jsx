@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import { Collapse, Button, message, Badge, Popover, Empty } from 'antd';
+import { Collapse, Button, message, Badge, Empty } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 import '../../styles/utils.css'
 import { AccordionButton, Accordion, AccordionItem, AccordionPanel } from '@chakra-ui/accordion';
@@ -10,12 +10,13 @@ import { getToken } from '../../../../helpers';
 import { API } from '../../../../constant';
 import { useParams } from 'react-router-dom';
 import { getIcon } from './helpers';
+import { Popover, Whisper } from 'rsuite';
 
 
 
 
-export const AccordionCourseContent = ({ whisper, styles, courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag,
-  setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setCourseContentInformation, setEditSectionFlag, setSectionToEdit, courseSubsection, courseSection }) => {
+export const AccordionCourseContent = ({ setVisible, whisper, styles, courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag,
+  setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setCourseContentInformation, setEditSectionFlag, setSectionToEdit, courseSubsection, courseSection, setParticipantsFlag }) => {
   const [sectionNumber, setSectionNumber] = useState(1);
   const [newSection, setNewSection] = useState('');
   const [addSectionLoading, setAddSectionLoading] = useState(false);
@@ -40,23 +41,32 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
     setCourseSubsection(subsection);
     setCourseSection(tituloSeccion);
     setForumFlag(false);
+    setParticipantsFlag(false);
     setSettingsFlag(false);
-    if (whisper) whisper.current.close()
+    if (setVisible) setVisible(false)
   }
 
   function selectFaseSectionContent(str) {
     if (str === "forethought") {
       return (
-        <Badge color='#15803d' count='Forethought' />
+        <>
+          <Badge color='#15803d' count='Forethought' />
 
+        </>
       );
     } else if (str === "performance") {
       return (
-        <Badge color='#faad14' count='Performance' />
+        <>
+          <Badge color='#faad14' count='Performance' />
+
+        </>
       );
     } else if (str === "self-reflection") {
       return (
-        <Badge color='#dc2626' count='Self-reflection' />
+        <>
+          <Badge color='#dc2626' count='Self-reflection' />
+
+        </>
       );
     }
   }
@@ -99,8 +109,6 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
         )
     }
   }
-
-
 
   function RenderCourseInsideSectionContent(
     subsection,
@@ -249,8 +257,8 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
               <div className='flex items-center ml-2'>
                 {
                   user?.role_str === 'student' &&
-                  <div className='flex items-center w-20 h-20 text-sm'>
-                    <CircularProgressbar className='text-sm font-medium' value={percentageFinished} text={`${percentageFinished}%`} styles={buildStyles({
+                  <div className='flex items-center w-16 h-16 text-sm xl:w-20 xl:h-20'>
+                    <CircularProgressbar className='text-sm font-medium ' value={percentageFinished} text={`${percentageFinished}%`} styles={buildStyles({
                       textSize: '22px',
                       pathColor: '#6366f1',
                       textColor: 'black',
@@ -276,7 +284,7 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
               }
               <div className='flex flex-col w-full text-left ml-9'>
                 <p className='mb-1 text-sm'>Section {sectionNumber}</p>
-                <h2 className='w-3/4 text-lg font-medium text-left line-clamp-2'>
+                <h2 className='w-3/4 text-base font-medium text-left xl:text-lg line-clamp-2'>
                   {section.attributes.title}
                 </h2>
               </div>
@@ -306,48 +314,46 @@ export const AccordionCourseContent = ({ whisper, styles, courseContentInformati
   }
 
   return (
-    <div className={`flex-shrink-0 w-full max-w-[calc(100vw-4rem)] sm:w-auto z-20  lg:mr-0 ${styles === undefined ? "mt-3 ml-8" : styles}`}>
-      <div className={` bg-white rounded-lg p-5 sm:w-[30rem] w-full shadow-md sm:visible ${styles === undefined ? "mt-4 sm:mr-9 sm:right-0" : styles}`}>
-        <p className="text-xl font-semibold">Course content</p>
-        <hr className="h-px my-8 bg-gray-400 border-0"></hr>
-        {courseContentInformation.map((section, index) => (
-          <RenderCourseContent
-            key={index}
-            section={section}
-            sectionNumber={sectionNumber + index}
-          />
-        ))}
-        {
-          (user?.role_str === 'professor' || user?.role_str === 'admin') &&
-          <Accordion allowMultiple >
-            <AccordionItem>
-              <AccordionButton className='bg-indigo-500 py-2 w-[4rem] rounded-md mt-5 text-white gap-2 justify-center '>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
-                </svg>
-                Add a new section
-              </AccordionButton>
-              <AccordionPanel>
-                <div className='mt-4'>
-                  <form>
-                    <div className="mb-4 border border-gray-200 rounded-lg bg-gray-50 ">
-                      <div className="px-4 py-2 bg-white rounded-t-lg ">
-                        <input onChange={(e) => setNewSection(e.target.value)} id="comment" rows="4" value={newSection} className="w-full p-3 text-sm text-gray-900 duration-150 bg-white border rounded-md hover:border-blue-600 placeholder:text-gray-400 placeholder:font-light" placeholder="Section name" required></input>
-                      </div>
-                      <div className="flex items-center justify-between px-3 py-2 border-t ">
-                        <Button loading={addSectionLoading} onClick={() => addNewSection()} type="button" className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-indigo-500 rounded-lg focus:ring-4 focus:ring-blue-200  hover:bg-blue-800">
-                          Add section
-                        </Button>
-                      </div>
+    <div className={` bg-white rounded-lg xl:p-5 xl:w-[30rem] w-full xl:shadow-md shadow-none sm:visible lg:max-w-[calc(100vw-4rem)] sm:w-auto z-20  lg:mr-0 `}>
+      <p className="hidden text-xl font-semibold xl:block">Course content</p>
+      <hr className="hidden h-px my-8 bg-gray-400 border-0 xl:block"></hr>
+      {courseContentInformation.map((section, index) => (
+        <RenderCourseContent
+          key={index}
+          section={section}
+          sectionNumber={sectionNumber + index}
+        />
+      ))}
+      {
+        (user?.role_str === 'professor' || user?.role_str === 'admin') &&
+        <Accordion allowMultiple >
+          <AccordionItem>
+            <AccordionButton className='bg-indigo-500 py-2 w-[4rem] rounded-md mt-5 text-white gap-2 justify-center hover:bg-blue-500 duration-150 '>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
+              </svg>
+              Add a new section
+            </AccordionButton>
+            <AccordionPanel>
+              <div className='mt-4 '>
+                <form>
+                  <div className="mb-4 border border-gray-200 rounded-lg bg-gray-50 ">
+                    <div className="px-4 py-2 bg-white rounded-t-lg ">
+                      <input onChange={(e) => setNewSection(e.target.value)} id="comment" rows="4" value={newSection} className="w-full p-3 text-sm text-gray-900 duration-150 bg-white border rounded-md hover:border-blue-600 placeholder:text-gray-400 placeholder:font-light" placeholder="Section name" required></input>
                     </div>
-                  </form>
-                  <hr />
-                </div>
-              </AccordionPanel>
-            </AccordionItem>
-          </Accordion>
-        }
-      </div>
-    </div >
+                    <div className="flex items-center justify-between px-3 py-2 border-t ">
+                      <Button loading={addSectionLoading} onClick={() => addNewSection()} type="button" className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-indigo-500 rounded-lg focus:ring-4 focus:ring-blue-200  hover:bg-blue-800">
+                        Add section
+                      </Button>
+                    </div>
+                  </div>
+                </form>
+                <hr />
+              </div>
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
+      }
+    </div>
   );
 };

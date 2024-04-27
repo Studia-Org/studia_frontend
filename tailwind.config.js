@@ -124,8 +124,8 @@ module.exports = {
       // => @media (min-width: 1280px) { ... }
       "2xl": "2000px",
       "1.5xl": "1440px",
-      "accordion": "1230px",
-      "flexible": "1550px",
+      accordion: "1230px",
+      flexible: "1550px",
       "grid-home": "1340px",
       // => @media (min-width: 1280px) { ... }
     },

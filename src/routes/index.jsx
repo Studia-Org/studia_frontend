@@ -31,6 +31,10 @@ export const AppRoutes = () => {
     const pathSegments = new URL(window.location.href).pathname.split('/');
     const path = pathSegments[2];
     const inCourseCreate = pathSegments.join('/') === '/app/courses/create';
+    const lastElement = pathSegments.pop();
+    const inCourseInside = pathSegments.join('/') === '/app/courses' && lastElement !== 'create' && lastElement !== 'courses';
+
+    const styles = inCourseInside ? 'flexible:ml-80 flexible:min-w-[calc(100vw-22rem)' : 'xl:ml-80 xl:min-w-[calc(100vw-22rem)';
 
     if (!isLoading) {
         if (element.props.match.route.path === '*') return <div className='font-Poppins'>{element}</div>;
@@ -41,7 +45,7 @@ export const AppRoutes = () => {
                         <Navbar />
                         <div className='flex'>
                             <Sidebar section={path} />
-                            <div className={`flex min-h-[calc(100vh-8rem)] overflow-x-auto ${!inCourseCreate ? " xl:ml-80 xl:min-w-[calc(100vw-22rem)" : ""} bg-white w-full max-w-[100vw]`}>
+                            <div className={`flex min-h-[calc(100vh-8rem)] overflow-x-auto ${!inCourseCreate ? styles : ""} bg-white w-full max-w-[100vw]`}>
                                 <ErrorBoundary fallback={<ErrorBoundaryScreen />}>
                                     {element}
                                 </ErrorBoundary>

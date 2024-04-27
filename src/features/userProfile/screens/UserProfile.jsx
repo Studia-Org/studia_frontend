@@ -90,7 +90,7 @@ const UserProfile = () => {
                 </div>
               </section>
               <section className="relative py-16 ">
-                <div className="container mx-auto px-44">
+                <div className="container px-[5vw] mx-auto xl:px-44">
                   <div className="relative flex flex-col w-full min-w-0 mb-6 -mt-64 break-words bg-white rounded-lg shadow-xl">
                     <div className="px-6">
                       <div className="flex flex-wrap justify-center">

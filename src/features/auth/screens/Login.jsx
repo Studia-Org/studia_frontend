@@ -53,7 +53,7 @@ const Login = () => {
             console.error(error);
             Toast.fire({
                 icon: 'error',
-                text: error,
+                text: error?.message,
                 title: 'Something went wrong'
             })
         } finally {
