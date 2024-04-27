@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { TaskComponentCard } from "../CreateCourses/CourseConfirmation/TaskComponentCard";
 import ReactMarkdown from "react-markdown";
-import { Empty, Button, message, Divider, Tooltip } from "antd";
+import { Empty, Button, message } from "antd";
 import { AvatarGroup, Avatar } from 'rsuite';
-import { useNavigate } from "react-router-dom";
 import MDEditor, { image } from "@uiw/react-md-editor";
 import '@mdxeditor/editor/style.css'
 import { API } from "../../../../constant";
 import { getToken } from "../../../../helpers";
-import { FiChevronRight, FiCornerDownLeft } from "react-icons/fi";
+import { FiChevronRight } from "react-icons/fi";
 import { MoonLoader } from "react-spinners";
 import './participants.css'
 
