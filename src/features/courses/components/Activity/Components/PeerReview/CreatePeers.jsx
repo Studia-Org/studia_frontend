@@ -173,7 +173,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
 
             let groupExistInDestination = students[dInd].find((group) => group.id === student.id)
             let groupExist = studentsToReview[dInd - 1].users.some((user) => {
-                return student.attributes.users.data.find((student) => {
+                return student?.attributes?.users?.data?.find((student) => {
                     return student.id === user.id
                 })
             })
@@ -245,7 +245,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                 let studentExistInDestination = studentsCopy[groupIndex].find((user) => user.id === student.id)
                 let groupExistInDestination = studentsCopy[groupIndex].find((group) => group.id === student.id)
                 let groupExist = studentsToReview[groupIndex - 1].users.some((user) => {
-                    return student.attributes.users.data.find((student) => {
+                    return student?.attributes?.users?.data?.find((student) => {
                         return student.id === user.id
                     })
 
@@ -282,7 +282,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                 const studentExistInDestination = studentsCopy[groupIndex].find((user) => user.id === student.id)
                 const groupExistInDestination = studentsCopy[groupIndex].find((group) => group.id === student.id)
                 const groupExist = studentsToReview[groupIndex - 1].users.some((user) => {
-                    return student.attributes.users.data.find((student) => {
+                    return student?.attributes?.users?.data?.find((student) => {
 
                         return student.id === user.id
                     })
