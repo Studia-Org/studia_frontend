@@ -21,11 +21,11 @@ export const AddParticipants = ({ participants, addedParticipants, addParticipan
         setLoading(true);
         if (files.length === 0) {
             message.error('No file selected.');
+            setLoading(false);
             return;
         }
         const file = files[0].originFileObj;
         const reader = new FileReader();
-
         reader.onload = (e) => {
             const content = e.target.result;
             const lines = content.split('\n');
@@ -38,13 +38,20 @@ export const AddParticipants = ({ participants, addedParticipants, addParticipan
                     addParticipant(participant);
                 }
             });
+            setLoading(false);
+            setIsModalOpen(false);
+            message.success('Participants imported successfully.');
         };
 
-        reader.readAsText(file);
-        setLoading(false);
-        setIsModalOpen(false);
-        message.success('Participants imported successfully.');
+        reader.onerror = (e) => {
+            setLoading(false);
+            message.error('Error occurred while reading the file.');
+        };
+
+        // Especificamos la codificación al leer el archivo
+        reader.readAsText(file, 'utf-8');
     }
+
 
     return (
         <div className='sm:col-span-6'>
@@ -54,7 +61,7 @@ export const AddParticipants = ({ participants, addedParticipants, addParticipan
                         <label htmlFor="add-team-members" className="block text-sm font-medium text-gray-700">
                             Add {addType}
                         </label>
-                        <label className='ml-auto block text-sm font-medium text-gray-700'>{addType}: {addedParticipants?.length}</label>
+                        <label className='block ml-auto text-sm font-medium text-gray-700'>{addType}: {addedParticipants?.length}</label>
                     </div>
 
 
@@ -79,7 +86,7 @@ export const AddParticipants = ({ participants, addedParticipants, addParticipan
                                 ))}
                             </Select>
                         </div>
-                        <span className="ml-3 mt-3">
+                        <span className="mt-3 ml-3">
                             <Button
                                 type="default"
                                 onClick={() => addParticipant(selected)}
@@ -91,7 +98,7 @@ export const AddParticipants = ({ participants, addedParticipants, addParticipan
                                 <span>Add</span>
                             </Button>
                         </span>
-                        <span className="ml-3 mt-3">
+                        <span className="mt-3 ml-3">
                             <Button
                                 type="default"
                                 className="inline-flex items-center gap-2 bg-gray-200"
@@ -114,7 +121,7 @@ export const AddParticipants = ({ participants, addedParticipants, addParticipan
                                 ]}
                             >
                                 <p>Please upload a CSV spreadsheet file (comma or semi-colon separated) with the following format:</p>
-                                <ol className='list-disc ml-10 mb-5'>
+                                <ol className='mb-5 ml-10 list-disc'>
                                     <li>Column 1: Student's email</li>
                                 </ol>
                                 <p>For example:</p>
@@ -128,13 +135,13 @@ export const AddParticipants = ({ participants, addedParticipants, addParticipan
                 <div className="border-b border-gray-200 overflow-y-auto max-h-[20rem]">
                     <ul className="divide-y divide-gray-200">
                         {addedParticipants?.map((person) => (
-                            <li key={person.id} className="flex py-4 items-center">
-                                <img className="h-10 w-10 rounded-full" src={person?.attributes ? person?.attributes.profile_photo.data?.attributes.url : person?.profile_photo?.url} alt="" />
-                                <div className="ml-3 flex flex-col">
+                            <li key={person.id} className="flex items-center py-4">
+                                <img className="w-10 h-10 rounded-full" src={person?.attributes ? person?.attributes.profile_photo.data?.attributes.url : person?.profile_photo?.url} alt="" />
+                                <div className="flex flex-col ml-3">
                                     <span className="text-sm font-medium text-gray-900">{person?.attributes ? person.attributes.name : person.name}</span>
                                     <span className="text-sm text-gray-500">{person?.attributes ? person.attributes.email : person.email}</span>
                                 </div>
-                                <svg onClick={() => deleteParticipant(person)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="cursor-pointer w-5 h-5 ml-auto">
+                                <svg onClick={() => deleteParticipant(person)} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 ml-auto cursor-pointer">
                                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clipRule="evenodd" />
                                 </svg>
                             </li>

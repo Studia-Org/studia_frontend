@@ -10,7 +10,7 @@ export const UploadFiles = ({ fileList, setFileList, listType, maxCount }) => {
         maxCount: maxCount,
         fileList: fileList,
         listType: listType,
-        accept: '.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.jpg,.jpeg,.png,.gif,.mp4,.avi,.mov,.wmv,.flv,.mkv,.zip,.rar,.7z',
+        accept: '.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.jpg,.jpeg,.png,.gif,.mp4,.avi,.mov,.wmv,.flv,.mkv,.zip,.rar,.7z,.csv',
         multiple: true,
         action: 'https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188',
         beforeUpload(file) {
