@@ -13,7 +13,7 @@ import './participants.css'
 
 
 
-export const CourseContent = ({ setForumFlag, courseContentInformation, courseSection, courseSubsection, courseId, enableEdit, setEnableEdit, setCourseContentInformation, titleSubsection, backgroundPhotoSubsection }) => {
+export const CourseContent = ({ setForumFlag, courseContentInformation, courseSection, courseSubsection, courseId, enableEdit, setEnableEdit, setCourseContentInformation, titleSubsection, dateSubsection, backgroundPhotoSubsection }) => {
     const [loading, setLoading] = useState(false);
     const section_ = courseContentInformation.find(
         (seccion) => seccion.attributes.title === courseSection
@@ -61,10 +61,28 @@ export const CourseContent = ({ setForumFlag, courseContentInformation, courseSe
                 data: {
                     content: subsectionContent,
                     landscape_photo: background_photo_id,
+                    start_date: dateSubsection[0],
+                    end_date: dateSubsection[1],
                     title: titleSubsection,
                 }
             })
         })
+
+        await fetch(`${API}/activities/${subsection_?.attributes?.activity?.data.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${getToken()}`
+            },
+            body: JSON.stringify({
+                data: {
+                    start_date: dateSubsection[0],
+                    end_date: dateSubsection[1],
+
+                }
+            })
+        })
+
         if (response.ok) {
             setCourseContentInformation([...courseContentInformation.map((section) => {
                 if (section.id === section_.id) {
@@ -82,6 +100,8 @@ export const CourseContent = ({ setForumFlag, courseContentInformation, courseSe
                                                 ...subsection.attributes,
                                                 landscape_photo: backgroundPhotoSubsection,
                                                 content: subsectionContent,
+                                                start_date: dateSubsection[0],
+                                                end_date: dateSubsection[1],
                                                 title: titleSubsection,
                                             }
                                         }
