@@ -4,9 +4,10 @@ import { fetchActivityHasGroups } from "../../../../../fetches/fetchActivityGrou
 import { fetchCreateGroups } from "../../../../../fetches/fetchCreateGroups.js"
 
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { Button, Divider, message } from "antd";
+import { Button, Divider, Modal, message } from "antd";
 import { MoonLoader } from "react-spinners";
-
+import { UploadFiles } from "../../CreateCourses/CourseSections/UploadFiles.jsx";
+import Papa from 'papaparse';
 function CreateGroups({ activityId, courseId, activityData }) {
     const [students, setStudents] = useState([])
     const numberOfStudentsPerGroup = activityData.activity.data.attributes.numberOfStudentsperGroup
@@ -14,6 +15,9 @@ function CreateGroups({ activityId, courseId, activityData }) {
     const [loading, setLoading] = useState(true)
     const [creatingGroups, setCreatingGroups] = useState(false)
     const [activityHasStarted] = useState(new Date(activityData.activity.data.attributes.start_date) < new Date())
+    const [files, setFiles] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [loadingModal, setLoadingModal] = useState(false);
 
     useEffect(() => {
         async function fetchUsersFromCourse() {
@@ -177,6 +181,40 @@ function CreateGroups({ activityId, courseId, activityData }) {
             setCreatingGroups(false)
         }
     }
+    const uploadCSV = async () => {
+        setLoadingModal(true);
+        if (files.length === 0) {
+            message.error('No file selected.');
+            setLoading(false);
+            return;
+        }
+        const file = files[0].originFileObj;
+        const allStudents = students.flat()
+        const groups = {}
+        await new Promise((resolve, reject) => {
+            Papa.parse(file, {
+                complete: function (results) {
+                    for (let i = 0; i < results.data.length; i++) {
+                        var expresionRegular = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        if (expresionRegular.test(results.data[i][0])) {
+                            const student = allStudents.find(student => student.attributes.email === results.data[i][0])
+                            if (student) {
+                                groups[results.data[i][1]] = [...groups[results.data[i][1]] || [], student]
+                            }
+                        }
+                    }
+                    setLoadingModal(false);
+
+                    const arrGroups = Object.values(groups)
+                    arrGroups.unshift([])
+                    setStudents(arrGroups)
+                    setIsModalOpen(false);
+                    message.success('Participants imported successfully.');
+                    resolve();
+                }
+            });
+        });
+    }
     return (loading ?
         <div className="flex items-center justify-center flex-1 w-full min-h-[200px] lg:min-h-[500px] h-full">
             <MoonLoader color="#1E40AF" size={80} />
@@ -230,6 +268,36 @@ function CreateGroups({ activityId, courseId, activityData }) {
                     onClick={saveGroups}>
                     Save groups
                 </Button >
+                <Button
+                    type="default"
+                    className="inline-flex items-center gap-2 bg-gray-200"
+                    onClick={() => setIsModalOpen(true)}
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4">
+                        <path fillRule="evenodd" d="M4 2a1.5 1.5 0 0 0-1.5 1.5v9A1.5 1.5 0 0 0 4 14h8a1.5 1.5 0 0 0 1.5-1.5V6.621a1.5 1.5 0 0 0-.44-1.06L9.94 2.439A1.5 1.5 0 0 0 8.878 2H4Zm4 9.5a.75.75 0 0 1-.75-.75V8.06l-.72.72a.75.75 0 0 1-1.06-1.06l2-2a.75.75 0 0 1 1.06 0l2 2a.75.75 0 1 1-1.06 1.06l-.72-.72v2.69a.75.75 0 0 1-.75.75Z" clipRule="evenodd" />
+                    </svg>
+                    <span>Import from CSV</span>
+                </Button>
+                <Modal title={`Import groups from CSV`} open={isModalOpen}
+                    onCancel={() => setIsModalOpen(false)}
+                    footer={[
+                        <Button onClick={() => setIsModalOpen(false)} className='bg-gray-200'>
+                            Cancel
+                        </Button>,
+                        <Button type="primary" loading={loadingModal} onClick={uploadCSV}>
+                            Import
+                        </Button>
+                    ]}
+                >
+                    <p>Please upload a CSV spreadsheet file (comma or semi-colon separated) with the following format:</p>
+                    <ol className='mb-5 ml-10 list-disc'>
+                        <li>Column 1: Student's email</li>
+                        <li>Column 2: Group</li>
+                    </ol>
+                    <p>For example:</p>
+                    <img className='my-3' src={'https://res.cloudinary.com/dnmlszkih/image/upload/v1704474229/hwqyzbtduejhu3bwjrle.png'} alt="" />
+                    <UploadFiles fileList={files} accept={'.csv'} setFileList={setFiles} listType={'picture'} maxCount={1} />
+                </Modal>
             </div>
             {/* //force enabled for ludmila course  */}
             {/* {activityHasStarted && <p className="text-xs text-red-500">Activity has started, you can't modify the groups</p>} */}

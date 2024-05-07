@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Upload } from 'antd';
+import Papa from 'papaparse';
 
-
-export const UploadFiles = ({ fileList, setFileList, listType, maxCount }) => {
+export const UploadFiles = ({ fileList, setFileList, listType, maxCount, accept }) => {
     const [error, setError] = useState(null);
 
     const props = {
@@ -10,17 +10,40 @@ export const UploadFiles = ({ fileList, setFileList, listType, maxCount }) => {
         maxCount: maxCount,
         fileList: fileList,
         listType: listType,
-        accept: '.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.jpg,.jpeg,.png,.gif,.mp4,.avi,.mov,.wmv,.flv,.mkv,.zip,.rar,.7z',
+        accept: accept ? accept : '.pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.jpg,.jpeg,.png,.gif,.mp4,.avi,.mov,.wmv,.flv,.mkv,.zip,.rar,.7z,.csv',
         multiple: true,
         action: 'https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188',
-        beforeUpload(file) {
+        async beforeUpload(file) {
             const isLt10M = file.size / 1024 / 1024 < 10;
+            let isCorrect = true;
+            setError(null);
+
             if (!isLt10M) {
                 setError('File must be smaller than 10MB');
                 return false;
             }
-            setError(null);
-            return true;
+
+            if (accept && file.type === 'text/csv') {
+                await new Promise((resolve, reject) => {
+                    Papa.parse(file, {
+                        complete: function (results) {
+                            for (let i = 0; i < results.data.length; i++) {
+                                var expresionRegular = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                if (!expresionRegular.test(results.data[i][0])) {
+                                    if (results.data[i][0] === "") continue;
+                                    setError("Not a valid email detected in the CSV file\nPlease check if file format is correct\nRenaming the file to .csv may not work");
+                                    isCorrect = false;
+                                    break;
+                                }
+                            }
+                            resolve();
+                        }
+                    });
+                });
+            }
+
+            if (isCorrect) setError(null);
+            return isCorrect;
         },
         onChange(info) {
             let { status } = info.file;
@@ -49,7 +72,7 @@ export const UploadFiles = ({ fileList, setFileList, listType, maxCount }) => {
                     banned files.
                 </p>
             </Upload.Dragger>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
+            {error && <pre style={{ color: 'red' }}>{error}</pre>}
         </>
 
     )
