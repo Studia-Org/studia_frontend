@@ -167,9 +167,9 @@ function CreateGroups({ activityId, courseId, activityData }) {
         const groupsWithMoreStudents = students.slice(1).filter(group => group.length > numberOfStudentsPerGroup)
         const groupsWithLessStudents = students.slice(1).filter(group => group.length < numberOfStudentsPerGroup)
 
-        if (!groupsBalanced && (groupsWithLessStudents.length > 0 && groupsWithMoreStudents.length > 0)) {
-            return message.error("Groups are not balanced")
-        }
+        // if (!groupsBalanced && (groupsWithLessStudents.length > 0 && groupsWithMoreStudents.length > 0)) {
+        //     return message.error("Groups are not balanced")
+        // }
         //check if there are empty groups
         const emptyGroups = students.slice(1).find(group => group.length === 0 || group.length === 1)
         if (emptyGroups && emptyGroups.length === 1 && emptyGroups[0].groupId) {
@@ -207,30 +207,49 @@ function CreateGroups({ activityId, courseId, activityData }) {
         }
         const file = files[0].originFileObj;
         const allStudents = students.flat()
+        //delete groupID from students
         const groups = {}
-        await new Promise((resolve, reject) => {
-            Papa.parse(file, {
-                complete: function (results) {
-                    for (let i = 0; i < results.data.length; i++) {
-                        var expresionRegular = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                        if (expresionRegular.test(results.data[i][0])) {
-                            const student = allStudents.find(student => student.attributes.email === results.data[i][0])
-                            if (student) {
-                                groups[results.data[i][1]] = [...groups[results.data[i][1]] || [], student]
+        try {
+            await new Promise((resolve, reject) => {
+                Papa.parse(file, {
+                    complete: function (results) {
+                        try {
+                            for (let i = 0; i < results.data.length; i++) {
+                                var expresionRegular = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                if (expresionRegular.test(results.data[i][0])) {
+                                    const student = allStudents.find(student => student?.attributes?.email === results.data[i][0])
+                                    if (student) {
+                                        student.id = student.id.toString()
+                                        groups[results.data[i][1]] = [...groups[results.data[i][1]] || [], student]
+                                    }
+                                }
                             }
+                            setLoadingModal(false);
+
+                            const arrGroups = Object.values(groups)
+                            const studentsWithoutGroup = allStudents.filter(student => !arrGroups.flat().some(group => group.id === student?.id))
+                            //delete groupIds
+                            const studentsWithouGroupIds = studentsWithoutGroup.map(student => {
+                                if (student.groupId) return null
+                                return student
+                            }).filter(Boolean)
+                            arrGroups.unshift(studentsWithouGroupIds)
+                            setStudents(arrGroups)
+                            setIsModalOpen(false);
+                            message.success('Participants imported successfully.');
+                            resolve();
+                        } catch (error) {
+                            setLoadingModal(false);
+                            message.error('Error importing participants.');
+                            reject();
                         }
                     }
-                    setLoadingModal(false);
-
-                    const arrGroups = Object.values(groups)
-                    arrGroups.unshift([])
-                    setStudents(arrGroups)
-                    setIsModalOpen(false);
-                    message.success('Participants imported successfully.');
-                    resolve();
-                }
+                });
             });
-        });
+        } catch (error) {
+            message.error('Error importing participants.');
+            setLoadingModal(false);
+        }
     }
 
     return (loading ?
@@ -243,7 +262,7 @@ function CreateGroups({ activityId, courseId, activityData }) {
                 <Button
                     className="mb-4"
                     type="primary"
-                    disabled={activityHasStarted}
+                    disabled={false}
                     onClick={() => {
                         setStudents([...students, []]);
                     }}
