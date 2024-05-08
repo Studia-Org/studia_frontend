@@ -133,7 +133,6 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
 
             if (coverChanged.name !== courseData.cover.data.attributes.url[0].name
                 || coverChanged.size !== courseData.cover.data.attributes.url[0].size) {
-                message.error('uploading cover image')
                 const formData = new FormData();
                 formData.append('files', courseData.cover.data.attributes.url[0]);
                 const uploadCover = await fetch(`${API}/upload`, {
