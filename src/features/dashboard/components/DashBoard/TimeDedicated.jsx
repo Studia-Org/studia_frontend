@@ -4,6 +4,7 @@ import { fetchAverageCourse } from "../../../../fetches/fetchAverageCourse";
 import { useAuthContext } from "../../../../context/AuthContext";
 import { set } from "date-fns";
 import ReactApexChart from 'react-apexcharts'
+import { MoonLoader } from "react-spinners";
 
 const chartdata2 = [
   {
@@ -82,76 +83,85 @@ export function TimeDedicated({ courses }) {
   return (
     <section className="box-border w-full p-5 bg-white rounded-lg shadow-lg ">
       <Title>Average course marks</Title>
-      <ReactApexChart
-        options={{
-          chart: {
-            type: 'bar',
-            height: 'auto'
-          },
-          plotOptions: {
-            bar: {
-              borderRadius: 5,
-              dataLabels: {
-                position: 'top', // top, center, bottom
+      {
+        loading ? (
+          <div className="flex items-center justify-center w-full h-full">
+            <MoonLoader color="#363cd6" size={80} />
+          </div>
+        ) : (
+          <ReactApexChart
+            options={{
+              chart: {
+                type: 'bar',
+                height: 'auto'
               },
-            }
-          },
-          dataLabels: {
-            enabled: true,
-            formatter: function (val) {
-              return val;
-            },
-            offsetY: -20,
-            style: {
-              fontSize: '12px',
-              colors: ["#304758"]
-            }
-          },
-          stroke: {
-            show: true,
-            width: 2,
-            colors: ['transparent']
-          },
-          xaxis: {
-            categories: Object.keys(charData).map((key) => charData[key].name),
-          },
-          yaxis: {
-            max: 10, // Establecer el valor máximo del eje Y
-          },
-          fill: {
-            opacity: 1
-          },
-          tooltip: {
-            y: {
-              formatter: function (val) {
-                return val
+              plotOptions: {
+                bar: {
+                  borderRadius: 5,
+                  dataLabels: {
+                    position: 'top', // top, center, bottom
+                  },
+                }
+              },
+              dataLabels: {
+                enabled: true,
+                formatter: function (val) {
+                  return val;
+                },
+                offsetY: -20,
+                style: {
+                  fontSize: '12px',
+                  colors: ["#304758"]
+                }
+              },
+              stroke: {
+                show: true,
+                width: 2,
+                colors: ['transparent']
+              },
+              xaxis: {
+                categories: Object.keys(charData).map((key) => charData[key].name),
+              },
+              yaxis: {
+                max: 10, // Establecer el valor máximo del eje Y
+              },
+              fill: {
+                opacity: 1
+              },
+              tooltip: {
+                y: {
+                  formatter: function (val) {
+                    return val
+                  }
+                }
               }
             }
-          }
-        }
-        }
-        series={
-          user.role_str !== "student" ?
-            [
-              {
-                name: 'Average course grade',
-                data: Object.keys(charData).map((key) => charData[key]["Average course"])
-              }
-            ]
-            :
-            [
-              {
-                name: 'Average course grade',
-                data: Object.keys(charData).map((key) => charData[key]["Average course"])
-              }, {
-                name: 'Your grade',
-                data: Object.keys(charData).map((key) => charData[key]["Your mark"])
-              }
-            ]
+            }
+            series={
+              user.role_str !== "student" ?
+                [
+                  {
+                    name: 'Average course grade',
+                    data: Object.keys(charData).map((key) => charData[key]["Average course"])
+                  }
+                ]
+                :
+                [
+                  {
+                    name: 'Average course grade',
+                    data: Object.keys(charData).map((key) => charData[key]["Average course"])
+                  }, {
+                    name: 'Your grade',
+                    data: Object.keys(charData).map((key) => charData[key]["Your mark"])
+                  }
+                ]
 
-        }
+            }
 
-        type="bar" height={'95%'} />
+            type="bar" height={'95%'} />
+        )
+      }
+
 
     </section>
   );

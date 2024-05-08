@@ -2,9 +2,8 @@ import { useEffect, useState, React, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { API, BEARER } from "../../../constant";
 import { getToken } from "../../../helpers";
-import { Tabs, Popconfirm, Badge } from "antd";
+import { Tabs, Popconfirm, Badge, DatePicker, Input } from "antd";
 import { SwitchEdit } from "../components/CoursesInside/SwitchEdit";
-import { FiChevronRight } from "react-icons/fi";
 import { CourseSettings } from "../components/CoursesInside/Settings/CourseSettings";
 import { AccordionCourseContent } from "../components/CoursesInside/AccordionCourseContent";
 import { ForumClickable } from "../components/CoursesInside/Forum/ForumClickable";
@@ -15,10 +14,13 @@ import { useAuthContext } from "../../../context/AuthContext";
 import { EditSection } from "../components/CoursesInside/EditSection";
 import { SideBar } from "../components/CoursesInside/FloatingButtonNavigation";
 import { MoonLoader } from "react-spinners";
-import { set } from "lodash";
 import { CourseHasNotStarted } from "../components/CoursesInside/CourseHasNotStarted";
 import { ButtonSettings } from "../components/CoursesInside/EditSection/buttonEditCourse";
 import { Participants } from "../components/CoursesInside/Participants";
+import dayjs from "dayjs";
+
+const { TextArea } = Input;
+const { RangePicker } = DatePicker;
 
 const CourseInside = () => {
   const inputRefLandscape = useRef(null);
@@ -38,13 +40,13 @@ const CourseInside = () => {
   const [subsectionsCompleted, setSubsectionsCompleted] = useState([]);
   const [subsectionsLandscapePhoto, setSubsectionsLandscapePhoto] = useState(null);
   const [courseSubsection, setCourseSubsection] = useState([]);
+  const [dateSubsection, setDateSubsection] = useState();
   const [courseSection, setCourseSection] = useState();
   const [courseSubsectionQuestionnaire, setCourseSubsectionQuestionnaire] = useState([]);
   const [courseContentInformation, setCourseContentInformation] = useState([]);
   const [students, setStudents] = useState([]);
   const [professor, setProfessor] = useState([]);
 
-  console.log(participantsFlag)
 
   let { courseId } = useParams();
   let { activityId } = useParams();
@@ -223,6 +225,7 @@ const CourseInside = () => {
       );
     }
     setTitleSubsection(courseSubsection?.attributes?.title);
+    setDateSubsection([courseSubsection?.attributes?.start_date, courseSubsection?.attributes?.end_date]);
     setBackgroundPhotoSubsection(courseSubsection?.attributes?.landscape_photo?.data?.attributes?.url)
   }, [courseSubsection]);
 
@@ -258,13 +261,17 @@ const CourseInside = () => {
     }
   }
 
-  console.log(participantsFlag, forumFlag, settingsFlag)
 
   const items = [
     {
       key: '1',
       label: 'Course',
-      children: <CourseContent setForumFlag={setForumFlag} courseContentInformation={courseContentInformation} courseSection={courseSection} courseSubsection={courseSubsection} courseId={courseId} enableEdit={enableEdit} setEnableEdit={setEnableEdit} setCourseContentInformation={setCourseContentInformation} titleSubsection={titleSubsection} backgroundPhotoSubsection={backgroundPhotoSubsection} />,
+      children:
+        <CourseContent setForumFlag={setForumFlag} courseContentInformation={courseContentInformation} courseSection={courseSection}
+          courseSubsection={courseSubsection} courseId={courseId} enableEdit={enableEdit} setEnableEdit={setEnableEdit}
+          setCourseContentInformation={setCourseContentInformation} titleSubsection={titleSubsection} dateSubsection={dateSubsection}
+          backgroundPhotoSubsection={backgroundPhotoSubsection}
+        />,
     },
     {
       key: '2',
@@ -413,20 +420,32 @@ const CourseInside = () => {
                       <div className="flex items-center w-full max-w-full md:my-5">
                         {
                           enableEdit ?
-                            <input
-                              type="text"
-                              name="first-name"
+
+                            <TextArea
                               value={titleSubsection}
+                              className="w-1/2"
                               onChange={(e) => setTitleSubsection(e.target.value)}
-                              id="first-name"
-                              autoComplete="given-name"
-                              className="mt-1 rounded-md shadow-sm border-blue-gray-300 text-blue-gray-900 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                              style={{ resize: 'none' }}
+                              rows={1}
                             />
                             :
                             <div className="flex items-center w-full max-w-full gap-x-5">
                               <p className="text-2xl font-semibold max-w-[calc(100%-140px)]"> {courseSubsection?.attributes?.title}</p>
                               <Badge color="#6366f1" count={new Date(courseSubsection?.attributes?.end_date).toDateString()} />
                             </div>
+                        }
+                        {
+                          enableEdit && (
+                            <RangePicker
+                              value={[dayjs(dateSubsection[0]), dayjs(dateSubsection[1])]}
+                              showTime
+                              className="w-1/2 mx-5"
+                              clearIcon={null}
+                              onChange={(value, dateString) => {
+                                setDateSubsection(dateString)
+                              }}
+                            />
+                          )
                         }
                         {
                           user?.role_str === 'professor' || user?.role_str === 'admin' ?

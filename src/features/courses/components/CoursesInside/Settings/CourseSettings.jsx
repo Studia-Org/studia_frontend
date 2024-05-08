@@ -24,8 +24,8 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
     const [selectedEvaluator, setSelectedEvaluator] = useState()
     const [loading, setLoading] = useState(false)
     const [loadingDelete, setLoadingDelete] = useState(false)
+    const [coverChanged, setCoverChanged] = useState(courseData.cover.data.attributes.url[0])
     let { courseId } = useParams();
-
     const fetchUsers = async () => {
         const getAllUsers = await fetch(`${API}/users?populate=*`)
         const data = await getAllUsers.json();
@@ -116,42 +116,49 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
             message.error(error)
         }
     }
-
-
     const saveChanges = async () => {
-        const token = process.env.REACT_APP_ADMIN_TOKEN;
         setLoading(true)
         if (courseData.cover.data.attributes.url.length === 0) {
             message.error('Please upload a cover image')
             return;
         }
         try {
-            const formData = new FormData();
-            formData.append('files', courseData.cover.data.attributes.url[0]);
-            const uploadCover = await fetch(`${API}/upload`, {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${token}`
-                },
-                body: formData
-            })
-            const uploadCoverData = await uploadCover.json();
+            const data = {
+                title: courseData.title,
+                description: courseData.description,
+                tags: courseData.tags,
+                students: courseData.students.data.map(item => item.id),
+                evaluators: courseData.evaluators.data.map(item => item.id)
+            }
+
+            if (coverChanged.name !== courseData.cover.data.attributes.url[0].name
+                || coverChanged.size !== courseData.cover.data.attributes.url[0].size) {
+                message.error('uploading cover image')
+                const formData = new FormData();
+                formData.append('files', courseData.cover.data.attributes.url[0]);
+                const uploadCover = await fetch(`${API}/upload`, {
+                    method: 'POST',
+                    headers: {
+                        Authorization: `Bearer ${getToken()}`
+                    },
+                    body: formData
+                })
+                if (!uploadCover.ok) {
+                    message.error('Error uploading cover image')
+                    setLoading(false)
+                    return;
+                }
+                const uploadCoverData = await uploadCover.json();
+                data.cover = uploadCoverData[0].id
+            }
             const response = await fetch(`${API}/courses/${courseId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`
+                    Authorization: `Bearer ${getToken()}`
                 },
                 body: JSON.stringify({
-                    data:
-                    {
-                        title: courseData.title,
-                        description: courseData.description,
-                        tags: courseData.tags,
-                        cover: uploadCoverData[0].id,
-                        students: courseData.students.data.map(item => item.id),
-                        evaluators: courseData.evaluators.data.map(item => item.id)
-                    }
+                    data: data
                 })
             })
             if (response.ok) {
@@ -165,6 +172,7 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
             setLoading(false)
         } catch (error) {
             message.error(error)
+            setLoading(false)
         }
     }
 
