@@ -19,7 +19,7 @@ function CreateGroups({ activityId, courseId, activityData }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [loadingModal, setLoadingModal] = useState(false);
     const [textSaveGroups, setTextSaveGroups] = useState("Save groups")
-
+    console.log(students)
     useEffect(() => {
         async function fetchUsersFromCourse() {
 
