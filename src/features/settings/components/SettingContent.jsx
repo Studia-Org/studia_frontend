@@ -22,7 +22,7 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
                 </svg>
             ,
-            contact: "studiawip@gmail.com"
+            contact: "uptitudeapp@gmail.com"
         },
         {
             icon:
@@ -226,7 +226,7 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
             {selectedOption === 'help' && (
                 <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
                     <main className="text-base py-14">
-                        <div className="px-4 text-gray-600  md:px-8">
+                        <div className="px-4 text-gray-600 md:px-8">
                             <div className="flex-wrap max-w-lg gap-24 lg:flex lg:max-w-none ">
                                 <div className="max-w-lg space-y-3">
                                     <h3 className="font-semibold text-indigo-600">
@@ -259,7 +259,7 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
                                 <div className="flex-1 mt-20 min-w-[400px] max-w-2xl bg-white rounded p-7 shadow-lg ">
                                     <form
                                         method='POST'
-                                        action='https://getform.io/f/f2dc89ec-4d74-4789-a837-8411ebbeb789'
+                                        action='https://getform.io/f/qalowrqb'
                                         onSubmit={() => limpiarCampos()}
                                         className="space-y-5 font-normal"
                                     >
