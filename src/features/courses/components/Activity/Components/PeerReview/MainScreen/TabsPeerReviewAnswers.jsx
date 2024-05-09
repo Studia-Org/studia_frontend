@@ -11,7 +11,7 @@ export default function TabsPeerReviewAnswers({ answers, data }) {
                     :
                     <div className={`w-full h-full max-h-[600px] px-5 md:px-10`}>
                         <h3 className="-mb-1 text-xl font-semibold">Peer Review feedback</h3>
-                        <Tabs defaultActiveKey="1" >
+                        <Tabs defaultActiveKey="0" >
                             {
                                 answers.map((answer, index) => {
                                     return (
