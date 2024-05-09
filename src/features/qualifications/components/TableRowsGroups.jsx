@@ -305,7 +305,7 @@ export const TableRowsGroups = ({ group, activity, isEditChecked, setThereIsChan
             const Answer = answer?.attributes?.Answers;
             Object.keys(Answer).forEach((value) => {
                 const dict = Answer[value];
-                internAverage += Object.keys(dict)[0];
+                internAverage += (+Object.keys(dict)[0]);
             })
             sum += (internAverage / Object.keys(Answer).length);
         });
