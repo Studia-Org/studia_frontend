@@ -24,7 +24,7 @@ export const Sidebar = (props) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setDashboardNotification(await fetchUserHasNotReadNotificationDashboard(user.id));
+      setDashboardNotification(await fetchUserHasNotReadNotificationDashboard(user?.id));
     };
     fetchData();
     const resizeListener = window.addEventListener("resize", function (event) {

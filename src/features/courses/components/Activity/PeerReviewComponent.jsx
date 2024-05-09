@@ -44,7 +44,7 @@ export default function PeerReviewComponent({ activityData }) {
     useEffect(() => {
         if (user.role_str !== 'student') return
         if (qualificationIds === null) {
-            fetch(`${API}/qualifications?qualification` +
+            fetch(`${API}/qualifications?qualification&pagination[pageSize]=99999` +
                 `&populate[activity][fields][0]=groupActivity` +
                 `&populate[user][fields][0]=username` +
                 `&populate[group][populate][users][fields][0]=*` +
