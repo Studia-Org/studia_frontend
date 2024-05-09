@@ -85,18 +85,18 @@ function MainScreen({
     const overpassDeadLine = deadLine < new Date() && user?.role_str === 'student'
 
     return (
-        <div className={`flex ${overpassDeadLine || userIndexSelected === null ? `flex-col h-full` : ""} content-start items-start 1.5xl:justify-between flex-wrap space-y-3 `}>
-            <div className={`flex flex-col ${userIndexSelected !== null ? "flex-1" : "w-full"} ${overpassDeadLine ? "sm:p-10 p-5" : "p-5"}`}>
+        <div className={`flex ${overpassDeadLine || userIndexSelected === null ? `flex-col h-full ` : "1.5xl:justify-between"} content-start items-start  flex-wrap space-y-3 `}>
+            <div className={`flex flex-col max-h-[50%] max-w-[60%] ${userIndexSelected !== null && peerReviewInGroups ? "flex-1" : "w-full"} ${overpassDeadLine ? "sm:p-10 p-5" : "p-5"}`}>
                 <BackToCourse courseId={courseId} navigate={navigate} />
-                <div className="flex flex-wrap flex-1 mb-5 max-w-[80%] 2xl:mb-0 gap-x-10">
-                    <div className={`flex-1 min-w-[300px] max-w-full ${peerReviewInGroups ? "" : ""}`}>
+                <div className={`flex flex-wrap flex-1 mb-5 max-w-[80%]  2xl:mb-0 gap-x-10`}>
+                    <div className={`flex-1 min-w-[300px] max-w-full`}>
                         <ActivityTitle type='peerReview'
                             title={activityData.activity.data.attributes.title}
                             evaluated={evaluated}
                             qualification={activityData?.qualification}
                         />
                     </div>
-                    <div className="flex justify-end max-w-[500px] w-fit flex-wrap">
+                    <div className="flex justify-end max-w-[500px] w-fit flex-wrap ">
                         {peerReviewInGroups && <GroupMembers
                             activityGroup={activityData.group.data.attributes}
                             small={true}
@@ -108,7 +108,7 @@ function MainScreen({
             </div>
 
             {userIndexSelected !== null && PeerReview !== undefined && PeerReview !== null && deadLine > new Date() ?
-                <section className="flex md3:justify-end min-w-[350px] max-w-full xl:max-w-[30%] md3:ms-3 xl:pr-10 p-5">
+                <section className="flex md3:justify-end min-w-[350px] max-w-full xl:max-w-[30%] md3:ms-3 xl:pr-10 p-5 !mt-6">
                     <div className="flex flex-col w-full gap-y-1">
                         <h3 className='text-xl font-semibold'>Peer Review</h3>
 

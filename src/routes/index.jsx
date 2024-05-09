@@ -33,7 +33,6 @@ export const AppRoutes = () => {
     const inCourseCreate = pathSegments.join('/') === '/app/courses/create';
     const lastElement = pathSegments.pop();
     const inCourseInside = pathSegments.join('/') === '/app/courses' && lastElement !== 'create' && lastElement !== 'courses';
-
     const styles = inCourseInside ? 'flexible:ml-80 flexible:min-w-[calc(100vw-22rem)' : 'xl:ml-80 xl:min-w-[calc(100vw-22rem)';
 
     if (!isLoading) {

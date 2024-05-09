@@ -2,7 +2,7 @@ import PeerReviewAnswers from "./PeerReviewAnswers"
 import { Tabs } from 'antd';
 export default function TabsPeerReviewAnswers({ answers, data }) {
     return (
-        <section className={`flex flex-1 min-w-[100vw] lg:min-w-[75vw] max-w-[90vw] pb-10 !m-0`}>
+        <section className={`flex max-w-[100%] pb-10 !m-0`}>
             {
                 answers.length === 0 ?
                     <div className="flex flex-col items-center flex-1">
@@ -11,7 +11,7 @@ export default function TabsPeerReviewAnswers({ answers, data }) {
                     :
                     <div className={`w-full h-full max-h-[600px] px-5 md:px-10`}>
                         <h3 className="-mb-1 text-xl font-semibold">Peer Review feedback</h3>
-                        <Tabs defaultActiveKey="1" centered >
+                        <Tabs defaultActiveKey="0" >
                             {
                                 answers.map((answer, index) => {
                                     return (

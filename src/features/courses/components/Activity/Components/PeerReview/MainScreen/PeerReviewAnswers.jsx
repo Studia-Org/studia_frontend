@@ -9,8 +9,9 @@ function PeerReviewAnswers({ answers, data }) {
                      grid-cols-2 shadow-md rounded-md  ">
 
                     {Object.keys(answers).map((criterion, index) => {
-                        const range = Object.keys(answers[criterion])[0];
-                        const feedback = answers[criterion][range];
+                        const mark = Object.keys(answers[criterion])[0];
+                        const upperLimit = data[data.length - 1].split("-")[1] || data[data.length - 1];
+                        const feedback = answers[criterion][mark];
                         const isFirstRow = index === 0;
                         const isLastRow = index === Object.keys(answers).length - 1;
                         const cornerClasses = isFirstRow ? "rounded-tl-md " : (isLastRow ? " " : "");
@@ -20,7 +21,7 @@ function PeerReviewAnswers({ answers, data }) {
                             <>
                                 <div className={`flex items-center p-4 break-allbg-purple-300 text-gray-900 bg-[#ced6ef]  ${cornerClasses}`}>{criterion}</div>
                                 <div className={`${isFirstRow ? "rounded-tr-md" : ""} break-all bg-[#ced6ef] 
-                                                flex items-center p-4  text-gray-900`}>{range + (number ? "/" + data[data.length - 1].split("-")[1] : "")}</div>
+                                                flex items-center p-4  text-gray-900`}>{mark + (number ? "/" + upperLimit : "")}</div>
                                 <div className={`col-span-2 break-all flex items-center p-4 h-full bg-white 
                                                 ${isLastRow ? "rounded-bl-md  rounded-br-md" : ""}`}>{feedback}</div>
                             </>

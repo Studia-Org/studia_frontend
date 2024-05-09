@@ -364,7 +364,7 @@ export default function PeerReviewComponent({ activityData }) {
                             </div>
                             : qualificationIds !== null &&
                             <>
-                                <div className="max-w-[calc(100vw-2rem)] min-w-[calc(100vw-2rem)] xl:min-w-[calc(100vw-22rem)]">
+                                <div className="max-w-[calc(100vw-2rem)] min-w-[calc(100vw-2rem)] xl:min-w-[calc(100vw-22rem)] xl:max-w-[calc(100vw-22rem)]">
                                     <MainScreen
                                         activityData={activityData}
                                         setShowEvaluate={setShowEvaluate}

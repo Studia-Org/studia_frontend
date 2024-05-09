@@ -39,7 +39,7 @@ function EvaluateScreen({ data, setShowEvaluate, sendEvalution, answersDelivered
                                             name={key + "about"}
                                             type="number"
                                             min={0}
-                                            max={parseInt(data["Criteria"][data["Criteria"].length - 1].split("-")[1])}
+                                            max={parseInt(data["Criteria"][data["Criteria"].length - 1].split("-")[1]) || parseInt(data["Criteria"][data["Criteria"].length - 1].split("-")[0])}
                                             className="block w-full mt-1 text-sm border border-gray-300 rounded-lg resize-none"
                                         />
                                         :

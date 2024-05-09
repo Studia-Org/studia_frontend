@@ -2,12 +2,12 @@ import { useEffect, useState } from "react"
 import { fetchUsersInformationComplete } from "../../../../../fetches/fetchUsersFromCourse"
 import { fetchActivityHasGroups } from "../../../../../fetches/fetchActivityGroups.js"
 import { fetchCreateGroups } from "../../../../../fetches/fetchCreateGroups.js"
-
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Button, Divider, Modal, message } from "antd";
 import { MoonLoader } from "react-spinners";
 import { UploadFiles } from "../../CreateCourses/CourseSections/UploadFiles.jsx";
 import Papa from 'papaparse';
+import csvIMG from '../../../../../assets/csvgroups.png'
 function CreateGroups({ activityId, courseId, activityData }) {
     const [students, setStudents] = useState([])
     const numberOfStudentsPerGroup = activityData.activity.data.attributes.numberOfStudentsperGroup
@@ -18,7 +18,8 @@ function CreateGroups({ activityId, courseId, activityData }) {
     const [files, setFiles] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [loadingModal, setLoadingModal] = useState(false);
-
+    const [textSaveGroups, setTextSaveGroups] = useState("Save groups")
+    console.log(students)
     useEffect(() => {
         async function fetchUsersFromCourse() {
 
@@ -28,13 +29,16 @@ function CreateGroups({ activityId, courseId, activityData }) {
                 let groups = []
                 setTotalStudents(data.data.attributes.students.data.length)
                 if (dataGroups.length > 0) {
+                    setTextSaveGroups("Update groups")
                     groups.push([])
                     dataGroups.forEach(group => {
                         //transfrom id into strings
                         group.attributes.users.data.forEach(user => {
                             user.id = user.id.toString()
                         })
+                        group.attributes.users.data.push({ groupId: group.id })
                         groups.push(group.attributes.users.data)
+
                     })
                     //check if there are students without group
                     const studentsWithoutGroup = data.data.attributes.students.data.filter(student => !groups.flat().some(group => +group.id === student.id))
@@ -108,7 +112,13 @@ function CreateGroups({ activityId, courseId, activityData }) {
 
     function createGroupsAutomatically() {
         let studentsCopy = [...students]
-
+        //remove last element of each group if its a groupId
+        studentsCopy = studentsCopy.map(group => {
+            if (group.length > 0 && group[group.length - 1].groupId) {
+                group.pop()
+            }
+            return group
+        })
         // move all students to the first group
         studentsCopy.forEach((group, index) => {
             if (index !== 0) {
@@ -148,7 +158,6 @@ function CreateGroups({ activityId, courseId, activityData }) {
         }
         setStudents(studentsCopy)
     }
-
     async function saveGroups() {
         //save groups in the backend
         //fetch to update groups
@@ -158,8 +167,16 @@ function CreateGroups({ activityId, courseId, activityData }) {
         const groupsWithMoreStudents = students.slice(1).filter(group => group.length > numberOfStudentsPerGroup)
         const groupsWithLessStudents = students.slice(1).filter(group => group.length < numberOfStudentsPerGroup)
 
-        if (!groupsBalanced && (groupsWithLessStudents.length > 0 && groupsWithMoreStudents.length > 0)) {
-            return message.error("Groups are not balanced")
+        // if (!groupsBalanced && (groupsWithLessStudents.length > 0 && groupsWithMoreStudents.length > 0)) {
+        //     return message.error("Groups are not balanced")
+        // }
+        //check if there are empty groups
+        const emptyGroups = students.slice(1).find(group => group.length === 0 || group.length === 1)
+        if (emptyGroups && emptyGroups.length === 1 && emptyGroups[0].groupId) {
+            return message.error("There are empty groups")
+        }
+        if (emptyGroups && emptyGroups.length === 0) {
+            return message.error("There are empty groups")
         }
         try {
 
@@ -190,31 +207,51 @@ function CreateGroups({ activityId, courseId, activityData }) {
         }
         const file = files[0].originFileObj;
         const allStudents = students.flat()
+        //delete groupID from students
         const groups = {}
-        await new Promise((resolve, reject) => {
-            Papa.parse(file, {
-                complete: function (results) {
-                    for (let i = 0; i < results.data.length; i++) {
-                        var expresionRegular = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                        if (expresionRegular.test(results.data[i][0])) {
-                            const student = allStudents.find(student => student.attributes.email === results.data[i][0])
-                            if (student) {
-                                groups[results.data[i][1]] = [...groups[results.data[i][1]] || [], student]
+        try {
+            await new Promise((resolve, reject) => {
+                Papa.parse(file, {
+                    complete: function (results) {
+                        try {
+                            for (let i = 0; i < results.data.length; i++) {
+                                var expresionRegular = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                if (expresionRegular.test(results.data[i][0])) {
+                                    const student = allStudents.find(student => student?.attributes?.email === results.data[i][0])
+                                    if (student) {
+                                        student.id = student.id.toString()
+                                        groups[results.data[i][1]] = [...groups[results.data[i][1]] || [], student]
+                                    }
+                                }
                             }
+                            setLoadingModal(false);
+
+                            const arrGroups = Object.values(groups)
+                            const studentsWithoutGroup = allStudents.filter(student => !arrGroups.flat().some(group => group.id === student?.id))
+                            //delete groupIds
+                            const studentsWithouGroupIds = studentsWithoutGroup.map(student => {
+                                if (student.groupId) return null
+                                return student
+                            }).filter(Boolean)
+                            arrGroups.unshift(studentsWithouGroupIds)
+                            setStudents(arrGroups)
+                            setIsModalOpen(false);
+                            message.success('Participants imported successfully.');
+                            resolve();
+                        } catch (error) {
+                            setLoadingModal(false);
+                            message.error('Error importing participants.');
+                            reject();
                         }
                     }
-                    setLoadingModal(false);
-
-                    const arrGroups = Object.values(groups)
-                    arrGroups.unshift([])
-                    setStudents(arrGroups)
-                    setIsModalOpen(false);
-                    message.success('Participants imported successfully.');
-                    resolve();
-                }
+                });
             });
-        });
+        } catch (error) {
+            message.error('Error importing participants.');
+            setLoadingModal(false);
+        }
     }
+
     return (loading ?
         <div className="flex items-center justify-center flex-1 w-full min-h-[200px] lg:min-h-[500px] h-full">
             <MoonLoader color="#1E40AF" size={80} />
@@ -225,7 +262,7 @@ function CreateGroups({ activityId, courseId, activityData }) {
                 <Button
                     className="mb-4"
                     type="primary"
-                    disabled={activityHasStarted}
+                    disabled={false}
                     onClick={() => {
                         setStudents([...students, []]);
                     }}
@@ -241,6 +278,8 @@ function CreateGroups({ activityId, courseId, activityData }) {
                         if (students.length === 1) return
                         if (students[students.length - 1].length > 0) {
                             const copyStudents = [...students]
+                            //remove groupid from last element if it has one
+                            copyStudents[copyStudents.length - 1] = copyStudents[copyStudents.length - 1].filter(student => !student.groupId)
                             const newGroup = [...copyStudents[0], ...copyStudents[copyStudents.length - 1]]
                             copyStudents[0] = newGroup
                             copyStudents.pop()
@@ -261,16 +300,9 @@ function CreateGroups({ activityId, courseId, activityData }) {
                     Create groups automatically
                 </Button>
                 <Button
-                    className="mb-4"
-                    type="primary"
-                    loading={creatingGroups}
-                    // disabled={activityHasStarted}
-                    onClick={saveGroups}>
-                    Save groups
-                </Button >
-                <Button
                     type="default"
                     className="inline-flex items-center gap-2 bg-gray-200"
+                    disabled={activityHasStarted}
                     onClick={() => setIsModalOpen(true)}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4">
@@ -292,17 +324,27 @@ function CreateGroups({ activityId, courseId, activityData }) {
                     <p>Please upload a CSV spreadsheet file (comma or semi-colon separated) with the following format:</p>
                     <ol className='mb-5 ml-10 list-disc'>
                         <li>Column 1: Student's email</li>
-                        <li>Column 2: Group</li>
+                        <li>Column 2: Group ( You can put any text/number/combination you want if they match between students )</li>
                     </ol>
                     <p>For example:</p>
-                    <img className='my-3' src={'https://res.cloudinary.com/dnmlszkih/image/upload/v1704474229/hwqyzbtduejhu3bwjrle.png'} alt="" />
+                    <img className='my-3 max-h-[450px]' src={csvIMG} alt="" />
                     <UploadFiles fileList={files} accept={'.csv'} setFileList={setFiles} listType={'picture'} maxCount={1} />
                 </Modal>
+                <Button
+                    className="mb-4"
+                    type="primary"
+                    loading={creatingGroups}
+                    // disabled={activityHasStarted}
+                    onClick={saveGroups}>
+                    {textSaveGroups}
+                </Button >
+
             </div>
             {/* //force enabled for ludmila course  */}
             {/* {activityHasStarted && <p className="text-xs text-red-500">Activity has started, you can't modify the groups</p>} */}
-            <Divider className="mt-1" />
+            <Divider className="mt-0" />
             <h2> Activity was created to have {numberOfStudentsPerGroup} students per group</h2>
+            {activityHasStarted && <small className="mb-0 text-red-500 ">When activty has started, you can only update groups</small>}
             <Divider />
             <DragDropContext className="mt-5" onDragEnd={onDragEnd}  >
                 <div className="flex gap-y-3">
@@ -356,6 +398,7 @@ function CreateGroups({ activityId, courseId, activityData }) {
                                                     ref={provided.innerRef}>
                                                     {
                                                         group.map((student, index) => {
+                                                            if (student.groupId) return null
                                                             return (
                                                                 <Draggable key={student.id} draggableId={student.id.toString()} index={index}>
                                                                     {(provided) => (

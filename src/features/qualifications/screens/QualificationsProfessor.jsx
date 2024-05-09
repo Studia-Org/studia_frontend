@@ -40,7 +40,9 @@ const QualificationsProfessor = () => {
                     section?.attributes.subsections.data.forEach(
                         subsection => {
                             if (subsection?.attributes.activity.data) {
-                                if (subsection?.attributes?.activity.data.attributes.evaluable === true) {
+                                if (subsection?.attributes?.activity.data.attributes.evaluable === true
+                                    && subsection?.attributes?.activity.data.attributes.type !== 'peerReview'
+                                ) {
                                     evaluableActivities.push(subsection.attributes.activity.data)
                                 }
                             }
