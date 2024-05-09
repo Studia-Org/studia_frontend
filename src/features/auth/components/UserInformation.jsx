@@ -119,7 +119,14 @@ export const UserInformation = ({ onChange, formData, username, email, universit
                                 <label for="" className="px-1 text-xs font-semibold">Add a profile photo *</label>
                                 <FilePond
                                     files={profilePhoto}
-                                    onupdatefiles={setProfilePhoto}
+                                    beforeAddFile={(file) => {
+                                        if (file.file.type !== 'image/jpeg' && file.file.type !== 'image/png') {
+                                            message.error('Invalid file type. Please upload an image .jpeg or .png file.')
+                                            return false
+                                        }
+                                        setProfilePhoto([file.file])
+                                        return true
+                                    }}
                                     maxFiles={1}
                                 />
                             </div>

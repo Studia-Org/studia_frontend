@@ -37,7 +37,7 @@ const Register = () => {
   const handlePhotoUpload = async (data) => {
     const photoFormData = new FormData();
     let photoId = null;
-    photoFormData.append("files", profilePhoto[0].file);
+    photoFormData.append("files", profilePhoto[0]);
     const uploadPhoto = await fetch(`${API}/upload`, {
       method: 'POST',
       body: photoFormData,
@@ -154,8 +154,6 @@ const Register = () => {
         )
     }
   }
-
-
   return (
     <div class="">
       <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js" defer></script>
