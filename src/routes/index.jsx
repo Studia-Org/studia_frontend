@@ -32,20 +32,21 @@ export const AppRoutes = () => {
     const path = pathSegments[2];
     const inCourseCreate = pathSegments.join('/') === '/app/courses/create';
     const lastElement = pathSegments.pop();
-    const inCourseInside = pathSegments.join('/') === '/app/courses' && lastElement !== 'create' && lastElement !== 'courses';
+    const semiLastElement = pathSegments.pop();
+    const inCourseInside = pathSegments.join('/') === '/app/courses' && lastElement !== 'create' && lastElement !== 'courses' && semiLastElement !== 'activity';
 
-    const styles = inCourseInside ? 'flexible:ml-80 flexible:min-w-[calc(100vw-22rem)' : 'xl:ml-80 xl:min-w-[calc(100vw-22rem)';
-
+    const styles = inCourseInside ? 'flexible:ml-80' : 'xl:ml-80';
+    const style2 = inCourseCreate ? 'flexible:min-w-[calc(100vw-22rem)]' : 'xl:min-w-[calc(100vw-22rem)]';
     if (!isLoading) {
         if (element.props.match.route.path === '*') return <div className='font-Poppins'>{element}</div>;
         else if (authenticated)
             return (
                 isLoading ? <div className='flex items-center justify-center w-screen h-screen'><MoonLoader color="#363cd6" size={80} /></div> :
-                    <div className='flex flex-col bg-white font-Poppins '>
+                    <div className='flex flex-col bg-white font-Poppins max-w-[100vw]'>
                         <Navbar />
                         <div className='flex'>
                             <Sidebar section={path} />
-                            <div className={`flex min-h-[calc(100vh-8rem)] overflow-x-auto ${!inCourseCreate ? styles : ""} bg-white w-full max-w-[100vw]`}>
+                            <div className={`flex min-h-[calc(100vh-8rem)] overflow-x-auto ${!inCourseCreate ? styles : ""} ${!inCourseCreate ? style2 : ""} bg-white w-full max-w-[100vw]`}>
                                 <ErrorBoundary fallback={<ErrorBoundaryScreen />}>
                                     {element}
                                 </ErrorBoundary>
