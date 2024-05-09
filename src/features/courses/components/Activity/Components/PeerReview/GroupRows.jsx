@@ -3,6 +3,7 @@ import { Button } from "antd"
 import { ModalRubrica } from './ModalRubrica'
 import { ModalFilesPR } from './ModalFilesPR'
 import { AvatarGroup, Avatar } from "rsuite"
+import { useParams } from 'react-router-dom'
 
 export const GroupRows = ({ group, activityToReviewID, activityTitle, peerReviewAnswers, peerReviewinGroups }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -11,7 +12,7 @@ export const GroupRows = ({ group, activityToReviewID, activityTitle, peerReview
     const studentFiles = group.attributes.qualifications.data.find((qualification) => {
         return qualification?.attributes?.activity?.data?.id === activityToReviewID
     })?.attributes?.file?.data
-
+    const { activityId } = useParams()
     const studentQualificationsGiven = peerReviewAnswers.filter((answer) => {
         return answer.attributes?.group?.data?.id === group.id
     })
@@ -27,11 +28,14 @@ export const GroupRows = ({ group, activityToReviewID, activityTitle, peerReview
     }
 
     function renderAllGivenQualifications(givenQualification) {
+        const qual = givenQualification?.attributes?.qualifications?.data?.find((qualification) => {
+            return qualification?.attributes?.activity?.data?.id === +activityId
+        })
         return (
             <>
                 <Button onClick={() => handleRubricModalOpen(givenQualification)} className='flex items-center h-full overflow-x-clip' >
                     <AvatarGroup stack>
-                        {givenQualification?.attributes?.group?.data?.attributes?.users?.data?.map((user, index) => {
+                        {qual?.attributes?.group?.data?.attributes?.users?.data?.map((user, index) => {
                             return (
                                 <Avatar
                                     circle
@@ -41,7 +45,7 @@ export const GroupRows = ({ group, activityToReviewID, activityTitle, peerReview
                         })}
                     </AvatarGroup>
                     <div className="pl-3 text-left">
-                        {givenQualification?.attributes?.group?.data?.attributes?.users?.data?.map((user, index) => {
+                        {qual?.attributes?.group?.data?.attributes?.users?.data?.map((user, index) => {
                             return (
                                 <>
                                     <p className="text-sm font-semibold">{user.attributes.name}</p>
