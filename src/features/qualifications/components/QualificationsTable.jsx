@@ -323,6 +323,12 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                             Professor - Students ponderation
                                         </th>
                                     }
+                                    {
+                                        filteredActivity.attributes.BeingReviewedBy.data !== null &&
+                                        <th scope="col" class="px-6 py-3">
+                                            Files
+                                        </th>
+                                    }
                                     <th scope="col" class="px-6 py-3">
                                         Last modified
                                     </th>
