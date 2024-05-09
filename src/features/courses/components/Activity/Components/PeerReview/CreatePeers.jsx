@@ -32,6 +32,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                     group.attributes.activity?.data?.id === activityToReview.id
                 )
             if (activityToReviewWasInGroups) {
+
                 // check if qualification has already been created
                 if (studentQualification && studentQualification?.attributes?.qualifications?.data?.length > 0 && !added.includes(studentQualification.id)) {
                     added.push(studentQualification.id)
@@ -41,10 +42,15 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                         else user.attributes.profile_photo = allStudents.find((student) => student.id === user.id).attributes.profile_photo
                         return user
                     })
-                    return {
-                        qualification: studentQualification.attributes.qualifications.data[0],
-                        users: studentQualification.attributes.users.data.map((user) => user)
+
+                    const qual = studentQualification.attributes.qualifications.data.find((qualification) => qualification.attributes.activity.data.id === activityToReview.id)
+                    if (qual) {
+                        return {
+                            qualification: studentQualification.attributes.qualifications.data.find((qualification) => qualification.attributes.activity.data.id === activityToReview.id),
+                            users: studentQualification.attributes.users.data.map((user) => user)
+                        }
                     }
+                    return null
                 }
             } else {
                 if (studentQualification && !added.includes(studentQualification.id)) {
@@ -57,6 +63,8 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                 }
             }
         }).filter(Boolean)
+
+
         const groups = []
         // multiplacte each student hisself by the number of times they have to review usersToPair
         const studentsDuplicated = []
@@ -106,7 +114,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                     const qualificationToReview = qualificationsToReview[i].qualification
                     const find = qualificationsAlreadyDone
                         .filter((qualification) => qualification.attributes.peer_review_qualifications.data?.find((peer) => {
-                            return peer.id === qualificationToReview.id
+                            return peer.id === qualificationToReview?.id
                         }))
 
                     if (find.length > 0) {
@@ -115,7 +123,15 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                                 const group_qualification = studentsDuplicated.find((group) => group.id === qualification.attributes.group.data.id)
                                 const studentIndex = studentsDuplicated.findIndex((group) => group.id === qualification.attributes.group.data.id)
                                 studentsDuplicated.splice(studentIndex, 1)
-                                group.push({ ...group_qualification, draggableId: Math.random().toString(36) })
+                                const activityToReview = qualificationToReview.attributes.activity.data.id
+                                const findQualification = group_qualification?.attributes?.qualifications?.data?.find((qualification) => {
+                                    return qualification?.attributes?.activity?.data?.id === activityToReview
+                                })
+                                if (!findQualification) {
+                                }
+                                if (findQualification) {
+                                    group.push({ ...group_qualification, draggableId: Math.random().toString(36) })
+                                }
                             }
                             else {
                                 const student = studentsDuplicated.find((user) => user.id === qualification.attributes.user.data.id)
@@ -467,7 +483,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                                         return (
                                             <section className="flex flex-col gap-y-2">
                                                 <p className="text-sm text-gray-700">Activity done by </p>
-                                                <ul style={{ height: height }} className="bg-white rounded-lg">
+                                                <ul style={{ minHeight: height }} className="bg-white rounded-lg">
                                                     {
                                                         student.users.map((user, index) => {
                                                             return <li key={user.id} className={`p-2 list-none w-[300px] overflow-x-clip `}>
