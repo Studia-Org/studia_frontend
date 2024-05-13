@@ -7,7 +7,6 @@ import Timeline, {
 import "react-calendar-timeline/lib/Timeline.css";
 import '../styles/timelineStyles.css'
 import { useEffect, useRef, useState } from "react";
-import { off } from "rsuite/esm/DOMHelper";
 
 
 const keys = {
@@ -90,49 +89,47 @@ const TimelineComponent = ({ groups, timelineItems, createCourseFlag }) => {
       colorStyle = { backgroundColor: '#166534' }
     }
     else colorStyle = { backgroundColor: '#3573f9' }
+
     return (
-      <div className="pt-70">
+      <div
+        {...getItemProps({
+          style: {
+            padding: '10px',
+            backgroundColor,
+            color: item.color,
+            borderColor,
+            borderStyle: "solid",
+            borderWidth: 1,
+            borderRadius: 7,
+            borderLeftWidth: itemContext.selected ? 3 : 1,
+            borderRightWidth: itemContext.selected ? 3 : 1
+          },
+          onMouseDown: () => {
+          }
+        })}>
+        {itemContext.useResizeHandle ? <div {...leftResizeProps} /> : ''}
+
         <div
-          className="mt-10 flex"
-          {...getItemProps({
-            style: {
-              padding: '10px',
-              backgroundColor,
-              color: item.color,
-              borderColor,
-              borderStyle: "solid",
-              borderWidth: 1,
-              borderRadius: 7,
-              borderLeftWidth: itemContext.selected ? 3 : 1,
-              borderRightWidth: itemContext.selected ? 3 : 1
-            },
-            onMouseDown: () => {
-            }
-          })}
-
+          className="rct-item-content"
+          style={{ maxHeight: `${itemContext.dimensions.height}` }}
         >
-          {itemContext.useResizeHandle ? <div className="" {...leftResizeProps} /> : null}
-
-          <div className="flex h-full ">
-
-            <div className="w-2 rounded-md mr-3" style={colorStyle}>
+          <div className="flex h-full">
+            <div className="w-2 mr-3 rounded-md" style={colorStyle}>
             </div>
-            <div className="flex flex-col leading-none justify-center">
-              <h1 className="font-semibold text-base">
+            <div className="flex flex-col justify-center leading-none">
+              <h1 className="text-base font-semibold">
                 {itemContext.title}
               </h1>
-              <p className="font-normal  text-gray-500">
+              <p className="font-normal text-gray-500">
                 {item.description}
               </p>
-
             </div>
           </div>
-
-          {itemContext.useResizeHandle ? <div {...rightResizeProps} /> : null}
         </div>
-      </div>
 
-    );
+        {itemContext.useResizeHandle ? <div {...rightResizeProps} /> : ''}
+      </div>
+    )
   };
 
   function TimelineComponentStructure() {
@@ -170,10 +167,10 @@ const TimelineComponent = ({ groups, timelineItems, createCourseFlag }) => {
 
               if (today.toDateString() === intervalDate.toDateString() && !createCourseFlag) {
                 return (
-                  <div className="h-full bg-white items-center justify-center flex " {...getIntervalProps()}>
+                  <div className="flex items-center justify-center h-full bg-white " {...getIntervalProps()}>
                     <div className=" bg-[#3573f9] text-white py-2 px-10 rounded-lg">
-                      <div className="flex font-normal text-base ">
-                        <p className=" whitespace-pre">{dayOfWeek}</p>
+                      <div className="flex text-base font-normal ">
+                        <p className="whitespace-pre ">{dayOfWeek}</p>
                         <p className="font-semibold">, {day}</p>
                       </div>
                     </div>
@@ -183,7 +180,7 @@ const TimelineComponent = ({ groups, timelineItems, createCourseFlag }) => {
               } else {
                 return (
                   <div className={`h-full ${createCourseFlag ? 'bg-gray-50 border-t border-b' : 'bg-white'}  items-center justify-center flex `} {...getIntervalProps()}>
-                    <div className="flex font-normal text-base">
+                    <div className="flex text-base font-normal">
                       <p className="text-gray-600 whitespace-pre">{dayOfWeek}</p>
                       <p className="font-semibold">, {day}</p>
                     </div>
