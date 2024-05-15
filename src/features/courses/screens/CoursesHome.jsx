@@ -51,7 +51,7 @@ const CoursesHome = () => {
   const fetchCoursesCards = async () => {
     setIsLoading(true);
     try {
-      let endpoint = `${API}/courses?populate=*,professor.profile_photo,course_tags,cover,students.profile_photo`;
+      let endpoint = `${API}/courses?populate=*,professor.profile_photo,course_tags,cover,students.profile_photo,evaluators`;
       if (user.role_str === 'student') {
         endpoint = `${API}/users/${user?.id}?populate=courses.cover,courses.students.profile_photo,courses.professor,courses.professor.profile_photo,courses.course_tags`;
       }
@@ -68,7 +68,9 @@ const CoursesHome = () => {
   };
   const filterCoursesByRole = (data, user) => {
     if (user.role_str === 'professor' || user.role_str === 'admin') {
-      return data.data.filter(course => course.attributes.professor.data.id === user.id);
+      const coursesEvaluators = data.data.filter(course => course.attributes.evaluators.data.some(evaluator => evaluator.id === user.id));
+      const coursesProfessor = data.data.filter(course => course.attributes.professor.data.id === user.id);
+      return [...coursesEvaluators, ...coursesProfessor];
     } else if (user.role_str === 'student') {
       return data.courses;
     }
@@ -184,9 +186,6 @@ const CoursesHome = () => {
               </div> : null
           }
         </div>
-
-
-
         <img className='absolute top-0 right-0 object-cover w-24 h-full rounded-r-lg opacity-90' src={subsection.cover} alt="" />
       </Link>
     )

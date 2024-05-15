@@ -195,7 +195,7 @@ const TimelineComponent = ({ groups, timelineItems, createCourseFlag }) => {
           {!createCourseFlag ? (
             <TodayMarker>
               {({ styles }) => (
-                <div style={{ ...styles, backgroundColor: '#3573f9', zIndex: '100', width: '1px' }} />
+                <div style={{ ...styles, backgroundColor: '#3573f9', zIndex: '', width: '1px' }} />
               )}
             </TodayMarker>
           ) : null}
