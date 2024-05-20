@@ -6,9 +6,10 @@ import { Button, Divider, message } from "antd";
 import { useParams } from "react-router-dom";
 import { API } from "../../../../../../constant";
 import { getToken } from "../../../../../../helpers";
-
+import { useAuthContext } from "../../../../../../context/AuthContext";
 function CreatePeers({ students: allStudents, setCreatePeerReview, activityToReview, activity }) {
 
+    const { user } = useAuthContext();
     const [students, setStudents] = useState([])
     const [studentsToReview, setStudentsToReview] = useState([])
     const [creatingGroups, setCreatingGroups] = useState(false)
@@ -18,8 +19,8 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
     const usersToPair = activity?.attributes?.usersToPair
     const [activityHasStarted] = useState(new Date(activity.attributes.start_date) < new Date())
     const [groupWithMoreStudents, setGroupWithMoreStudents] = useState(null)
+    const [buttonTextPeerReview, setButtonTextPeerReview] = useState("Create peers")
     const height = Math.max(studentsPerGroup, 1) * 52 + "px"
-
     useEffect(() => {
         const added = []
         const qualificationsToReview = allStudents.map((student) => {
@@ -143,6 +144,8 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                     }
                     groups.push(group)
                 }
+                if (qualificationsAlreadyDone.length > 0) setButtonTextPeerReview("Update peers")
+
                 const groupWithMoreStudents = qualificationsToReview.find((group) => group.users.length > studentsPerGroup)
                 setGroupWithMoreStudents(groupWithMoreStudents)
 
@@ -151,7 +154,6 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
             })
 
     }, [allStudents])
-
 
     const reorder = (list, startIndex, endIndex) => {
         const result = Array.from(list);
@@ -336,7 +338,6 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
         const peers = students.map((group, index) => {
             if (index === 0) return null
             const data = {
-
                 qualifications: studentsToReview[index - 1].qualification.id,
                 activity: +activityId
             }
@@ -354,11 +355,14 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${getToken()}`
                 },
-                body: JSON.stringify({ peers, peerInGroups: activity.attributes.groupActivity })
+                body: JSON.stringify({ peers, peerInGroups: activity.attributes.groupActivity, updatedBy: user.id })
             }
         )
         if (response.ok) {
             message.success("Peers created successfully")
+        }
+        else {
+            message.error("Error creating peers")
         }
 
         setCreatingGroups(false)
@@ -389,7 +393,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                         loading={creatingGroups}
                         disabled={activityHasStarted && false}
                         onClick={saveGroups}>
-                        Save peers
+                        {buttonTextPeerReview}
                     </Button >
                 </div>
                 {/* disable text for ludmila */}

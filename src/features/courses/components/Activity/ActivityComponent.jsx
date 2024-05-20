@@ -144,7 +144,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
         data: {
           activity: activityId,
           file: isThinkAloud ? result[0].id : files,
-          user: user.id,
+          user: user.id, //TODO CHANGE IF ITS ITS ACTIVITY GROUP AND IT DOES NOT HAVE A GROUP
           delivered: true,
           delivered_data: new Date(),
         }
