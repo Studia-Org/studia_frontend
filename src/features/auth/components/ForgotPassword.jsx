@@ -27,7 +27,7 @@ export const ForgotPassword = ({ setForgotPasswordFlag }) => {
             .then(data => {
                 console.log(data)
                 if (data.error) {
-                    message.error(data.error)
+                    message.error('Something went wrong')
                 } else {
                     message.success(`We've sent you an email to ${email} with a link to reset your password.`)
                     setForgotPasswordFlag(false)

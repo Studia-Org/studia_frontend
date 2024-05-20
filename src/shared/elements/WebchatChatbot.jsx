@@ -26,7 +26,7 @@ export const WebchatChatbot = () => {
                     "theme": "prism",
                     "themeColor": "#2563eb",
                     "userData": {
-                        "user_id": user?.id,
+                        "user_id": (user?.id).toString(),
                         "company": "Botpress"
                     }
                 });
