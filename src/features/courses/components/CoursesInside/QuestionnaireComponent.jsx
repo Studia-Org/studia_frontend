@@ -21,6 +21,7 @@ import { UserQuestionnaireAnswerTable } from './Questionnaire/UserQuestionnaireA
 import { getRecommendationsSRLO } from './Questionnaire/getRecommendationsSRLO';
 import { RecommendationCard } from './Questionnaire/RecommendationCard';
 import { ScaleQuestionnaireForm } from './Questionnaire/ScaleQuestionnaireForm';
+import { StepsQuestionnaire } from './Questionnaire/StepsQuestionnaire';
 
 const { Search } = Input;
 
@@ -455,7 +456,15 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
               animate="visible"
               variants={list}
             >
-              <div className="space-y-5 ">{renderQuestionsForPage()}</div>
+              <div className='my-4'>
+                <StepsQuestionnaire currentPage={currentPage} totalPages={totalPages} />
+              </div>
+
+
+
+              <div className="space-y-5 ">
+                {renderQuestionsForPage()}
+              </div>
               {
                 (enableEdit === true && user?.role_str !== 'student' && (totalPages === 0 || currentPage === totalPages)) && (
                   <AddQuestionButton setCourseSubsectionQuestionnaire={setCourseSubsectionQuestionnaire} />
