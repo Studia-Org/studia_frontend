@@ -28,7 +28,6 @@ export const SpeedDialCreateCourse = ({ setExpandCreateCourseStudent }) => {
                     <div className='flex items-center'>
                         <button disabled className='flex items-center text-left text-gray-400'
                             onClick={() => navigate('create')}>
-
                             <div className='flex items-center duration-150'>
                                 <p className='ml-2'>Create new course from a template</p>
                                 <FiChevronRight className='ml-1' />
@@ -54,7 +53,7 @@ export const SpeedDialCreateCourse = ({ setExpandCreateCourseStudent }) => {
                 type="button"
                 data-dial-toggle="speed-dial-menu-dropdown"
                 aria-controls="speed-dial-menu-dropdown"
-                className="flex items-center justify-center ml-auto w-[3.2rem] h-[3.2rem]  text-white transition bg-[#3c3c3c] rounded-full shadow-xl hover:bg-[#4f4f4f] duration-100 hover-scale active-scale "
+                className="flex items-center justify-center ml-auto w-[3.2rem] h-[3.2rem]  text-white transition !bg-[#3c3c3c] rounded-full shadow-xl hover:!bg-[#4f4f4f] duration-100 hover-scale active-scale "
                 onClick={() => handleClick()}
             >
                 <FiPlus size={26} />
