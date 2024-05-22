@@ -121,7 +121,6 @@ export const Questionnaire = ({ setState, setSelfAssesmentData, setQualification
                             setUserResponses={setUserResponses}
                             questionnaireAnswers={questionnaireAnswers}
                             user={user}
-
                         />
                     }</div>
                 </motion.ul>

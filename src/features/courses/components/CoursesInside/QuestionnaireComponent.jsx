@@ -20,6 +20,7 @@ import { CardQuestionnaireUser } from './Questionnaire/CardQuestionnaireUser';
 import { UserQuestionnaireAnswerTable } from './Questionnaire/UserQuestionnaireAnswerTable';
 import { getRecommendationsSRLO } from './Questionnaire/getRecommendationsSRLO';
 import { RecommendationCard } from './Questionnaire/RecommendationCard';
+import { ScaleQuestionnaireForm } from './Questionnaire/ScaleQuestionnaireForm';
 
 const { Search } = Input;
 
@@ -32,7 +33,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
   const [recommendationList, setRecommendationList] = useState([]);
   const [completed, setCompleted] = useState(questionnaireAnswerData.length > 0);
   const [sendingData, setSendingData] = useState(false);
-  const questionsPerPage = 5;
+  const questionsPerPage = questionnaire.attributes.type === 'scaling' ? 10 : 5;
   const totalQuestions = questionnaire.attributes.Options.questionnaire.questions.length;
   const totalPages = Math.ceil(totalQuestions / questionsPerPage);
   const { minutes, seconds, stopTimer } = useTimer({ testCompleted: questionnaireAnswerData.length > 0 });
@@ -292,129 +293,135 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
     const startIdx = (currentPage - 1) * questionsPerPage;
     const endIdx = Math.min(startIdx + questionsPerPage, totalQuestions);
     const questionsForPage = questionnaire.attributes.Options.questionnaire.questions.slice(startIdx, endIdx);
-    return questionsForPage
-      .filter((question) => question !== undefined && question !== null)
-      .map((question, index) => {
-        const absoluteIndex = startIdx + index;
-        const initialValue = editedQuestions[absoluteIndex] !== undefined ? editedQuestions[absoluteIndex] : question;
-        return (
-          <motion.li
-            className='bg-white shadow-md rounded-md p-5 border-l-8 border-[#377ddf75]'
-            variants={item}
-            key={absoluteIndex}>
-            {
-              enableEdit ?
-                <div className='flex items-center'>
-                  <Input
-                    type="text"
-                    className='w-full rounded-md'
-                    value={initialValue.question}
-                    onChange={(e) => handleInputChange({ question: e.target.value, options: question.options }, absoluteIndex)}
-                  />
-                  <Popconfirm
-                    title="Delete question"
-                    description="Are you sure you want to delete this question?"
-                    okText="Yes"
-                    onConfirm={() => deleteQuestion(absoluteIndex)}
-                    okButtonProps={{ className: 'bg-blue-500', type: 'primary' }}
-                    cancelText="No">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 ml-4 cursor-pointer">
-                      <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z" clipRule="evenodd" />
-                    </svg>
-                  </Popconfirm>
-                </div>
-                :
-                <p className="font-medium">{question.question}</p>
-            }
+    if (questionnaire.attributes.type === 'scaling') {
+      return (
+        <ScaleQuestionnaireForm questions={questionsForPage} groupValues={groupValues} setGroupValues={setGroupValues} currentPage={currentPage} />
+      )
+    } else {
+      return questionsForPage
+        .filter((question) => question !== undefined && question !== null)
+        .map((question, index) => {
+          const absoluteIndex = startIdx + index;
+          const initialValue = editedQuestions[absoluteIndex] !== undefined ? editedQuestions[absoluteIndex] : question;
+          return (
+            <motion.li
+              className='bg-white shadow-md rounded-md p-5 border-l-8 border-[#377ddf75]'
+              variants={item}
+              key={absoluteIndex}>
+              {
+                enableEdit ?
+                  <div className='flex items-center'>
+                    <Input
+                      type="text"
+                      className='w-full rounded-md'
+                      value={initialValue.question}
+                      onChange={(e) => handleInputChange({ question: e.target.value, options: question.options }, absoluteIndex)}
+                    />
+                    <Popconfirm
+                      title="Delete question"
+                      description="Are you sure you want to delete this question?"
+                      okText="Yes"
+                      onConfirm={() => deleteQuestion(absoluteIndex)}
+                      okButtonProps={{ className: 'bg-blue-500', type: 'primary' }}
+                      cancelText="No">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 ml-4 cursor-pointer">
+                        <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z" clipRule="evenodd" />
+                      </svg>
+                    </Popconfirm>
+                  </div>
+                  :
+                  <p className="font-medium">{question.question}</p>
+              }
 
-            {Array.isArray(question.options) ? (
-              user.role_str === "student" || (user.role_str !== "student" && questionnaireAnswerData.length > 0) ?
-                <div key={absoluteIndex}>
-                  {
-                    (questionnaireAnswerData.length > 0) ?
-                      <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} defaultValue={questionnaireAnswerData[0].responses.responses[absoluteIndex]?.answer}>
+              {Array.isArray(question.options) ? (
+                user.role_str === "student" || (user.role_str !== "student" && questionnaireAnswerData.length > 0) ?
+                  <div key={absoluteIndex}>
+                    {
+                      (questionnaireAnswerData.length > 0) ?
+                        <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} defaultValue={questionnaireAnswerData[0].responses.responses[absoluteIndex]?.answer}>
+                          {question.options.map((option, optionIndex) => (
+                            <MyFormControlLabel key={optionIndex} value={option} label={option} control={<Radio disabled readOnly />} />
+                          ))}
+                        </RadioGroup>
+                        :
+                        <RadioGroup className="mt-4"
+                          name={`use-radio-group-${absoluteIndex}`}
+                          value={groupValues[absoluteIndex] || ""}
+                          onChange={(event) => handleRadioChange(absoluteIndex, event.target.value)}
+                        >
+                          {question.options.map((option, optionIndex) => (
+                            <MyFormControlLabel key={optionIndex} value={option} label={option} control={<Radio />} />
+                          ))}
+                        </RadioGroup>
+                    }
+                  </div> :
+                  enableEdit ?
+                    <div key={absoluteIndex}>
+                      <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} >
+                        {initialValue.options.map((option, optionIndex) => (
+                          <div className='flex items-center gap-2 space-y-2'>
+                            <div className='w-5 h-5 border-2 border-gray-400 rounded-full '> </div>
+                            <Input type="text" className='rounded-md' value={option} onChange={(e) => {
+                              const updatedOptions = initialValue.options.map((o, index) =>
+                                index === optionIndex ? e.target.value : o
+                              );
+                              handleInputChange({ question: initialValue.question, options: updatedOptions }, absoluteIndex);
+                            }} />
+                          </div>
+                        ))}
+                      </RadioGroup>
+                    </div> :
+                    <div key={absoluteIndex}>
+                      <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} >
                         {question.options.map((option, optionIndex) => (
                           <MyFormControlLabel key={optionIndex} value={option} label={option} control={<Radio disabled readOnly />} />
                         ))}
                       </RadioGroup>
-                      :
-                      <RadioGroup className="mt-4"
-                        name={`use-radio-group-${absoluteIndex}`}
-                        value={groupValues[absoluteIndex] || ""}
-                        onChange={(event) => handleRadioChange(absoluteIndex, event.target.value)}
-                      >
-                        {question.options.map((option, optionIndex) => (
-                          <MyFormControlLabel key={optionIndex} value={option} label={option} control={<Radio />} />
-                        ))}
-                      </RadioGroup>
-                  }
-                </div> :
-                enableEdit ?
-                  <div key={absoluteIndex}>
-                    <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} >
-                      {initialValue.options.map((option, optionIndex) => (
-                        <div className='flex items-center gap-2 space-y-2'>
-                          <div className='w-5 h-5 border-2 border-gray-400 rounded-full '> </div>
-                          <Input type="text" className='rounded-md' value={option} onChange={(e) => {
-                            const updatedOptions = initialValue.options.map((o, index) =>
-                              index === optionIndex ? e.target.value : o
-                            );
-                            handleInputChange({ question: initialValue.question, options: updatedOptions }, absoluteIndex);
-                          }} />
-                        </div>
-                      ))}
-                    </RadioGroup>
-                  </div> :
-                  <div key={absoluteIndex}>
-                    <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} >
-                      {question.options.map((option, optionIndex) => (
-                        <MyFormControlLabel key={optionIndex} value={option} label={option} control={<Radio disabled readOnly />} />
-                      ))}
-                    </RadioGroup>
+                    </div>
+              ) : (
+                user.role_str === "student" || (user.role_str !== "student" && questionnaireAnswerData.length > 0) ?
+                  <div key={absoluteIndex} className='flex w-full mt-5'>
+                    {
+                      questionnaireAnswerData.length > 0 ?
+                        <TextField
+                          id="outlined-basic"
+                          label=""
+                          disabled
+                          defaultValue={questionnaireAnswerData[0].responses.responses[absoluteIndex].answer}
+                          variant="filled"
+                          className='w-full'
+                          rows={3}
+                          multiline
+                        /> :
+                        <TextField
+                          id="outlined-basic"
+                          label=""
+                          variant="filled"
+                          className='w-full'
+                          value={groupValues[absoluteIndex] || ""}
+                          onChange={(event) => handleRadioChange(absoluteIndex, event.target.value)}
+                          rows={3}
+                          multiline
+                        />
+                    }
                   </div>
-            ) : (
-              user.role_str === "student" || (user.role_str !== "student" && questionnaireAnswerData.length > 0) ?
-                <div key={absoluteIndex} className='flex w-full mt-5'>
-                  {
-                    questionnaireAnswerData.length > 0 ?
-                      <TextField
-                        id="outlined-basic"
-                        label=""
-                        disabled
-                        defaultValue={questionnaireAnswerData[0].responses.responses[absoluteIndex].answer}
-                        variant="filled"
-                        className='w-full'
-                        rows={3}
-                        multiline
-                      /> :
-                      <TextField
-                        id="outlined-basic"
-                        label=""
-                        variant="filled"
-                        className='w-full'
-                        value={groupValues[absoluteIndex] || ""}
-                        onChange={(event) => handleRadioChange(absoluteIndex, event.target.value)}
-                        rows={3}
-                        multiline
-                      />
-                  }
-                </div>
-                :
-                <div key={absoluteIndex} className='flex w-full mt-5'>
-                  <TextField
-                    id="outlined-basic"
-                    label=""
-                    disabled
-                    variant="filled"
-                    className='w-full'
-                    rows={1}
-                    multiline
-                  />
-                </div>
-            )}
-          </motion.li>
-        );
-      });
+                  :
+                  <div key={absoluteIndex} className='flex w-full mt-5'>
+                    <TextField
+                      id="outlined-basic"
+                      label=""
+                      disabled
+                      variant="filled"
+                      className='w-full'
+                      rows={1}
+                      multiline
+                    />
+                  </div>
+              )}
+            </motion.li>
+          );
+        });
+    }
   };
 
 
