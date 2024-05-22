@@ -21,7 +21,8 @@ import GroupMembers from './Components/GroupMembers.jsx';
 import useGetGroup from './hooks/useGetGroup.jsx';
 import CreateGroups from './Components/CreateGroups.jsx';
 import { RecordAudio } from './Components/ThinkAloud/RecordAudio';
-
+import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
+registerPlugin(FilePondPluginFileValidateSize);
 
 registerPlugin(FilePondPluginImagePreview);
 
@@ -493,7 +494,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                 {(!activityFiles.length ||
                   activityFiles?.length === 0) ? (
                   enableEdit ? (
-                    <FilePond allowMultiple={true} maxFiles={5} onupdatefiles={setFilesTask} />
+                    <FilePond allowMultiple={true} maxFileSize={'10MB'} maxFiles={5} onupdatefiles={setFilesTask} />
                   ) : (
                     <Empty
                       image={Empty.PRESENTED_IMAGE_SIMPLE}
@@ -508,7 +509,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                 ) : (
                   enableEdit ? (
                     <section className='max-w-[calc(100vw-1.25rem)]'>
-                      <FilePond allowMultiple={true} maxFiles={5} onupdatefiles={setFilesTask} />
+                      <FilePond allowMultiple={true} maxFileSize={'10MB'} maxFiles={5} onupdatefiles={setFilesTask} />
                       <div className='space-y-2'>
                         {activityFiles.map((file) => renderFiles(file))}
                       </div>
@@ -628,13 +629,17 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                           :
                           <div className='m-5'>
                             <FilePond
+                              maxFileSize={'10MB'}
                               files={formData.getAll('files')}
                               allowMultiple={true}
                               maxFiles={5}
-                              onaddfile={(err, item) => {
-                                if (!err) {
-                                  handleFileUpload(item.file);
+                              beforeAddFile={(item) => {
+                                if (item.file.size > 1048576) {
+                                  message.error('File is too big. Please upload a file smaller than 10MB.')
+                                  return false
                                 }
+                                handleFileUpload(item.file);
+                                return true;
                               }}
                               onremovefile={(err, item) => {
                                 if (!err) {
@@ -661,12 +666,16 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                       <>
                         <FilePond
                           files={formData.getAll('files')}
+                          maxFileSize={'10MB'}
                           allowMultiple={true}
                           maxFiles={5}
-                          onaddfile={(err, item) => {
-                            if (!err) {
-                              handleFileUpload(item.file);
+                          beforeAddFile={(item) => {
+                            if (item.file.size > 1048576) {
+                              message.error('File is too big. Please upload a file smaller than 10MB.')
+                              return false
                             }
+                            handleFileUpload(item.file);
+                            return true;
                           }}
                           onremovefile={(err, item) => {
                             if (!err) {

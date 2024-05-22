@@ -6,13 +6,21 @@ import { FilePond, registerPlugin } from 'react-filepond';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond/dist/filepond.min.css';
+import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
+registerPlugin(FilePondPluginFileValidateSize);
 registerPlugin(FilePondPluginImagePreview);
 
 export const UserInformation = ({ onChange, formData, username, email, university, password, repassword, name, setPageSelector, setProfilePhoto, profilePhoto }) => {
 
     function handleContinue() {
         if (!username || !email || !university || !password || !repassword || !name || profilePhoto.length === 0) {
-            message.error('Please fill in all fields')
+            if (!username) message.error('Please fill username')
+            if (!name) message.error('Please fill name')
+            if (!email) message.error('Please fill email')
+            if (!university) message.error('Please fill university')
+            if (!password) message.error('Please fill password')
+            if (!repassword) message.error('Please fill repassword')
+            if (profilePhoto.length === 0) message.error('Please upload a profile photo')
         }
         else if (password !== repassword) {
             message.error('Passwords do not match')
@@ -119,14 +127,21 @@ export const UserInformation = ({ onChange, formData, username, email, universit
                                 <label for="" className="px-1 text-xs font-semibold">Add a profile photo *</label>
                                 <FilePond
                                     files={profilePhoto}
+                                    maxFileSize={'10MB'}
                                     beforeAddFile={(file) => {
                                         if (file.file.type !== 'image/jpeg' && file.file.type !== 'image/png') {
                                             message.error('Invalid file type. Please upload an image .jpeg or .png file.')
                                             return false
                                         }
+                                        if (file.file.size > 1048576) {
+                                            message.error('File is too big. Please upload a file smaller than 10MB.')
+                                            return false
+                                        }
+
                                         setProfilePhoto([file.file])
                                         return true
                                     }}
+                                    onremovefile={() => setProfilePhoto([])}
                                     maxFiles={1}
                                 />
                             </div>
