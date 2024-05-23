@@ -634,7 +634,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                               allowMultiple={true}
                               maxFiles={5}
                               beforeAddFile={(item) => {
-                                if (item.file.size > 1048576) {
+                                if (item.file.size > 10485760) {
                                   message.error('File is too big. Please upload a file smaller than 10MB.')
                                   return false
                                 }
@@ -670,7 +670,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                           allowMultiple={true}
                           maxFiles={5}
                           beforeAddFile={(item) => {
-                            if (item.file.size > 1048576) {
+                            if (item.file.size > 10485760) {
                               message.error('File is too big. Please upload a file smaller than 10MB.')
                               return false
                             }

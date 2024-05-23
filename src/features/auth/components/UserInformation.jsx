@@ -133,7 +133,7 @@ export const UserInformation = ({ onChange, formData, username, email, universit
                                             message.error('Invalid file type. Please upload an image .jpeg or .png file.')
                                             return false
                                         }
-                                        if (file.file.size > 1048576) {
+                                        if (file.file.size > 10485760) {
                                             message.error('File is too big. Please upload a file smaller than 10MB.')
                                             return false
                                         }

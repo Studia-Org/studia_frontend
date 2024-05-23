@@ -182,8 +182,7 @@ export const EditPanel = ({ onClose, userProfile, uid, setUserProfile }) => {
             });
             return;
         }
-        var _size = Math.floor(event.target.files[0].size / 1048576) + 'MB';
-        if (_size > 10) {
+        if (event.target.files[0].size > 10485760) {
             Toast.fire({
                 icon: 'error',
                 text: 'The image must be less than 10MB',
@@ -202,7 +201,7 @@ export const EditPanel = ({ onClose, userProfile, uid, setUserProfile }) => {
             });
             return;
         }
-        if (event.target.files[0].size > 1048576) {
+        if (event.target.files[0].size > 10485760) {
             Toast.fire({
                 icon: 'error',
                 text: 'The image must be less than 10MB',
