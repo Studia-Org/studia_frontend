@@ -73,7 +73,7 @@ function EvaluateScreen({ data, setShowEvaluate, sendEvalution, answersDelivered
 
                     </div>
                     <div className="pt-5 pr-5 place-self-end">
-                        <Button type='primary' onClick={sendEvalution} loading={sendDataLoader}
+                        <Button type='primary' onClick={() => sendEvalution()} disabled={sendDataLoader} loading={sendDataLoader}
                             className="flex flex-wrap items-center gap-1 px-4 py-2 font-bold text-white duration-200 bg-blue-700 rounded h-fit w-fit hover:scale-95 ">
                             {buttonText}
                         </Button>
