@@ -101,7 +101,7 @@ export const ProfessorPeerReview = ({ activityData }) => {
   return (
     <div className='h-full p-5'>
       <BackToCourse courseId={courseId} navigate={navigate} />
-      <div className='h-full mx-5'>
+      <main className='mx-5'>
         <h2 className='mt-3 mb-2 text-lg font-medium'>Peer Review</h2>
         <p className='mb-1 text-sm text-gray-500'>In this section, you will be able to see the evaluations that students have given to their peers.</p>
         <p className='mb-4 text-sm text-gray-500'>Peers will be created automatically if you don't create them manually</p>
@@ -164,7 +164,7 @@ export const ProfessorPeerReview = ({ activityData }) => {
             </tbody>
           </table>
         </div>
-      </div>
+      </main>
     </div>
   )
 }
