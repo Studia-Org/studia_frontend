@@ -4,7 +4,7 @@ export const MSLQuestionnaireData = {
         description: "Questionnaire for measuring student learning and motivation",
         autocorrect: false,
         editable: false,
-        type: "MSLQ",
+        type: "scaling",
         Options: {
             questionnaire: {
                 editable: false,
@@ -65,7 +65,7 @@ export const SRLOQuestionnaireData = {
         description: "Questionnaire for measuring student self-regulated learning",
         autocorrect: false,
         editable: false,
-        type: "SRL-O",
+        type: "scaling",
         Options: {
             questionnaire: {
                 editable: false,
@@ -256,7 +256,7 @@ export const EmptyQuestionnaireData = {
         description: "Empty Questionnaire",
         autocorrect: false,
         editable: true,
-        type: "Empty",
+        type: "standard",
         Options: {
             questionnaire: {
                 editable: true,
@@ -278,7 +278,7 @@ export const PlannificationQuestionnaireData = {
         description: "Questionnaire for measuring student plannification",
         autocorrect: false,
         editable: true,
-        type: "Plannification",
+        type: "standard",
         Options: {
             questionnaire: {
                 title: "Plannification Questionnaire",
@@ -324,7 +324,7 @@ export const SelfAssesmentData = {
         description: "Questionnaire for measuring the performance and progress of students.",
         autocorrect: false,
         editable: true,
-        type: "Self-Assessment",
+        type: "standard",
         Options: {
             questionnaire: {
                 title: "Self-Assessment Questionnaire",

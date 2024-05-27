@@ -6,8 +6,8 @@ export const fetchUserResponsesQuestionnaires = async (idQuestionnaire) => {
         const data = await response.json();
         const questionnaireResponses = data.data.filter((response) => response.attributes.questionnaire?.data?.id === idQuestionnaire);
         questionnaireResponses.forEach((response) => {
-            response.attributes.user?.data.attributes.qualifications?.data.forEach((qualification) => {
-                if (qualification.attributes.activity?.data?.attributes.subsection?.data?.attributes.questionnaire?.data?.id === idQuestionnaire) {
+            response?.attributes.user?.data?.attributes.qualifications?.data.forEach((qualification) => {
+                if (qualification?.attributes.activity?.data?.attributes.subsection?.data?.attributes.questionnaire?.data?.id === idQuestionnaire) {
                     response.attributes.qualification = qualification;
                 }
             })

@@ -45,6 +45,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
   };
 
   useEffect(() => {
+
     if (questionnaireAnswerData.length > 0) {
       if (questionnaire.attributes.Options.questionnaire?.type === 'SRL-O') {
         setRecommendationList(getRecommendationsSRLO(questionnaireAnswerData[0].responses.responses))
@@ -54,17 +55,13 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
     } else {
       setCompleted(false);
     }
-  }, [questionnaireAnswerData.length, stopTimer, questionnaire.id]);
+  }, [questionnaireAnswerData.length, questionnaire.id]);
 
   useEffect(() => {
     setCurrentPage(1);
     setUserResponses([]);
     setLoadingData(true);
-    const fetchData = async () => {
-      setUserResponses(await fetchUserResponsesQuestionnaires(questionnaire.id));
-      setLoadingData(false);
-    };
-    fetchData();
+    setQuestionnaireAnswerData(answers.filter((answer) => answer.questionnaire?.id === questionnaire?.id));
   }, [questionnaire.id]);
 
   const list = {
@@ -295,9 +292,10 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
     const startIdx = (currentPage - 1) * questionsPerPage;
     const endIdx = Math.min(startIdx + questionsPerPage, totalQuestions);
     const questionsForPage = questionnaire.attributes.Options.questionnaire.questions.slice(startIdx, endIdx);
+    let answersData = answers.filter((answer) => answer.questionnaire?.id === questionnaire?.id);
     if (questionnaire.attributes.type === 'scaling') {
       return (
-        <ScaleQuestionnaireForm questions={questionsForPage} groupValues={groupValues} setGroupValues={setGroupValues} currentPage={currentPage} />
+        <ScaleQuestionnaireForm questions={questionsForPage} groupValues={groupValues} setGroupValues={setGroupValues} currentPage={currentPage} questionnaireAnswerData={answersData} />
       )
     } else {
       return questionsForPage
@@ -336,11 +334,11 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
               }
 
               {Array.isArray(question.options) ? (
-                user.role_str === "student" || (user.role_str !== "student" && questionnaireAnswerData.length > 0) ?
+                user.role_str === "student" || (user.role_str !== "student" && answersData.length > 0) ?
                   <div key={absoluteIndex}>
                     {
-                      (questionnaireAnswerData.length > 0) ?
-                        <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} defaultValue={questionnaireAnswerData[0].responses.responses[absoluteIndex]?.answer}>
+                      (answersData.length > 0) ?
+                        <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} defaultValue={answersData[0].responses.responses[absoluteIndex]?.answer}>
                           {question.options.map((option, optionIndex) => (
                             <MyFormControlLabel key={optionIndex} value={option} label={option} control={<Radio disabled readOnly />} />
                           ))}
@@ -381,15 +379,15 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
                       </RadioGroup>
                     </div>
               ) : (
-                user.role_str === "student" || (user.role_str !== "student" && questionnaireAnswerData.length > 0) ?
+                user.role_str === "student" || (user.role_str !== "student" && answersData.length > 0) ?
                   <div key={absoluteIndex} className='flex w-full mt-5'>
                     {
-                      questionnaireAnswerData.length > 0 ?
+                      answersData.length > 0 ?
                         <TextField
                           id="outlined-basic"
                           label=""
                           disabled
-                          defaultValue={questionnaireAnswerData[0].responses.responses[absoluteIndex].answer}
+                          defaultValue={answersData[0].responses.responses[absoluteIndex].answer}
                           variant="filled"
                           className='w-full'
                           rows={3}
@@ -431,7 +429,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
 
   return (
     <div className="flex flex-col mt-5">
-      <Header enableEdit={enableEdit} questionnaire={questionnaire} questionnaireAnswerData={questionnaireAnswerData}
+      <Header enableEdit={enableEdit} questionnaire={questionnaire} questionnaireAnswerData={answers.filter((answer) => answer.questionnaire?.id === questionnaire?.id)}
         completed={completed} setEnableEdit={setEnableEdit} courseSubsection={courseSubsection} editedQuestions={editedQuestions}
         setQuestionnaireAnswerData={setQuestionnaireAnswerData}
       />
@@ -461,8 +459,6 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
                 <StepsQuestionnaire currentPage={currentPage} totalPages={totalPages} />
               </div>
 
-
-
               <div className="space-y-5 ">
                 {renderQuestionsForPage()}
               </div>
@@ -480,7 +476,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
                     {
                       user.role_str === 'student' && (
                         <>
-                          <span className='inline-flex w-[60px] text-gray-500'>{minutes}:{seconds < 10 ? "0" + seconds : seconds}</span>
+
                           <Button type='primary' loading={sendingData} onClick={handleSubmission}
                             className="ml-auto ">
                             Submit
