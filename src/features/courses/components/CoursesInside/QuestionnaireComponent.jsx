@@ -23,7 +23,6 @@ import { RecommendationCard } from './Questionnaire/RecommendationCard';
 import { ScaleQuestionnaireForm } from './Questionnaire/ScaleQuestionnaireForm';
 import { StepsQuestionnaire } from './Questionnaire/StepsQuestionnaire';
 
-const { Search } = Input;
 
 export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, enableEdit, setEnableEdit, courseSubsection, setCourseSubsectionQuestionnaire, professorID }) => {
   const { user } = useAuthContext();
@@ -39,6 +38,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
   const totalPages = Math.ceil(totalQuestions / questionsPerPage);
   const { minutes, seconds, stopTimer } = useTimer({ testCompleted: questionnaireAnswerData.length > 0 });
   const [editedQuestions, setEditedQuestions] = useState({});
+
 
   const handleInputChange = (question, absoluteIndex) => {
     setEditedQuestions((prev) => ({ ...prev, [absoluteIndex]: { question: question.question, options: question.options } }));
@@ -83,6 +83,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
     visible: { opacity: 1, x: 0 },
     hidden: { opacity: 0, x: -100 },
   }
+
 
 
 
@@ -492,7 +493,14 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
               </div>
             )}
             <div className="flex items-center justify-between mt-5 mb-8 bg-white rounded-md shadow-md p-5 border-b-8 border-[#6366f1]">
-              <NavigationButtons setCurrentPage={setCurrentPage} currentPage={currentPage} totalPages={totalPages} />
+              <NavigationButtons
+                setCurrentPage={setCurrentPage}
+                currentPage={currentPage}
+                totalPages={totalPages}
+                groupValues={groupValues}
+                questionsPerPage={questionsPerPage}
+                questionnaireAnswered={questionnaireAnswerData.length > 0}
+              />
             </div>
           </>
           :

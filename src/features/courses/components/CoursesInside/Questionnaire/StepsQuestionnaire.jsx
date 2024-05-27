@@ -1,26 +1,20 @@
-import React, { useMemo } from 'react'
-import { Popover, Steps } from 'antd';
+import React from 'react'
+import { Popover, Steps, Progress } from 'antd';
 
 export const StepsQuestionnaire = ({ currentPage, totalPages }) => {
-    const generateItems = () => {
-        let items = []
-        for (let i = 0; i < totalPages; i++) {
-            items.push({
-                title: ``,
-                description: ``,
-            })
-        }
-        return items
-    }
 
-    const items = useMemo(() => generateItems(), [totalPages, currentPage])
-
+    const percentage = (currentPage / totalPages) * 100
 
     return (
-        <Steps
-            progressDot
-            current={currentPage - 1}
-            items={items}
+        <Progress
+            percent={percentage}
+            status="active"
+            showInfo={false}
+            size={[, 13]}
+            strokeColor={{
+                from: '#87a2f2',
+                to: '#6E66D6',
+            }}
         />
     )
 }
