@@ -54,7 +54,7 @@ export async function replicateCourse(courseId) {
                         {
                             data: {
                                 activity: activityData.data.id,
-                                questionnaire: questionnaireData.data.id,
+                                questionnaire: questionnaireData?.data?.id,
                                 title: subsection.attributes.title,
                                 fase: subsection.attributes.fase,
                                 description: subsection.attributes.description,
