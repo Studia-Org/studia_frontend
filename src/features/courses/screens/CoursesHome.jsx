@@ -12,6 +12,7 @@ import Confetti from 'react-confetti'
 import { SpeedDialCreateCourse } from '../components/CoursesHome/SpeedDialCreateCourse';
 import { ModalCreateCourseStudent } from '../components/CoursesHome/AddCourseStudent/ModalCreateCourseStudent';
 import { ModalCompleteObjectives } from '../components/CoursesHome/ModalCompleteObjectives';
+import { replicateCourse } from '../components/CoursesHome/helpers/replicateCourse';
 
 const CoursesHome = () => {
   const { user } = useAuthContext();
@@ -25,6 +26,7 @@ const CoursesHome = () => {
   const [openModalCompleteObjectives, setOpenModalCompleteObjectives] = useState(false);
   const [openObjectivesModal, setOpenObjectivesModal] = useState(false);
   const [objectiveSelected, setObjectiveSelected] = useState();
+
 
   document.title = 'Home - Uptitude'
 
@@ -47,7 +49,6 @@ const CoursesHome = () => {
     };
   }, [confettiExplode]);
 
-
   const fetchCoursesCards = async () => {
     setIsLoading(true);
     try {
@@ -66,6 +67,8 @@ const CoursesHome = () => {
       console.error(error);
     }
   };
+
+
   const filterCoursesByRole = (data, user) => {
     if (user.role_str === 'professor' || user.role_str === 'admin') {
       const coursesEvaluators = data.data.filter(course => course.attributes.evaluators.data.some(evaluator => evaluator.id === user.id));
@@ -75,6 +78,8 @@ const CoursesHome = () => {
       return data.courses;
     }
   };
+
+
   const mapCourseData = course => ({
     id: course.id,
     createdAt: course.createdAt || course.attributes.createdAt,
@@ -139,13 +144,7 @@ const CoursesHome = () => {
     }
   }, [isLoading, user]);
 
-  const speaker = (props) => {
-    return (
-      <Popover>
 
-      </Popover>
-    )
-  }
 
   function RenderDailyTasks(subsection) {
     var colorStyle = undefined;

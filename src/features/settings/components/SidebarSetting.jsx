@@ -10,6 +10,7 @@ import { useAuthContext } from '../../../context/AuthContext';
 const SidebarSetting = ({ setSelectedOption }) => {
     const [isOpen, setIsOpen] = useState(false);
     const { setAuthenticated } = useAuthContext();
+    const { user } = useAuthContext();
     const navigate = useNavigate();
 
     const handleOptionChange = (option) => {
@@ -118,6 +119,21 @@ const SidebarSetting = ({ setSelectedOption }) => {
                         <h2 className='font-normal tracking-tight text-left text-gray-700 hover:text-indigo-600'>Notification preferences</h2>
                     </button>
                 </div>
+
+                {
+                    user.role_str === 'admin' && (
+                        <div className='space-y-4 '>
+                            <h1 className='pb-1 text-lg font-semibold tracking-tight'>Admin Settings</h1>
+                            <button className='flex items-center pl-4 gap-3 hover:text-indigo-600 hover:translate-x-[5px] transition-all' onClick={() => handleOptionChange('customFunctions')}>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
+                                </svg>
+                                <h2 className='font-normal tracking-tight text-left text-gray-700 hover:text-indigo-600'>Custom functions</h2>
+                            </button>
+                        </div>
+                    )
+                }
+
                 <div className='space-y-3'>
                     <hr className='mt-24 border-[#b7bcd4]' />
                     <button className='flex items-center gap-2 hover:text-indigo-600 hover:translate-x-[5px] transition-all mt-14 pt-2' onClick={() => handleOptionChange('help')}>
