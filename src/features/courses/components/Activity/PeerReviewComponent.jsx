@@ -241,6 +241,7 @@ export default function PeerReviewComponent({ activityData }) {
                                 throw new Error(res.json())
                             }
                         }).then((data) => {
+
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Your feedback has been sent',
@@ -251,11 +252,15 @@ export default function PeerReviewComponent({ activityData }) {
                                     resetUser()
                                     if (peerReviewInGroups) {
                                         activityData.group.data.attributes.PeerReviewAnswers.data.push(data.data)
+                                        if (usersToPair === activityData.group.data.attributes.PeerReviewAnswers.data.length) completeSubsection()
                                     }
                                     else {
                                         activityData.user.data.attributes.PeerReviewAnswers.data.push(data.data)
+                                        if (usersToPair === activityData.group.data.attributes.PeerReviewAnswers.data.length) completeSubsection()
+
                                     }
                                 } else {
+                                    if (answersDelivered == null) completeSubsection()
                                     setAnswersDelivered(answers)
                                 }
                             })
@@ -336,6 +341,23 @@ export default function PeerReviewComponent({ activityData }) {
 
 
 
+    }
+
+    function completeSubsection() {
+        const subsectionsCompleted = {
+            subsections_completed: [
+                ...user.subsections_completed.map(subsection => ({ id: subsection.id })),
+                { id: activityData.activity.data.attributes.subsection.data.id }
+            ]
+        };
+        fetch(`${API}/users/${user.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${getToken()}`,
+            },
+            body: JSON.stringify(subsectionsCompleted)
+        });
     }
     function resetUser() {
         setQualificationIdPartnerReview(null)
