@@ -10,7 +10,7 @@ export const StepsQuestionnaire = ({ currentPage, totalPages }) => {
             percent={percentage}
             status="active"
             showInfo={false}
-            size={[, 13]}
+            size={[, 10]}
             strokeColor={{
                 from: '#87a2f2',
                 to: '#6E66D6',

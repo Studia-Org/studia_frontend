@@ -455,7 +455,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
               animate="visible"
               variants={list}
             >
-              <div className='my-4'>
+              <div className='my-1'>
                 <StepsQuestionnaire currentPage={currentPage} totalPages={totalPages} />
               </div>
 
