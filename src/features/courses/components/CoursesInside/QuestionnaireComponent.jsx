@@ -4,7 +4,7 @@ import RadioGroup, { useRadioGroup } from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
 import { motion } from "framer-motion";
 import { useAuthContext } from "../../../../context/AuthContext";
-import { Button, Input, message, Popconfirm, Empty } from "antd";
+import { Button, Input, message, Popconfirm, Empty, InputNumber } from "antd";
 import { API } from "../../../../constant";
 import { getToken } from "../../../../helpers";
 import Swal from 'sweetalert2'
@@ -332,13 +332,12 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
                   :
                   <p className="font-medium">{question.question}</p>
               }
-
               {Array.isArray(question.options) ? (
-                user.role_str === "student" || (user.role_str !== "student" && answersData.length > 0) ?
+                user.role_str === "student" || (user.role_str !== "student" && questionnaireAnswerData.length > 0) ?
                   <div key={absoluteIndex}>
                     {
-                      (answersData.length > 0) ?
-                        <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} defaultValue={answersData[0].responses.responses[absoluteIndex]?.answer}>
+                      (questionnaireAnswerData.length > 0) ?
+                        <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} value={questionnaireAnswerData[0].responses.responses[absoluteIndex]?.answer}>
                           {question.options.map((option, optionIndex) => (
                             <MyFormControlLabel key={optionIndex} value={option} label={option} control={<Radio disabled readOnly />} />
                           ))}
@@ -379,30 +378,49 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
                       </RadioGroup>
                     </div>
               ) : (
-                user.role_str === "student" || (user.role_str !== "student" && answersData.length > 0) ?
+                user.role_str === "student" || (user.role_str !== "student" && questionnaireAnswerData.length > 0) ?
                   <div key={absoluteIndex} className='flex w-full mt-5'>
                     {
-                      answersData.length > 0 ?
-                        <TextField
-                          id="outlined-basic"
-                          label=""
-                          disabled
-                          defaultValue={answersData[0].responses.responses[absoluteIndex].answer}
-                          variant="filled"
-                          className='w-full'
-                          rows={3}
-                          multiline
-                        /> :
-                        <TextField
-                          id="outlined-basic"
-                          label=""
-                          variant="filled"
-                          className='w-full'
-                          value={groupValues[absoluteIndex] || ""}
-                          onChange={(event) => handleRadioChange(absoluteIndex, event.target.value)}
-                          rows={3}
-                          multiline
-                        />
+                      questionnaireAnswerData.length > 0 ?
+                        question.options === 'numberInput' ?
+                          <InputNumber
+                            min={1}
+                            max={10}
+                            disabled
+                            className='w-full'
+                            value={questionnaireAnswerData[0].responses.responses[absoluteIndex].answer}
+                          />
+                          :
+                          <TextField
+                            id="outlined-basic"
+                            label=""
+                            disabled
+                            defaultValue={questionnaireAnswerData[0].responses.responses[absoluteIndex].answer}
+                            variant="filled"
+                            className='w-full'
+                            rows={3}
+                            multiline
+                          />
+                        :
+                        question.options === 'numberInput' ?
+                          <InputNumber
+                            min={1}
+                            max={10}
+                            className='w-full'
+                            value={groupValues[absoluteIndex] || ""}
+                            onChange={(value) => handleRadioChange(absoluteIndex, value)}
+                          />
+                          :
+                          <TextField
+                            id="outlined-basic"
+                            label=""
+                            variant="filled"
+                            className='w-full'
+                            value={groupValues[absoluteIndex] || ""}
+                            onChange={(event) => handleRadioChange(absoluteIndex, event.target.value)}
+                            rows={3}
+                            multiline
+                          />
                     }
                   </div>
                   :
@@ -418,6 +436,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
                     />
                   </div>
               )}
+
             </motion.li>
           );
         });
