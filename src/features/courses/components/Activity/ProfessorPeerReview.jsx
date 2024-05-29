@@ -99,14 +99,14 @@ export const ProfessorPeerReview = ({ activityData }) => {
 
 
   return (
-    <div className='p-5'>
+    <div className='h-full p-5'>
       <BackToCourse courseId={courseId} navigate={navigate} />
-      <div className='mx-5'>
-        <h2 className='mt-10 mb-2 text-lg font-medium'>Peer Review</h2>
+      <main className='mx-5'>
+        <h2 className='mt-3 mb-2 text-lg font-medium'>Peer Review</h2>
         <p className='mb-1 text-sm text-gray-500'>In this section, you will be able to see the evaluations that students have given to their peers.</p>
         <p className='mb-4 text-sm text-gray-500'>Peers will be created automatically if you don't create them manually</p>
-        <div className="relative overflow-x-auto shadow-md sm:rounded-lg ">
-          <div className="flex items-center justify-between p-5 pb-4 bg-white">
+        <div className="relative max-h-[calc(100vh-8rem-168px)] overflow-x-auto shadow-md sm:rounded-lg">
+          <div className="sticky top-0 z-50 flex items-center justify-between p-5 pb-4 bg-white">
             <label htmlFor="table-search" className="sr-only">Search</label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -136,8 +136,8 @@ export const ProfessorPeerReview = ({ activityData }) => {
               </Button>
             </section>
           </div>
-          <table className="w-full text-sm text-left text-gray-500 ">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 ">
+          <table className="w-full text-sm text-left text-gray-500">
+            <thead className="sticky text-xs text-gray-700 uppercase top-[74px] z-50 bg-gray-50">
               <tr>
                 <th scope="col" className="px-6 py-3">
                   Name
@@ -146,7 +146,7 @@ export const ProfessorPeerReview = ({ activityData }) => {
                   Files delivered
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Qualifications recieved
+                  Qualifications received
                 </th>
                 <th scope="col" className="px-6 py-3">
                   Qualifications given
@@ -164,8 +164,7 @@ export const ProfessorPeerReview = ({ activityData }) => {
             </tbody>
           </table>
         </div>
-      </div>
-
+      </main>
     </div>
   )
 }

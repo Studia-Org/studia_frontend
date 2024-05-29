@@ -7,8 +7,11 @@ import { API } from "../../../constant";
 import { getToken } from "../../../helpers";
 
 import '../styles/userStyles.css';
+import { message } from 'antd';
+import { set } from 'date-fns';
+import { useAuthContext } from '../../../context/AuthContext';
 
-export const EditPanel = ({ onClose, userProfile, uid }) => {
+export const EditPanel = ({ onClose, userProfile, uid, setUserProfile }) => {
 
     const inputRefLandscape = useRef(null);
     const inputRefProfile = useRef(null);
@@ -19,6 +22,8 @@ export const EditPanel = ({ onClose, userProfile, uid }) => {
     const [name, setName] = useState();
     const [profilePhoto, setProfilePhoto] = useState();
     const [landscapePhoto, setLandscapePhoto] = useState();
+    const [loading, setLoading] = useState(false);
+    const { setUser, user } = useAuthContext();
 
     const handleClose = () => {
         setOpen(false);
@@ -39,10 +44,12 @@ export const EditPanel = ({ onClose, userProfile, uid }) => {
 
 
     async function handleEdit() {
+        setLoading(true);
         const formData = new FormData();
         let profilePhotoId = undefined;
         let landscapePhotoId = undefined;
-
+        let profilePhotoNew = userProfile.profile_photo;
+        let landscapePhotoNew = userProfile.landscape_photo;
         if (profilePhoto !== undefined) {
             formData.append('files', profilePhoto);
             const uploadProfileResponse = await fetch(`${API}/upload`, {
@@ -51,8 +58,27 @@ export const EditPanel = ({ onClose, userProfile, uid }) => {
                     Authorization: `Bearer ${getToken()}`,
                 },
                 body: formData
+            }).catch(error => {
+                Toast.fire({
+                    icon: 'error',
+                    text: 'Error uploading profile photo',
+                    title: ''
+                })
+                setLoading(false);
+                return;
             });
+
+            if (!uploadProfileResponse.ok) {
+                Toast.fire({
+                    icon: 'error',
+                    text: 'Error uploading profile photo',
+                    title: ''
+                })
+                setLoading(false);
+                return;
+            }
             const uploadProfileData = await uploadProfileResponse.json();
+            profilePhotoNew = uploadProfileData[0];
             profilePhotoId = uploadProfileData[0].id;
         }
         if (landscapePhoto !== undefined) {
@@ -64,8 +90,26 @@ export const EditPanel = ({ onClose, userProfile, uid }) => {
                     Authorization: `Bearer ${getToken()}`,
                 },
                 body: formData
+            }).catch(error => {
+                Toast.fire({
+                    icon: 'error',
+                    text: 'Error uploading landscape photo',
+                    title: ''
+                })
+                setLoading(false);
+                return;
             });
+            if (!uploadLandscapeResponse.ok) {
+                Toast.fire({
+                    icon: 'error',
+                    text: 'Error uploading landscape photo',
+                    title: ''
+                })
+                setLoading(false);
+                return;
+            }
             const uploadLandscapeData = await uploadLandscapeResponse.json();
+            landscapePhotoNew = uploadLandscapeData[0]
             landscapePhotoId = uploadLandscapeData[0].id;
         }
 
@@ -93,6 +137,7 @@ export const EditPanel = ({ onClose, userProfile, uid }) => {
                         text: 'Changes saved.',
                         title: 'Success!'
                     })
+                    return response.json();
                 } else {
                     response.text().then(errorMessage => {
                         Toast.fire({
@@ -102,6 +147,9 @@ export const EditPanel = ({ onClose, userProfile, uid }) => {
                         });
                     });
                 }
+            }).then(data => {
+                setUserProfile({ ...data, profile_photo: profilePhotoNew, landscape_photo: landscapePhotoNew });
+                setUser({ ...user, ...data, profile_photo: profilePhotoNew, landscape_photo: landscapePhotoNew });
             })
             .catch(error => {
                 Toast.fire({
@@ -114,6 +162,7 @@ export const EditPanel = ({ onClose, userProfile, uid }) => {
         resetValues();
         setOpen(false);
         onClose();
+        setLoading(false);
     }
 
     function handleProfilePhoto() {
@@ -124,9 +173,42 @@ export const EditPanel = ({ onClose, userProfile, uid }) => {
     }
 
     function handleProfilePhotoChange(event) {
+        console.log(event.target.files[0].size);
+        if (event.target.files[0].type !== 'image/jpeg' && event.target.files[0].type !== 'image/png') {
+            Toast.fire({
+                icon: 'error',
+                text: 'The image must be a PNG or JPEG',
+                title: ''
+            });
+            return;
+        }
+        if (event.target.files[0].size > 10485760) {
+            Toast.fire({
+                icon: 'error',
+                text: 'The image must be less than 10MB',
+                title: ''
+            });
+            return;
+        }
         setProfilePhoto(event.target.files[0]);
     }
     function handleLandscapePhotoChange(event) {
+        if (event.target.files[0].type !== 'image/jpeg' && event.target.files[0].type !== 'image/png') {
+            Toast.fire({
+                icon: 'error',
+                text: 'The image must be a PNG or JPEG',
+                title: ''
+            });
+            return;
+        }
+        if (event.target.files[0].size > 10485760) {
+            Toast.fire({
+                icon: 'error',
+                text: 'The image must be less than 10MB',
+                title: ''
+            });
+            return;
+        }
         setLandscapePhoto(event.target.files[0]);
     }
 
@@ -158,7 +240,7 @@ export const EditPanel = ({ onClose, userProfile, uid }) => {
             <Modal backdrop='static' data-dismiss="modal" keyboard={false} open={open} onClose={handleClose} >
                 <Modal.Header closeButton="false" >
                     <button className='z-40 w-full' onClick={handleLandscapePhoto}>
-                        <input type="file" ref={inputRefLandscape} onChange={handleLandscapePhotoChange} style={{ display: 'none' }} />
+                        <input type="file" accept=".png,.jpg" ref={inputRefLandscape} onChange={handleLandscapePhotoChange} style={{ display: 'none' }} />
                         <div className='relative flex items-center'>
                             {userProfile && (
                                 landscapePhoto ? (
@@ -180,19 +262,19 @@ export const EditPanel = ({ onClose, userProfile, uid }) => {
                         </div>
                     </button>
                     <button className='w-full' onClick={handleProfilePhoto}>
-                        <input type="file" ref={inputRefProfile} onChange={handleProfilePhotoChange} style={{ display: 'none' }} />
+                        <input type="file" accept=".png,.jpg" ref={inputRefProfile} onChange={handleProfilePhotoChange} style={{ display: 'none' }} />
                         <div className='justify-center ml-10 -mt-16 tems-center'>
                             {userProfile && (
                                 profilePhoto ? (
                                     <img
                                         src={URL.createObjectURL(profilePhoto)}
-                                        className='border-none rounded-full shadow-xl max-w-[120px] min-w-[120px] min-h-[120px]'
+                                        className='border-none rounded-full shadow-xl max-w-[120px] min-w-[120px] max-h-[120px] min-h-[120px] bg-center object-fill'
                                         alt=''
                                         style={{ filter: 'brightness(50%)' }}
                                     />
                                 ) : (
                                     <img
-                                        className='max-w-[120px] min-w-[120px] min-h-[120px] border-none rounded-full shadow-xl'
+                                        className='max-w-[120px] min-w-[120px] min-h-[120px] border-none rounded-full shadow-xl max-h-[120px] bg-center object-fill'
                                         src={userProfile?.profile_photo?.url}
                                         alt=''
                                         style={{ filter: 'brightness(50%)' }}
@@ -203,7 +285,7 @@ export const EditPanel = ({ onClose, userProfile, uid }) => {
                         </div>
                     </button>
                 </Modal.Header>
-                <Modal.Body className='!overflow-y-hidden' >
+                <Modal.Body className='!overflow-y-scroll' >
                     <div className='flex flex-col '>
                         <div class="mb-6">
                             <label for="name" class="block mb-2 text-sm font-medium text-gray-900 ">Name</label>
@@ -234,7 +316,7 @@ export const EditPanel = ({ onClose, userProfile, uid }) => {
                 </Modal.Body>
                 <div className='mt-4'>
                     <Modal.Footer className=''>
-                        <Button onClick={handleEdit} appearance="primary" >
+                        <Button loading={loading} onClick={handleEdit} appearance="primary" >
                             Save Changes
                         </Button>
                         <Button onClick={handleClose} appearance="subtle">

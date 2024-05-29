@@ -5,6 +5,7 @@ import { NotImplemented } from '../../../shared/elements/NotImplemented';
 import { API } from "../../../constant";
 import { Toast } from "../../../shared/elements/Toasts";
 import { getToken } from "../../../helpers";
+import { CustomFunctions } from './CustomFunctions';
 
 export const SettingContent = ({ selectedOption, setSelectedOption }) => {
     const [isOldPasswordHidden, setOldPasswordHidden] = useState(true)
@@ -218,6 +219,17 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
                         <div className="max-w-screen-xl px-4 text-gray-600 md:px-8">
                             <SettingsBreadcrumb index={'Notification preferences'} />
                             <NotImplemented />
+                        </div>
+                    </main>
+                </motion.div>
+            )}
+
+            {selectedOption === 'customFunctions' && (
+                <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
+                    <main className="text-base py-14">
+                        <div className="max-w-screen-xl px-4 text-gray-600 md:px-8">
+                            <SettingsBreadcrumb index={'Custom functions'} />
+                            <CustomFunctions />
                         </div>
                     </main>
                 </motion.div>

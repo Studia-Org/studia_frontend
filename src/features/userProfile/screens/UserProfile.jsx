@@ -33,7 +33,7 @@ const UserProfile = () => {
       </>
     )
   }
-
+  console.log(userProfile)
 
   function fetchCoursesCards() {
 
@@ -99,7 +99,7 @@ const UserProfile = () => {
                             {userProfile && userProfile.profile_photo ? (
                               <img
                                 src={userProfile && userProfile.profile_photo?.url}
-                                className="object-cover -m-16 border-none rounded-lg shadow-xl w-[150px] h-[150px] lg:-ml-16"
+                                className="object-fill -m-16 border-none rounded-lg shadow-xl w-[150px] h-[150px] lg:-ml-16"
                                 alt=""
                               />
                             ) : (
@@ -119,7 +119,7 @@ const UserProfile = () => {
                               <path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                             </svg>
                           </button>
-                          {showModal && <EditPanel onClose={handleCloseModal} userProfile={userProfile} uid={uid} />}
+                          {showModal && <EditPanel onClose={handleCloseModal} userProfile={userProfile} setUserProfile={setUserProfile} uid={uid} />}
                         </div>
                         <div className="w-full px-4 lg:w-4/12 lg:order-1">
                         </div>

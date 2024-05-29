@@ -15,7 +15,11 @@ export async function fetchPeerReviewAnswers(activityId) {
             `&populate[qualifications][populate][user][populate][profile_photo][fields][0]=*` +
             `&populate[qualifications][populate][group][populate][users][populate][profile_photo][fields][0]=*` +
 
-            '&filters[qualifications][activity][id]=' + activityId,
+            '&filters[qualifications][activity][id]=' + activityId, {
+            headers: {
+                Authorization: `Bearer ${getToken()}`,
+            },
+        }
         );
         const data = await response.json();
         try {

@@ -24,7 +24,6 @@ export default function PeerReviewComponent({ activityData }) {
     ////////////////////eleccion de la data del user////////////////////////
     const [loading, setLoading] = useState(true);
     const { user } = useAuthContext();
-
     useEffect(() => {
         try {
             if (user === null || user === undefined || user.role_str !== 'student') { setLoading(false); return }
@@ -144,7 +143,7 @@ export default function PeerReviewComponent({ activityData }) {
 
     }, [userIndexSelected, qualificationIds])
 
-    function sendEvalution() {
+    async function sendEvalution() {
         try {
             setSendDataLoader(true)
 
@@ -206,7 +205,7 @@ export default function PeerReviewComponent({ activityData }) {
 
 
 
-            fetch(`${API}/peer-review-answers?populate[user]=*` +
+            const response = await fetch(`${API}/peer-review-answers?populate[user]=*` +
                 `&populate[qualifications][fields][0]=*` +
                 `&populate[qualifications][populate][activity][fields][0]=id` +
                 `&filters[qualifications][activity][id]=${activityData.activity.data.id}` +
@@ -225,9 +224,9 @@ export default function PeerReviewComponent({ activityData }) {
                     } else {
                         throw new Error(res.json())
                     }
-                }).then((data) => {
+                }).then(async (data) => {
                     if (data.data.length === 0) {
-                        fetch(`${API}/peer-review-answers?populate[qualifications][populate][user][fields][0]=*` +
+                        const response = await fetch(`${API}/peer-review-answers?populate[qualifications][populate][user][fields][0]=*` +
                             `&populate[qualifications][populate][group][fields][0]=*`, {
                             method: 'POST',
                             headers: {
@@ -235,7 +234,6 @@ export default function PeerReviewComponent({ activityData }) {
                                 Authorization: `Bearer ${getToken()}`,
                             },
                             body: JSON.stringify(payload),
-
                         }).then(res => {
                             if (res.ok) {
                                 return res.json()
@@ -243,6 +241,7 @@ export default function PeerReviewComponent({ activityData }) {
                                 throw new Error(res.json())
                             }
                         }).then((data) => {
+
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Your feedback has been sent',
@@ -253,10 +252,16 @@ export default function PeerReviewComponent({ activityData }) {
                                     resetUser()
                                     if (peerReviewInGroups) {
                                         activityData.group.data.attributes.PeerReviewAnswers.data.push(data.data)
+                                        if (usersToPair === activityData.group.data.attributes.PeerReviewAnswers.data.length) completeSubsection()
                                     }
                                     else {
                                         activityData.user.data.attributes.PeerReviewAnswers.data.push(data.data)
+                                        if (usersToPair === activityData.group.data.attributes.PeerReviewAnswers.data.length) completeSubsection()
+
                                     }
+                                } else {
+                                    if (answersDelivered == null) completeSubsection()
+                                    setAnswersDelivered(answers)
                                 }
                             })
                         })
@@ -270,7 +275,7 @@ export default function PeerReviewComponent({ activityData }) {
                                 })
                             }).finally(() => { })
                     } else {
-                        fetch(`${API}/peer-review-answers/${data.data[0].id}`, {
+                        const res = await fetch(`${API}/peer-review-answers/${data.data[0].id}`, {
                             method: 'PUT',
                             headers: {
                                 "Content-Type": "application/json",
@@ -337,6 +342,23 @@ export default function PeerReviewComponent({ activityData }) {
 
 
     }
+
+    function completeSubsection() {
+        const subsectionsCompleted = {
+            subsections_completed: [
+                ...user.subsections_completed.map(subsection => ({ id: subsection.id })),
+                { id: activityData.activity.data.attributes.subsection.data.id }
+            ]
+        };
+        fetch(`${API}/users/${user.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${getToken()}`,
+            },
+            body: JSON.stringify(subsectionsCompleted)
+        });
+    }
     function resetUser() {
         setQualificationIdPartnerReview(null)
         setAnswersDelivered(null)
@@ -349,7 +371,7 @@ export default function PeerReviewComponent({ activityData }) {
         )
     } else {
         return (
-            <div className={`flex transition-transform duration-700 ${showEvaluate ? 'xl:-translate-x-[calc(100vw-21rem)] -translate-x-[calc(100vw-1rem)]' : ''}`}>
+            <div className={`flex min-h-full transition-transform duration-700 ${showEvaluate ? 'xl:-translate-x-[calc(100vw-21rem)] -translate-x-[calc(100vw-1rem)]' : ''}`}>
                 {
                     loading ?
                         <div className="flex items-center justify-center w-full h-full">
