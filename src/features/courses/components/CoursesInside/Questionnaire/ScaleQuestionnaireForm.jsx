@@ -4,10 +4,11 @@ import { Table, Radio, Input } from 'antd';
 
 const { TextArea } = Input;
 
-export const ScaleQuestionnaireForm = ({ questions, groupValues, setGroupValues, currentPage, questionnaireAnswerData }) => {
+export const ScaleQuestionnaireForm = ({ questions, groupValues, setGroupValues, currentPage, questionnaireAnswerData, userResponses }) => {
     const startIdx = (currentPage - 1) * 10;
     let questionIndexAcc = 0
 
+    console.log('questionnaireAnswerData', userResponses);
     const groupQuestions = (questions) => {
         const groupedQuestions = [];
         let currentGroup = { options: null, questions: [] };
@@ -49,8 +50,8 @@ export const ScaleQuestionnaireForm = ({ questions, groupValues, setGroupValues,
                     {questions.map((question, questionIndex) => {
                         const absoluteIndex = startIdx + questionIndexAcc;
                         questionIndexAcc++;
-                        const isDisabled = questionnaireAnswerData[0]?.length > 0;
-                        const defaultValue = isDisabled ? questionnaireAnswerData[0].responses.responses[absoluteIndex].answer : '';
+                        const isDisabled = questionnaireAnswerData[0]?.responses?.responses?.length > 0 || userResponses[0]?.attributes?.responses?.responses.length > 0;
+                        const defaultValue = isDisabled ? questionnaireAnswerData[0]?.responses?.responses[absoluteIndex].answer || userResponses[0]?.attributes?.responses?.responses[absoluteIndex].answer : '';
                         const value = isDisabled ? defaultValue : groupValues[absoluteIndex] || "";
 
 
@@ -80,19 +81,17 @@ export const ScaleQuestionnaireForm = ({ questions, groupValues, setGroupValues,
                     const absoluteIndex = startIdx + questionIndexAcc;
                     questionIndexAcc++;
 
-                    console.log(absoluteIndex);
-
                     const row = {
                         key: questionIndexAcc,
                         empty: question.question,
                     };
 
-                    if (questionnaireAnswerData[0]) {
+                    if (questionnaireAnswerData[0] || userResponses[0]) {
                         question.options.forEach((option, index) => {
                             row[`option${index}`] = (
                                 <Radio
                                     disabled
-                                    checked={questionnaireAnswerData[0].responses.responses[absoluteIndex]?.answer === option}
+                                    checked={questionnaireAnswerData[0]?.responses?.responses[absoluteIndex]?.answer === option || userResponses[0].attributes.responses.responses[absoluteIndex]?.answer === option}
                                     onChange={() => {
                                         setGroupValues((prevState) => ({
                                             ...prevState,

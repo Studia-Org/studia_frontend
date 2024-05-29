@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { styled } from '@mui/material/styles';
 import RadioGroup, { useRadioGroup } from '@mui/material/RadioGroup';
-import TextField from '@mui/material/TextField';
 import { motion } from "framer-motion";
 import { useAuthContext } from "../../../../context/AuthContext";
 import { Button, Input, message, Popconfirm, Empty, InputNumber } from "antd";
@@ -14,14 +13,15 @@ import Radio from '@mui/material/Radio';
 import { useTimer } from "../../../../shared/elements/useTimer";
 import { AddQuestionButton } from './EditSection/AddQuestionButton';
 import { Header } from './Questionnaire/Header';
-import { fetchUserResponsesQuestionnaires } from "../../../../fetches/fetchUserResponsesQuestionnaires";
 import { NavigationButtons } from './Questionnaire/NavigationsButons';
-import { CardQuestionnaireUser } from './Questionnaire/CardQuestionnaireUser';
 import { UserQuestionnaireAnswerTable } from './Questionnaire/UserQuestionnaireAnswerTable';
 import { getRecommendationsSRLO } from './Questionnaire/getRecommendationsSRLO';
 import { RecommendationCard } from './Questionnaire/RecommendationCard';
 import { ScaleQuestionnaireForm } from './Questionnaire/ScaleQuestionnaireForm';
+import { fetchUserResponsesQuestionnaires } from "../../../../fetches/fetchUserResponsesQuestionnaires";
 import { StepsQuestionnaire } from './Questionnaire/StepsQuestionnaire';
+
+const { TextArea } = Input;
 
 
 export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, enableEdit, setEnableEdit, courseSubsection, setCourseSubsectionQuestionnaire, professorID }) => {
@@ -60,7 +60,14 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
   useEffect(() => {
     setCurrentPage(1);
     setUserResponses([]);
-    setLoadingData(true);
+    if (user.role_str !== 'student') {
+      setLoadingData(true);
+      const fetchData = async () => {
+        setUserResponses(await fetchUserResponsesQuestionnaires(questionnaire.id));
+        setLoadingData(false);
+      };
+      fetchData();
+    }
     setQuestionnaireAnswerData(answers.filter((answer) => answer.questionnaire?.id === questionnaire?.id));
   }, [questionnaire.id]);
 
@@ -295,7 +302,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
     let answersData = answers.filter((answer) => answer.questionnaire?.id === questionnaire?.id);
     if (questionnaire.attributes.type === 'scaling') {
       return (
-        <ScaleQuestionnaireForm questions={questionsForPage} groupValues={groupValues} setGroupValues={setGroupValues} currentPage={currentPage} questionnaireAnswerData={answersData} />
+        <ScaleQuestionnaireForm questions={questionsForPage} groupValues={groupValues} setGroupValues={setGroupValues} currentPage={currentPage} questionnaireAnswerData={answersData} userResponses={userResponses} />
       )
     } else {
       return questionsForPage
@@ -391,15 +398,14 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
                             value={questionnaireAnswerData[0].responses.responses[absoluteIndex].answer}
                           />
                           :
-                          <TextField
+                          <TextArea
                             id="outlined-basic"
                             label=""
-                            disabled
-                            defaultValue={questionnaireAnswerData[0].responses.responses[absoluteIndex].answer}
-                            variant="filled"
+                            disabled={true}
+                            style={{ resize: 'none' }}
+                            value={questionnaireAnswerData[0].responses.responses[absoluteIndex].answer}
                             className='w-full'
                             rows={3}
-                            multiline
                           />
                         :
                         question.options === 'numberInput' ?
@@ -411,24 +417,23 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
                             onChange={(value) => handleRadioChange(absoluteIndex, value)}
                           />
                           :
-                          <TextField
+                          <TextArea
                             id="outlined-basic"
                             label=""
-                            variant="filled"
                             className='w-full'
                             value={groupValues[absoluteIndex] || ""}
                             onChange={(event) => handleRadioChange(absoluteIndex, event.target.value)}
                             rows={3}
-                            multiline
                           />
                     }
                   </div>
                   :
                   <div key={absoluteIndex} className='flex w-full mt-5'>
-                    <TextField
+                    <TextArea
                       id="outlined-basic"
                       label=""
-                      disabled
+                      disabled={true}
+                      style={{ resize: 'none' }}
                       variant="filled"
                       className='w-full'
                       rows={1}

@@ -9,6 +9,8 @@ import { BeatLoader } from 'react-spinners';
 
 export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }) => {
 
+    console.log('createCourseSectionsList', createCourseSectionsList)
+
     const [isLoading, setIsLoading] = useState(false);
     const [progress, setProgress] = useState(0);
 

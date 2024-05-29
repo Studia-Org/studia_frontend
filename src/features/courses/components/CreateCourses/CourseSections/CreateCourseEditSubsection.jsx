@@ -484,7 +484,6 @@ export const CreateCourseEditSubsection = ({
                   parser={(value) => value.replace('%', '')}
                 />
               </div>
-
             </div>
             <div className='space-y-2 mt-7'>
               <label className='text-sm text-gray-500 mt-7 ' htmlFor=''>Subsection description</label>
