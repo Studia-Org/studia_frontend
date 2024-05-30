@@ -464,6 +464,23 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                   )
                 }
 
+                <p className='mt-5 mb-1 text-xs text-gray-400'>Task Files</p>
+                <hr />
+                <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)] w-[30rem]'>
+                  {
+                    activityData.activity.data.attributes.file?.data === null || activityData.activity.data.attributes.file?.data?.length === 0 ?
+                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
+                        <span className='font-normal text-gray-400 '>
+                          There are no files
+                        </span>
+                      } />
+                      :
+                      <section className='flex flex-col gap-y-3'>
+                        {activityFiles.map((file, index) => renderFiles(file))}
+                      </section>
+                  }
+                </div>
+
 
                 <p className='mt-5 mb-1 text-xs text-gray-400'>Task description</p>
                 <hr />
@@ -528,21 +545,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
             </div> :
             (evaluated || passedDeadline) && !(user.role_str === 'professor' || user.role_str === 'admin') ?
               <div className='flex flex-col max-w-[calc(100vw-1.25rem)]'>
-                <p className='mb-3 text-xs text-gray-400' > Task Files</ p>
-                <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)] w-[30rem]'>
-                  {
-                    activityData.activity.data.attributes.file?.data === null || activityData.activity.data.attributes.file?.data?.length === 0 ?
-                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
-                        <span className='font-normal text-gray-400 '>
-                          There are no files
-                        </span>
-                      } />
-                      :
-                      <section className='flex flex-col gap-y-3'>
-                        {activityFiles.map((file, index) => renderFiles(file))}
-                      </section>
-                  }
-                </div>
                 {
                   activityData.evaluator?.data && (
                     <>
