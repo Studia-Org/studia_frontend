@@ -58,6 +58,11 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
     setCurrentPage(1);
     setUserResponses([]);
     setLoadingData(true);
+    const fetchData = async () => {
+      setUserResponses(await fetchUserResponsesQuestionnaires(questionnaire.id));
+      setLoadingData(false);
+    };
+    fetchData();
     setQuestionnaireAnswerData(answers.filter((answer) => answer.questionnaire?.id === questionnaire?.id));
   }, [questionnaire.id]);
 
