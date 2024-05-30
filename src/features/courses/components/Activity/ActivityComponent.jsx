@@ -22,6 +22,8 @@ import useGetGroup from './hooks/useGetGroup.jsx';
 import CreateGroups from './Components/CreateGroups.jsx';
 import { RecordAudio } from './Components/ThinkAloud/RecordAudio';
 import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
+import { TaskFiles } from './Components/TaskFiles.jsx';
+import { UploadFiles } from '../CreateCourses/CourseSections/UploadFiles.jsx';
 registerPlugin(FilePondPluginFileValidateSize);
 
 registerPlugin(FilePondPluginImagePreview);
@@ -41,8 +43,8 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   const type = activityData?.activity?.data?.attributes?.type;
   const audioUser = activityData?.file?.data ? activityData?.file?.data[0]?.attributes : null;
   const [audioFile, setAudioFile] = useState(audioUser);
-  const [formData, setFormData] = useState(new FormData());
   const { user } = useAuthContext();
+  const [fileList, setFileList] = useState(activityData?.file?.data?.map((file) => file.attributes) || []);
   let { activityId, courseId } = useParams();
 
   const isActivityEvaluable = activityData?.activity?.data?.attributes.evaluable
@@ -55,13 +57,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   const { activityGroup, loadingGroup } = useGetGroup({ user, activityData, activityId, IDQualification });
   const isActivityGroup = activityData?.activity?.data?.attributes?.groupActivity;
   const isThinkAloud = activityData.activity.data.attributes.type === 'thinkAloud'
-
-  function handleFileUpload(file) {
-    const dataCopy = formData;
-    dataCopy.append('files', file);
-    setFormData(dataCopy);
-    document.getElementById('submit-button-activity').disabled = false;
-  }
 
   useEffect(() => {
     setFilesTask([]);
@@ -190,6 +185,10 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
 
   async function sendData() {
     try {
+      const formData = new FormData();
+      fileList.forEach((file) => {
+        formData.append('files', file.originFileObj);
+      });
       const isThinkAloud = (activityData.activity.data.attributes.type === 'thinkAloud' && formData.getAll('files').length === 0)
       const isBlob = audioFile instanceof Blob;
       const formDataAudio = new FormData();
@@ -251,7 +250,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
               setUserQualification({ ...userQualification, idQualification: data.data.id });
             }
             setFilesUploaded(prev => [...prev, ...parsedResults]);
-            setFormData(new FormData());
           })
         }
         else throw new Error('Error uploading files');
@@ -464,25 +462,12 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                   )
                 }
 
-                <p className='mt-5 mb-1 text-xs text-gray-400'>Task Files</p>
-                <hr />
-                <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)] w-[30rem]'>
-                  {
-                    activityData.activity.data.attributes.file?.data === null || activityData.activity.data.attributes.file?.data?.length === 0 ?
-                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
-                        <span className='font-normal text-gray-400 '>
-                          There are no files
-                        </span>
-                      } />
-                      :
-                      <section className='flex flex-col gap-y-3'>
-                        {activityFiles.map((file, index) => renderFiles(file))}
-                      </section>
-                  }
-                </div>
+                <p className='mt-8 mb-1 text-xs text-gray-600'>Task Files</p>
+                <hr className='mb-5' />
+                <TaskFiles files={activityFiles} />
 
 
-                <p className='mt-5 mb-1 text-xs text-gray-400'>Task description</p>
+                <p className='mt-5 mb-1 text-xs text-gray-600'>Task description</p>
                 <hr />
                 <div className=' my-3 text-gray-600 ml-5 max-w-[calc(100vw-1.25rem)] box-content mt-5 '>
                   {
@@ -556,7 +541,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
 
                   )
                 }
-                <p className='mt-5 mb-3 text-xs text-gray-400'>Your submission</p>
+                <p className='mt-5 mb-3 text-xs text-gray-600'>Your submission</p>
                 {
                   filesUploaded.length === 0 ?
                     <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)] w-[30rem]'>
@@ -566,49 +551,37 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                         </span>
                       } />
                     </div> :
-                    <div className='flex flex-col p-5 bg-white rounded-md mb-14 gap-y-3'>
+                    <div className='flex flex-col p-5 bg-white rounded-md shadow-md mb-14 gap-y-3'>
                       {filesUploaded && filesUploaded.map(renderFiles)}
                     </div>
                 }
               </div >
               :
-              !createGroups && <div className='flex flex-col w-[30rem] mt-1 max-w-[calc(100vw-2.5rem)]'>
-                <p className='mb-3 text-xs text-gray-400' > Task Files</ p>
-                {
-                  activityData.activity.data.attributes.file?.data === null ||
-                    activityData.activity.data.attributes.file?.data?.length === 0 ?
-                    <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
-                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
-                        <span className='font-normal text-gray-400 '>
-                          There are no files
-                        </span>
-                      } />
-                    </div>
-                    :
-                    <div className='flex flex-col gap-y-3'>
-                      {activityFiles.map((file, index) => renderFiles(file))}
-                    </div>
-                }
+              !createGroups &&
+              <div className='flex flex-col w-[30rem] mt-1 max-w-[calc(100vw-2.5rem)]'>
                 {
                   isActivityEvaluable && (
                     <>
-                      <p className='mt-5 mb-1 text-xs text-gray-400'>Your submission</p>
-                      {
-                        activityData.activity.data.attributes.type !== 'thinkAloud' &&
-                        <div className='bg-white rounded-md shadow-md p-5 mb-3 space-y-3 md:w-[30rem]' >
-                          {
-                            filesUploaded.length === 0 ?
-                              <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
-                                <span className='font-normal text-gray-400 '>
-                                  You did not submit any files
-                                </span>
-                              } />
-                              :
-                              filesUploaded && filesUploaded.map((file) => renderFiles(file, true))
-                          }
+                      <p className='mt-5 mb-1 text-xs text-gray-600'>Your submission</p>
+                      <div className='p-5 space-y-5 bg-white border rounded-md'>
+                        <UploadFiles
+                          fileList={fileList}
+                          setFileList={setFileList}
+                          listType={'picture'}
+                          maxCount={5}
+                          disabled={passedDeadline || evaluated}
+                          showRemoveIcon={!passedDeadline || !evaluated}
+                        />
+                        <Button
+                          loading={uploadLoading}
+                          disabled={uploadLoading || (passedDeadline || evaluated)}
+                          id='submit-button-activity'
+                          onClick={() => { sendData() }}
+                          className="flex ml-auto" type='primary'>
+                          Submit files
+                        </Button>
+                      </div>
 
-                        </div>
-                      }
                     </>
                   )
                 }
@@ -630,32 +603,15 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                             setUserQualification={setUserQualification} />
                           :
                           <div className='m-5'>
-                            <FilePond
-                              maxFileSize={'10MB'}
-                              files={formData.getAll('files')}
-                              allowMultiple={true}
-                              maxFiles={5}
-                              beforeAddFile={(item) => {
-                                if (item.file.size > 10485760) {
-                                  message.error('File is too big. Please upload a file smaller than 10MB.')
-                                  return false
-                                }
-                                handleFileUpload(item.file);
-                                return true;
-                              }}
-                              onremovefile={(err, item) => {
-                                if (!err) {
-                                  const dataCopy = formData;
-                                  dataCopy.forEach((value, key) => {
-                                    if (value.name === item.file.name) {
-                                      dataCopy.delete(key);
-                                    }
-                                  });
-                                  document.getElementById('submit-button-activity').disabled = formData.getAll('files').length === 0;
-                                  setFormData(dataCopy);
-                                }
-                              }}
-                            />
+                            <UploadFiles fileList={fileList} setFileList={setFileList} listType={'picture'} maxCount={1} disabled={passedDeadline || evaluated} />
+                            <Button
+                              loading={uploadLoading}
+                              disabled={uploadLoading || (passedDeadline || evaluated)}
+                              id='submit-button-activity'
+                              onClick={() => { sendData() }}
+                              className="flex ml-auto" type='primary'>
+                              Submit files
+                            </Button>
                           </div>
 
 
@@ -665,46 +621,10 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                     </div>
                     :
                     isActivityEvaluable && (
-                      <>
-                        <FilePond
-                          files={formData.getAll('files')}
-                          maxFileSize={'10MB'}
-                          allowMultiple={true}
-                          maxFiles={5}
-                          beforeAddFile={(item) => {
-                            if (item.file.size > 10485760) {
-                              message.error('File is too big. Please upload a file smaller than 10MB.')
-                              return false
-                            }
-                            handleFileUpload(item.file);
-                            return true;
-                          }}
-                          onremovefile={(err, item) => {
-                            if (!err) {
-                              const dataCopy = formData;
-                              dataCopy.forEach((value, key) => {
-                                if (value.name === item.file.name) {
-                                  dataCopy.delete(key);
-                                }
-                              });
-                              document.getElementById('submit-button-activity').disabled = formData.getAll('files').length === 0;
-                              setFormData(dataCopy);
-                            }
-                          }}
-                        />
-                        <Button
-                          loading={uploadLoading}
-                          disabled={uploadLoading}
-                          id='submit-button-activity'
-                          onClick={() => { sendData() }}
-                          className="ml-auto " type='primary'>
-                          Submit
-                        </Button>
-                        <GroupMembers
-                          activityGroup={activityGroup}
-                          loadingGroup={loadingGroup}
-                        />
-                      </>
+                      <GroupMembers
+                        activityGroup={activityGroup}
+                        loadingGroup={loadingGroup}
+                      />
                     )
                 }
               </div>
