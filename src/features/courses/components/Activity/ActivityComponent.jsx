@@ -24,10 +24,9 @@ import { RecordAudio } from './Components/ThinkAloud/RecordAudio';
 import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
 import { TaskFiles } from './Components/TaskFiles.jsx';
 import { UploadFiles } from '../CreateCourses/CourseSections/UploadFiles.jsx';
+
 registerPlugin(FilePondPluginFileValidateSize);
-
 registerPlugin(FilePondPluginImagePreview);
-
 
 export const ActivityComponent = ({ activityData, idQualification, setUserQualification, userQualification }) => {
   const [filesTask, setFilesTask] = useState();
@@ -44,8 +43,14 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   const audioUser = activityData?.file?.data ? activityData?.file?.data[0]?.attributes : null;
   const [audioFile, setAudioFile] = useState(audioUser);
   const { user } = useAuthContext();
-  const [fileList, setFileList] = useState(activityData?.file?.data?.map((file) => file.attributes) || []);
-  let { activityId, courseId } = useParams();
+
+  const [fileList, setFileList] = useState(
+    activityData?.file?.data?.map((file) => ({
+      ...file.attributes,
+      IdFromBackend: file.id
+    })) || []
+
+  ); let { activityId, courseId } = useParams();
 
   const isActivityEvaluable = activityData?.activity?.data?.attributes.evaluable
 
@@ -128,23 +133,30 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
     }
   }
 
-  async function sendFile(result) {
+  async function sendFile(result, fileListIds) {
     try {
 
       let files = []
 
-      files = filesUploaded.map((file) => file.id);
-      files = files.concat(result.map((file) => file.id));
+      //files = filesUploaded.map((file) => file.id);
+      files = files.concat(result?.map((file) => file?.id));
+      files = files.concat(fileListIds);
+
+      //eliminamos undefined si hay
+      files = files.filter((file) => file !== undefined);
+
+      console.log('files', files)
 
       const qualificationData = {
         data: {
           activity: activityId,
-          file: isThinkAloud ? result[0].id : files,
+          file: isThinkAloud ? result[0]?.id : files,
           user: user.id, //TODO CHANGE IF ITS ITS ACTIVITY GROUP AND IT DOES NOT HAVE A GROUP
           delivered: true,
           delivered_data: new Date(),
         }
       };
+      console.log('activityGroup', qualificationData)
       if (activityGroup !== null) {
         qualificationData.data.group = activityGroup.id;
       }
@@ -183,11 +195,20 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
     }
   }
 
+  console.log('activityData', fileList)
+  console.log('activityData', filesUploaded)
+
   async function sendData() {
     try {
+      const fileListIds = []
       const formData = new FormData();
+
       fileList.forEach((file) => {
-        formData.append('files', file.originFileObj);
+        if (file?.originFileObj) {
+          formData.append('files', file.originFileObj);
+        } else {
+          fileListIds.push(file.IdFromBackend)
+        }
       });
       const isThinkAloud = (activityData.activity.data.attributes.type === 'thinkAloud' && formData.getAll('files').length === 0)
       const isBlob = audioFile instanceof Blob;
@@ -196,11 +217,34 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
         formDataAudio.append('files', audioFile);
       }
       setUploadLoading(true);
-      if (formData.getAll('files').length === 0 && !isThinkAloud) {
+      if (formData.getAll('files').length === 0 && !isThinkAloud && fileListIds.length === 0) {
         message.error('You must upload a file');
         setUploadLoading(false);
         return
+
+        // Caso en el que el usuario haya eliminado un archivo de los que había subido
+      } else if (formData.entries().next().done && fileListIds.length !== 0) {
+        Swal.fire({
+          title: 'Warning!',
+          text: "You are going to change the files you uploaded before, are you sure?",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Yes, submit',
+          cancelButtonText: 'No, cancel'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            sendFile(null, fileListIds)
+          } else {
+            setUploadLoading(false);
+          }
+        })
+
+        return
       }
+
+
       const response = await fetch(`${API}/upload`, {
         method: 'POST',
         headers: {
@@ -210,7 +254,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
       });
       const result = await response.json();
       if (response.ok) {
-        const { response_upload, json } = await sendFile(result);
+        const { response_upload, json } = await sendFile(result, fileListIds);
         if (response_upload.ok) {
           // Completar subseccion
           const subsectionsCompleted = {

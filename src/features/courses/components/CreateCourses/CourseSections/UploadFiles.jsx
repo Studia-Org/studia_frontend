@@ -79,11 +79,18 @@ export const UploadFiles = ({ fileList, setFileList, listType, maxCount, accept,
         },
     };
 
+    const handleRemove = () => {
+        return (file) => {
+            console.log(file);
+            setFileList(fileList.filter((f) => f.uid !== file.uid));
+        };
+    }
+
     return (
         <>
-            <Upload.Dragger showUploadList={
+            <Upload.Dragger onRemove={handleRemove()} showUploadList={
                 {
-                    showRemoveIcon: showRemoveIcon,
+                    showRemoveIcon: showRemoveIcon
                 }
             } disabled={disabled} {...props}>
                 <div className='flex items-center justify-center'>
