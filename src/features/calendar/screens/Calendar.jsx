@@ -60,6 +60,8 @@ const CalendarEvents = () => {
         handleClose();
     }
 
+    console.log(date)
+
     const fetchEvents = async () => {
         if (user) {
             try {
@@ -177,6 +179,7 @@ const CalendarEvents = () => {
         setInfoModal(true);
         setTitle('');
         setDate(date);
+        console.log(date)
         setInfoModalData(getTodoList(date))
     }
 
@@ -249,6 +252,12 @@ END:VCALENDAR
         }
     }
 
+    function formatDate(date) {
+        const isoString = date.toISOString();
+        return isoString.slice(0, 16);
+    }
+
+
     return (
         <>
             {isLoading ? (
@@ -300,9 +309,9 @@ END:VCALENDAR
                             <Form.ControlLabel>Title</Form.ControlLabel>
                             <Input value={title} onChange={handleTitleChange} />
                         </Form.Group >
-                        <Form.Group >
+                        <Form.Group className='mt-6' >
                             <Form.ControlLabel>Date</Form.ControlLabel>
-                            <Input type='datetime-local' value={date} onChange={handleDateChange} />
+                            <Input type='datetime-local' value={formatDate(date)} onChange={handleDateChange} />
                         </Form.Group >
                     </Modal.Body>
                     <Modal.Footer>

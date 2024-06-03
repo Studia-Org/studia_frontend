@@ -11,7 +11,6 @@ const Activity = () => {
   const { courseId, activityId } = useParams();
   const [userQualification, setUserQualification] = useState([]);
 
-
   const { user } = useAuthContext();
 
   const fetchUserQualificationsData = async () => {
@@ -19,7 +18,7 @@ const Activity = () => {
       if (!user) return;
 
       const activityData = await fetch(
-        `${API}/activities/${activityId}?populate=qualifications,evaluators.profile_photo,section,task_to_review,subsection,selfAssesmentAnswer.user,BeingReviewedBy,file`, {
+        `${API}/activities/${activityId}?populate=qualifications,evaluators.profile_photo,section,task_to_review,subsection.section.course,selfAssesmentAnswer.user,BeingReviewedBy,file`, {
         headers: {
           Authorization: `${BEARER} ${getToken()}`
         }
@@ -55,7 +54,7 @@ const Activity = () => {
           `&populate[activity][populate][evaluators][fields][0]=*` +
           `&populate[activity][populate][file][fields][0]=*` +
           `&populate[activity][populate][task_to_review][populate][peer_review_qualifications][fields][0]=*` +
-          `&populate[activity][populate][subsection][fields][0]=*` +
+          `&populate[activity][populate][subsection][populate][section][populate][course][fields][0]=*` +
           `&filters[activity][id]=${activityId}` +
           `&populate[user][populate][PeerReviewAnswers][populate][qualifications][populate][user][fields][0]=username` +
           `&populate[evaluator][populate][profile_photo][fields][0]=url` +

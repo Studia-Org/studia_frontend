@@ -18,6 +18,7 @@ import { CourseHasNotStarted } from "../components/CoursesInside/CourseHasNotSta
 import { ButtonSettings } from "../components/CoursesInside/EditSection/buttonEditCourse";
 import { Participants } from "../components/CoursesInside/Participants";
 import dayjs from "dayjs";
+import { BreadcrumbCourse } from "../components/CoursesInside/BreadcrumbCourse";
 
 const { TextArea } = Input;
 const { RangePicker } = DatePicker;
@@ -411,12 +412,35 @@ const CourseInside = () => {
                         courseSubsection={courseSubsection}
                         setCourseSubsectionQuestionnaire={setCourseSubsectionQuestionnaire}
                         professorID={professor.id}
+                        coursePositionInfo={
+                          {
+                            course: courseBasicInformation.title,
+                            courseSection: courseSection,
+                            courseSubsection: courseSubsection.attributes.title,
+                            activity: null
+                          }
+                        }
+
                       />
                     ) :
                       <CourseHasNotStarted startDate={courseBasicInformation.start_date} />
 
                   ) : courseSection && courseContentInformation.length > 0 && (
                     <>
+
+                      <BreadcrumbCourse
+                        coursePositionInfo={
+                          {
+                            course: courseBasicInformation.title,
+                            courseSection: courseSection,
+                            courseSubsection: courseSubsection.attributes.title,
+                            activity: null
+                          }
+                        }
+                        styles={
+                          'mt-3'
+                        }
+                      />
                       <div className="flex items-center w-full max-w-full md:my-5">
                         {
                           enableEdit ?

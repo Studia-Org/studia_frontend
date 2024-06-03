@@ -24,6 +24,7 @@ import { RecordAudio } from './Components/ThinkAloud/RecordAudio';
 import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
 import { TaskFiles } from './Components/TaskFiles.jsx';
 import { UploadFiles } from '../CreateCourses/CourseSections/UploadFiles.jsx';
+import { BreadcrumbCourse } from '../CoursesInside/BreadcrumbCourse.jsx';
 
 registerPlugin(FilePondPluginFileValidateSize);
 registerPlugin(FilePondPluginImagePreview);
@@ -49,12 +50,10 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
       ...file.attributes,
       IdFromBackend: file.id
     })) || []
+  );
 
-  ); let { activityId, courseId } = useParams();
-
+  let { activityId, courseId } = useParams();
   const isActivityEvaluable = activityData?.activity?.data?.attributes.evaluable
-
-  const navigate = useNavigate();
   const USER_OBJECTIVES = [...new Set(user?.user_objectives?.map((objective) => objective.categories.map((category) => category)).flat() || [])];
   const passedDeadline = activityData?.activity?.data?.attributes?.deadline ? new Date(activityData?.activity?.data?.attributes?.deadline) < new Date() : false;
   const [createGroups, setCreateGroups] = useState(false);
@@ -69,6 +68,10 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
     setTitle(activityData.activity.data.attributes.title);
   }, [enableEdit])
 
+  const sameUpload = (
+    filesUploaded.length === fileList.length &&
+    filesUploaded.every((file, index) => file.id === fileList[index].IdFromBackend)
+  );
 
   async function saveChanges() {
     setLoading(true);
@@ -195,9 +198,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
     }
   }
 
-  console.log('activityData', fileList)
-  console.log('activityData', filesUploaded)
-
   async function sendData() {
     try {
       const fileListIds = []
@@ -284,8 +284,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                 }
               }
             })
-
-            //check if its json and not response
             if (json) {
               setUserQualification({ ...userQualification, idQualification: json.data.id });
             }
@@ -454,10 +452,21 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
 
       <>
         <div className={`${!createGroups ? "1.5xl:w-2/4 lg:w-10/12" : ""} w-full`}>
+          <BreadcrumbCourse
+            coursePositionInfo={
+              {
+                course: activityData.activity.data.attributes.subsection.data.attributes.section.data.attributes.course.data.attributes.title,
+                courseSection: activityData.activity.data.attributes.subsection.data.attributes.section.data.attributes.title,
+                courseSubsection: activityData.activity.data.attributes.subsection.data.attributes.title,
+                activity: `Activity: ${activityData.activity.data.attributes.title}`
+              }
+            }
+            courseId={courseId}
+          />
           {
             createGroups ?
               <BackButton onClick={() => setCreateGroups(false)} text={"Go back to activity"} /> :
-              <BackToCourse navigate={navigate} courseId={courseId} />
+              null
           }
           <ActivityTitle
             type={type}
@@ -608,6 +617,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                     <>
                       <p className='mt-5 mb-1 text-xs text-gray-600'>Your submission</p>
                       <div className='p-5 space-y-5 bg-white border rounded-md'>
+
                         <UploadFiles
                           fileList={fileList}
                           setFileList={setFileList}
@@ -618,12 +628,13 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                         />
                         <Button
                           loading={uploadLoading}
-                          disabled={uploadLoading || (passedDeadline || evaluated)}
+                          disabled={uploadLoading || (passedDeadline || evaluated) || sameUpload}
                           id='submit-button-activity'
                           onClick={() => { sendData() }}
                           className="flex ml-auto" type='primary'>
                           Submit files
                         </Button>
+                        <p className='text-xs text-gray-600'>Your changes will only be reflected if you submit your files.</p>
                       </div>
 
                     </>
@@ -631,7 +642,8 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                 }
 
                 {
-                  activityData.activity.data.attributes.type === 'thinkAloud' ?
+                  activityData.activity.data.attributes.type === 'thinkAloud'
+                    ?
                     <div className='mb-5 bg-white rounded-md shadow-md'>
                       <div className='flex items-center gap-5 mx-5 mt-5'>
                         <p className='text-xs text-gray-400 '>Click on the microphone and start recording your voice, or you can upload an audio file</p>

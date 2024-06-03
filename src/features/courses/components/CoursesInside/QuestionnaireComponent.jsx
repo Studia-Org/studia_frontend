@@ -20,11 +20,12 @@ import { RecommendationCard } from './Questionnaire/RecommendationCard';
 import { ScaleQuestionnaireForm } from './Questionnaire/ScaleQuestionnaireForm';
 import { fetchUserResponsesQuestionnaires } from "../../../../fetches/fetchUserResponsesQuestionnaires";
 import { StepsQuestionnaire } from './Questionnaire/StepsQuestionnaire';
+import { BreadcrumbCourse } from './BreadcrumbCourse';
 
 const { TextArea } = Input;
 
 
-export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, enableEdit, setEnableEdit, courseSubsection, setCourseSubsectionQuestionnaire, professorID }) => {
+export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, enableEdit, setEnableEdit, courseSubsection, setCourseSubsectionQuestionnaire, professorID, coursePositionInfo }) => {
   const { user } = useAuthContext();
   const [groupValues, setGroupValues] = useState({});
   const [loadingData, setLoadingData] = useState(true);
@@ -452,7 +453,13 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
   const isLastPage = currentPage === totalPages;
 
   return (
-    <div className="flex flex-col mt-5">
+    <div className="flex flex-col mt-3">
+      <BreadcrumbCourse
+        coursePositionInfo={coursePositionInfo}
+        styles={
+          'mb-5'
+        }
+      />
       <Header enableEdit={enableEdit} questionnaire={questionnaire} questionnaireAnswerData={answers.filter((answer) => answer.questionnaire?.id === questionnaire?.id)}
         completed={completed} setEnableEdit={setEnableEdit} courseSubsection={courseSubsection} editedQuestions={editedQuestions}
         setQuestionnaireAnswerData={setQuestionnaireAnswerData}
