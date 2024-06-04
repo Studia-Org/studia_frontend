@@ -7,6 +7,7 @@ import { MoonLoader } from 'react-spinners';
 import Swal from "sweetalert2";
 import { useAuthContext } from "../../../../context/AuthContext";
 import { ProfessorPeerReview } from "./ProfessorPeerReview";
+import { sub } from "date-fns";
 
 export default function PeerReviewComponent({ activityData }) {
     const [showEvaluate, setShowEvaluate] = useState(false);
@@ -99,7 +100,6 @@ export default function PeerReviewComponent({ activityData }) {
         if (usersToPair === 1 && userIndexSelected === null) setUserIndexSelected(0)
         if (userIndexSelected === null) return
         if (qualificationIds === null) return
-
         const idQualification =
             peerReviewInGroups ?
                 qualificationIds.find((qual) => {
@@ -252,11 +252,15 @@ export default function PeerReviewComponent({ activityData }) {
                                     resetUser()
                                     if (peerReviewInGroups) {
                                         activityData.group.data.attributes.PeerReviewAnswers.data.push(data.data)
-                                        if (usersToPair === activityData.group.data.attributes.PeerReviewAnswers.data.length) completeSubsection()
+                                        const count = activityData.group.data.attributes.PeerReviewAnswers.data
+                                            .filter((answer) => answer.attributes.qualifications.data.find((qualification) => qualification.id === QualificationIdPartnerReview))
+                                        if (usersToPair === count?.length) completeSubsection()
                                     }
                                     else {
                                         activityData.user.data.attributes.PeerReviewAnswers.data.push(data.data)
-                                        if (usersToPair === activityData.group.data.attributes.PeerReviewAnswers.data.length) completeSubsection()
+                                        const count = activityData.group.data.attributes.PeerReviewAnswers.data
+                                            .filter((answer) => answer.attributes.qualifications.data.find((qualification) => qualification.id === QualificationIdPartnerReview))
+                                        if (usersToPair === count?.length) completeSubsection()
 
                                     }
                                 } else {
@@ -289,7 +293,6 @@ export default function PeerReviewComponent({ activityData }) {
                                 throw new Error(res.json())
                             }
                         }).then(data => {
-
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Your feedback has been sent',
@@ -338,26 +341,39 @@ export default function PeerReviewComponent({ activityData }) {
         } finally {
             setSendDataLoader(false)
         }
-
-
-
     }
 
     function completeSubsection() {
-        const subsectionsCompleted = {
-            subsections_completed: [
-                ...user.subsections_completed.map(subsection => ({ id: subsection.id })),
-                { id: activityData.activity.data.attributes.subsection.data.id }
-            ]
-        };
-        fetch(`${API}/users/${user.id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${getToken()}`,
-            },
-            body: JSON.stringify(subsectionsCompleted)
-        });
+        if (peerReviewInGroups) {
+            activityData.group.data.attributes.users.data.forEach((user) => {
+                fetch(`${API}/users/${user.id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${getToken()}`,
+                    },
+                    body: JSON.stringify({
+                        subsections_completed: {
+                            connect: [{ id: activityData.activity.data.attributes.subsection.data.id }]
+                        }
+                    })
+                })
+            })
+        }
+        else {
+            fetch(`${API}/users/${user.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${getToken()}`,
+                },
+                body: JSON.stringify({
+                    subsections_completed: {
+                        connect: [{ id: activityData.activity.data.attributes.subsection.data.id }]
+                    }
+                })
+            })
+        }
     }
     function resetUser() {
         setQualificationIdPartnerReview(null)
@@ -371,7 +387,7 @@ export default function PeerReviewComponent({ activityData }) {
         )
     } else {
         return (
-            <div className={`flex min-h-full transition-transform duration-700 ${showEvaluate ? 'xl:-translate-x-[calc(100vw-21rem)] -translate-x-[calc(100vw-1rem)]' : ''}`}>
+            <div className={`flex min-h-full transition -transform duration-700 ${showEvaluate ? 'xl:-translate-x-[calc(100vw-110px-1rem)] -translate-x-[calc(100vw-1rem)]' : ''}`}>
                 {
                     loading ?
                         <div className="flex items-center justify-center w-full h-full">
@@ -386,7 +402,7 @@ export default function PeerReviewComponent({ activityData }) {
                             </div>
                             : qualificationIds !== null &&
                             <>
-                                <div className="max-w-[calc(100vw-2rem)] min-w-[calc(100vw-2rem)] xl:min-w-[calc(100vw-22rem)] xl:max-w-[calc(100vw-22rem)]">
+                                <div className="max-w-[calc(100vw-2rem)] min-w-[calc(100vw-2rem)] xl:min-w-[calc(100vw-110px-2rem)] xl:max-w-[calc(100vw-110px)]">
                                     <MainScreen
                                         activityData={activityData}
                                         setShowEvaluate={setShowEvaluate}
@@ -400,7 +416,7 @@ export default function PeerReviewComponent({ activityData }) {
                                         peerReviewInGroups={peerReviewInGroups}
                                     />
                                 </div>
-                                <div key={userIndexSelected} className={`${!showEvaluate ? 'w-0 h-0 overflow-hidden absolute' : 'min-w-[calc(100vw)] xl:min-w-[calc(100vw-22rem)] overflow-x-hidden  '}`}>
+                                <div key={userIndexSelected} className={`${!showEvaluate ? 'w-0 h-0 overflow-hidden absolute' : 'min-w-[calc(100vw-1rem)] xl:min-w-[calc(100vw-110px-1rem)] overflow-x-hidden  '} `}>
                                     <EvaluateScreen
                                         key={userIndexSelected}
                                         data={data}
