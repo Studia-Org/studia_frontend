@@ -194,7 +194,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
         <>
             {
                 activities.length > 0 ?
-                    <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-20">
+                    <div class="relative overflow-x-auto shadow-md sm:rounded-lg mt-20 bg-white">
                         <div class=" pb-4 bg-white  p-5">
                             <div className='flex items-center justify-between'>
                                 <label for="table-search" class="sr-only">Search</label>
@@ -287,7 +287,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                 <span className="block text-sm sm:inline"> Peer review deadline is on {new Date(filteredActivity.attributes.BeingReviewedBy.data.attributes.deadline).toLocaleDateString()}</span>
                             </div>
                         }
-                        <table class="w-full text-sm text-left text-gray-500 ">
+                        <table class="w-full text-sm text-left text-gray-500 border-collapse border-spacing-0 ">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50  ">
                                 <tr>
                                     {
