@@ -256,20 +256,17 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
       if (response.ok) {
         const { response_upload, json } = await sendFile(result, fileListIds);
         if (response_upload.ok) {
-          // Completar subseccion
-          const subsectionsCompleted = {
-            subsections_completed: [
-              ...user.subsections_completed.map(subsection => ({ id: subsection.id })),
-              { id: activityData.activity.data.attributes.subsection.data.id }
-            ]
-          };
           await fetch(`${API}/users/${user.id}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${getToken()}`,
             },
-            body: JSON.stringify(subsectionsCompleted)
+            body: JSON.stringify({
+              subsections_completed: {
+                connect: [{ id: activityData.activity.data.attributes.subsection.data.id }]
+              }
+            })
           });
           Swal.fire({
             icon: 'success',

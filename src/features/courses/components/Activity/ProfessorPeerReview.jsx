@@ -8,6 +8,8 @@ import { GroupRows } from './Components/PeerReview/GroupRows.jsx';
 import { Button, Empty } from 'antd';
 import generateExcelPeerReview from './utils/generateExcelPeerReview';
 import CreatePeers from './Components/PeerReview/CreatePeers';
+import { set } from 'date-fns';
+import { MoonLoader } from 'react-spinners';
 
 export const ProfessorPeerReview = ({ activityData }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -16,7 +18,7 @@ export const ProfessorPeerReview = ({ activityData }) => {
   const [createPeerReview, setCreatePeerReview] = useState(false);
   const [studentGroups, setStudentGroups] = useState([])
   const peerReviewinGroups = activityData.activity?.data.attributes.groupActivity
-
+  const [loading, setLoading] = useState(false)
   const activityToReviewID = activityData.activity?.data.attributes.task_to_review?.data?.id
   const navigate = useNavigate()
   const { courseId, activityId } = useParams()
@@ -35,13 +37,13 @@ export const ProfessorPeerReview = ({ activityData }) => {
 
   useEffect(() => {
     async function fetchCourseData() {
+      setLoading(true)
       const { courseInformation, students, professors } =
         await fetchCourseInformation({ courseId });
 
       setCourseContentInformation({ courseInformation, students, professors });
 
       if (peerReviewinGroups) {
-
         const idAdded = []
         const groups = students.data.flatMap((student) => {
           return student.attributes.groups?.data.filter((group) => {
@@ -53,19 +55,12 @@ export const ProfessorPeerReview = ({ activityData }) => {
 
         setStudentGroups(groups)
       }
-
-    }
-
-    fetchCourseData();
-  }, [courseId]);
-
-  useEffect(() => {
-    async function fetchPeerReviewData() {
       const peerReviewAnswers =
         await fetchPeerReviewAnswers(activityId);
       setPeerReviewAnswers(peerReviewAnswers);
+      setLoading(false)
     }
-    fetchPeerReviewData();
+    fetchCourseData();
   }, []);
 
   function renderTableRows() {
@@ -99,16 +94,16 @@ export const ProfessorPeerReview = ({ activityData }) => {
 
 
   return (
-    <div className='h-full p-5'>
+    <div className='h-full p-5 max-w-[100%] overflow-x-scroll'>
       <BackToCourse courseId={courseId} navigate={navigate} />
       <main className='mx-5'>
         <h2 className='mt-3 mb-2 text-lg font-medium'>Peer Review</h2>
         <p className='mb-1 text-sm text-gray-500'>In this section, you will be able to see the evaluations that students have given to their peers.</p>
         <p className='mb-4 text-sm text-gray-500'>Peers will be created automatically if you don't create them manually</p>
-        <div className="relative max-h-[calc(100vh-8rem-168px)] overflow-x-auto shadow-md sm:rounded-lg">
+        <div className="relative max-h-[calc(100vh-8rem-185px)] overflow-x-auto max-w-[100%] shadow-md sm:rounded-lg bg-white">
           <div className="sticky top-0 z-50 flex items-center justify-between p-5 pb-4 bg-white">
             <label htmlFor="table-search" className="sr-only">Search</label>
-            <div className="relative">
+            <div className="relative ">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                 <svg className="w-4 h-4 text-gray-500 " aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
                   <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
@@ -154,13 +149,23 @@ export const ProfessorPeerReview = ({ activityData }) => {
               </tr>
             </thead>
             <tbody>
+              {
+                loading &&
+                <tr>
+                  <td colSpan="4" className="px-6 py-10 text-sm text-center text-gray-500 whitespace-nowrap">
+                    <div className="flex items-center justify-center w-full h-full">
+                      <MoonLoader color="#363cd6" size={80} />
+                    </div>
+                  </td>
+                </tr>
+              }
               {courseContentInformation.students?.data.length === 0 &&
                 <tr>
                   <td colSpan="4" className="px-6 py-4 text-sm text-center text-gray-500 whitespace-nowrap">
                     <Empty description={<span className='text-gray-500'>There are no students enrolled in this course.</span>} />
                   </td>
                 </tr>}
-              {courseContentInformation.students?.data.length > 0 && renderTableRows()}
+              {!loading && courseContentInformation.students?.data.length > 0 && renderTableRows()}
             </tbody>
           </table>
         </div>
