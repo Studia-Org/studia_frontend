@@ -34,7 +34,10 @@ export const AppRoutes = () => {
     const lastElement = pathSegments.pop();
     const inCourseInside = pathSegments.join('/') === '/app/courses' && lastElement !== 'create' && lastElement !== 'courses';
     const styles = inCourseInside ? 'flexible:ml-80 flexible:min-w-[calc(100vw-22rem)' : 'xl:ml-80 xl:min-w-[calc(100vw-22rem)';
-
+    const onlyIconStyles =
+        (pathSegments[4] === 'activity' && !isNaN(lastElement)) || (lastElement === 'qualifications' || pathSegments[2] === 'qualifications') || (lastElement === 'dashboard' || pathSegments[2] === 'dashboard') ?
+            'xl:ml-[110px] xl:min-w-[calc(100vw-110px)' : '';
+    const onlyIcon = onlyIconStyles !== ''
     if (!isLoading) {
         if (element.props.match.route.path === '*') return <div className='font-Poppins'>{element}</div>;
         else if (authenticated)
@@ -43,8 +46,8 @@ export const AppRoutes = () => {
                     <div className='flex flex-col bg-white font-Poppins '>
                         <Navbar />
                         <div className='flex'>
-                            <Sidebar section={path} />
-                            <div className={`flex min-h-[calc(100vh-8rem)] overflow-x-auto ${!inCourseCreate ? styles : ""} bg-white w-full max-w-[100vw]`}>
+                            <Sidebar section={path} onlyIcon={onlyIcon} />
+                            <div className={`flex min-h-[calc(100vh-8rem)] overflow-x-auto ${!inCourseCreate ? styles : ""} ${onlyIcon ? onlyIconStyles : ""} bg-white w-full max-w-[100vw]`}>
                                 <ErrorBoundary fallback={<ErrorBoundaryScreen />}>
                                     {element}
                                 </ErrorBoundary>
