@@ -1,26 +1,39 @@
 import { Breadcrumb } from 'antd'
 import React from 'react'
 import { HomeOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 
 
 export const BreadcrumbCourse = ({ coursePositionInfo, styles, courseId }) => {
     const items = [
         {
-            href: '/app/courses/',
-            title: <HomeOutlined className='flex items-center mt-1' />
+            title:
+                <Link to={'/app/courses/'}>
+                    <HomeOutlined className='flex items-center mt-1' />
+                </Link>
             ,
         },
         {
-            href: coursePositionInfo?.activity ? `/app/courses/${courseId}` : undefined,
-            title: coursePositionInfo?.course
+            title:
+                <Link to={`/app/courses/${courseId}`}>
+                    {coursePositionInfo?.course} noe
+                </Link>
+
         },
         {
-            href: coursePositionInfo?.activity ? `/app/courses/${courseId}` : undefined,
-            title: coursePositionInfo?.courseSection
+            title:
+                <Link to={`/app/courses/${courseId}`}>
+                    {coursePositionInfo?.courseSection}
+                </Link>
         },
         {
-            href: coursePositionInfo?.activity ? `/app/courses/${courseId}` : undefined,
-            title: coursePositionInfo?.courseSubsection
+            title: coursePositionInfo?.activity ?
+                <Link to={`/app/courses/${courseId}`}>
+                    {coursePositionInfo?.courseSubsection}
+                </Link>
+                :
+                coursePositionInfo?.courseSubsection
+
         }
     ];
 
