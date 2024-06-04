@@ -253,8 +253,10 @@ END:VCALENDAR
     }
 
     function formatDate(date) {
-        const isoString = date.toISOString();
-        return isoString.slice(0, 16);
+        if (date instanceof Date) {
+            const isoString = date.toISOString();
+            return isoString.slice(0, 16);
+        }
     }
 
 

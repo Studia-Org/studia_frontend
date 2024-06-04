@@ -6,14 +6,18 @@ import { API, BEARER } from "../../../constant";
 import { useAuthContext } from "../../../context/AuthContext";
 import { getToken } from "../../../helpers.js";
 import { SelfAssesmentComponent } from "../components/Activity/SelfAssesmentComponent.jsx";
+import { set } from "date-fns";
+import { MoonLoader } from "react-spinners";
 
 const Activity = () => {
   const { courseId, activityId } = useParams();
   const [userQualification, setUserQualification] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const { user } = useAuthContext();
 
   const fetchUserQualificationsData = async () => {
+    setLoading(true);
     try {
       if (!user) return;
 
@@ -86,9 +90,9 @@ const Activity = () => {
         }
         setUserQualification({ activity: qualificationData })
       }
-
-
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error(error);
     }
   };
@@ -114,9 +118,16 @@ const Activity = () => {
 
   return (
     <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] grid '>
-      {userQualification.activity && (
-        selectTypeOfActivity()
-      )}
+      {
+        loading ?
+          <div className='flex items-center justify-center w-full h-full'>
+            <MoonLoader color='#363cd6' size={80} />
+          </div>
+          :
+          userQualification.activity && (
+            selectTypeOfActivity()
+          )
+      }
     </div>
   )
 }
