@@ -7,11 +7,8 @@ export const BreadcrumbCourse = ({ coursePositionInfo, styles, courseId }) => {
     const items = [
         {
             href: '/app/courses/',
-            title: (
-                <div className='flex items-center justify-center'>
-                    <HomeOutlined className='mt-1' />
-                </div>
-            ),
+            title: <HomeOutlined className='flex items-center mt-1' />
+            ,
         },
         {
             href: coursePositionInfo?.activity ? `/app/courses/${courseId}` : undefined,

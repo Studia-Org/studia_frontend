@@ -7,6 +7,7 @@ import { RubricAutoAssesment } from './Components/SelfAssesment/RubricAutoAssesm
 import { FinalResultsAutoAssesment } from './Components/SelfAssesment/FinalResultsAutoAssesment'
 import { useAuthContext } from '../../../../context/AuthContext'
 import { ProfessorAutoAssesment } from './Components/SelfAssesment/ProfessorAutoAssesment'
+import { BreadcrumbCourse } from '../CoursesInside/BreadcrumbCourse'
 
 
 export const SelfAssesmentComponent = ({ activityData, idQualification, idSubsection }) => {
@@ -50,7 +51,17 @@ export const SelfAssesmentComponent = ({ activityData, idQualification, idSubsec
 
     return (
         <div className='p-10'>
-            <BackButton onClick={() => navigate(`/app/courses/${courseId}`)} text='Go back to course' />
+            <BreadcrumbCourse
+                coursePositionInfo={
+                    {
+                        course: activityData.activity.data.attributes.subsection.data.attributes.section.data.attributes.course.data.attributes.title,
+                        courseSection: activityData.activity.data.attributes.subsection.data.attributes.section.data.attributes.title,
+                        courseSubsection: activityData.activity.data.attributes.subsection.data.attributes.title,
+                        activity: `Activity: ${activityData.activity.data.attributes.title}`
+                    }
+                }
+                courseId={courseId}
+            />
             <div className='mt-10'>
                 {
                     user.role_str === 'student' ?
