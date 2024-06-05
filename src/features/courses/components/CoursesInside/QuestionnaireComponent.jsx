@@ -25,7 +25,7 @@ import { BreadcrumbCourse } from './BreadcrumbCourse';
 const { TextArea } = Input;
 
 
-export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, enableEdit, setEnableEdit, courseSubsection, setCourseSubsectionQuestionnaire, professorID, coursePositionInfo }) => {
+export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, enableEdit, setEnableEdit, setCourseSubsectionQuestionnaire, professorID, coursePositionInfo }) => {
   const { user } = useAuthContext();
   const [groupValues, setGroupValues] = useState({});
   const [loadingData, setLoadingData] = useState(true);
@@ -40,6 +40,9 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
   const { minutes, seconds, stopTimer } = useTimer({ testCompleted: questionnaireAnswerData.length > 0 });
   const [editedQuestions, setEditedQuestions] = useState({});
 
+  const {
+    courseSubsection
+  } = useCourseContext();
 
   const handleInputChange = (question, absoluteIndex) => {
     setEditedQuestions((prev) => ({ ...prev, [absoluteIndex]: { question: question.question, options: question.options } }));

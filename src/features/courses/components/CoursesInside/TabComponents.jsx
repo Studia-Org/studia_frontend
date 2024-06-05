@@ -13,14 +13,24 @@ import './participants.css'
 
 
 
-export const CourseContent = ({ setForumFlag, course, courseSection, courseSubsection, courseId, enableEdit, setEnableEdit, setCourse, titleSubsection, dateSubsection, backgroundPhotoSubsection }) => {
+export const CourseContent = ({ setForumFlag, courseId, enableEdit, setEnableEdit, titleSubsection, dateSubsection, backgroundPhotoSubsection }) => {
     const [loading, setLoading] = useState(false);
+
+    const {
+        course,
+        sectionSelected,
+        subsectionSelected,
+        setCourse,
+        setSectionSelected,
+        setSubsectionSelected,
+    } = useCourseContext();
+
     const section_ = course.find(
-        (seccion) => seccion.attributes.title === courseSection
+        (seccion) => seccion.attributes.title === sectionSelected
     );
     const subsection_ = section_?.attributes.subsections.data.find(
         (subseccion) =>
-            subseccion?.attributes.title === courseSubsection?.attributes.title
+            subseccion?.attributes.title === subsectionSelected?.attributes.title
     );
     const [subsectionContent, setSubsectionContent] = useState(subsection_?.attributes?.content);
 
@@ -159,14 +169,23 @@ export const CourseContent = ({ setForumFlag, course, courseSection, courseSubse
     )
 }
 
-export const CourseFiles = ({ course, courseSection, courseSubsection, enableEdit, setCourse }) => {
+export const CourseFiles = ({ enableEdit }) => {
+
+    const {
+        course,
+        sectionSelected,
+        subsectionSelected,
+        setCourse,
+    } = useCourseContext();
+
     const [fileUploadLoading, setFileUploadLoading] = useState(false);
+
     const section_ = course.find(
-        (seccion) => seccion.attributes.title === courseSection
+        (seccion) => seccion.attributes.title === sectionSelected
     );
     const subsection_ = section_.attributes.subsections.data.find(
         (subseccion) =>
-            subseccion.attributes.title === courseSubsection.attributes.title
+            subseccion.attributes.title === subsectionSelected.attributes.title
     );
     const [files, setFiles] = useState(subsection_.attributes.files?.data);
 

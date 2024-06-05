@@ -15,8 +15,8 @@ import { Popover, Whisper } from 'rsuite';
 
 
 
-export const AccordionCourseContent = ({ setVisible, whisper, styles, course, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag,
-  setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setCourse, setEditSectionFlag, setSectionToEdit, courseSubsection, courseSection, setParticipantsFlag }) => {
+export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFlag, setQuestionnaireFlag,
+  setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setEditSectionFlag, setSectionToEdit, setParticipantsFlag }) => {
   const [sectionNumber, setSectionNumber] = useState(1);
   const [newSection, setNewSection] = useState('');
   const [addSectionLoading, setAddSectionLoading] = useState(false);
@@ -25,8 +25,16 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, course, se
   let { courseId } = useParams()
 
 
-  function handleSections(tituloSeccion, subsection) {
+  const {
+    course,
+    sectionSelected,
+    subsectionSelected,
+    setCourse,
+    setSectionSelected,
+    setSubsectionSelected,
+  } = useCourseContext();
 
+  function handleSections(tituloSeccion, subsection) {
     if (
       subsection.attributes.activity?.data?.attributes.type ===
       "questionnaire"
@@ -38,8 +46,8 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, course, se
     } else {
       setQuestionnaireFlag(false);
     }
-    setCourseSubsection(subsection);
-    setCourseSection(tituloSeccion);
+    setSubsectionSelected(subsection);
+    setSectionSelected(tituloSeccion);
     setForumFlag(false);
     setParticipantsFlag(false);
     setSettingsFlag(false);
@@ -117,7 +125,7 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, course, se
     isFirstSubsection,
     index
   ) {
-    const selectedSubsection = subsection.id === courseSubsection.id;
+    const selectedSubsection = subsection.id === subsectionSelected.id;
     const dateToday = new Date();
     const startDate = new Date(subsection.attributes.start_date);
     const isBeforeStartDate = dateToday < startDate;
@@ -249,7 +257,7 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, course, se
         expandIcon={({ isActive }) => <CaretRightOutlined className='absolute top-0 bottom-0 right-5 ' rotate={isActive ? 90 : 0} />}
         className='mt-5 bg-gray-50'
         expandIconPosition="right"
-        defaultActiveKey={(courseSection === section.attributes.title) && sectionNumber.toString()}
+        defaultActiveKey={(sectionSelected === section.attributes.title) && sectionNumber.toString()}
       >
         <Panel
           header={

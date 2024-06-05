@@ -7,8 +7,8 @@ import { Button, Drawer } from "antd";
 import { CourseParticipantsClickable } from './TabComponents';
 import { ButtonSettings } from './EditSection/buttonEditCourse';
 
-function FloatingButtonNavigation({ whisper, allForums, professor, course, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag, setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setCourse, setEditSectionFlag, setSectionToEdit, courseSubsection, courseSection, setParticipantsFlag, posts }) {
-    //TODO
+function FloatingButtonNavigation({ whisper, allForums, professor, setForumFlag, setQuestionnaireFlag, setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setEditSectionFlag, setSectionToEdit, setParticipantsFlag, posts }) {
+
 
     return (
         <div className='fixed flex xl:hidden right-[6.5rem] bottom-12'>
@@ -23,20 +23,14 @@ function FloatingButtonNavigation({ whisper, allForums, professor, course, setCo
                             {...{
                                 whisper,
                                 styles: "shadow-none m-0 px-1 sm:px-5 sm:w-full",
-                                course,
-                                setCourseSubsection,
-                                setCourseSection,
                                 setForumFlag,
                                 setQuestionnaireFlag,
                                 setSettingsFlag,
                                 setCourseSubsectionQuestionnaire,
                                 subsectionsCompleted,
-                                setCourse,
                                 setEditSectionFlag,
                                 setSectionToEdit,
-                                courseSubsection,
                                 setParticipantsFlag,
-                                courseSection,
                             }}
                         />
                         {allForums[0]?.attributes &&
@@ -59,13 +53,12 @@ function FloatingButtonNavigation({ whisper, allForums, professor, course, setCo
 }
 
 export const SideBar = ({
-    allPosts, students, enableEdit, course,
-    setCourseSubsection, setCourseSection, setForumFlag,
-    setQuestionnaireFlag, setSettingsFlag, setCourseSubsectionQuestionnaire,
-    subsectionsCompleted, setCourse, setEditSectionFlag,
-    setSectionToEdit, courseSubsection, courseSection,
-    user, courseBasicInformation, setParticipantsFlag }) => {
+    allPosts, students, enableEdit,
+    setForumFlag, setQuestionnaireFlag, setSettingsFlag, setCourseSubsectionQuestionnaire,
+    subsectionsCompleted, setEditSectionFlag,
+    setSectionToEdit, user, courseBasicInformation, setParticipantsFlag }) => {
     const [visible, setVisible] = useState(false);
+
     return (
         <nav className="absolute top-[calc(8rem+7px)] right-0 xl:hidden">
             <Button
@@ -97,21 +90,15 @@ export const SideBar = ({
                     }
                     <AccordionCourseContent
                         {...{
-                            styles: "shadow-none px-1",
-                            course,
-                            setCourseSubsection,
-                            setCourseSection,
+                            styles: "shadow-none px-1",                            
                             setForumFlag,
                             setQuestionnaireFlag,
                             setSettingsFlag,
                             setCourseSubsectionQuestionnaire,
                             subsectionsCompleted,
-                            setCourse,
                             setEditSectionFlag,
                             setSectionToEdit,
-                            courseSubsection,
                             setParticipantsFlag,
-                            courseSection,
                             setVisible
                         }}
                     />
