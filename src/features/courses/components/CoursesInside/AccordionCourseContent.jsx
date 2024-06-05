@@ -15,8 +15,8 @@ import { Popover, Whisper } from 'rsuite';
 
 
 
-export const AccordionCourseContent = ({ setVisible, whisper, styles, courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag,
-  setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setCourseContentInformation, setEditSectionFlag, setSectionToEdit, courseSubsection, courseSection, setParticipantsFlag }) => {
+export const AccordionCourseContent = ({ setVisible, whisper, styles, course, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag,
+  setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setCourse, setEditSectionFlag, setSectionToEdit, courseSubsection, courseSection, setParticipantsFlag }) => {
   const [sectionNumber, setSectionNumber] = useState(1);
   const [newSection, setNewSection] = useState('');
   const [addSectionLoading, setAddSectionLoading] = useState(false);
@@ -195,7 +195,7 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, courseCont
         body: JSON.stringify({ data: { sections: { connect: [sectionId] } } }),
       })
 
-      setCourseContentInformation([...courseContentInformation, {
+      setCourse([...course, {
         id: sectionId,
         attributes: {
           title: newSection,
@@ -317,7 +317,7 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, courseCont
     <div className={` bg-white rounded-lg xl:p-5 xl:w-[30rem] w-full xl:shadow-md shadow-none sm:visible lg:max-w-[calc(100vw-4rem)] sm:w-auto z-20  lg:mr-0 `}>
       <p className="hidden text-xl font-semibold xl:block">Course content</p>
       <hr className="hidden h-px my-8 bg-gray-400 border-0 xl:block"></hr>
-      {courseContentInformation.map((section, index) => (
+      {course.map((section, index) => (
         <RenderCourseContent
           key={index}
           section={section}

@@ -19,6 +19,8 @@ import { ButtonSettings } from "../components/CoursesInside/EditSection/buttonEd
 import { Participants } from "../components/CoursesInside/Participants";
 import dayjs from "dayjs";
 import { BreadcrumbCourse } from "../components/CoursesInside/BreadcrumbCourse";
+import { useCourseContext } from "../../../context/CourseContext";
+import { set } from "date-fns";
 
 const { TextArea } = Input;
 const { RangePicker } = DatePicker;
@@ -44,9 +46,19 @@ const CourseInside = () => {
   const [dateSubsection, setDateSubsection] = useState();
   const [courseSection, setCourseSection] = useState();
   const [courseSubsectionQuestionnaire, setCourseSubsectionQuestionnaire] = useState([]);
-  const [courseContentInformation, setCourseContentInformation] = useState([]);
   const [students, setStudents] = useState([]);
   const [professor, setProfessor] = useState([]);
+
+  const {
+    course,
+    sectionSelected,
+    subsectionSelected,
+    activitySelected,
+    setCourse,
+    setSectionSelected,
+    setSubsectionSelected,
+    setActivitySelected,
+  } = useCourseContext();
 
 
   let { courseId } = useParams();
@@ -105,7 +117,7 @@ const CourseInside = () => {
     let lastCompletedSubseccion = null;
     let cursoTitle = null;
 
-    for (const curso of courseContentInformation) {
+    for (const curso of course) {
       const {
         id,
         attributes: {
@@ -153,7 +165,7 @@ const CourseInside = () => {
       const data = await response.json();
       document.title = `${data?.data?.attributes.title} - Uptitude`
       setCourseBasicInformation(data?.data?.attributes ?? []);
-      setCourseContentInformation(data?.data?.attributes?.sections?.data ?? []);
+      setCourse(data?.data?.attributes?.sections?.data ?? []);
       setStudents(data?.data?.attributes?.students ?? []);
       setProfessor(data?.data?.attributes?.professor?.data);
     } catch (error) {
@@ -163,30 +175,34 @@ const CourseInside = () => {
 
   useEffect(() => {
     if (
-      courseContentInformation.length > 0 &&
+      course?.length > 0 &&
       subsectionsCompleted.length > 0
     ) {
       const firstSubsection = obtenerPrimeraSubseccion(
-        courseContentInformation,
+        course,
         subsectionsCompleted
       );
 
       if (firstSubsection) {
         if (firstSubsection?.subseccion?.attributes?.activity?.data?.attributes?.type === 'questionnaire') {
           setCourseSection(firstSubsection?.cursoTitle);
+          setSectionSelected(firstSubsection?.cursoTitle);
           setCourseSubsection(firstSubsection.subseccion);
+          setSubsectionSelected(firstSubsection.subseccion);
           setQuestionnaireFlag(true);
           setCourseSubsectionQuestionnaire(
             firstSubsection.subseccion.attributes.questionnaire.data
           );
         } else {
           setCourseSection(firstSubsection.cursoTitle);
+          setSectionSelected(firstSubsection.cursoTitle);
           setCourseSubsection(firstSubsection.subseccion);
+          setSubsectionSelected(firstSubsection.subseccion);
         }
         loadQuestionnaire();
       }
     } else if (
-      courseContentInformation.length > 0 &&
+      course?.length > 0 &&
       subsectionsCompleted.length === 0
     ) {
       const {
@@ -194,12 +210,14 @@ const CourseInside = () => {
           title,
           subsections: { data: subsecciones },
         },
-      } = courseContentInformation[0];
+      } = course[0];
       if (
         subsecciones[0]?.attributes?.activity?.data?.attributes?.type ===
         "questionnaire"
       ) {
+        setSectionSelected(title);
         setCourseSection(title);
+        setSubsectionSelected(subsecciones[0]);
         setCourseSubsection(subsecciones[0]);
         setQuestionnaireFlag(true);
         setCourseSubsectionQuestionnaire(
@@ -207,12 +225,14 @@ const CourseInside = () => {
         );
       } else {
         setCourseSection(title);
+        setSectionSelected(title);
         setCourseSubsection(subsecciones[0]);
+        setSubsectionSelected(subsecciones[0]);
       }
       loadQuestionnaire();
     }
 
-  }, [courseContentInformation, subsectionsCompleted]);
+  }, [course, subsectionsCompleted]);
 
   function deleteFile() {
     setBackgroundPhotoSubsection(undefined)
@@ -241,11 +261,13 @@ const CourseInside = () => {
 
 
   const loadQuestionnaire = () => {
-    if (activityId && courseContentInformation.length > 0 && user.role_str !== 'student') {
+    if (activityId && course.length > 0 && user.role_str !== 'student') {
       const data = locateFromActivityId(Number(activityId));
       if (data) {
         setCourseSubsection(data.subsection);
+        setSubsectionSelected(data.subsection);
         setCourseSection(data.section.attributes.title);
+        setSectionSelected(data.section.attributes.title);
         setCourseSubsectionQuestionnaire(data.subsection.attributes.questionnaire.data);
         setQuestionnaireFlag(true);
       }
@@ -253,7 +275,7 @@ const CourseInside = () => {
   }
 
   const locateFromActivityId = (activityId) => {
-    for (const section of courseContentInformation) {
+    for (const section of course) {
       for (const subsection of section.attributes.subsections.data) {
         if (subsection.attributes.activity.data.id === activityId) {
           return { section, subsection };
@@ -268,16 +290,16 @@ const CourseInside = () => {
       key: '1',
       label: 'Course',
       children:
-        <CourseContent setForumFlag={setForumFlag} courseContentInformation={courseContentInformation} courseSection={courseSection}
+        <CourseContent setForumFlag={setForumFlag} course={course} courseSection={courseSection}
           courseSubsection={courseSubsection} courseId={courseId} enableEdit={enableEdit} setEnableEdit={setEnableEdit}
-          setCourseContentInformation={setCourseContentInformation} titleSubsection={titleSubsection} dateSubsection={dateSubsection}
+          setCourse={setCourse} titleSubsection={titleSubsection} dateSubsection={dateSubsection}
           backgroundPhotoSubsection={backgroundPhotoSubsection}
         />,
     },
     {
       key: '2',
       label: 'Files',
-      children: <CourseFiles courseContentInformation={courseContentInformation} courseSection={courseSection} courseSubsection={courseSubsection} enableEdit={enableEdit} setCourseContentInformation={setCourseContentInformation} />,
+      children: <CourseFiles course={course} courseSection={courseSection} courseSubsection={courseSubsection} enableEdit={enableEdit} setCourse={setCourse} />,
     }
   ].filter(item => {
     if (item.label === 'Participants') {
@@ -299,7 +321,7 @@ const CourseInside = () => {
         <div className="container-fluid min-h-screen w-screen max-w-full rounded-tl-3xl bg-[#e7eaf886] flex flex-wrap flex-col-reverse md:flex-row  ">
           <SideBar
             {...{
-              courseContentInformation,
+              course,
               setCourseSubsection,
               setCourseSection,
               setForumFlag,
@@ -307,7 +329,7 @@ const CourseInside = () => {
               setSettingsFlag,
               setCourseSubsectionQuestionnaire,
               subsectionsCompleted,
-              setCourseContentInformation,
+              setCourse,
               setEditSectionFlag,
               setSectionToEdit,
               courseSubsection,
@@ -324,8 +346,8 @@ const CourseInside = () => {
           />
           <div id="flex_wrap" className="flex-1 max-w-full min-w-0 sm:w-auto mt-3 md:ml-8 md:mr-8 p-5 md:p-0 md:basis-[600px]">
             {editSectionFlag && sectionToEdit !== null ? (
-              <EditSection setEditSectionFlag={setEditSectionFlag} sectionToEdit={sectionToEdit} setCourseContentInformation={setCourseContentInformation}
-                setSectionToEdit={setSectionToEdit} setCourseSection={setCourseSection} setCourseSubsection={setCourseSubsection} courseContentInformation={courseContentInformation} />
+              <EditSection setEditSectionFlag={setEditSectionFlag} sectionToEdit={sectionToEdit} setCourse={setCourse}
+                setSectionToEdit={setSectionToEdit} setCourseSection={setCourseSection} setCourseSubsection={setCourseSubsection} course={course} />
             ) : (!forumFlag && !participantsFlag && !settingsFlag) ? (
               <div>
                 {
@@ -425,7 +447,7 @@ const CourseInside = () => {
                     ) :
                       <CourseHasNotStarted startDate={courseBasicInformation.start_date} />
 
-                  ) : courseSection && courseContentInformation.length > 0 && (
+                  ) : courseSection && course.length > 0 && (
                     <>
 
                       <BreadcrumbCourse
@@ -522,7 +544,7 @@ const CourseInside = () => {
                   <section >
                     <AccordionCourseContent
                       {...{
-                        courseContentInformation,
+                        course,
                         setCourseSubsection,
                         setCourseSection,
                         setForumFlag,
@@ -530,7 +552,7 @@ const CourseInside = () => {
                         setSettingsFlag,
                         setCourseSubsectionQuestionnaire,
                         subsectionsCompleted,
-                        setCourseContentInformation,
+                        setCourse,
                         setEditSectionFlag,
                         setSectionToEdit,
                         courseSubsection,

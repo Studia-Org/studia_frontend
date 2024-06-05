@@ -25,6 +25,7 @@ import FilePondPluginFileValidateSize from 'filepond-plugin-file-validate-size';
 import { TaskFiles } from './Components/TaskFiles.jsx';
 import { UploadFiles } from '../CreateCourses/CourseSections/UploadFiles.jsx';
 import { BreadcrumbCourse } from '../CoursesInside/BreadcrumbCourse.jsx';
+import { useCourseContext } from '../../../../context/CourseContext.js';
 
 registerPlugin(FilePondPluginFileValidateSize);
 registerPlugin(FilePondPluginImagePreview);
@@ -61,6 +62,19 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   const { activityGroup, loadingGroup } = useGetGroup({ user, activityData, activityId, IDQualification });
   const isActivityGroup = activityData?.activity?.data?.attributes?.groupActivity;
   const isThinkAloud = activityData.activity.data.attributes.type === 'thinkAloud'
+
+  const {
+    course,
+    sectionSelected,
+    subsectionSelected,
+    activitySelected,
+    setCourse,
+    setSectionSelected,
+    setSubsectionSelected,
+    setActivitySelected,
+  } = useCourseContext();
+
+  console.log(sectionSelected)
 
   useEffect(() => {
     setFilesTask([]);

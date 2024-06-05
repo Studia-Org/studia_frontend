@@ -16,7 +16,7 @@ export const BreadcrumbCourse = ({ coursePositionInfo, styles, courseId }) => {
         {
             title:
                 <Link to={`/app/courses/${courseId}`}>
-                    {coursePositionInfo?.course} noe
+                    {coursePositionInfo?.course}
                 </Link>
 
         },

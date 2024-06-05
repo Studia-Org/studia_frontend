@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 import { SubsectionItems } from '../CreateCourses/CourseSections/SubsectionItems';
 
 
-export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseContentInformation, setSectionToEdit, setCourseSection, setCourseSubsection, courseContentInformation }) => {
+export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourse, setSectionToEdit, setCourseSection, setCourseSubsection, course }) => {
     const [disabled, setDisabled] = useState(true);
     const [loading, setLoading] = useState(false);
     const [loadingDelete, setLoadingDelete] = useState(false);
@@ -188,7 +188,7 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
             }),
         })
 
-        setCourseContentInformation((prev) => {
+        setCourse((prev) => {
             const updatedSections = prev.map((section) => {
                 if (section.id === sectionToEdit.id) {
                     return sectionToEditTemp;
@@ -297,12 +297,12 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
                 }
             })
 
-            setCourseContentInformation((prev) => {
+            setCourse((prev) => {
                 const updatedSections = prev.filter((section) => section.id !== sectionToEdit.id);
                 return updatedSections;
             })
-            setCourseSection(courseContentInformation[0].attributes.title)
-            setCourseSubsection(courseContentInformation[0].attributes.subsections.data[0])
+            setCourseSection(course[0].attributes.title)
+            setCourseSubsection(course[0].attributes.subsections.data[0])
             setLoadingDelete(false);
             setEditSectionFlag(false);
             message.success('Section deleted');

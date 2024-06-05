@@ -13,9 +13,9 @@ import './participants.css'
 
 
 
-export const CourseContent = ({ setForumFlag, courseContentInformation, courseSection, courseSubsection, courseId, enableEdit, setEnableEdit, setCourseContentInformation, titleSubsection, dateSubsection, backgroundPhotoSubsection }) => {
+export const CourseContent = ({ setForumFlag, course, courseSection, courseSubsection, courseId, enableEdit, setEnableEdit, setCourse, titleSubsection, dateSubsection, backgroundPhotoSubsection }) => {
     const [loading, setLoading] = useState(false);
-    const section_ = courseContentInformation.find(
+    const section_ = course.find(
         (seccion) => seccion.attributes.title === courseSection
     );
     const subsection_ = section_?.attributes.subsections.data.find(
@@ -84,7 +84,7 @@ export const CourseContent = ({ setForumFlag, courseContentInformation, courseSe
         })
 
         if (response.ok) {
-            setCourseContentInformation([...courseContentInformation.map((section) => {
+            setCourse([...course.map((section) => {
                 if (section.id === section_.id) {
                     return {
                         ...section,
@@ -159,9 +159,9 @@ export const CourseContent = ({ setForumFlag, courseContentInformation, courseSe
     )
 }
 
-export const CourseFiles = ({ courseContentInformation, courseSection, courseSubsection, enableEdit, setCourseContentInformation }) => {
+export const CourseFiles = ({ course, courseSection, courseSubsection, enableEdit, setCourse }) => {
     const [fileUploadLoading, setFileUploadLoading] = useState(false);
-    const section_ = courseContentInformation.find(
+    const section_ = course.find(
         (seccion) => seccion.attributes.title === courseSection
     );
     const subsection_ = section_.attributes.subsections.data.find(
@@ -240,7 +240,7 @@ export const CourseFiles = ({ courseContentInformation, courseSection, courseSub
             body: JSON.stringify({ data: { files: allFiles } })
         })
 
-        setCourseContentInformation([...courseContentInformation.map((section) => {
+        setCourse([...course.map((section) => {
             if (section.id === section_.id) {
                 return {
                     ...section,
