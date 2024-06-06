@@ -6,15 +6,23 @@ import { API, BEARER } from "../../../constant";
 import { useAuthContext } from "../../../context/AuthContext";
 import { getToken } from "../../../helpers.js";
 import { SelfAssesmentComponent } from "../components/Activity/SelfAssesmentComponent.jsx";
-import { set } from "date-fns";
 import { MoonLoader } from "react-spinners";
+import { useCourseContext } from "../../../context/CourseContext.js";
 
 const Activity = () => {
-  const { courseId, activityId } = useParams();
+  const { activityId } = useParams();
   const [userQualification, setUserQualification] = useState([]);
   const [loading, setLoading] = useState(true);
-
   const { user } = useAuthContext();
+  const { setActivitySelected, setCourse, setSectionSelected, setSubsectionSelected, course } = useCourseContext();
+
+  function completeContext(course_, section, subsection) {
+    if (!course) {
+      setCourse(course_);
+      setSectionSelected(section);
+      setSubsectionSelected(subsection);
+    }
+  }
 
   const fetchUserQualificationsData = async () => {
     setLoading(true);
@@ -82,6 +90,10 @@ const Activity = () => {
           idQualification: data.data[0]["id"],
           idSubsection: data.data[0].attributes.activity.data.attributes.subsection.data.id
         });
+        setActivitySelected(data.data[0].attributes.activity.data.attributes.title);
+        completeContext(data.data[0].attributes.activity.data.attributes.subsection.data.attributes.section.data.attributes.course, 
+          data.data[0].attributes.activity.data.attributes.subsection.data.attributes.section.data.attributes.title, 
+          data.data[0].attributes.activity.data.attributes.subsection.data.attributes.title);
       } else {
         const qualificationData = {
           activity: { data: activityDataa.data },
@@ -89,6 +101,10 @@ const Activity = () => {
           idSubsection: activityDataa.data.attributes.subsection.data.id
         }
         setUserQualification({ activity: qualificationData })
+        setActivitySelected(activityDataa.data.attributes.title);
+        completeContext(activityDataa.data.attributes.subsection.data.attributes.section.data.attributes.course,
+          activityDataa.data.attributes.subsection.data.attributes.section.data.attributes.title,
+          activityDataa.data.attributes.subsection.data.attributes.title);          
       }
       setLoading(false);
     } catch (error) {

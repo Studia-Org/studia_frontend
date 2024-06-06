@@ -323,7 +323,7 @@ const CourseInside = () => {
 
           />
           <div id="flex_wrap" className="flex-1 max-w-full min-w-0 sm:w-auto mt-3 md:ml-8 md:mr-8 p-5 md:p-0 md:basis-[600px]">
-            {editSectionFlag && sectionToEdit !== null ? (              
+            {editSectionFlag && sectionToEdit !== null ? (
               <EditSection
                 setEditSectionFlag={setEditSectionFlag}
                 sectionToEdit={sectionToEdit}
@@ -414,15 +414,6 @@ const CourseInside = () => {
                         setEnableEdit={setEnableEdit}
                         setCourseSubsectionQuestionnaire={setCourseSubsectionQuestionnaire}
                         professorID={professor.id}
-                        coursePositionInfo={
-                          {
-                            course: courseBasicInformation.title,
-                            courseSection: sectionSelected,
-                            courseSubsection: subsectionSelected.attributes.title,
-                            activity: null
-                          }
-                        }
-
                       />
                     ) :
                       <CourseHasNotStarted startDate={courseBasicInformation.start_date} />
@@ -431,14 +422,6 @@ const CourseInside = () => {
                     <>
 
                       <BreadcrumbCourse
-                        coursePositionInfo={
-                          {
-                            course: courseBasicInformation.title,
-                            courseSection: sectionSelected,
-                            courseSubsection: subsectionSelected.attributes.title,
-                            activity: null
-                          }
-                        }
                         styles={
                           'mt-3'
                         }
@@ -528,7 +511,7 @@ const CourseInside = () => {
                         setQuestionnaireFlag,
                         setSettingsFlag,
                         setCourseSubsectionQuestionnaire,
-                        subsectionsCompleted,                        
+                        subsectionsCompleted,
                         setEditSectionFlag,
                         setSectionToEdit,
                         setParticipantsFlag

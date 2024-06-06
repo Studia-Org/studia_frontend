@@ -21,11 +21,12 @@ import { ScaleQuestionnaireForm } from './Questionnaire/ScaleQuestionnaireForm';
 import { fetchUserResponsesQuestionnaires } from "../../../../fetches/fetchUserResponsesQuestionnaires";
 import { StepsQuestionnaire } from './Questionnaire/StepsQuestionnaire';
 import { BreadcrumbCourse } from './BreadcrumbCourse';
+import { useCourseContext } from '../../../../context/CourseContext';
 
 const { TextArea } = Input;
 
 
-export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, enableEdit, setEnableEdit, setCourseSubsectionQuestionnaire, professorID, coursePositionInfo }) => {
+export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, enableEdit, setEnableEdit, setCourseSubsectionQuestionnaire, professorID }) => {
   const { user } = useAuthContext();
   const [groupValues, setGroupValues] = useState({});
   const [loadingData, setLoadingData] = useState(true);
@@ -41,7 +42,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
   const [editedQuestions, setEditedQuestions] = useState({});
 
   const {
-    courseSubsection
+    subsectionSelected
   } = useCourseContext();
 
   const handleInputChange = (question, absoluteIndex) => {
@@ -152,7 +153,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
       },
       body: JSON.stringify({
         data: {
-          activity: courseSubsection.attributes.activity.data.id,
+          activity: subsectionSelected.attributes.activity.data.id,
           user: user.id,
           comments: 'Automatic evaluation of the questionnaire',
           evaluator: professorID,
@@ -458,13 +459,12 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
   return (
     <div className="flex flex-col mt-3">
       <BreadcrumbCourse
-        coursePositionInfo={coursePositionInfo}
         styles={
           'mb-5'
         }
       />
       <Header enableEdit={enableEdit} questionnaire={questionnaire} questionnaireAnswerData={answers.filter((answer) => answer.questionnaire?.id === questionnaire?.id)}
-        completed={completed} setEnableEdit={setEnableEdit} courseSubsection={courseSubsection} editedQuestions={editedQuestions}
+        completed={completed} setEnableEdit={setEnableEdit} courseSubsection={subsectionSelected} editedQuestions={editedQuestions}
         setQuestionnaireAnswerData={setQuestionnaireAnswerData}
       />
       {

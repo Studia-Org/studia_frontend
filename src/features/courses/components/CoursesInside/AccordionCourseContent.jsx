@@ -11,6 +11,7 @@ import { API } from '../../../../constant';
 import { useParams } from 'react-router-dom';
 import { getIcon } from './helpers';
 import { Popover, Whisper } from 'rsuite';
+import { useCourseContext } from '../../../../context/CourseContext';
 
 
 
@@ -23,7 +24,6 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFl
   const { Panel } = Collapse;
   const { user } = useAuthContext();
   let { courseId } = useParams()
-
 
   const {
     course,
@@ -125,7 +125,7 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFl
     isFirstSubsection,
     index
   ) {
-    const selectedSubsection = subsection.id === subsectionSelected.id;
+    const selectedSubsection = subsection.id === subsectionSelected?.id;
     const dateToday = new Date();
     const startDate = new Date(subsection.attributes.start_date);
     const isBeforeStartDate = dateToday < startDate;

@@ -10,6 +10,7 @@ import { getToken } from "../../../../helpers";
 import { FiChevronRight } from "react-icons/fi";
 import { MoonLoader } from "react-spinners";
 import './participants.css'
+import { useCourseContext } from "../../../../context/CourseContext";
 
 
 

@@ -1,14 +1,17 @@
 import React, { useState } from 'react'
 import { Collapse } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
+import { useCourseContext } from '../../../../../../context/CourseContext';
 
-export const AccordionCourse = ({ createCourseSectionsList, setSectionContentSelector, setSectionId, selectedSubsection, sectionId }) => {
+export const AccordionNavigator = () => {
     const { Panel } = Collapse;
     const [sectionNumber, setSectionNumber] = useState(1);
 
+    const { course, subsectionSelected, sectionSelected } = useCourseContext();
 
-    function RenderCourseSubsections({ subsection, sectionId }) {
-        const selectedSubsectionTemp = subsection.id === selectedSubsection.id
+
+    function RenderCourseSubsections({ subsection }) {
+        const selectedSubsectionTemp = subsection.id === subsectionSelected.id
 
         let ringColor = '#15803d'
         if (subsection.fase === 'forethought') {
@@ -27,8 +30,7 @@ export const AccordionCourse = ({ createCourseSectionsList, setSectionContentSel
                     </svg>
                 </span>
                 <button onClick={() => {
-                    setSectionContentSelector(subsection.id)
-                    setSectionId(sectionId)
+
                 }} className="flex items-center w-3/4 mb-1 font-medium text-left text-gray-900 duration-200 line-clamp-2 hover:translate-x-2"> {subsection.title}</button>
                 {
                     selectedSubsectionTemp && (
@@ -48,8 +50,7 @@ export const AccordionCourse = ({ createCourseSectionsList, setSectionContentSel
                 expandIcon={({ isActive }) => <CaretRightOutlined className='absolute top-0 bottom-0 right-5 ' rotate={isActive ? 90 : 0} />}
                 className='mt-5 bg-gray-50'
                 expandIconPosition="right"
-                defaultActiveKey={(sectionId === section.id) && sectionNumber.toString()}
-
+                defaultActiveKey={(sectionSelected === section.attributes.title) && sectionNumber.toString()}
             >
                 <Panel
                     header={
@@ -67,7 +68,7 @@ export const AccordionCourse = ({ createCourseSectionsList, setSectionContentSel
                     key={sectionNumber}
                 >
                     <ol className="relative ml-10 text-base border-l border-gray-300 border-dashed">
-                        {section.subsections.map((subsection, index) => (
+                        {section.subsections?.map((subsection, index) => (
                             <RenderCourseSubsections key={index} subsection={subsection} sectionId={section.id} />
                         ))}
                     </ol>
@@ -81,7 +82,7 @@ export const AccordionCourse = ({ createCourseSectionsList, setSectionContentSel
             <p className='text-xl font-semibold'>Course content</p>
             <hr className="h-px my-8 bg-gray-400 border-0"></hr>
             {
-                createCourseSectionsList.map((section, index) => (
+                course?.map((section, index) => (
                     <RenderCourseSections key={index} section={section} sectionNumber={sectionNumber + index} />
                 ))
             }

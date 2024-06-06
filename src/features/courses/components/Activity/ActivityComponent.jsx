@@ -26,6 +26,7 @@ import { TaskFiles } from './Components/TaskFiles.jsx';
 import { UploadFiles } from '../CreateCourses/CourseSections/UploadFiles.jsx';
 import { BreadcrumbCourse } from '../CoursesInside/BreadcrumbCourse.jsx';
 import { useCourseContext } from '../../../../context/CourseContext.js';
+import { AccordionNavigator } from './Components/ActivityTask/AccordionNavigator.jsx';
 
 registerPlugin(FilePondPluginFileValidateSize);
 registerPlugin(FilePondPluginImagePreview);
@@ -46,6 +47,9 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   const [audioFile, setAudioFile] = useState(audioUser);
   const { user } = useAuthContext();
 
+  const { course } = useCourseContext();
+  console.log('course', course)
+
   const [fileList, setFileList] = useState(
     activityData?.file?.data?.map((file) => ({
       ...file.attributes,
@@ -62,19 +66,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   const { activityGroup, loadingGroup } = useGetGroup({ user, activityData, activityId, IDQualification });
   const isActivityGroup = activityData?.activity?.data?.attributes?.groupActivity;
   const isThinkAloud = activityData.activity.data.attributes.type === 'thinkAloud'
-
-  const {
-    course,
-    sectionSelected,
-    subsectionSelected,
-    activitySelected,
-    setCourse,
-    setSectionSelected,
-    setSubsectionSelected,
-    setActivitySelected,
-  } = useCourseContext();
-
-  console.log(sectionSelected)
 
   useEffect(() => {
     setFilesTask([]);
@@ -173,7 +164,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
           delivered_data: new Date(),
         }
       };
-      console.log('activityGroup', qualificationData)
       if (activityGroup !== null) {
         qualificationData.data.group = activityGroup.id;
       }
@@ -460,20 +450,9 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
 
   return (
     <div className='flex max-w-[calc(100vw)] flex-col 1.5xl:flex-row items-start 1.5xl:items-start 1.5xl:space-x-24 p-5 sm:p-10'>
-
       <>
         <div className={`${!createGroups ? "1.5xl:w-2/4 lg:w-10/12" : ""} w-full`}>
-          <BreadcrumbCourse
-            coursePositionInfo={
-              {
-                course: activityData.activity.data.attributes.subsection.data.attributes.section.data.attributes.course.data.attributes.title,
-                courseSection: activityData.activity.data.attributes.subsection.data.attributes.section.data.attributes.title,
-                courseSubsection: activityData.activity.data.attributes.subsection.data.attributes.title,
-                activity: `Activity: ${activityData.activity.data.attributes.title}`
-              }
-            }
-            courseId={courseId}
-          />
+          <BreadcrumbCourse />
           {
             createGroups ?
               <BackButton onClick={() => setCreateGroups(false)} text={"Go back to activity"} /> :
@@ -551,7 +530,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                 </div>
               </>
           }
-        </div >
+        </div>
         {
           (user.role_str === 'professor' || user.role_str === 'admin') && !createGroups ?
             <div className='flex flex-col'>
@@ -694,7 +673,12 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                       />
                     )
                 }
+                <div>
+                  <AccordionNavigator />
+                </div>
               </div>
+
+
         }
       </>
     </div >

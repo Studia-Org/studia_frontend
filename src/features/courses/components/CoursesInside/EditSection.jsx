@@ -7,6 +7,7 @@ import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { motion } from 'framer-motion';
 import { SubsectionItems } from '../CreateCourses/CourseSections/SubsectionItems';
+import { useCourseContext } from '../../../../context/CourseContext';
 
 
 export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdit }) => {
@@ -20,12 +21,12 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdi
     useEffect(() => {
         if (sectionToEditTemp !== sectionToEdit) {
             setDisabled(false);
-        }º
+        }
     }, [sectionToEditTemp, sectionToEdit])
 
     const isValidMove = (subsections, oldIndex, newIndex) => {
         const movedSubsection = subsections[oldIndex].attributes;
-        if (newIndex < 0 |d| newIndex >= subsections.length) {
+        if (newIndex < 0 || newIndex >= subsections.length) {
             return false;
         }
 
