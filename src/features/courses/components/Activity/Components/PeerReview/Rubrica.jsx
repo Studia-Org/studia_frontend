@@ -7,7 +7,8 @@ function Rubrica({ petite, title, data, index }) {
 
     const tableClass = petite ? 'petite' : '';
     function download() {
-        html2canvas(document.querySelector("#rubrica")).then(canvas => {
+        const element = document.getElementById('rubrica' + index);
+        html2canvas(element).then(canvas => {
             const imgData = canvas.toDataURL('image/png');
             const link = document.createElement('a');
             link.href = imgData;
