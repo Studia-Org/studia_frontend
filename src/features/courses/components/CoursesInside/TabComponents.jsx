@@ -26,7 +26,7 @@ export const CourseContent = ({ setForumFlag, courseId, enableEdit, setEnableEdi
         setSubsectionSelected,
     } = useCourseContext();
 
-    const section_ = course.find(
+    const section_ = course.sections.data.find(
         (seccion) => seccion.attributes.title === sectionSelected
     );
     const subsection_ = section_?.attributes.subsections.data.find(
@@ -95,7 +95,7 @@ export const CourseContent = ({ setForumFlag, courseId, enableEdit, setEnableEdi
         })
 
         if (response.ok) {
-            setCourse([...course.map((section) => {
+            setCourse([...course.sections.data.map((section) => {
                 if (section.id === section_.id) {
                     return {
                         ...section,
@@ -181,7 +181,7 @@ export const CourseFiles = ({ enableEdit }) => {
 
     const [fileUploadLoading, setFileUploadLoading] = useState(false);
 
-    const section_ = course.find(
+    const section_ = course.sections.data.find(
         (seccion) => seccion.attributes.title === sectionSelected
     );
     const subsection_ = section_.attributes.subsections.data.find(
@@ -260,7 +260,7 @@ export const CourseFiles = ({ enableEdit }) => {
             body: JSON.stringify({ data: { files: allFiles } })
         })
 
-        setCourse([...course.map((section) => {
+        setCourse([...course.sections.data.map((section) => {
             if (section.id === section_.id) {
                 return {
                     ...section,
@@ -398,10 +398,8 @@ export const CourseFiles = ({ enableEdit }) => {
                                         />
                                     </div>
                                 )
-
                         )
                 }
-
             </div >
         </div >
     )
@@ -410,7 +408,7 @@ export const CourseFiles = ({ enableEdit }) => {
 
 export const CourseParticipantsClickable = ({ students, enableEdit, setSettingsFlag, setParticipantsFlag, setVisible, setForumFlag }) => {
 
-    if (students.data.length === 0) {
+    if (students?.data?.length === 0) {
         return <div className="p-5 bg-white rounded-md shadow-md">
             <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='There are no other participants' />
         </div>;
@@ -433,9 +431,9 @@ export const CourseParticipantsClickable = ({ students, enableEdit, setSettingsF
 
                 <div className="flex flex-col justify-start mt-3">
                     <AvatarGroup className="mt-4" stack>
-                        {students.data
-                            .filter((user, i) => i < 10)
-                            .map(user => {
+                        {students?.data
+                            ?.filter((user, i) => i < 10)
+                            ?.map(user => {
                                 return (
                                     <Avatar
                                         circle

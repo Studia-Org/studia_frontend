@@ -31,7 +31,7 @@ import { AccordionNavigator } from './Components/ActivityTask/AccordionNavigator
 registerPlugin(FilePondPluginFileValidateSize);
 registerPlugin(FilePondPluginImagePreview);
 
-export const ActivityComponent = ({ activityData, idQualification, setUserQualification, userQualification }) => {
+export const ActivityComponent = ({ activityData, idQualification, setUserQualification, userQualification, subsectionsCompleted }) => {
   const [filesTask, setFilesTask] = useState();
   const [uploadMode, setUploadMode] = useState('record')
   const [filesUploaded, setFilesUploaded] = useState(activityData?.file?.data || []);
@@ -448,10 +448,12 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
     }
   };
 
+  console.log('activityData', activityData)
+
   return (
-    <div className='flex max-w-[calc(100vw)] flex-col 1.5xl:flex-row items-start 1.5xl:items-start 1.5xl:space-x-24 p-5 sm:p-10'>
+    <div className='flex max-w-[calc(100vw)] flex-col 1.5xl:flex-row items-start 1.5xl:items-start 1.5xl:space-x-5 p-5 sm:p-10'>
       <>
-        <div className={`${!createGroups ? "1.5xl:w-2/4 lg:w-10/12" : ""} w-full`}>
+        <div className={`${!createGroups ? "1.5xl:w-3/4 lg:w-10/12" : ""}  w-full `}>
           <BreadcrumbCourse />
           {
             createGroups ?
@@ -673,12 +675,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                       />
                     )
                 }
-                <div>
-                  <AccordionNavigator />
-                </div>
               </div>
-
-
         }
       </>
     </div >

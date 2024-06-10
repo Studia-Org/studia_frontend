@@ -10,7 +10,6 @@ import { getToken } from '../../../../helpers';
 import { API } from '../../../../constant';
 import { useParams } from 'react-router-dom';
 import { getIcon } from './helpers';
-import { Popover, Whisper } from 'rsuite';
 import { useCourseContext } from '../../../../context/CourseContext';
 
 
@@ -203,7 +202,7 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFl
         body: JSON.stringify({ data: { sections: { connect: [sectionId] } } }),
       })
 
-      setCourse([...course, {
+      setCourse([...course.sections.data, {
         id: sectionId,
         attributes: {
           title: newSection,
@@ -325,7 +324,7 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFl
     <div className={` bg-white rounded-lg xl:p-5 xl:w-[30rem] w-full xl:shadow-md shadow-none sm:visible lg:max-w-[calc(100vw-4rem)] sm:w-auto z-20  lg:mr-0 `}>
       <p className="hidden text-xl font-semibold xl:block">Course content</p>
       <hr className="hidden h-px my-8 bg-gray-400 border-0 xl:block"></hr>
-      {course.map((section, index) => (
+      {course.sections.data.map((section, index) => (
         <RenderCourseContent
           key={index}
           section={section}

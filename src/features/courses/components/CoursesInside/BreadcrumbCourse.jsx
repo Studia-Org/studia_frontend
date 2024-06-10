@@ -5,15 +5,15 @@ import { Link } from 'react-router-dom';
 import { useCourseContext } from '../../../../context/CourseContext';
 
 
-export const BreadcrumbCourse = ({  styles }) => {
-    
+export const BreadcrumbCourse = ({ styles }) => {
+
     const {
         course,
         sectionSelected,
         subsectionSelected,
         activitySelected,
     } = useCourseContext();
-    
+
     const items = [
         {
             title:
@@ -24,34 +24,35 @@ export const BreadcrumbCourse = ({  styles }) => {
         },
         {
             title:
-                <Link to={`/app/courses/${course[0].id}`}>
-                    {course[0].attributes.title}
+                <Link to={`/app/courses/${course[0]?.id}`}>
+                    {course.title}
                 </Link>
 
         },
         {
             title:
-                <Link to={`/app/courses/${course[0].id}`}>
+                <Link to={`/app/courses/${course[0]?.id}`}>
                     {sectionSelected}
                 </Link>
         },
         {
             title: activitySelected?.activity ?
-                <Link to={`/app/courses/${course[0].id}`}>
-                    {subsectionSelected.attributes.title}
+                <Link to={`/app/courses/${course[0]?.id}`}>
+                    {subsectionSelected?.attributes?.title}
                 </Link>
                 :
-                subsectionSelected.attributes.title
+                subsectionSelected?.attributes?.title
 
         }
     ];
 
     if (activitySelected?.activity) {
         items.push({
-            title: activitySelected?.activity
+            title: `Activity: ${activitySelected?.activity}`
         })
     }
     return (
+
         <Breadcrumb
             className={`flex items-center ${styles}`}
             items={items}

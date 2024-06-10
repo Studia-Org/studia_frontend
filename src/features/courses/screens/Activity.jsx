@@ -8,21 +8,42 @@ import { getToken } from "../../../helpers.js";
 import { SelfAssesmentComponent } from "../components/Activity/SelfAssesmentComponent.jsx";
 import { MoonLoader } from "react-spinners";
 import { useCourseContext } from "../../../context/CourseContext.js";
+import { SideBarButton } from "../components/Activity/Components/SideBarButton.jsx";
 
 const Activity = () => {
   const { activityId } = useParams();
   const [userQualification, setUserQualification] = useState([]);
+  const [subsectionsCompleted, setSubsectionsCompleted] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user } = useAuthContext();
   const { setActivitySelected, setCourse, setSectionSelected, setSubsectionSelected, course } = useCourseContext();
 
   function completeContext(course_, section, subsection) {
+
     if (!course) {
-      setCourse(course_);
+      console.log('course', course_)
+      setCourse(course_.data.attributes);
       setSectionSelected(section);
       setSubsectionSelected(subsection);
     }
   }
+
+  const fetchUserResponsesData = async () => {
+    const token = getToken();
+    try {
+      const response = await fetch(
+        `${API}/users/me?populate=subsections_completed`,
+        {
+          headers: { Authorization: `${BEARER} ${token}` },
+        }
+      );
+      const data = await response.json();
+      setSubsectionsCompleted(data.subsections_completed);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
 
   const fetchUserQualificationsData = async () => {
     setLoading(true);
@@ -30,7 +51,7 @@ const Activity = () => {
       if (!user) return;
 
       const activityData = await fetch(
-        `${API}/activities/${activityId}?populate=qualifications,evaluators.profile_photo,section,task_to_review,subsection.section.course,selfAssesmentAnswer.user,BeingReviewedBy,file`, {
+        `${API}/activities/${activityId}?populate=qualifications,evaluators.profile_photo,section,task_to_review,subsection.section.course.sections.subsections,selfAssesmentAnswer.user,BeingReviewedBy,file`, {
         headers: {
           Authorization: `${BEARER} ${getToken()}`
         }
@@ -66,7 +87,7 @@ const Activity = () => {
           `&populate[activity][populate][evaluators][fields][0]=*` +
           `&populate[activity][populate][file][fields][0]=*` +
           `&populate[activity][populate][task_to_review][populate][peer_review_qualifications][fields][0]=*` +
-          `&populate[activity][populate][subsection][populate][section][populate][course][fields][0]=*` +
+          `&populate[activity][populate][subsection][populate][section][populate][course][populate][sections][populate][subsections][fields][0]=*` +
           `&filters[activity][id]=${activityId}` +
           `&populate[user][populate][PeerReviewAnswers][populate][qualifications][populate][user][fields][0]=username` +
           `&populate[evaluator][populate][profile_photo][fields][0]=url` +
@@ -90,10 +111,12 @@ const Activity = () => {
           idQualification: data.data[0]["id"],
           idSubsection: data.data[0].attributes.activity.data.attributes.subsection.data.id
         });
-        setActivitySelected(data.data[0].attributes.activity.data.attributes.title);
-        completeContext(data.data[0].attributes.activity.data.attributes.subsection.data.attributes.section.data.attributes.course, 
-          data.data[0].attributes.activity.data.attributes.subsection.data.attributes.section.data.attributes.title, 
-          data.data[0].attributes.activity.data.attributes.subsection.data.attributes.title);
+        setActivitySelected({
+          activity: data.data[0].attributes.activity.data.attributes.title
+        });
+        completeContext(data.data[0].attributes.activity.data.attributes.subsection.data.attributes.section.data.attributes.course,
+          data.data[0].attributes.activity.data.attributes.subsection.data.attributes.section.data.attributes.title,
+          data.data[0].attributes.activity.data.attributes.subsection.data);
       } else {
         const qualificationData = {
           activity: { data: activityDataa.data },
@@ -101,10 +124,12 @@ const Activity = () => {
           idSubsection: activityDataa.data.attributes.subsection.data.id
         }
         setUserQualification({ activity: qualificationData })
-        setActivitySelected(activityDataa.data.attributes.title);
+        setActivitySelected({
+          activity: activityDataa.data.attributes.title
+        });
         completeContext(activityDataa.data.attributes.subsection.data.attributes.section.data.attributes.course,
           activityDataa.data.attributes.subsection.data.attributes.section.data.attributes.title,
-          activityDataa.data.attributes.subsection.data.attributes.title);          
+          activityDataa.data.attributes.subsection.data);
       }
       setLoading(false);
     } catch (error) {
@@ -122,14 +147,14 @@ const Activity = () => {
         return <SelfAssesmentComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} idSubsection={userQualification.idSubsection || userQualification.activity.idSubsection} />;
       default:
         return <ActivityComponent activityData={userQualification.activity} idQualification={userQualification.idQualification}
-          setUserQualification={setUserQualification} userQualification={userQualification} />;
+          setUserQualification={setUserQualification} userQualification={userQualification} subsectionsCompleted={subsectionsCompleted} />;
 
     }
 
   }
   useEffect(() => {
+    fetchUserResponsesData();
     fetchUserQualificationsData();
-
   }, [user]);
 
   return (
@@ -140,9 +165,15 @@ const Activity = () => {
             <MoonLoader color='#363cd6' size={80} />
           </div>
           :
-          userQualification.activity && (
-            selectTypeOfActivity()
-          )
+          <>
+            {
+              userQualification.activity && course && (
+                selectTypeOfActivity()
+              )
+            }
+            <SideBarButton subsectionsCompleted={subsectionsCompleted} />
+          </>
+
       }
     </div>
   )
