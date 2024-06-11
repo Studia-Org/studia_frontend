@@ -91,7 +91,7 @@ export const ScaleQuestionnaireForm = ({ questions, groupValues, setGroupValues,
                             row[`option${index}`] = (
                                 <Radio
                                     disabled
-                                    checked={questionnaireAnswerData[0]?.responses?.responses[absoluteIndex]?.answer === option || userResponses[0].attributes.responses.responses[absoluteIndex]?.answer === option}
+                                    checked={questionnaireAnswerData[0]?.responses?.responses[absoluteIndex]?.answer === option || userResponses[0]?.attributes?.responses?.responses[absoluteIndex]?.answer === option}
                                     onChange={() => {
                                         setGroupValues((prevState) => ({
                                             ...prevState,
