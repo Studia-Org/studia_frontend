@@ -42,9 +42,7 @@ const CourseInside = () => {
   const [questionnaireAnswers, setQuestionnaireAnswers] = useState([]);
   const [subsectionsCompleted, setSubsectionsCompleted] = useState([]);
   const [subsectionsLandscapePhoto, setSubsectionsLandscapePhoto] = useState(null);
-  const [courseSubsection, setCourseSubsection] = useState([]);
   const [dateSubsection, setDateSubsection] = useState();
-  const [courseSection, setCourseSection] = useState();
   const [courseSubsectionQuestionnaire, setCourseSubsectionQuestionnaire] = useState([]);
   const [students, setStudents] = useState([]);
   const [professor, setProfessor] = useState([]);
@@ -117,6 +115,10 @@ const CourseInside = () => {
     let lastCompletedSubseccion = null;
     let cursoTitle = null;
 
+    if (Object.keys(subsectionSelected).length !== 0) {
+      return { subseccion: subsectionSelected, cursoTitle: sectionSelected };
+    }
+
     for (const curso of course.sections.data) {
       const {
         id,
@@ -185,18 +187,14 @@ const CourseInside = () => {
 
       if (firstSubsection) {
         if (firstSubsection?.subseccion?.attributes?.activity?.data?.attributes?.type === 'questionnaire') {
-          setCourseSection(firstSubsection?.cursoTitle);
           setSectionSelected(firstSubsection?.cursoTitle);
-          setCourseSubsection(firstSubsection.subseccion);
           setSubsectionSelected(firstSubsection.subseccion);
           setQuestionnaireFlag(true);
           setCourseSubsectionQuestionnaire(
             firstSubsection.subseccion.attributes.questionnaire.data
           );
         } else {
-          setCourseSection(firstSubsection.cursoTitle);
           setSectionSelected(firstSubsection.cursoTitle);
-          setCourseSubsection(firstSubsection.subseccion);
           setSubsectionSelected(firstSubsection.subseccion);
         }
         loadQuestionnaire();
@@ -216,17 +214,13 @@ const CourseInside = () => {
         "questionnaire"
       ) {
         setSectionSelected(title);
-        setCourseSection(title);
         setSubsectionSelected(subsecciones[0]);
-        setCourseSubsection(subsecciones[0]);
         setQuestionnaireFlag(true);
         setCourseSubsectionQuestionnaire(
           subsecciones[0].attributes.questionnaire.data
         );
       } else {
-        setCourseSection(title);
         setSectionSelected(title);
-        setCourseSubsection(subsecciones[0]);
         setSubsectionSelected(subsecciones[0]);
       }
       loadQuestionnaire();
@@ -239,16 +233,16 @@ const CourseInside = () => {
   }
 
   useEffect(() => {
-    if (courseSubsection?.length && courseSubsection?.length !== 0) {
+    if (subsectionSelected?.length && subsectionSelected?.length !== 0) {
       setSubsectionsLandscapePhoto(
-        courseSubsection.attributes.landscape_photo?.data?.attributes?.url ??
+        subsectionSelected.attributes.landscape_photo?.data?.attributes?.url ??
         null
       );
     }
-    setTitleSubsection(courseSubsection?.attributes?.title);
-    setDateSubsection([courseSubsection?.attributes?.start_date, courseSubsection?.attributes?.end_date]);
-    setBackgroundPhotoSubsection(courseSubsection?.attributes?.landscape_photo?.data?.attributes?.url)
-  }, [courseSubsection]);
+    setTitleSubsection(subsectionSelected?.attributes?.title);
+    setDateSubsection([subsectionSelected?.attributes?.start_date, subsectionSelected?.attributes?.end_date]);
+    setBackgroundPhotoSubsection(subsectionSelected?.attributes?.landscape_photo?.data?.attributes?.url)
+  }, [subsectionSelected]);
 
   useEffect(() => {
     Promise.all([
@@ -264,9 +258,7 @@ const CourseInside = () => {
     if (activityId && course.sections.data.length > 0 && user.role_str !== 'student') {
       const data = locateFromActivityId(Number(activityId));
       if (data) {
-        setCourseSubsection(data.subsection);
         setSubsectionSelected(data.subsection);
-        setCourseSection(data.section.attributes.title);
         setSectionSelected(data.section.attributes.title);
         setCourseSubsectionQuestionnaire(data.subsection.attributes.questionnaire.data);
         setQuestionnaireFlag(true);
@@ -290,8 +282,8 @@ const CourseInside = () => {
       key: '1',
       label: 'Course',
       children:
-        <CourseContent setForumFlag={setForumFlag} course={course} courseSection={courseSection}
-          courseSubsection={courseSubsection} courseId={courseId} enableEdit={enableEdit} setEnableEdit={setEnableEdit}
+        <CourseContent setForumFlag={setForumFlag} course={course} courseSection={sectionSelected}
+          courseSubsection={subsectionSelected} courseId={courseId} enableEdit={enableEdit} setEnableEdit={setEnableEdit}
           setCourse={setCourse} titleSubsection={titleSubsection} dateSubsection={dateSubsection}
           backgroundPhotoSubsection={backgroundPhotoSubsection}
         />,
@@ -299,7 +291,7 @@ const CourseInside = () => {
     {
       key: '2',
       label: 'Files',
-      children: <CourseFiles course={course} courseSection={courseSection} courseSubsection={courseSubsection} enableEdit={enableEdit} setCourse={setCourse} />,
+      children: <CourseFiles course={course} courseSection={sectionSelected} courseSubsection={subsectionSelected} enableEdit={enableEdit} setCourse={setCourse} />,
     }
   ].filter(item => {
     if (item.label === 'Participants') {
@@ -322,8 +314,6 @@ const CourseInside = () => {
           <SideBar
             {...{
               course,
-              setCourseSubsection,
-              setCourseSection,
               setForumFlag,
               setQuestionnaireFlag,
               setSettingsFlag,
@@ -332,8 +322,6 @@ const CourseInside = () => {
               setCourse,
               setEditSectionFlag,
               setSectionToEdit,
-              courseSubsection,
-              courseSection,
               professor,
               allPosts,
               students,
@@ -347,7 +335,7 @@ const CourseInside = () => {
           <div id="flex_wrap" className="flex-1 max-w-full min-w-0 sm:w-auto mt-3 md:ml-8 md:mr-8 p-5 md:p-0 md:basis-[600px]">
             {editSectionFlag && sectionToEdit !== null ? (
               <EditSection setEditSectionFlag={setEditSectionFlag} sectionToEdit={sectionToEdit} setCourse={setCourse}
-                setSectionToEdit={setSectionToEdit} setCourseSection={setCourseSection} setCourseSubsection={setCourseSubsection} course={course} />
+                setSectionToEdit={setSectionToEdit} course={course} />
             ) : (!forumFlag && !participantsFlag && !settingsFlag) ? (
               <div>
                 {
@@ -394,10 +382,10 @@ const CourseInside = () => {
                         </Popconfirm>
                       </div>
                       :
-                      courseSubsection?.attributes?.landscape_photo?.data ?
+                      subsectionSelected?.attributes?.landscape_photo?.data ?
                         <>
                           <img
-                            src={courseSubsection?.attributes?.landscape_photo?.data?.attributes?.url}
+                            src={subsectionSelected?.attributes?.landscape_photo?.data?.attributes?.url}
                             alt=""
                             className="h-auto md:h-[30rem] w-[calc(100%-1.25rem)] md:w-full object-cover rounded-md shadow-md mt-5"
                           />
@@ -428,17 +416,17 @@ const CourseInside = () => {
                       <QuestionnaireComponent
                         questionnaire={courseSubsectionQuestionnaire}
                         answers={questionnaireAnswers}
-                        subsectionID={courseSubsection.id}
+                        subsectionID={subsectionSelected.id}
                         enableEdit={enableEdit}
                         setEnableEdit={setEnableEdit}
-                        courseSubsection={courseSubsection}
+                        courseSubsection={subsectionSelected}
                         setCourseSubsectionQuestionnaire={setCourseSubsectionQuestionnaire}
                         professorID={professor.id}
                         coursePositionInfo={
                           {
                             course: courseBasicInformation.title,
-                            courseSection: courseSection,
-                            courseSubsection: courseSubsection.attributes.title,
+                            courseSection: sectionSelected,
+                            courseSubsection: subsectionSelected.attributes.title,
                             activity: null
                           }
                         }
@@ -447,7 +435,7 @@ const CourseInside = () => {
                     ) :
                       <CourseHasNotStarted startDate={courseBasicInformation.start_date} />
 
-                  ) : courseSection && course.sections.data.length > 0 && (
+                  ) : sectionSelected && course.sections.data.length > 0 && (
                     <>
 
                       <BreadcrumbCourse
@@ -468,8 +456,8 @@ const CourseInside = () => {
                             />
                             :
                             <div className="flex items-center w-full max-w-full gap-x-5">
-                              <p className="text-2xl font-semibold max-w-[calc(100%-140px)]"> {courseSubsection?.attributes?.title}</p>
-                              <Badge color="#6366f1" count={new Date(courseSubsection?.attributes?.end_date).toDateString()} />
+                              <p className="text-2xl font-semibold max-w-[calc(100%-140px)]"> {subsectionSelected?.attributes?.title}</p>
+                              <Badge color="#6366f1" count={new Date(subsectionSelected?.attributes?.end_date).toDateString()} />
                             </div>
                         }
                         {
@@ -537,8 +525,6 @@ const CourseInside = () => {
                     <AccordionCourseContent
                       {...{
                         course,
-                        setCourseSubsection,
-                        setCourseSection,
                         setForumFlag,
                         setQuestionnaireFlag,
                         setSettingsFlag,
@@ -547,8 +533,6 @@ const CourseInside = () => {
                         setCourse,
                         setEditSectionFlag,
                         setSectionToEdit,
-                        courseSubsection,
-                        courseSection,
                         setParticipantsFlag
                       }}
                     />

@@ -5,13 +5,14 @@ import { useCourseContext } from '../../../../../../context/CourseContext';
 import { getIcon } from '../../../CoursesInside/helpers';
 import { useAuthContext } from '../../../../../../context/AuthContext';
 import { useNavigate, useParams } from 'react-router-dom';
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 
 export const AccordionNavigator = ({ subsectionsCompleted }) => {
     const navigate = useNavigate();
     const { Panel } = Collapse;
     const { user } = useAuthContext();
     const [sectionNumber, setSectionNumber] = useState(1);
-    const { course, subsectionSelected, sectionSelected, setSectionSelected, setSubsectionSelected } = useCourseContext();
+    const { course, subsectionSelected, sectionSelected, setSectionSelected, setSubsectionSelected, setActivitySelected } = useCourseContext();
     let { courseId } = useParams();
 
 
@@ -82,6 +83,7 @@ export const AccordionNavigator = ({ subsectionsCompleted }) => {
     function handleClickSubsection(subsection, section) {
         setSubsectionSelected(subsection);
         setSectionSelected(section);
+        setActivitySelected({})
         navigate(`/app/courses/${courseId}`);
     }
 
@@ -145,6 +147,17 @@ export const AccordionNavigator = ({ subsectionsCompleted }) => {
 
     function RenderCourseSections({ section, sectionNumber }) {
         let prevSubsectionFinished = false;
+        const subsectionIdsCompleted = subsectionsCompleted.map(
+            (subsection) => subsection.id
+        );
+        const filteredSubsections = section.attributes.subsections.data.filter(
+            (subsection) => subsectionIdsCompleted.includes(subsection.id)
+        );
+        let percentageFinished = (
+            (filteredSubsections.length /
+                section.attributes.subsections.data.length) *
+            100
+        ).toFixed(0);
         return (
             <Collapse
                 expandIcon={({ isActive }) => <CaretRightOutlined className='absolute top-0 bottom-0 right-5 ' rotate={isActive ? 90 : 0} />}
@@ -155,6 +168,18 @@ export const AccordionNavigator = ({ subsectionsCompleted }) => {
                 <Panel
                     header={
                         <div className='flex items-center py-4 '>
+                            <div className='flex items-center ml-2'>
+                                {
+                                    user?.role_str === 'student' &&
+                                    <div className='flex items-center w-16 h-16 text-sm xl:w-20 xl:h-20'>
+                                        <CircularProgressbar className='text-sm font-medium ' value={percentageFinished} text={`${percentageFinished}%`} styles={buildStyles({
+                                            textSize: '22px',
+                                            pathColor: '#6366f1',
+                                            textColor: 'black',
+                                        })} />
+                                    </div>
+                                }
+                            </div>
                             <div className='flex flex-col w-full text-left ml-9'>
                                 <p className='mb-1 text-sm'>Section {sectionNumber}</p>
                                 <h2 className='w-3/4 text-lg font-medium text-left line-clamp-2'>
