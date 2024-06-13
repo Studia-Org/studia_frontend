@@ -213,18 +213,36 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
       if (response.ok) {
         const { response_upload, json } = await sendFile(result);
         if (response_upload.ok) {
-          await fetch(`${API}/users/${user.id}`, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${getToken()}`,
-            },
-            body: JSON.stringify({
-              subsections_completed: {
-                connect: [{ id: activityData.activity.data.attributes.subsection.data.id }]
-              }
+          if (isActivityGroup) {
+            activityGroup.users.data.forEach((user) => {
+              fetch(`${API}/users/${user.id}`, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                  Authorization: `Bearer ${getToken()}`,
+                },
+                body: JSON.stringify({
+                  subsections_completed: {
+                    connect: [{ id: activityData.activity.data.attributes.subsection.data.id }]
+                  }
+                })
+              })
             })
-          });
+          }
+          else {
+            await fetch(`${API}/users/${user.id}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${getToken()}`,
+              },
+              body: JSON.stringify({
+                subsections_completed: {
+                  connect: [{ id: activityData.activity.data.attributes.subsection.data.id }]
+                }
+              })
+            });
+          }
           Swal.fire({
             icon: 'success',
             title: 'Success',
@@ -689,7 +707,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                         />
                         <Button
                           loading={uploadLoading}
-                          disabled={uploadLoading}
+                          disabled={uploadLoading || loadingGroup}
                           id='submit-button-activity'
                           onClick={() => { sendData() }}
                           className="ml-auto " type='primary'>
