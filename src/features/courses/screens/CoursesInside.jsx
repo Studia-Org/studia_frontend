@@ -115,7 +115,7 @@ const CourseInside = () => {
     let lastCompletedSubseccion = null;
     let cursoTitle = null;
 
-    if (Object.keys(subsectionSelected).length !== 0) {
+    if (subsectionSelected && Object.keys(subsectionSelected).length !== 0) {
       return { subseccion: subsectionSelected, cursoTitle: sectionSelected };
     }
 

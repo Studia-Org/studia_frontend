@@ -72,24 +72,19 @@ export const TaskFiles = ({ files }) => {
         }
     ];
 
-    if (!files?.length) {
-        return (
-            <div className='p-5 bg-white border rounded-md'>
-                <Empty
-                    image={Empty.PRESENTED_IMAGE_SIMPLE}
-                    className='mt-6'
-                    description={<span className='font-normal text-gray-400'>Professor did not upload any files</span>}
-                />
-            </div>
-        );
-    } else {
-        return (
+    if (!files?.length) return null
+
+    return (
+        <>
+            <p className='mt-8 mb-1 text-xs text-gray-600'>Task Files</p>
+            <hr className='mb-5' />
             <Table
                 dataSource={dataSource}
                 columns={columns}
                 className='border rounded-md'
                 pagination={false}
             />
-        );
-    }
+        </>
+    );
+
 };
