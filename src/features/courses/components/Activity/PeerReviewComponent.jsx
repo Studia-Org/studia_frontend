@@ -387,7 +387,9 @@ export default function PeerReviewComponent({ activityData }) {
         )
     } else {
         return (
+
             <div className={`flex min-h-full transition-transform duration-700 ${showEvaluate ? 'xl:-translate-x-[calc(100vw-21rem)] -translate-x-[calc(100vw-1rem)]' : ''}`}>
+
                 {
                     loading ?
                         <div className="flex items-center justify-center w-full h-full">
@@ -402,7 +404,7 @@ export default function PeerReviewComponent({ activityData }) {
                             </div>
                             : qualificationIds !== null &&
                             <>
-                                <div className="max-w-[calc(100vw-2rem)] min-w-[calc(100vw-2rem)] xl:min-w-[calc(100vw-22rem)] xl:max-w-[calc(100vw-22rem)]">
+                                <div className="max-w-[calc(100vw-2rem)] min-w-[calc(100vw-2rem)] xl:min-w-[calc(100vw-110px-2rem)] xl:max-w-[calc(100vw-110px)]">
                                     <MainScreen
                                         activityData={activityData}
                                         setShowEvaluate={setShowEvaluate}
@@ -416,7 +418,7 @@ export default function PeerReviewComponent({ activityData }) {
                                         peerReviewInGroups={peerReviewInGroups}
                                     />
                                 </div>
-                                <div key={userIndexSelected} className={`${!showEvaluate ? 'w-0 h-0 overflow-hidden absolute' : 'min-w-[calc(100vw)] xl:min-w-[calc(100vw-22rem)] overflow-x-hidden  '} `}>
+                                <div key={userIndexSelected} className={`${!showEvaluate ? 'w-0 h-0 overflow-hidden absolute' : 'min-w-[calc(100vw-1rem)] xl:min-w-[calc(100vw-110px-1rem)] overflow-x-hidden  '} `}>
                                     <EvaluateScreen
                                         key={userIndexSelected}
                                         data={data}
