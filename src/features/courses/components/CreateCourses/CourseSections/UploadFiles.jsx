@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Upload, Alert } from 'antd';
+import { Upload, Alert, message } from 'antd';
 import Papa from 'papaparse';
+import { API, BEARER } from '../../../../../constant';
+import { getToken } from '../../../../../helpers';
 
 export const UploadFiles = ({ fileList, setFileList, listType, maxCount, accept, disabled, showRemoveIcon }) => {
-    console.log(fileList);
     const [errors, setErrors] = useState([]);
 
     const generateAlert = (message, index) => {
@@ -80,11 +81,25 @@ export const UploadFiles = ({ fileList, setFileList, listType, maxCount, accept,
     };
 
     const handleRemove = () => {
-        return (file) => {
-            console.log(file);
+        return async (file) => {
             setFileList(fileList.filter((f) => f.uid !== file.uid));
+            if (file?.IdFromBackend) {
+                try {
+                    await fetch(`${API}/upload/files/${file.IdFromBackend}`, {
+                        method: 'DELETE',
+                        headers: {
+                            Authorization: `${BEARER} ${getToken()}`,
+                            'Content-Type': 'application/json',
+                        },
+                    });
+                    message.success('File removed successfully');
+                } catch (error) {
+                    console.error('Error removing file from backend', error);
+                }
+            }
         };
-    }
+    };
+
 
     return (
         <>

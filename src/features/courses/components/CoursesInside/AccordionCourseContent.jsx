@@ -171,7 +171,7 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFl
                 {subsection.attributes.activity?.data?.attributes.type === 'questionnaire' ? subsection.attributes.questionnaire.data.attributes.Title : subsection.attributes.title}
               </button>
               {startWhenFinished && isBeforeStartDate && <p className="-mt-1 text-xs text-gray-500">Will open when the last subsection is completed or the {startDate.toLocaleDateString("es-ES", { day: 'numeric', month: 'numeric' }) + " at " + startDate.toLocaleTimeString("es-ES", { hour: 'numeric', minute: 'numeric' })}</p>}
-              {!startWhenFinished && isBeforeStartDate && <p className="text-xs text-gray-500">Will open the {startDate.toLocaleDateString("es-ES", { day: 'numeric', month: 'numeric' }) + " at " + startDate.toLocaleTimeString("es-ES", { hour: 'numeric', minute: 'numeric' })}</p>}
+              {!startWhenFinished && isBeforeStartDate && <p className="text-xs text-gray-500">Will open on {startDate.toLocaleDateString("es-ES", { day: 'numeric', month: 'numeric' }) + " at " + startDate.toLocaleTimeString("es-ES", { hour: 'numeric', minute: 'numeric' })}</p>}
             </div>
             {selectFaseSectionContent(subsection.attributes.fase)}
           </div>
