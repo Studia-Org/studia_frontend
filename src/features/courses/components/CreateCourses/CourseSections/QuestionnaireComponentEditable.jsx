@@ -40,7 +40,7 @@ const item = {
 export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSectionsList, createCourseSectionsList, sectionId, categories }) => {
     const questionsPerPage = 3;
     const [currentPage, setCurrentPage] = useState(1);
-    const [selectorValue, setSelectorValue] = useState('open-ended-short')
+    const [selectorValue, setSelectorValue] = useState({ value: 'open-ended', label: 'Text' })
     const [newOption, setNewOption] = useState('')
     const [addQuestionText, setAddQuestionText] = useState({ question: '', options: [] })
     const totalQuestions = subsection?.questionnaire?.attributes?.Options?.questionnaire?.questions.length;
@@ -760,6 +760,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                         <p className="mb-4 font-medium">Add question</p>
                         <FormControl >
                             <Select
+                                className='w-40'
                                 value={selectorValue}
                                 options={[
                                     { value: 'open-ended', label: 'Text' },
@@ -822,7 +823,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                     }
 
                     <button onClick={() => addQuestion()} className='ml-auto  mt-5 rounded-md bg-[#6366f1]  p-2 text-white'>
-                        Submit
+                        Create
                     </button>
                 </div>
             }

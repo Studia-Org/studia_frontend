@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles';
 import RadioGroup, { useRadioGroup } from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
 import Radio from '@mui/material/Radio';
+import { ScaleQuestionnaireForm } from '../../CoursesInside/Questionnaire/ScaleQuestionnaireForm';
 
 const list = {
     visible: { opacity: 1 },
@@ -26,6 +27,7 @@ const item = {
 
 export const QuestionnaireConfirmation = ({ questionnaire }) => {
     const questionsPerPage = 3;
+    const [groupValues, setGroupValues] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const totalQuestions = questionnaire?.attributes?.Options?.questionnaire?.questions.length;
     const totalPages = Math.ceil(totalQuestions / questionsPerPage);
@@ -63,53 +65,69 @@ export const QuestionnaireConfirmation = ({ questionnaire }) => {
         const startIdx = (currentPage - 1) * questionsPerPage;
         const endIdx = Math.min(startIdx + questionsPerPage, totalQuestions);
         const questionsForPage = questionnaire.attributes.Options.questionnaire.questions.slice(startIdx, endIdx);
+        const answersData = ['disabled'];
+        const userResponses = [];
 
-        return questionsForPage.map((question, index) => {
-            const absoluteIndex = startIdx + index;
 
+        if (questionnaire.attributes.type === 'scaling') {
             return (
-                <motion.li
-                    className='bg-white shadow-md rounded-md p-5 border-l-8 border-[#377ddf75]'
-                    variants={item}>
-                    <div className='flex items-center'>
-                        <p className="font-medium">{question.question}</p>
-                    </div>
-                    {Array.isArray(question.options) ? (
-                        <div key={absoluteIndex}>
-                            <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} >
-                                {question.options.map((option, optionIndex) => (
-                                    <MyFormControlLabel key={optionIndex} value={option} label={option} control={<Radio disabled readOnly />} />
-                                ))}
-                            </RadioGroup>
+                <ScaleQuestionnaireForm
+                    questions={questionsForPage}
+                    groupValues={groupValues}
+                    setGroupValues={setGroupValues}
+                    currentPage={currentPage}
+                    questionnaireAnswerData={answersData}
+                    userResponses={userResponses}
+                />
+            )
+        }
+        else {
+            return questionsForPage.map((question, index) => {
+                const absoluteIndex = startIdx + index;
+                return (
+                    <motion.li
+                        className='bg-white shadow-md rounded-md p-5 border-l-8 border-[#377ddf75]'
+                        variants={item}>
+                        <div className='flex items-center'>
+                            <p className="font-medium">{question.question}</p>
                         </div>
-                    ) : (
-                        question.options === 'open-ended-short' ?
-                            <div key={absoluteIndex} className='mt-5 flex w-full'>
-                                <TextField
-                                    id="outlined-basic"
-                                    label=""
-                                    disabled
-                                    variant="filled"
-                                    className='w-full'
-                                    rows={1}
-                                    multiline
-                                />
-                            </div> :
-                            <div key={absoluteIndex} className='mt-5 flex w-full'>
-                                <TextField
-                                    id="outlined-basic"
-                                    label=""
-                                    disabled
-                                    variant="filled"
-                                    className='w-full'
-                                    rows={3}
-                                    multiline
-                                />
+                        {Array.isArray(question.options) ? (
+                            <div key={absoluteIndex}>
+                                <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} >
+                                    {question.options.map((option, optionIndex) => (
+                                        <MyFormControlLabel key={optionIndex} value={option} label={option} control={<Radio disabled readOnly />} />
+                                    ))}
+                                </RadioGroup>
                             </div>
-                    )}
-                </motion.li>
-            );
-        });
+                        ) : (
+                            question.options === 'open-ended-short' ?
+                                <div key={absoluteIndex} className='flex w-full mt-5'>
+                                    <TextField
+                                        id="outlined-basic"
+                                        label=""
+                                        disabled
+                                        variant="filled"
+                                        className='w-full'
+                                        rows={1}
+                                        multiline
+                                    />
+                                </div> :
+                                <div key={absoluteIndex} className='flex w-full mt-5'>
+                                    <TextField
+                                        id="outlined-basic"
+                                        label=""
+                                        disabled
+                                        variant="filled"
+                                        className='w-full'
+                                        rows={3}
+                                        multiline
+                                    />
+                                </div>
+                        )}
+                    </motion.li>
+                );
+            });
+        }
     };
 
     return (
@@ -117,7 +135,7 @@ export const QuestionnaireConfirmation = ({ questionnaire }) => {
             <div className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1]">
                 <div className="my-7 mx-7">
                     <div className='flex items-center'>
-                        <p className="text-black font-semibold text-3xl">{questionnaire.attributes.Title}</p>
+                        <p className="text-3xl font-semibold text-black">{questionnaire.attributes.Title}</p>
                     </div>
                     <p className="mt-7">{questionnaire.attributes.description}</p>
                 </div>
@@ -127,16 +145,16 @@ export const QuestionnaireConfirmation = ({ questionnaire }) => {
                 animate="visible"
                 variants={list}
             >
-                <div className="space-y-5 mt-5 ">{renderQuestionsForPage()}</div>
+                <div className="mt-5 space-y-5 ">{renderQuestionsForPage()}</div>
             </motion.ul>
             <div className="flex items-center justify-between mt-5 mb-8 bg-white rounded-md shadow-md p-5 border-b-8 border-[#6366f1]">
-                <button className='flex items-center hover:-translate-x-2 duration-200 mx-4 disabled:text-gray-300 disabled:translate-x-0' onClick={handlePrevPage} disabled={currentPage === 1}>
+                <button className='flex items-center mx-4 duration-200 hover:-translate-x-2 disabled:text-gray-300 disabled:translate-x-0' onClick={handlePrevPage} disabled={currentPage === 1}>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 mr-2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75" />
                     </svg>
                     Previous
                 </button>
-                <button className='flex items-center hover:translate-x-2 duration-200 mx-4 disabled:text-gray-300 disabled:translate-x-0' onClick={handleNextPage} disabled={currentPage === totalPages}>
+                <button className='flex items-center mx-4 duration-200 hover:translate-x-2 disabled:text-gray-300 disabled:translate-x-0' onClick={handleNextPage} disabled={currentPage === totalPages}>
                     Next
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
