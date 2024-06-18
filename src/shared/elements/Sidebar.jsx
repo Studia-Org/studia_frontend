@@ -45,25 +45,27 @@ export const Sidebar = (props) => {
         mostrarScrollbar();
       }
     });
-    const clickListener = window.addEventListener("click", function (event) {
-      if (
-        event.target.matches("#button-sidebar") ||
-        event.target.matches("#svg-sidebar") ||
-        event.target.matches("#path-sidebar")
-      )
-        return;
-      if (!event.target.matches(".inline-flex")) {
-        const sidebar = document.getElementById("default-sidebar");
-        if (sidebar === null || sidebar === undefined) return;
-        setExpanded(false);
-        mostrarScrollbar();
-      }
-    });
+    // const clickListener = window.addEventListener("click", function (event) {
+    //   console.log(event.target);
+    //   if (
+    //     event.target.matches("#button-sidebar") ||
+    //     event.target.matches("#svg-sidebar") ||
+    //     event.target.matches("#path-sidebar")
+    //   )
+    //     return;
+    //   if (!event.target.matches(".inline-flex")) {
+    //     const sidebar = document.getElementById("default-sidebar");
+    //     if (sidebar === null || sidebar === undefined) return;
+    //     sidebar.classList.add("-translate-x-full");
+    //     setExpanded(false);
+    //     mostrarScrollbar();
+    //   }
+    // });
 
     return () => {
       window.removeEventListener("resize", resizeListener);
       window.removeEventListener("scroll", scrollListener);
-      window.removeEventListener("click", clickListener);
+      // window.removeEventListener("click", clickListener);
     };
   }, []);
 
@@ -178,6 +180,7 @@ export const Sidebar = (props) => {
       </button>
 
       <aside
+        key={window.location.pathname}
         id="default-sidebar"
         className={`absolute flex min-h-screen  ${courseInsideStyle ? "flexible:min-h-[calc(100vh-8rem)]" : "xl:min-h-[calc(100vh-8rem)]"} bg-white z-[1000] pl-8 
          ${courseInsideStyle ? "flexible:pl-16" : "xl:pl-16"} top-0 left-0 ${onlyIcon ? "w-fit xl:!pl-6 flexible:!pl-6" : "w-80"} ${courseInsideStyle ? "flexible:top-32" : "xl:top-32"} transition-transform -translate-x-full ${showSidebar ? `${courseInsideStyle ? "flexible:translate-x-0" : "xl:translate-x-0"}` : "-translate-x-full"} `}
@@ -189,7 +192,6 @@ export const Sidebar = (props) => {
             id="button-sidebar"
             data-drawer-toggle="default-sidebar"
             aria-controls="default-sidebar"
-
             onClick={handleClick}
             className={`z-10 items-center flex mt-4 mb-16 py-5 px-3 text-sm text-gray-500 rounded-lg top-8 ${courseInsideStyle ? `${!showSidebar ? "flexible:block" : "flexible:hidden"}` : `${!showSidebar ? "xl:block" : "xl:hidden"}`} hover:bg-gray-100 
         focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600`}
@@ -211,11 +213,7 @@ export const Sidebar = (props) => {
               ></path>
             </svg>
           </Button>
-          {
-            expanded && (
-              <hr className="w-64 " />
-            )
-          }
+          {expanded && <hr className="w-64 " />}
           <ul className={`${onlyIcon ? "w-fit" : "w-48"} ml-3 font-medium space-y-96 ${courseInsideStyle ? "flexible:ml-0" : "xl:ml-0"} `}>
             <Link to={"/app/courses"} style={{ textDecoration: "none" }}>
               <li
@@ -225,7 +223,6 @@ export const Sidebar = (props) => {
                   }`}
               >
                 <span className="flex items-center font-semibold">
-
                   <IconContext.Provider value={iconProps.courses}>
                     <FiGrid size={25} />
                   </IconContext.Provider>
@@ -244,7 +241,6 @@ export const Sidebar = (props) => {
                   }`}
               >
                 <span className="flex items-center font-semibold">
-
                   <IconContext.Provider value={iconProps.events}>
                     <FiCalendar size={25} />
                   </IconContext.Provider>
@@ -308,8 +304,6 @@ export const Sidebar = (props) => {
                   }
                 </span>
               </li>
-
-
             </Link>
             <Link to={"/app/qualifications"} style={{ textDecoration: "none" }}>
               <li
@@ -359,7 +353,13 @@ export const Sidebar = (props) => {
           </ul>
         </div>
       </aside >
-      <main className={`absolute right-0 top-0 h-screen  ${courseInsideStyle ? "flexible:w-1/3" : "xl:w-1/3"}  ${courseInsideStyle ? "flexible:relative" : "xl:relative"} ${expanded ? 'w-full h-screen bg-black bg-opacity-30 z-40' : 'hidden'}`}></main>
+      <main onClick={() => {
+        const sidebar = document.getElementById("default-sidebar");
+        if (sidebar === null || sidebar === undefined) return;
+        sidebar.classList.add("-translate-x-full");
+        setExpanded(false);
+        mostrarScrollbar();
+      }} className={`absolute right-0 top-0 h-screen  ${courseInsideStyle ? "flexible:w-1/3" : "xl:w-1/3"}  ${courseInsideStyle ? "flexible:relative" : "xl:relative"} ${expanded ? 'w-full h-screen bg-black bg-opacity-30 z-40' : 'hidden'}`}></main>
     </>
   );
 };
