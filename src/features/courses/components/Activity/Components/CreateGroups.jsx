@@ -357,7 +357,7 @@ function CreateGroups({ activityId, courseId, activityData }) {
                         {(provided) => (
                             <article className={`flex flex-col gap-2 p-2 sticky}`}>
                                 <p>Students</p>
-                                <ul className={`flex flex-col gap-y-4 w-[300px] min-h-[200px] bg-white rounded-lg p-2 overflow-x-clip`}
+                                <ul className={`flex flex-col gap-y-4 w-[300px] min-h-[200px] bg-white rounded-lg p-2 overflow-x-clip border`}
                                     {...provided.droppableProps}
                                     ref={provided.innerRef}>
                                     {
@@ -434,7 +434,7 @@ function CreateGroups({ activityId, courseId, activityData }) {
                                                             </svg>
                                                         </p>
                                                 }
-                                                <ul className={`flex flex-col gap-y-4 w-[300px] min-h-[200px] bg-white rounded-lg p-2 overflow-x-clip`}
+                                                <ul className={`flex flex-col gap-y-2 w-[300px] min-h-[200px] bg-white rounded-lg p-2 overflow-x-clip border`}
                                                     {...provided.droppableProps}
                                                     ref={provided.innerRef}>
                                                     {
@@ -444,7 +444,7 @@ function CreateGroups({ activityId, courseId, activityData }) {
                                                                 <Draggable key={student.id} draggableId={student.id.toString()} index={index}>
                                                                     {(provided) => (
                                                                         <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
-                                                                            className="p-2 shadow-md list-none active::cursor-grabbing bg-white  w-[280px] overflow-x-clip rounded-lg ">
+                                                                            className="p-2 border list-none active::cursor-grabbing bg-white  w-[280px] overflow-x-clip rounded-lg ">
                                                                             <article className='flex items-center h-full '>
                                                                                 <img alt='profile student' className="w-6 h-6 rounded-full"
                                                                                     src={student?.attributes?.profile_photo?.data?.attributes?.url} />
