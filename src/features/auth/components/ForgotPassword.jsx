@@ -12,11 +12,22 @@ export const ForgotPassword = ({ setForgotPasswordFlag }) => {
         return regex.test(email);
     }
 
-    async function sendEmail() {
+    async function sendEmail(event) {
+        event.preventDefault()
         if (!validateEmail(email)) {
             message.error('Invalid email address')
             return;
         }
+        //check if email exists
+        const result = await fetch(`${API}/users?filters[email][$eq]=${email}`)
+            .then(res => res.json())
+            .then(data => data)
+
+        if (result.length === 0) {
+            message.error('This email is not registered')
+            return;
+        }
+
         await fetch(`${API}/auth/forgot-password`, {
             method: 'POST',
             headers: {
@@ -48,7 +59,7 @@ export const ForgotPassword = ({ setForgotPasswordFlag }) => {
                     </svg>
                     <p className='ml-1'>Back to login</p>
                 </button>
-                <div className='p-5'>
+                <form className='p-5' onSubmit={sendEmail}>
                     <h2 className='text-2xl font-bold text-gray-900'>Password Recovery</h2>
                     <p className='text-sm'>Recover the password for your associated account.</p>
                     <div className='flex flex-col items-center'>
@@ -69,26 +80,25 @@ export const ForgotPassword = ({ setForgotPasswordFlag }) => {
                             </div>
                             <div className="flex justify-center mb-5 ">
                                 <div className="w-full mb-5 text-center ">
-                                    <button onClick={() => sendEmail()} className="w-full inline-flex items-center justify-center p-0.5 mb-2  overflow-hidden text-sm 
+                                    <button type='submit' className="w-full inline-flex items-center justify-center p-0.5 mb-2  overflow-hidden text-sm 
                                     font-medium text-gray-900 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 
                                     group-hover:to-blue-500 hover:text-white dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
                                         <span className="w-full py-3.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
                                             Continue
                                         </span>
                                     </button>
-
                                 </div>
                             </div>
                             <p className='mt-20 text-center'>Don't have an account?
-                                <span onClick={() => navigate('/auth/register')} className='ml-1 font-medium text-indigo-600 cursor-pointer'>
+                                <button onClick={() => navigate('/auth/register')} className='ml-1 font-medium text-indigo-600 cursor-pointer'>
                                     Sign up
-                                </span>
+                                </button>
                             </p>
                         </div>
 
                     </div>
 
-                </div>
+                </form>
 
             </div>
         </div>

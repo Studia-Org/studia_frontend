@@ -57,6 +57,7 @@
     "flowbite": "^2.0.0",
     "flowbite-react": "^0.6.4",
     "framer-motion": "^10.12.23",
+    "html2canvas": "^1.4.1",
     "js-file-download": "^0.4.12",
     "papaparse": "^5.4.1",
     "randomcolor": "^0.6.2",

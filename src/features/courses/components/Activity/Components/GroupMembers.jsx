@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 function GroupMembers({ activityGroup, loadingGroup, small = false }) {
   const sizeAvatar = small ? 'md' : 'large'
+  console.log(activityGroup)
   return (
     loadingGroup ?
       <div className="flex items-center justify-center w-full h-full">
@@ -13,7 +14,7 @@ function GroupMembers({ activityGroup, loadingGroup, small = false }) {
       :
       activityGroup !== null &&
       <section className="flex flex-col flex-wrap flex-1 w-full ">
-        <p className="text-base font-medium text-gray-800 ">Group members</p>
+        <p className="text-base font-medium text-gray-800 ">{activityGroup.GroupName} Group members :</p>
         <div className={`flex ${small ? "flex gap-x-2" : "flex-col px-5"}  my-2 flex-wrap`}>
           {activityGroup.users.data.map((user, index) => {
             return (

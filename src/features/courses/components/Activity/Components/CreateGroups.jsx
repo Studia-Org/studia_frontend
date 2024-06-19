@@ -8,6 +8,7 @@ import { MoonLoader } from "react-spinners";
 import { UploadFiles } from "../../CreateCourses/CourseSections/UploadFiles.jsx";
 import Papa from 'papaparse';
 import csvIMG from '../../../../../assets/csvgroups.png'
+
 function CreateGroups({ activityId, courseId, activityData }) {
     const [students, setStudents] = useState([])
     const numberOfStudentsPerGroup = activityData.activity.data.attributes.numberOfStudentsperGroup
@@ -19,7 +20,9 @@ function CreateGroups({ activityId, courseId, activityData }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [loadingModal, setLoadingModal] = useState(false);
     const [textSaveGroups, setTextSaveGroups] = useState("Save groups")
-    console.log(students)
+    const [isEditing, setIsEditing] = useState(null)
+    const [tempName, setTempName] = useState(null)
+
     useEffect(() => {
         async function fetchUsersFromCourse() {
 
@@ -36,12 +39,15 @@ function CreateGroups({ activityId, courseId, activityData }) {
                         group.attributes.users.data.forEach(user => {
                             user.id = user.id.toString()
                         })
-                        group.attributes.users.data.push({ groupId: group.id })
+                        if (group?.attributes?.GroupName) group.attributes.users.data.push({ groupId: group.id, GroupName: group.attributes.GroupName })
+                        else group.attributes.users.data.push({ groupId: group.id })
+
                         groups.push(group.attributes.users.data)
 
                     })
                     //check if there are students without group
-                    const studentsWithoutGroup = data.data.attributes.students.data.filter(student => !groups.flat().some(group => +group.id === student.id))
+                    const studentsWithoutGroup = data.data.attributes.students.data
+                        .filter(student => !groups.flat().some(group => +group.id === student.id))
                     groups[0] = studentsWithoutGroup
                 }
                 else {
@@ -58,7 +64,6 @@ function CreateGroups({ activityId, courseId, activityData }) {
         }
         fetchUsersFromCourse()
     }, [])
-
     const reorder = (list, startIndex, endIndex) => {
         const result = Array.from(list);
         const [removed] = result.splice(startIndex, 1);
@@ -251,7 +256,6 @@ function CreateGroups({ activityId, courseId, activityData }) {
             setLoadingModal(false);
         }
     }
-
     return (loading ?
         <div className="flex items-center justify-center flex-1 w-full min-h-[200px] lg:min-h-[500px] h-full">
             <MoonLoader color="#1E40AF" size={80} />
@@ -353,7 +357,7 @@ function CreateGroups({ activityId, courseId, activityData }) {
                         {(provided) => (
                             <article className={`flex flex-col gap-2 p-2 sticky}`}>
                                 <p>Students</p>
-                                <ul className={`flex flex-col gap-y-4 w-[300px] min-h-[200px] bg-white rounded-lg p-2 overflow-x-clip`}
+                                <ul className={`flex flex-col gap-y-4 w-[300px] min-h-[200px] bg-white rounded-lg p-2 overflow-x-clip border`}
                                     {...provided.droppableProps}
                                     ref={provided.innerRef}>
                                     {
@@ -392,18 +396,55 @@ function CreateGroups({ activityId, courseId, activityData }) {
                                     <StrictModeDroppable key={index} droppableId={`${index}`} isDropDisabled={activityHasStarted && false}>
                                         {(provided) => (
                                             <article className={`flex flex-col gap-2 p-2 `}>
-                                                <p>Group {index}</p>
-                                                <ul className={`flex flex-col gap-y-4 w-[300px] min-h-[200px] bg-white rounded-lg p-2 overflow-x-clip`}
+                                                {
+                                                    isEditing === index ?
+                                                        <label className="flex items-center gap-x-2">
+                                                            <input
+                                                                type="text"
+                                                                defaultValue={group[group.length - 1]?.GroupName || "Group " + index}
+                                                                onChange={(e) => { setTempName(e.target.value) }}
+                                                                autoFocus
+                                                                className="px-2 py-1 mr-2 border rounded"
+                                                            />
+                                                            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="green"
+                                                                onClick={
+                                                                    () => {
+                                                                        const copyStudents = [...students]
+                                                                        //try if not addd
+                                                                        if (copyStudents[index][copyStudents[index].length - 1]) copyStudents[index][copyStudents[index].length - 1].GroupName = tempName
+                                                                        else copyStudents[index].push({ GroupName: tempName })
+                                                                        setStudents(copyStudents)
+                                                                        setIsEditing(null)
+                                                                        setTempName(null)
+                                                                    }
+                                                                }
+                                                                className="p-1 bg-gray-200 rounded-md cursor-pointer w-7 h-7 hover:bg-gray-300 hover:scale-110">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                                                            </svg>
+                                                            <svg fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="red" onClick={() => { setIsEditing(null); setTempName(null) }}
+                                                                className="p-1 bg-gray-200 rounded-md cursor-pointer w-7 h-7 hover:bg-gray-300 hover:scale-110">
+                                                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                                            </svg>
+                                                        </label>
+                                                        :
+                                                        <p className="flex items-center cursor-pointer" onClick={() => setIsEditing(index)}>
+                                                            {group[group.length - 1]?.GroupName || "Group " + index}
+                                                            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4 ml-2 inline-block">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                                            </svg>
+                                                        </p>
+                                                }
+                                                <ul className={`flex flex-col gap-y-2 w-[300px] min-h-[200px] bg-white rounded-lg p-2 overflow-x-clip border`}
                                                     {...provided.droppableProps}
                                                     ref={provided.innerRef}>
                                                     {
                                                         group.map((student, index) => {
-                                                            if (student.groupId) return null
+                                                            if (student.groupId || student.GroupName) return null
                                                             return (
                                                                 <Draggable key={student.id} draggableId={student.id.toString()} index={index}>
                                                                     {(provided) => (
                                                                         <li ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}
-                                                                            className="p-2 shadow-md list-none active::cursor-grabbing bg-white  w-[280px] overflow-x-clip rounded-lg ">
+                                                                            className="p-2 border list-none active::cursor-grabbing bg-white  w-[280px] overflow-x-clip rounded-lg ">
                                                                             <article className='flex items-center h-full '>
                                                                                 <img alt='profile student' className="w-6 h-6 rounded-full"
                                                                                     src={student?.attributes?.profile_photo?.data?.attributes?.url} />

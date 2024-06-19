@@ -387,7 +387,9 @@ export default function PeerReviewComponent({ activityData }) {
         )
     } else {
         return (
-            <div className={`flex min-h-full transition -transform duration-700 ${showEvaluate ? 'xl:-translate-x-[calc(100vw-110px-1rem)] -translate-x-[calc(100vw-1rem)]' : ''}`}>
+
+            <div className={`flex min-h-full transition-transform duration-700 ${showEvaluate ? 'xl:-translate-x-[calc(100vw-21rem)] -translate-x-[calc(100vw-1rem)]' : ''}`}>
+
                 {
                     loading ?
                         <div className="flex items-center justify-center w-full h-full">

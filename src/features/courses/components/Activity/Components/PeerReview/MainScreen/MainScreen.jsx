@@ -114,7 +114,7 @@ function MainScreen({
 
                         <p className='mt-5 text-lg'>Correct {" "}
                             {!correctActivityGroup ?
-                                PeerReview.attributes.user.data.attributes.username + "'s" : "Group " + (userIndexSelected + 1)} task/s!</p>
+                                PeerReview.attributes.user.data.attributes.username + "'s" : "group " + PeerReview.attributes.group.data.attributes.GroupName || "Group " + (userIndexSelected + 1)} delivery!</p>
                         {PeerReview?.attributes?.file?.data?.map(renderFiles)}
                     </div>
                 </section> : null
