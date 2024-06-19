@@ -230,10 +230,11 @@ function CreateGroups({ activityId, courseId, activityData }) {
                                 }
                             }
                             setLoadingModal(false);
-
                             const arrGroups = Object.values(groups)
+                            arrGroups.forEach((group, index) => {
+                                group.push({ GroupName: Object.keys(groups)[index] })
+                            })
                             const studentsWithoutGroup = allStudents.filter(student => !arrGroups.flat().some(group => group.id === student?.id))
-                            //delete groupIds
                             const studentsWithouGroupIds = studentsWithoutGroup.map(student => {
                                 if (student.groupId) return null
                                 return student
