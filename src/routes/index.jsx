@@ -36,7 +36,7 @@ export const AppRoutes = () => {
     const onlyIconStyles =
         (pathSegments[4] === 'activity' && !isNaN(lastElement)) || (lastElement === 'qualifications' || pathSegments[2] === 'qualifications') || (lastElement === 'dashboard' || pathSegments[2] === 'dashboard') ?
             'xl:ml-[110px] xl:min-w-[calc(100vw-110px)' : '';
-    const onlyIcon = onlyIconStyles !== '' && window.innerWidth > 1280;
+    const onlyIcon = onlyIconStyles !== '' && window.innerWidth > 1280 && !inCourseCreate;
     if (!isLoading) {
         if (element.props.match.route.path === '*') return <div className='font-Poppins'>{element}</div>;
         else if (authenticated)
