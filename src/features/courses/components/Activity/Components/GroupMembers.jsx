@@ -7,6 +7,7 @@ function GroupMembers({ activityGroup, loadingGroup, small = false }) {
 
   console.log(activityGroup, loadingGroup)
   const sizeAvatar = small ? 'md' : 'large'
+  console.log(activityGroup)
   return (
     loadingGroup ?
       <div className="flex items-center justify-center w-full h-full">
@@ -14,9 +15,9 @@ function GroupMembers({ activityGroup, loadingGroup, small = false }) {
       </div>
       :
       activityGroup !== null &&
-      <section className="flex flex-col flex-wrap flex-1 w-full mt-5 ">
-        <p className='text-xs text-gray-600'>Group members</p>
-        <div className={`flex ${small ? "flex gap-x-2" : "flex-col "} flex-wrap`}>
+      <section className="flex flex-col flex-wrap flex-1 w-full ">
+        <p className="text-base font-medium text-gray-800 ">{activityGroup.GroupName} Group members :</p>
+        <div className={`flex ${small ? "flex gap-x-2" : "flex-col px-5"}  my-2 flex-wrap`}>
           {activityGroup.users.data.map((user, index) => {
             return (
               <Link

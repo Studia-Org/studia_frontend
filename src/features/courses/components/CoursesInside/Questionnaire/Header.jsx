@@ -189,8 +189,8 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
                             {
                                 (user.role_str !== 'student' && questionnaireAnswerData.length > 0 && enableEdit === false) && (
                                     <div className='flex items-center gap-1 ml-7'>
-                                        <Avatar shape="square" size="large" src={questionnaireAnswerData[0]?.user.data.attributes.profile_photo?.data?.attributes?.url} />
-                                        <p className='text-sm text-gray-800'>{questionnaireAnswerData[0]?.user.data.attributes.name}</p>
+                                        <Avatar shape="square" size="large" src={questionnaireAnswerData[0]?.user?.data?.attributes?.profile_photo?.data?.attributes?.url} />
+                                        <p className='text-sm text-gray-800'>{questionnaireAnswerData[0]?.user?.data?.attributes?.name}</p>
                                     </div>
                                 )
                             }
