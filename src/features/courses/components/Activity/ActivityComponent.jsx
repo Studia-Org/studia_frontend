@@ -617,37 +617,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
               !createGroups &&
               <div className='flex flex-col w-[30rem] mt-1 max-w-[calc(100vw-2.5rem)]'>
                 {
-                  isActivityEvaluable && (
-                    <>
-                      <p className='mt-5 mb-1 text-xs text-gray-600'>Your submission</p>
-                      <div className='p-5 space-y-5 bg-white border rounded-md'>
-
-                        <UploadFiles
-                          fileList={fileList}
-                          setFileList={setFileList}
-                          listType={'picture'}
-                          maxCount={5}
-                          disabled={passedDeadline || evaluated}
-                          showRemoveIcon={!passedDeadline || !evaluated}
-                        />
-                        <Button
-                          loading={uploadLoading}
-                          disabled={uploadLoading || (passedDeadline || evaluated) || sameUpload}
-                          id='submit-button-activity'
-                          onClick={() => { sendData() }}
-                          className="flex ml-auto" type='primary'>
-                          Submit files
-                        </Button>
-                        <p className='text-xs text-gray-600'>Your changes will only be reflected if you submit your files.</p>
-                      </div>
-
-                    </>
-                  )
-                }
-
-                {
-                  activityData.activity.data.attributes.type === 'thinkAloud'
-                    ?
+                  activityData.activity.data.attributes.type === 'thinkAloud' ?
                     <div className='mb-5 bg-white rounded-md shadow-md'>
                       <div className='flex items-center gap-5 mx-5 mt-5'>
                         <p className='text-xs text-gray-400 '>Click on the microphone and start recording your voice, or you can upload an audio file</p>
@@ -682,29 +652,32 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                     :
                     isActivityEvaluable && (
                       <>
-                        <UploadFiles
-                          fileList={fileList}
-                          setFileList={setFileList}
-                          listType={'picture'}
-                          maxCount={5}
-                          disabled={passedDeadline || evaluated}
-                          showRemoveIcon={!passedDeadline || !evaluated}
-                        />
-                        <Button
-                          loading={uploadLoading}
-                          disabled={uploadLoading || loadingGroup}
-                          id='submit-button-activity'
-                          onClick={() => { sendData() }}
-                          className="ml-auto " type='primary'>
-                          Submit
-                        </Button>
-                        <GroupMembers
-                          activityGroup={activityGroup}
-                          loadingGroup={loadingGroup}
-                        />
+                        <p className='mt-5 mb-1 text-xs text-gray-600'>Your submission</p>
+                        <div className='p-5 space-y-5 bg-white border rounded-md'>
+
+                          <UploadFiles
+                            fileList={fileList}
+                            setFileList={setFileList}
+                            listType={'picture'}
+                            maxCount={5}
+                            disabled={passedDeadline || evaluated}
+                            showRemoveIcon={!passedDeadline || !evaluated}
+                          />
+                          <Button
+                            loading={uploadLoading}
+                            disabled={uploadLoading || (passedDeadline || evaluated) || sameUpload}
+                            id='submit-button-activity'
+                            onClick={() => { sendData() }}
+                            className="flex ml-auto" type='primary'>
+                            Submit files
+                          </Button>
+                          <p className='text-xs text-gray-600'>Your changes will only be reflected if you submit your files.</p>
+                        </div>
+
                       </>
                     )
                 }
+
               </div>
         }
       </>
