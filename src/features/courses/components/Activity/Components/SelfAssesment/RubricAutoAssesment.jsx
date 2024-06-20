@@ -18,22 +18,22 @@ export const RubricAutoAssesment = ({ activityData, setState, qualificationId, s
             rowScope: 'row',
         },
         {
-            title: '1',
+            title: 'Bad',
             dataIndex: 'evaluation1',
 
         },
         {
-            title: '2',
+            title: 'Regular',
             dataIndex: 'evaluation2',
 
         },
         {
-            title: '3',
+            title: 'Good',
             dataIndex: 'evaluation3',
 
         },
         {
-            title: '4',
+            title: 'Excellent',
             dataIndex: 'evaluation4',
 
         },
@@ -104,12 +104,14 @@ export const RubricAutoAssesment = ({ activityData, setState, qualificationId, s
     return (
         <>
             <h2 className='mt-5 text-lg font-medium'>Rubric and Autoevaluation</h2>
-            <p className='mt-1 text-sm font-normal text-gray-500'>Based on the criteria outlined by the teacher in the rubric, please evaluate your work with a qualitative comment, and then select a provisional grade for your task from the provided options.</p>
+            <p className='mt-3 mb-3 text-sm font-normal text-gray-500'>Thoroughly read the criteria outlined in the rubric. Take some time to reflect on your project and assess how well it meets each of the outlined criteria. </p>
+            <Table columns={columns} dataSource={activityData.activity.data.attributes.SelfAssesmentRubrica} pagination={false} className='border rounded-md' />
+            <p className='my-3 text-sm font-normal text-gray-500'>Now that you have reviewed the rubric, use it to self-evaluate your project. Consider each criterion carefully and assess how well your project fulfills the requirements. After reflecting on these aspects, assign a grade to your project.</p>
             <div className='p-6 mt-5 bg-white border rounded-md'>
-                <Table columns={columns} dataSource={activityData.activity.data.attributes.SelfAssesmentRubrica} bordered pagination={false} />
-                <p className='mt-5 mb-1 text-xs'>Evaluate your task and add a grade</p>
+                <p className='mb-1 text-xs'>Add your comments about your project.</p>
                 <TextArea rows={5} value={comments} onChange={(e) => setComments(e.target.value)} />
-                <div className='mt-3'>
+                <div className='mt-5'>
+                    <p className='mb-1 text-xs'>Evaluate your project with a score from 1 to 10.</p>
                     <InputNumber min={1} max={10} value={grade} onChange={setGrade} />
                 </div>
             </div>

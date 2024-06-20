@@ -7,14 +7,16 @@ import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { motion } from 'framer-motion';
 import { SubsectionItems } from '../CreateCourses/CourseSections/SubsectionItems';
+import { useCourseContext } from '../../../../context/CourseContext';
 
 
-export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseContentInformation, setSectionToEdit, setCourseSection, setCourseSubsection, courseContentInformation }) => {
+export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdit }) => {
     const [disabled, setDisabled] = useState(true);
     const [loading, setLoading] = useState(false);
     const [loadingDelete, setLoadingDelete] = useState(false);
     const [sectionToEditTemp, setSectionToEditTemp] = useState(sectionToEdit);
 
+    const { setCourse } = useCourseContext();  
 
     useEffect(() => {
         if (sectionToEditTemp !== sectionToEdit) {
@@ -56,7 +58,6 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
     const handleDragEnd = (event) => {
         const { active, over } = event;
         try {
-            //Cuando se mueva una subseccion, primero se tiene que comprobar si es un movimiento valido y luego se actualiza el estado(se reordena la subseccion en funcion de su nuevo indice), la variable donde se encuentran las subsecciones es sectionToEditTemp
             if (active.id !== over.id) {
                 const oldIndex = sectionToEditTemp.attributes.subsections.data.findIndex(c => c.id === active.id);
                 const newIndex = sectionToEditTemp.attributes.subsections.data.findIndex(c => c.id === over.id);
@@ -88,9 +89,6 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
 
     const saveChanges = async () => {
         setLoading(true);
-
-        //Tambien hay que comprobar si se ha cambiado el orden de las subsecciones, si es asi, se actualiza el orden de las subsecciones en la base de datos poniendo en una lista en orden las id de las subsecciones
-
         const addedSubsections = sectionToEditTemp.attributes.subsections.data.filter(
             (tempSubsection) =>
                 !sectionToEdit.attributes.subsections.data.some(
@@ -188,7 +186,7 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
             }),
         })
 
-        setCourseContentInformation((prev) => {
+        setCourse((prev) => {
             const updatedSections = prev.map((section) => {
                 if (section.id === sectionToEdit.id) {
                     return sectionToEditTemp;
@@ -297,12 +295,10 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setCourseConten
                 }
             })
 
-            setCourseContentInformation((prev) => {
+            setCourse((prev) => {
                 const updatedSections = prev.filter((section) => section.id !== sectionToEdit.id);
                 return updatedSections;
             })
-            setCourseSection(courseContentInformation[0].attributes.title)
-            setCourseSubsection(courseContentInformation[0].attributes.subsections.data[0])
             setLoadingDelete(false);
             setEditSectionFlag(false);
             message.success('Section deleted');

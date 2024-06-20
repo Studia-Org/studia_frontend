@@ -734,6 +734,26 @@ export const SelfReflectionPage = ({ setCreateCourseSectionsList, sectionToEdit,
                     </svg>
                 </button>
             </div>
+
+            <div className='flex items-center p-5 mt-5 border rounded-xl bg-gray-50'>
+                <div className='px-3 py-3 bg-[#dc2626] rounded-md flex items-center justify-center'>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 text-white">
+                        <path d="M5.625 3.75a2.625 2.625 0 100 5.25h12.75a2.625 2.625 0 000-5.25H5.625zM3.75 11.25a.75.75 0 000 1.5h16.5a.75.75 0 000-1.5H3.75zM3 15.75a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75zM3.75 18.75a.75.75 0 000 1.5h16.5a.75.75 0 000-1.5H3.75z" />
+                    </svg>
+                </div>
+                <div className='ml-5'>
+                    <p className='text-base font-normal'>Empty Questionnaire</p>
+                    <p className='text-sm font-normal text-gray-500'>
+                        Create a new questionnaire from scratch.
+                    </p>
+                </div>
+                <button onClick={() => createSubsection('Questionnaire', 'self-reflection', EmptyQuestionnaireData, setCreateCourseSectionsList, sectionToEdit, 'questionnaire', context, null)} className='pl-3 mx-3 ml-auto'>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
+                        <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
+                    </svg>
+                </button>
+            </div>
+
             <div className='flex items-center p-5 mt-5 border rounded-xl bg-gray-50'>
                 <div className='px-3 py-3 bg-[#dc2626] rounded-md flex items-center justify-center '>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-8 h-8 text-white">

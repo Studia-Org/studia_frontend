@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { styled } from '@mui/material/styles';
 import RadioGroup, { useRadioGroup } from '@mui/material/RadioGroup';
-import TextField from '@mui/material/TextField';
 import { motion } from "framer-motion";
 import { useAuthContext } from "../../../../context/AuthContext";
 import { Button, Input, message, Popconfirm, Empty, InputNumber } from "antd";
@@ -14,16 +13,20 @@ import Radio from '@mui/material/Radio';
 import { useTimer } from "../../../../shared/elements/useTimer";
 import { AddQuestionButton } from './EditSection/AddQuestionButton';
 import { Header } from './Questionnaire/Header';
-import { fetchUserResponsesQuestionnaires } from "../../../../fetches/fetchUserResponsesQuestionnaires";
 import { NavigationButtons } from './Questionnaire/NavigationsButons';
-import { CardQuestionnaireUser } from './Questionnaire/CardQuestionnaireUser';
 import { UserQuestionnaireAnswerTable } from './Questionnaire/UserQuestionnaireAnswerTable';
 import { getRecommendationsSRLO } from './Questionnaire/getRecommendationsSRLO';
 import { RecommendationCard } from './Questionnaire/RecommendationCard';
+import { ScaleQuestionnaireForm } from './Questionnaire/ScaleQuestionnaireForm';
+import { fetchUserResponsesQuestionnaires } from "../../../../fetches/fetchUserResponsesQuestionnaires";
+import { StepsQuestionnaire } from './Questionnaire/StepsQuestionnaire';
+import { BreadcrumbCourse } from './BreadcrumbCourse';
+import { useCourseContext } from '../../../../context/CourseContext';
 
-const { Search } = Input;
+const { TextArea } = Input;
 
-export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, enableEdit, setEnableEdit, courseSubsection, setCourseSubsectionQuestionnaire, professorID }) => {
+
+export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, enableEdit, setEnableEdit, setCourseSubsectionQuestionnaire, professorID }) => {
   const { user } = useAuthContext();
   const [groupValues, setGroupValues] = useState({});
   const [loadingData, setLoadingData] = useState(true);
@@ -32,17 +35,22 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
   const [recommendationList, setRecommendationList] = useState([]);
   const [completed, setCompleted] = useState(questionnaireAnswerData.length > 0);
   const [sendingData, setSendingData] = useState(false);
-  const questionsPerPage = 5;
+  const questionsPerPage = questionnaire.attributes.type === 'scaling' ? 10 : 5;
   const totalQuestions = questionnaire.attributes.Options.questionnaire.questions.length;
   const totalPages = Math.ceil(totalQuestions / questionsPerPage);
   const { minutes, seconds, stopTimer } = useTimer({ testCompleted: questionnaireAnswerData.length > 0 });
   const [editedQuestions, setEditedQuestions] = useState({});
+
+  const {
+    subsectionSelected
+  } = useCourseContext();
 
   const handleInputChange = (question, absoluteIndex) => {
     setEditedQuestions((prev) => ({ ...prev, [absoluteIndex]: { question: question.question, options: question.options } }));
   };
 
   useEffect(() => {
+
     if (questionnaireAnswerData.length > 0) {
       if (questionnaire.attributes.Options.questionnaire?.type === 'SRL-O') {
         setRecommendationList(getRecommendationsSRLO(questionnaireAnswerData[0].responses.responses))
@@ -57,12 +65,14 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
   useEffect(() => {
     setCurrentPage(1);
     setUserResponses([]);
-    setLoadingData(true);
-    const fetchData = async () => {
-      setUserResponses(await fetchUserResponsesQuestionnaires(questionnaire.id));
-      setLoadingData(false);
-    };
-    fetchData();
+    if (user.role_str !== 'student') {
+      setLoadingData(true);
+      const fetchData = async () => {
+        setUserResponses(await fetchUserResponsesQuestionnaires(questionnaire.id));
+        setLoadingData(false);
+      };
+      fetchData();
+    }
     setQuestionnaireAnswerData(answers.filter((answer) => answer.questionnaire?.id === questionnaire?.id));
   }, [questionnaire.id]);
 
@@ -82,6 +92,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
     visible: { opacity: 1, x: 0 },
     hidden: { opacity: 0, x: -100 },
   }
+
 
 
 
@@ -142,7 +153,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
       },
       body: JSON.stringify({
         data: {
-          activity: courseSubsection.attributes.activity.data.id,
+          activity: subsectionSelected.attributes.activity.data.id,
           user: user.id,
           comments: 'Automatic evaluation of the questionnaire',
           evaluator: professorID,
@@ -293,157 +304,167 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
     const startIdx = (currentPage - 1) * questionsPerPage;
     const endIdx = Math.min(startIdx + questionsPerPage, totalQuestions);
     const questionsForPage = questionnaire.attributes.Options.questionnaire.questions.slice(startIdx, endIdx);
-    return questionsForPage
-      .filter((question) => question !== undefined && question !== null)
-      .map((question, index) => {
-        const absoluteIndex = startIdx + index;
-        const initialValue = editedQuestions[absoluteIndex] !== undefined ? editedQuestions[absoluteIndex] : question;
-        return (
-          <motion.li
-            className='bg-white shadow-md rounded-md p-5 border-l-8 border-[#377ddf75]'
-            variants={item}
-            key={absoluteIndex}>
-            {
-              enableEdit ?
-                <div className='flex items-center'>
-                  <Input
-                    type="text"
-                    className='w-full rounded-md'
-                    value={initialValue.question}
-                    onChange={(e) => handleInputChange({ question: e.target.value, options: question.options }, absoluteIndex)}
-                  />
-                  <Popconfirm
-                    title="Delete question"
-                    description="Are you sure you want to delete this question?"
-                    okText="Yes"
-                    onConfirm={() => deleteQuestion(absoluteIndex)}
-                    okButtonProps={{ className: 'bg-blue-500', type: 'primary' }}
-                    cancelText="No">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 ml-4 cursor-pointer">
-                      <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z" clipRule="evenodd" />
-                    </svg>
-                  </Popconfirm>
-                </div>
-                :
-                <p className="font-medium">{question.question}</p>
-            }
-
-            {Array.isArray(question.options) ? (
-              user.role_str === "student" || (user.role_str !== "student" && questionnaireAnswerData.length > 0) ?
-                <div key={absoluteIndex}>
-                  {
-                    (questionnaireAnswerData.length > 0) ?
-                      <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} value={questionnaireAnswerData[0].responses.responses[absoluteIndex]?.answer}>
+    let answersData = answers.filter((answer) => answer.questionnaire?.id === questionnaire?.id);
+    if (questionnaire.attributes.type === 'scaling') {
+      return (
+        <ScaleQuestionnaireForm questions={questionsForPage} groupValues={groupValues} setGroupValues={setGroupValues} currentPage={currentPage} questionnaireAnswerData={answersData} userResponses={userResponses} />
+      )
+    } else {
+      return questionsForPage
+        .filter((question) => question !== undefined && question !== null)
+        .map((question, index) => {
+          const absoluteIndex = startIdx + index;
+          const initialValue = editedQuestions[absoluteIndex] !== undefined ? editedQuestions[absoluteIndex] : question;
+          return (
+            <motion.li
+              className='bg-white shadow-md rounded-md p-5 border-l-8 border-[#377ddf75]'
+              variants={item}
+              key={absoluteIndex}>
+              {
+                enableEdit ?
+                  <div className='flex items-center'>
+                    <Input
+                      type="text"
+                      className='w-full rounded-md'
+                      value={initialValue.question}
+                      onChange={(e) => handleInputChange({ question: e.target.value, options: question.options }, absoluteIndex)}
+                    />
+                    <Popconfirm
+                      title="Delete question"
+                      description="Are you sure you want to delete this question?"
+                      okText="Yes"
+                      onConfirm={() => deleteQuestion(absoluteIndex)}
+                      okButtonProps={{ className: 'bg-blue-500', type: 'primary' }}
+                      cancelText="No">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 ml-4 cursor-pointer">
+                        <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm-1.72 6.97a.75.75 0 10-1.06 1.06L10.94 12l-1.72 1.72a.75.75 0 101.06 1.06L12 13.06l1.72 1.72a.75.75 0 101.06-1.06L13.06 12l1.72-1.72a.75.75 0 10-1.06-1.06L12 10.94l-1.72-1.72z" clipRule="evenodd" />
+                      </svg>
+                    </Popconfirm>
+                  </div>
+                  :
+                  <p className="font-medium">{question.question}</p>
+              }
+              {Array.isArray(question.options) ? (
+                user.role_str === "student" || (user.role_str !== "student" && questionnaireAnswerData.length > 0) ?
+                  <div key={absoluteIndex}>
+                    {
+                      (questionnaireAnswerData.length > 0) ?
+                        <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} value={questionnaireAnswerData[0].responses.responses[absoluteIndex]?.answer}>
+                          {question.options.map((option, optionIndex) => (
+                            <MyFormControlLabel key={optionIndex} value={option} label={option} control={<Radio disabled readOnly />} />
+                          ))}
+                        </RadioGroup>
+                        :
+                        <RadioGroup className="mt-4"
+                          name={`use-radio-group-${absoluteIndex}`}
+                          value={groupValues[absoluteIndex] || ""}
+                          onChange={(event) => handleRadioChange(absoluteIndex, event.target.value)}
+                        >
+                          {question.options.map((option, optionIndex) => (
+                            <MyFormControlLabel key={optionIndex} value={option} label={option} control={<Radio />} />
+                          ))}
+                        </RadioGroup>
+                    }
+                  </div> :
+                  enableEdit ?
+                    <div key={absoluteIndex}>
+                      <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} >
+                        {initialValue.options.map((option, optionIndex) => (
+                          <div className='flex items-center gap-2 space-y-2'>
+                            <div className='w-5 h-5 border-2 border-gray-400 rounded-full '> </div>
+                            <Input type="text" className='rounded-md' value={option} onChange={(e) => {
+                              const updatedOptions = initialValue.options.map((o, index) =>
+                                index === optionIndex ? e.target.value : o
+                              );
+                              handleInputChange({ question: initialValue.question, options: updatedOptions }, absoluteIndex);
+                            }} />
+                          </div>
+                        ))}
+                      </RadioGroup>
+                    </div> :
+                    <div key={absoluteIndex}>
+                      <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} >
                         {question.options.map((option, optionIndex) => (
                           <MyFormControlLabel key={optionIndex} value={option} label={option} control={<Radio disabled readOnly />} />
                         ))}
                       </RadioGroup>
-                      :
-                      <RadioGroup className="mt-4"
-                        name={`use-radio-group-${absoluteIndex}`}
-                        value={groupValues[absoluteIndex] || ""}
-                        onChange={(event) => handleRadioChange(absoluteIndex, event.target.value)}
-                      >
-                        {question.options.map((option, optionIndex) => (
-                          <MyFormControlLabel key={optionIndex} value={option} label={option} control={<Radio />} />
-                        ))}
-                      </RadioGroup>
-                  }
-                </div> :
-                enableEdit ?
-                  <div key={absoluteIndex}>
-                    <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} >
-                      {initialValue.options.map((option, optionIndex) => (
-                        <div className='flex items-center gap-2 space-y-2'>
-                          <div className='w-5 h-5 border-2 border-gray-400 rounded-full '> </div>
-                          <Input type="text" className='rounded-md' value={option} onChange={(e) => {
-                            const updatedOptions = initialValue.options.map((o, index) =>
-                              index === optionIndex ? e.target.value : o
-                            );
-                            handleInputChange({ question: initialValue.question, options: updatedOptions }, absoluteIndex);
-                          }} />
-                        </div>
-                      ))}
-                    </RadioGroup>
-                  </div> :
-                  <div key={absoluteIndex}>
-                    <RadioGroup className="mt-4" name={`use-radio-group-${absoluteIndex}`} >
-                      {question.options.map((option, optionIndex) => (
-                        <MyFormControlLabel key={optionIndex} value={option} label={option} control={<Radio disabled readOnly />} />
-                      ))}
-                    </RadioGroup>
+                    </div>
+              ) : (
+                user.role_str === "student" || (user.role_str !== "student" && questionnaireAnswerData.length > 0) ?
+                  <div key={absoluteIndex} className='flex w-full mt-5'>
+                    {
+                      questionnaireAnswerData.length > 0 ?
+                        question.options === 'numberInput' ?
+                          <InputNumber
+                            min={1}
+                            max={10}
+                            disabled
+                            className='w-full'
+                            value={questionnaireAnswerData[0].responses.responses[absoluteIndex].answer}
+                          />
+                          :
+                          <TextArea
+                            id="outlined-basic"
+                            label=""
+                            disabled={true}
+                            style={{ resize: 'none' }}
+                            value={questionnaireAnswerData[0].responses.responses[absoluteIndex].answer}
+                            className='w-full'
+                            rows={3}
+                          />
+                        :
+                        question.options === 'numberInput' ?
+                          <InputNumber
+                            min={1}
+                            max={10}
+                            className='w-full'
+                            value={groupValues[absoluteIndex] || ""}
+                            onChange={(value) => handleRadioChange(absoluteIndex, value)}
+                          />
+                          :
+                          <TextArea
+                            id="outlined-basic"
+                            label=""
+                            className='w-full'
+                            value={groupValues[absoluteIndex] || ""}
+                            onChange={(event) => handleRadioChange(absoluteIndex, event.target.value)}
+                            rows={3}
+                          />
+                    }
                   </div>
-            ) : (
-              user.role_str === "student" || (user.role_str !== "student" && questionnaireAnswerData.length > 0) ?
-                <div key={absoluteIndex} className='flex w-full mt-5'>
-                  {
-                    questionnaireAnswerData.length > 0 ?
-                      question.options === 'numberInput' ?
-                        <InputNumber
-                          min={1}
-                          max={10}
-                          disabled
-                          className='w-full'
-                          value={questionnaireAnswerData[0].responses.responses[absoluteIndex].answer}
-                        />
-                        :
-                        <TextField
-                          id="outlined-basic"
-                          label=""
-                          disabled
-                          defaultValue={questionnaireAnswerData[0].responses.responses[absoluteIndex].answer}
-                          variant="filled"
-                          className='w-full'
-                          rows={3}
-                          multiline
-                        />
-                      :
-                      question.options === 'numberInput' ?
-                        <InputNumber
-                          min={1}
-                          max={10}
-                          className='w-full'
-                          value={groupValues[absoluteIndex] || ""}
-                          onChange={(value) => handleRadioChange(absoluteIndex, value)}
-                        />
-                        :
-                        <TextField
-                          id="outlined-basic"
-                          label=""
-                          variant="filled"
-                          className='w-full'
-                          value={groupValues[absoluteIndex] || ""}
-                          onChange={(event) => handleRadioChange(absoluteIndex, event.target.value)}
-                          rows={3}
-                          multiline
-                        />
-                  }
-                </div>
-                :
-                <div key={absoluteIndex} className='flex w-full mt-5'>
-                  <TextField
-                    id="outlined-basic"
-                    label=""
-                    disabled
-                    variant="filled"
-                    className='w-full'
-                    rows={1}
-                    multiline
-                  />
-                </div>
-            )}
-          </motion.li>
-        );
-      });
+                  :
+                  <div key={absoluteIndex} className='flex w-full mt-5'>
+                    <TextArea
+                      id="outlined-basic"
+                      label=""
+                      disabled={true}
+                      style={{ resize: 'none' }}
+                      variant="filled"
+                      className='w-full'
+                      rows={1}
+                      multiline
+                    />
+                  </div>
+              )}
+
+            </motion.li>
+          );
+        });
+    }
   };
 
 
   const isLastPage = currentPage === totalPages;
 
   return (
-    <div className="flex flex-col mt-5">
-      <Header enableEdit={enableEdit} questionnaire={questionnaire} questionnaireAnswerData={questionnaireAnswerData}
-        completed={completed} setEnableEdit={setEnableEdit} courseSubsection={courseSubsection} editedQuestions={editedQuestions}
+    <div className="flex flex-col mt-3">
+      <BreadcrumbCourse
+        styles={
+          'mb-5'
+        }
+      />
+      <Header enableEdit={enableEdit} questionnaire={questionnaire} questionnaireAnswerData={answers.filter((answer) => answer.questionnaire?.id === questionnaire?.id)}
+        completed={completed} setEnableEdit={setEnableEdit} courseSubsection={subsectionSelected} editedQuestions={editedQuestions}
         setQuestionnaireAnswerData={setQuestionnaireAnswerData}
       />
       {
@@ -468,7 +489,13 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
               animate="visible"
               variants={list}
             >
-              <div className="space-y-5 ">{renderQuestionsForPage()}</div>
+              <div className='my-1'>
+                <StepsQuestionnaire currentPage={currentPage} totalPages={totalPages} />
+              </div>
+
+              <div className="space-y-5 ">
+                {renderQuestionsForPage()}
+              </div>
               {
                 (enableEdit === true && user?.role_str !== 'student' && (totalPages === 0 || currentPage === totalPages)) && (
                   <AddQuestionButton setCourseSubsectionQuestionnaire={setCourseSubsectionQuestionnaire} />
@@ -483,6 +510,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
                     {
                       user.role_str === 'student' && (
                         <>
+
                           <Button type='primary' loading={sendingData} onClick={handleSubmission}
                             className="ml-auto ">
                             Submit
@@ -495,7 +523,14 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
               </div>
             )}
             <div className="flex items-center justify-between mt-5 mb-8 bg-white rounded-md shadow-md p-5 border-b-8 border-[#6366f1]">
-              <NavigationButtons setCurrentPage={setCurrentPage} currentPage={currentPage} totalPages={totalPages} />
+              <NavigationButtons
+                setCurrentPage={setCurrentPage}
+                currentPage={currentPage}
+                totalPages={totalPages}
+                groupValues={groupValues}
+                questionsPerPage={questionsPerPage}
+                questionnaireAnswered={questionnaireAnswerData.length > 0}
+              />
             </div>
           </>
           :

@@ -108,7 +108,7 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
     }
 
     return (
-        <div className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1] mb-5">
+        <div className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1] mb-2">
             <div className="flex flex-col w-full my-7 mx-7">
                 <div className='flex items-center w-full '>
                     {enableEdit ? (

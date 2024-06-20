@@ -10,6 +10,7 @@ import generateExcelPeerReview from './utils/generateExcelPeerReview';
 import CreatePeers from './Components/PeerReview/CreatePeers';
 import { set } from 'date-fns';
 import { MoonLoader } from 'react-spinners';
+import { BreadcrumbCourse } from '../CoursesInside/BreadcrumbCourse.jsx';
 
 export const ProfessorPeerReview = ({ activityData }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -95,7 +96,7 @@ export const ProfessorPeerReview = ({ activityData }) => {
 
   return (
     <div className='h-full p-5 max-w-[100%] overflow-x-scroll'>
-      <BackToCourse courseId={courseId} navigate={navigate} />
+      <BreadcrumbCourse styles={'ml-5'} />
       <main className='mx-5'>
         <h2 className='mt-3 mb-2 text-lg font-medium'>Peer Review</h2>
         <p className='mb-1 text-sm text-gray-500'>In this section, you will be able to see the evaluations that students have given to their peers.</p>

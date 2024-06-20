@@ -53,7 +53,6 @@ export const Questionnaire = ({ setState, setSelfAssesmentData, setQualification
                             }),
                 })
                 const qualificationsResponse = await qualificationsData.json()
-                setQualificationId(qualificationsResponse.data.id)
                 const selfAssesmentData = await fetch(`${API}/self-assesment-answers`, {
                     method: 'POST',
                     headers: {
@@ -71,22 +70,11 @@ export const Questionnaire = ({ setState, setSelfAssesmentData, setQualification
                     }),
                 })
                 const response = await selfAssesmentData.json()
-                await fetch(`${API}/qualifications`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${getToken()}`,
-                    },
-                    body: JSON.stringify({
-                        data: {
-                            SelfAssesmentAnswers: response.data.id
-                        }
-                    })
-                })
+                setQualificationId(qualificationsResponse.data.id)
                 setSendingData(false)
+                setState(1)
                 setSelfAssesmentData([response.data])
                 message.success('Questionnaire submitted successfully')
-                setState(1)
             } else {
                 setSendingData(false)
                 message.error('Please answer all questions before submitting')
@@ -121,7 +109,6 @@ export const Questionnaire = ({ setState, setSelfAssesmentData, setQualification
                             setUserResponses={setUserResponses}
                             questionnaireAnswers={questionnaireAnswers}
                             user={user}
-
                         />
                     }</div>
                 </motion.ul>
