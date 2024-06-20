@@ -46,7 +46,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   const { user } = useAuthContext();
 
   const { course } = useCourseContext();
-  console.log('course', course)
 
   const [fileList, setFileList] = useState(
     activityData?.file?.data?.map((file) => ({
@@ -71,8 +70,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
     })) || []
   );
 
-  console.log('activityFiles', activityFiles)
-
   let { activityId, courseId } = useParams();
   const isActivityEvaluable = activityData?.activity?.data?.attributes.evaluable
   const USER_OBJECTIVES = [...new Set(user?.user_objectives?.map((objective) => objective.categories.map((category) => category)).flat() || [])];
@@ -92,8 +89,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
     filesUploaded.length === fileList.length &&
     filesUploaded.every((file, index) => file.id === fileList[index].IdFromBackend)
   );
-
-  console.log(filesTask)
 
   async function saveChanges() {
     setLoading(true);
@@ -118,8 +113,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
             },
             body: formData,
           });
-
-          console.log('uploadFiles', uploadFiles);
 
           if (uploadFiles.ok) {
             const result = await uploadFiles.json();
@@ -155,7 +148,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
         const result = await response.json();
         setUserQualification({ ...activityData, activity: { activity: result } });
         setEnableEdit(false);
-        console.log('result', result.data.attributes.file)
         setActivityFiles(
           result.data.attributes.file?.data?.map((file) => ({
             ...file.attributes,
@@ -192,9 +184,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
 
       //eliminamos undefined si hay
       files = files.filter((file) => file !== undefined);
-
-      console.log('files', files)
-
       const qualificationData = {
         data: {
           activity: activityId,
