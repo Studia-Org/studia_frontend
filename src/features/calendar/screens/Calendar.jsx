@@ -274,7 +274,7 @@ END:VCALENDAR
 
                     <div className='h-full overflow-y-auto text-2xl font-bold'>
                         <div className='grid h-full '>
-                            <div className='font-normal max-w-[95%] max-h-[100%] mt-8 mb-10 overflow-hidden bg-white rounded-xl my-auto mx-auto '>
+                            <div className='font-normal max-w-[95%] max-h-[100%] mt-8 mb-10 overflow-hidden bg-white rounded-xl my-auto mx-auto border'>
                                 <div className='flex w-full'>
                                     <Button bordered onClick={() => exportCalendar()} className='gap-2 mt-3 ml-auto mr-3'>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
