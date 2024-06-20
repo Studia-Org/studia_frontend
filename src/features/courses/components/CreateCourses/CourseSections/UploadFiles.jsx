@@ -6,6 +6,7 @@ import { getToken } from '../../../../../helpers';
 
 export const UploadFiles = ({ fileList, setFileList, listType, maxCount, accept, disabled, showRemoveIcon }) => {
     const [errors, setErrors] = useState([]);
+    console.log('fileList', fileList);
 
     const generateAlert = (message, index) => {
         return (

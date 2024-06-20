@@ -49,9 +49,9 @@ const DownloadButton = ({ file }) => (
 export const TaskFiles = ({ files }) => {
     const dataSource = useMemo(() => files?.map((file, index) => ({
         key: index,
-        files: file.attributes.name,
-        size: formatFileSize(file.attributes.size),
-        download: <div className='flex items-center justify-center'><DownloadButton file={file.attributes} /></div>
+        files: file.name,
+        size: formatFileSize(file.size),
+        download: <div className='flex items-center justify-center'><DownloadButton file={file} /></div>
     })), [files]);
 
     const columns = [

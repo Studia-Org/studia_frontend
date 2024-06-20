@@ -32,10 +32,8 @@ registerPlugin(FilePondPluginFileValidateSize);
 registerPlugin(FilePondPluginImagePreview);
 
 export const ActivityComponent = ({ activityData, idQualification, setUserQualification, userQualification, subsectionsCompleted }) => {
-  const [filesTask, setFilesTask] = useState();
   const [uploadMode, setUploadMode] = useState('record')
   const [filesUploaded, setFilesUploaded] = useState(activityData?.file?.data || []);
-  const [activityFiles, setActivityFiles] = useState(activityData?.activity?.data?.attributes?.file?.data || []);
   const [uploadLoading, setUploadLoading] = useState(false);
   const [title, setTitle] = useState(activityData.activity.data.attributes.title)
   const [subsectionContent, setSubsectionContent] = useState(activityData.activity.data.attributes.description);
@@ -57,6 +55,24 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
     })) || []
   );
 
+  //las files que se muestran en la actividad subidas por el professor
+  const [activityFiles, setActivityFiles] = useState(
+    activityData?.activity?.data?.attributes?.file?.data?.map((file) => ({
+      ...file.attributes,
+      IdFromBackend: file.id
+    })) || []
+  );
+
+  //las files que hay en el edit mode subidas por el professor
+  const [filesTask, setFilesTask] = useState(
+    activityData?.activity?.data?.attributes?.file?.data?.map((file) => ({
+      ...file.attributes,
+      IdFromBackend: file.id
+    })) || []
+  );
+
+  console.log('activityFiles', activityFiles)
+
   let { activityId, courseId } = useParams();
   const isActivityEvaluable = activityData?.activity?.data?.attributes.evaluable
   const USER_OBJECTIVES = [...new Set(user?.user_objectives?.map((objective) => objective.categories.map((category) => category)).flat() || [])];
@@ -68,7 +84,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   const isThinkAloud = activityData.activity.data.attributes.type === 'thinkAloud'
 
   useEffect(() => {
-    setFilesTask([]);
     setSubsectionContent(activityData.activity.data.attributes.description);
     setTitle(activityData.activity.data.attributes.title);
   }, [enableEdit])
@@ -78,30 +93,50 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
     filesUploaded.every((file, index) => file.id === fileList[index].IdFromBackend)
   );
 
+  console.log(filesTask)
+
   async function saveChanges() {
     setLoading(true);
     const formData = new FormData();
     let filesId = [];
     try {
       if (filesTask.length > 0) {
-        filesTask.forEach((file) => {
-          formData.append('files', file.file);
-        });
-        const uploadFiles = await fetch(`${API}/upload`, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${getToken()}`,
-          },
-          body: formData,
-        });
-        if (uploadFiles.ok) {
-          const result = await uploadFiles.json();
-          filesId = result.map((file) => file.id);
-        }
-        if (activityFiles !== null) {
-          filesId = filesId.concat(activityFiles.map((file) => file.id));
+        // Verificar si algún archivo en filesTask tiene el atributo originFileObj
+        const hasOriginFileObj = filesTask.some(file => file.originFileObj);
+
+        if (hasOriginFileObj) {
+          filesTask.forEach((file) => {
+            if (file.originFileObj) {
+              formData.append('files', file.originFileObj);
+            }
+          });
+
+          const uploadFiles = await fetch(`${API}/upload`, {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${getToken()}`,
+            },
+            body: formData,
+          });
+
+          console.log('uploadFiles', uploadFiles);
+
+          if (uploadFiles.ok) {
+            const result = await uploadFiles.json();
+            filesId = result.map((file) => file.id);
+          }
+
+          if (activityFiles !== null) {
+            filesId = filesId.concat(activityFiles.map((file) => file.IdFromBackend));
+          }
+
+          // Eliminar IDs duplicados usando un Set
+          filesId = [...new Set(filesId)];
+        } else {
+          filesId = filesTask.map((file) => file.IdFromBackend);
         }
       }
+
       const response = await fetch(`${API}/activities/${activityId}?populate[file][fields][0]=*`, {
         method: 'PUT',
         headers: {
@@ -120,8 +155,13 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
         const result = await response.json();
         setUserQualification({ ...activityData, activity: { activity: result } });
         setEnableEdit(false);
-
-        setActivityFiles(result.data.attributes.file?.data || []);
+        console.log('result', result.data.attributes.file)
+        setActivityFiles(
+          result.data.attributes.file?.data?.map((file) => ({
+            ...file.attributes,
+            IdFromBackend: file.id
+          })) || []
+        )
         message.success('Changes saved successfully');
       }
       else throw new Error('Error saving changes');
@@ -355,11 +395,8 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
       const filesFiltered =
         filesUploaded.filter((file) => file.id !== fileId);
       setFilesUploaded(filesFiltered);
-
-
-
       const activityFilesFiltered =
-        activityFiles.filter((file) => file.id !== fileId);
+        activityFiles.filter((file) => file.IdFromBackend !== fileId);
       setActivityFiles(activityFilesFiltered);
       message.success('File deleted successfully');
     }
@@ -474,7 +511,10 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
           <BreadcrumbCourse />
           {
             createGroups ?
-              <BackButton onClick={() => setCreateGroups(false)} text={"Go back to activity"} /> :
+              <div className='mt-3'>
+                <BackButton onClick={() => setCreateGroups(false)} text={"Go back to activity"} />
+              </div>
+              :
               null
           }
           <ActivityTitle
@@ -523,7 +563,17 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                     </>
                   )
                 }
-                <TaskFiles files={activityFiles} />
+                {
+                  !enableEdit || user.role_str === 'student' ?
+                    <TaskFiles files={activityFiles} />
+                    :
+                    <>
+                      <p className='mt-8 mb-1 text-xs text-gray-600'>Task Files</p>
+                      <hr className='mb-3' />
+                      <UploadFiles fileList={filesTask} setFileList={setFilesTask} listType={'picture'} maxCount={10} />
+                      <p className='mt-1 text-xs text-right text-gray-500 '>Remember to save your changes for correctly visualizing your new files.</p>
+                    </>
+                }
                 <p className='mt-5 mb-1 text-xs text-gray-600'>Task description</p>
                 <hr />
                 <div className=' my-3 text-gray-600 ml-5 max-w-[calc(100vw-1.25rem)] box-content mt-5 '>
@@ -547,44 +597,11 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
         </div>
         {
           (user.role_str === 'professor' || user.role_str === 'admin') && !createGroups ?
-            <div className='flex flex-col'>
-              <p className='mb-3 text-xs text-gray-400' > Task Files</ p>
-              <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)] w-[30rem]'>
-                {(!activityFiles.length ||
-                  activityFiles?.length === 0) ? (
-                  enableEdit ? (
-                    <FilePond allowMultiple={true} maxFileSize={'10MB'} maxFiles={5} onupdatefiles={setFilesTask} />
-                  ) : (
-                    <Empty
-                      image={Empty.PRESENTED_IMAGE_SIMPLE}
-                      className='mt-6'
-                      description={
-                        <span className='font-normal text-gray-400'>
-                          There are no files
-                        </span>
-                      }
-                    />
-                  )
-                ) : (
-                  enableEdit ? (
-                    <section className='max-w-[calc(100vw-1.25rem)]'>
-                      <FilePond allowMultiple={true} maxFileSize={'10MB'} maxFiles={5} onupdatefiles={setFilesTask} />
-                      <div className='space-y-2'>
-                        {activityFiles.map((file) => renderFiles(file))}
-                      </div>
-
-                    </section>
-                  ) : (
-                    <div className='space-y-2 max-w-[calc(100vw-1.25rem)]'>
-                      {activityFiles.map((file) => renderFiles(file))}
-                    </div>
-
-                  )
-                )}
-              </div>
-              {isActivityGroup && <Button type='primary' onClick={() => setCreateGroups(true)} >Create students groups</Button>}
-
-            </div> :
+            isActivityGroup &&
+            <Button type='primary' onClick={() => setCreateGroups(true)} >
+              Create students groups
+            </Button>
+            :
             (evaluated || passedDeadline) && !(user.role_str === 'professor' || user.role_str === 'admin') ?
               <div className='flex flex-col max-w-[calc(100vw-1.25rem)]'>
                 {
