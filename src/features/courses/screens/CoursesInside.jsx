@@ -115,10 +115,6 @@ const CourseInside = () => {
     let lastCompletedSubseccion = null;
     let cursoTitle = null;
 
-    if (subsectionSelected && Object.keys(subsectionSelected).length !== 0) {
-      return { subseccion: subsectionSelected, cursoTitle: sectionSelected };
-    }
-
     for (const curso of course.sections.data) {
       const {
         id,
@@ -176,6 +172,9 @@ const CourseInside = () => {
   };
 
   useEffect(() => {
+    if (subsectionSelected && Object.keys(subsectionSelected)?.length !== 0) {
+      return;
+    }
     if (
       course?.sections?.data?.length > 0 &&
       subsectionsCompleted.length > 0
@@ -239,6 +238,7 @@ const CourseInside = () => {
         null
       );
     }
+    setActivitySelected(undefined);
     setTitleSubsection(subsectionSelected?.attributes?.title);
     setDateSubsection([subsectionSelected?.attributes?.start_date, subsectionSelected?.attributes?.end_date]);
     setBackgroundPhotoSubsection(subsectionSelected?.attributes?.landscape_photo?.data?.attributes?.url)
