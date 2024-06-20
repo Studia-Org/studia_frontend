@@ -556,16 +556,16 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                   !enableEdit || user.role_str === 'student' ?
                     <TaskFiles files={activityFiles} />
                     :
-                    <>
+                    <section className="!max-h-fit">
                       <p className='mt-8 mb-1 text-xs text-gray-600'>Task Files</p>
                       <hr className='mb-3' />
                       <UploadFiles fileList={filesTask} setFileList={setFilesTask} listType={'picture'} maxCount={10} />
                       <p className='mt-1 text-xs text-right text-gray-500 '>Remember to save your changes for correctly visualizing your new files.</p>
-                    </>
+                    </section>
                 }
                 <p className='mt-5 mb-1 text-xs text-gray-600'>Task description</p>
                 <hr />
-                <div className=' my-3 text-gray-600 ml-5 max-w-[calc(100vw-1.25rem)] box-content mt-5 '>
+                <div className='my-3 text-gray-600 ml-5 max-w-[calc(100vw-1.25rem)] box-content mt-5 '>
                   {
                     !enableEdit ?
                       <div className='prose max-w-none'>
