@@ -10,17 +10,28 @@ import { getToken } from "../../../../helpers";
 import { FiChevronRight } from "react-icons/fi";
 import { MoonLoader } from "react-spinners";
 import './participants.css'
+import { useCourseContext } from "../../../../context/CourseContext";
 
 
 
-export const CourseContent = ({ setForumFlag, courseContentInformation, courseSection, courseSubsection, courseId, enableEdit, setEnableEdit, setCourseContentInformation, titleSubsection, dateSubsection, backgroundPhotoSubsection }) => {
+export const CourseContent = ({ setForumFlag, courseId, enableEdit, setEnableEdit, titleSubsection, dateSubsection, backgroundPhotoSubsection }) => {
     const [loading, setLoading] = useState(false);
-    const section_ = courseContentInformation.find(
-        (seccion) => seccion.attributes.title === courseSection
+
+    const {
+        course,
+        sectionSelected,
+        subsectionSelected,
+        setCourse,
+        setSectionSelected,
+        setSubsectionSelected,
+    } = useCourseContext();
+
+    const section_ = course.sections.data.find(
+        (seccion) => seccion.attributes.title === sectionSelected
     );
     const subsection_ = section_?.attributes.subsections.data.find(
         (subseccion) =>
-            subseccion?.attributes.title === courseSubsection?.attributes.title
+            subseccion?.attributes.title === subsectionSelected?.attributes.title
     );
     const [subsectionContent, setSubsectionContent] = useState(subsection_?.attributes?.content);
 
@@ -84,7 +95,7 @@ export const CourseContent = ({ setForumFlag, courseContentInformation, courseSe
         })
 
         if (response.ok) {
-            setCourseContentInformation([...courseContentInformation.map((section) => {
+            setCourse([...course.sections.data.map((section) => {
                 if (section.id === section_.id) {
                     return {
                         ...section,
@@ -159,14 +170,23 @@ export const CourseContent = ({ setForumFlag, courseContentInformation, courseSe
     )
 }
 
-export const CourseFiles = ({ courseContentInformation, courseSection, courseSubsection, enableEdit, setCourseContentInformation }) => {
+export const CourseFiles = ({ enableEdit }) => {
+
+    const {
+        course,
+        sectionSelected,
+        subsectionSelected,
+        setCourse,
+    } = useCourseContext();
+
     const [fileUploadLoading, setFileUploadLoading] = useState(false);
-    const section_ = courseContentInformation.find(
-        (seccion) => seccion.attributes.title === courseSection
+
+    const section_ = course.sections.data.find(
+        (seccion) => seccion.attributes.title === sectionSelected
     );
     const subsection_ = section_.attributes.subsections.data.find(
         (subseccion) =>
-            subseccion.attributes.title === courseSubsection.attributes.title
+            subseccion.attributes.title === subsectionSelected.attributes.title
     );
     const [files, setFiles] = useState(subsection_.attributes.files?.data);
 
@@ -240,7 +260,7 @@ export const CourseFiles = ({ courseContentInformation, courseSection, courseSub
             body: JSON.stringify({ data: { files: allFiles } })
         })
 
-        setCourseContentInformation([...courseContentInformation.map((section) => {
+        setCourse([...course.sections.data.map((section) => {
             if (section.id === section_.id) {
                 return {
                     ...section,
@@ -378,10 +398,8 @@ export const CourseFiles = ({ courseContentInformation, courseSection, courseSub
                                         />
                                     </div>
                                 )
-
                         )
                 }
-
             </div >
         </div >
     )
@@ -390,7 +408,7 @@ export const CourseFiles = ({ courseContentInformation, courseSection, courseSub
 
 export const CourseParticipantsClickable = ({ students, enableEdit, setSettingsFlag, setParticipantsFlag, setVisible, setForumFlag }) => {
 
-    if (students.data.length === 0) {
+    if (students?.data?.length === 0) {
         return <div className="p-5 bg-white rounded-md shadow-md">
             <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='There are no other participants' />
         </div>;
@@ -413,9 +431,9 @@ export const CourseParticipantsClickable = ({ students, enableEdit, setSettingsF
 
                 <div className="flex flex-col justify-start mt-3">
                     <AvatarGroup className="mt-4" stack>
-                        {students.data
-                            .filter((user, i) => i < 10)
-                            .map(user => {
+                        {students?.data
+                            ?.filter((user, i) => i < 10)
+                            ?.map(user => {
                                 return (
                                     <Avatar
                                         circle

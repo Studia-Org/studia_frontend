@@ -121,14 +121,15 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                     if (find.length > 0) {
                         find.forEach((qualification) => {
                             if (activity.attributes.groupActivity) {
-                                const group_qualification = studentsDuplicated.find((group) => group.id === qualification.attributes.group.data.id)
-                                const studentIndex = studentsDuplicated.findIndex((group) => group.id === qualification.attributes.group.data.id)
+                                const group_qualification = studentsDuplicated.find((group) => group.id === qualification?.attributes?.group?.data?.id)
+                                const studentIndex = studentsDuplicated.findIndex((group) => group.id === qualification?.attributes?.group?.data?.id)
                                 studentsDuplicated.splice(studentIndex, 1)
-                                const activityToReview = qualificationToReview.attributes.activity.data.id
+                                const activityToReview = qualificationToReview?.attributes?.activity?.data?.id
                                 const findQualification = group_qualification?.attributes?.qualifications?.data?.find((qualification) => {
                                     return qualification?.attributes?.activity?.data?.id === activityToReview
                                 })
                                 if (!findQualification) {
+
                                 }
                                 if (findQualification) {
                                     group.push({ ...group_qualification, draggableId: Math.random().toString(36) })
@@ -148,8 +149,15 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
 
                 const groupWithMoreStudents = qualificationsToReview.find((group) => group.users.length > studentsPerGroup)
                 setGroupWithMoreStudents(groupWithMoreStudents)
-
-                setStudents(groups)
+                //delete students that not delivered the activity
+                if (activity.attributes.groupActivity) {
+                    groups[0] = groups[0]?.filter((group) => qualificationsAlreadyDone.find((qualification) => qualification?.attributes?.group?.data?.id === group.id))
+                    setStudents(groups)
+                }
+                else {
+                    groups[0] = groups[0]?.filter((student) => qualificationsAlreadyDone.find((qualification) => qualification?.attributes?.user?.data?.id === student.id))
+                    setStudents(groups)
+                }
                 setStudentsToReview(qualificationsToReview)
             })
 

@@ -44,7 +44,7 @@ export const TFGExtendedCourseData = [
                         "description": "Questionnaire for measuring student self-regulated learning",
                         "autocorrect": false,
                         "editable": false,
-                        "type": "SRL-O",
+                        "type": "standard",
                         "Options": {
                             "questionnaire": {
                                 "editable": false,

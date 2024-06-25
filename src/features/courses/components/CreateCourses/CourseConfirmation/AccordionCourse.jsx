@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Collapse, Progress } from 'antd';
+import { Collapse } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
 
 export const AccordionCourse = ({ createCourseSectionsList, setSectionContentSelector, setSectionId, selectedSubsection, sectionId }) => {

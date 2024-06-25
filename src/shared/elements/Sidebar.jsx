@@ -10,16 +10,16 @@ import {
   FiSettings,
   FiBarChart,
 } from "react-icons/fi";
-
 import { MdTimeline } from "react-icons/md";
 import { useAuthContext } from "../../context/AuthContext";
-import { set } from "date-fns";
 import { Button } from "antd";
 
 export const Sidebar = (props) => {
   const [dashboardNotification, setDashboardNotification] = useState(false);
   const [expanded, setExpanded] = useState(false);
-
+  const [showSidebar, setShowSidebar] = useState(document.location.pathname !== '/app/courses/create');
+  const [courseInsideStyle, setCourseInsideStyle] = useState('xl');
+  const onlyIcon = props.onlyIcon;
   const { user } = useAuthContext();
 
   useEffect(() => {
@@ -27,6 +27,7 @@ export const Sidebar = (props) => {
       setDashboardNotification(await fetchUserHasNotReadNotificationDashboard(user?.id));
     };
     fetchData();
+
     const resizeListener = window.addEventListener("resize", function (event) {
       const sidebar = document.getElementById("default-sidebar");
       if (sidebar === null || sidebar === undefined) return;
@@ -44,25 +45,27 @@ export const Sidebar = (props) => {
         mostrarScrollbar();
       }
     });
-    const clickListener = window.addEventListener("click", function (event) {
-      if (
-        event.target.matches("#button-sidebar") ||
-        event.target.matches("#svg-sidebar") ||
-        event.target.matches("#path-sidebar")
-      )
-        return;
-      if (!event.target.matches(".inline-flex")) {
-        const sidebar = document.getElementById("default-sidebar");
-        if (sidebar === null || sidebar === undefined) return;
-        sidebar.classList.add("-translate-x-full");
-        setExpanded(false);
-        mostrarScrollbar();
-      }
-    });
+    // const clickListener = window.addEventListener("click", function (event) {
+    //   console.log(event.target);
+    //   if (
+    //     event.target.matches("#button-sidebar") ||
+    //     event.target.matches("#svg-sidebar") ||
+    //     event.target.matches("#path-sidebar")
+    //   )
+    //     return;
+    //   if (!event.target.matches(".inline-flex")) {
+    //     const sidebar = document.getElementById("default-sidebar");
+    //     if (sidebar === null || sidebar === undefined) return;
+    //     sidebar.classList.add("-translate-x-full");
+    //     setExpanded(false);
+    //     mostrarScrollbar();
+    //   }
+    // });
+
     return () => {
       window.removeEventListener("resize", resizeListener);
       window.removeEventListener("scroll", scrollListener);
-      window.removeEventListener("click", clickListener);
+      // window.removeEventListener("click", clickListener);
     };
   }, []);
 
@@ -97,12 +100,11 @@ export const Sidebar = (props) => {
     const lastElement = pathSegments.pop();
     const inCourseInside = pathSegments.join('/') === '/app/courses' && lastElement !== 'create' && lastElement !== 'courses';
     setCourseInsideStyle(inCourseInside);
-
+    setExpanded(false);
   }, [document.location.pathname]);
 
 
-  const [showSidebar, setShowSidebar] = useState(document.location.pathname !== '/app/courses/create');
-  const [courseInsideStyle, setCourseInsideStyle] = useState('xl');
+
   function oscurecerScrollbar() {
     const style = document.createElement('style');
     style.innerHTML = `
@@ -156,7 +158,8 @@ export const Sidebar = (props) => {
         aria-controls="default-sidebar"
         type="button"
         onClick={handleClick}
-        className={`${courseInsideStyle ? `${!showSidebar ? "flexible:block" : "flexible:hidden"}` : `${!showSidebar ? "xl:block" : "xl:hidden"}`} absolute z-10 items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg top-[38px] 
+        className={`${courseInsideStyle ? `${!showSidebar ? "flexible:flex" : "flexible:hidden"}` : `${!showSidebar ? "xl:flex" : "xl:hidden"}`} 
+        absolute z-10 p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg top-[38px] items-center
          hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600`}
       >
         <span className="sr-only">Open sidebar</span>
@@ -178,9 +181,12 @@ export const Sidebar = (props) => {
       </button>
 
       <aside
+        key={window.location.pathname}
         id="default-sidebar"
         className={`absolute flex min-h-screen  ${courseInsideStyle ? "flexible:min-h-[calc(100vh-8rem)]" : "xl:min-h-[calc(100vh-8rem)]"} bg-white z-[1000] pl-8 
-         ${courseInsideStyle ? "flexible:pl-16" : "xl:pl-16"} top-0 left-0 w-80 ${courseInsideStyle ? "flexible:top-32" : "xl:top-32"} transition-transform -translate-x-full ${showSidebar ? `${courseInsideStyle ? "flexible:translate-x-0" : "xl:translate-x-0"}` : "-translate-x-full"} `}
+         ${courseInsideStyle ? "flexible:pl-16" : "xl:pl-16"} top-0 left-0 ${onlyIcon ? "w-fit xl:!pl-6 flexible:!pl-6" : "w-80"} 
+         ${courseInsideStyle ? "flexible:top-32" : "xl:top-32"} transition-transform -translate-x-full 
+         ${showSidebar ? `${courseInsideStyle ? "flexible:translate-x-0" : "xl:translate-x-0"}` : "-translate-x-full !top-0 !min-h-screen"} `}
         aria-label="Sidebar"
       >
         <div className="min-h-[100%]">
@@ -189,9 +195,8 @@ export const Sidebar = (props) => {
             id="button-sidebar"
             data-drawer-toggle="default-sidebar"
             aria-controls="default-sidebar"
-
             onClick={handleClick}
-            className={`z-10 items-center flex mt-4 mb-16 py-5 px-3 text-sm text-gray-500 rounded-lg top-8 ${courseInsideStyle ? `${!showSidebar ? "flexible:block" : "flexible:hidden"}` : `${!showSidebar ? "xl:block" : "xl:hidden"}`} hover:bg-gray-100 
+            className={`z-10 items-center flex mt-4 mb-16 py-5 px-3 text-sm text-gray-500 rounded-lg top-8 ${courseInsideStyle ? `${!showSidebar ? "flexible:flex" : "flexible:hidden"}` : `${!showSidebar ? "xl:flex" : "xl:hidden"}`} hover:bg-gray-100 
         focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600`}
           >
             <span className="sr-only">Open sidebar</span>
@@ -211,31 +216,21 @@ export const Sidebar = (props) => {
               ></path>
             </svg>
           </Button>
-          {
-            expanded && (
-              <hr className="w-64 " />
-            )
-          }
-          <ul className={`w-48 ml-3 font-medium space-y-96 ${courseInsideStyle ? "flexible:ml-0" : "xl:ml-0"} `}>
+          {expanded && <hr className="w-64 " />}
+          <ul className={`${onlyIcon ? "w-fit" : "w-48"} ml-3 font-medium space-y-96 ${courseInsideStyle ? "flexible:ml-0" : "xl:ml-0"} `}>
             <Link to={"/app/courses"} style={{ textDecoration: "none" }}>
               <li
-                className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all  rounded-lg ${Object.keys(iconProps.courses).length > 0
+                className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all ${onlyIcon ? "w-fit px-3" : ""}  rounded-lg ${Object.keys(iconProps.courses).length > 0
                   ? "bg-gradient-to-r from-[#657DE9] to-[#6E66D6] rounded-lg py-3"
                   : ""
                   }`}
               >
                 <span className="flex items-center font-semibold">
-
                   <IconContext.Provider value={iconProps.courses}>
                     <FiGrid size={25} />
                   </IconContext.Provider>
-                  <h2
-                    className={`${Object.keys(iconProps.courses).length > 0
-                      ? "pl-2 text-white"
-                      : "px-4"
-                      }`}
-                  >
-                    Home
+                  <h2 className={`${Object.keys(iconProps.courses).length > 0 ? "pl-2 text-white" : "px-4"}`}>
+                    {!onlyIcon && "Home"}
                   </h2>
                 </span>
               </li>
@@ -243,13 +238,12 @@ export const Sidebar = (props) => {
 
             <Link to={"/app/calendar"} style={{ textDecoration: "none" }}>
               <li
-                className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all  rounded-lg ${Object.keys(iconProps.events).length > 0
+                className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all ${onlyIcon ? "w-fit px-3" : ""} rounded-lg ${Object.keys(iconProps.events).length > 0
                   ? "bg-gradient-to-r from-[#657DE9] to-[#6E66D6] rounded-lg py-3"
                   : ""
                   }`}
               >
                 <span className="flex items-center font-semibold">
-
                   <IconContext.Provider value={iconProps.events}>
                     <FiCalendar size={25} />
                   </IconContext.Provider>
@@ -259,14 +253,14 @@ export const Sidebar = (props) => {
                       : "px-4"
                       }`}
                   >
-                    Calendar
+                    {!onlyIcon && "Calendar"}
                   </h2>
                 </span>
               </li>
             </Link>
             <Link to={"/app/timeline"} style={{ textDecoration: "none" }}>
               <li
-                className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all  rounded-lg ${Object.keys(iconProps.timeline).length > 0
+                className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all ${onlyIcon ? "w-fit px-3" : ""} rounded-lg ${Object.keys(iconProps.timeline).length > 0
                   ? "bg-gradient-to-r from-[#657DE9] to-[#6E66D6] rounded-lg py-3"
                   : ""
                   }`}
@@ -282,7 +276,7 @@ export const Sidebar = (props) => {
                       : "px-4"
                       }`}
                   >
-                    Timeline
+                    {!onlyIcon && "Timeline"}
                   </h2>
                 </span>
               </li>
@@ -290,7 +284,7 @@ export const Sidebar = (props) => {
             <Link to={"/app/dashboard"} style={{ textDecoration: "none" }}>
               <li
                 onClick={() => setDashboardNotification(false)}
-                className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all rounded-lg ${Object.keys(iconProps.dashboard).length > 0
+                className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all ${onlyIcon ? "w-fit px-3" : ""} rounded-lg ${Object.keys(iconProps.dashboard).length > 0
                   ? "bg-gradient-to-r from-[#657DE9] to-[#6E66D6] rounded-lg py-3"
                   : ""
                   }`}
@@ -300,27 +294,23 @@ export const Sidebar = (props) => {
                     <FiBarChart size={25} />
                   </IconContext.Provider>
                   <h2
-                    className={`${Object.keys(iconProps.dashboard).length > 0 ? "pl-2 text-white" : "px-4"
-                      }`}
-                  >
-                    Dashboard
+                    className={`${Object.keys(iconProps.dashboard).length > 0 ? "pl-2 text-white" : `${onlyIcon ? "px-2" : "px-4"}`}`}>
+                    {!onlyIcon && "Dashboard"}
                   </h2>
                   {
                     Object.keys(iconProps.dashboard).length <= 0 && dashboardNotification && (
                       <span name="ping" className="flex items-center">
-                        <span className="absolute  w-2.5 h-2.5 bg-red-400 rounded-full opacity-75 animate-ping"></span>
-                        <span className="absolute  w-2.5 h-2.5 bg-red-500 rounded-full"></span>
+                        <span className="absolute w-2.5 h-2.5 bg-red-400 rounded-full opacity-75 animate-ping"></span>
+                        <span className="absolute w-2.5 h-2.5 bg-red-500 rounded-full"></span>
                       </span>
                     )
                   }
                 </span>
               </li>
-
-
             </Link>
             <Link to={"/app/qualifications"} style={{ textDecoration: "none" }}>
               <li
-                className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all  rounded-lg ${Object.keys(iconProps.qualifications).length > 0
+                className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all ${onlyIcon ? "w-fit px-3" : ""} rounded-lg ${Object.keys(iconProps.qualifications).length > 0
                   ? "bg-gradient-to-r from-[#657DE9] to-[#6E66D6] rounded-lg py-3"
                   : ""
                   }`}
@@ -335,14 +325,14 @@ export const Sidebar = (props) => {
                       : "px-4"
                       }`}
                   >
-                    Qualifications
+                    {!onlyIcon && "Qualifications"}
                   </h2>
                 </span>
               </li>
             </Link>
             <Link to={"/app/settings"} style={{ textDecoration: "none" }}>
               <li
-                className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all  rounded-lg ${Object.keys(iconProps.settings).length > 0
+                className={`py-3 mt-7 pl-5 hover:text-indigo-600 hover:translate-x-[5px] transition-all ${onlyIcon ? "w-fit px-3" : ""} rounded-lg ${Object.keys(iconProps.settings).length > 0
                   ? "bg-gradient-to-r from-[#657DE9] to-[#6E66D6] rounded-lg py-3"
                   : ""
                   }`}
@@ -358,15 +348,21 @@ export const Sidebar = (props) => {
                       : "px-4"
                       }`}
                   >
-                    Settings
+                    {!onlyIcon && "Settings"}
                   </h2>
                 </span>
               </li>
             </Link>
           </ul>
         </div>
-      </aside>
-      <main className={`absolute right-0 top-0 h-screen  ${courseInsideStyle ? "flexible:w-1/3" : "xl:w-1/3"}  ${courseInsideStyle ? "flexible:relative" : "xl:relative"} ${expanded ? 'w-full h-screen bg-black bg-opacity-30 z-40' : 'hidden'}`}></main>
+      </aside >
+      <main onClick={() => {
+        const sidebar = document.getElementById("default-sidebar");
+        if (sidebar === null || sidebar === undefined) return;
+        sidebar.classList.add("-translate-x-full");
+        setExpanded(false);
+        mostrarScrollbar();
+      }} className={`absolute right-0 top-0 ${expanded ? 'w-screen h-screen bg-black bg-opacity-30 z-40' : 'hidden'}`}></main>
     </>
   );
 };

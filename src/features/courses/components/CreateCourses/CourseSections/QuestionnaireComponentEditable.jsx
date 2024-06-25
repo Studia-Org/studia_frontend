@@ -7,11 +7,11 @@ import RadioGroup, { useRadioGroup } from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
 import Radio from '@mui/material/Radio';
 import { TableCategories } from './TableCategories';
-import { message, DatePicker, Input, Switch, InputNumber, Button, Tooltip } from 'antd';
+import { message, DatePicker, Input, Switch, InputNumber, Button, Tooltip, Select } from 'antd';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import { PonderationWarning } from './PonderationWarning';
+import { QuestionnaireInfo } from './EditSubsection/QuestionnaireInfo';
 
 
 const { RangePicker } = DatePicker;
@@ -37,11 +37,10 @@ const item = {
 
 
 
-
 export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSectionsList, createCourseSectionsList, sectionId, categories }) => {
     const questionsPerPage = 3;
     const [currentPage, setCurrentPage] = useState(1);
-    const [selectorValue, setSelectorValue] = useState('open-ended-short')
+    const [selectorValue, setSelectorValue] = useState({ value: 'open-ended', label: 'Text' })
     const [newOption, setNewOption] = useState('')
     const [addQuestionText, setAddQuestionText] = useState({ question: '', options: [] })
     const totalQuestions = subsection?.questionnaire?.attributes?.Options?.questionnaire?.questions.length;
@@ -691,6 +690,52 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
 
                     </div>
                     <div className='mt-7'>
+                        <div className='flex items-center gap-3'>
+                            <label className='text-sm text-gray-500' htmlFor=''>Questionnaire type *</label>
+                            <QuestionnaireInfo />
+                        </div>
+
+                        <Select
+                            className='w-full mt-3'
+                            defaultValue="Stantard"
+                            onChange={(e) => {
+                                setCreateCourseSectionsList(prevSections => {
+                                    const updatedSections = prevSections.map(section => {
+                                        if (section.subsections) {
+                                            const updatedSubsections = section.subsections.map(sub => {
+                                                if (sub.id === subsection.id) {
+                                                    return {
+                                                        ...sub,
+                                                        questionnaire: {
+                                                            ...sub.questionnaire,
+                                                            attributes: {
+                                                                ...sub.questionnaire.attributes,
+                                                                type: e
+                                                            }
+                                                        }
+                                                    };
+                                                }
+                                                return sub;
+                                            });
+                                            return {
+                                                ...section,
+                                                subsections: updatedSubsections
+                                            };
+                                        }
+                                        return section;
+                                    });
+                                    return updatedSections;
+                                });
+                            }}
+                            value={subsection.questionnaire.attributes.type}
+                            options={[
+                                { value: 'standard', label: 'Standard' },
+                                { value: 'scaling', label: 'Scaling' },
+                            ]}
+
+                        />
+                    </div>
+                    <div className='mt-7'>
                         <label className='text-sm text-gray-500 mt-7 ' htmlFor="" >Description</label>
                         <div className='flex w-full mt-2'>
                             <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3' placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} onBlur={(e) => handleChangeDescription(e.target.value)} />
@@ -715,22 +760,21 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                         <p className="mb-4 font-medium">Add question</p>
                         <FormControl >
                             <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
+                                className='w-40'
                                 value={selectorValue}
-                                label=""
+                                options={[
+                                    { value: 'open-ended', label: 'Text' },
+                                    { value: 'options', label: 'Options' }
+                                ]}
                                 onChange={(e) => {
-                                    setSelectorValue(e.target.value)
-                                    if (e.target.value === 'options') {
+                                    setSelectorValue(e)
+                                    if (e === 'options') {
                                         setAddQuestionText(prevQuestionText => ({ ...prevQuestionText, options: [] }));
                                     } else {
-                                        setAddQuestionText(prevQuestionText => ({ ...prevQuestionText, options: e.target.value }));
+                                        setAddQuestionText(prevQuestionText => ({ ...prevQuestionText, options: e }));
                                     }
                                 }}
                             >
-                                <MenuItem value={'open-ended-short'}> Short answer</MenuItem>
-                                <MenuItem value={'open-ended-long'}>Long answer</MenuItem>
-                                <MenuItem value={'options'}>Checkboxes</MenuItem>
                             </Select>
                         </FormControl>
                     </div>
@@ -779,7 +823,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                     }
 
                     <button onClick={() => addQuestion()} className='ml-auto  mt-5 rounded-md bg-[#6366f1]  p-2 text-white'>
-                        Submit
+                        Create
                     </button>
                 </div>
             }

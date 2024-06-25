@@ -9,6 +9,7 @@ import TabsPeerReviewAnswers from "./TabsPeerReviewAnswers.jsx"
 import UsersToReview from "./UsersToReview.jsx"
 import { Button } from "antd"
 import GroupMembers from "../../GroupMembers.jsx"
+import { BreadcrumbCourse } from "../../../../CoursesInside/BreadcrumbCourse.jsx"
 
 
 function MainScreen({
@@ -87,7 +88,7 @@ function MainScreen({
     return (
         <div className={`flex ${overpassDeadLine || userIndexSelected === null ? `flex-col min-h-full ` : "1.5xl:justify-between"} content-start items-start  flex-wrap space-y-3 `}>
             <div className={`flex flex-col max-h-[40%]  ${userIndexSelected !== null && peerReviewInGroups ? "flex-1" : "w-full"} ${overpassDeadLine ? "sm:p-10 p-5 w-full" : "p-5 max-w-[70%]"}`}>
-                <BackToCourse courseId={courseId} navigate={navigate} />
+                <BreadcrumbCourse />
                 <div className={`flex flex-wrap flex-1 mb-5 max-w-[80%]  2xl:mb-0 gap-x-10`}>
                     <div className={`flex-1 min-w-[400px] max-w-full`}>
                         <ActivityTitle type='peerReview'
@@ -114,7 +115,7 @@ function MainScreen({
 
                         <p className='mt-5 text-lg'>Correct {" "}
                             {!correctActivityGroup ?
-                                PeerReview.attributes.user.data.attributes.username + "'s" : "Group " + (userIndexSelected + 1)} task/s!</p>
+                                PeerReview.attributes.user.data.attributes.username + "'s" : "group " + PeerReview.attributes.group.data.attributes.GroupName || "Group " + (userIndexSelected + 1)} delivery!</p>
                         {PeerReview?.attributes?.file?.data?.map(renderFiles)}
                     </div>
                 </section> : null

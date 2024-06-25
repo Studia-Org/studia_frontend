@@ -10,13 +10,13 @@ import { getToken } from '../../../../helpers';
 import { API } from '../../../../constant';
 import { useParams } from 'react-router-dom';
 import { getIcon } from './helpers';
-import { Popover, Whisper } from 'rsuite';
+import { useCourseContext } from '../../../../context/CourseContext';
 
 
 
 
-export const AccordionCourseContent = ({ setVisible, whisper, styles, courseContentInformation, setCourseSubsection, setCourseSection, setForumFlag, setQuestionnaireFlag,
-  setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setCourseContentInformation, setEditSectionFlag, setSectionToEdit, courseSubsection, courseSection, setParticipantsFlag }) => {
+export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFlag, setQuestionnaireFlag,
+  setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setEditSectionFlag, setSectionToEdit, setParticipantsFlag }) => {
   const [sectionNumber, setSectionNumber] = useState(1);
   const [newSection, setNewSection] = useState('');
   const [addSectionLoading, setAddSectionLoading] = useState(false);
@@ -24,9 +24,16 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, courseCont
   const { user } = useAuthContext();
   let { courseId } = useParams()
 
+  const {
+    course,
+    sectionSelected,
+    subsectionSelected,
+    setCourse,
+    setSectionSelected,
+    setSubsectionSelected,
+  } = useCourseContext();
 
   function handleSections(tituloSeccion, subsection) {
-
     if (
       subsection.attributes.activity?.data?.attributes.type ===
       "questionnaire"
@@ -38,8 +45,8 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, courseCont
     } else {
       setQuestionnaireFlag(false);
     }
-    setCourseSubsection(subsection);
-    setCourseSection(tituloSeccion);
+    setSubsectionSelected(subsection);
+    setSectionSelected(tituloSeccion);
     setForumFlag(false);
     setParticipantsFlag(false);
     setSettingsFlag(false);
@@ -115,20 +122,21 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, courseCont
     titulo,
     prevSubsectionFinished,
     isFirstSubsection,
-    index
+    index,
+    prevTime
   ) {
-    const selectedSubsection = subsection.id === courseSubsection.id;
+    const selectedSubsection = subsection.id === subsectionSelected?.id;
     const dateToday = new Date();
     const startDate = new Date(subsection.attributes.start_date);
     const isBeforeStartDate = dateToday < startDate;
     const disableButton = isBeforeStartDate || (!isFirstSubsection && !prevSubsectionFinished);
+    const startWhenFinished = prevTime > startDate;
 
     const handleClick = () => {
       handleSections(titulo, subsection);
     };
 
-    const buttonClassName = `flex items-center mb-1 font-medium ${!disableButton ? 'text-gray-900 hover:translate-x-2' : 'text-gray-500'
-      } line-clamp-2 w-3/4 duration-200 text-left`;
+    const buttonClassName = `flex items-center font-medium ${!disableButton ? 'text-gray-900 hover:translate-x-2' : 'text-gray-500'} line-clamp-2 w-full duration-200 text-left`;
 
     if (user?.role_str === 'professor' || user?.role_str === 'admin') {
       return (
@@ -138,35 +146,35 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, courseCont
           </span>
           <button
             onClick={() => handleSections(titulo, subsection)}
-            className="flex items-center w-3/4 mb-1 font-medium text-left text-gray-900 duration-200 line-clamp-2 hover:translate-x-2"
-          >
-            {" "}
-            {
-              subsection.attributes.activity?.data?.attributes.type === 'questionnaire' ? subsection.attributes.questionnaire.data.attributes.Title : subsection.attributes.title
-            }
-            {
-              selectedSubsection && (
-                <span class="relative flex h-3 w-3 ml-3">
-                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                  <span class="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
-                </span>
-              )
+            className="flex items-center w-3/4 mb-1 font-medium text-left text-gray-900 duration-200 line-clamp-2 hover:translate-x-2">
+            {subsection.attributes.activity?.data?.attributes.type === 'questionnaire' ? subsection.attributes.questionnaire.data.attributes.Title : subsection.attributes.title}
+            {startDate > dateToday && <span className="ml-2 text-xs text-gray-500">Starts on {startDate.toLocaleDateString()}</span>}
+            {selectedSubsection &&
+              <span class="relative flex h-3 w-3 ml-3">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
+              </span>
             }
           </button>
         </li>
       )
     } else {
       return (
-        <li className="flex items-center mt-8 mb-10 ml-8" key={index}>
+        <li className="flex items-center w-full mt-8 mb-10" key={index}>
           {getIcon(subsection, subsectionsCompleted, isFirstSubsection, prevSubsectionFinished)}
-          <button
-            onClick={handleClick}
-            className={buttonClassName}
-            disabled={disableButton}
-          >
-            {subsection.attributes.activity?.data?.attributes.type === 'questionnaire' ? subsection.attributes.questionnaire.data.attributes.Title : subsection.attributes.title}
-          </button>
-          {selectFaseSectionContent(subsection.attributes.fase)}
+          <div className='flex justify-between w-full ml-8'>
+            <div>
+              <button
+                onClick={handleClick}
+                className={buttonClassName}
+                disabled={disableButton}>
+                {subsection.attributes.activity?.data?.attributes.type === 'questionnaire' ? subsection.attributes.questionnaire.data.attributes.Title : subsection.attributes.title}
+              </button>
+              {startWhenFinished && isBeforeStartDate && <p className="-mt-1 text-xs text-gray-500">Will open when the last subsection is completed or the {startDate.toLocaleDateString("es-ES", { day: 'numeric', month: 'numeric' }) + " at " + startDate.toLocaleTimeString("es-ES", { hour: 'numeric', minute: 'numeric' })}</p>}
+              {!startWhenFinished && isBeforeStartDate && <p className="text-xs text-gray-500">Will open on {startDate.toLocaleDateString("es-ES", { day: 'numeric', month: 'numeric' }) + " at " + startDate.toLocaleTimeString("es-ES", { hour: 'numeric', minute: 'numeric' })}</p>}
+            </div>
+            {selectFaseSectionContent(subsection.attributes.fase)}
+          </div>
         </li>
       );
     }
@@ -195,7 +203,7 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, courseCont
         body: JSON.stringify({ data: { sections: { connect: [sectionId] } } }),
       })
 
-      setCourseContentInformation([...courseContentInformation, {
+      setCourse([...course.sections.data, {
         id: sectionId,
         attributes: {
           title: newSection,
@@ -228,6 +236,7 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, courseCont
 
   function RenderCourseContent({ section, sectionNumber, index }) {
     let prevSubsectionFinished = false;
+    let prevTime = 0;
     const subsectionIdsCompleted = subsectionsCompleted.map(
       (subsection) => subsection.id
     );
@@ -249,7 +258,7 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, courseCont
         expandIcon={({ isActive }) => <CaretRightOutlined className='absolute top-0 bottom-0 right-5 ' rotate={isActive ? 90 : 0} />}
         className='mt-5 bg-gray-50'
         expandIconPosition="right"
-        defaultActiveKey={(courseSection === section.attributes.title) && sectionNumber.toString()}
+        defaultActiveKey={(sectionSelected === section.attributes.title) && sectionNumber.toString()}
       >
         <Panel
           header={
@@ -300,8 +309,10 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, courseCont
                   if (sectionNumber === 1 && index === 0) {
                     isFirstSubsection = true;
                   }
-                  const content = RenderCourseInsideSectionContent(subsection, section.attributes.title, prevSubsectionFinished, isFirstSubsection);
-                  prevSubsectionFinished = subsectionsCompleted.some(subsectionTemp => subsectionTemp.id === subsection.id);
+                  const content = RenderCourseInsideSectionContent(subsection, section.attributes.title, prevSubsectionFinished, isFirstSubsection, prevTime);
+                  const sub = subsectionsCompleted.find(subsectionTemp => subsectionTemp.id === subsection.id);
+                  if (sub) prevSubsectionFinished = true;
+                  prevTime = sub?.end_date
                   return content;
                 })}
               </ol>
@@ -317,7 +328,7 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, courseCont
     <div className={` bg-white rounded-lg xl:p-5 xl:w-[30rem] w-full xl:shadow-md shadow-none sm:visible lg:max-w-[calc(100vw-4rem)] sm:w-auto z-20  lg:mr-0 `}>
       <p className="hidden text-xl font-semibold xl:block">Course content</p>
       <hr className="hidden h-px my-8 bg-gray-400 border-0 xl:block"></hr>
-      {courseContentInformation.map((section, index) => (
+      {course.sections.data.map((section, index) => (
         <RenderCourseContent
           key={index}
           section={section}

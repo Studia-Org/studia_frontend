@@ -60,6 +60,8 @@ const CalendarEvents = () => {
         handleClose();
     }
 
+    console.log(date)
+
     const fetchEvents = async () => {
         if (user) {
             try {
@@ -177,6 +179,7 @@ const CalendarEvents = () => {
         setInfoModal(true);
         setTitle('');
         setDate(date);
+        console.log(date)
         setInfoModalData(getTodoList(date))
     }
 
@@ -249,6 +252,14 @@ END:VCALENDAR
         }
     }
 
+    function formatDate(date) {
+        if (date instanceof Date) {
+            const isoString = date.toISOString();
+            return isoString.slice(0, 16);
+        }
+    }
+
+
     return (
         <>
             {isLoading ? (
@@ -263,7 +274,7 @@ END:VCALENDAR
 
                     <div className='h-full overflow-y-auto text-2xl font-bold'>
                         <div className='grid h-full '>
-                            <div className='font-normal max-w-[95%] max-h-[100%] mt-8 mb-10 overflow-hidden bg-white rounded-xl my-auto mx-auto '>
+                            <div className='font-normal max-w-[95%] max-h-[100%] mt-8 mb-10 overflow-hidden bg-white rounded-xl my-auto mx-auto border'>
                                 <div className='flex w-full'>
                                     <Button bordered onClick={() => exportCalendar()} className='gap-2 mt-3 ml-auto mr-3'>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
@@ -300,9 +311,9 @@ END:VCALENDAR
                             <Form.ControlLabel>Title</Form.ControlLabel>
                             <Input value={title} onChange={handleTitleChange} />
                         </Form.Group >
-                        <Form.Group >
+                        <Form.Group className='mt-6' >
                             <Form.ControlLabel>Date</Form.ControlLabel>
-                            <Input type='datetime-local' value={date} onChange={handleDateChange} />
+                            <Input type='datetime-local' value={formatDate(date)} onChange={handleDateChange} />
                         </Form.Group >
                     </Modal.Body>
                     <Modal.Footer>
