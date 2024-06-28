@@ -40,7 +40,6 @@ export const Questions = ({ questionnaire, user, setUserResponses, questionnaire
 
     }
 
-
     const renderQuestionsForPage = () => {
         return questionnaire.attributes.Options.questionnaire.questions.map((question, index) => (
             <motion.li
@@ -51,7 +50,7 @@ export const Questions = ({ questionnaire, user, setUserResponses, questionnaire
                 <p className="font-medium">{question.question}</p>
                 {Array.isArray(question.options) ? (
                     user.role_str !== "student" || questionnaireAnswers.length > 0 ?
-                        <RadioGroup className="mt-4" name={`use-radio-group-${index}`} value={questionnaireAnswers[index].answer}>
+                        <RadioGroup className="mt-4" name={`use-radio-group-${index}`} value={questionnaireAnswers[index]?.answer}>
                             {question.options.map((option, optionIndex) => (
                                 <MyFormControlLabel key={optionIndex} value={option} label={option} control={<Radio disabled readOnly />} />
                             ))}
