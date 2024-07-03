@@ -6,8 +6,10 @@ import { API } from "../../../constant";
 import { Toast } from "../../../shared/elements/Toasts";
 import { getToken } from "../../../helpers";
 import { CustomFunctions } from './CustomFunctions';
-
+import { useTranslation } from 'react-i18next';
 export const SettingContent = ({ selectedOption, setSelectedOption }) => {
+
+    const { t, i18n } = useTranslation();
     const [isOldPasswordHidden, setOldPasswordHidden] = useState(true)
     const [isNewPasswordHidden, setNewPasswordHidden] = useState(true)
     const [isNewRePasswordHidden, setNewRePasswordHidden] = useState(true)
@@ -76,8 +78,8 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
             }
             Toast.fire({
                 icon: 'success',
-                text: 'Password has been updated',
-                title: 'Success!'
+                title: t("SETTINGS.CHANGE_PASSWORD.toast.title_success"),
+                text: t("SETTINGS.CHANGE_PASSWORD.toast.success")
             })
             setSelectedOption('help')
 
@@ -85,25 +87,28 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
             console.error(error.error);
             Toast.fire({
                 icon: 'error',
-                text: error.error.message,
-                title: 'Failure'
+                title: t("SETTINGS.CHANGE_PASSWORD.toast.title_error"),
+                text: t("SETTINGS.CHANGE_PASSWORD.toast.error")
             })
         }
     };
 
+    const changeLng = async (lng) => {
+        i18n.changeLanguage(lng.target.value);
+        localStorage.setItem("lng", lng.target.value);
+    }
+    console.log(i18n.language)
     return (
         <div>
             {selectedOption === 'password' && (
                 <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
                     <main className="text-base py-14">
                         <div className="px-4 text-gray-600 md:px-8 ">
-                            <SettingsBreadcrumb index={'Change password'} />
+                            <SettingsBreadcrumb index={t("SETTINGS.SIDEBAR.change_pswd")} />
                             <div className='mt-16 '>
                                 <div className='flex flex-col space-y-8 text-base font-normal'>
                                     <div>
-                                        <label className="font-medium text-gray-600">
-                                            Old Password
-                                        </label>
+                                        <label className="font-medium text-gray-600">{t("SETTINGS.CHANGE_PASSWORD.current_password")}</label>
                                         <div className="relative max-w-xs mt-2">
                                             <button className="absolute inset-y-0 my-auto text-gray-400 right-3 active:text-gray-600"
                                                 onClick={() => setOldPasswordHidden(!isOldPasswordHidden)}
@@ -124,7 +129,7 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
                                             </button>
                                             <input
                                                 type={isOldPasswordHidden ? "password" : "text"}
-                                                placeholder="Enter your old password"
+                                                placeholder={t("SETTINGS.CHANGE_PASSWORD.enter_current_password")}
                                                 onChange={(e) => setCurrentPassword(e.target.value)}
                                                 className="w-full py-2 pl-3 pr-12 text-gray-500 border rounded-lg shadow-sm outline-none focus:border-indigo-600"
                                             />
@@ -132,9 +137,7 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
                                     </div>
                                     <div>
 
-                                        <label className="font-medium text-gray-600">
-                                            New password
-                                        </label>
+                                        <label className="font-medium text-gray-600">{t("SETTINGS.CHANGE_PASSWORD.new_password")}</label>
                                         <div className="relative max-w-xs mt-2">
                                             <button className="absolute inset-y-0 my-auto text-gray-400 right-3 active:text-gray-600"
                                                 onClick={() => setNewPasswordHidden(!isNewPasswordHidden)}
@@ -155,16 +158,14 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
                                             </button>
                                             <input
                                                 type={isNewPasswordHidden ? "password" : "text"}
-                                                placeholder="Enter your new password"
+                                                placeholder={t("SETTINGS.CHANGE_PASSWORD.enter_new_password")}
                                                 onChange={(e) => setNewPassword(e.target.value)}
                                                 className="w-full py-2 pl-3 pr-12 text-gray-500 border rounded-lg shadow-sm outline-none focus:border-indigo-600"
                                             />
                                         </div>
                                     </div>
                                     <div>
-                                        <label className="font-medium text-gray-600">
-                                            Rewrite your new password
-                                        </label>
+                                        <label className="font-medium text-gray-600">{t("SETTINGS.CHANGE_PASSWORD.rewrite_password")}</label>
                                         <div className="relative max-w-xs mt-2">
                                             <button className="absolute inset-y-0 my-auto text-gray-400 right-3 active:text-gray-600"
                                                 onClick={() => setNewRePasswordHidden(!isNewRePasswordHidden)}
@@ -185,7 +186,7 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
                                             </button>
                                             <input
                                                 type={isNewRePasswordHidden ? "password" : "text"}
-                                                placeholder="Rewrite your password"
+                                                placeholder={t("SETTINGS.CHANGE_PASSWORD.rewrite_new_password")}
                                                 onChange={(e) => setNewPasswordRepeat(e.target.value)}
                                                 className="w-full py-2 pl-3 pr-12 text-gray-500 border rounded-lg shadow-sm outline-none focus:border-indigo-600"
                                             />
@@ -195,7 +196,7 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
                                 <button onClick={changePasswordButton}
                                     className="px-3 mt-8 py-1.5 text-sm text-white duration-150 bg-indigo-600 rounded-lg hover:bg-indigo-700 active:shadow-lg"
                                 >
-                                    Save Changes
+                                    {t("SETTINGS.CHANGE_PASSWORD.change_password")}
                                 </button>
                             </div>
                         </div>
@@ -206,8 +207,19 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
                 <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
                     <main className="text-base py-14">
                         <div className="max-w-screen-xl px-4 text-gray-600 md:px-8">
-                            <SettingsBreadcrumb index={'Language'} />
-                            <NotImplemented />
+                            <SettingsBreadcrumb index={t("SETTINGS.SIDEBAR.language")} />
+                            <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
+                                <main className="text-base py-14">
+                                    <form className="flex items-center text-gray-600 gap-x-4 md:px-8">
+                                        <input defaultChecked={i18n.language === "en"} className='cursor-pointer' onClick={changeLng} type="radio" id="english" name="language" value="en" />
+                                        <label className='cursor-pointer' htmlFor="english">{t("SETTINGS.LANGUAGE.english")}</label><br />
+                                        <input defaultChecked={i18n.language === "es"} className='cursor-pointer' onClick={changeLng} type="radio" id="spanish" name="language" value="es" />
+                                        <label className='cursor-pointer' htmlFor="spanish">{t("SETTINGS.LANGUAGE.spanish")}</label><br />
+                                        <input defaultChecked={i18n.language === "ca"} className='cursor-pointer' onClick={changeLng} type="radio" id="catalan" name="language" value="ca" />
+                                        <label className='cursor-pointer' htmlFor="catalan">{t("SETTINGS.LANGUAGE.catalan")}</label><br />
+                                    </form>
+                                </main>
+                            </motion.div>
                         </div>
                     </main>
                 </motion.div>
@@ -217,7 +229,7 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
                 <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
                     <main className="text-base py-14">
                         <div className="max-w-screen-xl px-4 text-gray-600 md:px-8">
-                            <SettingsBreadcrumb index={'Notification preferences'} />
+                            <SettingsBreadcrumb index={t("SETTINGS.SIDEBAR.notifications_settings")} />
                             <NotImplemented />
                         </div>
                     </main>
@@ -228,7 +240,7 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
                 <motion.div initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
                     <main className="text-base py-14">
                         <div className="max-w-screen-xl px-4 text-gray-600 md:px-8">
-                            <SettingsBreadcrumb index={'Custom functions'} />
+                            <SettingsBreadcrumb index={t("SETTINGS.SIDEBAR.custom_functions")} />
                             <CustomFunctions />
                         </div>
                     </main>
@@ -242,16 +254,16 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
                             <div className="flex-wrap max-w-lg gap-24 lg:flex lg:max-w-none ">
                                 <div className="max-w-lg space-y-3">
                                     <h3 className="font-semibold text-indigo-600">
-                                        <SettingsBreadcrumb index={'Help'} />
+                                        <SettingsBreadcrumb index={t("SETTINGS.SIDEBAR.help")} />
                                     </h3>
                                     <div>
 
                                     </div>
                                     <p className="py-10 text-3xl font-bold text-gray-800 sm:text-4xl">
-                                        Let us know how we can help
+                                        {t("SETTINGS.HELP.title")}
                                     </p>
                                     <p className='font-medium'>
-                                        We’re here to help and answer any question you might have, We look forward to hearing from you! Please fill out the form, or use the contact information below.
+                                        {t("SETTINGS.HELP.text")}
                                     </p>
                                     <div>
                                         <ul className="flex flex-wrap items-center mt-6 gap-x-10 gap-y-6">
@@ -277,7 +289,7 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
                                     >
                                         <div>
                                             <label className="font-medium">
-                                                Full name
+                                                {t("SETTINGS.HELP.form.name")}
                                             </label>
                                             <input
                                                 type="text"
@@ -288,7 +300,7 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
                                         </div>
                                         <div>
                                             <label className="font-medium">
-                                                Email
+                                                {t("SETTINGS.HELP.form.email")}
                                             </label>
                                             <input
                                                 type="email"
@@ -299,14 +311,14 @@ export const SettingContent = ({ selectedOption, setSelectedOption }) => {
                                         </div>
                                         <div>
                                             <label className="font-medium">
-                                                Message
+                                                {t("SETTINGS.HELP.form.message")}
                                             </label>
                                             <textarea required name='message' className="w-full px-3 py-2 mt-2 bg-transparent border rounded-lg shadow-sm outline-none appearance-none resize-none h-36 focus:border-indigo-600"></textarea>
                                         </div>
                                         <button
                                             className="w-full px-4 py-2 font-medium text-white duration-150 bg-indigo-600 rounded-lg hover:bg-indigo-500 active:bg-indigo-600"
                                         >
-                                            Submit
+                                            {t("SETTINGS.HELP.form.send")}
                                         </button>
                                     </form>
                                 </div>
