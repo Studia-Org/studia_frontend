@@ -19,11 +19,12 @@ export const CustomFunctions = () => {
                 />
 
                 <Popconfirm
-                    title="Delete the task"
-                    description="Are you sure to delete this task?"
+                    title={t("SETTINGS.CUSTOM_FUNCTIONS.DUPLICATE_COURSE.pop_confirm.title")}
+                    description={t("SETTINGS.CUSTOM_FUNCTIONS.DUPLICATE_COURSE.pop_confirm.description")}
+                    placement='topLeft'
                     onConfirm={() => replicateCourse(courseId)}
-                    okText="Yes"
-                    cancelText="No"
+                    okText={t("SETTINGS.CUSTOM_FUNCTIONS.DUPLICATE_COURSE.pop_confirm.confirm")}
+                    cancelText={t("SETTINGS.CUSTOM_FUNCTIONS.DUPLICATE_COURSE.pop_confirm.cancel")}
                 >
                     <Button className='flex ml-auto' >
                         {t("SETTINGS.CUSTOM_FUNCTIONS.DUPLICATE_COURSE.duplicate")}

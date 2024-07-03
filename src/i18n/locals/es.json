@@ -52,7 +52,13 @@
                 "title": "Duplicar curso",
                 "duplicate_course_text": "Introduce el ID del curso que deseas duplicar",
                 "placeholder": "ID del curso",
-                "duplicate": "Duplicar"
+                "duplicate": "Duplicar",
+                "pop_confirm": {
+                    "title": "Duplicar curso",
+                    "description": "¿Estás seguro de que deseas duplicar este curso?",
+                    "confirm": "Sí, duplicarlo",
+                    "cancel": "Cancelar"
+                }
             }
         },
         "LOGOUT": {
