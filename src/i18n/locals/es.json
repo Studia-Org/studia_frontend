@@ -1,0 +1,70 @@
+{
+    "NAVBAR": {
+        "professor": "Profesor",
+        "student": "Estudiante",
+        "admin": "Administrador"
+    },
+    "SETTINGS": {
+        "settings": "Configuración",
+        "SIDEBAR": {
+            "user_account": "Cuenta de usuario",
+            "change_pswd": "Cambiar contraseña",
+            "language": "Idioma",
+            "notifications": "Notificaciones",
+            "notifications_settings": "Configuración de notificaciones",
+            "admin_settings": "Configuración de administrador",
+            "custom_functions": "Funciones personalizadas",
+            "help": "Ayuda",
+            "logout": "Salir"
+        },
+        "CHANGE_PASSWORD": {
+            "current_password": "Contraseña actual",
+            "enter_current_password": "Introduce la contraseña actual",
+            "new_password": "Nueva contraseña",
+            "enter_new_password": "Introduce la nueva contraseña",
+            "rewrite_password": "Reescribe la nueva contraseña",
+            "rewrite_new_password": "Confirmar contraseña",
+            "change_password": "Cambiar contraseña",
+            "toast": {
+                "title_success": "¡Éxito!",
+                "success": "Contraseña cambiada con éxito",
+                "title_error": "¡Error!",
+                "error": "Error al cambiar la contraseña"
+            }
+        },
+        "LANGUAGE": {
+            "english": "Inglés",
+            "spanish": "Español",
+            "catalan": "Catalán"
+        },
+        "HELP": {
+            "title": "Déjanos saber cómo podemos ayudarte",
+            "text": "Estamos aquí para ayudarte y responder cualquier pregunta que puedas tener. ¡Esperamos con interés escuchar de ti! Por favor, rellena el formulario o utiliza la información de contacto a continuación.",
+            "form": {
+                "name": "Nombre",
+                "email": "Correo electrónico",
+                "message": "Mensaje",
+                "send": "Enviar"
+            }
+        },
+        "CUSTOM_FUNCTIONS": {
+            "DUPLICATE_COURSE": {
+                "title": "Duplicar curso",
+                "duplicate_course_text": "Introduce el ID del curso que deseas duplicar",
+                "placeholder": "ID del curso",
+                "duplicate": "Duplicar"
+            }
+        },
+        "LOGOUT": {
+            "swal": {
+                "title": "¿Estás seguro?",
+                "text": "Se cerrará tu sesión",
+                "confirm": "Sí, cerrar sesión",
+                "cancel": "Cancelar"
+            },
+            "toast": {
+                "title_success": "¡Sesión cerrada con éxito!"
+            }
+        }
+    }
+}

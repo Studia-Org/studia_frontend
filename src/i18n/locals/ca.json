@@ -1,0 +1,70 @@
+{
+    "NAVBAR": {
+        "professor": "Professor",
+        "student": "Estudiant",
+        "admin": "Administrador"
+    },
+    "SETTINGS": {
+        "settings": "Configuració",
+        "SIDEBAR": {
+            "user_account": "Compte d'usuari",
+            "change_pswd": "Canviar contrasenya",
+            "language": "Idioma",
+            "notifications": "Notificacions",
+            "notifications_settings": "Configuració de notificacions",
+            "admin_settings": "Configuració d'administrador",
+            "custom_functions": "Funcions personalitzades",
+            "help": "Ajuda",
+            "logout": "Sortir"
+        },
+        "CHANGE_PASSWORD": {
+            "current_password": "Contrasenya actual",
+            "enter_current_password": "Introdueix la contrasenya actual",
+            "new_password": "Nova contrasenya",
+            "enter_new_password": "Introdueix la nova contrasenya",
+            "rewrite_password": "Reescriu la nova contrasenya",
+            "rewrite_new_password": "Confirmar contrasenya",
+            "change_password": "Canviar contrasenya",
+            "toast": {
+                "title_success": "Èxit!",
+                "success": "Contrasenya canviada amb èxit",
+                "title_error": "Error!",
+                "error": "Error en canviar la contrasenya"
+            }
+        },
+        "LANGUAGE": {
+            "english": "Anglès",
+            "spanish": "Espanyol",
+            "catalan": "Català"
+        },
+        "HELP": {
+            "title": "Fes-nos saber com podem ajudar-te",
+            "text": "Estem aquí per ajudar-te i respondre qualsevol pregunta que puguis tenir. Estem desitjant escoltar-te! Si us plau, omple el formulari o utilitza la informació de contacte a continuació.",
+            "form": {
+                "name": "Nom",
+                "email": "Correu electrònic",
+                "message": "Missatge",
+                "send": "Enviar"
+            }
+        },
+        "CUSTOM_FUNCTIONS": {
+            "DUPLICATE_COURSE": {
+                "title": "Duplicar curs",
+                "duplicate_course_text": "Introdueix l'ID del curs que vols duplicar",
+                "placeholder": "ID del curs",
+                "duplicate": "Duplicar"
+            }
+        },
+        "LOGOUT": {
+            "swal": {
+                "title": "Estàs segur?",
+                "text": "Se't desconnectarà",
+                "confirm": "Sí, desconnecta'm",
+                "cancel": "Cancel·lar"
+            },
+            "toast": {
+                "title_success": "Desconnectat amb èxit!"
+            }
+        }
+    }
+}

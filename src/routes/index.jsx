@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRoutes } from 'react-router-dom';
 import { protectedRoutes } from './protected';
 import { publicRoutes } from './public';
@@ -11,9 +11,18 @@ import { useAuthContext } from '../context/AuthContext';
 import { MoonLoader } from 'react-spinners';
 import { WebchatChatbot } from '../shared/elements/WebchatChatbot';
 import { ErrorBoundaryScreen } from './ErrorBoundaryScreen';
+import { initializeI18n } from '../i18n/i18n'
 
 export const AppRoutes = () => {
     const { isLoading, authenticated } = useAuthContext();
+    const [i18loading, setI18loading] = useState(true);
+
+    useEffect(() => {
+
+        initializeI18n().then(() => {
+            setI18loading(false);
+        });
+    }, []);
 
     const commonRoutes = [
         {
@@ -37,7 +46,7 @@ export const AppRoutes = () => {
         (pathSegments[4] === 'activity' && !isNaN(lastElement)) || (lastElement === 'qualifications' || pathSegments[2] === 'qualifications') || (lastElement === 'dashboard' || pathSegments[2] === 'dashboard') ?
             'xl:ml-[110px] xl:min-w-[calc(100vw-110px)' : '';
     const onlyIcon = onlyIconStyles !== '' && window.innerWidth > 1280 && !inCourseCreate;
-    if (!isLoading) {
+    if (!isLoading && !i18loading) {
         if (element.props.match.route.path === '*') return <div className='font-Poppins'>{element}</div>;
         else if (authenticated)
             return (
@@ -62,7 +71,4 @@ export const AppRoutes = () => {
             <div className='flex items-center justify-center w-screen h-screen'><MoonLoader color="#363cd6" size={80} /></div>
         )
     }
-
-
-
 }

@@ -1,0 +1,70 @@
+{
+    "NAVBAR": {
+        "professor": "Professor",
+        "student": "Student",
+        "admin": "Admin"
+    },
+    "SETTINGS": {
+        "settings": "Settings",
+        "SIDEBAR": {
+            "user_account": "User account",
+            "change_pswd": "Change password",
+            "language": "Language",
+            "notifications": "Notifications",
+            "notifications_settings": "Notifications settings",
+            "admin_settings": "Admin settings",
+            "custom_functions": "Custom functions",
+            "help": "Help",
+            "logout": "Logout"
+        },
+        "CHANGE_PASSWORD": {
+            "current_password": "Current password",
+            "enter_current_password": "Enter current password",
+            "new_password": "New password",
+            "enter_new_password": "Enter new password",
+            "rewrite_password": "Rewrite new password",
+            "rewrite_new_password": "Confirm password",
+            "change_password": "Change password",
+            "toast": {
+                "title_success": "Success!",
+                "success": "Password changed successfully",
+                "title_error": "Failure!",
+                "error": "Error changing password"
+            }
+        },
+        "LANGUAGE": {
+            "english": "English",
+            "spanish": "Spanish",
+            "catalan": "Catalan"
+        },
+        "HELP": {
+            "title": "Let us know how we can help",
+            "text": "We’re here to help and answer any question you might have, We look forward to hearing from you! Please fill out the form, or use the contact information below.",
+            "form": {
+                "name": "Name",
+                "email": "Email",
+                "message": "Message",
+                "send": "Send"
+            }
+        },
+        "CUSTOM_FUNCTIONS": {
+            "DUPLICATE_COURSE": {
+                "title": "Duplicate course",
+                "duplicate_course_text": "Enter the course ID of the course you want to duplicate",
+                "placeholder": "Course ID",
+                "duplicate": "Duplicate"
+            }
+        },
+        "LOGOUT": {
+            "swal": {
+                "title": "Are you sure?",
+                "text": "You will be logged out",
+                "confirm": "Yes, log out",
+                "cancel": "Cancel"
+            },
+            "toast": {
+                "title_success": "Logged out successfully!"
+            }
+        }
+    }
+}
