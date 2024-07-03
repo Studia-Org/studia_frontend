@@ -30,7 +30,7 @@ export const ReportBug = () => {
         setLoading(true);
         try {
             if (formData.message === '') {
-                message.error('Please fill all the fields.');
+                message.error(t('NAVBAR.BUG_REPORT.all_fields'));
                 return;
             }
             if (formData.screenshot?.originFileObj) {

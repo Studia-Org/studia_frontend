@@ -13,6 +13,7 @@
             "bug_report_text": "Utiliza este formulario para informar de cualquier error o problema que encuentres en la aplicación.",
             "bug_description": "Descripción del error",
             "bug_description_placeholder": "Por favor, añade tantos detalles como sea posible.",
+            "all_fields": "Por favor, rellene todos los campos",
             "send": "Enviar",
             "screenshot": "Captura de pantalla",
             "optional": "opcional",

@@ -13,6 +13,7 @@
             "bug_report_text": "Use this form to report any bugs or issues you encounter on the app.",
             "bug_description": "Bug description",
             "bug_description_placeholder": "Please add as much detail as possible.",
+            "all_fields": "Please fill in all fields",
             "send": "Send",
             "screenshot": "Screenshot",
             "optional": "optional",

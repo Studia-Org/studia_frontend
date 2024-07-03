@@ -13,6 +13,7 @@
             "bug_report_text": "Utilitza aquest formulari per informar de qualsevol error o problema que trobis a l'aplicació.",
             "bug_description": "Descripció de l'error",
             "bug_description_placeholder": "Si us plau, afegeix tants detalls com sigui possible.",
+            "all_fields": "Si us plau, omple tots els camps",
             "send": "Enviar",
             "screenshot": "Captura de pantalla",
             "optional": "opcional",
