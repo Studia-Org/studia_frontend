@@ -125,7 +125,7 @@ const SidebarSetting = ({ setSelectedOption }) => {
                 </div>
 
                 {
-                    user.role_str !== 'admin' && (
+                    user.role_str === 'admin' && (
                         <div className='space-y-4 '>
                             <h1 className='pb-1 text-lg font-semibold tracking-tight'>{t("SETTINGS.SIDEBAR.admin_settings")}</h1>
                             <button className='flex items-center pl-4 gap-3 hover:text-indigo-600 hover:translate-x-[5px] transition-all' onClick={() => handleOptionChange('customFunctions')}>
