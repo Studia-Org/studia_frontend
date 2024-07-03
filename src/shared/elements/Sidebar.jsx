@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { IconContext } from "react-icons";
 import { Link } from "react-router-dom";
 import { fetchUserHasNotReadNotificationDashboard } from "../../fetches/fetchUserHasNotReadNotification";
-
 import {
   FiGrid,
   FiCalendar,
@@ -13,7 +12,7 @@ import {
 import { MdTimeline } from "react-icons/md";
 import { useAuthContext } from "../../context/AuthContext";
 import { Button } from "antd";
-
+import { useTranslation } from "react-i18next";
 export const Sidebar = (props) => {
   const [dashboardNotification, setDashboardNotification] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -21,7 +20,7 @@ export const Sidebar = (props) => {
   const [courseInsideStyle, setCourseInsideStyle] = useState('xl');
   const onlyIcon = props.onlyIcon;
   const { user } = useAuthContext();
-
+  const { t } = useTranslation();
   useEffect(() => {
     const fetchData = async () => {
       setDashboardNotification(await fetchUserHasNotReadNotificationDashboard(user?.id));
@@ -162,7 +161,7 @@ export const Sidebar = (props) => {
         absolute z-10 p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg top-[38px] items-center
          hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600`}
       >
-        <span className="sr-only">Open sidebar</span>
+        <span className="sr-only">{t("SIDEBAR.open_sidebar")}</span>
         <svg
           className="w-6 h-6 "
           id="svg-sidebar"
@@ -230,7 +229,7 @@ export const Sidebar = (props) => {
                     <FiGrid size={25} />
                   </IconContext.Provider>
                   <h2 className={`${Object.keys(iconProps.courses).length > 0 ? "pl-2 text-white" : "px-4"}`}>
-                    {!onlyIcon && "Home"}
+                    {!onlyIcon && t("SIDEBAR.home")}
                   </h2>
                 </span>
               </li>
@@ -253,7 +252,7 @@ export const Sidebar = (props) => {
                       : "px-4"
                       }`}
                   >
-                    {!onlyIcon && "Calendar"}
+                    {!onlyIcon && t("SIDEBAR.calendar")}
                   </h2>
                 </span>
               </li>
@@ -276,7 +275,7 @@ export const Sidebar = (props) => {
                       : "px-4"
                       }`}
                   >
-                    {!onlyIcon && "Timeline"}
+                    {!onlyIcon && t("SIDEBAR.timeline")}
                   </h2>
                 </span>
               </li>
@@ -295,7 +294,7 @@ export const Sidebar = (props) => {
                   </IconContext.Provider>
                   <h2
                     className={`${Object.keys(iconProps.dashboard).length > 0 ? "pl-2 text-white" : `${onlyIcon ? "px-2" : "px-4"}`}`}>
-                    {!onlyIcon && "Dashboard"}
+                    {!onlyIcon && t("SIDEBAR.dashboard")}
                   </h2>
                   {
                     Object.keys(iconProps.dashboard).length <= 0 && dashboardNotification && (
@@ -325,7 +324,7 @@ export const Sidebar = (props) => {
                       : "px-4"
                       }`}
                   >
-                    {!onlyIcon && "Qualifications"}
+                    {!onlyIcon && t("SIDEBAR.qualifications")}
                   </h2>
                 </span>
               </li>
@@ -348,7 +347,7 @@ export const Sidebar = (props) => {
                       : "px-4"
                       }`}
                   >
-                    {!onlyIcon && "Settings"}
+                    {!onlyIcon && t("SIDEBAR.settings")}
                   </h2>
                 </span>
               </li>

@@ -2,7 +2,21 @@
     "NAVBAR": {
         "professor": "Professor",
         "student": "Estudiant",
-        "admin": "Administrador"
+        "admin": "Administrador",
+        "NOTIFICATIONS": {
+            "notifications": "Notificacions",
+            "mark_all_as_read": "Marcar-ho tot com a llegit",
+            "delete_all": "Eliminar tot"
+        }
+    },
+    "SIDEBAR": {
+        "open_sidebar": "Obrir barra lateral",
+        "home": "Cursos",
+        "calendar": "Calendari",
+        "timeline": "Línia de temps",
+        "dashboard": "Dashboard",
+        "qualifications": "Qualificacions",
+        "settings": "Configuració"
     },
     "SETTINGS": {
         "settings": "Configuració",

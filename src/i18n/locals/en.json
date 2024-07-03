@@ -2,7 +2,21 @@
     "NAVBAR": {
         "professor": "Professor",
         "student": "Student",
-        "admin": "Admin"
+        "admin": "Admin",
+        "NOTIFICATIONS": {
+            "notifications": "Notifications",
+            "mark_all_as_read": "Mark all as read",
+            "delete_all": "Delete all"
+        }
+    },
+    "SIDEBAR": {
+        "open_sidebar": "Open sidebar",
+        "home": "Home",
+        "calendar": "Calendar",
+        "timeline": "Timeline",
+        "dashboard": "Dashboard",
+        "qualifications": "Qualifications",
+        "settings": "Settings"
     },
     "SETTINGS": {
         "settings": "Settings",

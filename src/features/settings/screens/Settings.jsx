@@ -1,6 +1,4 @@
-import { useEffect, useState, React } from 'react';
-import { checkAuthenticated } from "../../../helpers";
-import { useNavigate } from 'react-router-dom';
+import { useState, React } from 'react';
 import { useAuthContext } from "../../../context/AuthContext";
 import SidebarSetting from '../components/SidebarSetting';
 import { SettingContent } from '../components/SettingContent';
