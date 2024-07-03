@@ -7,6 +7,19 @@
             "notifications": "Notifications",
             "mark_all_as_read": "Mark all as read",
             "delete_all": "Delete all"
+        },
+        "BUG_REPORT": {
+            "bug_report_title": "Report a problem",
+            "bug_report_text": "Use this form to report any bugs or issues you encounter on the app.",
+            "bug_description": "Bug description",
+            "bug_description_placeholder": "Please add as much detail as possible.",
+            "send": "Send",
+            "screenshot": "Screenshot",
+            "optional": "optional",
+            "toast": {
+                "title_success": "Successfully created issue!",
+                "title_error": "Error reporting issue"
+            }
         }
     },
     "SIDEBAR": {
@@ -86,5 +99,13 @@
                 "title_success": "Logged out successfully!"
             }
         }
+    },
+    "UPLOADFILES": {
+        "principal_text": "Click or drag file to this area to upload",
+        "secondary_text": "Support for a single or bulk upload. Strictly prohibited from uploading company data or other banned files.",
+        "file_removed_success": "File removed successfully",
+        "file_removed_error": "Error removing file",
+        "csv_error": "Not a valid email detected in the CSV file. Please check if file format is correct. Renaming the file to .csv may not work.",
+        "file_MB": "File size must be less than 10MB"
     }
 }

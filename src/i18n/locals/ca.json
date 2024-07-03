@@ -7,6 +7,19 @@
             "notifications": "Notificacions",
             "mark_all_as_read": "Marcar-ho tot com a llegit",
             "delete_all": "Eliminar tot"
+        },
+        "BUG_REPORT": {
+            "bug_report_title": "Informar d'un problema",
+            "bug_report_text": "Utilitza aquest formulari per informar de qualsevol error o problema que trobis a l'aplicació.",
+            "bug_description": "Descripció de l'error",
+            "bug_description_placeholder": "Si us plau, afegeix tants detalls com sigui possible.",
+            "send": "Enviar",
+            "screenshot": "Captura de pantalla",
+            "optional": "opcional",
+            "toast": {
+                "title_success": "Problema creat amb èxit!",
+                "title_error": "Error en informar del problema"
+            }
         }
     },
     "SIDEBAR": {
@@ -86,5 +99,13 @@
                 "title_success": "Desconnectat amb èxit!"
             }
         }
+    },
+    "UPLOADFILES": {
+        "principal_text": "Feu clic o arrossegueu un fitxer a aquesta àrea per carregar-lo",
+        "secondary_text": "Suport per a càrrega única o massiva. Està estrictament prohibit carregar dades de l'empresa o altres fitxers prohibitius.",
+        "file_removed_success": "Fitxer eliminat amb èxit",
+        "file_removed_error": "Error en eliminar el fitxer",
+        "csv_error": "No s'ha detectat cap correu electrònic vàlid al fitxer CSV. Si us plau, verifica si el format del fitxer és correcte. Renombrar el fitxer a .csv pot no funcionar.",
+        "file_MB": "La mida del fitxer ha de ser inferior a 10MB"
     }
 }

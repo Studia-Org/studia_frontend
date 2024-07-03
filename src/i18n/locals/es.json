@@ -7,6 +7,19 @@
             "notifications": "Notificaciones",
             "mark_all_as_read": "Marcar todo como leído",
             "delete_all": "Eliminar todo"
+        },
+        "BUG_REPORT": {
+            "bug_report_title": "Reportar un problema",
+            "bug_report_text": "Utiliza este formulario para informar de cualquier error o problema que encuentres en la aplicación.",
+            "bug_description": "Descripción del error",
+            "bug_description_placeholder": "Por favor, añade tantos detalles como sea posible.",
+            "send": "Enviar",
+            "screenshot": "Captura de pantalla",
+            "optional": "opcional",
+            "toast": {
+                "title_success": "¡Problema creado con éxito!",
+                "title_error": "Error al informar del problema"
+            }
         }
     },
     "SIDEBAR": {
@@ -86,5 +99,13 @@
                 "title_success": "¡Sesión cerrada con éxito!"
             }
         }
+    },
+    "UPLOADFILES": {
+        "principal_text": "Haz clic o arrastra un archivo a esta área para subirlo",
+        "secondary_text": "Soporte para carga única o masiva. Está estrictamente prohibido subir datos de la empresa u otros archivos prohibidos.",
+        "file_removed_success": "Archivo eliminado correctamente",
+        "file_removed_error": "Error al eliminar el archivo",
+        "csv_error": "No se detectó un correo electrónico válido en el archivo CSV. Por favor, verifica si el formato del archivo es correcto. Renombrar el archivo a .csv puede no funcionar.",
+        "file_MB": "El tamaño del archivo debe ser inferior a 10MB"
     }
 }
