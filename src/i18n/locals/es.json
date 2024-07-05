@@ -1,4 +1,10 @@
 {
+    "COMMON": {
+        "cancel": "Cancelar",
+        "need_help": "¿Necesitas ayuda?",
+        "recommended": "Recomendado",
+        "new": "Nuevo"
+    },
     "NAVBAR": {
         "professor": "Profesor",
         "student": "Estudiante",
@@ -108,5 +114,63 @@
         "file_removed_error": "Error al eliminar el archivo",
         "csv_error": "No se detectó un correo electrónico válido en el archivo CSV. Por favor, verifica si el formato del archivo es correcto. Renombrar el archivo a .csv puede no funcionar.",
         "file_MB": "El tamaño del archivo debe ser inferior a 10MB"
+    },
+    "COURSESHOME": {
+        "taskEndSoon": "Esta tarea está a punto de <strong>terminar, su fecha de entrega es el {{end_date}}</strong>",
+        "objectives": {
+            "objectives": "Objetivos",
+            "not_objectives": "No has configurado ningún objetivo para este curso",
+            "completed": "Completado",
+            "not_completed": "No completado",
+            "complete_objective": "<p className='mb-5'>¿Estás seguro de que deseas actualizar el objetivo <strong>{{objective}}</strong>?</p>",
+            "text_modal_complete_objective": "Marcar objetivo como completado",
+            "text_modal_not_complete_objective": "Marcar objetivo como no completado",
+            "complete_objetive_button": "Completar objetivo",
+            "not_complete_objetive_button": "Marcar como no completado"
+        },
+        "recent_courses": "Cursos recientes",
+        "not_courses": "No hay cursos disponibles para ti",
+        "not_courses_explore": "Explora otras áreas de la plataforma o vuelve más tarde para ver nuevas opciones de cursos.",
+        "daily_tasks": "Tareas diarias",
+        "not_daily_tasks": "No tienes ninguna tarea para hoy",
+        "create_course_speed_dial": {
+            "create_course_from_template": "Crear curso desde plantilla",
+            "create_course": "Crear curso"
+        },
+        "student_creation_courses": {
+            "add_course": "Añadir un curso",
+            "add_course_text": "Añade un curso basado en tus preferencias y personalízalo.",
+            "about_creator": "Acerca del creador",
+            "icon_description": "Descripción del icono",
+            "customize_course": "Personaliza tu curso"
+        }
+    },
+    "OBJECTIVES_INFORMATION": {
+        "LEARNING_CAPABILITY": {
+            "title": "Capacidad de aprendizaje y responsabilidad",
+            "description_with_qualifications": "Ya tienes {{qualificationsCount}} calificaciones, con una nota promedio de {{averageGrade}}.",
+            "description_no_qualifications": "No tienes calificaciones válidas."
+        },
+        "TEAMWORK": {
+            "title": "Trabajo en equipo",
+            "description_with_activities": "Has completado {{activitiesCount}} actividades de trabajo en equipo, con una nota promedio de {{averageGrade}}.",
+            "description_no_activities": "No has completado ninguna actividad de trabajo en equipo."
+        },
+        "ETHICAL_COMMITMENT": {
+            "title": "Compromiso ético",
+            "description": "Antes de completar este objetivo, reflexiona sobre las siguientes preguntas: ¿Eres capaz de autocriticarte y pensar críticamente? ¿Eres capaz de demostrar actitudes coherentes con los principios éticos y deontológicos?"
+        },
+        "CREATIVE_CAPACITY": {
+            "title": "Capacidad creativa y emprendedora",
+            "description": "Antes de completar este objetivo, reflexiona sobre las siguientes preguntas: ¿Eres capaz de formular, diseñar y gestionar proyectos? ¿Eres capaz de buscar e integrar nuevos conocimientos y actitudes?"
+        },
+        "SUSTAINABILITY": {
+            "title": "Sostenibilidad",
+            "description": "Antes de completar este objetivo, reflexiona sobre las siguientes preguntas: ¿Eres capaz de evaluar el impacto social y ambiental de las acciones en tu campo? ¿Eres capaz de expresar visiones integradas y sistemáticas?"
+        },
+        "COMMUNICATIVE_ABILITY": {
+            "title": "Capacidad comunicativa",
+            "description": "Antes de completar este objetivo, reflexiona sobre las siguientes preguntas: ¿Eres capaz de entender y expresarte oralmente y por escrito en catalán y español y en otro idioma, utilizando el lenguaje especializado en la disciplina? ¿Eres capaz de buscar, utilizar e integrar información?"
+        }
     }
 }

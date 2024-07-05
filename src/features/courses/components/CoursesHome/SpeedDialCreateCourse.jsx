@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import { Badge } from 'antd';
 import { FiChevronRight, FiPlus } from 'react-icons/fi';
 import { useAuthContext } from '../../../../context/AuthContext';
-
+import { useTranslation } from 'react-i18next';
 
 export const SpeedDialCreateCourse = ({ setExpandCreateCourseStudent }) => {
     const navigate = useNavigate()
+    const { t } = useTranslation()
     const { user } = useAuthContext()
     const [isExpanded, setIsExpanded] = useState(false)
 
@@ -29,7 +30,7 @@ export const SpeedDialCreateCourse = ({ setExpandCreateCourseStudent }) => {
                         <button disabled className='flex items-center text-left text-gray-400'
                             onClick={() => navigate('create')}>
                             <div className='flex items-center duration-150'>
-                                <p className='ml-2'>Create new course from a template</p>
+                                <p className='ml-2'>{t("COURSESHOME.create_course_speed_dial.create_course_from_template")}</p>
                                 <FiChevronRight className='ml-1' />
                             </div>
                         </button>
@@ -37,15 +38,15 @@ export const SpeedDialCreateCourse = ({ setExpandCreateCourseStudent }) => {
                     <div className='flex items-center'>
                         <button className='flex items-center text-left' onClick={() => navigate('create')}>
                             <div className='flex items-center duration-150 hover:translate-x-2'>
-                                <p className='ml-2'>Create new course</p>
+                                <p className='ml-2'>{t("COURSESHOME.create_course_speed_dial.create_course")}</p>
                                 <FiChevronRight className='ml-1' />
-                                <Badge className='ml-2' count={'Recommended'} color='#3b82f6' />
+                                <Badge className='ml-2' count={t("COMMON.recommended")} color='#3b82f6' />
                             </div>
                         </button>
                     </div>
                     <div className='absolute bottom-0 w-full pb-2 pl-0'>
                         <hr className='ml-0 mr-8' />
-                        <button className='mt-2 text-sm font-light'>Do you need help?</button>
+                        <button className='mt-2 text-sm font-light'>{t("COMMON.need_help")}</button>
                     </div>
                 </div>
             </div>

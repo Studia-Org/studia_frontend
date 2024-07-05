@@ -1,4 +1,10 @@
 {
+    "COMMON": {
+        "cancel": "Cancel·lar",
+        "need_help": "Necessites ajuda?",
+        "recommended": "Recomanat",
+        "new": "Nou"
+    },
     "NAVBAR": {
         "professor": "Professor",
         "student": "Estudiant",
@@ -108,5 +114,64 @@
         "file_removed_error": "Error en eliminar el fitxer",
         "csv_error": "No s'ha detectat cap correu electrònic vàlid al fitxer CSV. Si us plau, verifica si el format del fitxer és correcte. Renombrar el fitxer a .csv pot no funcionar.",
         "file_MB": "La mida del fitxer ha de ser inferior a 10MB"
-    }
+    },
+    "COURSESHOME": {
+        "taskEndSoon": "Aquesta tasca està a punt de <strong>acabar, el seu termini es fins el {{end_date}}</strong>",
+        "objectives": {
+            "objectives": "Objectius",
+            "not_objectives": "No has configurat cap objectiu per a aquest curs",
+            "completed": "Completat",
+            "not_completed": "No completat",
+            "complete_objective": "<p className='mb-5'>Estàs segur que vols actualitzar l'objectiu <strong>{{objective}}</strong>?</p>",
+            "text_modal_complete_objective": "Marcar objectiu com a completat",
+            "text_modal_not_complete_objective": "Marcar objectiu com a no completat",
+            "complete_objetive_button": "Completar objectiu",
+            "not_complete_objetive_button": "Marcar com a no completat"
+        },
+        "recent_courses": "Cursos recents",
+        "not_courses": "No hi ha cursos disponibles per a tu",
+        "not_courses_explore": "Explora altres àrees de la plataforma o torna més tard per veure noves opcions de cursos.",
+        "daily_tasks": "Tasques diàries",
+        "not_daily_tasks": "No tens cap tasca per avui",
+        "create_course_speed_dial": {
+            "create_course_from_template": "Crear curs des de plantilla",
+            "create_course": "Crear curs"
+        },
+        "student_creation_courses": {
+            "add_course": "Afegir un curs",
+            "add_course_text": "Afegeix un curs basat en les teves preferències i personalitza'l.",
+            "about_creator": "Sobre el creador",
+            "icon_description": "Descripció de l'ícona",
+            "customize_course": "Personalitza el teu curs"
+        }
+    },
+    "OBJECTIVES_INFORMATION": {
+        "LEARNING_CAPABILITY": {
+            "title": "Capacitat d'aprenentatge i responsabilitat",
+            "description_with_qualifications": "Ja tens {{qualificationsCount}} qualificacions, amb una nota mitjana de {{averageGrade}}.",
+            "description_no_qualifications": "No tens qualificacions vàlides."
+        },
+        "TEAMWORK": {
+            "title": "Treball en equip",
+            "description_with_activities": "Has completat {{activitiesCount}} activitats de treball en equip, amb una nota mitjana de {{averageGrade}}.",
+            "description_no_activities": "No has completat cap activitat de treball en equip."
+        },
+        "ETHICAL_COMMITMENT": {
+            "title": "Compromís ètic",
+            "description": "Abans de completar aquest objectiu, reflexiona sobre les següents preguntes: Ets capaç de criticar-te a tu mateix i pensar críticament? Ets capaç de demostrar actituds coherents amb els principis ètics i deontològics?"
+        },
+        "CREATIVE_CAPACITY": {
+            "title": "Capacitat creativa i emprenedora",
+            "description": "Abans de completar aquest objectiu, reflexiona sobre les següents preguntes: Ets capaç de formular, dissenyar i gestionar projectes? Ets capaç de cercar i integrar nous coneixements i actituds?"
+        },
+        "SUSTAINABILITY": {
+            "title": "Sostenibilitat",
+            "description": "Abans de completar aquest objectiu, reflexiona sobre les següents preguntes: Ets capaç d'avaluar l'impacte social i ambiental de les accions en el teu camp? Ets capaç d'expressar visions integrades i sistemàtiques?"
+        },
+        "COMMUNICATIVE_ABILITY": {
+            "title": "Capacitat comunicativa",
+            "description": "Abans de completar aquest objectiu, reflexiona sobre les següents preguntes: Ets capaç d'entendre i expressar-te oralment i per escrit en català i espanyol i en un altre idioma, utilitzant el llenguatge especialitzat en la disciplina? Ets capaç de cercar, utilitzar i integrar informació?"
+        }
+    },
+    "STUDENT_COURSES": {}
 }

@@ -1,4 +1,10 @@
 {
+    "COMMON": {
+        "cancel": "Cancel",
+        "need_help": "Do you need help?",
+        "recommended": "Recommended",
+        "new": "New"
+    },
     "NAVBAR": {
         "professor": "Professor",
         "student": "Student",
@@ -108,5 +114,113 @@
         "file_removed_error": "Error removing file",
         "csv_error": "Not a valid email detected in the CSV file. Please check if file format is correct. Renaming the file to .csv may not work.",
         "file_MB": "File size must be less than 10MB"
+    },
+    "COURSESHOME": {
+        "taskEndSoon": "This task is about to <strong>end soon on {{end_date}}</strong>",
+        "objectives": {
+            "objectives": "Objectives",
+            "not_objectives": "You did not set any objectives for this course",
+            "completed": "Completed",
+            "not_completed": "Not completed",
+            "complete_objective": "<p className='mb-5'>Are you sure you want to update objective <strong> {{objective}} </strong>",
+            "text_modal_complete_objective": "Mark objective as complete",
+            "text_modal_not_complete_objective": "Mark objective as incomplete",
+            "complete_objetive_button": "Complete objective",
+            "not_complete_objetive_button": "Return as incomplete"
+        },
+        "recent_courses": "Recent courses",
+        "not_courses": "There are no courses available for you",
+        "not_courses_explore": "Explore other areas of the platform or check back later for new course options.",
+        "daily_tasks": "Daily tasks",
+        "not_daily_tasks": "You do not have any task for today",
+        "create_course_speed_dial": {
+            "create_course_from_template": "Create course from template",
+            "create_course": "Create course"
+        },
+        "student_creation_courses": {
+            "add_course": "Add a course",
+            "add_course_text": "Add a course based on your preferences and customize it.",
+            "about_creator": "About the creator",
+            "icon_description": "Icon description",
+            "customize_course": "Customize your course"
+        }
+    },
+    "OBJECTIVES_INFORMATION": {
+        "LEARNING_CAPABILITY": {
+            "title": "Learning capability and responsibility",
+            "description_with_qualifications": "You have already {{qualificationsCount}} qualifications, with an average grade of {{averageGrade}}.",
+            "description_no_qualifications": "You don't have any valid qualifications."
+        },
+        "TEAMWORK": {
+            "title": "Team Work",
+            "description_with_activities": "You have completed {{activitiesCount}} team work activities, with an average grade of {{averageGrade}}.",
+            "description_no_activities": "You haven't completed any team work activities."
+        },
+        "ETHICAL_COMMITMENT": {
+            "title": "Ethical commitment",
+            "description": "Before completing this objective, think over the following questions: Are you able to criticize yourself and think critically? Are you able to demonstrate attitudes consistent with ethical and deontological principles?"
+        },
+        "CREATIVE_CAPACITY": {
+            "title": "Creative and entrepreneurial capacity",
+            "description": "Before completing this objective, think over the following questions: Are you able to formulate, design, and manage projects? Are you able to seek and integrate new knowledge and attitudes?"
+        },
+        "SUSTAINABILITY": {
+            "title": "Sustainability",
+            "description": "Before completing this objective, think over the following questions: Are you able to assess the social and environmental impact of actions in your field? Are you able to express integrated and systematic visions?"
+        },
+        "COMMUNICATIVE_ABILITY": {
+            "title": "Communicative ability",
+            "description": "Before completing this objective, think over the following questions: Are you able to understand and express yourself orally and in writing in Catalan and Spanish and in another language, using specialized language in the discipline? Are you able to search, use, and integrate information?"
+        }
+    },
+    "STUDENT_COURSES": {
+        "TFG": {
+            "task": {
+                "title": "TFG Planning",
+                "description": "TFG Planning"
+            },
+            "subsection_2": {
+                "title": "Task statement",
+                "activity": {
+                    "title": "Task statement",
+                    "description": "Task statement description"
+                }
+            },
+            "subsection_3": {
+                "title": "TFG Sheet delivery",
+                "activity": {
+                    "title": "Task statement",
+                    "description": "Task statement description"
+                }
+            },
+            "subsection_4": {
+                "title": "Task implementation",
+                "activity": {
+                    "title": "Task implementation",
+                    "description": "Task implementation description"
+                }
+            },
+            "subsection_5": {
+                "title": "Task implementation",
+                "activity": {
+                    "title": "Task implementation",
+                    "description": "Task implementation description"
+                }
+            },
+            "subsection_6": {
+                "title": "Task implementation",
+                "activity": {
+                    "title": "Task implementation",
+                    "description": "Task implementation description"
+                }
+            },
+            "subsection_7": {
+                "title": "Custom field",
+                "activity": {
+                    "title": "Custom field",
+                    "description": "Custom field description"
+                }
+            }
+        }
     }
 }
