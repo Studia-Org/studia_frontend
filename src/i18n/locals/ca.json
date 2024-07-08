@@ -3,7 +3,8 @@
         "cancel": "Cancel·lar",
         "need_help": "Necessites ajuda?",
         "recommended": "Recomanat",
-        "new": "Nou"
+        "new": "Nou",
+        "save_changes": "Desar canvis"
     },
     "NAVBAR": {
         "professor": "Professor",
@@ -173,5 +174,48 @@
             "description": "Abans de completar aquest objectiu, reflexiona sobre les següents preguntes: Ets capaç d'entendre i expressar-te oralment i per escrit en català i espanyol i en un altre idioma, utilitzant el llenguatge especialitzat en la disciplina? Ets capaç de cercar, utilitzar i integrar informació?"
         }
     },
-    "STUDENT_COURSES": {}
+    "COURSEINSIDE": {
+        "course": "Curs",
+        "files": "Arxius",
+        "activity": "Activitat",
+        "course_content": "Contingut del curs",
+        "edit_mode": "Mode d'edició",
+        "SETTINGS": {
+            "title": "Configuració del curs",
+            "button_edit": "Editar curs"
+        },
+        "FORUM": {
+            "forum": "Fòrum",
+            "view_all_posts": "Veure totes les publicacions",
+            "answers": "Respostes",
+            "add_thread": "Afegir fil",
+            "view_responses": "Veure respostes",
+            "your_comment": "El teu comentari",
+            "post_comment": "Publicar comentari",
+            "guidelines": "Recorda, les contribucions a aquest tema han de seguir les nostres ",
+            "guidelines2": "Normes de la comunitat"
+        },
+        "ACCORDION": {
+            "title": "Contingut del curs",
+            "section": "Secció",
+            "add_section": "Afegir secció",
+            "add_new_section": "Afegir nova secció",
+            "added_success": "Secció afegida amb èxit",
+            "added_error": "Error en afegir la secció",
+            "section_will_open": "S'obrirà quan es completi l'última subsecció o el {{day}} a les {{minute}}",
+            "section_will_open2": "S'obrirà el {{day}} a les {{minute}}",
+            "section_opened": "Secció oberta",
+            "placeholder_section_name": "Nom de la secció"
+        },
+        "files_professor": "Aquests arxius són pujats pel professor si són necessaris per a aquesta subsecció.",
+        "no_files": "No hi ha arxius disponibles per a aquesta subsecció.",
+        "PARTICIPANTS": {
+            "participants": "Participants",
+            "view_participants": "Veure tots els participants",
+            "add_student": "Afegir estudiant",
+            "participants_tile": "Explora tots els participants actualment inscrits en aquest curs.",
+            "to_add_student": "Per afegir un nou estudiant, si us plau, navega fins a la secció de configuració del curs.",
+            "placeholder_search": "Cerca un estudiant"
+        }
+    }
 }

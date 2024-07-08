@@ -3,7 +3,8 @@
         "cancel": "Cancel",
         "need_help": "Do you need help?",
         "recommended": "Recommended",
-        "new": "New"
+        "new": "New",
+        "save_changes": "Save changes"
     },
     "NAVBAR": {
         "professor": "Professor",
@@ -171,6 +172,50 @@
         "COMMUNICATIVE_ABILITY": {
             "title": "Communicative ability",
             "description": "Before completing this objective, think over the following questions: Are you able to understand and express yourself orally and in writing in Catalan and Spanish and in another language, using specialized language in the discipline? Are you able to search, use, and integrate information?"
+        }
+    },
+    "COURSEINSIDE": {
+        "course": "Course",
+        "files": "Files",
+        "activity": "Activity",
+        "course_content": "Course content",
+        "edit_mode": "Edit mode",
+        "SETTINGS": {
+            "title": "Course settings",
+            "button_edit": "Edit course info"
+        },
+        "FORUM": {
+            "forum": "Forum",
+            "view_all_posts": "View all posts",
+            "answers": "Answers",
+            "add_thread": "Add thread",
+            "view_responses": "View responses",
+            "your_comment": "Your comment",
+            "post_comment": "Post comment",
+            "guidelines": "Remember, contributions to this topic should follow our ",
+            "guidelines2": "Community Guidelines"
+        },
+        "ACCORDION": {
+            "title:": "Course content",
+            "section": "Section",
+            "add_section": "Add section",
+            "add_new_section": "Add new section",
+            "added_success": "Section added successfully",
+            "added_error": "Error adding section",
+            "section_will_open": "Will open when the last subsection is completed or the {{day}} at {{minute}}",
+            "section_will_open2": "Will open on {{day}} at {{minute}}",
+            "section_opened": "Section opened",
+            "placeholder_section_name": "Section name"
+        },
+        "files_professor": "These files are uploaded by the professor if it's necessary for this subsection.",
+        "no_files": "There are no files available for this subsection.",
+        "PARTICIPANTS": {
+            "participants": "Participantes",
+            "view_participants": "Ver todos los participantes",
+            "add_student": "Agregar estudiante",
+            "participants_tile": "Explora todos los participantes actualmente inscritos en este curso.",
+            "to_add_student": "Para agregar un nuevo estudiante, por favor navega a la sección de configuración del curso.",
+            "placeholder_search": "Buscar un estudiante"
         }
     },
     "STUDENT_COURSES": {

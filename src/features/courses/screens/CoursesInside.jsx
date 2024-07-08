@@ -20,12 +20,16 @@ import { Participants } from "../components/CoursesInside/Participants";
 import dayjs from "dayjs";
 import { BreadcrumbCourse } from "../components/CoursesInside/BreadcrumbCourse";
 import { useCourseContext } from "../../../context/CourseContext";
-import { set } from "date-fns";
-
+import { useTranslation } from "react-i18next";
+import { ca, es, enUS } from 'date-fns/locale';
+import { format } from 'date-fns';
 const { TextArea } = Input;
 const { RangePicker } = DatePicker;
 
 const CourseInside = () => {
+  const { t, i18n } = useTranslation();
+  const locales = { ca, es } || enUS;
+  const local = locales[i18n.language] || enUS;
   const inputRefLandscape = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [titleSubsection, setTitleSubsection] = useState("");
@@ -280,7 +284,7 @@ const CourseInside = () => {
   const items = [
     {
       key: '1',
-      label: 'Course',
+      label: t('COURSEINSIDE.course'),
       children:
         <CourseContent setForumFlag={setForumFlag} course={course} courseSection={sectionSelected}
           courseSubsection={subsectionSelected} courseId={courseId} enableEdit={enableEdit} setEnableEdit={setEnableEdit}
@@ -290,7 +294,7 @@ const CourseInside = () => {
     },
     {
       key: '2',
-      label: 'Files',
+      label: t('COURSEINSIDE.files'),
       children: <CourseFiles course={course} courseSection={sectionSelected} courseSubsection={subsectionSelected} enableEdit={enableEdit} setCourse={setCourse} />,
     }
   ].filter(item => {
@@ -457,7 +461,7 @@ const CourseInside = () => {
                             :
                             <div className="flex items-center w-full max-w-full gap-x-5">
                               <p className="text-2xl font-semibold max-w-[calc(100%-140px)]"> {subsectionSelected?.attributes?.title}</p>
-                              <Badge color="#6366f1" count={new Date(subsectionSelected?.attributes?.end_date).toDateString()} />
+                              <Badge color="#6366f1" count={format(new Date(subsectionSelected?.attributes?.end_date), "EEE MMM dd yyyy", { locale: local })} />
                             </div>
                         }
                         {

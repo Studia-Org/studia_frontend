@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import { List, Avatar, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../../../../context/AuthContext';
-
-const { Search } = Input;
+import { useTranslation } from 'react-i18next';
 
 export const Participants = ({ students }) => {
+    const { t } = useTranslation()
     const navigate = useNavigate()
     const { user } = useAuthContext()
     const [searchTerm, setSearchTerm] = useState('')
@@ -16,11 +16,11 @@ export const Participants = ({ students }) => {
 
     return (
         <div className=''>
-            <h2 className='mt-5 text-xl font-bold'>Participants</h2>
-            <p className='mt-2 text-sm text-gray-600 '>Explore all participants currently enrolled in this course.</p>
+            <h2 className='mt-5 text-xl font-bold'>{t("COURSEINSIDE.PARTICIPANTS.participants")}</h2>
+            <p className='mt-2 text-sm text-gray-600 '>{t("COURSEINSIDE.PARTICIPANTS.participants_tile")}</p>
             {
                 user.role_str !== 'student' && (
-                    <p className='text-sm text-gray-600 '>For adding a student, please navigate to the course settings section.</p>
+                    <p className='text-sm text-gray-600 '>{t("COURSEINSIDE.PARTICIPANTS.to_add_student")}</p>
                 )
             }
             <div className='p-5 mt-5 mb-10 bg-white border rounded-lg'>
@@ -35,7 +35,7 @@ export const Participants = ({ students }) => {
                         id="table-search-users"
                         onChange={(e) => setSearchTerm(e.target.value)}
                         class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
-                        placeholder="Search for users" />
+                        placeholder={t("COURSEINSIDE.PARTICIPANTS.placeholder_search")} />
                 </div>
                 <List
                     className='mt-5'

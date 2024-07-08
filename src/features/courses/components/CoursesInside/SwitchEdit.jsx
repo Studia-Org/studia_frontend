@@ -1,11 +1,12 @@
 import React from 'react'
 import { Switch } from '@headlessui/react'
+import { useTranslation } from 'react-i18next'
 function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
 export const SwitchEdit = ({ enableEdit, setEnableEdit, context, setQuestionnaireAnswerData }) => {
-
+    const { t } = useTranslation()
     const handleSwitch = () => {
         if (context === 'questionnaire') {
             setEnableEdit(!enableEdit)
@@ -63,7 +64,7 @@ export const SwitchEdit = ({ enableEdit, setEnableEdit, context, setQuestionnair
                 </span>
             </Switch>
             <Switch.Label as="span" className="ml-3">
-                <span className="text-sm font-medium text-gray-900">Edit mode</span>
+                <span className="text-sm font-medium text-gray-900">{t("COURSEINSIDE.edit_mode")}</span>
             </Switch.Label>
         </Switch.Group>
     )
