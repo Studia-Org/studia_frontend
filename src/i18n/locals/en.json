@@ -363,5 +363,25 @@
                 }
             }
         }
+    },
+    "CREATE_COURSES": {
+        "principal_text": "Create new Course",
+        "COURSE_INFO": {
+            "principal_text": "First, give us some information about the new course. This information will be visible to students.",
+            "course_name": "Course name *",
+            "course_description": "Course description *",
+            "course_evaluator": "Evaluator *",
+            "course_tags": "Tags *",
+            "course_cover": "Course cover *"
+        },
+        "NAVIGATION": {
+            "continue": "Continue",
+            "back": "Back",
+            "confirm": "Confirm",
+            "cancel": "Cancel",
+            "course_info": "Course info",
+            "course_sections": "Course sections",
+            "course_visualization": "Course visualization"
+        }
     }
 }

@@ -4,11 +4,12 @@ import draw2 from '../../../assets/draw2.png'
 import { CreateCourseBreadcrumb } from '../components/CreateCourses/CreateCourseBreadcrumb';
 import { EditCreateCourseSection } from '../components/CreateCourses/CourseSections/EditCreateCourseSection';
 import { CreateConfirmation, CreateCourseInfo, CreateCourseSections } from '../components/CreateCourses/CreateCourseComponents';
+import { useTranslation } from 'react-i18next';
 
 
 
 const CreateCourse = () => {
-    const navigate = useNavigate();
+    const { t } = useTranslation();
     document.title = 'Create Course - Uptitude'
     const [createCourseOption, setCreateCourseOption] = useState(0);
     const [createCourseSectionsList, setCreateCourseSectionsList] = useState([])
@@ -49,7 +50,7 @@ const CreateCourse = () => {
                         </>
                         :
                         <>
-                            <h1>Create new Course</h1>
+                            <h1>{t("CREATE_COURSES.principal_text")}</h1>
                             <CreateCourseBreadcrumb createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} courseBasicInfo={courseBasicInfo} />
                             <div className='flex justify-between mt-5 mr-16'>
                                 {RenderCreateCourse()}
