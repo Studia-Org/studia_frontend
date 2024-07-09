@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { useAuthContext } from '../../context/AuthContext';
 import { Webchat, WebchatProvider, useClient } from '@botpress/webchat';
 import { buildTheme } from '@botpress/webchat-generator';
 import { Drawer } from 'antd';
-import retargetEvents from 'react-shadow-dom-retarget-events';
 import '../styles/webchatCustomCss.css';
 
 const themeConfig = buildTheme({
@@ -15,8 +14,6 @@ export const WebchatChatbot = () => {
     const [open, setOpen] = useState(false);
     const { user } = useAuthContext();
     const client = useClient({ clientId: '8a2495e6-ad0d-46ac-a82c-56b8c0275fdd' });
-    const shadowRootRef = useRef(null);
-
     const showDrawer = () => {
         setOpen(true);
     };
@@ -25,11 +22,6 @@ export const WebchatChatbot = () => {
         setOpen(false);
     };
 
-    useEffect(() => {
-        if (shadowRootRef.current) {
-            retargetEvents(shadowRootRef.current.shadowRoot);
-        }
-    }, [shadowRootRef]);
 
     const configuration = {
         botName: 'Uptitude Bot',
