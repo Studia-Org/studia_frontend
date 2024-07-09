@@ -28,7 +28,7 @@ const { RangePicker } = DatePicker;
 
 const CourseInside = () => {
   const { t, i18n } = useTranslation();
-  const locales = { ca, es } || enUS;
+  const locales = { ca, es }
   const local = locales[i18n.language] || enUS;
   const inputRefLandscape = useRef(null);
   const [isLoading, setIsLoading] = useState(true);

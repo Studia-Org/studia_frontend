@@ -3,8 +3,9 @@ import bg_img from '../assets/uptitudenewlogo.png'
 import { useNavigate } from "react-router-dom";
 import { Divider } from 'antd';
 import './styles/home.css'
-
+import { useTranslation } from "react-i18next";
 const Home = () => {
+    const { t } = useTranslation();
     return (
         <div className='bg-[#f2f2f2] overflow-y-hidden'>
             <div class="overflow-x-hidden overflow-y-hidden antialiased h-full">
@@ -51,20 +52,19 @@ const Home = () => {
                             class="z-30 flex flex-col items-center w-full max-w-xl pt-48 text-center lg:items-start lg:w-1/2 lg:pt-20 xl:pt-40 lg:text-left justify-center">
                             <h1
                                 class="relative mb-4 text-3xl font-black leading-tight text-gray-900 sm:text-6xl xl:mb-8 tracking-tighter mt-24">
-                                Welcome to the new era of Learning </h1>
-                            <p class="pr-0 mt-7 text-base text-gray-900 sm:text-lg xl:text-xl lg:pr-20 z-20 ">Join the future of
-                                education with our user-friendly e-learning platform designed for the University of Barcelona.</p>
+                                {t("HOME.title")} </h1>
+                            <p class="pr-0 mt-7 text-base text-gray-900 sm:text-lg xl:text-xl lg:pr-20 z-20 ">{t("HOME.subtitle")}</p>
                             <div className='relative z-20 py-6 lg:left-48 top-5'>
                                 <a href="/auth/login
                                 ">
                                     <button class="inline-flex items-center justify-center p-0.5 mb-2 mr-2 overflow-hidden text-sm font-medium text-gray-900  rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-white  focus:ring-4 focus:outline-none focus:ring-blue-300 ">
                                         <span class=" px-8 py-3.5 transition-all ease-in duration-75 bg-white  rounded-md group-hover:bg-opacity-0 font-medium">
-                                            Enter the classroom
+                                            {t("HOME.button_enter")}
                                         </span>
                                     </button>
                                 </a>
                             </div>
-                            <p className="mt-24 mb-5 text-gray-500 -translate-x-32 lg:mb-0">Funded by:</p>
+                            <p className="mt-24 mb-5 text-gray-500 -translate-x-32 lg:mb-0"> {t("HOME.funded")}</p>
                             <div className="flex flex-wrap mb-5 space-y-4 lg:flex-nowrap lg:items-center lg:space-x-4 lg:-translate-x-32">
                                 <img className="w-60 h-14 " src="https://res.cloudinary.com/dnmlszkih/image/upload/v1706026314/iqehusa8b2l5xdyjubgf.png" alt="" />
                                 <Divider type="vertical" />
