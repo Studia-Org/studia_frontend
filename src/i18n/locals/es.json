@@ -217,5 +217,25 @@
             "to_add_student": "Para agregar un nuevo estudiante, por favor navega a la sección de configuración del curso.",
             "placeholder_search": "Buscar un estudiante"
         }
+    },
+    "CREATE_COURSES": {
+        "principal_text": "Crear un curso nuevo",
+        "COURSE_INFO": {
+            "principal_text": "Primero, llena la información básica del curso. Esta información será visible para los estudiantes.",
+            "course_name": "Nombre del curso *",
+            "course_description": "Descripción del curso *",
+            "course_evaluator": "Evaluador *",
+            "course_tags": "Etiquetas *",
+            "course_cover": "Portada del curso *"
+        },
+        "NAVIGATION": {
+            "continue": "Continuar",
+            "confirm": "Confirmar",
+            "back": "Atrás",
+            "cancel": "Cancelar",
+            "course_info": "Información del curso",
+            "course_sections": "Secciones del curso",
+            "course_visualization": "Visualización del curso"
+        }
     }
 }

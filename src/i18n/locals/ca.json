@@ -217,5 +217,25 @@
             "to_add_student": "Per afegir un nou estudiant, si us plau, navega fins a la secció de configuració del curs.",
             "placeholder_search": "Cerca un estudiant"
         }
+    },
+    "CREATE_COURSES": {
+        "principal_text": "Crear un curs nou",
+        "COURSE_INFO": {
+            "principal_text": "Primer, omple la informació bàsica del curs. Aquesta informació serà visible per als estudiants.",
+            "course_name": "Nom del curs *",
+            "course_description": "Descripció del curs *",
+            "course_evaluator": "Avaluador *",
+            "course_tags": "Etiquetes *",
+            "course_cover": "Portada del curs *"
+        },
+        "NAVIGATION": {
+            "continue": "Continuar",
+            "back": "Enrere",
+            "confirm": "Confirmar",
+            "cancel": "Cancel·lar",
+            "course_info": "Informació del curs",
+            "course_sections": "Seccions del curs",
+            "course_visualization": "Visualització del curs"
+        }
     }
 }
