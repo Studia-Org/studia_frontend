@@ -1,0 +1,23 @@
+.\#td4f9c[data-orientation=portrait] {
+    aspect-ratio: unset !important;
+    width: 20rem;
+}
+
+bpMessageListScrollDownButtonContainer {
+    display: none !important;
+}
+
+.bpMessageListScrollDownButtonButton {
+    display: none !important;
+
+}
+
+
+.bpMessageBlocksDropdownContentContainer {
+    z-index: 1000 !important;
+}
+
+.bpComposerInput {
+    border: none;
+    outline: none;
+}
