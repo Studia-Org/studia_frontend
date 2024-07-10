@@ -103,7 +103,7 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
     <motion.div className='flex flex-col w-2/4' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
       <p className='mt-5 mb-5 text-sm font-normal text-gray-400'>{t("CREATE_COURSES.COURSE_INFO.principal_text")}</p>
       <label htmlFor="base-input" className="block mb-2 text-sm font-medium text-gray-900">
-        {t("CREATE_COURSES.COURSE_INFO.course_name")}
+        {t("CREATE_COURSES.COURSE_INFO.course_name")} *
       </label>
       <input
         type="text"
@@ -114,7 +114,7 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
       />
 
       <label htmlFor="message" className="block mt-8 mb-2 text-sm font-medium text-gray-900">
-        {t("CREATE_COURSES.COURSE_INFO.course_description")}
+        {t("CREATE_COURSES.COURSE_INFO.course_description")} *
       </label>
       <textarea
         id="message"
@@ -126,7 +126,7 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
       <SelectProfessor setCourseBasicInfo={setCourseBasicInfo} />
       <div className='text-sm font-normal'>
         <label htmlFor="message" className="block mt-8 mb-4 text-sm font-medium text-gray-900">
-          {t("CREATE_COURSES.COURSE_INFO.course_tags")}
+          {t("CREATE_COURSES.COURSE_INFO.course_tags")} *
         </label>
         <Select
           size='large'
@@ -142,7 +142,7 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
       <div className='flex justify-between mt-8'>
         <div className='w-full font-medium'>
           <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 ">
-            {t("CREATE_COURSES.COURSE_INFO.course_cover")}
+            {t("CREATE_COURSES.COURSE_INFO.course_cover")} *
           </label>
           <FilePond
             allowMultiple={true}

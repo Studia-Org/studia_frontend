@@ -75,7 +75,7 @@ export default function SelectProfessor({ setCourseBasicInfo }) {
             <Listbox value={selected} onChange={handleSelectChange}>
                 {({ open }) => (
                     <>
-                        <Listbox.Label className="block mt-5 text-sm font-medium leading-6 text-gray-900">{t("CREATE_COURSES.COURSE_INFO.course_evaluator")}</Listbox.Label>
+                        <Listbox.Label className="block mt-5 text-sm font-medium leading-6 text-gray-900">{t("CREATE_COURSES.COURSE_INFO.course_evaluator")} *</Listbox.Label>
                         <div className="relative mt-2">
                             {selected &&
                                 <Listbox.Button className="relative w-full py-3 pl-3 pr-10 text-left text-gray-900 bg-white rounded-md shadow-sm cursor-default ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm sm:leading-6">
