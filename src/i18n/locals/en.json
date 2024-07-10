@@ -133,6 +133,7 @@
     "SETTINGS": {
         "settings": "Settings",
         "SIDEBAR": {
+            "general": "General",
             "user_account": "User account",
             "change_pswd": "Change password",
             "language": "Language",
