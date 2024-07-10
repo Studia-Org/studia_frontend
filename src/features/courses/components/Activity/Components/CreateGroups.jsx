@@ -8,8 +8,9 @@ import { MoonLoader } from "react-spinners";
 import { UploadFiles } from "../../CreateCourses/CourseSections/UploadFiles.jsx";
 import Papa from 'papaparse';
 import csvIMG from '../../../../../assets/csvgroups.png'
-
+import { Trans, useTranslation } from "react-i18next";
 function CreateGroups({ activityId, courseId, activityData }) {
+    const { t } = useTranslation()
     const [students, setStudents] = useState([])
     const numberOfStudentsPerGroup = activityData.activity.data.attributes.numberOfStudentsperGroup
     const [totalStudents, setTotalStudents] = useState(0)
@@ -19,7 +20,7 @@ function CreateGroups({ activityId, courseId, activityData }) {
     const [files, setFiles] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [loadingModal, setLoadingModal] = useState(false);
-    const [textSaveGroups, setTextSaveGroups] = useState("Save groups")
+    const [textSaveGroups, setTextSaveGroups] = useState(t("ACTIVITY.create_groups.save_groups"))
     const [isEditing, setIsEditing] = useState(null)
     const [tempName, setTempName] = useState(null)
 
@@ -32,7 +33,7 @@ function CreateGroups({ activityId, courseId, activityData }) {
                 let groups = []
                 setTotalStudents(data.data.attributes.students.data.length)
                 if (dataGroups.length > 0) {
-                    setTextSaveGroups("Update groups")
+                    setTextSaveGroups(t("ACTIVITY.create_groups.update_groups"))
                     groups.push([])
                     dataGroups.forEach(group => {
                         //transfrom id into strings
@@ -178,10 +179,10 @@ function CreateGroups({ activityId, courseId, activityData }) {
         //check if there are empty groups
         const emptyGroups = students.slice(1).find(group => group.length === 0 || group.length === 1)
         if (emptyGroups && emptyGroups.length === 1 && emptyGroups[0].groupId) {
-            return message.error("There are empty groups")
+            return message.error(t("ACTIVITY.create_groups.empty_groups"))
         }
         if (emptyGroups && emptyGroups.length === 0) {
-            return message.error("There are empty groups")
+            return message.error(t("ACTIVITY.create_groups.empty_groups"))
         }
         try {
 
@@ -191,9 +192,9 @@ function CreateGroups({ activityId, courseId, activityData }) {
             const response = await fetchCreateGroups({ activityId, groups })
 
             if (response.response.status === 200) {
-                message.success("Groups saved successfully")
+                message.success(t("ACTIVITY.create_groups.save_success"))
             } else {
-                throw new Error("Error saving groups")
+                throw new Error(t("ACTIVITY.create_groups.save_error"))
             }
         }
         catch (error) {
@@ -206,7 +207,7 @@ function CreateGroups({ activityId, courseId, activityData }) {
     const uploadCSV = async () => {
         setLoadingModal(true);
         if (files.length === 0) {
-            message.error('No file selected.');
+            message.error(t("ACTIVITY.create_groups.no_file_selected"));
             setLoading(false);
             return;
         }
@@ -242,18 +243,18 @@ function CreateGroups({ activityId, courseId, activityData }) {
                             arrGroups.unshift(studentsWithouGroupIds)
                             setStudents(arrGroups)
                             setIsModalOpen(false);
-                            message.success('Participants imported successfully.');
+                            message.success(t("ACTIVITY.create_groups.participants_imported"));
                             resolve();
                         } catch (error) {
                             setLoadingModal(false);
-                            message.error('Error importing participants.');
+                            message.error(t("ACTIVITY.create_groups.participants_imported_error"));
                             reject();
                         }
                     }
                 });
             });
         } catch (error) {
-            message.error('Error importing participants.');
+            message.error(t("ACTIVITY.create_groups.participants_imported_error"));
             setLoadingModal(false);
         }
     }
@@ -272,7 +273,7 @@ function CreateGroups({ activityId, courseId, activityData }) {
                         setStudents([...students, []]);
                     }}
                 >
-                    Add new group
+                    {t("ACTIVITY.create_groups.add_new_group")}
                 </Button>
                 <Button
                     className="mb-4"
@@ -294,7 +295,7 @@ function CreateGroups({ activityId, courseId, activityData }) {
                             setStudents(students.slice(0, students.length - 1));
                         }
                     }}>
-                    Delete last group
+                    {t("ACTIVITY.create_groups.delete_last_group")}
                 </Button>
                 <Button
                     className="mb-4"
@@ -302,7 +303,7 @@ function CreateGroups({ activityId, courseId, activityData }) {
                     disabled={activityHasStarted}
                     onClick={createGroupsAutomatically}
                 >
-                    Create groups automatically
+                    {t("ACTIVITY.create_groups.create_groups_auto")}
                 </Button>
                 <Button
                     type="default"
@@ -313,25 +314,25 @@ function CreateGroups({ activityId, courseId, activityData }) {
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4">
                         <path fillRule="evenodd" d="M4 2a1.5 1.5 0 0 0-1.5 1.5v9A1.5 1.5 0 0 0 4 14h8a1.5 1.5 0 0 0 1.5-1.5V6.621a1.5 1.5 0 0 0-.44-1.06L9.94 2.439A1.5 1.5 0 0 0 8.878 2H4Zm4 9.5a.75.75 0 0 1-.75-.75V8.06l-.72.72a.75.75 0 0 1-1.06-1.06l2-2a.75.75 0 0 1 1.06 0l2 2a.75.75 0 1 1-1.06 1.06l-.72-.72v2.69a.75.75 0 0 1-.75.75Z" clipRule="evenodd" />
                     </svg>
-                    <span>Import from CSV</span>
+                    <span>{t("ACTIVITY.create_groups.import_from_csv")}</span>
                 </Button>
-                <Modal title={`Import groups from CSV`} open={isModalOpen}
+                <Modal title={t("ACTIVITY.create_groups.import_groups_from_csv")} open={isModalOpen}
                     onCancel={() => setIsModalOpen(false)}
                     footer={[
                         <Button onClick={() => setIsModalOpen(false)} className='bg-gray-200'>
-                            Cancel
+                            {t("COMMON.cancel")}
                         </Button>,
                         <Button type="primary" loading={loadingModal} onClick={uploadCSV}>
-                            Import
+                            {t("COMMON.import")}
                         </Button>
                     ]}
                 >
-                    <p>Please upload a CSV spreadsheet file (comma or semi-colon separated) with the following format:</p>
+                    <p>{t("ACTIVITY.create_groups.please_upload_csv")}</p>
                     <ol className='mb-5 ml-10 list-disc'>
-                        <li>Column 1: Student's email</li>
-                        <li>Column 2: Group ( You can put any text/number/combination you want if they match between students )</li>
+                        <li>{t("ACTIVITY.create_groups.column1")}</li>
+                        <li>{t("ACTIVITY.create_groups.column2")}</li>
                     </ol>
-                    <p>For example:</p>
+                    <p>{t("COMMON.for_example")}</p>
                     <img className='my-3 max-h-[450px]' src={csvIMG} alt="" />
                     <UploadFiles fileList={files} accept={'.csv'} setFileList={setFiles} listType={'picture'} maxCount={1} />
                 </Modal>
@@ -339,7 +340,6 @@ function CreateGroups({ activityId, courseId, activityData }) {
                     className="mb-4"
                     type="primary"
                     loading={creatingGroups}
-                    // disabled={activityHasStarted}
                     onClick={saveGroups}>
                     {textSaveGroups}
                 </Button >
@@ -348,8 +348,8 @@ function CreateGroups({ activityId, courseId, activityData }) {
             {/* //force enabled for ludmila course  */}
             {/* {activityHasStarted && <p className="text-xs text-red-500">Activity has started, you can't modify the groups</p>} */}
             <Divider className="mt-0" />
-            <h2> Activity was created to have {numberOfStudentsPerGroup} students per group</h2>
-            {activityHasStarted && <small className="mb-0 text-red-500 ">When activty has started, you can only update groups</small>}
+            <h2> <Trans i18nKey="ACTIVITY.create_groups.activity_created_for" components={{ numberOfStudentsPerGroup }} /></h2>
+            {activityHasStarted && <small className="mb-0 text-red-500 ">{t("ACTIVITY.create_groups.when_activity_started")}</small>}
             <Divider />
             <DragDropContext className="mt-5" onDragEnd={onDragEnd}  >
                 <div className="flex gap-y-3">
@@ -357,7 +357,7 @@ function CreateGroups({ activityId, courseId, activityData }) {
                     <StrictModeDroppable key={0} droppableId={`${0}`} isDropDisabled={activityHasStarted && false}>
                         {(provided) => (
                             <article className={`flex flex-col gap-2 p-2 sticky}`}>
-                                <p>Students</p>
+                                <p>{t("ACTIVITY.create_groups.students")}</p>
                                 <ul className={`flex flex-col gap-y-4 w-[300px] min-h-[200px] bg-white rounded-lg p-2 overflow-x-clip border`}
                                     {...provided.droppableProps}
                                     ref={provided.innerRef}>
@@ -429,7 +429,7 @@ function CreateGroups({ activityId, courseId, activityData }) {
                                                         </label>
                                                         :
                                                         <p className="flex items-center cursor-pointer" onClick={() => setIsEditing(index)}>
-                                                            {group[group.length - 1]?.GroupName || "Group " + index}
+                                                            {group[group.length - 1]?.GroupName || t("ACTIVITY.create_groups.group") + " " + index}
                                                             <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="h-4 w-4 ml-2 inline-block">
                                                                 <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                                             </svg>

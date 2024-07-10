@@ -1,8 +1,11 @@
 import React from 'react'
 import Chip from '@mui/material/Chip';
-
+import { useTranslation } from 'react-i18next';
 
 function ActivityTitle({ type, title, evaluated, qualification, setTitle, enableEdit, userRole, titleState, passedDeadline }) {
+    const { t } = useTranslation();
+    console.log(userRole)
+    console.log(!(userRole === 'professor' || userRole === 'admin' || type === 'Peer Review') && passedDeadline)
     return (
         <div className='relative flex items-center p-5 mt-5 mb-6 bg-white border rounded-md'>
             <div className='flex items-center w-full space-x-3'>
@@ -52,18 +55,15 @@ function ActivityTitle({ type, title, evaluated, qualification, setTitle, enable
                 }
             </div>
             {
-                userRole === 'professor' || userRole === 'admin' || type === 'Peer Review' ?
-                    null
-                    :
-                    passedDeadline ?
-                        evaluated ?
-                            <div className='absolute right-0 bg-green-700 rounded-r-md w-14 sm:w-[6rem]  ml-auto flex flex-col h-full justify-center text-center'>
-                                <p className='text-xl font-semibold text-white'>{qualification}/10</p>
-                            </div>
-                            :
-                            <Chip className='ml-auto ' label="Not evaluated yet" color="primary" />
+                !(userRole === 'professor' || userRole === 'admin' || type === 'Peer Review') && passedDeadline ?
+                    evaluated ?
+                        <div className='absolute right-0 bg-green-700 rounded-r-md w-14 sm:w-[6rem]  ml-auto flex flex-col h-full justify-center text-center'>
+                            <p className='text-xl font-semibold text-white'>{qualification}/10</p>
+                        </div>
                         :
-                        null
+                        <Chip className='ml-auto ' label={t("ACTIVITY.not_evaluated")} color="primary" />
+                    : null
+
             }
         </div>
     )

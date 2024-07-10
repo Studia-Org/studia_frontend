@@ -11,7 +11,7 @@ export const ChangeLanguage = () => {
     }
 
     return (
-        <main className="w-full text-base md:w-1/2 py-14">
+        <main key={i18n.language} className="w-full text-base md:w-1/2 py-14">
             <div className="w-full max-w-screen-xl px-4 text-gray-600 md:px-8">
                 <h2 className='text-lg text-black mt-[3.2rem]'>{t("SETTINGS.SIDEBAR.language")}</h2>
                 <main className="w-full text-base py-14">

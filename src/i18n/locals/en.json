@@ -4,7 +4,10 @@
         "need_help": "Do you need help?",
         "recommended": "Recommended",
         "new": "New",
-        "save_changes": "Save changes"
+        "save_changes": "Save changes",
+        "switch_mode": "Switch mode",
+        "import": "Import",
+        "for_example": "For example"
     },
     "HOME": {
         "title": "Welcome to the new era of Learning",
@@ -290,9 +293,12 @@
             "your_comment": "Your comment",
             "post_comment": "Post comment",
             "guidelines": "Remember, contributions to this topic should follow our ",
-            "guidelines2": "Community Guidelines"
+            "guidelines2": "Community Guidelines",
+            "there_are_no_posts": "There are no posts yet",
+            "write_first_post": "write your first post now!"
         },
         "ACCORDION": {
+            "course_info": "Course info",
             "title:": "Course content",
             "section": "Section",
             "add_section": "Add section",
@@ -313,6 +319,86 @@
             "participants_tile": "Explora todos los participantes actualmente inscritos en este curso.",
             "to_add_student": "Para agregar un nuevo estudiante, por favor navega a la sección de configuración del curso.",
             "placeholder_search": "Buscar un estudiante"
+        }
+    },
+    "ACTIVITY": {
+        "changed_saved_success": "Changes saved successfully",
+        "changed_saved_error": "Error saving changes",
+        "no_files": "You must upload a file",
+        "smth_wrong": "Something went wrong",
+        "deleted_success": "File deleted successfully",
+        "swal_change_files": {
+            "title": "Warning!",
+            "text": "You are going to change the files you uploaded before, are you sure?",
+            "confirm": "Yes, submit",
+            "cancel": "Cancel"
+        },
+        "pop_confirm": {
+            "title": "Delete file",
+            "description": "Are you sure you want to delete this file?",
+            "confirm": "Yes, delete it",
+            "cancel": "Cancel"
+        },
+        "go_back_activity": "Go back to activity",
+        "not_evaluated": "Not evaluated",
+        "comments": "Comments",
+        "no_comments": "There are no comments for your submission.",
+        "task_files": "Task files",
+        "size": "Size",
+        "remember_upload": "Remember to save your changes for correctly visualizing your new files.",
+        "task_description": "Task description",
+        "create_groups_button": "Create students groups",
+        "evaluator": "Evaluator",
+        "about_evaluator": "About the evaluator",
+        "about_professor": "About the professor",
+        "view_profile": "View profile",
+        "your_submission": "Your submission",
+        "not_files_submitted": "You have not submitted any files",
+        "click_microphone": "Click on the microphone and start recording your voice, or you can upload an audio file",
+        "group_members": "Group members",
+        "submit_files": "Submit files",
+        "remember_submit": "Remember to submit your file once you finished.",
+        "create_groups": {
+            "save_groups": "Save groups",
+            "update_groups": "Update groups",
+            "empty_groups": "There are empty groups",
+            "save_success": "Groups saved successfully",
+            "save_error": "Error saving groups",
+            "no_file_selected": "No file selected",
+            "participants_imported": "Participants imported successfully.",
+            "participants_imported_error": "Error importing participants.",
+            "add_new_group": "Add new group",
+            "delete_last_group": "Delete last group",
+            "create_groups_auto": "Create groups automatically",
+            "import_groups_from_csv": "Import groups from CSV",
+            "import_from_csv": "Import from CSV",
+            "please_upload_csv": "Please upload a CSV spreadsheet file (comma or semi-colon separated) with the following format:",
+            "column1": "Column 1: Student's email",
+            "column2": "Column 2: Group ( You can put any text/number/combination you want if they match between students )",
+            "activity_created_for": "Activity was created to have {{numberOfStudentsPerGroup}} students per group",
+            "when_activity_started": "When activty has started, you can only update groups",
+            "students": "Students",
+            "group": "Group"
+        }
+    },
+    "CREATE_COURSES": {
+        "principal_text": "Create new Course",
+        "COURSE_INFO": {
+            "principal_text": "First, give us some information about the new course. This information will be visible to students.",
+            "course_name": "Course name",
+            "course_description": "Course description",
+            "course_evaluator": "Evaluator",
+            "course_tags": "Tags",
+            "course_cover": "Course cover"
+        },
+        "NAVIGATION": {
+            "continue": "Continue",
+            "back": "Back",
+            "confirm": "Confirm",
+            "cancel": "Cancel",
+            "course_info": "Course info",
+            "course_sections": "Course sections",
+            "course_visualization": "Course visualization"
         }
     },
     "STUDENT_COURSES": {
@@ -363,26 +449,6 @@
                     "description": "Custom field description"
                 }
             }
-        }
-    },
-    "CREATE_COURSES": {
-        "principal_text": "Create new Course",
-        "COURSE_INFO": {
-            "principal_text": "First, give us some information about the new course. This information will be visible to students.",
-            "course_name": "Course name",
-            "course_description": "Course description",
-            "course_evaluator": "Evaluator",
-            "course_tags": "Tags",
-            "course_cover": "Course cover"
-        },
-        "NAVIGATION": {
-            "continue": "Continue",
-            "back": "Back",
-            "confirm": "Confirm",
-            "cancel": "Cancel",
-            "course_info": "Course info",
-            "course_sections": "Course sections",
-            "course_visualization": "Course visualization"
         }
     }
 }

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { Button, Empty, Table, message } from 'antd';
-
+import { useTranslation } from 'react-i18next';
 const formatFileSize = (bytes) => {
     const units = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
     let size = bytes;
@@ -47,6 +47,7 @@ const DownloadButton = ({ file }) => (
 );
 
 export const TaskFiles = ({ files }) => {
+    const { t } = useTranslation();
     const dataSource = useMemo(() => files?.map((file, index) => ({
         key: index,
         files: file.name,
@@ -56,12 +57,12 @@ export const TaskFiles = ({ files }) => {
 
     const columns = [
         {
-            title: 'Activity files',
+            title: t("ACTIVITY.task_files"),
             dataIndex: 'files',
             key: 'files',
         },
         {
-            title: 'Size',
+            title: t("ACTIVITY.size"),
             dataIndex: 'size',
             key: 'size',
         },
@@ -76,7 +77,7 @@ export const TaskFiles = ({ files }) => {
 
     return (
         <>
-            <p className='mt-8 mb-1 text-xs text-gray-600'>Task Files</p>
+            <p className='mt-8 mb-1 text-xs text-gray-600'>{t("ACTIVITY.task_files")}</p>
             <hr className='mb-5' />
             <Table
                 dataSource={dataSource}

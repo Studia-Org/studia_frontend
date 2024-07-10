@@ -12,8 +12,8 @@ export const ForumClickable = ({ posts, setForumFlag, setVisible, setParticipant
     } else {
       return (
         <p className="text-sm text-gray-700 ">
-          There are no posts yet,{" "}
-          <strong className="font-semibold">write your first post now!</strong>{" "}
+          {t("COURSEINSIDE.FORUM.there_are_no_posts")},{" "}
+          <strong className="font-semibold">{t("COURSEINSIDE.FORUM.write_first_post")}</strong>{" "}
         </p>
       );
     }

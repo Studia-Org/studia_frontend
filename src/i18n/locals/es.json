@@ -4,7 +4,10 @@
         "need_help": "¿Necesitas ayuda?",
         "recommended": "Recomendado",
         "new": "Nuevo",
-        "save_changes": "Guardar cambios"
+        "save_changes": "Guardar cambios",
+        "switch_mode": "Cambiar modo",
+        "import": "Importar",
+        "for_example": "Por ejemplo"
     },
     "HOME": {
         "title": "Bienvenido/a a la nueva era del aprendizaje",
@@ -290,9 +293,12 @@
             "your_comment": "Tu comentario",
             "post_comment": "Publicar comentario",
             "guidelines": "Recuerda, las contribuciones a este tema deben seguir nuestras ",
-            "guidelines2": "Normas de la comunidad"
+            "guidelines2": "Normas de la comunidad",
+            "there_are_no_posts": "No hay publicaciones en este foro todavía",
+            "write_first_post": "¡escribe tu primera publicación!"
         },
         "ACCORDION": {
+            "course_info": "Menú del curso",
             "title": "Contenido del curso",
             "section": "Sección",
             "add_section": "Agregar sección",
@@ -313,6 +319,66 @@
             "participants_tile": "Explora todos los participantes actualmente inscritos en este curso.",
             "to_add_student": "Para agregar un nuevo estudiante, por favor navega a la sección de configuración del curso.",
             "placeholder_search": "Buscar un estudiante"
+        }
+    },
+    "ACTIVITY": {
+        "changed_saved_success": "Cambios guardados correctamente",
+        "changed_saved_error": "Error al guardar los cambios",
+        "no_files": "Debes subir mínimo un archivo",
+        "smth_wrong": "Algo salió mal",
+        "deleted_success": "Archivo eliminado correctamente",
+        "swal_change_files": {
+            "title": "¡Advertencia!",
+            "text": "Vas a cambiar los archivos que subiste antes, ¿estás seguro?",
+            "confirm": "Sí, enviar",
+            "cancel": "Cancelar"
+        },
+        "pop_confirm": {
+            "title": "Eliminar archivo",
+            "description": "¿Estás seguro de que quieres eliminar este archivo?",
+            "confirm": "Sí, eliminar",
+            "cancel": "Cancelar"
+        },
+        "go_back_activity": "Volver a la actividad",
+        "not_evaluated": "No evaluado",
+        "comments": "Comentarios",
+        "no_comments": "No hay comentarios para tu entrega.",
+        "task_files": "Archivos de la tarea",
+        "size": "Tamaño",
+        "remember_upload": "Recuerda guardar los cambios para visualizar correctamente tus nuevos archivos.",
+        "task_description": "Descripción de la tarea",
+        "create_groups_button": "Crear grupos de estudiantes",
+        "evaluator": "Evaluador",
+        "about_evaluator": "Sobre el evaluador",
+        "about_professor": "Sobre el profesor",
+        "view_profile": "Ver perfil",
+        "your_submission": "Tu entrega",
+        "not_files_submitted": "No has enviado ningún archivo",
+        "click_microphone": "Haz clic en el micrófono y comienza a grabar tu voz, o puedes cargar un archivo de audio",
+        "group_members": "Miembros del grupo",
+        "submit_files": "Enviar archivos",
+        "remember_submit": "Recuerda enviar tu/s archivo/s una vez que hayas terminado.",
+        "create_groups": {
+            "save_groups": "Guardar grupos",
+            "update_groups": "Actualizar grupos",
+            "empty_groups": "Hay grupos vacíos",
+            "save_success": "Grupos guardados correctamente",
+            "save_error": "Error al guardar los grupos",
+            "no_file_selected": "No se ha seleccionado ningún archivo",
+            "participants_imported": "Participantes importados correctamente.",
+            "participants_imported_error": "Error al importar los participantes.",
+            "add_new_group": "Agregar nuevo grupo",
+            "delete_last_group": "Eliminar último grupo",
+            "create_groups_auto": "Crear grupos automáticamente",
+            "import_groups_from_csv": "Importar grupos desde CSV",
+            "import_from_csv": "Importar desde CSV",
+            "please_upload_csv": "Por favor, carga un archivo de hoja de cálculo CSV (separado por comas o puntos y comas) con el siguiente formato:",
+            "column1": "Columna 1: Correo electrónico del estudiante",
+            "column2": "Columna 2: Grupo (Puedes poner cualquier texto/número/combinción que coincida entre los estudiantes)",
+            "activity_created_for": "La actividad se creó para tener {{numberOfStudentsPerGroup}} estudiantes por grupo",
+            "when_activity_started": "Cuando la actividad haya comenzado, solo podrás actualizar los grupos",
+            "students": "Estudiantes",
+            "group": "Grupo"
         }
     },
     "CREATE_COURSES": {

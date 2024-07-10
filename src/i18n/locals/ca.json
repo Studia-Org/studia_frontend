@@ -4,7 +4,10 @@
         "need_help": "Necessites ajuda?",
         "recommended": "Recomanat",
         "new": "Nou",
-        "save_changes": "Desar canvis"
+        "save_changes": "Desar canvis",
+        "switch_mode": "Canviar mode",
+        "import": "Importar",
+        "for_example": "Per exemple"
     },
     "HOME": {
         "title": "Benvingut/da a la nova era de l'aprenentatge",
@@ -290,9 +293,12 @@
             "your_comment": "El teu comentari",
             "post_comment": "Publicar comentari",
             "guidelines": "Recorda, les contribucions a aquest tema han de seguir les nostres ",
-            "guidelines2": "Normes de la comunitat"
+            "guidelines2": "Normes de la comunitat",
+            "there_are_no_posts": "No hi ha publicacions encara",
+            "write_first_post": "escriu la teva primera publicació!"
         },
         "ACCORDION": {
+            "course_info": "Menú del curs",
             "title": "Contingut del curs",
             "section": "Secció",
             "add_section": "Afegir secció",
@@ -313,6 +319,66 @@
             "participants_tile": "Explora tots els participants actualment inscrits en aquest curs.",
             "to_add_student": "Per afegir un nou estudiant, si us plau, navega fins a la secció de configuració del curs.",
             "placeholder_search": "Cerca un estudiant"
+        }
+    },
+    "ACTIVITY": {
+        "changed_saved_success": "Canvis guardats correctament",
+        "changed_saved_error": "Error en guardar els canvis",
+        "no_files": "Has de carregar mínim un fitxer",
+        "smth_wrong": "Alguna cosa ha anat malament",
+        "deleted_success": "Fitxer esborrat correctament",
+        "swal_change_files": {
+            "title": "Advertència!",
+            "text": "Vas a canviar els fitxers carregats abans, estàs segur?",
+            "confirm": "Sí, enviar",
+            "cancel": "Cancel·lar"
+        },
+        "pop_confirm": {
+            "title": "Esborrar fitxer",
+            "description": "Estàs segur que vols esborrar aquest fitxer?",
+            "confirm": "Sí, esborra'l",
+            "cancel": "Cancel·lar"
+        },
+        "go_back_activity": "Tornar a l'activitat",
+        "not_evaluated": "No avaluat",
+        "comments": "Comentaris",
+        "no_comments": "No hi ha comentaris per la teva entrega.",
+        "task_files": "Fitxers de la tasca",
+        "size": "Mida",
+        "remember_upload": "Recorda guardar els canvis per visualitzar correctament els teus nous fitxers.",
+        "task_description": "Descripció de la tasca",
+        "create_groups_button": "Crear grups d'estudiants",
+        "evaluator": "Avaluador",
+        "about_evaluator": "Sobre l'avaluador",
+        "about_professor": "Sobre el professor",
+        "view_profile": "Veure perfil",
+        "your_submission": "La teva entrega",
+        "not_files_submitted": "No has enviat cap fitxer",
+        "click_microphone": "Fes clic al micròfon i comença a gravar la teva veu, o pots carregar un fitxer d'àudio",
+        "group_members": "Membres del grup",
+        "submit_files": "Enviar fitxers",
+        "remember_submit": "Recorda enviar el/s teu/s fitxer una vegada hagis acabat.",
+        "create_groups": {
+            "save_groups": "Desa grups",
+            "update_groups": "Actualitza grups",
+            "empty_groups": "Hi ha grups buits",
+            "save_success": "Grups desats correctament",
+            "save_error": "Error en desar els grups",
+            "no_file_selected": "Cap fitxer seleccionat",
+            "participants_imported": "Participants importats correctament.",
+            "participants_imported_error": "Error en importar els participants.",
+            "add_new_group": "Afegeix un nou grup",
+            "delete_last_group": "Esborra l'últim grup",
+            "create_groups_auto": "Crear grups automàticament",
+            "import_groups_from_csv": "Importa grups des de CSV",
+            "import_from_csv": "Importar des de CSV",
+            "please_upload_csv": "Si us plau, carrega un fitxer de full de càlcul CSV (separat per comes o punts i comes) amb el següent format:",
+            "column1": "Columna 1: Correu electrònic de l'estudiant",
+            "column2": "Columna 2: Grup (Pots posar qualsevol text/nombre/combinació que coincideixi entre els estudiants)",
+            "activity_created_for": "L'activitat es va crear per tenir {{numberOfStudentsPerGroup}} estudiants per grup",
+            "when_activity_started": "Quan l'activitat hagi començat, només podràs actualitzar els grups",
+            "students": "Estudiants",
+            "group": "Grup"
         }
     },
     "CREATE_COURSES": {

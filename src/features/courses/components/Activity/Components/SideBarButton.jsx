@@ -19,7 +19,6 @@ export const SideBarButton = ({ subsectionsCompleted }) => {
                 </svg>
             </Button>
             <Drawer
-                title="Course Menu"
                 size='large'
                 className='px-1 '
                 placement="right"
