@@ -5,9 +5,7 @@ import { Link } from 'react-router-dom';
 
 function GroupMembers({ activityGroup, loadingGroup, small = false }) {
 
-  console.log(activityGroup, loadingGroup)
   const sizeAvatar = small ? 'md' : 'large'
-  console.log(activityGroup)
   return (
     loadingGroup ?
       <div className="flex items-center justify-center w-full h-full">

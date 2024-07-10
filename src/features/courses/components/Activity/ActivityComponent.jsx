@@ -618,6 +618,8 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                       {filesUploaded && filesUploaded.map(renderFiles)}
                     </div>
                 }
+                <GroupMembers activityGroup={activityGroup} loadingGroup={loadingGroup} />
+
               </div >
               :
               !createGroups &&
@@ -659,7 +661,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                     isActivityEvaluable && (
                       <>
                         <p className='mt-5 mb-1 text-xs text-gray-600'>Your submission</p>
-                        <div className='p-5 space-y-5 bg-white border rounded-md'>
+                        <div className='p-5 mb-2 space-y-5 bg-white border rounded-md'>
 
                           <UploadFiles
                             fileList={fileList}
@@ -679,7 +681,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                           </Button>
                           <p className='text-xs text-gray-600'>Your changes will only be reflected if you submit your files.</p>
                         </div>
-
+                        <GroupMembers activityGroup={activityGroup} loadingGroup={loadingGroup} />
                       </>
                     )
                 }
