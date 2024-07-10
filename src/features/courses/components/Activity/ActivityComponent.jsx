@@ -591,7 +591,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
               Create students groups
             </Button>
             :
-            (evaluated || passedDeadline) && !(user.role_str === 'professor' || user.role_str === 'admin') ?
+            !(evaluated || passedDeadline) && !(user.role_str === 'professor' || user.role_str === 'admin') ?
               <div className='flex flex-col max-w-[calc(100vw-1.25rem)]'>
                 {
                   activityData.evaluator?.data && (
@@ -618,6 +618,8 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                       {filesUploaded && filesUploaded.map(renderFiles)}
                     </div>
                 }
+                <GroupMembers activityGroup={activityGroup} loadingGroup={loadingGroup} />
+
               </div >
               :
               !createGroups &&
@@ -657,9 +659,9 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                     </div>
                     :
                     isActivityEvaluable && (
-                      <>
-                        <p className='mt-5 mb-1 text-xs text-gray-600'>Your submission</p>
-                        <div className='p-5 space-y-5 bg-white border rounded-md'>
+                      <main>
+                        <header className='mt-5 mb-1 text-xs text-gray-600'>Your submission</header>
+                        <div className='p-5 mb-5 space-y-5 bg-white border rounded-md'>
 
                           <UploadFiles
                             fileList={fileList}
@@ -671,7 +673,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                           />
                           <Button
                             loading={uploadLoading}
-                            disabled={uploadLoading || (passedDeadline || evaluated) || sameUpload}
+                            disabled={uploadLoading || (passedDeadline || evaluated) || sameUpload || loadingGroup}
                             id='submit-button-activity'
                             onClick={() => { sendData() }}
                             className="flex ml-auto" type='primary'>
@@ -679,8 +681,8 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                           </Button>
                           <p className='text-xs text-gray-600'>Your changes will only be reflected if you submit your files.</p>
                         </div>
-
-                      </>
+                        <GroupMembers activityGroup={activityGroup} loadingGroup={loadingGroup} />
+                      </main>
                     )
                 }
 
