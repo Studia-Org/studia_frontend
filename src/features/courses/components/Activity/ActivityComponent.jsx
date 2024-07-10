@@ -591,7 +591,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
               Create students groups
             </Button>
             :
-            !(evaluated || passedDeadline) && !(user.role_str === 'professor' || user.role_str === 'admin') ?
+            (evaluated || passedDeadline) && !(user.role_str === 'professor' || user.role_str === 'admin') ?
               <div className='flex flex-col max-w-[calc(100vw-1.25rem)]'>
                 {
                   activityData.evaluator?.data && (
