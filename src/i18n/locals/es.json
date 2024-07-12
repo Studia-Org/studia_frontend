@@ -476,5 +476,16 @@
         "event_title": "Título del evento",
         "date": "Fecha",
         "there_are_no_events": "No hay eventos"
+    },
+    "TIMELINE": {
+        "days_week": [
+            "Dom",
+            "Lun",
+            "Mar",
+            "Mir",
+            "Jue",
+            "Vie",
+            "Sáb"
+        ]
     }
 }

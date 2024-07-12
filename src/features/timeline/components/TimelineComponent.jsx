@@ -7,7 +7,7 @@ import Timeline, {
 import "react-calendar-timeline/lib/Timeline.css";
 import '../styles/timelineStyles.css'
 import { useEffect, useRef, useState } from "react";
-
+import { useTranslation } from "react-i18next";
 
 const keys = {
   groupIdKey: "id",
@@ -23,7 +23,7 @@ const keys = {
 };
 
 const TimelineComponent = ({ groups, timelineItems, createCourseFlag }) => {
-
+  const { t } = useTranslation();
   let alturaElemento = (5 * groups.length) + 5
   const lineHeight = createCourseFlag ? 60 : 153;
   const itemHeightRatio = createCourseFlag ? 0.8 : 0.70;
@@ -161,8 +161,8 @@ const TimelineComponent = ({ groups, timelineItems, createCourseFlag }) => {
             intervalRenderer={({ getIntervalProps, intervalContext }) => {
               const [month, day] = intervalContext.intervalText.split('/').map(item => parseInt(item, 10));
               const intervalDate = new Date(today.getFullYear(), month - 1, day);
-              const date = new Date(2023, month - 1, day);
-              const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+              const date = new Date(today.getFullYear(), month - 1, day);
+              const daysOfWeek = t('TIMELINE.days_week', { returnObjects: true });
               const dayOfWeek = daysOfWeek[date.getDay()];
 
               if (today.toDateString() === intervalDate.toDateString() && !createCourseFlag) {

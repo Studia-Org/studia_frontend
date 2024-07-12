@@ -476,5 +476,16 @@
         "event_title": "Títol de l'esdeveniment",
         "date": "Data",
         "there_are_no_events": "No hi ha esdeveniments"
+    },
+    "TIMELINE": {
+        "days_week": [
+            "Dig",
+            "Dil",
+            "Dit",
+            "Dic",
+            "Dij",
+            "Div",
+            "Dis"
+        ]
     }
 }

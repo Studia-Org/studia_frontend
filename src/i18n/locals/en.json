@@ -526,5 +526,16 @@
         "event_title": "Event title",
         "date": "Date",
         "there_are_no_events": "There are no events"
+    },
+    "TIMELINE": {
+        "days_week": [
+            "Sun",
+            "Mon",
+            "Tue",
+            "Wed",
+            "Thu",
+            "Fri",
+            "Sat"
+        ]
     }
 }
