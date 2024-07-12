@@ -400,5 +400,15 @@
             "course_sections": "Secciones del curso",
             "course_visualization": "Visualización del curso"
         }
+    },
+    "CALENDAR": {
+        "event_added": "Evento agregado correctamente",
+        "event_deleted": "Evento eliminado correctamente",
+        "error_fetching_events": "Error al obtener los eventos",
+        "export_calendar": "Exportar calendario",
+        "add_event": "Agregar evento",
+        "event_title": "Título del evento",
+        "date": "Fecha",
+        "there_are_no_events": "No hay eventos"
     }
 }

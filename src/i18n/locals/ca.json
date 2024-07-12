@@ -400,5 +400,15 @@
             "course_sections": "Seccions del curs",
             "course_visualization": "Visualització del curs"
         }
+    },
+    "CALENDAR": {
+        "event_added": "Esdeveniment afegit correctament",
+        "event_deleted": "Esdeveniment esborrat correctament",
+        "error_fetching_events": "Error en recuperar els esdeveniments",
+        "export_calendar": "Exporta el calendari",
+        "add_event": "Afegeix esdeveniment",
+        "event_title": "Títol de l'esdeveniment",
+        "date": "Data",
+        "there_are_no_events": "No hi ha esdeveniments"
     }
 }

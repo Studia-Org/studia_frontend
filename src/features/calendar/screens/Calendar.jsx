@@ -2,16 +2,24 @@ import React, { useEffect, useState } from 'react'
 import 'rsuite/dist/rsuite-no-reset.min.css';
 import { Empty } from 'antd';
 import { useAuthContext } from "../../../context/AuthContext";
-import { Calendar, Whisper, Popover, Badge, Modal, Input, Button, Form } from 'rsuite';
+import { Calendar, Whisper, Popover, Badge, Modal, Input, Button, Form, CustomProvider } from 'rsuite';
 import { API } from "../../../constant";
 import { message } from "antd";
 import { fetchAllCoursesFromUser } from '../../../fetches/fetchAllCoursesFromUser';
 import { getToken } from "../../../helpers";
 import { FiPlus } from 'react-icons/fi';
 import { MoonLoader } from "react-spinners";
+import { useTranslation } from "react-i18next";
+import { esES, enUS } from 'rsuite/locales'
 import './calendar.css'
 
 const CalendarEvents = () => {
+    const { t, i18n } = useTranslation();
+    const locales = {
+        'es': esES,
+        'en': enUS,
+    }
+    const locale = locales[i18n.language] || enUS;
     const { user } = useAuthContext();
     const [open, setOpen] = useState(false);
     const [infoModal, setInfoModal] = useState(false);
@@ -53,14 +61,12 @@ const CalendarEvents = () => {
                 body: JSON.stringify({ data: userData })
             });
             fetchEvents();
-            message.success("Event Added Successfully");
+            message.success(t("CALENDAR.event_added"));
         } catch (error) {
             console.error(error);
         }
         handleClose();
     }
-
-    console.log(date)
 
     const fetchEvents = async () => {
         if (user) {
@@ -94,7 +100,7 @@ const CalendarEvents = () => {
                 setEventList(eventsData);
             } catch (error) {
                 console.error(error)
-                message.error("Error fetching events");
+                message.error(t("CALENDAR.error_fetching_events"));
             } finally {
                 setIsLoading(false);
             }
@@ -246,7 +252,7 @@ END:VCALENDAR
             });
             fetchEvents();
             setInfoModal(false)
-            message.success("Event Deleted Successfully");
+            message.success(t("CALENDAR.event_deleted"));
         } catch (error) {
             console.error(error);
         }
@@ -280,10 +286,12 @@ END:VCALENDAR
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                                             <path d="M13.75 7h-3v5.296l1.943-2.048a.75.75 0 0 1 1.114 1.004l-3.25 3.5a.75.75 0 0 1-1.114 0l-3.25-3.5a.75.75 0 1 1 1.114-1.004l1.943 2.048V7h1.5V1.75a.75.75 0 0 0-1.5 0V7h-3A2.25 2.25 0 0 0 4 9.25v7.5A2.25 2.25 0 0 0 6.25 19h7.5A2.25 2.25 0 0 0 16 16.75v-7.5A2.25 2.25 0 0 0 13.75 7Z" />
                                         </svg>
-                                        Export Calendar
+                                        {t("CALENDAR.export_calendar")}
                                     </Button>
                                 </div>
-                                <Calendar onSelect={selectDate} compact={innerWidth < 690} bordered renderCell={renderCell} />
+                                <CustomProvider locale={locale} >
+                                    <Calendar isoWeek={true} onSelect={selectDate} compact={innerWidth < 690} bordered renderCell={renderCell} />
+                                </CustomProvider>
                             </div>
                         </div>
                     </div>
@@ -304,24 +312,24 @@ END:VCALENDAR
             <div className='flex shadow-lg'>
                 <Modal size='sm' open={open} onClose={handleClose}>
                     <Modal.Header>
-                        <Modal.Title>Add Event</Modal.Title>
+                        <Modal.Title>{t("CALENDAR.add_event")}</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         <Form.Group >
-                            <Form.ControlLabel>Title</Form.ControlLabel>
+                            <Form.ControlLabel>{t("CALENDAR.event_title")}</Form.ControlLabel>
                             <Input value={title} onChange={handleTitleChange} />
                         </Form.Group >
                         <Form.Group className='mt-6' >
-                            <Form.ControlLabel>Date</Form.ControlLabel>
+                            <Form.ControlLabel>{t("CALENDAR.date")}</Form.ControlLabel>
                             <Input type='datetime-local' value={formatDate(date)} onChange={handleDateChange} />
                         </Form.Group >
                     </Modal.Body>
                     <Modal.Footer>
                         <Button onClick={handleClose} appearance="subtle">
-                            Cancel
+                            {t("COMMON.cancel")}
                         </Button>
                         <Button onClick={handleAddEvent} appearance="primary">
-                            Add Event
+                            {t("CALENDAR.add_event")}
                         </Button>
                     </Modal.Footer>
                 </Modal>
@@ -341,7 +349,7 @@ END:VCALENDAR
                         {
                             Object.keys(infoModalData).length === 0 && (
                                 <div>
-                                    <Empty description='There are no events' />
+                                    <Empty description={t("CALENDAR.there_are_no_events")} />
                                 </div>
                             )
                         }
@@ -370,10 +378,10 @@ END:VCALENDAR
                     </Modal.Body>
                     <Modal.Footer>
                         <Button onClick={() => setInfoModal(false)} appearance="subtle">
-                            Close
+                            {t("COMMON.cancel")}
                         </Button>
                         <Button onClick={() => { setInfoModal(false); setOpen(true) }} appearance="primary">
-                            Add new Event
+                            {t("CALENDAR.add_event")}
                         </Button>
                     </Modal.Footer>
                 </Modal>

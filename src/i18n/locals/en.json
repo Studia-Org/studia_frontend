@@ -450,5 +450,15 @@
                 }
             }
         }
+    },
+    "CALENDAR": {
+        "event_added": "Event added successfully",
+        "event_deleted": "Event deleted successfully",
+        "error_fetching_events": "Error fetching events",
+        "export_calendar": "Export calendar",
+        "add_event": "Add event",
+        "event_title": "Event title",
+        "date": "Date",
+        "there_are_no_events": "There are no events"
     }
 }
