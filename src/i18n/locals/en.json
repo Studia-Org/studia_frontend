@@ -391,6 +391,72 @@
             "course_tags": "Tags",
             "course_cover": "Course cover"
         },
+        "COURSE_SECTIONS": {
+            "CREATE_TASK": {
+                "back_to_course": "Back to course",
+                "section": "Section",
+                "create_task": "Create task",
+                "save_changes": "Save changes",
+                "principal_text": "Before proceeding to create our first sequence, let's first establish the task that will encompass the entire section!",
+                "task_title": "Task title",
+                "task_title_placeholder": "Enter the task title",
+                "task_description": "Task description",
+                "task_description_placeholder": "Enter the task description",
+                "task_files": "Task files",
+                "task_end_date": "Task end date",
+                "task_end_date_placeholder": "Select a date",
+                "task_categories": "Task categories",
+                "task_categories_placeholder": "Select at least one category",
+                "task_categories_text": "Select the categories associated with this task that students will need to develop."
+            },
+            "EDIT_SECTION": {
+                "title": "Edit Section",
+                "save_changes": "Save changes",
+                "course_sequence": "Course sequence",
+                "course_sequence_text": "Click on a subsection for editing the content.",
+                "empty_sequence": "Start defining the sequence!",
+                "draganddrop": "Drag and drop to reorder the sequence",
+                "add_first_item": "Add the first item to the sequence",
+                "edit_task": "Edit task",
+                "sequences": "Sequences",
+                "premade_sequences": "Pre-made sequences",
+                "items_sequences": "Add items to the sequence",
+                "sequence_text": "You can edit all the sequences for customization when they are added on a section.",
+                "add_sequence": "Add sequence",
+                "SEQUENCES": {
+                    "CONTINUOUS_FEEDBACK": {
+                        "title": "Continuous feedback",
+                        "description": "The sequence is designed to revolve around the delivery of a task, allowing students to plan the task and progressively improve it with feedback from other students."
+                    },
+                    "FORUM_FEEDBACK": {
+                        "title": "Develop a task with forum feedback",
+                        "description": "The sequence is designed to revolve around the delivery of a task, with the possibility of receiving feedback from other students through the forum."
+                    },
+                    "CONTINUOUS_FEEDBACK_2": {
+                        "title": "Continuous feedback",
+                        "description": "The sequence is designed to revolve around the delivery of a task, allowing students to plan the task and progressively improve it with feedback from other students with a more continuous delivery system."
+                    },
+                    "EARLY_FEEDBACK": {
+                        "title": "Early Professor feedback and reflection",
+                        "description": "The sequence is designed to revolve around the delivery of a task, allowing students to plan the task and receive feedback from the professor before the final delivery."
+                    },
+                    "WIP": {
+                        "title": "Work in progress",
+                        "description": "Work in progress."
+                    }
+                }
+            },
+            "section_name": "Section name",
+            "create": "Create",
+            "principal_text": "It's time to build your course, construct the sections and define the sequence! 🚀",
+            "add_section": "Add section",
+            "title": "Course sections",
+            "draganddrop": "Drag and drop to reorder your sections",
+            "no_sections": "There are no sections yet"
+        },
+        "COURSE_VISUALIZATION": {
+            "generate_course": "Generate course"
+        },
         "NAVIGATION": {
             "continue": "Continue",
             "back": "Back",

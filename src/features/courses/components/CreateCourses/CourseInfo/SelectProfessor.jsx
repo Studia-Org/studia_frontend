@@ -91,7 +91,6 @@ export default function SelectProfessor({ setCourseBasicInfo }) {
                                     </span>
                                 </Listbox.Button>
                             }
-
                             <Transition
                                 show={open}
                                 as={Fragment}

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Empty } from 'antd'
 import TimelineComponent from '../../../../timeline/components/TimelineComponent'
+import { useTranslation } from 'react-i18next'
 
 export const CreateCourseTimelineSubsection = ({ createCourseSectionsList, sectionId, ref2 }) => {
   const sectionFiltered = createCourseSectionsList.filter((section) => section.id === sectionId)[0]
@@ -11,6 +12,7 @@ export const CreateCourseTimelineSubsection = ({ createCourseSectionsList, secti
   let counter = 1;
   let timelineItems = []
 
+  const { t } = useTranslation()
   let alturaElemento = (5 * groups.length) + 6
 
   sectionFiltered.subsections.forEach(subsection => {
@@ -34,7 +36,7 @@ export const CreateCourseTimelineSubsection = ({ createCourseSectionsList, secti
       <div ref={ref2} className='flex flex-col items-center justify-center p-5 mb-10 bg-white rounded-md shadow-md'>
         <Empty description={
           <span className='font-normal text-gray-400 '>
-            Add your first item
+            {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.add_first_item")}
           </span>
         } />
       </div>

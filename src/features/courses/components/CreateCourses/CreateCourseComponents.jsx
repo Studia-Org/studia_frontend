@@ -164,6 +164,8 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
   const [sectionName, setSectionName] = useState('');
   const [addSectionFlag, setAddSectionFlag] = useState(true);
 
+  const { t } = useTranslation();
+
   const handleDragEnd = (event) => {
     const { active, over } = event
 
@@ -197,20 +199,20 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
 
   return (
     <motion.div className='flex flex-col w-2/4' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
-      <p className='mt-5 mb-5 text-sm font-normal text-gray-400'>It's time to build your course, construct the sections and define the sequence! 🚀</p>
+      <p className='mt-5 mb-5 text-sm font-normal text-gray-400'>{t("CREATE_COURSES.COURSE_SECTIONS.principal_text")}</p>
       <div className='p-5 mb-5 text-base font-medium bg-white rounded-md shadow-md'>
         <div className='flex items-center'>
-          <h3 className=''>Course sections</h3>
+          <h3 className=''>{t("CREATE_COURSES.COURSE_SECTIONS.title")}</h3>
           {
             addSectionFlag ?
               <button onClick={() => setAddSectionFlag(false)} className='flex ml-auto '>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 mr-1">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
                 </svg>
-                <p className='ml-auto text-sm'>Add a section</p>
+                <p className='ml-auto text-sm'>{t("CREATE_COURSES.COURSE_SECTIONS.add_section")}</p>
               </button> :
               <button onClick={() => setAddSectionFlag(true)} className='flex ml-auto'>
-                <p className='ml-auto text-sm'>Cancel</p>
+                <p className='ml-auto text-sm'>{t("CREATE_COURSES.NAVIGATION.cancel")}</p>
               </button>
           }
 
@@ -218,7 +220,7 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
         {
           !addSectionFlag &&
           <div>
-            <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 mt-5">Section name</label>
+            <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 mt-5">{t("CREATE_COURSES.COURSE_SECTIONS.section_name")}</label>
             <input type="text" value={sectionName}
               onChange={(e) => setSectionName(e.target.value)}
               id="base-input"
@@ -226,7 +228,7 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
             <button
               onClick={() => createSection()}
               className='p-2 mt-4 text-sm text-white bg-gray-800 rounded-md '>
-              Create
+              {t("CREATE_COURSES.COURSE_SECTIONS.create")}
             </button>
           </div>
         }
@@ -248,12 +250,12 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
             <div>
               <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={
                 <span>
-                  There are no sections yet
+                  {t("CREATE_COURSES.COURSE_SECTIONS.no_sections")}
                 </span>
               } />
             </div>
         }
-        <p className='mt-8 text-xs font-normal text-gray-400'>Drag and drop to reorder your sections</p>
+        <p className='mt-8 text-xs font-normal text-gray-400'>{t("CREATE_COURSES.COURSE_SECTIONS.draganddrop")}</p>
       </div>
       {CreateCourseButtons(createCourseOption, setCreateCourseOption)}
     </motion.div>

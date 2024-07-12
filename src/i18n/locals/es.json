@@ -391,6 +391,72 @@
             "course_tags": "Etiquetas",
             "course_cover": "Portada del curso"
         },
+        "COURSE_SECTIONS": {
+            "CREATE_TASK": {
+                "back_to_course": "Volver al curso",
+                "section": "Sección",
+                "create_task": "Crear tarea",
+                "save_changes": "Guardar cambios",
+                "principal_text": "Antes de proceder a crear nuestra primera secuencia, ¡primero establezcamos la tarea que abarcará toda la sección!",
+                "task_title": "Título de la tarea",
+                "task_title_placeholder": "Introduce el título de la tarea",
+                "task_description": "Descripción de la tarea",
+                "task_description_placeholder": "Introduce la descripción de la tarea",
+                "task_files": "Archivos de la tarea",
+                "task_end_date": "Fecha de finalización de la tarea",
+                "task_end_date_placeholder": "Selecciona una fecha",
+                "task_categories": "Categorías de la tarea",
+                "task_categories_placeholder": "Selecciona como mínimo una categoría",
+                "task_categories_text": "Selecciona las categorías asociadas a esta tarea que los estudiantes tendrán que desarrollar."
+            },
+            "EDIT_SECTION": {
+                "title": "Editar Sección",
+                "save_changes": "Guardar cambios",
+                "course_sequence": "Secuencia del curso",
+                "course_sequence_text": "Haz clic en una subsección para editar el contenido.",
+                "empty_sequence": "¡Comienza a definir la secuencia!",
+                "draganddrop": "Arrastra y suelta para reordenar la secuencia",
+                "add_first_item": "Añadir el primer elemento a la secuencia",
+                "edit_task": "Editar tarea",
+                "sequences": "Secuencias",
+                "premade_sequences": "Secuencias predefinidas",
+                "items_sequences": "Añadir elementos a la secuencia",
+                "sequence_text": "Puedes editar todas las secuencias para personalización cuando se añaden a una sección.",
+                "add_sequence": "Añadir secuencia",
+                "SEQUENCES": {
+                    "CONTINUOUS_FEEDBACK": {
+                        "title": "Feedback continuo",
+                        "description": "La secuencia está diseñada para girar en torno a la entrega de una tarea, permitiendo a los estudiantes planificar la tarea y mejorarla progresivamente con feedback de otros estudiantes."
+                    },
+                    "FORUM_FEEDBACK": {
+                        "title": "Desarrollar una tarea con feedback del foro",
+                        "description": "La secuencia está diseñada para girar en torno a la entrega de una tarea, con la posibilidad de recibir feedback de otros estudiantes a través del foro."
+                    },
+                    "CONTINUOUS_FEEDBACK_2": {
+                        "title": "Feedback continuo",
+                        "description": "La secuencia está diseñada para girar en torno a la entrega de una tarea, permitiendo a los estudiantes planificar la tarea y mejorarla progresivamente con feedback de otros estudiantes con un sistema de entrega más continuo."
+                    },
+                    "EARLY_FEEDBACK": {
+                        "title": "Feedback inicial del profesor y reflexión",
+                        "description": "La secuencia está diseñada para girar en torno a la entrega de una tarea, permitiendo a los estudiantes planificar la tarea y recibir feedback del profesor antes de la entrega final."
+                    },
+                    "WIP": {
+                        "title": "Trabajo en progreso",
+                        "description": "Trabajo en progreso."
+                    }
+                }
+            },
+            "section_name": "Título de la sección",
+            "create": "Crear",
+            "principal_text": "Es hora de construir tu curso, ¡construye las secciones y define la secuencia! 🚀",
+            "add_section": "Añadir sección",
+            "title": "Secciones del curso",
+            "draganddrop": "Arrastra y suelta para reordenar tus secciones",
+            "no_sections": "Aún no hay secciones"
+        },
+        "COURSE_VISUALIZATION": {
+            "generate_course": "Crear curso"
+        },
         "NAVIGATION": {
             "continue": "Continuar",
             "confirm": "Confirmar",
