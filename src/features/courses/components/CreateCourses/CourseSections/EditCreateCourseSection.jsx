@@ -8,6 +8,7 @@ import { CreateCourseTimelineSubsection } from './CreateCourseTimelineSubsection
 import { motion } from 'framer-motion';
 import { message, Button, Tag, Tour } from 'antd';
 import { CreateTask } from './CreateTask';
+import { useTranslation } from 'react-i18next';
 
 export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdit, createCourseSectionsList, task, setTask,
     createCourseSectionsListCopy, setCreateCourseSectionsListCopy, setCreateCourseSectionsList, categories, setCategories }) => {
@@ -16,6 +17,8 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
     const [subsectionEditing, setSubsectionEditing] = useState()
     const [thereIsChanges, setThereIsChanges] = useState(false)
     const [editTaskFlag, setEditTaskFlag] = useState(false)
+
+    const { t } = useTranslation();
 
     const ref = useRef(null);
     const ref0 = useRef(null);
@@ -202,7 +205,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                     <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
                 </svg>
-                <p className='ml-1 text-sm '>Back to course setup</p>
+                <p className='ml-1 text-sm '>{t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.back_to_course")}</p>
             </button>
 
             {
@@ -213,7 +216,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
                     <div className='flex'>
                         <div className='w-1/2 pl-5 pr-10 '>
                             <div className='flex items-center gap-2 mt-5'>
-                                <h1 className='text-2xl font-bold '>Edit Section</h1>
+                                <h1 className='text-2xl font-bold '>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.title")}</h1>
                                 <svg
                                     onClick={handleClick}
                                     xmlns="http://www.w3.org/2000/svg"
@@ -232,18 +235,18 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
                             <div className='flex items-center justify-between mt-5'>
                                 <div className='flex items-center gap-2'>
                                     <h2 className='text-xl font-medium '>{sectionToEdit.name}</h2>
-                                    <Tag color="#108ee9">Section</Tag>
+                                    <Tag color="#108ee9">{t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.section")}</Tag>
                                 </div>
-                                <Button ref={ref4} disabled={!thereIsChanges} type='primary' onClick={saveChanges} className='bg-[#1677ff] text-white '>Save Changes</Button>
+                                <Button ref={ref4} disabled={!thereIsChanges} type='primary' onClick={saveChanges} className='bg-[#1677ff] text-white '>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.save_changes")}</Button>
                             </div>
                             <div ref={ref} className='p-5 mt-5 mb-5 text-base font-medium bg-white rounded-md shadow-md'>
                                 <div className='flex items-center'>
-                                    <h3 className=''>Course sequence</h3>
+                                    <h3 className=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.course_sequence")}</h3>
                                     <Button ref={ref0} className='ml-auto' onClick={() => setEditTaskFlag(true)}>
-                                        Edit Task
+                                        {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.edit_task")}
                                     </Button>
                                 </div>
-                                <p className='text-xs font-normal text-gray-400'>Click on a subsection for editing the content.</p>
+                                <p className='text-xs font-normal text-gray-400'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.course_sequence_text")}</p>
                                 {
                                     subsectionsToEdit.subsections.length > 0 ?
                                         <div className='mt-6 space-y-3 h-[20rem] duration-700 overflow-y-auto overflow-x-hidden'>
@@ -269,10 +272,10 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
                                         </div>
                                         :
                                         <div>
-                                            <p className='mt-6 text-sm italic font-normal text-gray-500'>Start defining the sequence!</p>
+                                            <p className='mt-6 text-sm italic font-normal text-gray-500'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.empty_sequence")}</p>
                                         </div>
                                 }
-                                <p className='mt-8 text-xs font-normal text-gray-400'>Drag and drop to reorder the sequence</p>
+                                <p className='mt-8 text-xs font-normal text-gray-400'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.draganddrop")}</p>
                             </div>
                             <CreateCourseTimelineSubsection ref2={ref2} createCourseSectionsList={createCourseSectionsListCopy} sectionId={sectionToEdit.id} />
                         </div>

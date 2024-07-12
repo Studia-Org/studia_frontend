@@ -3,12 +3,15 @@ import { SequenceDevelop, SequenceDevelopNoMSLQForum, SequenceDevelopEducation1,
 import { motion } from 'framer-motion';
 import { Badge, Tabs } from 'antd';
 import { ForethoughtPage, PerformancePage, SelfReflectionPage } from './ConstantsSubsectionItems'
+import { useTranslation } from 'react-i18next';
 
 
 export const SubsectionItems = ({ setCreateCourseSectionsList, sectionToEdit, context, ref3, sectionTask }) => {
     const [currentPage, setCurrentPage] = useState('first');
     const [currentPageSequence, setCurrentPageSequence] = useState(0);
     const [addItemsOrPreMade, setAddItemsOrPreMade] = useState(context === 'coursesInside' ? 'addItems' : 'preMade');
+
+    const { t } = useTranslation()
 
     const variants = {
         hidden: { opacity: 0, y: 20 },
@@ -109,14 +112,22 @@ export const SubsectionItems = ({ setCreateCourseSectionsList, sectionToEdit, co
                     {
                         context === 'coursesInside' ?
                             <>
-                                <button onClick={() => setAddItemsOrPreMade('addItems')} className={`${addItemsOrPreMade === 'addItems' ? ' bg-[#45406f]' : ''} font-medium inline-block px-4 ml-2 hover:bg-[#45406f] duration-100  mt-[2.5rem] rounded-t-lg text-white p-2`}>Add items to the sequence</button>
-                                <button onClick={() => setAddItemsOrPreMade('preMade')} className={`${addItemsOrPreMade === 'preMade' ? ' bg-[#45406f]' : ''} font-medium inline-block ml-4 px-4 hover:bg-[#45406f] duration-100  mt-[2.5rem] rounded-t-lg text-white p-2`}>Pre-Made sequences</button>
+                                <button onClick={() => setAddItemsOrPreMade('addItems')} className={`${addItemsOrPreMade === 'addItems' ? ' bg-[#45406f]' : ''} font-medium inline-block px-4 ml-2 hover:bg-[#45406f] duration-100  mt-[2.5rem] rounded-t-lg text-white p-2`}>
+                                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.items_sequences")}
+                                </button>
+                                <button onClick={() => setAddItemsOrPreMade('preMade')} className={`${addItemsOrPreMade === 'preMade' ? ' bg-[#45406f]' : ''} font-medium inline-block ml-4 px-4 hover:bg-[#45406f] duration-100  mt-[2.5rem] rounded-t-lg text-white p-2`}>
+                                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.premade_sequences")}
+                                </button>
 
                             </>
                             :
                             <>
-                                <button onClick={() => setAddItemsOrPreMade('preMade')} className={`${addItemsOrPreMade === 'preMade' ? ' bg-[#45406f]' : ''} font-medium inline-block ml-4 px-4 hover:bg-[#45406f] duration-100  mt-[2.5rem] rounded-t-lg text-white p-2`}>Pre-Made sequences</button>
-                                <button onClick={() => setAddItemsOrPreMade('addItems')} className={`${addItemsOrPreMade === 'addItems' ? ' bg-[#45406f]' : ''} font-medium inline-block px-4 ml-2 hover:bg-[#45406f] duration-100  mt-[2.5rem] rounded-t-lg text-white p-2`}>Add items to the sequence</button>
+                                <button onClick={() => setAddItemsOrPreMade('preMade')} className={`${addItemsOrPreMade === 'preMade' ? ' bg-[#45406f]' : ''} font-medium inline-block ml-4 px-4 hover:bg-[#45406f] duration-100  mt-[2.5rem] rounded-t-lg text-white p-2`}>
+                                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.premade_sequences")}
+                                </button>
+                                <button onClick={() => setAddItemsOrPreMade('addItems')} className={`${addItemsOrPreMade === 'addItems' ? ' bg-[#45406f]' : ''} font-medium inline-block px-4 ml-2 hover:bg-[#45406f] duration-100  mt-[2.5rem] rounded-t-lg text-white p-2`}>
+                                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.items_sequences")}
+                                </button>
                             </>
                     }
                 </div>
@@ -132,7 +143,7 @@ export const SubsectionItems = ({ setCreateCourseSectionsList, sectionToEdit, co
                         :
                         <>
                             <div className='flex mt-20 '>
-                                <p className='mb-5'>Sequences</p>
+                                <p className='mb-5'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.sequences")}</p>
                                 <div className='flex items-center ml-auto space-x-3'>
                                     <Badge count={(currentPageSequence + 1) + '/4'} color='#45406f' />
                                     <button onClick={() => handleBackSequence()} className='bg-[#45406f] p-1 text-white rounded-md hover:bg-indigo-900 duration-150'>
@@ -154,7 +165,7 @@ export const SubsectionItems = ({ setCreateCourseSectionsList, sectionToEdit, co
                                 initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
                                 {renderSequencesPage()}
                             </motion.div>
-                            <p className='mt-5 ml-1 text-xs font-normal text-gray-400'>You can edit all the sequences for customization when they are added on a section.</p>
+                            <p className='mt-5 ml-1 text-xs font-normal text-gray-400'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.sequence_text")}</p>
                         </>
                 }
             </div >

@@ -391,6 +391,72 @@
             "course_tags": "Etiquetes",
             "course_cover": "Portada del curs"
         },
+        "COURSE_SECTIONS": {
+            "CREATE_TASK": {
+                "back_to_course": "Tornar al curs",
+                "section": "Secció",
+                "create_task": "Crear tasca",
+                "save_changes": "Desar canvis",
+                "principal_text": "Abans de procedir a crear la nostra primera seqüència, primer establim la tasca que abastarà tota la secció!",
+                "task_title": "Títol de la tasca",
+                "task_title_placeholder": "Introdueix el títol de la tasca",
+                "task_description": "Descripció de la tasca",
+                "task_description_placeholder": "Introdueix la descripció de la tasca",
+                "task_files": "Arxius de la tasca",
+                "task_end_date": "Data de finalització de la tasca",
+                "task_end_date_placeholder": "Selecciona una data",
+                "task_categories": "Categories de la tasca",
+                "task_categories_placeholder": "Selecciona com a mínim una categoria",
+                "task_categories_text": "Selecciona les categories associades a aquesta tasca que els estudiants hauran de desenvolupar."
+            },
+            "EDIT_SECTION": {
+                "title": "Editar Secció",
+                "save_changes": "Desar canvis",
+                "course_sequence": "Seqüència del curs",
+                "course_sequence_text": "Fes clic en una subsecció per editar el contingut.",
+                "empty_sequence": "Comença a definir la seqüència!",
+                "draganddrop": "Arrossega i deixa anar per reordenar la seqüència",
+                "add_first_item": "Afegeix el primer element a la seqüència",
+                "edit_task": "Editar tasca",
+                "sequences": "Seqüències",
+                "premade_sequences": "Seqüències predefinides",
+                "items_sequences": "Afegeix elements a la seqüència",
+                "sequence_text": "Pots editar totes les seqüències per a la personalització quan s'afegeixen a una secció.",
+                "add_sequence": "Afegeix seqüència",
+                "SEQUENCES": {
+                    "CONTINUOUS_FEEDBACK": {
+                        "title": "Feedback continu",
+                        "description": "La seqüència està dissenyada per girar al voltant de l'entrega d'una tasca, permetent als estudiants planificar la tasca i millorar-la progressivament amb feedback d'altres estudiants."
+                    },
+                    "FORUM_FEEDBACK": {
+                        "title": "Desenvolupar una tasca amb feedback del fòrum",
+                        "description": "La seqüència està dissenyada per girar al voltant de l'entrega d'una tasca, amb la possibilitat de rebre feedback d'altres estudiants a través del fòrum."
+                    },
+                    "CONTINUOUS_FEEDBACK_2": {
+                        "title": "Feedback continu",
+                        "description": "La seqüència està dissenyada per girar al voltant de l'entrega d'una tasca, permetent als estudiants planificar la tasca i millorar-la progressivament amb feedback d'altres estudiants amb un sistema d'entrega més continu."
+                    },
+                    "EARLY_FEEDBACK": {
+                        "title": "Feedback inicial del professor i reflexió",
+                        "description": "La seqüència està dissenyada per girar al voltant de l'entrega d'una tasca, permetent als estudiants planificar la tasca i rebre feedback del professor abans de l'entrega final."
+                    },
+                    "WIP": {
+                        "title": "Treball en progress",
+                        "description": "Treball en progress."
+                    }
+                }
+            },
+            "section_name": "Títol de la secció",
+            "create": "Crear",
+            "principal_text": "És hora de construir el teu curs, construeix les seccions i defineix la seqüència! 🚀",
+            "add_section": "Afegir secció",
+            "title": "Seccions del curs",
+            "draganddrop": "Arrossega i deixa anar per reordenar les teves seccions",
+            "no_sections": "Encara no hi ha seccions"
+        },
+        "COURSE_VISUALIZATION": {
+            "generate_course": "Crear curs"
+        },
         "NAVIGATION": {
             "continue": "Continuar",
             "back": "Enrere",

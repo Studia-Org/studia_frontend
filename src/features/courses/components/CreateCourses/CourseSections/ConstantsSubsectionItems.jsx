@@ -1,6 +1,7 @@
 import { EmptyQuestionnaireData, PlannificationQuestionnaireData, SRLOQuestionnaireData } from './QuestionnaireData'
 import { PeerReviewData, ForumData, ThinkAloudData, SelfAssessmentData } from './ActivityData';
 import React from 'react'
+import { useTranslation } from 'react-i18next';
 
 function createSubsection(subsectionName, fase, questionnaireData, setCreateCourseSectionsList, sectionToEdit, type, context, activityData) {
     const id = crypto.randomUUID();
@@ -190,6 +191,8 @@ function addSequence(modifiedSequence, setCreateCourseSectionsList, sectionToEdi
 }
 
 export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask, context }) => {
+    const { t } = useTranslation();
+
     const sequence = [
         { title: 'Autoregulation Questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: SRLOQuestionnaireData, type: 'questionnaire', activityData: null },
         { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
@@ -217,11 +220,11 @@ export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit, se
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
                     </svg>
-                    Add Sequence
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.add_sequence")}
                 </button>
                 <div className="">
-                    <p className="text-base font-normal">Continuous feedback</p>
-                    <p className="text-sm font-normal text-gray-500 ">The sequence is designed to revolve around the delivery of a task, allowing students to plan the task and progressively improve it with feedback from other students</p>
+                    <p className="text-base font-normal">{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.CONTINUOUS_FEEDBACK.title")}</p>
+                    <p className="text-sm font-normal text-gray-500 ">{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.CONTINUOUS_FEEDBACK.description")}</p>
                 </div>
             </div>
         </div>
@@ -229,6 +232,7 @@ export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit, se
 }
 
 export const SequenceDevelopEducation1 = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask, context }) => {
+    const { t } = useTranslation();
     const sequence = [
         { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
         { title: 'Forum debate', iconColor: '#15803d', iconPath: svgSwitcher('forum'), fase: 'forethought', questionnaireData: null, type: 'forum', activityData: ForumData },
@@ -260,11 +264,11 @@ export const SequenceDevelopEducation1 = ({ setCreateCourseSectionsList, section
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
                     </svg>
-                    Add Sequence
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.add_sequence")}
                 </button>
                 <div className="">
-                    <p className="text-base font-normal">Continuous feedback</p>
-                    <p className="text-sm font-normal text-gray-500">The sequence is designed to revolve around the delivery of a task, allowing students to plan the task and progressively improve it with feedback from other students</p>
+                    <p className="text-base font-normal">{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.CONTINUOUS_FEEDBACK_2.title")}</p>
+                    <p className="text-sm font-normal text-gray-500 ">{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.CONTINUOUS_FEEDBACK_2.description")}</p>
                 </div>
             </div>
         </div>
@@ -272,6 +276,7 @@ export const SequenceDevelopEducation1 = ({ setCreateCourseSectionsList, section
 }
 
 export const SequenceDevelopEducation2 = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask, context }) => {
+    const { t } = useTranslation();
     const sequence = [
         { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
         { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
@@ -298,11 +303,11 @@ export const SequenceDevelopEducation2 = ({ setCreateCourseSectionsList, section
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
                     </svg>
-                    Add Sequence
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.add_sequence")}
                 </button>
                 <div className="">
-                    <p className="text-base font-normal">Early Professor feedback and reflection</p>
-                    <p className="text-sm font-normal text-gray-500">The sequence is designed to revolve around the delivery of a task, allowing students to plan the task and progressively improve it with feedback from other students</p>
+                    <p className="text-base font-normal">{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.EARLY_FEEDBACK.title")}</p>
+                    <p className="text-sm font-normal text-gray-500 ">{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.EARLY_FEEDBACK.description")}</p>
                 </div>
             </div>
         </div>
@@ -311,6 +316,7 @@ export const SequenceDevelopEducation2 = ({ setCreateCourseSectionsList, section
 
 
 export const SequenceFeedUP = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask, context }) => {
+    const { t } = useTranslation();
     const sequence = [
         { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
         { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
@@ -337,11 +343,11 @@ export const SequenceFeedUP = ({ setCreateCourseSectionsList, sectionToEdit, sec
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
                     </svg>
-                    Add Sequence
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.add_sequence")}
                 </button>
                 <div className="">
-                    <p className="text-base font-normal">WIP</p>
-                    <p className="text-sm font-normal text-gray-500">Work in Progress</p>
+                    <p className="text-base font-normal">{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.WIP.title")}</p>
+                    <p className="text-sm font-normal text-gray-500 ">{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.WIP.description")}</p>
                 </div>
             </div>
         </div>
@@ -349,6 +355,7 @@ export const SequenceFeedUP = ({ setCreateCourseSectionsList, sectionToEdit, sec
 }
 
 export const SequenceThinkAloud = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask, context }) => {
+    const { t } = useTranslation();
     const sequence = [
         { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
         { title: 'Rubric analysis ', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: null },
@@ -373,11 +380,11 @@ export const SequenceThinkAloud = ({ setCreateCourseSectionsList, sectionToEdit,
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
                     </svg>
-                    Add Sequence
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.add_sequence")}
                 </button>
                 <div className="">
-                    <p className="text-base font-normal">WIP</p>
-                    <p className="text-sm font-normal text-gray-500">Work in Progress</p>
+                    <p className="text-base font-normal">{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.WIP.title")}</p>
+                    <p className="text-sm font-normal text-gray-500 ">{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.WIP.description")}</p>
                 </div>
             </div>
         </div>
@@ -386,6 +393,7 @@ export const SequenceThinkAloud = ({ setCreateCourseSectionsList, sectionToEdit,
 
 
 export const SequenceDevelopNoMSLQForum = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask, context }) => {
+    const { t } = useTranslation();
     const sequence = [
         { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
         { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
@@ -413,11 +421,11 @@ export const SequenceDevelopNoMSLQForum = ({ setCreateCourseSectionsList, sectio
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                         <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
                     </svg>
-                    Add Sequence
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.add_sequence")}
                 </button>
                 <div className="">
-                    <p className="text-base font-normal">Develop a task with forum feedback</p>
-                    <p className="text-sm font-normal text-gray-500">The sequence is designed to revolve around the delivery of a task, allowing students to plan the task and progressively improve it with feedback from other students</p>
+                    <p className="text-base font-normal">{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.FORUM_FEEDBACK.title")}</p>
+                    <p className="text-sm font-normal text-gray-500 ">{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.FORUM_FEEDBACK.description")}</p>
                 </div>
             </div>
         </div>
