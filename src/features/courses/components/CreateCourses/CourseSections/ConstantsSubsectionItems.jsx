@@ -194,13 +194,13 @@ export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit, se
     const { t } = useTranslation();
 
     const sequence = [
-        { title: 'Autoregulation Questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: SRLOQuestionnaireData, type: 'questionnaire', activityData: null },
-        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
-        { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
-        { title: 'Task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
-        { title: 'Peer review', iconColor: '#dc2626', iconPath: svgSwitcher('peerReview'), fase: 'self-reflection', questionnaireData: null, type: 'peerReview', activityData: PeerReviewData },
-        { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
-        { title: 'Autoregulation Questionnaire', iconColor: '#dc2626', iconPath: svgSwitcher('questionnaireNormal'), fase: 'self-reflection', questionnaireData: SRLOQuestionnaireData, type: 'questionnaire', activityData: null },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.SRL_O_QUESTIONNAIRE.title"), iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: SRLOQuestionnaireData, type: 'questionnaire', activityData: null },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_STATEMENT.title"), iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.PLANNING_QUESTIONNAIRE.title"), iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_IMPLEMENTATION.title"), iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.PEER_REVIEW.title"), iconColor: '#dc2626', iconPath: svgSwitcher('peerReview'), fase: 'self-reflection', questionnaireData: null, type: 'peerReview', activityData: PeerReviewData },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.FINAL_DELIVERY.title"), iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.SRL_O_QUESTIONNAIRE.title"), iconColor: '#dc2626', iconPath: svgSwitcher('questionnaireNormal'), fase: 'self-reflection', questionnaireData: SRLOQuestionnaireData, type: 'questionnaire', activityData: null },
 
     ];
 
@@ -234,18 +234,18 @@ export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit, se
 export const SequenceDevelopEducation1 = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask, context }) => {
     const { t } = useTranslation();
     const sequence = [
-        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
-        { title: 'Forum debate', iconColor: '#15803d', iconPath: svgSwitcher('forum'), fase: 'forethought', questionnaireData: null, type: 'forum', activityData: ForumData },
-        { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
-        { title: 'First task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
-        { title: 'First delivery', iconColor: '#f59e0b', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
-        { title: 'Peer Review', iconColor: '#f59e0b', iconPath: svgSwitcher('peerReview'), fase: 'performance', questionnaireData: null, type: 'peerReview', activityData: PeerReviewData },
-        { title: 'Feedback reflection questionnaire', iconColor: '#f59e0b', iconPath: svgSwitcher('questionnaireNormal'), fase: 'performance', questionnaireData: EmptyQuestionnaireData, type: 'questionnaire', activityData: null },
-        { title: 'Second task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
-        { title: 'Second delivery', iconColor: '#f59e0b', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
-        { title: 'Peer Review', iconColor: '#f59e0b', iconPath: svgSwitcher('peerReview'), fase: 'performance', questionnaireData: null, type: 'peerReview', activityData: PeerReviewData },
-        { title: 'Feedback reflection questionnaire', iconColor: '#f59e0b', iconPath: svgSwitcher('questionnaireNormal'), fase: 'performance', questionnaireData: EmptyQuestionnaireData, type: 'questionnaire', activityData: null },
-        { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_STATEMENT.title"), iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.FORUM_DEBATE.title"), iconColor: '#15803d', iconPath: svgSwitcher('forum'), fase: 'forethought', questionnaireData: null, type: 'forum', activityData: ForumData },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.PLANNING_QUESTIONNAIRE.title"), iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_IMPLEMENTATION.title"), iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_DELIVERY.title"), iconColor: '#f59e0b', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.PEER_REVIEW.title"), iconColor: '#f59e0b', iconPath: svgSwitcher('peerReview'), fase: 'performance', questionnaireData: null, type: 'peerReview', activityData: PeerReviewData },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.FEEDBACK_REFLECTION_QUESTIONNAIRE.title"), iconColor: '#f59e0b', iconPath: svgSwitcher('questionnaireNormal'), fase: 'performance', questionnaireData: EmptyQuestionnaireData, type: 'questionnaire', activityData: null },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_IMPLEMENTATION.title"), iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_DELIVERY.title"), iconColor: '#f59e0b', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.PEER_REVIEW.title"), iconColor: '#f59e0b', iconPath: svgSwitcher('peerReview'), fase: 'performance', questionnaireData: null, type: 'peerReview', activityData: PeerReviewData },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.FEEDBACK_REFLECTION_QUESTIONNAIRE.title"), iconColor: '#f59e0b', iconPath: svgSwitcher('questionnaireNormal'), fase: 'performance', questionnaireData: EmptyQuestionnaireData, type: 'questionnaire', activityData: null },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.FINAL_DELIVERY.title"), iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
     ];
 
     const modifiedSequence = modifySequence(sequence, sectionTask);
@@ -278,14 +278,15 @@ export const SequenceDevelopEducation1 = ({ setCreateCourseSectionsList, section
 export const SequenceDevelopEducation2 = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask, context }) => {
     const { t } = useTranslation();
     const sequence = [
-        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
-        { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
-        { title: 'First task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
-        { title: 'First delivery', iconColor: '#f59e0b', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_STATEMENT.title"), iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.PLANNING_QUESTIONNAIRE.title"), iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_IMPLEMENTATION.title"), iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_DELIVERY.title"), iconColor: '#f59e0b', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
         { title: 'Professor feedback and reflection', iconColor: '#dc2626', iconPath: svgSwitcher('peerReview'), fase: 'self-reflection', questionnaireData: null, type: 'peerReview', activityData: PeerReviewData },
-        { title: 'Autoevaluation questionnaire', iconColor: '#dc2626', iconPath: svgSwitcher('questionnaireNormal'), fase: 'self-reflection', questionnaireData: EmptyQuestionnaireData, type: 'questionnaire', activityData: null },
-        { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.SELF_ASSESSMENT.title"), iconColor: '#dc2626', iconPath: svgSwitcher('questionnaireNormal'), fase: 'self-reflection', questionnaireData: null, type: 'selfAssessment', activityData: SelfAssessmentData },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.FINAL_DELIVERY.title"), iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
     ];
+
 
     const modifiedSequence = modifySequence(sequence, sectionTask);
 
@@ -318,13 +319,13 @@ export const SequenceDevelopEducation2 = ({ setCreateCourseSectionsList, section
 export const SequenceFeedUP = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask, context }) => {
     const { t } = useTranslation();
     const sequence = [
-        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
-        { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_STATEMENT.title"), iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.PLANNING_QUESTIONNAIRE.title"), iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
         { title: 'Feed Up', iconColor: '#15803d', iconPath: svgSwitcher('peerReview'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: null },
-        { title: 'First task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
-        { title: 'Questionnaire feedback and reflection', iconColor: '#dc2626', iconPath: svgSwitcher('peerReview'), fase: 'self-reflection', questionnaireData: null, type: 'peerReview', activityData: PeerReviewData },
-        { title: 'Plannification questionnaire for Final Delivery', iconColor: '#dc2626', iconPath: svgSwitcher('questionnaireNormal'), fase: 'self-reflection', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
-        { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_IMPLEMENTATION.title"), iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.FEEDBACK_REFLECTION_QUESTIONNAIRE.title"), iconColor: '#dc2626', iconPath: svgSwitcher('peerReview'), fase: 'self-reflection', questionnaireData: null, type: 'peerReview', activityData: PeerReviewData },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.PLANNING_QUESTIONNAIRE.title"), iconColor: '#dc2626', iconPath: svgSwitcher('questionnaireNormal'), fase: 'self-reflection', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.FINAL_DELIVERY.title"), iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
     ];
 
     const modifiedSequence = modifySequence(sequence, sectionTask);
@@ -357,11 +358,11 @@ export const SequenceFeedUP = ({ setCreateCourseSectionsList, sectionToEdit, sec
 export const SequenceThinkAloud = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask, context }) => {
     const { t } = useTranslation();
     const sequence = [
-        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_STATEMENT.title"), iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
         { title: 'Rubric analysis ', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: null },
-        { title: 'Think Aloud ', iconColor: '#15803d', iconPath: svgSwitcher('thinkAloud'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: ThinkAloudData },
-        { title: 'Task Implementation and Delivery', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
-        { title: 'Think Aloud and Feed-Forward', iconColor: '#dc2626', iconPath: svgSwitcher('thinkAloud'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: ThinkAloudData },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.THINK_ALOUD.title"), iconColor: '#15803d', iconPath: svgSwitcher('thinkAloud'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: ThinkAloudData },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_DELIVERY.title"), iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.THINK_ALOUD.title"), iconColor: '#dc2626', iconPath: svgSwitcher('thinkAloud'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: ThinkAloudData },
     ];
 
     const modifiedSequence = modifySequence(sequence, sectionTask);
@@ -395,14 +396,14 @@ export const SequenceThinkAloud = ({ setCreateCourseSectionsList, sectionToEdit,
 export const SequenceDevelopNoMSLQForum = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask, context }) => {
     const { t } = useTranslation();
     const sequence = [
-        { title: 'Task Statement', iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
-        { title: 'Plannification questionnaire', iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
-        { title: 'Task implementation', iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
-        { title: 'Forum Doubts', iconColor: '#f59e0b', iconPath: svgSwitcher('forum'), fase: 'performance', questionnaireData: null, type: 'forum', activityData: ForumData },
-        { title: 'Peer review', iconColor: '#dc2626', iconPath: svgSwitcher('peerReview'), fase: 'self-reflection', questionnaireData: null, type: 'peerReview', activityData: PeerReviewData },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_STATEMENT.title"), iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.PLANNING_QUESTIONNAIRE.title"), iconColor: '#15803d', iconPath: svgSwitcher('questionnaireNormal'), fase: 'forethought', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_IMPLEMENTATION.title"), iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.FORUM_DEBATE.title"), iconColor: '#f59e0b', iconPath: svgSwitcher('forum'), fase: 'performance', questionnaireData: null, type: 'forum', activityData: ForumData },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.PEER_REVIEW.title"), iconColor: '#dc2626', iconPath: svgSwitcher('peerReview'), fase: 'self-reflection', questionnaireData: null, type: 'peerReview', activityData: PeerReviewData },
         { title: 'Feedback refactor', iconColor: '#dc2626', iconPath: svgSwitcher('taskImplementation'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
-        { title: 'Final delivery', iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
-        { title: 'Autoregulation Questionnaire', iconColor: '#dc2626', iconPath: svgSwitcher('questionnaireNormal'), fase: 'self-reflection', questionnaireData: SRLOQuestionnaireData, type: 'questionnaire', activityData: null },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.FINAL_DELIVERY.title"), iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.SRL_O_QUESTIONNAIRE.title"), iconColor: '#dc2626', iconPath: svgSwitcher('questionnaireNormal'), fase: 'self-reflection', questionnaireData: SRLOQuestionnaireData, type: 'questionnaire', activityData: null },
     ];
 
     const modifiedSequence = modifySequence(sequence, sectionTask);
@@ -433,6 +434,7 @@ export const SequenceDevelopNoMSLQForum = ({ setCreateCourseSectionsList, sectio
 }
 
 export const PerformancePage = ({ setCreateCourseSectionsList, sectionToEdit, context, sectionTask }) => {
+    const { t } = useTranslation();
 
     return (
         <>
@@ -444,10 +446,10 @@ export const PerformancePage = ({ setCreateCourseSectionsList, sectionToEdit, co
 
                 </div>
                 <div className='ml-5'>
-                    <p className='text-base font-normal'>Task implementation</p>
-                    <p className='text-sm font-normal text-gray-500'>Implementation of the task, during this phase, the planned tasks and activities are put into action. It involves carrying out the necessary actions to achieve the project or task objectives defined in the planning phase.</p>
+                    <p className='text-base font-normal'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_IMPLEMENTATION.title")}</p>
+                    <p className='text-sm font-normal text-gray-500'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_IMPLEMENTATION.description")}</p>
                 </div>
-                <button onClick={() => createSubsection('Task implementation', 'performance', null, setCreateCourseSectionsList, sectionToEdit, 'task', context, sectionTask)} className='pl-3 mx-3 ml-auto'>
+                <button onClick={() => createSubsection(t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_IMPLEMENTATION.title"), 'performance', null, setCreateCourseSectionsList, sectionToEdit, 'task', context, sectionTask)} className='pl-3 mx-3 ml-auto'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -460,10 +462,10 @@ export const PerformancePage = ({ setCreateCourseSectionsList, sectionToEdit, co
                     </svg>
                 </div>
                 <div className='ml-5'>
-                    <p className='text-base font-normal'>Peer review</p>
-                    <p className='text-sm font-normal text-gray-500'>This review method aims to provide constructive feedback, validate the quality and accuracy of the work, and ensure it meets established standards or criteria.</p>
+                    <p className='text-base font-normal'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.PEER_REVIEW.title")}</p>
+                    <p className='text-sm font-normal text-gray-500'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.PEER_REVIEW.description")}</p>
                 </div>
-                <button onClick={() => createSubsection('Peer review', 'performance', null, setCreateCourseSectionsList, sectionToEdit, 'peerReview', context, PeerReviewData)} className='pl-3 mx-3 ml-auto'>
+                <button onClick={() => createSubsection(t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.PEER_REVIEW.title"), 'performance', null, setCreateCourseSectionsList, sectionToEdit, 'peerReview', context, PeerReviewData)} className='pl-3 mx-3 ml-auto'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -477,10 +479,10 @@ export const PerformancePage = ({ setCreateCourseSectionsList, sectionToEdit, co
                     </svg>
                 </div>
                 <div className='ml-5'>
-                    <p className='text-base font-normal'>Task delivery</p>
-                    <p className='text-sm font-normal text-gray-500'>Delivery of the task.</p>
+                    <p className='text-base font-normal'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_DELIVERY.title")}</p>
+                    <p className='text-sm font-normal text-gray-500'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_DELIVERY.description")}</p>
                 </div>
-                <button onClick={() => createSubsection('Task delivery', 'performance', null, setCreateCourseSectionsList, sectionToEdit, 'task', context, sectionTask)} className='pl-3 mx-3 ml-auto'>
+                <button onClick={() => createSubsection(t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_DELIVERY.title"), 'performance', null, setCreateCourseSectionsList, sectionToEdit, 'task', context, sectionTask)} className='pl-3 mx-3 ml-auto'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f] ">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -494,10 +496,10 @@ export const PerformancePage = ({ setCreateCourseSectionsList, sectionToEdit, co
                     </svg>
                 </div>
                 <div className='ml-5'>
-                    <p className='text-base font-normal'>Empty Questionnaire</p>
-                    <p className='text-sm font-normal text-gray-500'>Create a new questionnaire from scratch.</p>
+                    <p className='text-base font-normal'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.EMPTY_QUESTIONNAIRE.title")}</p>
+                    <p className='text-sm font-normal text-gray-500'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.EMPTY_QUESTIONNAIRE.description")}</p>
                 </div>
-                <button onClick={() => createSubsection('Questionnaire', 'performance', EmptyQuestionnaireData, setCreateCourseSectionsList, sectionToEdit, 'questionnaire', context, null)} className='pl-3 mx-3 ml-auto'>
+                <button onClick={() => createSubsection(t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.EMPTY_QUESTIONNAIRE.title"), 'performance', EmptyQuestionnaireData, setCreateCourseSectionsList, sectionToEdit, 'questionnaire', context, null)} className='pl-3 mx-3 ml-auto'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -511,11 +513,10 @@ export const PerformancePage = ({ setCreateCourseSectionsList, sectionToEdit, co
                     </svg>
                 </div>
                 <div className='ml-5'>
-                    <p className='text-base font-normal'>Self-assessment</p>
-                    <p className='text-sm font-normal text-gray-500'>
-                        Self-assessment is a process that allows students to reflect on their learning, identify areas of strength and weakness, and set goals for improvement. It is an essential skill for lifelong learning and personal development.</p>
+                    <p className='text-base font-normal'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.SELF_ASSESSMENT.title")}</p>
+                    <p className='text-sm font-normal text-gray-500'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.SELF_ASSESSMENT.description")}</p>
                 </div>
-                <button onClick={() => createSubsection('Self-assesment', 'performance', null, setCreateCourseSectionsList, sectionToEdit, 'selfAssessment', context, SelfAssessmentData)} className='pl-3 mx-3 ml-auto'>
+                <button onClick={() => createSubsection(t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.SELF_ASSESSMENT.title"), 'performance', null, setCreateCourseSectionsList, sectionToEdit, 'selfAssessment', context, SelfAssessmentData)} className='pl-3 mx-3 ml-auto'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -529,10 +530,10 @@ export const PerformancePage = ({ setCreateCourseSectionsList, sectionToEdit, co
                     </svg>
                 </div>
                 <div className='ml-5'>
-                    <p className='text-base font-normal'>Custom Field</p>
-                    <p className='text-sm font-normal text-gray-500'>Add a custom field if you need to introduce any theorical subsection between phases.</p>
+                    <p className='text-base font-normal'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.CUSTOM_FIELD.title")}</p>
+                    <p className='text-sm font-normal text-gray-500'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.CUSTOM_FIELD.description")}</p>
                 </div>
-                <button onClick={() => createSubsection('Custom field', 'performance', null, setCreateCourseSectionsList, sectionToEdit, 'task', context, sectionTask)} className='pl-3 mx-3 ml-auto'>
+                <button onClick={() => createSubsection(t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.CUSTOM_FIELD.title"), 'performance', null, setCreateCourseSectionsList, sectionToEdit, 'task', context, sectionTask)} className='pl-3 mx-3 ml-auto'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -563,6 +564,8 @@ export const buttonGroup = ({ handleBack, handleContinue }) => {
 
 export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, context, sectionTask }) => {
 
+    const { t } = useTranslation();
+
     return (
         <>
             <div className='flex items-center p-5 border rounded-xl bg-gray-50'>
@@ -573,10 +576,10 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, co
                     </svg>
                 </div>
                 <div className='ml-5'>
-                    <p className='text-base font-normal'>Plannification questionnaire</p>
-                    <p className='text-sm font-normal text-gray-500'>A planning questionnaire is a valuable tool for gathering essential information to create effective plans. This questionnaire helps individuals or teams define goals, identify resources, and establish a roadmap for successful execution. </p>
+                    <p className='text-base font-normal'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.PLANNING_QUESTIONNAIRE.title")}</p>
+                    <p className='text-sm font-normal text-gray-500'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.PLANNING_QUESTIONNAIRE.description")}</p>
                 </div>
-                <button onClick={() => createSubsection('Plannification questionnaire', 'forethought', PlannificationQuestionnaireData, setCreateCourseSectionsList, sectionToEdit, 'questionnaire', context, null)} className='pl-3 mx-3 ml-3'>
+                <button onClick={() => createSubsection(t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.PLANNING_QUESTIONNAIRE.title"), 'forethought', PlannificationQuestionnaireData, setCreateCourseSectionsList, sectionToEdit, 'questionnaire', context, null)} className='pl-3 mx-3 ml-3'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6  text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -590,10 +593,10 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, co
                     </svg>
                 </div>
                 <div className='ml-5'>
-                    <p className='text-base font-normal'>SRL-O Autoregulation Questionnaire</p>
-                    <p className='text-sm font-normal text-gray-500'>The Self-regulation for learning online (SRL-O) questionnaire measures the frequency and quality of learning strategies when applied to online or blended or hybrid environments.</p>
+                    <p className='text-base font-normal'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.SRL_O_QUESTIONNAIRE.title")}</p>
+                    <p className='text-sm font-normal text-gray-500'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.SRL_O_QUESTIONNAIRE.description")}</p>
                 </div>
-                <button onClick={() => createSubsection('SRL-O Questionnaire', 'forethought', SRLOQuestionnaireData, setCreateCourseSectionsList, sectionToEdit, 'questionnaire', context, null)} className='pl-3 mx-3 ml-auto'>
+                <button onClick={() => createSubsection(t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.SRL_O_QUESTIONNAIRE.title"), 'forethought', SRLOQuestionnaireData, setCreateCourseSectionsList, sectionToEdit, 'questionnaire', context, null)} className='pl-3 mx-3 ml-auto'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -608,10 +611,10 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, co
                     </svg>
                 </div>
                 <div className='ml-5'>
-                    <p className='text-base font-normal'>Task statement</p>
-                    <p className='text-sm font-normal text-gray-500'>Define the essential details of the task, including its objectives, scope, and expected outcomes. Task statements are designed to provide clear guidance to individuals or teams, ensuring that they understand their responsibilities and can execute the task effectively. </p>
+                    <p className='text-base font-normal'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_STATEMENT.title")}</p>
+                    <p className='text-sm font-normal text-gray-500'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_STATEMENT.description")}</p>
                 </div>
-                <button onClick={() => createSubsection('Task statement', 'forethought', null, setCreateCourseSectionsList, sectionToEdit, 'task', context, sectionTask)} className='pl-3 mx-3 ml-auto '>
+                <button onClick={() => createSubsection(t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_STATEMENT.title"), 'forethought', null, setCreateCourseSectionsList, sectionToEdit, 'task', context, sectionTask)} className='pl-3 mx-3 ml-auto '>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -624,10 +627,10 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, co
                     </svg>
                 </div>
                 <div className='ml-5'>
-                    <p className='text-base font-normal'>Empty Questionnaire</p>
-                    <p className='text-sm font-normal text-gray-500'>Create a new questionnaire from scratch.</p>
+                    <p className='text-base font-normal'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.EMPTY_QUESTIONNAIRE.title")}</p>
+                    <p className='text-sm font-normal text-gray-500'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.EMPTY_QUESTIONNAIRE.description")}</p>
                 </div>
-                <button onClick={() => createSubsection('Questionnaire', 'forethought', EmptyQuestionnaireData, setCreateCourseSectionsList, sectionToEdit, 'questionnaire', context, null)} className='pl-3 mx-3 ml-auto'>
+                <button onClick={() => createSubsection(t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.EMPTY_QUESTIONNAIRE.title"), 'forethought', EmptyQuestionnaireData, setCreateCourseSectionsList, sectionToEdit, 'questionnaire', context, null)} className='pl-3 mx-3 ml-auto'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -641,11 +644,10 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, co
 
                 </div>
                 <div className='ml-5'>
-                    <p className='text-base font-normal'>Think Aloud</p>
-                    <p className='text-sm font-normal text-gray-500'>
-                        A Think Aloud is a strategy where you verbalize your thoughts as you work through a problem or task. It helps students understand your reasoning process and learn effective problem-solving strategies.</p>
+                    <p className='text-base font-normal'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.THINK_ALOUD.title")}</p>
+                    <p className='text-sm font-normal text-gray-500'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.THINK_ALOUD.description")}</p>
                 </div>
-                <button onClick={() => createSubsection('Think Aloud', 'forethought', null, setCreateCourseSectionsList, sectionToEdit, 'thinkAloud', context, ThinkAloudData)} className='pl-3 mx-3 ml-auto'>
+                <button onClick={() => createSubsection(t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.THINK_ALOUD.title"), 'forethought', null, setCreateCourseSectionsList, sectionToEdit, 'thinkAloud', context, ThinkAloudData)} className='pl-3 mx-3 ml-auto'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -658,11 +660,10 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, co
                     </svg>
                 </div>
                 <div className='ml-5'>
-                    <p className='text-base font-normal'>Self-assessment</p>
-                    <p className='text-sm font-normal text-gray-500'>
-                        Self-assessment is a process that allows students to reflect on their learning, identify areas of strength and weakness, and set goals for improvement. It is an essential skill for lifelong learning and personal development.</p>
+                    <p className='text-base font-normal'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.SELF_ASSESSMENT.title")}</p>
+                    <p className='text-sm font-normal text-gray-500'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.SELF_ASSESSMENT.description")}</p>
                 </div>
-                <button onClick={() => createSubsection('Self-assesment', 'forethought', null, setCreateCourseSectionsList, sectionToEdit, 'selfAssessment', context, SelfAssessmentData)} className='pl-3 mx-3 ml-auto'>
+                <button onClick={() => createSubsection(t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.SELF_ASSESSMENT.title"), 'forethought', null, setCreateCourseSectionsList, sectionToEdit, 'selfAssessment', context, SelfAssessmentData)} className='pl-3 mx-3 ml-auto'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -675,10 +676,10 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, co
                     </svg>
                 </div>
                 <div className='ml-5'>
-                    <p className='text-base font-normal'>Custom field</p>
-                    <p className='text-sm font-normal text-gray-500'>Add a custom field if you need to introduce any theorical subsection between phases.</p>
+                    <p className='text-base font-normal'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.CUSTOM_FIELD.title")}</p>
+                    <p className='text-sm font-normal text-gray-500'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.CUSTOM_FIELD.description")}</p>
                 </div>
-                <button onClick={() => createSubsection('Custom field', 'forethought', null, setCreateCourseSectionsList, sectionToEdit, 'task', context, sectionTask)} className='pl-3 mx-3 ml-auto'>
+                <button onClick={() => createSubsection(t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.CUSTOM_FIELD.title"), 'forethought', null, setCreateCourseSectionsList, sectionToEdit, 'task', context, sectionTask)} className='pl-3 mx-3 ml-auto'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -689,6 +690,7 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, co
 }
 
 export const SelfReflectionPage = ({ setCreateCourseSectionsList, sectionToEdit, context, sectionTask }) => {
+    const { t } = useTranslation();
 
     return (
         <>
@@ -699,10 +701,10 @@ export const SelfReflectionPage = ({ setCreateCourseSectionsList, sectionToEdit,
                     </svg>
                 </div>
                 <div className='ml-5'>
-                    <p className='text-base font-normal'>Peer review</p>
-                    <p className='text-sm font-normal text-gray-500'>This review method aims to provide constructive feedback, validate the quality and accuracy of the work, and ensure it meets established standards or criteria.</p>
+                    <p className='text-base font-normal'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.PEER_REVIEW.title")}</p>
+                    <p className='text-sm font-normal text-gray-500'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.PEER_REVIEW.description")}</p>
                 </div>
-                <button onClick={() => createSubsection('Peer review', 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit, 'peerReview', context, PeerReviewData)} className='pl-3 mx-3 ml-auto'>
+                <button onClick={() => createSubsection(t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.PEER_REVIEW.title"), 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit, 'peerReview', context, PeerReviewData)} className='pl-3 mx-3 ml-auto'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -715,10 +717,10 @@ export const SelfReflectionPage = ({ setCreateCourseSectionsList, sectionToEdit,
                     </svg>
                 </div>
                 <div className='ml-5'>
-                    <p className='text-base font-normal'>Final delivery</p>
-                    <p className='text-sm font-normal text-gray-500'>Final delivery of the task.</p>
+                    <p className='text-base font-normal'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.FINAL_DELIVERY.title")}</p>
+                    <p className='text-sm font-normal text-gray-500'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.FINAL_DELIVERY.description")}</p>
                 </div>
-                <button onClick={() => createSubsection('Final delivery', 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit, 'task', context, sectionTask)} className='pl-3 mx-3 ml-auto'>
+                <button onClick={() => createSubsection(t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.FINAL_DELIVERY.title"), 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit, 'task', context, sectionTask)} className='pl-3 mx-3 ml-auto'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f] ">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -732,11 +734,10 @@ export const SelfReflectionPage = ({ setCreateCourseSectionsList, sectionToEdit,
                     </svg>
                 </div>
                 <div className='ml-5'>
-                    <p className='text-base font-normal'>Self-assessment</p>
-                    <p className='text-sm font-normal text-gray-500'>
-                        Self-assessment is a process that allows students to reflect on their learning, identify areas of strength and weakness, and set goals for improvement. It is an essential skill for lifelong learning and personal development.</p>
+                    <p className='text-base font-normal'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.SELF_ASSESSMENT.title")}</p>
+                    <p className='text-sm font-normal text-gray-500'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.SELF_ASSESSMENT.description")}</p>
                 </div>
-                <button onClick={() => createSubsection('Self-assesment', 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit, 'selfAssessment', context, SelfAssessmentData)} className='pl-3 mx-3 ml-auto'>
+                <button onClick={() => createSubsection(t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.SELF_ASSESSMENT.title"), 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit, 'selfAssessment', context, SelfAssessmentData)} className='pl-3 mx-3 ml-auto'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f] ">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -750,12 +751,10 @@ export const SelfReflectionPage = ({ setCreateCourseSectionsList, sectionToEdit,
                     </svg>
                 </div>
                 <div className='ml-5'>
-                    <p className='text-base font-normal'>Empty Questionnaire</p>
-                    <p className='text-sm font-normal text-gray-500'>
-                        Create a new questionnaire from scratch.
-                    </p>
+                    <p className='text-base font-normal'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.EMPTY_QUESTIONNAIRE.title")}</p>
+                    <p className='text-sm font-normal text-gray-500'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.EMPTY_QUESTIONNAIRE.description")}</p>
                 </div>
-                <button onClick={() => createSubsection('Questionnaire', 'self-reflection', EmptyQuestionnaireData, setCreateCourseSectionsList, sectionToEdit, 'questionnaire', context, null)} className='pl-3 mx-3 ml-auto'>
+                <button onClick={() => createSubsection(t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.EMPTY_QUESTIONNAIRE.title"), 'self-reflection', EmptyQuestionnaireData, setCreateCourseSectionsList, sectionToEdit, 'questionnaire', context, null)} className='pl-3 mx-3 ml-auto'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
@@ -769,10 +768,10 @@ export const SelfReflectionPage = ({ setCreateCourseSectionsList, sectionToEdit,
                     </svg>
                 </div>
                 <div className='ml-5'>
-                    <p className='text-base font-normal'>Custom field</p>
-                    <p className='text-sm font-normal text-gray-500'>Add a custom field if you need to introduce any theorical subsection between phases.</p>
+                    <p className='text-base font-normal'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.CUSTOM_FIELD.title")}</p>
+                    <p className='text-sm font-normal text-gray-500'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.CUSTOM_FIELD.description")}</p>
                 </div>
-                <button onClick={() => createSubsection('Custom field', 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit, 'task', context, sectionTask)} className='pl-3 mx-3 ml-auto'>
+                <button onClick={() => createSubsection(t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.CUSTOM_FIELD.title"), 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit, 'task', context, sectionTask)} className='pl-3 mx-3 ml-auto'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>
