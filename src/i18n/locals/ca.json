@@ -424,6 +424,60 @@
                 "sequence_text": "Pots editar totes les seqüències per a la personalització quan s'afegeixen a una secció.",
                 "add_sequence": "Afegeix seqüència",
                 "SEQUENCES": {
+                    "ELEMENTS": {
+                        "PLANNING_QUESTIONNAIRE": {
+                            "title": "Qüestionari de Planificació",
+                            "description": "Un qüestionari de planificació és una eina valuosa per recopilar informació essencial per crear plans efectius. Aquest qüestionari ajuda a individus o equips a definir metes, identificar recursos i establir una fulla de ruta per a una execució reeixida."
+                        },
+                        "SRL_O_QUESTIONNAIRE": {
+                            "title": "Qüestionari d'Autorregulació SRL-O",
+                            "description": "El qüestionari d'Autorregulació per a l'aprenentatge en línia (SRL-O) mesura la freqüència i la qualitat de les estratègies d'aprenentatge quan s'apliquen a entorns en línia, mixtos o híbrids."
+                        },
+                        "TASK_STATEMENT": {
+                            "title": "Enunciat i presentació de la tasca",
+                            "description": "Defineix els detalls essencials de la tasca, inclosos els seus objectius, abast i resultats esperats. Les declaracions de tasques estan dissenyades per proporcionar una guia clara a individus o equips, assegurant que comprenguin les seves responsabilitats i puguin executar la tasca de manera efectiva."
+                        },
+                        "EMPTY_QUESTIONNAIRE": {
+                            "title": "Qüestionari Buit",
+                            "description": "Crea un nou qüestionari des de zero."
+                        },
+                        "THINK_ALOUD": {
+                            "title": "Think aloud",
+                            "description": "El think aloud és una estratègia on verbalitzes els teus pensaments mentre treballes en un problema o tasca. Ajuda els estudiants a entendre el teu procés de raonament i a aprendre estratègies efectives de resolució de problemes."
+                        },
+                        "SELF_ASSESSMENT": {
+                            "title": "Autoavaluació",
+                            "description": "L'autoavaluació és un procés que permet als estudiants reflexionar sobre el seu aprenentatge, identificar àrees de fortalesa i feblesa, i establir metes per a la millora. És una habilitat essencial per a l'aprenentatge permanent i el desenvolupament personal."
+                        },
+                        "CUSTOM_FIELD": {
+                            "title": "Camp Personalitzat",
+                            "description": "Afegeix un camp personalitzat si necessites introduir alguna subsecció teòrica entre fases."
+                        },
+                        "TASK_IMPLEMENTATION": {
+                            "title": "Implementació de la Tasca",
+                            "description": "Implementació de la tasca, durant aquesta fase, es posen en acció les tasques i activitats planificades. Implica dur a terme les accions necessàries per aconseguir els objectius del projecte o tasca definits en la fase de planificació."
+                        },
+                        "TASK_DELIVERY": {
+                            "title": "Entrega de la Tasca",
+                            "description": "Entrega de la tasca."
+                        },
+                        "PEER_REVIEW": {
+                            "title": "Revisió per Iguals",
+                            "description": "Aquest mètode de revisió té com a objectiu proporcionar retroalimentació constructiva, validar la qualitat i precisió del treball, i assegurar que compleixi amb els estàndards o criteris establerts."
+                        },
+                        "FINAL_DELIVERY": {
+                            "title": "Entrega Final",
+                            "description": "Entrega final de la tasca."
+                        },
+                        "FORUM_DEBATE": {
+                            "title": "Fòrum de debat",
+                            "description": "El fòrum de debat és un fòrum de discussió on els estudiants poden compartir les seves opinions, fer preguntes i participar en debats sobre un tema específic. És una excel·lent manera de fomentar el pensament crític, la col·laboració i les habilitats comunicatives."
+                        },
+                        "FEEDBACK_REFLECTION_QUESTIONNAIRE": {
+                            "title": "Qüestionari de Feedback i Reflexió",
+                            "description": "El qüestionari de feedback i reflexió és una eina valuosa per recopilar informació sobre l'eficàcia de les tasques i activitats, així com per identificar àrees d'aprenentatge i millora. Aquest qüestionari ajuda a individus o equips a reflexionar sobre el seu aprenentatge i a identificar accions per millorar."
+                        }
+                    },
                     "CONTINUOUS_FEEDBACK": {
                         "title": "Feedback continu",
                         "description": "La seqüència està dissenyada per girar al voltant de l'entrega d'una tasca, permetent als estudiants planificar la tasca i millorar-la progressivament amb feedback d'altres estudiants."

@@ -424,6 +424,60 @@
                 "sequence_text": "You can edit all the sequences for customization when they are added on a section.",
                 "add_sequence": "Add sequence",
                 "SEQUENCES": {
+                    "ELEMENTS": {
+                        "PLANNING_QUESTIONNAIRE": {
+                            "title": "Planning Questionnaire",
+                            "description": "A planning questionnaire is a valuable tool for gathering essential information to create effective plans. This questionnaire helps individuals or teams define goals, identify resources, and establish a roadmap for successful execution."
+                        },
+                        "SRL_O_QUESTIONNAIRE": {
+                            "title": "SRL-O Self-regulation Questionnaire",
+                            "description": "The Self-regulation for learning online (SRL-O) questionnaire measures the frequency and quality of learning strategies when applied to online or blended or hybrid environments."
+                        },
+                        "TASK_STATEMENT": {
+                            "title": "Task Statement",
+                            "description": "Define the essential details of the task, including its objectives, scope, and expected outcomes. Task statements are designed to provide clear guidance to individuals or teams, ensuring that they understand their responsibilities and can execute the task effectively."
+                        },
+                        "EMPTY_QUESTIONNAIRE": {
+                            "title": "Empty Questionnaire",
+                            "description": "Create a new questionnaire from scratch."
+                        },
+                        "THINK_ALOUD": {
+                            "title": "Think Aloud",
+                            "description": "A Think Aloud is a strategy where you verbalize your thoughts as you work through a problem or task. It helps students understand your reasoning process and learn effective problem-solving strategies."
+                        },
+                        "SELF_ASSESSMENT": {
+                            "title": "Self-assessment",
+                            "description": "Self-assessment is a process that allows students to reflect on their learning, identify areas of strength and weakness, and set goals for improvement. It is an essential skill for lifelong learning and personal development."
+                        },
+                        "CUSTOM_FIELD": {
+                            "title": "Custom Field",
+                            "description": "Add a custom field if you need to introduce any theoretical subsection between phases."
+                        },
+                        "TASK_IMPLEMENTATION": {
+                            "title": "Task Implementation",
+                            "description": "Implementation of the task, during this phase, the planned tasks and activities are put into action. It involves carrying out the necessary actions to achieve the project or task objectives defined in the planning phase."
+                        },
+                        "TASK_DELIVERY": {
+                            "title": "Task Delivery",
+                            "description": "Delivery of the task."
+                        },
+                        "PEER_REVIEW": {
+                            "title": "Peer Review",
+                            "description": "This review method aims to provide constructive feedback, validate the quality and accuracy of the work, and ensure it meets established standards or criteria."
+                        },
+                        "FINAL_DELIVERY": {
+                            "title": "Final Delivery",
+                            "description": "Final delivery of the task."
+                        },
+                        "FORUM_DEBATE": {
+                            "title": "Forum Debate",
+                            "description": "The forum debate is a discussion forum where students can share their opinions, ask questions, and engage in debates on a specific topic. It is an excellent way to encourage critical thinking, collaboration, and communication skills."
+                        },
+                        "FEEDBACK_REFLECTION_QUESTIONNAIRE": {
+                            "title": "Feedback and Reflection Questionnaire",
+                            "description": "Feedback and reflection questionnaire."
+                        }
+                    },
                     "CONTINUOUS_FEEDBACK": {
                         "title": "Continuous feedback",
                         "description": "The sequence is designed to revolve around the delivery of a task, allowing students to plan the task and progressively improve it with feedback from other students."

@@ -424,6 +424,60 @@
                 "sequence_text": "Puedes editar todas las secuencias para personalización cuando se añaden a una sección.",
                 "add_sequence": "Añadir secuencia",
                 "SEQUENCES": {
+                    "ELEMENTS": {
+                        "PLANNING_QUESTIONNAIRE": {
+                            "title": "Cuestionario de Planificación",
+                            "description": "Un cuestionario de planificación es una herramienta valiosa para recopilar información esencial para crear planes efectivos. Este cuestionario ayuda a individuos o equipos a definir metas, identificar recursos y establecer una hoja de ruta para una ejecución exitosa."
+                        },
+                        "SRL_O_QUESTIONNAIRE": {
+                            "title": "Cuestionario de Autorregulación SRL-O",
+                            "description": "El cuestionario de Autorregulación para el aprendizaje en línea (SRL-O) mide la frecuencia y la calidad de las estrategias de aprendizaje cuando se aplican a entornos en línea, mixtos o híbridos."
+                        },
+                        "TASK_STATEMENT": {
+                            "title": "Enunciado y presentación de la tarea",
+                            "description": "Define los detalles esenciales de la tarea, incluidos sus objetivos, alcance y resultados esperados. Las declaraciones de tareas están diseñadas para proporcionar una guía clara a individuos o equipos, asegurando que comprendan sus responsabilidades y puedan ejecutar la tarea de manera efectiva."
+                        },
+                        "EMPTY_QUESTIONNAIRE": {
+                            "title": "Cuestionario Vacío",
+                            "description": "Crea un nuevo cuestionario desde cero."
+                        },
+                        "THINK_ALOUD": {
+                            "title": "Think Aloud",
+                            "description": "El think aloud es una estrategia en la que verbalizas tus pensamientos mientras trabajas en un problema o tarea. Ayuda a los estudiantes a entender tu proceso de razonamiento y a aprender estrategias efectivas de resolución de problemas."
+                        },
+                        "SELF_ASSESSMENT": {
+                            "title": "Autoevaluación",
+                            "description": "La autoevaluación es un proceso que permite a los estudiantes reflexionar sobre su aprendizaje, identificar áreas de fortaleza y debilidad, y establecer metas para la mejora. Es una habilidad esencial para el aprendizaje permanente y el desarrollo personal."
+                        },
+                        "CUSTOM_FIELD": {
+                            "title": "Campo Personalizado",
+                            "description": "Agrega un campo personalizado si necesitas introducir alguna subsección teórica entre fases."
+                        },
+                        "TASK_IMPLEMENTATION": {
+                            "title": "Implementación de la Tarea",
+                            "description": "Implementación de la tarea, durante esta fase, se ponen en acción las tareas y actividades planificadas. Implica llevar a cabo las acciones necesarias para lograr los objetivos del proyecto o tarea definidos en la fase de planificación."
+                        },
+                        "TASK_DELIVERY": {
+                            "title": "Entrega de la Tarea",
+                            "description": "Entrega de la tarea."
+                        },
+                        "PEER_REVIEW": {
+                            "title": "Revisión por Pares",
+                            "description": "Este método de revisión tiene como objetivo proporcionar retroalimentación constructiva, validar la calidad y precisión del trabajo, y asegurar que cumpla con los estándares o criterios establecidos."
+                        },
+                        "FINAL_DELIVERY": {
+                            "title": "Entrega Final",
+                            "description": "Entrega final de la tarea."
+                        },
+                        "FORUM_DEBATE": {
+                            "title": "Foro de Debate",
+                            "description": "El foro de debate es un foro de discusión donde los estudiantes pueden compartir sus opiniones, hacer preguntas y participar en debates sobre un tema específico. Es una excelente manera de fomentar el pensamiento crítico, la colaboración y las habilidades de comunicación."
+                        },
+                        "FEEDBACK_REFLECTION_QUESTIONNAIRE": {
+                            "title": "Cuestionario de Feedback y Reflexión",
+                            "description": "El cuestionario de feedback y reflexión es una herramienta valiosa para recopilar información esencial para mejorar el rendimiento y la calidad del trabajo. Este cuestionario ayuda a individuos o equipos a identificar áreas de mejora, establecer metas y desarrollar un plan de acción para la mejora continua."
+                        }
+                    },
                     "CONTINUOUS_FEEDBACK": {
                         "title": "Feedback continuo",
                         "description": "La secuencia está diseñada para girar en torno a la entrega de una tarea, permitiendo a los estudiantes planificar la tarea y mejorarla progresivamente con feedback de otros estudiantes."
