@@ -3,13 +3,14 @@ import { Spin, message } from 'antd';
 import { API } from '../../../../constant';
 import { getToken } from '../../../../helpers';
 import Swal from 'sweetalert2';
-
+import { useTranslation } from 'react-i18next';
 export const Confirmation = () => {
+    const { t } = useTranslation();
     return (
         <div className='h-[20rem]'>
-            <p className='mt-2 text-sm text-gray-500'>Please wait until the system has created all the qualifications, it will not take more than a minute. </p>
+            <p className='mt-2 text-sm text-gray-500'>{t("QUALIFICATIONS.please_wait")}</p>
             <div className='flex items-center justify-center h-[95%]'>
-                <Spin tip="Creating qualifications..." size="large">
+                <Spin tip={t("QUALIFICATIONS.creating_qualifications")} size="large">
                     <div className="mr-14" />
                 </Spin>
             </div>
@@ -17,8 +18,7 @@ export const Confirmation = () => {
         </div>
     )
 }
-
-export async function uploadQualificationsPerGroup({ dataTable, activity, user, fullActivity }) {
+export async function uploadQualificationsPerGroup({ dataTable, activity, user, fullActivity, t }) {
     try {
         for (const { group } of dataTable) {
             const grade = group.qualification
@@ -50,9 +50,9 @@ export async function uploadQualificationsPerGroup({ dataTable, activity, user, 
                         }
                     }),
                 }).catch(error => {
-                    throw new Error('An error occurred while uploading the qualifications');
+                    throw new Error(t("QUALIFICATIONS.error_creating_qualifications"));
                 });
-                if (response.status !== 200) throw new Error('An error occurred while uploading the qualifications');
+                if (response.status !== 200) throw new Error(t("QUALIFICATIONS.error_creating_qualifications"));
             }
             else {
                 const response = await fetch(`${API}/qualifications`, {
@@ -73,13 +73,13 @@ export async function uploadQualificationsPerGroup({ dataTable, activity, user, 
                         }
                     }),
                 }).catch(error => {
-                    throw new Error('An error occurred while uploading the qualifications');
+                    throw new Error(t("QUALIFICATIONS.error_creating_qualifications"));
                 });
-                if (response.status !== 200) throw new Error('An error occurred while uploading the qualifications');
+                if (response.status !== 200) throw new Error(t("QUALIFICATIONS.error_creating_qualifications"));
             }
         }
         Swal.fire({
-            title: 'Qualifications uploaded successfully',
+            title: t("QUALIFICATIONS.qualifications_created"),
             icon: 'success',
             confirmButtonText: 'Ok'
         }).then(() => {
@@ -92,7 +92,7 @@ export async function uploadQualificationsPerGroup({ dataTable, activity, user, 
     } finally {
     }
 }
-export async function uploadQualifications({ dataTable, activity, user, fullActivity }) {
+export async function uploadQualifications({ dataTable, activity, user, fullActivity, t }) {
     for (const student of dataTable) {
         const grade = student.Name.student.attributes.qualifications.data.find(
             qualification => qualification.attributes.activity.data?.id === JSON.parse(activity).id
@@ -147,7 +147,7 @@ export async function uploadQualifications({ dataTable, activity, user, fullActi
         }
     }
     Swal.fire({
-        title: 'Qualifications uploaded successfully',
+        title: t("QUALIFICATIONS.qualifications_created"),
         icon: 'success',
         confirmButtonText: 'Ok'
     }).then(() => {

@@ -7,7 +7,11 @@
         "save_changes": "Guardar cambios",
         "switch_mode": "Cambiar modo",
         "import": "Importar",
-        "for_example": "Por ejemplo"
+        "for_example": "Por ejemplo",
+        "professor": "Profesor",
+        "student": "Estudiante",
+        "yes": "Sí",
+        "no": "No"
     },
     "HOME": {
         "title": "Bienvenido/a a la nueva era del aprendizaje",
@@ -487,5 +491,67 @@
             "Vie",
             "Sáb"
         ]
+    },
+    "QUALIFICATIONS": {
+        "qualifications": "Calificaciones",
+        "qualification": "Calificación",
+        "search_users": "Buscar usuarios",
+        "attention": "Atención",
+        "peerreview_deadline": "La fecha límite para la revisión por pares es el",
+        "comments": "Comentarios",
+        "professor_qualification": "Calificación del profesor",
+        "files": "Archivos",
+        "last_modification": "Última modificación",
+        "groups": "Grupos",
+        "name": "Nombre",
+        "professor_students_ponderation": "Ponderación Profesor - Estudiantes",
+        "edit_qualifications": "Editar calificaciones",
+        "upload_qualifications": "Subir calificaciones",
+        "questionnaire_completed": "Cuestionario completado",
+        "average_grade": "Nota media recibida",
+        "at": "a las",
+        "write_comment": "Escribe un comentario",
+        "files_delivered_by": "Archivos entregados por {{student}} en la actividad {{activity}}",
+        "no_files_delivered": "No se han entregado archivos",
+        "no_grade": "Sin calificaciónes",
+        "csv_configuration": "Configuración del CSV",
+        "csv_configuration_text": "Configura el archivo CSV y selecciona la actividad deseada.",
+        "visualization": "Visualización",
+        "visualization_text": "Visualiza los datos a subir antes de confirmar.",
+        "confirmation": "Confirmación",
+        "confirmation_text": "Crea las nuevas entradas de calificación.",
+        "first_text_upload": "Primero de todo, selecciona la actividad para subir las notas",
+        "download_template_csv": "Descargar plantilla CSV con los estudiantes",
+        "now_introduce_columns": "Ahora, introduce la relación en las columnas y filas de tu hoja de cálculo CSV",
+        "placeholder_columns_student": "Columna y fila del estudiante, ej: B2-B22",
+        "placeholder_columns_grade": "Columna y fila de la calificación, ej: D2-D22",
+        "placeholder_columns_comments": "Columna y fila de los comentarios, ej: F2-F22",
+        "placeholder_columns_peer": "Columna y fila de las medias de revisión entre pares, ej: F2-F22",
+        "peerReviewGroup": {
+            "instruction": "Para el ejemplo siguiente, seleccionaríamos; A2-A8 (en el caso del estudiante), B2-B8 (en el caso de la calificación), C2-C8 (en el caso del comentario) y D2-D8 (Calificación de la revisión entre pares):",
+            "note": "Cuando aparece ' - ' en 'Calificación media de la revisión entre pares' significa que la revisión entre pares no se evaluó numéricamente y solo se tendrá en cuenta la calificación del profesor."
+        },
+        "group": {
+            "instruction": "Para el ejemplo siguiente, seleccionaríamos; A2-A8 (en el caso del estudiante), B2-B8 (en el caso de la calificación), C2-C8 (en el caso del comentario):"
+        },
+        "peerReview": {
+            "instruction": "Para el ejemplo siguiente, seleccionaríamos; A2-A6 (en el caso del estudiante), B2-B6 (en el caso de la calificación), C2-C6 (en el caso del comentario) y D2-D6 (Calificación de la revisión entre pares):"
+        },
+        "standard": {
+            "instruction": "Para el ejemplo siguiente, seleccionaríamos; B2-B22 (en el caso del estudiante), D2-D22 (en el caso de la calificación), F2-F22 (en el caso del comentario):"
+        },
+        "finally_csv": "Finalmente, cargue el archivo de hoja de cálculo CSV (separado por comas o puntos y comas).",
+        "students_no_enrolled": "Los estudiantes que no están inscritos en el curso no aparecerán aquí.",
+        "please_wait": "Por favor espere hasta que el sistema haya creado todas las calificaciones, no tomará más de un minuto.",
+        "creating_qualifications": "Creando calificaciones...",
+        "qualifications_created": "Calificaciones creadas correctamente",
+        "error_creating_qualifications": "Error al crear las calificaciones",
+        "file_must_be_csv": "El archivo debe ser un archivo CSV o una hoja de cálculo",
+        "input_columns_must_be": "Las columnas de entrada deben tener formato de rango de Excel, por ejemplo, B2-B22",
+        "input_columns_must_be_filled": "Debes completar todos los campos",
+        "no_data": "No hay datos para visualizar",
+        "peer_review_did_not_finish": "La revisión por pares no finalizó",
+        "student_missing": "El estudiante {{name}} no tiene calificaciones o comentarios. Por favor verifique los datos.",
+        "select_activity": "Selecciona una actividad"
     }
 }

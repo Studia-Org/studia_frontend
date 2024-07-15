@@ -7,7 +7,11 @@
         "save_changes": "Save changes",
         "switch_mode": "Switch mode",
         "import": "Import",
-        "for_example": "For example"
+        "for_example": "For example",
+        "professor": "Professor",
+        "student": "Student",
+        "yes": "Yes",
+        "no": "No"
     },
     "HOME": {
         "title": "Welcome to the new era of Learning",
@@ -537,5 +541,68 @@
             "Fri",
             "Sat"
         ]
+    },
+    "QUALIFICATIONS": {
+        "qualifications": "Qualifications",
+        "qualificacion": "Qualification",
+        "search_users": "Search users",
+        "attention": "Attention",
+        "peerreview_deadline": "Peer review deadline is on",
+        "comments": "Comments",
+        "professor_qualification": "Professor qualification",
+        "files": "Files",
+        "last_modification": "Last modification",
+        "groups": "Groups",
+        "name": "Name",
+        "professor_students_ponderation": "Professor - Students ponderation",
+        "edit_qualifications": "Edit qualifications",
+        "upload_qualifications": "Upload qualifications",
+        "questionnaire_completed": "Questionnaire completed",
+        "average_grade": "Average grade received",
+        "at": "at",
+        "write_comment": "Write a comment",
+        "files_delivered_by": "Files delivered by {{student}} on activity {{activity}}",
+        "no_files_delivered": "No files delivered",
+        "no_grade": "No grades yet",
+        "csv_configuration": "CSV configuration",
+        "csv_configuration_text": "Configure the CSV file and select the activity desired.",
+        "visualization": "Visualization",
+        "visualization_text": "Visualize the data to upload before confirming.",
+        "confirmation": "Confirmation",
+        "confirmation_text": "Create the new qualification entries.",
+        "first_text_upload": "First of all, select the activity to upload the grades",
+        "download_template_csv": "Download template CSV with students",
+        "now_introduce_columns": "Now, introduce the relation in the columns and rows on your CSV spreadsheet",
+        "placeholder_columns_student": "Student column and row, ex: B2-B22",
+        "placeholder_columns_grade": "Qualification column and row, ex: D2-D22",
+        "placeholder_columns_comments": "Comments column and row, ex: F2-F22",
+        "placeholder_columns_peer": "Average peer review grades column and row, ex: F2-F22",
+        "peerReviewGroup": {
+            "instruction": "For the example below, we would select; A2-A8 (in the student case), B2-B8 (Qualification case), C2-C8 (Comment case), and D2-D8 (Grade from peer review):",
+            "note": "When ' - ' is displayed in 'Average grade peer review' it means that peer review was not evaluated numerically and only professor qualification will be taken into account."
+        },
+        "group": {
+            "instruction": "For the example below, we would select; A2-A8 (in the student case), B2-B8 (Qualification case), C2-C8 (Comment case):"
+        },
+        "peerReview": {
+            "instruction": "For the example below, we would select; A2-A6 (in the student case), B2-B6 (Qualification case), C2-C6 (Comment case), and D2-D6 (Grade from peer review):"
+        },
+        "standard": {
+            "instruction": "For the example below, we would select; B2-B22 (in the student case), D2-D22 (Qualification case), F2-F22 (Comment case):"
+        },
+        "finally_csv": "Finally, upload the CSV spreadsheet file (comma or semi-colon separated).",
+        "students_no_enrolled": "Students who aren't enrolled in the course won't show up here.",
+        "are_you_sure_continue": "Are you sure you want to continue?",
+        "please_wait": "Please wait until the system has created all the qualifications, it will not take more than a minute.",
+        "creating_qualifications": "Creating qualifications...",
+        "qualifications_created": "Qualifications created successfully",
+        "error_creating_qualifications": "Error creating qualifications",
+        "file_must_be_csv": "File must be a CSV or spreadsheet file",
+        "input_columns_must_be": "The input columns must have Excel range format, e.g., B2-B22",
+        "input_columns_must_be_filled": "You must fill all the fields",
+        "no_data": "There is no data to visualize",
+        "peer_review_did_not_finish": "Peer review did not finish",
+        "student_missing": "Student {{name}} does not have a qualification or comments. Please check the data.",
+        "select_activity": "Select activity"
     }
 }

@@ -7,9 +7,10 @@ import { MoonLoader } from "react-spinners";
 import { Select, Avatar } from 'antd';
 import { useAuthContext } from "../../../context/AuthContext";
 import { ProfessorQualificationsCard } from '../components/ProfessorQualificationsCard';
-
+import { useTranslation } from 'react-i18next';
 const Qualifications = () => {
     document.title = 'Qualifications - Uptitude'
+    const { t } = useTranslation();
     const { user } = useAuthContext();
     const [loading, setLoading] = useState(true);
     const [qualifications, setQualifications] = useState([]);
@@ -105,11 +106,7 @@ const Qualifications = () => {
 
 
     function renderProfessorQualificationsCard(qualification) {
-        return (
-            <>
-                <ProfessorQualificationsCard qualification={qualification} />
-            </>
-        )
+        return <ProfessorQualificationsCard qualification={qualification} />
     }
 
     const handleCourseChange = (value) => {
@@ -143,19 +140,19 @@ const Qualifications = () => {
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50  ">
                         <tr>
                             <th scope="col" class="px-6 py-3">
-                                Activity
+                                {t("COURSEINSIDE.activity")}
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Comments
+                                {t("QUALIFICATIONS.comments")}
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Grade
+                                {t("QUALIFICATIONS.qualification")}
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Evaluator
+                                {t("ACTIVITY.evaluator")}
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Last Updated
+                                {t("QUALIFICATIONS.last_modification")}
                             </th>
                         </tr>
                     </thead>
@@ -246,7 +243,7 @@ const Qualifications = () => {
             {
                 user !== undefined && user?.role_str !== 'student' ?
                     <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] '>
-                        <h1 className='ml-12 text-xl font-bold pt-11'>Qualifications</h1>
+                        <h1 className='ml-12 text-xl font-bold pt-11'>{t("QUALIFICATIONS.qualifications")}</h1>
                         {!loading ?
                             <div className='px-12 text-2xl font-bold p-9'>
                                 <div className='flex'>

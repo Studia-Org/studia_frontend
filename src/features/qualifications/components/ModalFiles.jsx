@@ -1,8 +1,10 @@
 import React from 'react'
 import { Modal, Button, Empty } from 'antd'
+import { Trans, useTranslation } from 'react-i18next';
 
 export const ModalFiles = ({ grade, isModalOpen, setIsModalOpen, student, group = false }) => {
     const title = grade?.attributes?.activity?.data?.attributes?.title
+    const { t } = useTranslation();
     const downloadFile = async (file) => {
         try {
             const response = await fetch(file.url);
@@ -41,10 +43,18 @@ export const ModalFiles = ({ grade, isModalOpen, setIsModalOpen, student, group 
                     OK
                 </Button>
             ]}>
-            {group === false && <p className='text-sm text-gray-700'>Files delivered by {student.attributes.name} on activity {title}</p>}
+            {group === false && <p className='text-sm text-gray-700'>
+                <Trans i18nKey='QUALIFICATIONS.files_delivered_by'
+                    components={{
+                        student: student.attributes.name,
+                        activity: title
+                    }}
+                />
+
+            </p>}
             {
                 (grade?.attributes?.file?.data?.length === 0 || !grade?.attributes?.file.data) &&
-                <Empty className='mt-7' description='There are no files delivered' />
+                <Empty className='mt-7' description={t("QUALIFICATIONS.no_files_delivered")} />
             }
             <div className='mt-3 space-y-5'>
                 {grade?.attributes?.file?.data?.map(renderFiles)}

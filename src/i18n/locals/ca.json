@@ -7,7 +7,11 @@
         "save_changes": "Desar canvis",
         "switch_mode": "Canviar mode",
         "import": "Importar",
-        "for_example": "Per exemple"
+        "for_example": "Per exemple",
+        "professor": "Professor",
+        "student": "Estudiant",
+        "yes": "Si",
+        "no": "No"
     },
     "HOME": {
         "title": "Benvingut/da a la nova era de l'aprenentatge",
@@ -487,5 +491,68 @@
             "Div",
             "Dis"
         ]
+    },
+    "QUALIFICATIONS": {
+        "qualifications": "Qualificacions",
+        "qualification": "Qualificació",
+        "search_users": "Cercar usuaris",
+        "attention": "Atenció",
+        "peerreview_deadline": "La data límit per a la revisió entre iguals és el",
+        "comments": "Comentaris",
+        "professor_qualification": "Qualificació del professor",
+        "files": "Arxius",
+        "last_modification": "Última modificació",
+        "groups": "Grups",
+        "name": "Nom",
+        "professor_students_ponderation": "Ponderació Professor - Estudiants",
+        "edit_qualifications": "Editar qualificacions",
+        "upload_qualifications": "Pujar qualificacions",
+        "questionnaire_completed": "Qüestionari completat",
+        "average_grade": "Nota mitjana rebuda",
+        "at": "a les",
+        "write_comment": "Escriu un comentari",
+        "files_delivered_by": "Arxius entregats per {{student}} a l'activitat {{activity}}",
+        "no_files_delivered": "No s'han entregat arxius",
+        "no_grade": "No hi ha cap qualificació",
+        "csv_configuration": "Configuració del CSV",
+        "csv_configuration_text": "Configura l'arxiu CSV i selecciona l'activitat desitjada.",
+        "visualization": "Visualització",
+        "visualization_text": "Visualitza les dades a carregar abans de confirmar.",
+        "confirmation": "Confirmació",
+        "confirmation_text": "Crea les noves entrades de qualificació.",
+        "first_text_upload": "Primer de tot, selecciona l'activitat per pujar les notes",
+        "download_template_csv": "Descarregar plantilla CSV amb els estudiants",
+        "now_introduce_columns": "Ara, introdueix la relació en les columnes i files del teu full de càlcul CSV",
+        "placeholder_columns_student": "Columna i fila de l'estudiant, ex: A2-A22",
+        "placeholder_columns_grade": "Columna i fila de la qualificació, ex: B2-B22",
+        "placeholder_columns_comments": "Columna i fila de comentaris, ex: C2-C22",
+        "placeholder_columns_peer": "Columna i fila de les mitjanes de revisió entre iguals, ex: D2-D22",
+        "peerReviewGroup": {
+            "instruction": "Per l'exemple següent, seleccionaríem; A2-A8 (en el cas de l'estudiant), B2-B8 (en el cas de la qualificació), C2-C8 (en el cas del comentari) i D2-D8 (Qualificació de la revisió entre iguals):",
+            "note": "Quan apareix ' - ' en 'Qualificació mitjana de la revisió entre iguals' significa que la revisió entre iguals no es va avaluar numèricament i només es tindrà en compte la qualificació del professor."
+        },
+        "group": {
+            "instruction": "Per l'exemple següent, seleccionaríem; A2-A8 (en el cas de l'estudiant), B2-B8 (en el cas de la qualificació), C2-C8 (en el cas del comentari):"
+        },
+        "peerReview": {
+            "instruction": "Per l'exemple següent, seleccionaríem; A2-A6 (en el cas de l'estudiant), B2-B6 (en el cas de la qualificació), C2-C6 (en el cas del comentari) i D2-D6 (Qualificació de la revisió entre iguals):"
+        },
+        "standard": {
+            "instruction": "Per l'exemple següent, seleccionaríem; B2-B22 (en el cas de l'estudiant), D2-D22 (en el cas de la qualificació), F2-F22 (en el cas del comentari):"
+        },
+        "finally_csv": "Finalment, carregueu el fitxer de full de càlcul CSV (separat per comes o punts i coma).",
+        "students_no_enrolled": "Els estudiants que no estan matriculats al curs no apareixeran aquí.",
+        "are_you_sure_continue": "Estàs segur que vols continuar?",
+        "please_wait": "Espereu fins que el sistema hagi creat totes les qualificacions, no trigarà més d'un minut.",
+        "creating_qualifications": "Creant qualificacions...",
+        "qualifications_created": "Qualificacions creades correctament",
+        "error_creating_qualifications": "Error en crear les qualificacions",
+        "file_must_be_csv": "El fitxer ha de ser un fitxer CSV o full de càlcul",
+        "input_columns_must_be": "Les columnes d'entrada han de tenir el format d'interval d'Excel, per exemple, B2-B22",
+        "input_columns_must_be_filled": "Has d'omplir tots els camps",
+        "no_data": "No hi ha dades per visualitzar",
+        "peer_review_did_not_finish": "La revisió per iguals no ha acabat",
+        "student_missing": "L'estudiant {{name}} no té cap qualificació o comentaris. Comproveu les dades.",
+        "select_activity": "Selecciona l'activitat"
     }
 }

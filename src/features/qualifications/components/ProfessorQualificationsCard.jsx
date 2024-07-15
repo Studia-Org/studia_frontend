@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 export const ProfessorQualificationsCard = ({ qualification }) => {
     const navigate = useNavigate();
     return (
-        <button onClick={() => navigate(`courses/${qualification.id}`)} className='transform hover:scale-105  duration-150  bg-white rounded-md flex justify-end items-center relative font-normal text-base p-5 h-[10rem] w-[25rem] shadow-md text-right'>
+        <button key={qualification.id} onClick={() => navigate(`courses/${qualification.id}`)} className='transform hover:scale-105  duration-150  bg-white rounded-md flex justify-end items-center relative font-normal text-base p-5 h-[10rem] w-[25rem] shadow-md text-right'>
             <img className='object-cover w-24 top-0 left-0 h-[10rem] absolute rounded-l-lg ' src={qualification.attributes.cover.data.attributes.url} alt="" />
             <div className='flex flex-col w-3/4'>
                 <p className='font-semibold '>{qualification.attributes.title}</p>
