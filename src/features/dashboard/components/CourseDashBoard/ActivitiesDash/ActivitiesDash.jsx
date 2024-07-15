@@ -97,6 +97,26 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
     }
 
     function generatePieChart() {
+        const colors = [
+            '#1f77b4',
+            '#ff7f0e',
+            '#2ca02c',
+            '#d62728',
+            '#9467bd',
+            '#8c564b',
+            '#e377c2',
+            '#7f7f7f',
+            '#bcbd22',
+            '#17becf',
+            '#ffcc00'
+        ]
+
+        // Añadir color a cada entrada de datos
+        const coloredData = totalQualifications.map((item, index) => ({
+            ...item,
+            color: colors[index % colors.length]
+        }));
+
         return (
             <>
                 <p className="mb-1 text-lg font-medium">Qualifications distribution</p>
@@ -109,7 +129,7 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
                         :
                         <PieChart
                             series={[{
-                                data: totalQualifications,
+                                data: coloredData,
                                 highlightScope: { faded: 'global', highlighted: 'item' },
                                 faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
                             }]}
