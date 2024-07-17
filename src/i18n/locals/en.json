@@ -102,7 +102,45 @@
         "Creative and entrepreneurial capacity": "Creative and entrepreneurial capacity",
         "Sustainability": "Sustainability",
         "Communicative ability": "Communicative ability",
-        "linked_objectives": "This task is linked with your objectives!"
+        "linked_objectives": "This task is linked with your objectives!",
+        "CRITERIA": {
+            "Ethical_commitment": {
+                "criteria": [
+                    "Ability for self-criticism and critical thinking",
+                    "Ability to demonstrate attitudes consistent with ethical and deontological principles"
+                ]
+            },
+            "Learning_capability_and_responsibility": {
+                "criteria": [
+                    "Ability for analysis, synthesis, global perspectives, and practical applications of knowledge",
+                    "Ability to make decisions and adapt to new situations"
+                ]
+            },
+            "Teamwork": {
+                "criteria": [
+                    "Ability to collaborate with others and contribute to a common project",
+                    "Ability to collaborate in interdisciplinary and multicultural teams"
+                ]
+            },
+            "Creative_and_entrepreneurial_capacity": {
+                "criteria": [
+                    "Ability to formulate, design, and manage projects",
+                    "Ability to seek and integrate new knowledge and attitudes"
+                ]
+            },
+            "Sustainability": {
+                "criteria": [
+                    "Ability to assess the social and environmental impact of actions in their field",
+                    "Ability to express integrated and systematic visions"
+                ]
+            },
+            "Communicative_ability": {
+                "criteria": [
+                    "Ability to understand and express oneself orally and in writing in Catalan and Spanish and in another language, using specialized language in the discipline",
+                    "Ability to search, use, and integrate information"
+                ]
+            }
+        }
     },
     "NAVBAR": {
         "professor": "Professor",
@@ -427,6 +465,31 @@
                 "items_sequences": "Add items to the sequence",
                 "sequence_text": "You can edit all the sequences for customization when they are added on a section.",
                 "add_sequence": "Add sequence",
+                "EDIT_SUBSECTION": {
+                    "title": "Title",
+                    "description": "Description",
+                    "files": "Files (max 5)",
+                    "date": "Subsection date",
+                    "date_placeholder_start": "Start date",
+                    "date_placeholder_end": "End date",
+                    "content": "Content",
+                    "content_placeholder": "Edit subsection content",
+                    "cover": "Cover (optional)",
+                    "pairs_or_individual": "Will the activity be carried out in pairs or individually?",
+                    "individual": "Individual",
+                    "groups": "Groups",
+                    "students_per_group": "How many students per group?",
+                    "categories": "Categories",
+                    "categories_text": "Associate criteria of the categories you selected with the activity.",
+                    "add_row": "Add row",
+                    "criteria": "Criteria",
+                    "check": "Check",
+                    "evaluable": "Is the activity evaluable?",
+                    "ponderation": "Ponderation",
+                    "ponderation_error": "Ponderation do not sum 100",
+                    "ponderation_good": "Ponderation sum 100",
+                    "ponderation_error_text": "You will not be able to create a course, the ponderation of all subsections do not sum 100%, they do sum"
+                },
                 "SEQUENCES": {
                     "ELEMENTS": {
                         "PLANNING_QUESTIONNAIRE": {

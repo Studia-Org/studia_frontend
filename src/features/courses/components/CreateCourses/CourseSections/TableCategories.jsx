@@ -2,12 +2,14 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Button, Table, Select, Checkbox, Form, Input, message } from 'antd';
 import { ACTIVITY_CATEGORIES } from '../../../../../constant';
 import './TableAntd.css'
+import { useTranslation } from 'react-i18next';
 
 const dataSourceMap = (category, createCourseSectionsList, subsection) => {
     let resultArray = [];
 
     if (ACTIVITY_CATEGORIES[category]?.criteria) {
         resultArray = ACTIVITY_CATEGORIES[category].criteria.map((item, index) => {
+            console.log(item)
             return {
                 key: Math.floor(Date.now() * Math.random()),
                 Criteria: item
@@ -134,6 +136,8 @@ const isFromActivityCategories = (criteria) => {
 
 export const TableCategories = ({ categories, setCreateCourseSectionsList, subsection, sectionID, createCourseSectionsList }) => {
 
+    const { t } = useTranslation()
+
     const categoriesOptions = categories?.map((category) => {
         return {
             label: category,
@@ -212,12 +216,12 @@ export const TableCategories = ({ categories, setCreateCourseSectionsList, subse
 
     const defaultColumns = [
         {
-            title: 'Criteria',
+            title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.criteria"),
             dataIndex: 'Criteria',
             editable: true,
         },
         {
-            title: 'Check',
+            title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.check"),
             dataIndex: 'check',
             render: (_, record) =>
                 dataSource.length >= 1 ? (
@@ -376,9 +380,9 @@ export const TableCategories = ({ categories, setCreateCourseSectionsList, subse
                 value={selectOption}
             />
             <div className='flex items-center mb-3'>
-                <p className='text-xs text-gray-500 '>Associate criteria of the categories you selected with the activity.</p>
+                <p className='text-xs text-gray-500 '>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.categories_text")}</p>
                 <Button onClick={() => addRow()} className='ml-auto'>
-                    Add Row
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.add_row")}
                 </Button>
             </div>
             <Table

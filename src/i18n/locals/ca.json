@@ -102,7 +102,45 @@
         "Creative and entrepreneurial capacity": "Capacitat creativa i emprenedora",
         "Sustainability": "Sostenibilitat",
         "Communicative ability": "Capacitat comunicativa",
-        "linked_objectives": "Aquesta tasca està vinculada amb els teus objectius!"
+        "linked_objectives": "Aquesta tasca està vinculada amb els teus objectius!",
+        "CRITERIA": {
+            "Compromís_ètic": {
+                "criteria": [
+                    "Capacitat d'autocrítica i pensament crític",
+                    "Capacitat per demostrar actituds coherents amb els principis ètics i deontològics"
+                ]
+            },
+            "Capacitat_d'aprenentatge_i_responsabilitat": {
+                "criteria": [
+                    "Capacitat d'anàlisi, síntesi, perspectives globals i aplicacions pràctiques del coneixement",
+                    "Capacitat per prendre decisions i adaptar-se a noves situacions"
+                ]
+            },
+            "Treball_en_equip": {
+                "criteria": [
+                    "Capacitat per col·laborar amb altres i contribuir a un projecte comú",
+                    "Capacitat per col·laborar en equips interdisciplinaris i multiculturals"
+                ]
+            },
+            "Capacitat_creativa_i_emprenedora": {
+                "criteria": [
+                    "Capacitat per formular, dissenyar i gestionar projectes",
+                    "Capacitat per cercar i integrar nous coneixements i actituds"
+                ]
+            },
+            "Sostenibilitat": {
+                "criteria": [
+                    "Capacitat per avaluar l'impacte social i ambiental de les accions en el seu camp",
+                    "Capacitat per expressar visions integrades i sistemàtiques"
+                ]
+            },
+            "Habilitat_comunicativa": {
+                "criteria": [
+                    "Capacitat per comprendre i expressar-se oralment i per escrit en català i espanyol i en un altre idioma, utilitzant el llenguatge especialitzat en la disciplina",
+                    "Capacitat per cercar, usar i integrar informació"
+                ]
+            }
+        }
     },
     "NAVBAR": {
         "professor": "Professor",
@@ -427,6 +465,31 @@
                 "items_sequences": "Afegeix elements a la seqüència",
                 "sequence_text": "Pots editar totes les seqüències per a la personalització quan s'afegeixen a una secció.",
                 "add_sequence": "Afegeix seqüència",
+                "EDIT_SUBSECTION": {
+                    "title": "Títol",
+                    "description": "Descripció",
+                    "files": "Arxius (màxim 5)",
+                    "date": "Data de la subsecció",
+                    "date_placeholder_start": "Data d'inici",
+                    "date_placeholder_end": "Data de finalització",
+                    "content": "Contingut",
+                    "content_placeholder": "Editar el contingut de la subsecció",
+                    "cover": "Portada (opcional)",
+                    "pairs_or_individual": "L'activitat es durà a terme en parelles o individualment?",
+                    "individual": "Individual",
+                    "groups": "Grups",
+                    "students_per_group": "Quants estudiants per grup?",
+                    "categories": "Categories",
+                    "categories_text": "Associeu criteris de les categories que heu seleccionat amb l'activitat.",
+                    "add_row": "Afegeix fila",
+                    "criteria": "Criteris",
+                    "check": "Marcar",
+                    "evaluable": "És l'activitat avaluable?",
+                    "ponderation": "Ponderació",
+                    "ponderation_error": "La ponderació no suma 100",
+                    "ponderation_good": "La ponderació suma 100",
+                    "ponderation_error_text": "No podràs crear un curs, la ponderació de totes les subseccions no suma 100%, en canvi, suma"
+                },
                 "SEQUENCES": {
                     "ELEMENTS": {
                         "PLANNING_QUESTIONNAIRE": {
