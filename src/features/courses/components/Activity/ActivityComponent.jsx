@@ -4,16 +4,16 @@ import { getToken } from '../../../../helpers';
 import ReactMarkdown from 'react-markdown';
 import { API } from '../../../../constant';
 import { useAuthContext } from '../../../../context/AuthContext';
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import 'filepond/dist/filepond.min.css';
 import '../..//styles/filepondStyles.css'
-import { FilePond, registerPlugin } from 'react-filepond';
+import { registerPlugin } from 'react-filepond';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import Swal from 'sweetalert2';
 import ObjectivesTags from './ObjectivesTag';
 import ActivityTitle from './Components/ActivityTitle';
-import BackToCourse, { BackButton } from './Components/BackToCourse';
+import { BackButton } from './Components/BackToCourse';
 import { Empty, Button, message, Popconfirm } from 'antd';
 import MDEditor from '@uiw/react-md-editor';
 import { SwitchEdit } from '../CoursesInside/SwitchEdit';
@@ -26,8 +26,7 @@ import { TaskFiles } from './Components/TaskFiles.jsx';
 import { UploadFiles } from '../CreateCourses/CourseSections/UploadFiles.jsx';
 import { BreadcrumbCourse } from '../CoursesInside/BreadcrumbCourse.jsx';
 import { useCourseContext } from '../../../../context/CourseContext.js';
-import { AccordionNavigator } from './Components/ActivityTask/AccordionNavigator.jsx';
-
+import { useTranslation } from 'react-i18next';
 registerPlugin(FilePondPluginFileValidateSize);
 registerPlugin(FilePondPluginImagePreview);
 
@@ -44,6 +43,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
   const audioUser = activityData?.file?.data ? activityData?.file?.data[0]?.attributes : null;
   const [audioFile, setAudioFile] = useState(audioUser);
   const { user } = useAuthContext();
+  const { t } = useTranslation();
 
   const { course } = useCourseContext();
 
@@ -154,9 +154,9 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
             IdFromBackend: file.id
           })) || []
         )
-        message.success('Changes saved successfully');
+        message.success(t("ACTIVITY.changed_saved_success"));
       }
-      else throw new Error('Error saving changes');
+      else throw new Error(t("ACTIVITY.changed_saved_error"));
     } catch (error) {
       await fetch(`${API}/upload`, {
         method: 'DELETE',
@@ -251,21 +251,21 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
       }
       setUploadLoading(true);
       if (formData.getAll('files').length === 0 && !isThinkAloud && fileListIds.length === 0) {
-        message.error('You must upload a file');
+        message.error(t("ACTIVITY.no_files"))
         setUploadLoading(false);
         return
 
         // Caso en el que el usuario haya eliminado un archivo de los que había subido
       } else if (formData.entries().next().done && fileListIds.length !== 0) {
         Swal.fire({
-          title: 'Warning!',
-          text: "You are going to change the files you uploaded before, are you sure?",
+          title: t("ACTIVITY.swal_change_files.title"),
+          text: t("ACTIVITY.swal_change_files.text"),
           icon: 'warning',
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
-          confirmButtonText: 'Yes, submit',
-          cancelButtonText: 'No, cancel'
+          confirmButtonText: t("ACTIVITY.swal_change_files.confirm"),
+          cancelButtonText: t("ACTIVITY.swal_change_files.cancel")
         }).then((result) => {
           if (result.isConfirmed) {
             sendFile(null, fileListIds)
@@ -387,16 +387,17 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
       const activityFilesFiltered =
         activityFiles.filter((file) => file.IdFromBackend !== fileId);
       setActivityFiles(activityFilesFiltered);
-      message.success('File deleted successfully');
+      message.success(t("ACTIVITY.deleted_success"));
     }
-    else message.error('Something went wrong');
+    else message.error(t("ACTIVITY.smth_wrong"));
   }
   function DeleteButton({ id }) {
     return (
       <Popconfirm
-        title="Delete the file"
-        description="Are you sure to delete this file?"
-        okText="Yes"
+        title={t("ACTIVITY.pop_confirm.title")}
+        description={t("ACTIVITY.pop_confirm.description")}
+        okText={t("ACTIVITY.pop_confirm.confirm")}
+        cancelText={t("ACTIVITY.pop_confirm.cancel")}
         okType="danger"
         onConfirm={(e) => {
           e.stopPropagation();
@@ -405,7 +406,6 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
         onCancel={(e) => {
           e.stopPropagation();
         }}
-        cancelText="No"
       >
         <svg
           onClick={(e) => {
@@ -485,10 +485,10 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
         a.click();
         window.URL.revokeObjectURL(url);
       } else {
-        message.error('Something went wrong');
+        message.error(t("ACTIVITY.smth_wrong"));
       }
     } catch (error) {
-      message.error('Something went wrong: ', error);
+      message.error(t("ACTIVITY.smth_wrong"));
     }
   };
 
@@ -499,12 +499,10 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
         <div className={`${!createGroups ? "1.5xl:w-3/4 lg:w-10/12" : ""}  w-full `}>
           <BreadcrumbCourse />
           {
-            createGroups ?
-              <div className='mt-3'>
-                <BackButton onClick={() => setCreateGroups(false)} text={"Go back to activity"} />
-              </div>
-              :
-              null
+            createGroups &&
+            <div className='mt-3'>
+              <BackButton onClick={() => setCreateGroups(false)} text={t("ACTIVITY.go_back_activity")} />
+            </div>
           }
           <ActivityTitle
             type={type}
@@ -525,58 +523,54 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
           }
           {
             createGroups ?
-              <div >
-                <CreateGroups activityId={activityId} activityData={activityData} courseId={courseId} />
-              </div>
+              <CreateGroups activityId={activityId} activityData={activityData} courseId={courseId} />
               :
               <>
                 {
-                  user.role_str === 'professor' || user.role_str === 'admin' ?
-                    <div className='flex items-center ml-auto'>
-                      <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} />
-                    </div> : null
+                  (user.role_str === 'professor' || user.role_str === 'admin') &&
+                  <div className='flex items-center ml-auto'>
+                    <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} />
+                  </div>
                 }
-
                 {
-                  evaluated && (
-                    <>
-                      <p className='mt-5 mb-1 text-xs text-gray-400'>Comments</p>
-                      <hr />
-                      {
-                        activityData.comments === null || activityData.comments === '' ?
-                          <p className='mt-3'>There are no comments for your submission.</p>
-                          :
-                          <p className='mt-3'>{activityData.comments}</p>
-                      }
+                  evaluated &&
+                  <section>
+                    <p className='mt-5 mb-1 text-xs text-gray-400'>{t("ACTIVITY.comments")}</p>
+                    <hr />
+                    {
+                      activityData.comments === null || activityData.comments === '' ?
+                        <p className='mt-3'>{t("ACTIVITY.no_comments")}</p>
+                        :
+                        <p className='mt-3'>{activityData.comments}</p>
+                    }
 
-                    </>
-                  )
+                  </section>
                 }
                 {
                   !enableEdit || user.role_str === 'student' ?
                     <TaskFiles files={activityFiles} />
                     :
                     <section className="!max-h-fit">
-                      <p className='mt-8 mb-1 text-xs text-gray-600'>Task Files</p>
+                      <p className='mt-8 mb-1 text-xs text-gray-600'>{t("ACTIVITY.task_files")}</p>
                       <hr className='mb-3' />
                       <UploadFiles fileList={filesTask} setFileList={setFilesTask} listType={'picture'} maxCount={10} />
-                      <p className='mt-1 text-xs text-right text-gray-500 '>Remember to save your changes for correctly visualizing your new files.</p>
+                      <p className='mt-1 text-xs text-right text-gray-500 '>{t("ACTIVITY.remember_upload")}</p>
                     </section>
                 }
-                <p className='mt-5 mb-1 text-xs text-gray-600'>Task description</p>
+                <p className='mt-5 mb-1 text-xs text-gray-600'>{t("ACTIVITY.task_description")}</p>
                 <hr />
                 <div className='my-3 text-gray-600 ml-5 max-w-[calc(100vw-1.25rem)] box-content mt-5 '>
                   {
                     !enableEdit ?
                       <div className='prose max-w-none'>
-                        <ReactMarkdown className=''>{activityData.activity.data.attributes.description}</ReactMarkdown>
+                        <ReactMarkdown>{activityData.activity.data.attributes.description}</ReactMarkdown>
                       </div>
                       :
                       <div className="flex flex-col">
                         <MDEditor height="30rem" className='mt-2 mb-8' data-color-mode='light' onChange={setSubsectionContent} value={subsectionContent} />
                         <Button onClick={() => saveChanges()} type="primary" loading={loading}
                           className="inline-flex justify-center px-4 ml-auto text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                          Save Changes
+                          {t("COMMON.save_changes")}
                         </Button>
                       </div>
                   }
@@ -588,7 +582,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
           (user.role_str === 'professor' || user.role_str === 'admin') && !createGroups ?
             isActivityGroup &&
             <Button type='primary' onClick={() => setCreateGroups(true)} >
-              Create students groups
+              {t("ACTIVITY.create_groups_button")}
             </Button>
             :
             (evaluated || passedDeadline) && !(user.role_str === 'professor' || user.role_str === 'admin') ?
@@ -596,21 +590,21 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                 {
                   activityData.evaluator?.data && (
                     <>
-                      <p className='mb-1 text-xs text-gray-400' > Evaluator</ p>
+                      <p className='mb-1 text-xs text-gray-400' >{t("ACTIVITY.evaluator")}</ p>
                       <div className='pl-1'>
-                        <ProfessorData professor={{ attributes: activityData.evaluator.data.attributes }} evaluatorFlag={true} />
+                        <ProfessorData professor={activityData.evaluator.data} evaluatorFlag={true} />
                       </div>
                     </>
 
                   )
                 }
-                <p className='mt-5 mb-3 text-xs text-gray-600'>Your submission</p>
+                <p className='mt-5 mb-3 text-xs text-gray-600'>{t("ACTIVITY.your_submission")}</p>
                 {
                   filesUploaded.length === 0 ?
                     <div className='bg-white mb-5 rounded-md shadow-md p-5 max-w-[calc(100vw-1.25rem)] w-[30rem]'>
                       <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} className='mt-6' description={
                         <span className='font-normal text-gray-400 '>
-                          You did not submit any files
+                          {t("ACTIVITY.not_files_submitted")}
                         </span>
                       } />
                     </div> :
@@ -628,10 +622,10 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                   activityData.activity.data.attributes.type === 'thinkAloud' ?
                     <div className='mb-5 bg-white rounded-md shadow-md'>
                       <div className='flex items-center gap-5 mx-5 mt-5'>
-                        <p className='text-xs text-gray-400 '>Click on the microphone and start recording your voice, or you can upload an audio file</p>
+                        <p className='text-xs text-gray-400 '>{t("ACTIVITY.click_microphone")}</p>
 
                         <Button onClick={() => handleUploadMode()} disabled={passedDeadline}>
-                          Switch mode
+                          {t("COMMON.switch_mode")}
                         </Button>
                       </div>
                       <hr className='mx-10 mt-5' />
@@ -648,19 +642,19 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                               id='submit-button-activity'
                               onClick={() => { sendData() }}
                               className="flex ml-auto" type='primary'>
-                              Submit files
+                              {t("ACTIVITY.submit_files")}
                             </Button>
                           </div>
 
 
                       }
-                      <p className='mb-2 ml-5 text-xs text-gray-400'>Remember to submit your file once you finished.</p>
+                      <p className='mb-2 ml-5 text-xs text-gray-400'>{t("ACTIVITY.remember_submit")}</p>
 
                     </div>
                     :
                     isActivityEvaluable && (
                       <main>
-                        <header className='mt-5 mb-1 text-xs text-gray-600'>Your submission</header>
+                        <header className='mt-5 mb-1 text-xs text-gray-600'>{t("ACTIVITY.your_submission")}</header>
                         <div className='p-5 mb-5 space-y-5 bg-white border rounded-md'>
 
                           <UploadFiles
@@ -677,9 +671,9 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                             id='submit-button-activity'
                             onClick={() => { sendData() }}
                             className="flex ml-auto" type='primary'>
-                            Submit files
+                            {t("ACTIVITY.submit_files")}
                           </Button>
-                          <p className='text-xs text-gray-600'>Your changes will only be reflected if you submit your files.</p>
+                          <p className='text-xs text-gray-600'>{t("ACTIVITY.remember_submit")}</p>
                         </div>
                         <GroupMembers activityGroup={activityGroup} loadingGroup={loadingGroup} />
                       </main>

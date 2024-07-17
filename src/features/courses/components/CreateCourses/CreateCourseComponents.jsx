@@ -13,13 +13,11 @@ import { TaskContent } from './CourseConfirmation/TaskContent';
 import { Empty, Popconfirm, Button } from 'antd';
 import { ButtonCreateCourse } from './CourseConfirmation/ButtonCreateCourse';
 import SelectProfessor from './CourseInfo/SelectProfessor';
-
-import TagsInput from 'react-tagsinput'
-
 import { FilePond, registerPlugin } from 'react-filepond';
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond/dist/filepond.min.css';
+import { useTranslation } from 'react-i18next';
 registerPlugin(FilePondPluginImagePreview);
 
 const variants = {
@@ -30,6 +28,7 @@ const transition = { duration: 0.2 };
 
 const CreateCourseButtons = (createCourseOption, setCreateCourseOption, visibilityTask, courseBasicInfo) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   function handleContinue() {
     if (createCourseOption === 0) {
@@ -45,7 +44,7 @@ const CreateCourseButtons = (createCourseOption, setCreateCourseOption, visibili
 
   if (!visibilityTask) {
     return (
-      <div className='flex w-full mt-8 mb-10'>
+      <div className='flex w-full mt-8 mb-10 '>
         {
           createCourseOption === 0 ?
             <Popconfirm
@@ -57,23 +56,23 @@ const CreateCourseButtons = (createCourseOption, setCreateCourseOption, visibili
               cancelText={<span className="">No</span>}
               okButtonProps={{ className: 'bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5' }}
             >
-              <Button type="button" className="inline-flex items-center px-4 py-5 mr-2 text-sm font-medium text-center text-white duration-150 bg-gray-800 rounded-lg hover:bg-gray-900 focus:ring-4 focus:outline-none ">
-                Cancel
+              <Button type="button" className="inline-flex items-center px-4 py-5 mr-2 text-sm text-center text-white duration-150 bg-gray-800 rounded-lg font-Poppins hover:bg-gray-900 focus:ring-4 focus:outline-none ">
+                {t("CREATE_COURSES.NAVIGATION.cancel")}
               </Button>
             </Popconfirm> :
             <button onClick={() => setCreateCourseOption(createCourseOption - 1)} type="button" className="duration-150 text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center mr-2 ">
-              Back
+              {t("CREATE_COURSES.NAVIGATION.back")}
             </button>
         }
 
         {
           createCourseOption === 2 ?
             <button type="button" class="duration-150 group/continue text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center ">
-              Confirm
+              {t("CREATE_COURSES.NAVIGATION.confirm")}
             </button> :
 
             <button type="button" onClick={() => handleContinue()} class=" duration-150 group/continue text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none  font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center ">
-              Continue
+              {t("CREATE_COURSES.NAVIGATION.continue")}
               <svg class="w-3.5 h-3.5 ml-2 group-hover/continue:translate-x-1 duration-150" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
               </svg>
@@ -93,6 +92,8 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
     tags: [],
   });
 
+  const { t } = useTranslation();
+
   const handleChange = (field, value) => {
     setFormData((prevData) => ({ ...prevData, [field]: value }));
     setCourseBasicInfo((prevInfo) => ({ ...prevInfo, [field]: value }));
@@ -100,9 +101,9 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
 
   return (
     <motion.div className='flex flex-col w-2/4' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
-      <p className='mt-5 mb-5 text-sm font-normal text-gray-400'>First, give us some information about the new course</p>
+      <p className='mt-5 mb-5 text-sm font-normal text-gray-400'>{t("CREATE_COURSES.COURSE_INFO.principal_text")}</p>
       <label htmlFor="base-input" className="block mb-2 text-sm font-medium text-gray-900">
-        Course name *
+        {t("CREATE_COURSES.COURSE_INFO.course_name")} *
       </label>
       <input
         type="text"
@@ -113,7 +114,7 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
       />
 
       <label htmlFor="message" className="block mt-8 mb-2 text-sm font-medium text-gray-900">
-        Description *
+        {t("CREATE_COURSES.COURSE_INFO.course_description")} *
       </label>
       <textarea
         id="message"
@@ -125,7 +126,7 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
       <SelectProfessor setCourseBasicInfo={setCourseBasicInfo} />
       <div className='text-sm font-normal'>
         <label htmlFor="message" className="block mt-8 mb-4 text-sm font-medium text-gray-900">
-          Tags *
+          {t("CREATE_COURSES.COURSE_INFO.course_tags")} *
         </label>
         <Select
           size='large'
@@ -133,7 +134,6 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
           style={{
             width: '100%',
           }}
-          placeholder="Enter course tags"
           value={courseBasicInfo.tags}
           onChange={(e) => handleChange('tags', e)}
         />
@@ -142,7 +142,7 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
       <div className='flex justify-between mt-8'>
         <div className='w-full font-medium'>
           <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 ">
-            Cover image *
+            {t("CREATE_COURSES.COURSE_INFO.course_cover")} *
           </label>
           <FilePond
             allowMultiple={true}
@@ -163,6 +163,8 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
   setSectionToEdit, setCreateCourseSectionsListCopy, createCourseSectionsListCopy }) => {
   const [sectionName, setSectionName] = useState('');
   const [addSectionFlag, setAddSectionFlag] = useState(true);
+
+  const { t } = useTranslation();
 
   const handleDragEnd = (event) => {
     const { active, over } = event
@@ -197,20 +199,20 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
 
   return (
     <motion.div className='flex flex-col w-2/4' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
-      <p className='mt-5 mb-5 text-sm font-normal text-gray-400'>It's time to build your course, construct the sections and define the sequence! 🚀</p>
+      <p className='mt-5 mb-5 text-sm font-normal text-gray-400'>{t("CREATE_COURSES.COURSE_SECTIONS.principal_text")}</p>
       <div className='p-5 mb-5 text-base font-medium bg-white rounded-md shadow-md'>
         <div className='flex items-center'>
-          <h3 className=''>Course sections</h3>
+          <h3 className=''>{t("CREATE_COURSES.COURSE_SECTIONS.title")}</h3>
           {
             addSectionFlag ?
               <button onClick={() => setAddSectionFlag(false)} className='flex ml-auto '>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 mr-1">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
                 </svg>
-                <p className='ml-auto text-sm'>Add a section</p>
+                <p className='ml-auto text-sm'>{t("CREATE_COURSES.COURSE_SECTIONS.add_section")}</p>
               </button> :
               <button onClick={() => setAddSectionFlag(true)} className='flex ml-auto'>
-                <p className='ml-auto text-sm'>Cancel</p>
+                <p className='ml-auto text-sm'>{t("CREATE_COURSES.NAVIGATION.cancel")}</p>
               </button>
           }
 
@@ -218,7 +220,7 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
         {
           !addSectionFlag &&
           <div>
-            <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 mt-5">Section name</label>
+            <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 mt-5">{t("CREATE_COURSES.COURSE_SECTIONS.section_name")}</label>
             <input type="text" value={sectionName}
               onChange={(e) => setSectionName(e.target.value)}
               id="base-input"
@@ -226,7 +228,7 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
             <button
               onClick={() => createSection()}
               className='p-2 mt-4 text-sm text-white bg-gray-800 rounded-md '>
-              Create
+              {t("CREATE_COURSES.COURSE_SECTIONS.create")}
             </button>
           </div>
         }
@@ -248,12 +250,12 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
             <div>
               <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={
                 <span>
-                  There are no sections yet
+                  {t("CREATE_COURSES.COURSE_SECTIONS.no_sections")}
                 </span>
               } />
             </div>
         }
-        <p className='mt-8 text-xs font-normal text-gray-400'>Drag and drop to reorder your sections</p>
+        <p className='mt-8 text-xs font-normal text-gray-400'>{t("CREATE_COURSES.COURSE_SECTIONS.draganddrop")}</p>
       </div>
       {CreateCourseButtons(createCourseOption, setCreateCourseOption)}
     </motion.div>

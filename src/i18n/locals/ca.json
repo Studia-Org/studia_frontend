@@ -1,0 +1,614 @@
+{
+    "COMMON": {
+        "cancel": "Cancel·lar",
+        "need_help": "Necessites ajuda?",
+        "recommended": "Recomanat",
+        "new": "Nou",
+        "save_changes": "Desar canvis",
+        "switch_mode": "Canviar mode",
+        "import": "Importar",
+        "for_example": "Per exemple",
+        "professor": "Professor",
+        "student": "Estudiant",
+        "yes": "Si",
+        "no": "No"
+    },
+    "HOME": {
+        "title": "Benvingut/da a la nova era de l'aprenentatge",
+        "subtitle": "Uneix-te al futur de l'educació amb la nostra plataforma d'e-learning fàcil d'utilitzar, dissenyada per a la Universitat de Barcelona.",
+        "button_enter": "Entrar a l'aula",
+        "funded": "Finançat per:"
+    },
+    "LOGIN": {
+        "login": "Iniciar sessió",
+        "enter_information": "Introdueix la teva informació",
+        "email": "Correu electrònic",
+        "password": "Contrasenya",
+        "forgot_password": "Has oblidat la teva contrasenya?",
+        "card_title": "Benvingut de nou!",
+        "card_text": "Pots iniciar sessió o accedir amb el teu compte existent.",
+        "in_case_register": "En cas que no tinguis un compte",
+        "register": "Registrar-se",
+        "connect_social": "o connecta amb xarxes socials",
+        "contact_support": "Contactar amb suport:",
+        "sing_in_google": "Iniciar sessió amb Google"
+    },
+    "REGISTER": {
+        "fill_username": "Si us plau, omple el nom d'usuari",
+        "fill_name": "Si us plau, omple el nom",
+        "fill_email": "Si us plau, omple el correu electrònic",
+        "fill_university": "Si us plau, omple la universitat",
+        "fill_password": "Si us plau, omple la contrasenya",
+        "fill_repassword": "Si us plau, omple la confirmació de la contrasenya",
+        "upload_profile_photo": "Si us plau, puja una foto de perfil",
+        "passwords_do_not_match": "Les contrasenyes no coincideixen",
+        "password_length": "La contrasenya ha de tenir almenys 6 caràcters",
+        "fill_all_fields": "Si us plau, omple tots els camps",
+        "select_objective": "Si us plau, selecciona almenys un objectiu i categoritza'l",
+        "card_title": "Aprèn des de qualsevol lloc, en qualsevol moment",
+        "card_text": "Registra't ara i comença a adquirir nous coneixements amb els nostres cursos en línia. Aprendre mai no ha estat tan fàcil!",
+        "in_case": "En cas que ja tinguis un compte",
+        "login": "Iniciar sessió",
+        "register": "Registrar-se",
+        "enter_information": "Introdueix la teva informació per registrar-te",
+        "username": "Nom d'usuari",
+        "name": "Nom",
+        "email": "Correu electrònic",
+        "university": "Universitat",
+        "profile_photo": "Foto de perfil",
+        "password": "Contrasenya",
+        "repassword": "Repeteix la contrasenya",
+        "continue": "Continuar",
+        "objectives_register": {
+            "title": "Un últim pas...",
+            "subtitle": "Afegeix una mica de personalització al teu perfil i estableix els teus objectius!",
+            "add_brief_description": "Afegeix una breu descripció sobre tu",
+            "set_your_goals": "Estableix els teus objectius",
+            "text_goals_1": "Aprendre amb un MOOC pot ser un desafiament. Aquesta eina et recolza per assolir els teus objectius. Aquí pots (1) establir activament el teu objectiu per a aquest curs i (2) seleccionar indicadors per monitoritzar el teu progrés cap al teu objectiu.",
+            "text_goals_title": "Què vols aconseguir al final d'aquest curs?",
+            "text_goals_2": "Alguns exemples d'un objectiu són aprendre temes específics coberts pel curs, completar el curs i obtenir un certificat, completar totes les activitats del curs en un cert període de temps, dedicar 3 hores setmanals a aquest curs, etc.",
+            "text_goals_title_2": "Com categoritzaries els teus objectius?",
+            "text_goals_3": "Pots seleccionar una o més categories que millor descriguin els teus objectius. Això t'ajudarà a monitoritzar el teu progrés i a assolir els teus objectius.",
+            "add": "Afegir",
+            "create_user": "Crear usuari",
+            "placeholder": "Introdueix el teu objectiu aqui..."
+        }
+    },
+    "PASSWORD_RECOVERY": {
+        "password_not_match": "Les contrasenyes no coincideixen.",
+        "password_length": "La contrasenya ha de tenir entre 8 i 20 caràcters.",
+        "password_uppercase": "La contrasenya ha de contenir almenys una lletra majúscula.",
+        "password_lowercase": "La contrasenya ha de contenir almenys una lletra minúscula.",
+        "password_digit": "La contrasenya ha de contenir almenys un dígit.",
+        "password_special_character": "La contrasenya ha de contenir almenys un caràcter especial.",
+        "password_reset": "Contrasenya restablerta correctament",
+        "invalid_mail": "Adreça de correu electrònic no vàlida",
+        "email_not_found": "Aquest correu electrònic no està registrat",
+        "smth_wrong": "Alguna cosa ha anat malament",
+        "sent_email": "T'hem enviat un correu electrònic a {{email}} amb un enllaç per restablir la teva contrasenya.",
+        "password_recovery": "Recuperació de contrasenya",
+        "password_recovery_sub": "Restableix la contrasenya del teu compte associat.",
+        "password_enter": "Introdueix una nova contrasenya per al teu compte.",
+        "new_password": "Nova contrasenya",
+        "confirm_password": "Confirma la contrasenya",
+        "password_text": "Introdueix l'adreça de correu electrònic associada al teu compte i t'enviarem un enllaç per restablir la teva contrasenya.",
+        "dont_have_account": "No tens un compte ?",
+        "back_to_login": "Tornar a l'inici de sessió"
+    },
+    "OBJECTIVES_CONSTANT": {
+        "Ethical commitment": "Compromís ètic",
+        "Learning capability and responsibility": "Capacitat d'aprenentatge i responsabilitat",
+        "Teamwork": "Treball en equip",
+        "Creative and entrepreneurial capacity": "Capacitat creativa i emprenedora",
+        "Sustainability": "Sostenibilitat",
+        "Communicative ability": "Capacitat comunicativa",
+        "linked_objectives": "Aquesta tasca està vinculada amb els teus objectius!"
+    },
+    "NAVBAR": {
+        "professor": "Professor",
+        "student": "Estudiant",
+        "admin": "Administrador",
+        "NOTIFICATIONS": {
+            "notifications": "Notificacions",
+            "mark_all_as_read": "Marcar-ho tot com a llegit",
+            "delete_all": "Eliminar tot"
+        },
+        "BUG_REPORT": {
+            "bug_report_title": "Informar d'un problema",
+            "bug_report_text": "Utilitza aquest formulari per informar de qualsevol error o problema que trobis a l'aplicació.",
+            "bug_description": "Descripció de l'error",
+            "bug_description_placeholder": "Si us plau, afegeix tants detalls com sigui possible.",
+            "all_fields": "Si us plau, omple tots els camps",
+            "send": "Enviar",
+            "screenshot": "Captura de pantalla",
+            "optional": "opcional",
+            "toast": {
+                "title_success": "Problema creat amb èxit!",
+                "title_error": "Error en informar del problema"
+            }
+        }
+    },
+    "SIDEBAR": {
+        "open_sidebar": "Obrir barra lateral",
+        "home": "Cursos",
+        "calendar": "Calendari",
+        "timeline": "Línia de temps",
+        "dashboard": "Dashboard",
+        "qualifications": "Qualificacions",
+        "settings": "Configuració"
+    },
+    "SETTINGS": {
+        "settings": "Configuració",
+        "SIDEBAR": {
+            "general": "General",
+            "user_account": "Compte d'usuari",
+            "change_pswd": "Canviar contrasenya",
+            "language": "Idioma",
+            "notifications": "Notificacions",
+            "notifications_settings": "Configuració de notificacions",
+            "admin_settings": "Configuració d'administrador",
+            "custom_functions": "Funcions personalitzades",
+            "help": "Ajuda",
+            "logout": "Sortir"
+        },
+        "CHANGE_PASSWORD": {
+            "current_password": "Contrasenya actual",
+            "enter_current_password": "Introdueix la contrasenya actual",
+            "new_password": "Nova contrasenya",
+            "enter_new_password": "Introdueix la nova contrasenya",
+            "rewrite_password": "Reescriu la nova contrasenya",
+            "rewrite_new_password": "Confirmar contrasenya",
+            "change_password": "Canviar contrasenya",
+            "toast": {
+                "title_success": "Èxit!",
+                "success": "Contrasenya canviada amb èxit",
+                "title_error": "Error!",
+                "error": "Error en canviar la contrasenya"
+            }
+        },
+        "LANGUAGE": {
+            "english": "Anglès",
+            "spanish": "Espanyol",
+            "catalan": "Català"
+        },
+        "HELP": {
+            "title": "Fes-nos saber com podem ajudar-te",
+            "text": "Estem aquí per ajudar-te i respondre qualsevol pregunta que puguis tenir. Estem desitjant escoltar-te! Si us plau, omple el formulari o utilitza la informació de contacte a continuació.",
+            "form": {
+                "name": "Nom",
+                "email": "Correu electrònic",
+                "message": "Missatge",
+                "send": "Enviar"
+            }
+        },
+        "CUSTOM_FUNCTIONS": {
+            "DUPLICATE_COURSE": {
+                "title": "Duplicar curs",
+                "duplicate_course_text": "Introdueix l'ID del curs que vols duplicar",
+                "placeholder": "ID del curs",
+                "duplicate": "Duplicar",
+                "pop_confirm": {
+                    "title": "Duplicar curs",
+                    "description": "Estàs segur que vols duplicar aquest curs?",
+                    "confirm": "Sí, duplica'l",
+                    "cancel": "Cancel·lar"
+                }
+            }
+        },
+        "LOGOUT": {
+            "swal": {
+                "title": "Estàs segur?",
+                "text": "Se't desconnectarà",
+                "confirm": "Sí, desconnecta'm",
+                "cancel": "Cancel·lar"
+            },
+            "toast": {
+                "title_success": "Desconnectat amb èxit!"
+            }
+        }
+    },
+    "UPLOADFILES": {
+        "principal_text": "Feu clic o arrossegueu un fitxer a aquesta àrea per carregar-lo",
+        "secondary_text": "Suport per a càrrega única o massiva. Està estrictament prohibit carregar dades de l'empresa o altres fitxers prohibitius.",
+        "file_removed_success": "Fitxer eliminat amb èxit",
+        "file_removed_error": "Error en eliminar el fitxer",
+        "csv_error": "No s'ha detectat cap correu electrònic vàlid al fitxer CSV. Si us plau, verifica si el format del fitxer és correcte. Renombrar el fitxer a .csv pot no funcionar.",
+        "file_MB": "La mida del fitxer ha de ser inferior a 10MB"
+    },
+    "DRAGANDDROP": {
+        "drag_drop": "Arrossega i deixa anar els teus arxius o <span class='filepond--label-action'>Explorar</span>",
+        "invalid_type": "Tipus d'arxiu no vàlid. Si us plau, puja una imatge en format .jpeg o .png.",
+        "large_file": "L'arxiu és massa gran. Si us plau, puja un arxiu de menys de 10 MB."
+    },
+    "COURSESHOME": {
+        "taskEndSoon": "Aquesta tasca està a punt de <strong>acabar, el seu termini es fins el {{end_date}}</strong>",
+        "objectives": {
+            "objectives": "Objectius",
+            "not_objectives": "No has configurat cap objectiu per a aquest curs",
+            "completed": "Completat",
+            "not_completed": "No completat",
+            "complete_objective": "<p className='mb-5'>Estàs segur que vols actualitzar l'objectiu <strong>{{objective}}</strong>?</p>",
+            "text_modal_complete_objective": "Marcar objectiu com a completat",
+            "text_modal_not_complete_objective": "Marcar objectiu com a no completat",
+            "complete_objetive_button": "Completar objectiu",
+            "not_complete_objetive_button": "Marcar com a no completat"
+        },
+        "recent_courses": "Cursos recents",
+        "not_courses": "No hi ha cursos disponibles per a tu",
+        "not_courses_explore": "Explora altres àrees de la plataforma o torna més tard per veure noves opcions de cursos.",
+        "daily_tasks": "Tasques diàries",
+        "not_daily_tasks": "No tens cap tasca per avui",
+        "create_course_speed_dial": {
+            "create_course_from_template": "Crear curs des de plantilla",
+            "create_course": "Crear curs"
+        },
+        "student_creation_courses": {
+            "add_course": "Afegir un curs",
+            "add_course_text": "Afegeix un curs basat en les teves preferències i personalitza'l.",
+            "about_creator": "Sobre el creador",
+            "icon_description": "Descripció de l'ícona",
+            "customize_course": "Personalitza el teu curs"
+        }
+    },
+    "OBJECTIVES_INFORMATION": {
+        "LEARNING_CAPABILITY": {
+            "title": "Capacitat d'aprenentatge i responsabilitat",
+            "description_with_qualifications": "Ja tens {{qualificationsCount}} qualificacions, amb una nota mitjana de {{averageGrade}}.",
+            "description_no_qualifications": "No tens qualificacions vàlides."
+        },
+        "TEAMWORK": {
+            "title": "Treball en equip",
+            "description_with_activities": "Has completat {{activitiesCount}} activitats de treball en equip, amb una nota mitjana de {{averageGrade}}.",
+            "description_no_activities": "No has completat cap activitat de treball en equip."
+        },
+        "ETHICAL_COMMITMENT": {
+            "title": "Compromís ètic",
+            "description": "Abans de completar aquest objectiu, reflexiona sobre les següents preguntes: Ets capaç de criticar-te a tu mateix i pensar críticament? Ets capaç de demostrar actituds coherents amb els principis ètics i deontològics?"
+        },
+        "CREATIVE_CAPACITY": {
+            "title": "Capacitat creativa i emprenedora",
+            "description": "Abans de completar aquest objectiu, reflexiona sobre les següents preguntes: Ets capaç de formular, dissenyar i gestionar projectes? Ets capaç de cercar i integrar nous coneixements i actituds?"
+        },
+        "SUSTAINABILITY": {
+            "title": "Sostenibilitat",
+            "description": "Abans de completar aquest objectiu, reflexiona sobre les següents preguntes: Ets capaç d'avaluar l'impacte social i ambiental de les accions en el teu camp? Ets capaç d'expressar visions integrades i sistemàtiques?"
+        },
+        "COMMUNICATIVE_ABILITY": {
+            "title": "Capacitat comunicativa",
+            "description": "Abans de completar aquest objectiu, reflexiona sobre les següents preguntes: Ets capaç d'entendre i expressar-te oralment i per escrit en català i espanyol i en un altre idioma, utilitzant el llenguatge especialitzat en la disciplina? Ets capaç de cercar, utilitzar i integrar informació?"
+        }
+    },
+    "COURSEINSIDE": {
+        "course": "Curs",
+        "files": "Arxius",
+        "activity": "Activitat",
+        "course_content": "Contingut del curs",
+        "edit_mode": "Mode d'edició",
+        "SETTINGS": {
+            "title": "Configuració del curs",
+            "button_edit": "Editar curs"
+        },
+        "FORUM": {
+            "forum": "Fòrum",
+            "view_all_posts": "Veure totes les publicacions",
+            "answers": "Respostes",
+            "add_thread": "Afegir fil",
+            "view_responses": "Veure respostes",
+            "your_comment": "El teu comentari",
+            "post_comment": "Publicar comentari",
+            "guidelines": "Recorda, les contribucions a aquest tema han de seguir les nostres ",
+            "guidelines2": "Normes de la comunitat",
+            "there_are_no_posts": "No hi ha publicacions encara",
+            "write_first_post": "escriu la teva primera publicació!"
+        },
+        "ACCORDION": {
+            "course_info": "Menú del curs",
+            "title": "Contingut del curs",
+            "section": "Secció",
+            "add_section": "Afegir secció",
+            "add_new_section": "Afegir nova secció",
+            "added_success": "Secció afegida amb èxit",
+            "added_error": "Error en afegir la secció",
+            "section_will_open": "S'obrirà quan es completi l'última subsecció o el {{day}} a les {{minute}}",
+            "section_will_open2": "S'obrirà el {{day}} a les {{minute}}",
+            "section_opened": "Secció oberta",
+            "placeholder_section_name": "Nom de la secció"
+        },
+        "files_professor": "Aquests arxius són pujats pel professor si són necessaris per a aquesta subsecció.",
+        "no_files": "No hi ha arxius disponibles per a aquesta subsecció.",
+        "PARTICIPANTS": {
+            "participants": "Participants",
+            "view_participants": "Veure tots els participants",
+            "add_student": "Afegir estudiant",
+            "participants_tile": "Explora tots els participants actualment inscrits en aquest curs.",
+            "to_add_student": "Per afegir un nou estudiant, si us plau, navega fins a la secció de configuració del curs.",
+            "placeholder_search": "Cerca un estudiant"
+        }
+    },
+    "ACTIVITY": {
+        "changed_saved_success": "Canvis guardats correctament",
+        "changed_saved_error": "Error en guardar els canvis",
+        "no_files": "Has de carregar mínim un fitxer",
+        "smth_wrong": "Alguna cosa ha anat malament",
+        "deleted_success": "Fitxer esborrat correctament",
+        "swal_change_files": {
+            "title": "Advertència!",
+            "text": "Vas a canviar els fitxers carregats abans, estàs segur?",
+            "confirm": "Sí, enviar",
+            "cancel": "Cancel·lar"
+        },
+        "pop_confirm": {
+            "title": "Esborrar fitxer",
+            "description": "Estàs segur que vols esborrar aquest fitxer?",
+            "confirm": "Sí, esborra'l",
+            "cancel": "Cancel·lar"
+        },
+        "go_back_activity": "Tornar a l'activitat",
+        "not_evaluated": "No avaluat",
+        "comments": "Comentaris",
+        "no_comments": "No hi ha comentaris per la teva entrega.",
+        "task_files": "Fitxers de la tasca",
+        "size": "Mida",
+        "remember_upload": "Recorda guardar els canvis per visualitzar correctament els teus nous fitxers.",
+        "task_description": "Descripció de la tasca",
+        "create_groups_button": "Crear grups d'estudiants",
+        "evaluator": "Avaluador",
+        "about_evaluator": "Sobre l'avaluador",
+        "about_professor": "Sobre el professor",
+        "view_profile": "Veure perfil",
+        "your_submission": "La teva entrega",
+        "not_files_submitted": "No has enviat cap fitxer",
+        "click_microphone": "Fes clic al micròfon i comença a gravar la teva veu, o pots carregar un fitxer d'àudio",
+        "group_members": "Membres del grup",
+        "submit_files": "Enviar fitxers",
+        "remember_submit": "Recorda enviar el/s teu/s fitxer una vegada hagis acabat.",
+        "create_groups": {
+            "save_groups": "Desa grups",
+            "update_groups": "Actualitza grups",
+            "empty_groups": "Hi ha grups buits",
+            "save_success": "Grups desats correctament",
+            "save_error": "Error en desar els grups",
+            "no_file_selected": "Cap fitxer seleccionat",
+            "participants_imported": "Participants importats correctament.",
+            "participants_imported_error": "Error en importar els participants.",
+            "add_new_group": "Afegeix un nou grup",
+            "delete_last_group": "Esborra l'últim grup",
+            "create_groups_auto": "Crear grups automàticament",
+            "import_groups_from_csv": "Importa grups des de CSV",
+            "import_from_csv": "Importar des de CSV",
+            "please_upload_csv": "Si us plau, carrega un fitxer de full de càlcul CSV (separat per comes o punts i comes) amb el següent format:",
+            "column1": "Columna 1: Correu electrònic de l'estudiant",
+            "column2": "Columna 2: Grup (Pots posar qualsevol text/nombre/combinació que coincideixi entre els estudiants)",
+            "activity_created_for": "L'activitat es va crear per tenir {{numberOfStudentsPerGroup}} estudiants per grup",
+            "when_activity_started": "Quan l'activitat hagi començat, només podràs actualitzar els grups",
+            "students": "Estudiants",
+            "group": "Grup"
+        }
+    },
+    "CREATE_COURSES": {
+        "principal_text": "Crear un curs nou",
+        "COURSE_INFO": {
+            "principal_text": "Primer, omple la informació bàsica del curs. Aquesta informació serà visible per als estudiants.",
+            "course_name": "Nom del curs",
+            "course_description": "Descripció del curs",
+            "course_evaluator": "Avaluador",
+            "course_tags": "Etiquetes",
+            "course_cover": "Portada del curs"
+        },
+        "COURSE_SECTIONS": {
+            "CREATE_TASK": {
+                "back_to_course": "Tornar al curs",
+                "section": "Secció",
+                "create_task": "Crear tasca",
+                "save_changes": "Desar canvis",
+                "principal_text": "Abans de procedir a crear la nostra primera seqüència, primer establim la tasca que abastarà tota la secció!",
+                "task_title": "Títol de la tasca",
+                "task_title_placeholder": "Introdueix el títol de la tasca",
+                "task_description": "Descripció de la tasca",
+                "task_description_placeholder": "Introdueix la descripció de la tasca",
+                "task_files": "Arxius de la tasca",
+                "task_end_date": "Data de finalització de la tasca",
+                "task_end_date_placeholder": "Selecciona una data",
+                "task_categories": "Categories de la tasca",
+                "task_categories_placeholder": "Selecciona com a mínim una categoria",
+                "task_categories_text": "Selecciona les categories associades a aquesta tasca que els estudiants hauran de desenvolupar."
+            },
+            "EDIT_SECTION": {
+                "title": "Editar Secció",
+                "save_changes": "Desar canvis",
+                "course_sequence": "Seqüència del curs",
+                "course_sequence_text": "Fes clic en una subsecció per editar el contingut.",
+                "empty_sequence": "Comença a definir la seqüència!",
+                "draganddrop": "Arrossega i deixa anar per reordenar la seqüència",
+                "add_first_item": "Afegeix el primer element a la seqüència",
+                "edit_task": "Editar tasca",
+                "sequences": "Seqüències",
+                "premade_sequences": "Seqüències predefinides",
+                "items_sequences": "Afegeix elements a la seqüència",
+                "sequence_text": "Pots editar totes les seqüències per a la personalització quan s'afegeixen a una secció.",
+                "add_sequence": "Afegeix seqüència",
+                "SEQUENCES": {
+                    "ELEMENTS": {
+                        "PLANNING_QUESTIONNAIRE": {
+                            "title": "Qüestionari de Planificació",
+                            "description": "Un qüestionari de planificació és una eina valuosa per recopilar informació essencial per crear plans efectius. Aquest qüestionari ajuda a individus o equips a definir metes, identificar recursos i establir una fulla de ruta per a una execució reeixida."
+                        },
+                        "SRL_O_QUESTIONNAIRE": {
+                            "title": "Qüestionari d'Autorregulació SRL-O",
+                            "description": "El qüestionari d'Autorregulació per a l'aprenentatge en línia (SRL-O) mesura la freqüència i la qualitat de les estratègies d'aprenentatge quan s'apliquen a entorns en línia, mixtos o híbrids."
+                        },
+                        "TASK_STATEMENT": {
+                            "title": "Enunciat i presentació de la tasca",
+                            "description": "Defineix els detalls essencials de la tasca, inclosos els seus objectius, abast i resultats esperats. Les declaracions de tasques estan dissenyades per proporcionar una guia clara a individus o equips, assegurant que comprenguin les seves responsabilitats i puguin executar la tasca de manera efectiva."
+                        },
+                        "EMPTY_QUESTIONNAIRE": {
+                            "title": "Qüestionari Buit",
+                            "description": "Crea un nou qüestionari des de zero."
+                        },
+                        "THINK_ALOUD": {
+                            "title": "Think aloud",
+                            "description": "El think aloud és una estratègia on verbalitzes els teus pensaments mentre treballes en un problema o tasca. Ajuda els estudiants a entendre el teu procés de raonament i a aprendre estratègies efectives de resolució de problemes."
+                        },
+                        "SELF_ASSESSMENT": {
+                            "title": "Autoavaluació",
+                            "description": "L'autoavaluació és un procés que permet als estudiants reflexionar sobre el seu aprenentatge, identificar àrees de fortalesa i feblesa, i establir metes per a la millora. És una habilitat essencial per a l'aprenentatge permanent i el desenvolupament personal."
+                        },
+                        "CUSTOM_FIELD": {
+                            "title": "Camp Personalitzat",
+                            "description": "Afegeix un camp personalitzat si necessites introduir alguna subsecció teòrica entre fases."
+                        },
+                        "TASK_IMPLEMENTATION": {
+                            "title": "Implementació de la Tasca",
+                            "description": "Implementació de la tasca, durant aquesta fase, es posen en acció les tasques i activitats planificades. Implica dur a terme les accions necessàries per aconseguir els objectius del projecte o tasca definits en la fase de planificació."
+                        },
+                        "TASK_DELIVERY": {
+                            "title": "Entrega de la Tasca",
+                            "description": "Entrega de la tasca."
+                        },
+                        "PEER_REVIEW": {
+                            "title": "Revisió per Iguals",
+                            "description": "Aquest mètode de revisió té com a objectiu proporcionar retroalimentació constructiva, validar la qualitat i precisió del treball, i assegurar que compleixi amb els estàndards o criteris establerts."
+                        },
+                        "FINAL_DELIVERY": {
+                            "title": "Entrega Final",
+                            "description": "Entrega final de la tasca."
+                        },
+                        "FORUM_DEBATE": {
+                            "title": "Fòrum de debat",
+                            "description": "El fòrum de debat és un fòrum de discussió on els estudiants poden compartir les seves opinions, fer preguntes i participar en debats sobre un tema específic. És una excel·lent manera de fomentar el pensament crític, la col·laboració i les habilitats comunicatives."
+                        },
+                        "FEEDBACK_REFLECTION_QUESTIONNAIRE": {
+                            "title": "Qüestionari de Feedback i Reflexió",
+                            "description": "El qüestionari de feedback i reflexió és una eina valuosa per recopilar informació sobre l'eficàcia de les tasques i activitats, així com per identificar àrees d'aprenentatge i millora. Aquest qüestionari ajuda a individus o equips a reflexionar sobre el seu aprenentatge i a identificar accions per millorar."
+                        }
+                    },
+                    "CONTINUOUS_FEEDBACK": {
+                        "title": "Feedback continu",
+                        "description": "La seqüència està dissenyada per girar al voltant de l'entrega d'una tasca, permetent als estudiants planificar la tasca i millorar-la progressivament amb feedback d'altres estudiants."
+                    },
+                    "FORUM_FEEDBACK": {
+                        "title": "Desenvolupar una tasca amb feedback del fòrum",
+                        "description": "La seqüència està dissenyada per girar al voltant de l'entrega d'una tasca, amb la possibilitat de rebre feedback d'altres estudiants a través del fòrum."
+                    },
+                    "CONTINUOUS_FEEDBACK_2": {
+                        "title": "Feedback continu",
+                        "description": "La seqüència està dissenyada per girar al voltant de l'entrega d'una tasca, permetent als estudiants planificar la tasca i millorar-la progressivament amb feedback d'altres estudiants amb un sistema d'entrega més continu."
+                    },
+                    "EARLY_FEEDBACK": {
+                        "title": "Feedback inicial del professor i reflexió",
+                        "description": "La seqüència està dissenyada per girar al voltant de l'entrega d'una tasca, permetent als estudiants planificar la tasca i rebre feedback del professor abans de l'entrega final."
+                    },
+                    "WIP": {
+                        "title": "Treball en progress",
+                        "description": "Treball en progress."
+                    }
+                }
+            },
+            "section_name": "Títol de la secció",
+            "create": "Crear",
+            "principal_text": "És hora de construir el teu curs, construeix les seccions i defineix la seqüència! 🚀",
+            "add_section": "Afegir secció",
+            "title": "Seccions del curs",
+            "draganddrop": "Arrossega i deixa anar per reordenar les teves seccions",
+            "no_sections": "Encara no hi ha seccions"
+        },
+        "COURSE_VISUALIZATION": {
+            "generate_course": "Crear curs"
+        },
+        "NAVIGATION": {
+            "continue": "Continuar",
+            "back": "Enrere",
+            "confirm": "Confirmar",
+            "cancel": "Cancel·lar",
+            "course_info": "Informació del curs",
+            "course_sections": "Seccions del curs",
+            "course_visualization": "Visualització del curs"
+        }
+    },
+    "CALENDAR": {
+        "event_added": "Esdeveniment afegit correctament",
+        "event_deleted": "Esdeveniment esborrat correctament",
+        "error_fetching_events": "Error en recuperar els esdeveniments",
+        "export_calendar": "Exporta el calendari",
+        "add_event": "Afegeix esdeveniment",
+        "event_title": "Títol de l'esdeveniment",
+        "date": "Data",
+        "there_are_no_events": "No hi ha esdeveniments"
+    },
+    "TIMELINE": {
+        "days_week": [
+            "Dig",
+            "Dil",
+            "Dit",
+            "Dic",
+            "Dij",
+            "Div",
+            "Dis"
+        ]
+    },
+    "QUALIFICATIONS": {
+        "not_qualifications": "No hi ha qualificacions disponibles per a tu",
+        "not_qualifications_explore": "Explora altres àrees de la plataforma o torna més tard per veure noves opcions de qualificacions.",
+        "qualifications": "Qualificacions",
+        "qualification": "Qualificació",
+        "search_users": "Cercar usuaris",
+        "attention": "Atenció",
+        "peerreview_deadline": "La data límit per a la revisió entre iguals és el",
+        "comments": "Comentaris",
+        "professor_qualification": "Qualificació del professor",
+        "files": "Arxius",
+        "last_modification": "Última modificació",
+        "groups": "Grups",
+        "name": "Nom",
+        "professor_students_ponderation": "Ponderació Professor - Estudiants",
+        "edit_qualifications": "Editar qualificacions",
+        "upload_qualifications": "Pujar qualificacions",
+        "questionnaire_completed": "Qüestionari completat",
+        "average_grade": "Nota mitjana rebuda",
+        "at": "a les",
+        "write_comment": "Escriu un comentari",
+        "files_delivered_by": "Arxius entregats per {{student}} a l'activitat {{activity}}",
+        "no_files_delivered": "No s'han entregat arxius",
+        "no_grade": "No hi ha cap qualificació",
+        "csv_configuration": "Configuració del CSV",
+        "csv_configuration_text": "Configura l'arxiu CSV i selecciona l'activitat desitjada.",
+        "visualization": "Visualització",
+        "visualization_text": "Visualitza les dades a carregar abans de confirmar.",
+        "confirmation": "Confirmació",
+        "confirmation_text": "Crea les noves entrades de qualificació.",
+        "first_text_upload": "Primer de tot, selecciona l'activitat per pujar les notes",
+        "download_template_csv": "Descarregar plantilla CSV amb els estudiants",
+        "now_introduce_columns": "Ara, introdueix la relació en les columnes i files del teu full de càlcul CSV",
+        "placeholder_columns_student": "Columna i fila de l'estudiant, ex: A2-A22",
+        "placeholder_columns_grade": "Columna i fila de la qualificació, ex: B2-B22",
+        "placeholder_columns_comments": "Columna i fila de comentaris, ex: C2-C22",
+        "placeholder_columns_peer": "Columna i fila de les mitjanes de revisió entre iguals, ex: D2-D22",
+        "peerReviewGroup": {
+            "instruction": "Per l'exemple següent, seleccionaríem; A2-A8 (en el cas de l'estudiant), B2-B8 (en el cas de la qualificació), C2-C8 (en el cas del comentari) i D2-D8 (Qualificació de la revisió entre iguals):",
+            "note": "Quan apareix ' - ' en 'Qualificació mitjana de la revisió entre iguals' significa que la revisió entre iguals no es va avaluar numèricament i només es tindrà en compte la qualificació del professor."
+        },
+        "group": {
+            "instruction": "Per l'exemple següent, seleccionaríem; A2-A8 (en el cas de l'estudiant), B2-B8 (en el cas de la qualificació), C2-C8 (en el cas del comentari):"
+        },
+        "peerReview": {
+            "instruction": "Per l'exemple següent, seleccionaríem; A2-A6 (en el cas de l'estudiant), B2-B6 (en el cas de la qualificació), C2-C6 (en el cas del comentari) i D2-D6 (Qualificació de la revisió entre iguals):"
+        },
+        "standard": {
+            "instruction": "Per l'exemple següent, seleccionaríem; B2-B22 (en el cas de l'estudiant), D2-D22 (en el cas de la qualificació), F2-F22 (en el cas del comentari):"
+        },
+        "finally_csv": "Finalment, carregueu el fitxer de full de càlcul CSV (separat per comes o punts i coma).",
+        "students_no_enrolled": "Els estudiants que no estan matriculats al curs no apareixeran aquí.",
+        "are_you_sure_continue": "Estàs segur que vols continuar?",
+        "please_wait": "Espereu fins que el sistema hagi creat totes les qualificacions, no trigarà més d'un minut.",
+        "creating_qualifications": "Creant qualificacions...",
+        "qualifications_created": "Qualificacions creades correctament",
+        "error_creating_qualifications": "Error en crear les qualificacions",
+        "file_must_be_csv": "El fitxer ha de ser un fitxer CSV o full de càlcul",
+        "input_columns_must_be": "Les columnes d'entrada han de tenir el format d'interval d'Excel, per exemple, B2-B22",
+        "input_columns_must_be_filled": "Has d'omplir tots els camps",
+        "no_data": "No hi ha dades per visualitzar",
+        "peer_review_did_not_finish": "La revisió per iguals no ha acabat",
+        "student_missing": "L'estudiant {{name}} no té cap qualificació o comentaris. Comproveu les dades.",
+        "select_activity": "Selecciona l'activitat"
+    }
+}

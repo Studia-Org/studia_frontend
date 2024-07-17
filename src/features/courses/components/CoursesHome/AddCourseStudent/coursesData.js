@@ -1,3 +1,15 @@
+
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+
+export default function useCoursesData() {
+    const { t } = useTranslation()
+
+
+    return [TFGCourseData]
+
+}
+
 const TFGCourseData = {
     title: 'TFG Planning',
     description: 'Make a planning for your TFG.',
@@ -750,7 +762,5 @@ export const TFGExtendedCourseData = [
     }
 ]
 
-export const coursesData = [
-    TFGCourseData
-]
+
 

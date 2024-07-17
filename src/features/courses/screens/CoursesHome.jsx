@@ -13,8 +13,9 @@ import { SpeedDialCreateCourse } from '../components/CoursesHome/SpeedDialCreate
 import { ModalCreateCourseStudent } from '../components/CoursesHome/AddCourseStudent/ModalCreateCourseStudent';
 import { ModalCompleteObjectives } from '../components/CoursesHome/ModalCompleteObjectives';
 import { replicateCourse } from '../components/CoursesHome/helpers/replicateCourse';
-
+import { useTranslation, Trans } from 'react-i18next';
 const CoursesHome = () => {
+  document.title = 'Home - Uptitude'
   const { user } = useAuthContext();
   const [confettiActive, setConfettiActive] = useState(false);
   const [objectives, setObjectives] = useState([]);
@@ -26,9 +27,8 @@ const CoursesHome = () => {
   const [openModalCompleteObjectives, setOpenModalCompleteObjectives] = useState(false);
   const [openObjectivesModal, setOpenObjectivesModal] = useState(false);
   const [objectiveSelected, setObjectiveSelected] = useState();
+  const { t } = useTranslation();
 
-
-  document.title = 'Home - Uptitude'
 
   const variants = {
     hidden: { opacity: 0, y: 20 },
@@ -172,10 +172,14 @@ const CoursesHome = () => {
         <div className='flex w-full items-center lg:max-w-[calc(100%-6rem)]'>
           <p className='text-base font-semibold group-hover:underline '>{subsection.subsection.title}</p>
           {
-            isDateDangerous === true ?
+            isDateDangerous !== true ?
               <div className='flex items-center mr-3'>
                 <Popover
-                  content={(<p>This task is about to <strong>end soon  on {new Date(subsection.subsection.end_date).toDateString()} </strong></p>)}
+                  content={
+                    <Trans i18nKey="COURSESHOME.taskEndSoon" components={{
+                      "end_date": new Date(subsection.subsection.end_date).toLocaleDateString(),
+                    }} />
+                  }
                   title="Warning!"
                   trigger="hover">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 ml-2 text-red-500">
@@ -218,14 +222,14 @@ const CoursesHome = () => {
                 setOpenModalCompleteObjectives(true)
               }
 
-              } className='p-1 ml-auto cursor-pointer hover:scale-95' color="#008000">Completed</Tag>
+              } className='p-1 ml-auto cursor-pointer hover:scale-95' color="#008000">{t("COURSESHOME.objectives.completed")}</Tag>
             </div>
             :
             <div className='ml-auto'>
               <Tag onClick={() => {
                 setObjectiveSelected(objective)
                 setOpenModalCompleteObjectives(true)
-              }} className='p-1 ml-auto cursor-pointer hover:scale-95' color="#f50 ">Not Completed</Tag>
+              }} className='p-1 ml-auto cursor-pointer hover:scale-95' color="#f50 ">{t("COURSESHOME.objectives.not_completed")}</Tag>
             </div>
         }
       </div>
@@ -253,7 +257,7 @@ const CoursesHome = () => {
               <>
                 <div className={`flex ${user.role_str === 'student' && 'grid-home:max-w-[calc(100%-500px)]'} w-full gap-x-5 flex-wrap`}>
                   <main className='flex-1'>
-                    <h1 className='pb-6 text-xl font-bold py-11'>Recent Courses</h1>
+                    <h1 className='pb-6 text-xl font-bold py-11'>{t("COURSESHOME.recent_courses")}</h1>
                     {
                       courses.length !== 0 ?
                         <motion.div id='course-motion-div'
@@ -278,8 +282,8 @@ const CoursesHome = () => {
                               <path d="M4.462 19.462c.42-.419.753-.89 1-1.395.453.214.902.435 1.347.662a6.742 6.742 0 0 1-1.286 1.794.75.75 0 0 1-1.06-1.06Z" />
                             </svg>
 
-                            <span className="block mt-2 text-base font-medium text-gray-900">There are no courses available for you</span>
-                            <span className="block mt-2 text-sm font-medium text-gray-600">Explore other areas of the platform or check back later for new course options.</span>
+                            <span className="block mt-2 text-base font-medium text-gray-900">{t("COURSESHOME.not_courses")}</span>
+                            <span className="block mt-2 text-sm font-medium text-gray-600">{t("COURSESHOME.not_courses_explore")}</span>
                           </div>
                         </motion.div>
                     }
@@ -288,7 +292,7 @@ const CoursesHome = () => {
                     user.role_str === 'student' &&
                     <div className='border h-fit border-gray-300 flex flex-col w-1/4 min-w-[350px] xl:w-[400px] min-w-3/4 mt-12 grid-home:absolute right-16 bg-white p-8 rounded-lg'>
                       <section >
-                        <p className='text-lg font-semibold'>Daily Tasks</p>
+                        <p className='text-lg font-semibold'>{t("COURSESHOME.daily_tasks")}</p>
                         <Divider />
                         {
                           dailyTasks.length > 0 ?
@@ -300,14 +304,14 @@ const CoursesHome = () => {
                             <div className='flex'>
                               <div className='flex items-center justify-center w-full p-5 mb-10 border rounded-lg space-x-7'>
                                 <Empty description={
-                                  <span className='text-sm font-medium text-gray-400 '>You do not have any task for today</span>
+                                  <span className='text-sm font-medium text-gray-400 '>{t("COURSESHOME.not_daily_tasks")}</span>
                                 } />
                               </div>
                             </div>
                         }
                       </section>
                       <section>
-                        <p className='text-lg font-semibold'>Your Objectives</p>
+                        <p className='text-lg font-semibold'>{t("COURSESHOME.objectives.objectives")}</p>
                         <Divider />
                         <div className='flex flex-col mb-5 space-y-5'>
                           {
@@ -316,7 +320,7 @@ const CoursesHome = () => {
                               :
                               <div className='flex'>
                                 <div className='flex items-center p-5 mb-10 bg-white shadow-md rounded-2xl space-x-7'>
-                                  <p className='text-base font-medium text-gray-400 '>You did not set any objective yet!</p>
+                                  <p className='text-base font-medium text-gray-400 '>{t("COURSESHOME.objectives.not_objectives")}</p>
                                   <img className='hidden opacity-50 xl:block w-36' src="https://liferay-support.zendesk.com/hc/article_attachments/360032795211/empty_state.gif" alt="" />
                                 </div>
                               </div>

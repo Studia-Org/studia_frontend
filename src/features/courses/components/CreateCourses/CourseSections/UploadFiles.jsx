@@ -3,15 +3,18 @@ import { Upload, Alert, message } from 'antd';
 import Papa from 'papaparse';
 import { API, BEARER } from '../../../../../constant';
 import { getToken } from '../../../../../helpers';
+import { useTranslation } from 'react-i18next';
 
 export const UploadFiles = ({ fileList, setFileList, listType, maxCount, accept, disabled, showRemoveIcon }) => {
     const [errors, setErrors] = useState([]);
+    const { t } = useTranslation();
 
     const generateAlert = (message, index) => {
         return (
             <Alert
                 key={index}
                 message={message}
+                className={`mb-2 ${index === 0 ? "mt-2" : ""}`}
                 type="error"
                 showIcon
                 closable
@@ -41,7 +44,7 @@ export const UploadFiles = ({ fileList, setFileList, listType, maxCount, accept,
             let isCorrect = true;
 
             if (!isLt10M) {
-                addError('File must be smaller than 10MB');
+                addError(t("UPLOADFILES.file_MB"));
                 return false;
             }
 
@@ -53,7 +56,7 @@ export const UploadFiles = ({ fileList, setFileList, listType, maxCount, accept,
                                 var expresionRegular = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                                 if (!expresionRegular.test(results.data[i][0])) {
                                     if (results.data[i][0] === "") continue;
-                                    addError("Not a valid email detected in the CSV file. Please check if file format is correct. Renaming the file to .csv may not work.");
+                                    addError(t("UPLOADFILES.csv_error"));
                                     isCorrect = false;
                                     break;
                                 }
@@ -92,9 +95,9 @@ export const UploadFiles = ({ fileList, setFileList, listType, maxCount, accept,
                             'Content-Type': 'application/json',
                         },
                     });
-                    message.success('File removed successfully');
+                    message.success(t("UPLOADFILES.file_removed_success"));
                 } catch (error) {
-                    console.error('Error removing file from backend', error);
+                    console.error(t("UPLOADFILES.file_removed_error"), error);
                 }
             }
         };
@@ -114,11 +117,8 @@ export const UploadFiles = ({ fileList, setFileList, listType, maxCount, accept,
                         <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H6.911a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661Z" />
                     </svg>
                 </div>
-                <p className="ant-upload-text">Click or drag file to this area to upload</p>
-                <p className="px-5 ant-upload-hint">
-                    Support for a single or bulk upload. Strictly prohibited from uploading company data or other
-                    banned files.
-                </p>
+                <p className="ant-upload-text">{t("UPLOADFILES.principal_text")}</p>
+                <p className="px-5 ant-upload-hint">{t("UPLOADFILES.secondary_text")}</p>
             </Upload.Dragger>
             {errors.map((error, index) => generateAlert(error, index))}
         </>

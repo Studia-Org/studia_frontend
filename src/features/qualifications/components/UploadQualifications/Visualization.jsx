@@ -1,17 +1,18 @@
 import React from 'react'
 import { Table, Avatar } from 'antd';
 import { is } from 'date-fns/locale';
+import { useTranslation } from 'react-i18next';
 const { Column, ColumnGroup } = Table;
-
 export const Visualization = ({ formValues, data }) => {
+    const { t } = useTranslation();
     if (JSON.parse(formValues.selectedActivity).groupActivity) {
         return (
             <>
-                <p className='mt-2 text-sm text-gray-500'>Visualize the qualifications before uploading to your course. </p>
+                <p className='mt-2 text-sm text-gray-500'>{t("QUALIFICATIONS.visualization_text")} </p>
                 <Table dataSource={data} className='mt-5'>
                     <ColumnGroup title={JSON.parse(formValues.selectedActivity).title} >
                         <Column
-                            title="Group"
+                            title={t("QUALIFICATIONS.groups")}
                             dataIndex="Group"
                             key="Group"
                             render={(text, record) => {
@@ -33,13 +34,13 @@ export const Visualization = ({ formValues, data }) => {
                             }}
                         />
                         <Column
-                            title={JSON.parse(formValues.selectedActivity).isPeerReview ? 'Professor Qualification' : 'Qualification'}
+                            title={JSON.parse(formValues.selectedActivity).isPeerReview ? t("QUALIFICATIONS.professor_qualification") : t("QUALIFICATIONS.qualification")}
                             dataIndex="Qualification"
                             key="Qualification"
                             render={(text, record) => (record.group.Qualification)}
                         />
                         <Column
-                            title="Comments"
+                            title={t("ACTIVITY.comments")}
                             dataIndex="Comments"
                             key="Comments"
                             render={(text, record) => (record.group.Comments)}
@@ -47,7 +48,7 @@ export const Visualization = ({ formValues, data }) => {
                         {
                             JSON.parse(formValues.selectedActivity).isPeerReview &&
                             <Column
-                                title="Peer Review Grade"
+                                title={t("QUALIFICATIONS.average_grade")}
                                 dataIndex="averageGradePeerReview"
                                 key="averageGradePeerReview"
                                 render={(text, record) => (record.group.averageGradePeerReview)}
@@ -56,18 +57,18 @@ export const Visualization = ({ formValues, data }) => {
 
                     </ColumnGroup>
                 </Table>
-                <p className='mt-2 text-xs text-gray-500'>Students who aren't enrolled in the course won't show up here.</p>
+                <p className='mt-2 text-xs text-gray-500'>{t("QUALIFICATIONS.students_no_enrolled")}</p>
             </>
         )
     }
 
     return (
         <>
-            <p className='mt-2 text-sm text-gray-500'>Visualize the qualifications before uploading to your course. </p>
+            <p className='mt-2 text-sm text-gray-500'>{t("QUALIFICATIONS.visualization_text")} </p>
             <Table dataSource={data} className='mt-5'>
                 <ColumnGroup title={JSON.parse(formValues.selectedActivity).title} >
                     <Column
-                        title="Name"
+                        title={t("QUALIFICATIONS.name")}
                         dataIndex="Name"
                         key="Name"
                         render={(text, record) => (
@@ -81,16 +82,16 @@ export const Visualization = ({ formValues, data }) => {
                         )}
                     />
                     <Column
-                        title={JSON.parse(formValues.selectedActivity).isPeerReview ? 'Professor Qualification' : 'Qualification'}
+                        title={JSON.parse(formValues.selectedActivity).isPeerReview ? t("QUALIFICATIONS.professor_qualification") : t("QUALIFICATIONS.qualification")}
                         dataIndex="Qualification"
                         key="Qualification"
                         render={(text, record) => (record.Qualification)}
                     />
-                    <Column title="Comments" dataIndex="Comments" key="Comments" />
+                    <Column title={t("ACTIVITY.comments")} dataIndex="Comments" key="Comments" />
                     {
                         JSON.parse(formValues.selectedActivity).isPeerReview &&
                         <Column
-                            title="Peer Review Grade"
+                            title={t("QUALIFICATIONS.average_grade")}
                             dataIndex="averageGradePeerReview"
                             key="averageGradePeerReview"
                             render={(text, record) => (record.averageGradePeerReview)}
@@ -98,7 +99,7 @@ export const Visualization = ({ formValues, data }) => {
                     }
                 </ColumnGroup>
             </Table>
-            <p className='mt-2 text-xs text-gray-500'>Students who aren't enrolled in the course won't show up here.</p>
+            <p className='mt-2 text-xs text-gray-500'>{t("QUALIFICATIONS.students_no_enrolled")}</p>
         </>
     )
 }

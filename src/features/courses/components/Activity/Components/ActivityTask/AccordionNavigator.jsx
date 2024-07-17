@@ -6,8 +6,9 @@ import { getIcon } from '../../../CoursesInside/helpers';
 import { useAuthContext } from '../../../../../../context/AuthContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-
+import { useTranslation } from 'react-i18next';
 export const AccordionNavigator = ({ subsectionsCompleted }) => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { Panel } = Collapse;
     const { user } = useAuthContext();
@@ -17,28 +18,9 @@ export const AccordionNavigator = ({ subsectionsCompleted }) => {
 
 
     function selectFaseSectionContent(str) {
-        if (str === "forethought") {
-            return (
-                <>
-                    <Badge color='#15803d' count='Forethought' />
-
-                </>
-            );
-        } else if (str === "performance") {
-            return (
-                <>
-                    <Badge color='#faad14' count='Performance' />
-
-                </>
-            );
-        } else if (str === "self-reflection") {
-            return (
-                <>
-                    <Badge color='#dc2626' count='Self-reflection' />
-
-                </>
-            );
-        }
+        if (str === "forethought") return <Badge color='#15803d' count='Forethought' />
+        else if (str === "performance") return <Badge color='#faad14' count='Performance' />
+        else if (str === "self-reflection") return <Badge color='#dc2626' count='Self-reflection' />
     }
 
     function switchSVG(str) {
@@ -181,7 +163,7 @@ export const AccordionNavigator = ({ subsectionsCompleted }) => {
                                 }
                             </div>
                             <div className='flex flex-col w-full text-left ml-9'>
-                                <p className='mb-1 text-sm'>Section {sectionNumber}</p>
+                                <p className='mb-1 text-sm'>{t("COURSEINSIDE.ACCORDION.section")} {sectionNumber}</p>
                                 <h2 className='w-3/4 text-lg font-medium text-left line-clamp-2'>
                                     {section?.attributes ? section.attributes.title : section.name}
                                 </h2>
@@ -208,7 +190,7 @@ export const AccordionNavigator = ({ subsectionsCompleted }) => {
 
     return (
         <div className='w-full p-5 bg-white border rounded-lg'>
-            <p className='text-xl font-semibold'>Course content</p>
+            <p className='text-xl font-semibold'>{t("COURSEINSIDE.ACCORDION.title")}</p>
             <hr className="h-px my-8 bg-gray-400 border-0"></hr>
             {
                 course && course?.sections.data.map((section, index) => (

@@ -1,56 +1,10 @@
 import React, { useState } from 'react'
-import { Popover, Whisper } from 'rsuite';
 import { AccordionCourseContent } from './AccordionCourseContent';
 import { ForumClickable } from './Forum/ForumClickable';
-import { ProfessorData } from './ProfessorData';
 import { Button, Drawer } from "antd";
 import { CourseParticipantsClickable } from './TabComponents';
 import { ButtonSettings } from './EditSection/buttonEditCourse';
-
-function FloatingButtonNavigation({ whisper, allForums, professor, setForumFlag, setQuestionnaireFlag, setSettingsFlag, setCourseSubsectionQuestionnaire, subsectionsCompleted, setEditSectionFlag, setSectionToEdit, setParticipantsFlag, posts }) {
-
-
-    return (
-        <div className='fixed flex xl:hidden right-[6.5rem] bottom-12'>
-            <Whisper
-                ref={whisper}
-                placement="auto"
-                trigger={"click"}
-                controlId="hamburger-menu"
-                speaker={
-                    <Popover>
-                        <AccordionCourseContent
-                            {...{
-                                whisper,
-                                styles: "shadow-none m-0 px-1 sm:px-5 sm:w-full",
-                                setForumFlag,
-                                setQuestionnaireFlag,
-                                setSettingsFlag,
-                                setCourseSubsectionQuestionnaire,
-                                subsectionsCompleted,
-                                setEditSectionFlag,
-                                setSectionToEdit,
-                                setParticipantsFlag,
-                            }}
-                        />
-                        {allForums[0]?.attributes &&
-                            <section className='ml-2'>
-                                <ForumClickable posts={allForums[0].attributes.posts.data} setForumFlag={setForumFlag} setSettingsFlag={setSettingsFlag} setParticipantsFlag={setParticipantsFlag} whisper={whisper} />
-                            </section>
-                        }
-                        {professor.attributes && <section className='ml-10'> <ProfessorData professor={professor} evaluatorFlag={false} /></section>}
-                    </Popover>}>
-                <div className={` rounded-full w-[3.2rem] h-[3.2rem] p-[14px] text-white transition bg-[#3c3c3c] cursor-pointer shadow-xl hover:bg-[#4f4f4f] duration-100`}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5}
-                        stroke="white" className="w-full h-full">
-                        <path strokeLinecap="round" strokeLinejoin="round"
-                            d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5" />
-                    </svg>
-                </div>
-            </Whisper>
-        </div>
-    )
-}
+import { useTranslation } from 'react-i18next';
 
 export const SideBar = ({
     allPosts, students, enableEdit,
@@ -58,7 +12,7 @@ export const SideBar = ({
     subsectionsCompleted, setEditSectionFlag,
     setSectionToEdit, user, courseBasicInformation, setParticipantsFlag }) => {
     const [visible, setVisible] = useState(false);
-
+    const { t } = useTranslation();
     return (
         <nav className="absolute top-[calc(8rem+7px)] right-0 xl:hidden">
             <Button
@@ -74,7 +28,7 @@ export const SideBar = ({
                 </svg>
             </Button>
             <Drawer
-                title="Course Menu"
+                title={t("COURSEINSIDE.ACCORDION.course_info")}
                 size='large'
                 className='px-1 xl:hidden'
                 placement="right"
@@ -90,7 +44,7 @@ export const SideBar = ({
                     }
                     <AccordionCourseContent
                         {...{
-                            styles: "shadow-none px-1",                            
+                            styles: "shadow-none px-1",
                             setForumFlag,
                             setQuestionnaireFlag,
                             setSettingsFlag,
@@ -119,4 +73,4 @@ export const SideBar = ({
 };
 
 
-export default FloatingButtonNavigation
+export default SideBar

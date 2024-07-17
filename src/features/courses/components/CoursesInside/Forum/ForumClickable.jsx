@@ -1,8 +1,8 @@
 import React from "react";
 import { FiChevronRight, FiCornerDownLeft } from "react-icons/fi";
-
+import { useTranslation } from "react-i18next";
 export const ForumClickable = ({ posts, setForumFlag, setVisible, setParticipantsFlag, setSettingsFlag }) => {
-
+  const { t } = useTranslation();
   function renderPostsLogic(posts) {
     if (posts.length === 1) {
       return renderPostsInside(posts[0]);
@@ -12,8 +12,8 @@ export const ForumClickable = ({ posts, setForumFlag, setVisible, setParticipant
     } else {
       return (
         <p className="text-sm text-gray-700 ">
-          There are no posts yet,{" "}
-          <strong className="font-semibold">write your first post now!</strong>{" "}
+          {t("COURSEINSIDE.FORUM.there_are_no_posts")},{" "}
+          <strong className="font-semibold">{t("COURSEINSIDE.FORUM.write_first_post")}</strong>{" "}
         </p>
       );
     }
@@ -32,8 +32,8 @@ export const ForumClickable = ({ posts, setForumFlag, setVisible, setParticipant
               post.attributes.autor.data.attributes.profile_photo?.data
                 ?.attributes?.url
             }
-            className="w-8 rounded-full"
-            alt=""
+            className="w-5 h-5 rounded-full"
+            alt="profile_photo"
           />
           <p className="ml-1 font-medium">
             {post.attributes.autor.data.attributes.name}
@@ -42,7 +42,7 @@ export const ForumClickable = ({ posts, setForumFlag, setVisible, setParticipant
             <FiCornerDownLeft />{" "}
             <p className="ml-auto">
               {" "}
-              {post.attributes.forum_answers.data?.length} Replies
+              {post.attributes.forum_answers.data?.length} {t("COURSEINSIDE.FORUM.answers")}
             </p>
           </span>
         </div>
@@ -53,13 +53,13 @@ export const ForumClickable = ({ posts, setForumFlag, setVisible, setParticipant
   return (
     <section className={`px-5 py-5 bg-white rounded-lg shadow-none xl:shadow-md xl:border-none ${setVisible ? "border border-[#DADADA]" : "sm:w-[30rem]"} `}>
       <div className="flex items-center">
-        <p className="text-lg font-medium">Forum</p>
+        <p className="text-lg font-medium">{t("COURSEINSIDE.FORUM.forum")}</p>
         <div className="flex items-center ml-auto duration-150 hover:translate-x-1">
           <button
             onClick={() => { setForumFlag(true); setParticipantsFlag(false); setSettingsFlag(false); if (setVisible) setVisible(false) }}
             className="ml-auto text-base font-medium text-indigo-700 "
           >
-            View all posts
+            {t("COURSEINSIDE.FORUM.view_all_posts")}
           </button>
           <FiChevronRight className="text-indigo-700" />
         </div>

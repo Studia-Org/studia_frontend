@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Badge, Button, message } from "antd";
 import { formatDistanceToNow, set } from 'date-fns';
+import { enUS, es, ca } from "date-fns/locale";
 import { AvatarGroup, Avatar } from 'rsuite';
 import { getToken } from "../../../../../helpers";
 import { v4 as uuid } from 'uuid';
@@ -15,7 +16,7 @@ import {
     AccordionButton,
     AccordionPanel,
 } from '@chakra-ui/accordion'
-
+import { Trans, useTranslation } from 'react-i18next';
 const markdownConverter = (text) => {
     return (
         <div className='text-base prose max-w-none'>
@@ -25,10 +26,13 @@ const markdownConverter = (text) => {
 }
 
 export const Post = ({ post, setAllForums, forumId }) => {
+    const { t, i18n } = useTranslation();
+    const locales = { es, ca };
+    const local = locales[i18n.language] || enUS;
     const [loading, setLoading] = useState(false);
     const { user } = useAuthContext();
     const [comment, setComment] = useState('');
-    const timeAgo = formatDistanceToNow(new Date(post.attributes.createdAt), { addSuffix: true });
+    const timeAgo = formatDistanceToNow(new Date(post.attributes.createdAt), { addSuffix: true, locale: local });
     const isPostNew = new Date(post.attributes.createdAt) > new Date(new Date().setDate(new Date().getDate() - 1));
     const usersSet = []
 
@@ -144,7 +148,7 @@ export const Post = ({ post, setAllForums, forumId }) => {
                                 <p className='text-gray-400'>{timeAgo}</p>
                             </div>
                         </div>
-                        <div className='mt-6 ml-12 text-sm prose max-w-none'>
+                        <div className='pr-5 mt-6 ml-12 text-sm prose max-w-none'>
                             {markdownConverter(post.attributes.content)}
                         </div>
                         <div className='flex items-center mt-10 ml-12'>
@@ -152,7 +156,7 @@ export const Post = ({ post, setAllForums, forumId }) => {
                                 <AccordionButton>
                                     <div className='flex items-center'>
                                         <FiMessageSquare className='mx-4' />
-                                        <p className='mr-4 text-gray-700 '>View Responses</p>
+                                        <p className='mr-4 text-gray-700 '>{t("COURSEINSIDE.FORUM.view_responses")}</p>
                                     </div>
                                 </AccordionButton>
                             </button>
@@ -176,17 +180,18 @@ export const Post = ({ post, setAllForums, forumId }) => {
                                 <form>
                                     <div className="w-full mb-4 border border-gray-200 rounded-lg bg-gray-50 ">
                                         <div className="px-4 py-2 bg-white rounded-t-lg ">
-                                            <label for="comment" className="sr-only">Your comment</label>
+                                            <label for="comment" className="sr-only">{t("COURSEINSIDE.FORUM.your_comment")}</label>
                                             <textarea onChange={handleChangeComment} id="comment" rows="4" value={comment} className="w-full p-3 text-sm text-gray-900 bg-white " placeholder="Write a comment..." required></textarea>
                                         </div>
                                         <div className="flex items-center justify-between px-3 py-2 border-t ">
                                             <Button loading={loading} type="button" onClick={() => onClickPost(post)} className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-indigo-500 rounded-lg focus:ring-4 focus:ring-blue-200  hover:bg-blue-800">
-                                                Post comment
+                                                {t("COURSEINSIDE.FORUM.post_comment")}
                                             </Button>
                                         </div>
                                     </div>
                                 </form>
-                                <p className="mb-5 ml-auto text-xs text-gray-500">Remember, contributions to this topic should follow our <a href="#" className="text-blue-600 hover:underline">Community Guidelines</a>.</p>
+                                <p className='mb-5 ml-auto text-xs text-gray-500'>{t("COURSEINSIDE.FORUM.guidelines")}
+                                    <a href='#' className='text-blue-600 hover:underline'>{t("COURSEINSIDE.FORUM.guidelines2")}</a>.</p>
                                 <hr />
                                 <div className='mt-5 ml-10 space-y-5'>
                                     {(post.attributes?.forum_answers?.data?.sort((a, b) => new Date(b.attributes.createdAt) - new Date(a.attributes.createdAt)))?.map(renderResponses)}

@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react'
 import { Select, Input, Button } from 'antd';
 import { UploadFiles } from '../../../courses/components/CreateCourses/CourseSections/UploadFiles';
 import { createCSVTemplate } from './helpers';
+import { useTranslation } from 'react-i18next';
 export const CSVConfiguration = ({ students, activities, formValues, setFormValues, file, setFile }) => {
-
+    const { t } = useTranslation();
     const filterOption = (input, option) =>
         (option?.label ?? '').toLowerCase().includes(input.toLowerCase());
 
@@ -45,12 +46,12 @@ export const CSVConfiguration = ({ students, activities, formValues, setFormValu
     }
     return (
         <>
-            <p className='mt-4 mb-3 text-sm text-gray-600'>First of all, select the activity to upload the grades:</p>
+            <p className='mt-4 mb-3 text-sm text-gray-600'>{t("QUALIFICATIONS.first_text_upload")}:</p>
             <div className='flex gap-x-3'>
                 <Select
                     showSearch
                     className='w-full'
-                    placeholder="Select an activity"
+                    placeholder={t("QUALIFICATIONS.select_activity")}
                     optionFilterProp="children"
                     filterOption={filterOption}
                     options={activityOptions}
@@ -58,83 +59,81 @@ export const CSVConfiguration = ({ students, activities, formValues, setFormValu
                     onChange={handleActivityChange}
                 />
                 <Button onClick={() => createCSVTemplate(formValues.selectedActivity, students, activities)}>
-                    Download template CSV with students
+                    {t("QUALIFICATIONS.download_template_csv")}
                 </Button>
-            </div>
-            <p className='mt-4 mb-3 text-sm text-gray-600'>Now, introduce the relation in the columns and rows on your CSV spreadsheet:</p>
-            <div className='flex space-x-3'>
-                <Input
-                    placeholder='Student column and row, ex: B2-B22'
-                    name='studentInputColumn'
-                    className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3'
-                    value={formValues.studentInputColumn}
-                    onChange={handleInputChange}
-                />
-                <Input
-                    placeholder='Qualification column and row, ex: D2-D22'
-                    name='qualificationInputColumn'
-                    className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3'
-                    value={formValues.qualificationInputColumn}
-                    onChange={handleInputChange}
-                />
-                <Input
-                    placeholder='Comments column and row, ex: F2-F22'
-                    name='commentsInputColumn'
-                    className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3'
-                    value={formValues.commentsInputColumn}
-                    onChange={handleInputChange}
-                />
-                {
-                    JSON.parse(formValues.selectedActivity)?.isPeerReview ?
-                        <Input
-                            placeholder='Average peer review grades column and row, ex: F2-F22'
-                            name='gradeAverageInputColumn'
-                            className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3'
-                            value={formValues.gradeAverageInputColumn}
-                            onChange={handleInputChange}
-                        />
-                        : null
-                }
-
             </div>
             {
                 formValues.selectedActivity !== null ?
                     <>
+                        <p className='mt-4 mb-3 text-sm text-gray-600'>{t("QUALIFICATIONS.now_introduce_columns")}:</p>
+                        <div className='flex space-x-3'>
+                            <Input
+                                placeholder={t("QUALIFICATIONS.placeholder_columns_student")}
+                                name='studentInputColumn'
+                                className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3'
+                                value={formValues.studentInputColumn}
+                                onChange={handleInputChange}
+                            />
+                            <Input
+                                placeholder={t("QUALIFICATIONS.placeholder_columns_grade")}
+                                name='qualificationInputColumn'
+                                className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3'
+                                value={formValues.qualificationInputColumn}
+                                onChange={handleInputChange}
+                            />
+                            <Input
+                                placeholder={t("QUALIFICATIONS.placeholder_columns_comments")}
+                                name='commentsInputColumn'
+                                className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3'
+                                value={formValues.commentsInputColumn}
+                                onChange={handleInputChange}
+                            />
+                            {
+                                JSON.parse(formValues.selectedActivity)?.isPeerReview ?
+                                    <Input
+                                        placeholder={t("QUALIFICATIONS.placeholder_columns_peer")}
+                                        name='gradeAverageInputColumn'
+                                        className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3'
+                                        value={formValues.gradeAverageInputColumn}
+                                        onChange={handleInputChange}
+                                    />
+                                    : null
+                            }
+
+                        </div>
                         {JSON.parse(formValues.selectedActivity)?.groupActivity ?
                             JSON.parse(formValues.selectedActivity)?.isPeerReview ?
                                 <>
-                                    <p className='mt-4 mb-1 text-sm text-gray-600'>For the example below, we would select; A2-A8 (in the student case), B2-B8 (Qualification case), C2-C8 (Comment case), and D2-D8(Grade from peer review): </p>
-                                    <p className='mb-3 text-xs text-red-500'>When  "<b> - </b>"  is displayed in 'Average grade peer review' it means that peer review was not evaluated numerically and only professor qualification will be taken into account</p>
+                                    <p className='mt-4 mb-1 text-sm text-gray-600'>{t("QUALIFICATIONS.peerReviewGroup.instruction")} </p>
+                                    <p className='mb-3 text-xs text-red-500'>{t("QUALIFICATIONS.peerReviewGroup.note")}</p>
                                     <img src="https://res.cloudinary.com/dnmlszkih/image/upload/v1711553756/bcmnydszoqeugcwwg1yy.png" className='w-1/2 rounded-md' style={{ border: '1px solid #d9d9d9' }} alt="" />
                                 </>
                                 :
 
                                 <>
-                                    <p className='mt-4 mb-3 text-sm text-gray-600'>For the example below, we would select; A2-A8 (in the student case), B2-B8 (Qualification case), C2-C8 (Comment case): </p>
+                                    <p className='mt-4 mb-3 text-sm text-gray-600'>{t("QUALIFICATIONS.group.instruction")} </p>
                                     <img src="https://res.cloudinary.com/dnmlszkih/image/upload/v1708682854/csvgroups_16a6d46027.png" className='w-1/2 rounded-md' style={{ border: '1px solid #d9d9d9' }} alt="" />
                                 </>
                             :
                             JSON.parse(formValues.selectedActivity)?.isPeerReview ?
                                 <>
-                                    <p className='mt-4 mb-1 text-sm text-gray-600'>For the example below, we would select; A2-A6 (in the student case), B2-B6 (Qualification case), C2-C6 (Comment case), and D2-D6(Grade from peer review): </p>
-                                    <p className='mb-3 text-xs text-red-500'>When  "<b> - </b>"  is displayed in 'Average grade peer review' it means that peer review was not evaluated numerically and only professor qualification will be taken into account</p>
+                                    <p className='mt-4 mb-1 text-sm text-gray-600'>{t("QUALIFICATIONS.peerReview.instruction")} </p>
+                                    <p className='mb-3 text-xs text-red-500'>{t("QUALIFICATIONS.peerReviewGroup.note")}</p>
                                     <img src="https://res.cloudinary.com/dnmlszkih/image/upload/v1711553570/bymzghugjetjcsksxxvm.png" className='w-1/2 rounded-md' style={{ border: '1px solid #d9d9d9' }} alt="" />
                                 </>
                                 :
                                 <>
-                                    <p className='mt-4 mb-3 text-sm text-gray-600'>For the example below, we would select; B2-B22 (in the student case), D2-D22 (Qualification case), F2-F22 (Comment case): </p>
+                                    <p className='mt-4 mb-3 text-sm text-gray-600'>{t("QUALIFICATIONS.standard.instruction")} </p>
                                     <img src="https://res.cloudinary.com/dnmlszkih/image/upload/v1704732079/k18dfux3qnblwnk98zft.png" className='w-1/2 rounded-md' style={{ border: '1px solid #d9d9d9' }} alt="" />
 
                                 </>
                         }
-                        <p className='mt-4 mb-3 text-sm text-gray-600'>Finally, upload the CSV spreadsheet file (comma or semi-colon separated).</p>
+                        <p className='mt-4 mb-3 text-sm text-gray-600'>{t("QUALIFICATIONS.finally_csv")}</p>
                         <UploadFiles fileList={file} setFileList={setFile} listType={'picture'} maxCount={1} />
                     </>
                     : null
 
-
             }
-
         </>
     );
 }

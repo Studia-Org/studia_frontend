@@ -11,7 +11,7 @@ import { API } from '../../../../constant';
 import { useParams } from 'react-router-dom';
 import { getIcon } from './helpers';
 import { useCourseContext } from '../../../../context/CourseContext';
-
+import { Trans, useTranslation } from 'react-i18next';
 
 
 
@@ -24,6 +24,7 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFl
   const { user } = useAuthContext();
   let { courseId } = useParams()
 
+  const { t } = useTranslation();
   const {
     course,
     sectionSelected,
@@ -55,26 +56,11 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFl
 
   function selectFaseSectionContent(str) {
     if (str === "forethought") {
-      return (
-        <>
-          <Badge color='#15803d' count='Forethought' />
-
-        </>
-      );
+      return <Badge color='#15803d' count='Forethought' />
     } else if (str === "performance") {
-      return (
-        <>
-          <Badge color='#faad14' count='Performance' />
-
-        </>
-      );
+      return <Badge color='#faad14' count='Performance' />
     } else if (str === "self-reflection") {
-      return (
-        <>
-          <Badge color='#dc2626' count='Self-reflection' />
-
-        </>
-      );
+      return <Badge color='#dc2626' count='Self-reflection' />
     }
   }
 
@@ -144,18 +130,43 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFl
           <span className={` absolute flex items-center justify-center w-8 h-8 bg-indigo-500 rounded-full -left-4  ring-white `}>
             {switchSVG(subsection.attributes.activity?.data?.attributes.type)}
           </span>
-          <button
-            onClick={() => handleSections(titulo, subsection)}
-            className="flex items-center w-3/4 mb-1 font-medium text-left text-gray-900 duration-200 line-clamp-2 hover:translate-x-2">
-            {subsection.attributes.activity?.data?.attributes.type === 'questionnaire' ? subsection.attributes.questionnaire.data.attributes.Title : subsection.attributes.title}
-            {startDate > dateToday && <span className="ml-2 text-xs text-gray-500">Starts on {startDate.toLocaleDateString()}</span>}
-            {selectedSubsection &&
-              <span class="relative flex h-3 w-3 ml-3">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
-              </span>
+          <div className='w-full'>
+            <button
+              onClick={() => handleSections(titulo, subsection)}
+              className="flex items-center w-3/4 mb-1 font-medium text-left text-gray-900 duration-200 line-clamp-2 hover:translate-x-2">
+              {subsection.attributes.activity?.data?.attributes.type === 'questionnaire' ? subsection.attributes.questionnaire.data.attributes.Title : subsection.attributes.title}
+
+              {selectedSubsection &&
+                <span class="relative flex h-3 w-3 ml-3">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
+                </span>
+              }
+            </button>
+            {!startWhenFinished && isBeforeStartDate &&
+              <p className="w-5/6 -mt-1 text-xs text-gray-500">
+                <Trans i18nKey="COURSEINSIDE.ACCORDION.section_will_open"
+                  components={{
+                    "day": startDate.toLocaleDateString("es-ES", { day: 'numeric', month: 'numeric' }),
+                    "minute": startDate.toLocaleTimeString("es-ES", { hour: 'numeric', minute: 'numeric' })
+                  }}
+                />
+              </p>
             }
-          </button>
+            {!startWhenFinished && isBeforeStartDate &&
+              <p className="w-5/6 -mt-1 text-xs text-gray-500">
+                <Trans i18nKey="COURSEINSIDE.ACCORDION.section_will_open2"
+                  components={{
+                    "day": startDate.toLocaleDateString("es-ES", { day: 'numeric', month: 'numeric' }),
+                    "minute": startDate.toLocaleTimeString("es-ES", { hour: 'numeric', minute: 'numeric' })
+                  }}
+                />
+              </p>
+            }
+            {!startWhenFinished && !isBeforeStartDate &&
+              <p className="w-5/6 -mt-1 text-xs text-gray-500">{t("COURSEINSIDE.ACCORDION.section_opened")}</p>
+            }
+          </div>
         </li>
       )
     } else {
@@ -170,8 +181,26 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFl
                 disabled={disableButton}>
                 {subsection.attributes.activity?.data?.attributes.type === 'questionnaire' ? subsection.attributes.questionnaire.data.attributes.Title : subsection.attributes.title}
               </button>
-              {startWhenFinished && isBeforeStartDate && <p className="-mt-1 text-xs text-gray-500">Will open when the last subsection is completed or the {startDate.toLocaleDateString("es-ES", { day: 'numeric', month: 'numeric' }) + " at " + startDate.toLocaleTimeString("es-ES", { hour: 'numeric', minute: 'numeric' })}</p>}
-              {!startWhenFinished && isBeforeStartDate && <p className="text-xs text-gray-500">Will open on {startDate.toLocaleDateString("es-ES", { day: 'numeric', month: 'numeric' }) + " at " + startDate.toLocaleTimeString("es-ES", { hour: 'numeric', minute: 'numeric' })}</p>}
+              {startWhenFinished && isBeforeStartDate &&
+                <p className="-mt-1 text-xs text-gray-500">
+                  <Trans i18nKey="COURSEINSIDE.ACCORDION.section_will_open"
+                    components={{
+                      "day": startDate.toLocaleDateString("es-ES", { day: 'numeric', month: 'numeric' }),
+                      "minute": startDate.toLocaleTimeString("es-ES", { hour: 'numeric', minute: 'numeric' })
+                    }}
+                  />
+                </p>
+              }
+              {!startWhenFinished && isBeforeStartDate &&
+                <p className="-mt-1 text-xs text-gray-500">
+                  <Trans i18nKey="COURSEINSIDE.ACCORDION.section_will_open2"
+                    components={{
+                      "day": startDate.toLocaleDateString("es-ES", { day: 'numeric', month: 'numeric' }),
+                      "minute": startDate.toLocaleTimeString("es-ES", { hour: 'numeric', minute: 'numeric' })
+                    }}
+                  />
+                </p>
+              }
             </div>
             {selectFaseSectionContent(subsection.attributes.fase)}
           </div>
@@ -226,9 +255,9 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFl
       setNewSection('');
       setAddSectionLoading(false);
       setEditSectionFlag(true);
-      message.success("Section Added Successfully");
+      message.success(t("COURSEINSIDE.ACCORDION.section_added"));
     } catch (error) {
-      message.error("Error adding section");
+      message.error(t("COURSEINSIDE.ACCORDION.added_error"));
       setAddSectionLoading(false);
     }
 
@@ -292,7 +321,7 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFl
                 )
               }
               <div className='flex flex-col w-full text-left ml-9'>
-                <p className='mb-1 text-sm'>Section {sectionNumber}</p>
+                <p className='mb-1 text-sm'>{t("COURSEINSIDE.ACCORDION.section")} {sectionNumber}</p>
                 <h2 className='w-3/4 text-base font-medium text-left xl:text-lg line-clamp-2'>
                   {section.attributes.title}
                 </h2>
@@ -326,7 +355,7 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFl
 
   return (
     <div className={` bg-white rounded-lg xl:p-5 xl:w-[30rem] w-full xl:shadow-md shadow-none sm:visible lg:max-w-[calc(100vw-4rem)] sm:w-auto z-20  lg:mr-0 `}>
-      <p className="hidden text-xl font-semibold xl:block">Course content</p>
+      <p className="hidden text-xl font-semibold xl:block">{t("COURSEINSIDE.ACCORDION.title")}</p>
       <hr className="hidden h-px my-8 bg-gray-400 border-0 xl:block"></hr>
       {course.sections.data.map((section, index) => (
         <RenderCourseContent
@@ -343,18 +372,21 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFl
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
               </svg>
-              Add a new section
+              {t("COURSEINSIDE.ACCORDION.add_new_section")}
             </AccordionButton>
             <AccordionPanel>
               <div className='mt-4 '>
                 <form>
                   <div className="mb-4 border border-gray-200 rounded-lg bg-gray-50 ">
                     <div className="px-4 py-2 bg-white rounded-t-lg ">
-                      <input onChange={(e) => setNewSection(e.target.value)} id="comment" rows="4" value={newSection} className="w-full p-3 text-sm text-gray-900 duration-150 bg-white border rounded-md hover:border-blue-600 placeholder:text-gray-400 placeholder:font-light" placeholder="Section name" required></input>
+                      <input onChange={(e) => setNewSection(e.target.value)} id="comment" rows="4"
+                        value={newSection}
+                        className="w-full p-3 text-sm text-gray-900 duration-150 bg-white border rounded-md hover:border-blue-600 placeholder:text-gray-400 placeholder:font-light"
+                        placeholder={t("COURSEINSIDE.ACCORDION.placeholder_section_name")} required></input>
                     </div>
                     <div className="flex items-center justify-between px-3 py-2 border-t ">
                       <Button loading={addSectionLoading} onClick={() => addNewSection()} type="button" className="inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-indigo-500 rounded-lg focus:ring-4 focus:ring-blue-200  hover:bg-blue-800">
-                        Add section
+                        {t("COURSEINSIDE.ACCORDION.add_section")}
                       </Button>
                     </div>
                   </div>

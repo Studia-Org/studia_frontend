@@ -4,13 +4,13 @@ import { UploadFiles } from '../../../features/courses/components/CreateCourses/
 import { API } from '../../../constant';
 import { getToken } from '../../../helpers';
 import { useAuthContext } from '../../../context/AuthContext';
-
+import { useTranslation } from 'react-i18next';
 export const ReportBug = () => {
     const githubToken = process.env.REACT_APP_GITHUB_SECRET
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const { user } = useAuthContext();
-
+    const { t } = useTranslation();
     const [formData, setFormData] = useState({
         screenshot: null,
         message: ''
@@ -30,7 +30,7 @@ export const ReportBug = () => {
         setLoading(true);
         try {
             if (formData.message === '') {
-                message.error('Please fill all the fields.');
+                message.error(t('NAVBAR.BUG_REPORT.all_fields'));
                 return;
             }
             if (formData.screenshot?.originFileObj) {
@@ -66,15 +66,15 @@ export const ReportBug = () => {
             });
             if (response.ok) {
                 // Issue creada exitosamente
-                message.success('Successfully created issue.');
+                message.success(t('NAVBAR.BUG_REPORT.toast.title_success'));
             } else {
                 // Manejar errores de la respuesta de GitHub
-                message.error('Error al crear la issue:');
+                message.error(t('NAVBAR.BUG_REPORT.toast.title_error'));
                 console.error('Error al crear la issue:', response.statusText);
             }
         } catch (error) {
             // Manejar errores de red u otros errores
-            message.error('Error al crear la issue:');
+            message.error(t('NAVBAR.BUG_REPORT.toast.title_error'));
             console.error('Error al enviar la solicitud:', error);
         } finally {
             setLoading(false);
@@ -93,18 +93,18 @@ export const ReportBug = () => {
             <div className="p-6 mb-8 border border-gray-300 sm:rounded-md">
                 <form>
                     <label className="block mb-6">
-                        <span className="text-gray-700">Bug description</span>
+                        <span className="text-gray-700">{t('NAVBAR.BUG_REPORT.bug_description')}</span>
                         <textarea
                             name="message"
                             value={formData.message}
                             onChange={handleInputChange}
                             className="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                             rows="8"
-                            placeholder="Please add as much details as possible."
+                            placeholder={t('NAVBAR.BUG_REPORT.bug_description_placeholder')}
                         ></textarea>
                     </label>
                     <label className="block mb-6">
-                        <span className="text-gray-700">Screenshot <span className='text-xs text-gray-500'>(optional)</span></span>
+                        <span className="text-gray-700">{t('NAVBAR.BUG_REPORT.screenshot')} <span className='text-xs text-gray-500'>({t('NAVBAR.BUG_REPORT.optional')})</span></span>
                         <UploadFiles fileList={formData.screenshot ? [formData.screenshot] : []} setFileList={handleFileChange} listType={'picture'} maxCount={1} />
                     </label>
 
@@ -114,7 +114,7 @@ export const ReportBug = () => {
                             onClick={handleSubmit}
                             className="h-10 px-5 transition-colors duration-150 rounded-lg focus:shadow-outline "
                         >
-                            Submit
+                            {t('NAVBAR.BUG_REPORT.send')}
                         </Button>
                     </div>
                 </form>
@@ -123,9 +123,9 @@ export const ReportBug = () => {
     );
 
     const contentTitle = (
-        <div className="flex flex-col">
-            <h2 className="text-base font-medium">Report a problem</h2>
-            <p className="my-2 text-sm font-normal text-gray-400">Use this form to report any bugs or issues you encounter on the app.</p>
+        <div className="flex flex-col max-w-md ">
+            <h2 className="text-base font-medium">{t('NAVBAR.BUG_REPORT.bug_report_title')}</h2>
+            <p className="my-2 text-sm font-normal text-gray-400">{t('NAVBAR.BUG_REPORT.bug_report_text')}</p>
         </div>
     );
 

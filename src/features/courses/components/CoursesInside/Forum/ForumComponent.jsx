@@ -3,11 +3,12 @@ import { Button, Tabs } from "antd";
 import { ForumInside } from './ForumInside';
 import { useAuthContext } from "../../../../../context/AuthContext";
 import { ForumAddThread } from './ForumAddThread';
-
+import { useTranslation } from 'react-i18next';
 const { TabPane } = Tabs;
 
 
 export const ForumComponent = ({ allForums, setAllForums, courseData }) => {
+  const { t } = useTranslation();
   const [items, setItems] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [activeKey, setActiveKey] = useState(null);
@@ -88,13 +89,13 @@ export const ForumComponent = ({ allForums, setAllForums, courseData }) => {
     <div className='flex flex-col pt-5 '>
       <div className=''>
         <div className='flex items-center mb-5'>
-          <h2 className='font-bold text-xl'>Forum</h2>
+          <h2 className='text-xl font-bold'>{t("COURSEINSIDE.FORUM.forum")}</h2>
           {(user.role_str === 'professor' || activeKey !== (allForums[0]?.id)?.toString()) && (
-            <Button className='flex ml-auto items-center gap-2 bg-blue-500' type='primary' onClick={handleOpenModal}>
+            <Button className='flex items-center gap-2 ml-auto bg-blue-500' type='primary' onClick={handleOpenModal}>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                 <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
               </svg>
-              Add a new thread
+              {t("COURSEINSIDE.FORUM.add_thread")}
             </Button>
           )}
 

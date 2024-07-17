@@ -4,7 +4,7 @@ import { format, set } from 'date-fns';
 import { ModalFiles } from './ModalFiles';
 import { API } from '../../../constant';
 import { getToken } from '../../../helpers';
-import { is } from 'date-fns/locale';
+import { useTranslation } from 'react-i18next';
 
 const { TextArea } = Input;
 
@@ -95,6 +95,7 @@ export async function saveChangesButtonGroups(editedGrades, groups, selectedActi
 
 
 export const TableRowsGroups = ({ group, activity, isEditChecked, setThereIsChanges, editedGrades, setEditedGrades, isPeerReview, setEditActivity, activityFull }) => {
+    const { t } = useTranslation();
     const [files, setFiles] = useState();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const grade = group.attributes.qualifications?.data.find(qualification => qualification.attributes.activity.data.id === activity.id)
@@ -228,7 +229,7 @@ export const TableRowsGroups = ({ group, activity, isEditChecked, setThereIsChan
                     <TextArea
                         rows={3}
                         className="mt-4"
-                        placeholder="Write a comment"
+                        placeholder={t('QUALIFICATIONS.write_comment')}
                         value={comments}
                         onChange={(e) => { handleCommentsChange(e.target.value) }}
                     />
@@ -252,39 +253,16 @@ export const TableRowsGroups = ({ group, activity, isEditChecked, setThereIsChan
 
 
     function renderPonderations() {
-        // if (isEditChecked) {
-        //     return (
-        //         <td className="px-6 py-4">
-        //             <div className='flex items-center'>
-        //                 <p className='min-w-[90px]'>Professor %:</p>
-        //                 <InputNumber
-        //                     min={1}
-        //                     max={100}
-        //                     value={ponderationProfessor}
-        //                     onChange={(value) => { handlePonderation(value, 'professor') }}
-        //                 />
-        //             </div>
-        //             <div className='flex items-center mt-2'>
-        //                 <p className='min-w-[90px]'>Student %:</p>
-        //                 <InputNumber
-        //                     min={1}
-        //                     max={100}
-        //                     value={ponderationStudent}
-        //                     onChange={(value) => { handlePonderation(value, 'student') }}
-        //                 />
-        //             </div>
-        //         </td>
-        //     );
-        // } else {
+
         if (grade) {
             return (
                 <td className="px-6 py-4">
                     <div className='flex items-center'>
-                        <p className='min-w-[80px]'>Professor:</p>
+                        <p className='min-w-[80px]'>{t('COMMON.professor')}:</p>
                         <p>{ponderationProfessor}%</p>
                     </div>
                     <div className='flex items-center mt-2'>
-                        <p className='min-w-[80px]'>Student:</p>
+                        <p className='min-w-[80px]'>{t('COMMON.student')}:</p>
                         <p>{ponderationStudent}%</p>
                     </div>
                 </td>
@@ -309,7 +287,7 @@ export const TableRowsGroups = ({ group, activity, isEditChecked, setThereIsChan
             })
             sum += (internAverage / Object.keys(Answer).length);
         });
-        if (!grade) return "No grade yet";
+        if (!grade) return t("QUALIFICATIONS.no_grade");
         const average = sum / peerReviewAnswers?.attributes?.PeerReviewAnswers?.data?.length;
         return isNaN(average) ? "-" : average.toFixed(2);
     }
@@ -401,7 +379,7 @@ export const TableRowsGroups = ({ group, activity, isEditChecked, setThereIsChan
                 {
                     grade ?
                         <td className="px-6 py-4">
-                            {format(new Date(grade.attributes.updatedAt), "dd/MM/yyyy 'at' HH:mm")}
+                            {format(new Date(grade.attributes.updatedAt), `dd/MM/yyyy '${t("QUALIFICATIONS.at")}' HH:mm`)}
                         </td>
                         :
 

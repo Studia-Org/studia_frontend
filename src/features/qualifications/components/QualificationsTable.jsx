@@ -5,7 +5,7 @@ import { Button, Select, message } from "antd"
 import { API } from '../../../constant';
 import { getToken } from '../../../helpers';
 import { useAuthContext } from '../../../context/AuthContext';
-
+import { useTranslation } from 'react-i18next';
 
 export const QualificationsTable = ({ students, activities, setStudents, setUploadQualificationsFlag, setActivities }) => {
     const [isEditChecked, setIsEditChecked] = useState(false);
@@ -19,10 +19,11 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
     const [filteredActivity, setFilteredActivity] = useState(activities.find(activity => activity.id === JSON.parse(selectedActivity).id))
     const [loading, setLoading] = useState(false)
     const [groups, setGroups] = useState([])
+    const { t } = useTranslation();
 
     const tableOptions = {
-        "questionnaire": "Questionnaire Completed",
-        "peerReview": "Average grade received",
+        "questionnaire": t("QUALIFICATIONS.questionnaire_completed"),
+        "peerReview": t("QUALIFICATIONS.average_grade"),
     }
     const handleToggleChange = () => {
         setIsEditChecked(!isEditChecked);
@@ -209,7 +210,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                         id="table-search-users"
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                         class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
-                                        placeholder="Search for users" />
+                                        placeholder={t("QUALIFICATIONS.search_users")} />
                                 </div>
                                 <label className="relative inline-flex items-center ml-5 mr-auto cursor-pointer">
                                     <input
@@ -220,11 +221,11 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                         onChange={handleToggleChange}
                                     />
                                     <div className={`w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600`} />
-                                    <span className="ml-2 text-sm font-medium text-gray-900">Edit qualifications</span>
+                                    <span className="ml-2 text-sm font-medium text-gray-900">{t("QUALIFICATIONS.edit_qualifications")}</span>
                                 </label>
 
                                 <Button onClick={() => setUploadQualificationsFlag(true)} className="inline-flex items-center text-gray-500 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-3 py-1.5" type="default">
-                                    Upload qualifications
+                                    {t("QUALIFICATIONS.upload_qualifications")}
                                 </Button>
                             </div>
                             <div className='flex items-center justify-between mt-5 gap-x-5 '>
@@ -273,7 +274,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                             }
                                         }
                                         }>
-                                            Save Changes
+                                            {t("COMMON.save_changes")}
                                         </Button>
                                     )
                                 }
@@ -283,8 +284,8 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                             filteredActivity.attributes.BeingReviewedBy.data !== null &&
                             new Date(filteredActivity.attributes.BeingReviewedBy.data?.attributes?.deadline) > new Date() &&
                             <div className="px-4 py-2 text-red-700 bg-red-100 border border-red-400 rounded" role="alert">
-                                <strong className="text-sm font-bold">Attention!</strong>
-                                <span className="block text-sm sm:inline"> Peer review deadline is on {new Date(filteredActivity.attributes.BeingReviewedBy.data.attributes.deadline).toLocaleDateString()}</span>
+                                <strong className="text-sm font-bold">{t("QUALIFICATIONS.attention")}!</strong>
+                                <span className="block text-sm sm:inline"> {t("QUALIFICATIONS.peerreview_deadline")} {new Date(filteredActivity.attributes.BeingReviewedBy.data.attributes.deadline).toLocaleDateString()}</span>
                             </div>
                         }
                         <table class="w-full text-sm text-left text-gray-500 border-collapse border-spacing-0 ">
@@ -293,22 +294,22 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                     {
                                         JSON.parse(selectedActivity).activityGroup ?
                                             <th scope="col" class="px-6 py-3">
-                                                Groups
+                                                {t("QUALIFICATIONS.groups")}
                                             </th>
                                             :
                                             <th scope="col" class="px-6 py-3">
-                                                Name
+                                                {t("QUALIFICATIONS.name")}
                                             </th>
                                     }
                                     <th scope="col" class="px-6 py-3">
-                                        Qualification
+                                        {t("QUALIFICATIONS.qualification")}
                                     </th>
                                     <th scope="col" class="px-6 py-3 ">
-                                        Comment
+                                        {t("QUALIFICATIONS.comments")}
                                     </th>
                                     {filteredActivity.attributes.BeingReviewedBy.data !== null &&
                                         <th scope="col" class="px-6 py-3">
-                                            Professor qualification
+                                            {t("QUALIFICATIONS.professor_qualification")}
                                         </th>
                                     }
                                     <th scope="col" class="px-6 py-3">
@@ -320,17 +321,17 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                     </th>
                                     {filteredActivity.attributes.BeingReviewedBy.data !== null &&
                                         <th scope="col" class="px-6 py-3">
-                                            Professor - Students ponderation
+                                            {t("QUALIFICATIONS.professor_students_ponderation")}
                                         </th>
                                     }
                                     {
                                         filteredActivity.attributes.BeingReviewedBy.data !== null &&
                                         <th scope="col" class="px-6 py-3">
-                                            Files
+                                            {t("QUALIFICATIONS.files")}
                                         </th>
                                     }
                                     <th scope="col" class="px-6 py-3">
-                                        Last modified
+                                        {t("QUALIFICATIONS.last_modification")}
                                     </th>
                                 </tr>
                             </thead>

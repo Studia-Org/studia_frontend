@@ -7,6 +7,7 @@ import { UploadFiles } from './UploadFiles';
 import { message, Select, Tag, Input, DatePicker } from 'antd';
 import { ACTIVITY_CATEGORIES } from '../../../../../constant';
 import { ca } from 'date-fns/locale';
+import { useTranslation } from 'react-i18next';
 
 export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList, setEditTaskFlag, setCreateCourseSectionsListCopy, categories, setCategories }) => {
     const [content, setContent] = useState();
@@ -14,6 +15,8 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
     const [deadline, setDeadline] = useState();
     const [categoriesInside, setCategoriesInside] = useState();
     const [files, setFiles] = useState([]);
+
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (task[section.id]) {
@@ -229,47 +232,48 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
             className='mr-10'>
             <div className='flex items-center gap-2 mt-5'>
                 <h2 className='text-xl font-medium '>{section.name}</h2>
-                <Tag color="#108ee9">Section</Tag>
+                <Tag color="#108ee9">{t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.section")}</Tag>
                 <div className='flex ml-auto'>
                     {
 
                         task[section.id] === undefined ?
                             <button onClick={() => createTaskButton()} className=' duration-150 text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5 text-center  items-center  '>
-                                Create task
+                                {t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.create_task")}
                             </button>
                             :
                             <button onClick={() => saveChangesButton()} className=' duration-150 text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5 text-center  items-center  '>
-                                Save Changes
+                                {t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.save_changes")}
                             </button>
                     }
                 </div>
 
             </div>
             <p className='mt-5 text-sm text-gray-500'>
-                Before we proceed to create our first sequence, let's first establish the task that will encompass the entire section!
+                {t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.principal_text")}
             </p>
             <div className='mt-5'>
                 <div className='flex'>
 
                     <div className='flex flex-col w-1/2 pr-2 mb-3'>
-                        <label className='mb-3 text-sm' htmlFor="" >Task title *</label>
+                        <label className='mb-3 text-sm' htmlFor="" >{t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.task_title")} *</label>
                         <Input
                             className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3'
-                            placeholder="Title"
+                            placeholder={t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.task_title_placeholder")}
                             value={title}
                             onChange={(e) => handleTitleChange(e)}
                         />
                     </div>
 
                     <div className='flex flex-col justify-center mb-3 ml-10'>
-                        <label className='mb-3 text-sm' htmlFor="" >Deadline *</label>
-                        <DatePicker className='py-3' showTime onOk={(date) => { setDeadline(dayjs(date).format('YYYY-MM-DD HH:mm:ss')) }} value={deadline ? dayjs(deadline) : null} />
+                        <label className='mb-3 text-sm' htmlFor="" >{t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.task_end_date")} *</label>
+                        <DatePicker className='py-3' placeholder={t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.task_end_date_placeholder")} showTime onOk={(date) => { setDeadline(dayjs(date).format('YYYY-MM-DD HH:mm:ss')) }} value={deadline ? dayjs(deadline) : null} />
                     </div>
                 </div>
                 <div>
-                    <label className='text-sm ' htmlFor="" >Task description *</label>
+                    <label className='text-sm ' htmlFor="" >{t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.task_description")} *</label>
                     <MDEditor
                         className='mt-2'
+                        placeholder={t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.task_description_placeholder")}
                         style={{ minHeight: '25rem' }}
                         data-color-mode="light"
                         onChange={setContent}
@@ -279,22 +283,22 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                 </div>
                 <div className='flex mt-5 mb-32'>
                     <div className='w-1/2 pr-2 mr-8 space-y-2'>
-                        <label className='text-sm' htmlFor="">Task Categories *</label>
-                        <p className='text-xs text-gray-500'>Select the categories associated with the task that students are going to develop.</p>
+                        <label className='text-sm' htmlFor="">{t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.task_categories")} *</label>
+                        <p className='text-xs text-gray-500'>{t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.task_categories_text")}</p>
                         <Select
                             className=''
                             mode="tags"
                             placement='topRight'
                             style={{ width: '100%' }}
-                            placeholder="Select a category"
+                            placeholder={t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.task_categories_placeholder")}
                             defaultValue={categories[section.id]}
                             value={categoriesInside}
                             onChange={(value) => setCategoriesInside(value)}
-                            options={Object.keys(ACTIVITY_CATEGORIES).map(key => ({ label: key, value: key }))}
+                            options={Object.keys(ACTIVITY_CATEGORIES).map(key => ({ label: t(`OBJECTIVES_CONSTANT.${key}`), value: key }))}
                         />
                     </div>
                     <div className='flex-auto w-1/2 pr-2 space-y-2'>
-                        <label className='text-sm' htmlFor="">Task files</label>
+                        <label className='text-sm' htmlFor="">{t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.task_files")}</label>
                         <div style={{ flex: 'none' }} className='p-3 bg-white border rounded-md border-stone-300'>
                             <UploadFiles fileList={files} setFileList={setFiles} listType={'text'} maxCount={5} />
                         </div>

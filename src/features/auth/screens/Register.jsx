@@ -7,13 +7,14 @@ import { getToken, setToken } from "../../../helpers";
 import { UserInformation } from '../components/UserInformation';
 import { UserObjectives } from '../components/UserObjectives';
 import { debounce } from '@mui/material';
-
+import { useTranslation } from 'react-i18next';
 
 const Register = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [typingTimeout, setTypingTimeout] = useState(null);
   const { setUser } = useAuthContext();
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -91,13 +92,10 @@ const Register = () => {
     try {
       setLoading(true);
       if (!email || !password || !repassword || !username || !name || !university || !description) {
-        throw new Error("Please fill in all fields");
+        throw new Error(t("REGISTER.fill_all_fields"));
       }
       if ((user_objectives && user_objectives.length === 0) || (goals && goals.length === 0)) {
-        throw new Error("Please select at least one objective and categorize it");
-      }
-      if (!profilePhoto) {
-        throw new Error("Please upload a profile photo");
+        throw new Error(t("REGISTER.select_objective"));
       }
 
       const response = await fetch(`${API}/auth/local/register`, {

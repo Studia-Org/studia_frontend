@@ -5,15 +5,15 @@ import { Confirmation, uploadQualifications, uploadQualificationsPerGroup } from
 import { Visualization } from './UploadQualifications/Visualization';
 import { extractDataFromSpreadsheet, parseData } from './UploadQualifications/helpers.js';
 import { useAuthContext } from '../../../context/AuthContext';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useTranslation, Trans } from 'react-i18next';
 export const UploadQualifications = ({ setUploadQualificationsFlag, activities, students }) => {
+    const { t } = useTranslation();
     const [steps, setSteps] = useState(0)
     const { user } = useAuthContext();
     const [file, setFile] = useState([]);
     const [dataVisualization, setDataVisualization] = useState([])
     const [dataTable, setDataTable] = useState([])
-    const { courseID } = useParams();
-    const navigate = useNavigate()
+
     const [formValues, setFormValues] = useState({
         selectedActivity: null,
         studentInputColumn: '',
@@ -58,16 +58,16 @@ export const UploadQualifications = ({ setUploadQualificationsFlag, activities, 
         return (
             <div className='flex gap-3 ml-auto'>
                 <Button onClick={() => setSteps(steps - 1)}>
-                    Back
+                    {t("CREATE_COURSES.NAVIGATION.back")}
                 </Button>
                 {
                     steps === 0 ? (
                         <Button onClick={() => handleContinue()}>
-                            Continue
+                            {t("CREATE_COURSES.NAVIGATION.continue")}
                         </Button>
                     ) : (
                         <Popconfirm
-                            title="Are you sure to continue?"
+                            title={t("QUALIFICATIONS.are_you_sure_continue")}
                             onConfirm={() => {
                                 handleContinue();
                                 if (JSON.parse(formValues.selectedActivity).groupActivity) {
@@ -75,7 +75,8 @@ export const UploadQualifications = ({ setUploadQualificationsFlag, activities, 
                                         dataTable,
                                         activity: formValues.selectedActivity,
                                         user,
-                                        fullActivity: filteredActivity
+                                        fullActivity: filteredActivity,
+                                        t: t
                                     })
                                 }
                                 else {
@@ -83,18 +84,17 @@ export const UploadQualifications = ({ setUploadQualificationsFlag, activities, 
                                         dataTable,
                                         activity: formValues.selectedActivity,
                                         user,
-                                        fullActivity: filteredActivity
+                                        fullActivity: filteredActivity,
+                                        t: t
 
                                     })
                                 }
                             }}
                             onCancel={() => { }}
-                            okText="Yes"
-                            cancelText="No"
+                            okText={t("COMMON.yes")}
+                            cancelText={t("COMMON.no")}
                         >
-                            <Button>
-                                Confirm
-                            </Button>
+                            <Button>{t("CREATE_COURSES.NAVIGATION.confirm")}</Button>
                         </Popconfirm>
                     )
                 }
@@ -129,27 +129,33 @@ export const UploadQualifications = ({ setUploadQualificationsFlag, activities, 
                         return true;
                     }
                     else if (!isValidFile) {
-                        message.error('File must be a CSV or spreadsheet file');
+                        message.error(t("QUALIFICATIONS.file_must_be_csv"));
                         return false;
 
                     } else {
-                        message.error('The input columns must have Excel range format, e.g., B2-B22');
+                        message.error(t("QUALIFICATIONS.input_columns_must_be"));
                         return false;
                     }
                 } else {
-                    message.error('You must fill all the fields');
+                    message.error(t("QUALIFICATIONS.input_columns_must_be_filled"));
                     return false;
                 }
             } else if (steps === 1) {
                 if (dataTable.length === 0) {
-                    message.error('There is no data to visualize');
+                    message.error(t("QUALIFICATIONS.no_data"));
                     return false;
                 }
                 else {
                     for (let i = 0; i < dataTable.length; i++) {
                         const student = dataTable[i];
                         if ((!student.Qualification || !student.Comments) && (!student.group.Qualification || !student.group.Comments)) {
-                            message.error(`Student ${student.Name.student.attributes.name} does not have a qualification or comments. Please check the data.`);
+                            message.error(
+                                <Trans i18nKey="QUALIFICATIONS.student_missing"
+                                    components={{
+                                        name: student.Name.student.attributes.name
+                                    }}
+                                />
+                            );
                             return false;
                         }
                     }
@@ -161,7 +167,7 @@ export const UploadQualifications = ({ setUploadQualificationsFlag, activities, 
                 return true;
             }
         } catch (error) {
-            message.error('An error occurred while checking the data. Please try again');
+            message.error(t("QUALIFICATIONS.peer_review_did_not_finish"));
             return false;
         }
     };
@@ -186,33 +192,33 @@ export const UploadQualifications = ({ setUploadQualificationsFlag, activities, 
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                         <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
                     </svg>
-                    <p className='ml-1'>Go back to course</p>
+                    <p className='ml-1'>{t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.back_to_course")}</p>
                 </button>
                 <Steps
                     current={steps}
                     items={[
                         {
-                            title: 'CSV Configuration',
-                            description: 'Configure the CSV file and select the activity desired.',
+                            title: t("QUALIFICATIONS.csv_configuration"),
+                            description: t("QUALIFICATIONS.csv_configuration_text"),
                         },
                         {
-                            title: 'Visualization',
-                            description: 'Visualize the data to upload before confirming.',
+                            title: t("QUALIFICATIONS.visualization"),
+                            description: t("QUALIFICATIONS.visualization_text"),
                         },
                         {
-                            title: 'Confirmation',
-                            description: 'Create the new qualification entries.',
+                            title: t("QUALIFICATIONS.confirmation"),
+                            description: t("QUALIFICATIONS.confirmation_text"),
                         }
                     ]}
                 />
 
-                <h3 className='mt-10 text-lg font-medium'>Upload Qualifications</h3>
+                <h3 className='mt-10 text-lg font-medium'>{t("QUALIFICATIONS.upload_qualifications")}</h3>
                 {filteredActivity &&
                     filteredActivity.attributes.BeingReviewedBy.data !== null &&
                     new Date(filteredActivity.attributes.BeingReviewedBy.data?.attributes?.deadline) > new Date() &&
                     <div className="px-4 py-2 mt-3 text-red-700 bg-red-100 border border-red-400 rounded w-fit" role="alert">
-                        <strong className="text-sm font-bold">Attention!</strong>
-                        <span className="block text-sm sm:inline"> Peer review deadline is on {new Date(filteredActivity.attributes.BeingReviewedBy.data.attributes.deadline).toLocaleDateString()}</span>
+                        <strong className="text-sm font-bold">{t("QUALIFICATIONS.attention")}!</strong>
+                        <span className="block text-sm sm:inline"> {t("QUALIFICATIONS.peerreview_deadline")} {new Date(filteredActivity.attributes.BeingReviewedBy.data.attributes.deadline).toLocaleDateString()}</span>
                     </div>
                 }
                 {stepRenderer()}

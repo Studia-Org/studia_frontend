@@ -4,12 +4,14 @@ import { getToken } from '../../../../helpers';
 import { API } from '../../../../constant';
 import { fetchUserInformationComplete } from '../../../../fetches/fetchUserInformationComplete';
 import { ContentObjectiveInformation } from './ContentObjectiveInformation';
+import { Trans, useTranslation } from 'react-i18next';
 
 export const ModalCompleteObjectives = ({ isModalOpen, setIsModalOpen, setObjectives, propsObjectives, setConfettiExplode }) => {
+    const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
     const [userInfo, setUserInfo] = useState(null);
-    const textCompleted = propsObjectives?.completed ? 'Mark objective as incomplete' : 'Mark objective as complete';
-    const okText = propsObjectives?.completed ? 'Return as incomplete' : 'Complete objective';
+    const textCompleted = propsObjectives?.completed ? t("COURSESHOME.objectives.text_modal_not_complete_objective") : t("COURSESHOME.objectives.text_modal_complete_objective");
+    const okText = propsObjectives?.completed ? t("COURSESHOME.objectives.not_complete_objetive_button") : t("COURSESHOME.objectives.complete_objetive_button");
 
     useEffect(() => {
         const fetchData = async () => {
@@ -54,13 +56,15 @@ export const ModalCompleteObjectives = ({ isModalOpen, setIsModalOpen, setObject
     };
 
     return (
-        <Modal title={textCompleted} open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okText={okText}
+        <Modal title={textCompleted} open={isModalOpen} onOk={handleOk} onCancel={handleCancel} okText={okText} cancelText={t("COMMON.cancel")}
             okButtonProps={
                 {
                     loading: loading,
                 }
             }>
-            <p className='mb-5'>Are you sure you want to update objective <strong> {propsObjectives?.objective} </strong>?</p>
+            <Trans i18nKey="COURSESHOME.objectives.complete_objective" components={{
+                "objective": propsObjectives?.objective
+            }} />
             <ContentObjectiveInformation user={userInfo} propsObjectives={propsObjectives} />
         </Modal>
     )

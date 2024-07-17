@@ -1,0 +1,664 @@
+{
+    "COMMON": {
+        "cancel": "Cancel",
+        "need_help": "Do you need help?",
+        "recommended": "Recommended",
+        "new": "New",
+        "save_changes": "Save changes",
+        "switch_mode": "Switch mode",
+        "import": "Import",
+        "for_example": "For example",
+        "professor": "Professor",
+        "student": "Student",
+        "yes": "Yes",
+        "no": "No"
+    },
+    "HOME": {
+        "title": "Welcome to the new era of Learning",
+        "subtitle": "Join the future of education with our user-friendly e-learning platform designed for the University of Barcelona.",
+        "button_enter": "Enter the classroom",
+        "funded": "Funded by:"
+    },
+    "LOGIN": {
+        "login": "Login",
+        "enter_information": "Enter your information",
+        "email": "Email",
+        "password": "Password",
+        "forgot_password": "Forgot password?",
+        "card_title": "Welcome back!",
+        "card_text": "You can sign in or access with your existing account.",
+        "in_case_register": "In case you do not have an account already",
+        "register": "Register",
+        "connect_social": "or connect with social media",
+        "contact_support": "Contact support:",
+        "sing_in_google": "Sign in with Google"
+    },
+    "REGISTER": {
+        "fill_username": "Please fill username",
+        "fill_name": "Please fill name",
+        "fill_email": "Please fill email",
+        "fill_university": "Please fill university",
+        "fill_password": "Please fill password",
+        "fill_repassword": "Please fill repassword",
+        "upload_profile_photo": "Please upload a profile photo",
+        "fill_all_fields": "Please fill in all fields",
+        "select_objective": "Please select at least one objective and categorize it",
+        "password_length": "Password must be at least 6 characters long",
+        "passwords_do_not_match": "Passwords do not match",
+        "card_title": "Learn from anywhere, anytime",
+        "card_text": "Register now and start acquiring new knowledge with our online courses.Learning has never been easier!",
+        "in_case": "In case you have an account already",
+        "login": "Login",
+        "register": "Register",
+        "enter_information": "Enter your information to register",
+        "username": "Username",
+        "name": "Name",
+        "email": "Email",
+        "university": "University",
+        "profile_photo": "Profile photo",
+        "password": "Password",
+        "repassword": "Re-enter password",
+        "continue": "Continue",
+        "objectives_register": {
+            "title": "One last steps...",
+            "subtitle": "Add some personalization to your profile and set your goals!",
+            "add_brief_description": "Add a brief description about yourself",
+            "set_your_goals": "Set your goals",
+            "text_goals_1": "Learning with a MOOC can be challenging. This tool supports you to achieve your goals. Here you can (1) actively set your goal for this course and (2) select indicators to monitor your progress towards your goal.",
+            "text_goals_title": "What do you want to achieve by the end of this course?",
+            "text_goals_2": "Some examples for a goal are learning specific topics covered by the course, completing the course and getting a certificate, completing all activities in the course in a certain timeframe, dedicating 3 hours weekly to this course, etc.",
+            "text_goals_title_2": "How would you categorize your objectives ?",
+            "text_goals_3": "You can select one or more categories that best describe your objectives. This will help you to monitor your progress and help you to achieve your goals.",
+            "add": "Add",
+            "create_user": "Create user",
+            "placeholder": "Enter your goal here..."
+        }
+    },
+    "PASSWORD_RECOVERY": {
+        "password_not_match": "Passwords do not match.",
+        "password_length": "Password must be between 8 and 20 characters.",
+        "password_uppercase": "Password must contain at least one uppercase letter.",
+        "password_lowercase": "Password must contain at least one lowercase letter.",
+        "password_digit": "Password must contain at least one digit.",
+        "password_special_character": "Password must contain at least one special character.",
+        "password_reset": "Password reset successfully",
+        "invalid_mail": "Invalid email address",
+        "email_not_found": "This email is not registered",
+        "smth_wrong": "Something went wrong",
+        "sent_email": "We've sent you an email to {{email}} with a link to reset your password.",
+        "password_recovery": "Password recovery",
+        "password_recovery_sub": "Recover the password for your associated account.",
+        "password_enter": "Enter a new password for your account.",
+        "new_password": "New password",
+        "confirm_password": "Confirm password",
+        "password_text": "Enter the email address associated with your account and we'll send you a link to reset your password.",
+        "dont_have_account": "Don't have an account ?",
+        "back_to_login": "Back to login"
+    },
+    "OBJECTIVES_CONSTANT": {
+        "Ethical commitment": "Ethical commitment",
+        "Learning capability and responsibility": "Learning capability and responsibility",
+        "Teamwork": "Team Work",
+        "Creative and entrepreneurial capacity": "Creative and entrepreneurial capacity",
+        "Sustainability": "Sustainability",
+        "Communicative ability": "Communicative ability",
+        "linked_objectives": "This task is linked with your objectives!"
+    },
+    "NAVBAR": {
+        "professor": "Professor",
+        "student": "Student",
+        "admin": "Admin",
+        "NOTIFICATIONS": {
+            "notifications": "Notifications",
+            "mark_all_as_read": "Mark all as read",
+            "delete_all": "Delete all"
+        },
+        "BUG_REPORT": {
+            "bug_report_title": "Report a problem",
+            "bug_report_text": "Use this form to report any bugs or issues you encounter on the app.",
+            "bug_description": "Bug description",
+            "bug_description_placeholder": "Please add as much detail as possible.",
+            "all_fields": "Please fill in all fields",
+            "send": "Send",
+            "screenshot": "Screenshot",
+            "optional": "optional",
+            "toast": {
+                "title_success": "Successfully created issue!",
+                "title_error": "Error reporting issue"
+            }
+        }
+    },
+    "SIDEBAR": {
+        "open_sidebar": "Open sidebar",
+        "home": "Home",
+        "calendar": "Calendar",
+        "timeline": "Timeline",
+        "dashboard": "Dashboard",
+        "qualifications": "Qualifications",
+        "settings": "Settings"
+    },
+    "SETTINGS": {
+        "settings": "Settings",
+        "SIDEBAR": {
+            "general": "General",
+            "user_account": "User account",
+            "change_pswd": "Change password",
+            "language": "Language",
+            "notifications": "Notifications",
+            "notifications_settings": "Notifications settings",
+            "admin_settings": "Admin settings",
+            "custom_functions": "Custom functions",
+            "help": "Help",
+            "logout": "Logout"
+        },
+        "CHANGE_PASSWORD": {
+            "current_password": "Current password",
+            "enter_current_password": "Enter current password",
+            "new_password": "New password",
+            "enter_new_password": "Enter new password",
+            "rewrite_password": "Rewrite new password",
+            "rewrite_new_password": "Confirm password",
+            "change_password": "Change password",
+            "toast": {
+                "title_success": "Success!",
+                "success": "Password changed successfully",
+                "title_error": "Failure!",
+                "error": "Error changing password"
+            }
+        },
+        "LANGUAGE": {
+            "english": "English",
+            "spanish": "Spanish",
+            "catalan": "Catalan"
+        },
+        "HELP": {
+            "title": "Let us know how we can help",
+            "text": "We’re here to help and answer any question you might have, We look forward to hearing from you! Please fill out the form, or use the contact information below.",
+            "form": {
+                "name": "Name",
+                "email": "Email",
+                "message": "Message",
+                "send": "Send"
+            }
+        },
+        "CUSTOM_FUNCTIONS": {
+            "DUPLICATE_COURSE": {
+                "title": "Duplicate course",
+                "duplicate_course_text": "Enter the course ID of the course you want to duplicate",
+                "placeholder": "Course ID",
+                "duplicate": "Duplicate",
+                "pop_confirm": {
+                    "title": "Duplicate course",
+                    "description": "Are you sure you want to duplicate this course?",
+                    "confirm": "Yes, duplicate it",
+                    "cancel": "Cancel"
+                }
+            }
+        },
+        "LOGOUT": {
+            "swal": {
+                "title": "Are you sure?",
+                "text": "You will be logged out",
+                "confirm": "Yes, log out",
+                "cancel": "Cancel"
+            },
+            "toast": {
+                "title_success": "Logged out successfully!"
+            }
+        }
+    },
+    "UPLOADFILES": {
+        "principal_text": "Click or drag file to this area to upload",
+        "secondary_text": "Support for a single or bulk upload. Strictly prohibited from uploading company data or other banned files.",
+        "file_removed_success": "File removed successfully",
+        "file_removed_error": "Error removing file",
+        "csv_error": "Not a valid email detected in the CSV file. Please check if file format is correct. Renaming the file to .csv may not work.",
+        "file_MB": "File size must be less than 10MB"
+    },
+    "DRAGANDDROP": {
+        "drag_drop": "Drag & Drop your files or <span class='filepond--label-action'>Browse</span>",
+        "invalid_type": "Invalid file type. Please upload an image .jpeg or .png file.",
+        "large_file": "File is too big. Please upload a file smaller than 10MB."
+    },
+    "COURSESHOME": {
+        "taskEndSoon": "This task is about to <strong>end soon on {{end_date}}</strong>",
+        "objectives": {
+            "objectives": "Objectives",
+            "not_objectives": "You did not set any objectives for this course",
+            "completed": "Completed",
+            "not_completed": "Not completed",
+            "complete_objective": "<p className='mb-5'>Are you sure you want to update objective <strong> {{objective}} </strong>",
+            "text_modal_complete_objective": "Mark objective as complete",
+            "text_modal_not_complete_objective": "Mark objective as incomplete",
+            "complete_objetive_button": "Complete objective",
+            "not_complete_objetive_button": "Return as incomplete"
+        },
+        "recent_courses": "Recent courses",
+        "not_courses": "There are no courses available for you",
+        "not_courses_explore": "Explore other areas of the platform or check back later for new course options.",
+        "daily_tasks": "Daily tasks",
+        "not_daily_tasks": "You do not have any task for today",
+        "create_course_speed_dial": {
+            "create_course_from_template": "Create course from template",
+            "create_course": "Create course"
+        },
+        "student_creation_courses": {
+            "add_course": "Add a course",
+            "add_course_text": "Add a course based on your preferences and customize it.",
+            "about_creator": "About the creator",
+            "icon_description": "Icon description",
+            "customize_course": "Customize your course"
+        }
+    },
+    "OBJECTIVES_INFORMATION": {
+        "LEARNING_CAPABILITY": {
+            "title": "Learning capability and responsibility",
+            "description_with_qualifications": "You have already {{qualificationsCount}} qualifications, with an average grade of {{averageGrade}}.",
+            "description_no_qualifications": "You don't have any valid qualifications."
+        },
+        "TEAMWORK": {
+            "title": "Team Work",
+            "description_with_activities": "You have completed {{activitiesCount}} team work activities, with an average grade of {{averageGrade}}.",
+            "description_no_activities": "You haven't completed any team work activities."
+        },
+        "ETHICAL_COMMITMENT": {
+            "title": "Ethical commitment",
+            "description": "Before completing this objective, think over the following questions: Are you able to criticize yourself and think critically? Are you able to demonstrate attitudes consistent with ethical and deontological principles?"
+        },
+        "CREATIVE_CAPACITY": {
+            "title": "Creative and entrepreneurial capacity",
+            "description": "Before completing this objective, think over the following questions: Are you able to formulate, design, and manage projects? Are you able to seek and integrate new knowledge and attitudes?"
+        },
+        "SUSTAINABILITY": {
+            "title": "Sustainability",
+            "description": "Before completing this objective, think over the following questions: Are you able to assess the social and environmental impact of actions in your field? Are you able to express integrated and systematic visions?"
+        },
+        "COMMUNICATIVE_ABILITY": {
+            "title": "Communicative ability",
+            "description": "Before completing this objective, think over the following questions: Are you able to understand and express yourself orally and in writing in Catalan and Spanish and in another language, using specialized language in the discipline? Are you able to search, use, and integrate information?"
+        }
+    },
+    "COURSEINSIDE": {
+        "course": "Course",
+        "files": "Files",
+        "activity": "Activity",
+        "course_content": "Course content",
+        "edit_mode": "Edit mode",
+        "SETTINGS": {
+            "title": "Course settings",
+            "button_edit": "Edit course info"
+        },
+        "FORUM": {
+            "forum": "Forum",
+            "view_all_posts": "View all posts",
+            "answers": "Answers",
+            "add_thread": "Add thread",
+            "view_responses": "View responses",
+            "your_comment": "Your comment",
+            "post_comment": "Post comment",
+            "guidelines": "Remember, contributions to this topic should follow our ",
+            "guidelines2": "Community Guidelines",
+            "there_are_no_posts": "There are no posts yet",
+            "write_first_post": "write your first post now!"
+        },
+        "ACCORDION": {
+            "course_info": "Course info",
+            "title:": "Course content",
+            "section": "Section",
+            "add_section": "Add section",
+            "add_new_section": "Add new section",
+            "added_success": "Section added successfully",
+            "added_error": "Error adding section",
+            "section_will_open": "Will open when the last subsection is completed or the {{day}} at {{minute}}",
+            "section_will_open2": "Will open on {{day}} at {{minute}}",
+            "section_opened": "Section opened",
+            "placeholder_section_name": "Section name"
+        },
+        "files_professor": "These files are uploaded by the professor if it's necessary for this subsection.",
+        "no_files": "There are no files available for this subsection.",
+        "PARTICIPANTS": {
+            "participants": "Participantes",
+            "view_participants": "Ver todos los participantes",
+            "add_student": "Agregar estudiante",
+            "participants_tile": "Explora todos los participantes actualmente inscritos en este curso.",
+            "to_add_student": "Para agregar un nuevo estudiante, por favor navega a la sección de configuración del curso.",
+            "placeholder_search": "Buscar un estudiante"
+        }
+    },
+    "ACTIVITY": {
+        "changed_saved_success": "Changes saved successfully",
+        "changed_saved_error": "Error saving changes",
+        "no_files": "You must upload a file",
+        "smth_wrong": "Something went wrong",
+        "deleted_success": "File deleted successfully",
+        "swal_change_files": {
+            "title": "Warning!",
+            "text": "You are going to change the files you uploaded before, are you sure?",
+            "confirm": "Yes, submit",
+            "cancel": "Cancel"
+        },
+        "pop_confirm": {
+            "title": "Delete file",
+            "description": "Are you sure you want to delete this file?",
+            "confirm": "Yes, delete it",
+            "cancel": "Cancel"
+        },
+        "go_back_activity": "Go back to activity",
+        "not_evaluated": "Not evaluated",
+        "comments": "Comments",
+        "no_comments": "There are no comments for your submission.",
+        "task_files": "Task files",
+        "size": "Size",
+        "remember_upload": "Remember to save your changes for correctly visualizing your new files.",
+        "task_description": "Task description",
+        "create_groups_button": "Create students groups",
+        "evaluator": "Evaluator",
+        "about_evaluator": "About the evaluator",
+        "about_professor": "About the professor",
+        "view_profile": "View profile",
+        "your_submission": "Your submission",
+        "not_files_submitted": "You have not submitted any files",
+        "click_microphone": "Click on the microphone and start recording your voice, or you can upload an audio file",
+        "group_members": "Group members",
+        "submit_files": "Submit files",
+        "remember_submit": "Remember to submit your file once you finished.",
+        "create_groups": {
+            "save_groups": "Save groups",
+            "update_groups": "Update groups",
+            "empty_groups": "There are empty groups",
+            "save_success": "Groups saved successfully",
+            "save_error": "Error saving groups",
+            "no_file_selected": "No file selected",
+            "participants_imported": "Participants imported successfully.",
+            "participants_imported_error": "Error importing participants.",
+            "add_new_group": "Add new group",
+            "delete_last_group": "Delete last group",
+            "create_groups_auto": "Create groups automatically",
+            "import_groups_from_csv": "Import groups from CSV",
+            "import_from_csv": "Import from CSV",
+            "please_upload_csv": "Please upload a CSV spreadsheet file (comma or semi-colon separated) with the following format:",
+            "column1": "Column 1: Student's email",
+            "column2": "Column 2: Group ( You can put any text/number/combination you want if they match between students )",
+            "activity_created_for": "Activity was created to have {{numberOfStudentsPerGroup}} students per group",
+            "when_activity_started": "When activty has started, you can only update groups",
+            "students": "Students",
+            "group": "Group"
+        }
+    },
+    "CREATE_COURSES": {
+        "principal_text": "Create new Course",
+        "COURSE_INFO": {
+            "principal_text": "First, give us some information about the new course. This information will be visible to students.",
+            "course_name": "Course name",
+            "course_description": "Course description",
+            "course_evaluator": "Evaluator",
+            "course_tags": "Tags",
+            "course_cover": "Course cover"
+        },
+        "COURSE_SECTIONS": {
+            "CREATE_TASK": {
+                "back_to_course": "Back to course",
+                "section": "Section",
+                "create_task": "Create task",
+                "save_changes": "Save changes",
+                "principal_text": "Before proceeding to create our first sequence, let's first establish the task that will encompass the entire section!",
+                "task_title": "Task title",
+                "task_title_placeholder": "Enter the task title",
+                "task_description": "Task description",
+                "task_description_placeholder": "Enter the task description",
+                "task_files": "Task files",
+                "task_end_date": "Task end date",
+                "task_end_date_placeholder": "Select a date",
+                "task_categories": "Task categories",
+                "task_categories_placeholder": "Select at least one category",
+                "task_categories_text": "Select the categories associated with this task that students will need to develop."
+            },
+            "EDIT_SECTION": {
+                "title": "Edit Section",
+                "save_changes": "Save changes",
+                "course_sequence": "Course sequence",
+                "course_sequence_text": "Click on a subsection for editing the content.",
+                "empty_sequence": "Start defining the sequence!",
+                "draganddrop": "Drag and drop to reorder the sequence",
+                "add_first_item": "Add the first item to the sequence",
+                "edit_task": "Edit task",
+                "sequences": "Sequences",
+                "premade_sequences": "Pre-made sequences",
+                "items_sequences": "Add items to the sequence",
+                "sequence_text": "You can edit all the sequences for customization when they are added on a section.",
+                "add_sequence": "Add sequence",
+                "SEQUENCES": {
+                    "ELEMENTS": {
+                        "PLANNING_QUESTIONNAIRE": {
+                            "title": "Planning Questionnaire",
+                            "description": "A planning questionnaire is a valuable tool for gathering essential information to create effective plans. This questionnaire helps individuals or teams define goals, identify resources, and establish a roadmap for successful execution."
+                        },
+                        "SRL_O_QUESTIONNAIRE": {
+                            "title": "SRL-O Self-regulation Questionnaire",
+                            "description": "The Self-regulation for learning online (SRL-O) questionnaire measures the frequency and quality of learning strategies when applied to online or blended or hybrid environments."
+                        },
+                        "TASK_STATEMENT": {
+                            "title": "Task Statement",
+                            "description": "Define the essential details of the task, including its objectives, scope, and expected outcomes. Task statements are designed to provide clear guidance to individuals or teams, ensuring that they understand their responsibilities and can execute the task effectively."
+                        },
+                        "EMPTY_QUESTIONNAIRE": {
+                            "title": "Empty Questionnaire",
+                            "description": "Create a new questionnaire from scratch."
+                        },
+                        "THINK_ALOUD": {
+                            "title": "Think Aloud",
+                            "description": "A Think Aloud is a strategy where you verbalize your thoughts as you work through a problem or task. It helps students understand your reasoning process and learn effective problem-solving strategies."
+                        },
+                        "SELF_ASSESSMENT": {
+                            "title": "Self-assessment",
+                            "description": "Self-assessment is a process that allows students to reflect on their learning, identify areas of strength and weakness, and set goals for improvement. It is an essential skill for lifelong learning and personal development."
+                        },
+                        "CUSTOM_FIELD": {
+                            "title": "Custom Field",
+                            "description": "Add a custom field if you need to introduce any theoretical subsection between phases."
+                        },
+                        "TASK_IMPLEMENTATION": {
+                            "title": "Task Implementation",
+                            "description": "Implementation of the task, during this phase, the planned tasks and activities are put into action. It involves carrying out the necessary actions to achieve the project or task objectives defined in the planning phase."
+                        },
+                        "TASK_DELIVERY": {
+                            "title": "Task Delivery",
+                            "description": "Delivery of the task."
+                        },
+                        "PEER_REVIEW": {
+                            "title": "Peer Review",
+                            "description": "This review method aims to provide constructive feedback, validate the quality and accuracy of the work, and ensure it meets established standards or criteria."
+                        },
+                        "FINAL_DELIVERY": {
+                            "title": "Final Delivery",
+                            "description": "Final delivery of the task."
+                        },
+                        "FORUM_DEBATE": {
+                            "title": "Forum Debate",
+                            "description": "The forum debate is a discussion forum where students can share their opinions, ask questions, and engage in debates on a specific topic. It is an excellent way to encourage critical thinking, collaboration, and communication skills."
+                        },
+                        "FEEDBACK_REFLECTION_QUESTIONNAIRE": {
+                            "title": "Feedback and Reflection Questionnaire",
+                            "description": "Feedback and reflection questionnaire."
+                        }
+                    },
+                    "CONTINUOUS_FEEDBACK": {
+                        "title": "Continuous feedback",
+                        "description": "The sequence is designed to revolve around the delivery of a task, allowing students to plan the task and progressively improve it with feedback from other students."
+                    },
+                    "FORUM_FEEDBACK": {
+                        "title": "Develop a task with forum feedback",
+                        "description": "The sequence is designed to revolve around the delivery of a task, with the possibility of receiving feedback from other students through the forum."
+                    },
+                    "CONTINUOUS_FEEDBACK_2": {
+                        "title": "Continuous feedback",
+                        "description": "The sequence is designed to revolve around the delivery of a task, allowing students to plan the task and progressively improve it with feedback from other students with a more continuous delivery system."
+                    },
+                    "EARLY_FEEDBACK": {
+                        "title": "Early Professor feedback and reflection",
+                        "description": "The sequence is designed to revolve around the delivery of a task, allowing students to plan the task and receive feedback from the professor before the final delivery."
+                    },
+                    "WIP": {
+                        "title": "Work in progress",
+                        "description": "Work in progress."
+                    }
+                }
+            },
+            "section_name": "Section name",
+            "create": "Create",
+            "principal_text": "It's time to build your course, construct the sections and define the sequence! 🚀",
+            "add_section": "Add section",
+            "title": "Course sections",
+            "draganddrop": "Drag and drop to reorder your sections",
+            "no_sections": "There are no sections yet"
+        },
+        "COURSE_VISUALIZATION": {
+            "generate_course": "Generate course"
+        },
+        "NAVIGATION": {
+            "continue": "Continue",
+            "back": "Back",
+            "confirm": "Confirm",
+            "cancel": "Cancel",
+            "course_info": "Course info",
+            "course_sections": "Course sections",
+            "course_visualization": "Course visualization"
+        }
+    },
+    "STUDENT_COURSES": {
+        "TFG": {
+            "task": {
+                "title": "TFG Planning",
+                "description": "TFG Planning"
+            },
+            "subsection_2": {
+                "title": "Task statement",
+                "activity": {
+                    "title": "Task statement",
+                    "description": "Task statement description"
+                }
+            },
+            "subsection_3": {
+                "title": "TFG Sheet delivery",
+                "activity": {
+                    "title": "Task statement",
+                    "description": "Task statement description"
+                }
+            },
+            "subsection_4": {
+                "title": "Task implementation",
+                "activity": {
+                    "title": "Task implementation",
+                    "description": "Task implementation description"
+                }
+            },
+            "subsection_5": {
+                "title": "Task implementation",
+                "activity": {
+                    "title": "Task implementation",
+                    "description": "Task implementation description"
+                }
+            },
+            "subsection_6": {
+                "title": "Task implementation",
+                "activity": {
+                    "title": "Task implementation",
+                    "description": "Task implementation description"
+                }
+            },
+            "subsection_7": {
+                "title": "Custom field",
+                "activity": {
+                    "title": "Custom field",
+                    "description": "Custom field description"
+                }
+            }
+        }
+    },
+    "CALENDAR": {
+        "event_added": "Event added successfully",
+        "event_deleted": "Event deleted successfully",
+        "error_fetching_events": "Error fetching events",
+        "export_calendar": "Export calendar",
+        "add_event": "Add event",
+        "event_title": "Event title",
+        "date": "Date",
+        "there_are_no_events": "There are no events"
+    },
+    "TIMELINE": {
+        "days_week": [
+            "Sun",
+            "Mon",
+            "Tue",
+            "Wed",
+            "Thu",
+            "Fri",
+            "Sat"
+        ]
+    },
+    "QUALIFICATIONS": {
+        "not_qualifications": "There are no qualifications available",
+        "not_qualifications_explore": "Explore other areas of the platform or check back later for new qualifications.",
+        "qualifications": "Qualifications",
+        "qualificacion": "Qualification",
+        "search_users": "Search users",
+        "attention": "Attention",
+        "peerreview_deadline": "Peer review deadline is on",
+        "comments": "Comments",
+        "professor_qualification": "Professor qualification",
+        "files": "Files",
+        "last_modification": "Last modification",
+        "groups": "Groups",
+        "name": "Name",
+        "professor_students_ponderation": "Professor - Students ponderation",
+        "edit_qualifications": "Edit qualifications",
+        "upload_qualifications": "Upload qualifications",
+        "questionnaire_completed": "Questionnaire completed",
+        "average_grade": "Average grade received",
+        "at": "at",
+        "write_comment": "Write a comment",
+        "files_delivered_by": "Files delivered by {{student}} on activity {{activity}}",
+        "no_files_delivered": "No files delivered",
+        "no_grade": "No grades yet",
+        "csv_configuration": "CSV configuration",
+        "csv_configuration_text": "Configure the CSV file and select the activity desired.",
+        "visualization": "Visualization",
+        "visualization_text": "Visualize the data to upload before confirming.",
+        "confirmation": "Confirmation",
+        "confirmation_text": "Create the new qualification entries.",
+        "first_text_upload": "First of all, select the activity to upload the grades",
+        "download_template_csv": "Download template CSV with students",
+        "now_introduce_columns": "Now, introduce the relation in the columns and rows on your CSV spreadsheet",
+        "placeholder_columns_student": "Student column and row, ex: B2-B22",
+        "placeholder_columns_grade": "Qualification column and row, ex: D2-D22",
+        "placeholder_columns_comments": "Comments column and row, ex: F2-F22",
+        "placeholder_columns_peer": "Average peer review grades column and row, ex: F2-F22",
+        "peerReviewGroup": {
+            "instruction": "For the example below, we would select; A2-A8 (in the student case), B2-B8 (Qualification case), C2-C8 (Comment case), and D2-D8 (Grade from peer review):",
+            "note": "When ' - ' is displayed in 'Average grade peer review' it means that peer review was not evaluated numerically and only professor qualification will be taken into account."
+        },
+        "group": {
+            "instruction": "For the example below, we would select; A2-A8 (in the student case), B2-B8 (Qualification case), C2-C8 (Comment case):"
+        },
+        "peerReview": {
+            "instruction": "For the example below, we would select; A2-A6 (in the student case), B2-B6 (Qualification case), C2-C6 (Comment case), and D2-D6 (Grade from peer review):"
+        },
+        "standard": {
+            "instruction": "For the example below, we would select; B2-B22 (in the student case), D2-D22 (Qualification case), F2-F22 (Comment case):"
+        },
+        "finally_csv": "Finally, upload the CSV spreadsheet file (comma or semi-colon separated).",
+        "students_no_enrolled": "Students who aren't enrolled in the course won't show up here.",
+        "are_you_sure_continue": "Are you sure you want to continue?",
+        "please_wait": "Please wait until the system has created all the qualifications, it will not take more than a minute.",
+        "creating_qualifications": "Creating qualifications...",
+        "qualifications_created": "Qualifications created successfully",
+        "error_creating_qualifications": "Error creating qualifications",
+        "file_must_be_csv": "File must be a CSV or spreadsheet file",
+        "input_columns_must_be": "The input columns must have Excel range format, e.g., B2-B22",
+        "input_columns_must_be_filled": "You must fill all the fields",
+        "no_data": "There is no data to visualize",
+        "peer_review_did_not_finish": "Peer review did not finish",
+        "student_missing": "Student {{name}} does not have a qualification or comments. Please check the data.",
+        "select_activity": "Select activity"
+    }
+}

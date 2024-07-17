@@ -11,12 +11,12 @@ import { FiChevronRight } from "react-icons/fi";
 import { MoonLoader } from "react-spinners";
 import './participants.css'
 import { useCourseContext } from "../../../../context/CourseContext";
-
+import { useTranslation } from "react-i18next";
 
 
 export const CourseContent = ({ setForumFlag, courseId, enableEdit, setEnableEdit, titleSubsection, dateSubsection, backgroundPhotoSubsection }) => {
     const [loading, setLoading] = useState(false);
-
+    const { t } = useTranslation();
     const {
         course,
         sectionSelected,
@@ -140,10 +140,10 @@ export const CourseContent = ({ setForumFlag, courseId, enableEdit, setEnableEdi
 
     return (
         <>
-            <p className='mb-1 text-xs font-normal text-gray-400'>Activity</p>
+            <p className='mb-1 text-xs font-normal text-gray-400'>{t("COURSEINSIDE.activity")}</p>
             <hr className='mb-5' />
             <TaskComponentCard task={subsection_?.attributes.activity?.data} context={'coursesInside'} courseId={courseId} setForumFlag={setForumFlag} />
-            <p className='mb-1 text-xs font-normal text-gray-400'>Course content</p>
+            <p className='mb-1 text-xs font-normal text-gray-400'>{t("COURSEINSIDE.course_content")}</p>
             <hr className='mb-5' />
             <div className='mb-12 prose max-w-none'>
                 {
@@ -160,7 +160,7 @@ export const CourseContent = ({ setForumFlag, courseId, enableEdit, setEnableEdi
                             <MDEditor height="30rem" className='mt-2 mb-8' data-color-mode='light' onChange={setSubsectionContent} value={subsectionContent} />
                             <Button onClick={() => saveChanges()} type="primary" loading={loading} className="inline-flex justify-center px-4 ml-auto text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                             >
-                                Save Changes
+                                {t("COMMON.save_changes")}
                             </Button>
                         </div>
                 }
@@ -171,7 +171,7 @@ export const CourseContent = ({ setForumFlag, courseId, enableEdit, setEnableEdi
 }
 
 export const CourseFiles = ({ enableEdit }) => {
-
+    const { t } = useTranslation();
     const {
         course,
         sectionSelected,
@@ -306,7 +306,7 @@ export const CourseFiles = ({ enableEdit }) => {
         <div className='flex flex-row items-center w-full space-x-8'>
 
             <div className='w-full mr-5'>
-                <p className="mb-4 text-xs text-gray-400">These files are uploaded by the professor if it's necessary for this subsection.</p>
+                <p className="mb-4 text-xs text-gray-400">{t("COURSEINSIDE.files_professor")}</p>
                 {
                     files?.length > 0 ?
                         (
@@ -392,7 +392,7 @@ export const CourseFiles = ({ enableEdit }) => {
                                             image={Empty.PRESENTED_IMAGE_SIMPLE}
                                             description={
                                                 <span>
-                                                    There are no files
+                                                    {t("COURSEINSIDE.no_files")}
                                                 </span>
                                             }
                                         />
@@ -407,7 +407,7 @@ export const CourseFiles = ({ enableEdit }) => {
 
 
 export const CourseParticipantsClickable = ({ students, enableEdit, setSettingsFlag, setParticipantsFlag, setVisible, setForumFlag }) => {
-
+    const { t } = useTranslation();
     if (students?.data?.length === 0) {
         return <div className="p-5 bg-white rounded-md shadow-md">
             <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description='There are no other participants' />
@@ -416,13 +416,13 @@ export const CourseParticipantsClickable = ({ students, enableEdit, setSettingsF
         return (
             <div className="p-5 mb-20 bg-white border border-[#DADADA] rounded-lg shadow-none xl:shadow-md xl:border-none">
                 <div className="flex items-center">
-                    <h3 className="text-lg font-medium ">Participants</h3>
+                    <h3 className="text-lg font-medium ">{t("COURSEINSIDE.PARTICIPANTS.participants")}</h3>
                     <div className="flex items-center ml-auto duration-150 hover:translate-x-1">
                         <button
                             onClick={() => { setParticipantsFlag(true); setForumFlag(false); setSettingsFlag(false); if (setVisible) setVisible(false) }}
                             className="ml-auto text-base font-medium text-indigo-700 "
                         >
-                            View all participants
+                            {t("COURSEINSIDE.PARTICIPANTS.view_participants")}
                         </button>
                         <FiChevronRight className="text-indigo-700" />
                     </div>
@@ -463,7 +463,7 @@ export const CourseParticipantsClickable = ({ students, enableEdit, setSettingsF
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-white">
                                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
                                 </svg>
-                                <p className="text-base font-medium text-white">Add student</p>
+                                <p className="text-base font-medium text-white"> {t("COURSEINSIDE.PARTICIPANTS.add_student")}</p>
                             </Button>
                         )
                     }

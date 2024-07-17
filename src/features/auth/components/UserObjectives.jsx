@@ -3,9 +3,9 @@ import { ACTIVITY_CATEGORIES } from '../../../constant';
 import { BsFillArrowLeftSquareFill } from 'react-icons/bs'
 import { Button } from 'antd';
 import { motion } from 'framer-motion';
-
+import { useTranslation } from 'react-i18next';
 export const UserObjectives = ({ setPageSelector, description, onChange, registerAccount, profilePhoto, setProfilePhoto, loading, goals, setGoals, user_objectives, setUserObjectives }) => {
-
+    const { t } = useTranslation();
     function addObjectives(e) {
         e.preventDefault();
         const goal = e.target.search.value;
@@ -31,11 +31,11 @@ export const UserObjectives = ({ setPageSelector, description, onChange, registe
                     <button onClick={(e) => setPageSelector(1)}>
                         <BsFillArrowLeftSquareFill size={30} style={{ cursor: "pointer", color: "rgba(0, 0, 0, 1)" }} />
                     </button>
-                    <h1 className='justify-center text-3xl font-bold text-center text-gray-900'>One last steps...</h1>
-                    <p className='mt-2 mb-5 text-center'>Add some personalization to your profile and set your goals!</p>
+                    <h1 className='justify-center text-3xl font-bold text-center text-gray-900'>{t("REGISTER.objectives_register.title")}</h1>
+                    <p className='mt-2 mb-5 text-center'>{t("REGISTER.objectives_register.subtitle")}</p>
                     <div className="flex -mx-3">
                         <div className="w-full px-3 mb-5">
-                            <label for="" className="px-1 text-xs font-semibold ">Add a brief description about yourself</label>
+                            <label for="" className="px-1 text-xs font-semibold ">{t("REGISTER.objectives_register.add_brief_description")}</label>
                             <div className="flex">
                                 <div className="z-10 flex items-center justify-center w-10 pl-1 text-center pointer-events-none"><i class="mdi mdi-comment-text text-gray-400 text-lg"></i></div>
                                 <textarea
@@ -50,31 +50,30 @@ export const UserObjectives = ({ setPageSelector, description, onChange, registe
                             </div>
                         </div>
                     </div>
-                    <label for="" className="px-1 text-xs font-semibold ">Set your goals</label>
+                    <label for="" className="px-1 text-xs font-semibold ">{t("REGISTER.objectives_register.set_your_goals")}</label>
 
                     <div className='p-5 text-sm bg-white border-2 border-gray-200 rounded-lg outline-none'>
                         <header className=''>
-                            <p>Learning with a MOOC can be challenging. This tool supports you to achieve your goals. Here you can (1) actively
-                                set your goal for this course and (2) select indicators to monitor your progress towards your goal.</p>
+                            <p>{t("REGISTER.objectives_register.text_goals_1")}</p>
                         </header>
                         <section className='pt-2'>
-                            <h2 className='py-2 text-base font-semibold'>What do you want to achieve by the end of this course?</h2>
+                            <h2 className='py-2 text-base font-semibold'>{t("REGISTER.objectives_register.text_goals_title")}</h2>
                             <p className=''>
-                                Some examples for a goal are learning specific topics covered by the course, completing the course and getting a
-                                certificate, completing all activities in the course in a certain timeframe, dedicating 3 hours weekly to this course, etc.
+                                {t("REGISTER.objectives_register.text_goals_2")}
                             </p>
                         </section>
                         <main className='flex min-h-[150px]'>
                             <form onSubmit={addObjectives} className='pt-2 pl-1 pr-2 min-w-[60%]'>
                                 <label for="search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
-                                    Enter your goals here...
+                                    {t("REGISTER.objectives_register.text_goals_title")}
                                 </label>
                                 <div className="relative">
                                     <input type="search" id="search"
-                                        className="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-emerald-500 focus:border-emerald-500 " placeholder="Enter your goal here..." required />
+                                        className="block w-full p-4 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-emerald-500 focus:border-emerald-500 "
+                                        placeholder={t("REGISTER.objectives_register.placeholder")} required />
                                     <button type='submit'
                                         className="text-white absolute end-2.5 bottom-2.5 bg-green-400 hover:scale-95 hover:bg-emerald-800 focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm px-4 py-2 ">
-                                        Add
+                                        {t("REGISTER.objectives_register.add")}
                                     </button>
                                 </div>
                             </form>
@@ -97,10 +96,9 @@ export const UserObjectives = ({ setPageSelector, description, onChange, registe
                             </lu>
                         </main>
                         <section>
-                            <h2 className='py-2 text-lg font-semibold'>How would you categorize your objectives ?</h2>
+                            <h2 className='py-2 text-lg font-semibold'>{t("REGISTER.objectives_register.text_goals_title_2")}</h2>
                             <p>
-                                You can select one or more categories that best describe your objectives.
-                                This will help you to monitor your progress and help you to achieve your goals.
+                                {t("REGISTER.objectives_register.text_goals_3")}
                             </p>
                             <div className='flex flex-wrap gap-2 pt-4 pl-1'>
                                 {Object.keys(ACTIVITY_CATEGORIES).map((objective, index) =>
@@ -111,7 +109,7 @@ export const UserObjectives = ({ setPageSelector, description, onChange, registe
                                                 ` hover:text-${ACTIVITY_CATEGORIES[objective].color}-600 text-sm border-[1px] border-${ACTIVITY_CATEGORIES[objective].color}-500 rounded-lg p-2 m-1`}
                                             animate={{ opacity: [0, 1], y: [-10, 0] }}
                                             transition={{ delay: index * 0.025 }}>
-                                            {objective}
+                                            {t(`OBJECTIVES_CONSTANT.${objective}`)}
                                         </motion.button>
                                         <div className={`absolute ${user_objectives.includes(objective) ? "blur" : ""} 
                                 inset-0 top-1 left-1 bg-${ACTIVITY_CATEGORIES[objective].color}-500 rounded-lg w-[calc(100%-8px)] h-[calc(100%-8px)]`} ></div>
@@ -124,7 +122,7 @@ export const UserObjectives = ({ setPageSelector, description, onChange, registe
                     </div>
                     <Button loading={loading} type="button" onClick={registerAccount}
                         className="mt-6 flex items-center gap-2 ml-auto justify-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2  focus:outline-none">
-                        Create user
+                        {t("REGISTER.objectives_register.create_user")}
                     </Button>
                 </div>
             </div>

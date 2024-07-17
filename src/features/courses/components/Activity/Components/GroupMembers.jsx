@@ -2,9 +2,9 @@ import React from 'react'
 import { Avatar } from 'rsuite';
 import { MoonLoader } from 'react-spinners';
 import { Link } from 'react-router-dom';
-
+import { useTranslation } from 'react-i18next';
 function GroupMembers({ activityGroup, loadingGroup, small = false }) {
-
+  const { t } = useTranslation();
   const sizeAvatar = small ? 'md' : 'large'
   return (
     loadingGroup ?
@@ -14,7 +14,7 @@ function GroupMembers({ activityGroup, loadingGroup, small = false }) {
       :
       activityGroup !== null &&
       <section className="flex flex-col flex-wrap flex-1 w-full ">
-        <p className="text-base font-medium text-gray-800 ">{activityGroup.GroupName} Group members :</p>
+        <p className="text-base font-medium text-gray-800 ">{activityGroup.GroupName} {t("ACTIVITY.group_members")} :</p>
         <div className={`flex ${small ? "flex gap-x-2" : "flex-col px-5"}  my-2 flex-wrap`}>
           {activityGroup.users.data.map((user, index) => {
             return (

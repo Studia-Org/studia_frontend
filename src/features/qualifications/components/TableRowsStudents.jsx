@@ -3,13 +3,14 @@ import { Button, Input, InputNumber, Badge } from "antd"
 import { useNavigate, useParams } from "react-router-dom"
 import { format } from 'date-fns';
 import { ModalFiles } from './ModalFiles';
-
+import { useTranslation } from 'react-i18next';
 
 const { TextArea } = Input;
 
 
 
 export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIsChanges, editedGrades, setEditedGrades, activities, isPeerReview, setEditActivity, activityFull }) => {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const grade = student.attributes.qualifications.data.find(qualification => qualification.attributes.activity.data?.id === JSON.parse(activity).id)
     const [files, setFiles] = useState();
@@ -120,7 +121,7 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
             })
             sum += (internAverage / Object.keys(Answer).length);
         });
-        if (!grade) return "No grade yet";
+        if (!grade) return t("QUALIFICATIONS.no_grade");
         const average = sum / peerReviewAnswers?.attributes?.PeerReviewAnswers?.data?.length;
         return isNaN(average) ? "-" : average.toFixed(2);
     }
@@ -154,39 +155,15 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
     }
 
     function renderPonderations() {
-        // if (isEditChecked) {
-        //     return (
-        //         <td className="px-6 py-4">
-        //             <div className='flex items-center'>
-        //                 <p className='min-w-[90px]'>Professor %:</p>
-        //                 <InputNumber
-        //                     min={1}
-        //                     max={100}
-        //                     value={ponderationProfessor}
-        //                     onChange={(value) => { handlePonderation(value, 'professor') }}
-        //                 />
-        //             </div>
-        //             <div className='flex items-center mt-2'>
-        //                 <p className='min-w-[90px]'>Student %:</p>
-        //                 <InputNumber
-        //                     min={1}
-        //                     max={100}
-        //                     value={ponderationStudent}
-        //                     onChange={(value) => { handlePonderation(value, 'student') }}
-        //                 />
-        //             </div>
-        //         </td>
-        //     );
-        // } else {
         if (grade) {
             return (
                 <td className="px-6 py-4">
                     <div className='flex items-center'>
-                        <p className='min-w-[80px]'>Professor:</p>
+                        <p className='min-w-[80px]'>{t("COMMON.professor")}:</p>
                         <p>{ponderationProfessor}%</p>
                     </div>
                     <div className='flex items-center mt-2'>
-                        <p className='min-w-[80px]'>Student:</p>
+                        <p className='min-w-[80px]'>{t("COMMON.student")}:</p>
                         <p>{ponderationStudent}%</p>
                     </div>
                 </td>
@@ -206,7 +183,7 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
                     <TextArea
                         rows={3}
                         className="mt-4"
-                        placeholder="Write a comment"
+                        placeholder={t("QUALIFICATIONS.write_comment")}
                         value={comments}
                         onChange={(e) => { handleCommentsChange(e.target.value) }}
                     />
@@ -241,11 +218,11 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
 
         if (hasCompleted === true) {
             return (
-                <Badge count={'Completed'} style={{ backgroundColor: '#52c41a' }} />
+                <Badge count={t("COURSESHOME.objectives.completed")} style={{ backgroundColor: '#52c41a' }} />
             )
         } else {
             return (
-                <Badge count={'Not completed'} />
+                <Badge count={t("COURSESHOME.objectives.not_completed")} />
             )
         }
 
@@ -347,7 +324,7 @@ export const TableRowsStudents = ({ student, activity, isEditChecked, setThereIs
                     grade ?
                         (
                             <td class="px-6 py-4">
-                                {format(new Date(grade.attributes.updatedAt), "dd/MM/yyyy 'at' HH:mm")}
+                                {format(new Date(grade.attributes.updatedAt), `dd/MM/yyyy '${t("QUALIFICATIONS.at")}' HH:mm`)}
                             </td>
                         ) :
                         (
