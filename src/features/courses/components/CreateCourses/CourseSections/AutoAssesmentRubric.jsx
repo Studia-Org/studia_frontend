@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, Form, Table, Button, Input, InputNumber, Typography, Popconfirm } from 'antd';
+import { useTranslation } from 'react-i18next';
 
 const EditableCell = ({
     editing,
@@ -40,6 +41,7 @@ const EditableCell = ({
 
 export const AutoAssesmentRubric = ({ openSelfAssesmentRubricModal, setOpenSelfAssesmentRubricModal, setSubsectionEditing, setCreateCourseSectionsList, subsectionEditing }) => {
     const [form] = Form.useForm();
+    const { t } = useTranslation();
     const [data, setData] = useState(subsectionEditing?.activity?.SelfAssesmentRubrica);
     const [editingKey, setEditingKey] = useState('');
     const isEditing = (record) => record.key === editingKey;
@@ -72,11 +74,11 @@ export const AutoAssesmentRubric = ({ openSelfAssesmentRubricModal, setOpenSelfA
     };
 
     const columns = [
-        { title: '    ', dataIndex: 'criteria', editable: true, placeholderText: 'Enter Criteria, e.g.: Listening' },
-        { title: '1', dataIndex: 'evaluation1', editable: true, placeholderText: 'Enter Evaluation 1, e.g.: I was unable to listen when my teacher gave directions. ' },
-        { title: '2', dataIndex: 'evaluation2', editable: true, placeholderText: 'Enter Evaluation 2, e.g.: I needed more than 2 prompts to listen whan my teacher gave directions.' },
-        { title: '3', dataIndex: 'evaluation3', editable: true, placeholderText: 'Enter Evaluation 3, e.g.: I needed 1-2 prompts to listen whan my teacher gave directions.' },
-        { title: '4', dataIndex: 'evaluation4', editable: true, placeholderText: 'Enter Evaluation 4, e.g.: I listened when my teacher gave directions.' },
+        { title: '    ', dataIndex: 'criteria', editable: true, placeholderText: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.SELF_ASSESSMENT.placeholder_0") },
+        { title: '1', dataIndex: 'evaluation1', editable: true, placeholderText: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.SELF_ASSESSMENT.placeholder_1") },
+        { title: '2', dataIndex: 'evaluation2', editable: true, placeholderText: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.SELF_ASSESSMENT.placeholder_2") },
+        { title: '3', dataIndex: 'evaluation3', editable: true, placeholderText: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.SELF_ASSESSMENT.placeholder_3") },
+        { title: '4', dataIndex: 'evaluation4', editable: true, placeholderText: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.SELF_ASSESSMENT.placeholder_4") },
         {
             editable: false,
             title: '',
@@ -87,20 +89,20 @@ export const AutoAssesmentRubric = ({ openSelfAssesmentRubricModal, setOpenSelfA
                 return editable ? (
                     <span>
                         <Typography.Link onClick={() => save(record.key)} style={{ marginRight: 8 }}>
-                            Save
+                            {t("COMMON.save_changes")}
                         </Typography.Link>
                         <Popconfirm title="Sure to cancel?" onConfirm={cancel} okButtonProps={{ className: 'bg-blue-500' }}>
-                            <a>Cancel</a>
+                            {t("COMMON.cancel")}
                         </Popconfirm>
                     </span>
                 ) : (
                     <div className="flex justify-between">
                         <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
-                            Edit
+                            {t("COMMON.edit")}
                         </Typography.Link>
                         <Popconfirm title="Sure to delete?" onConfirm={() => deleteRow(record)} okButtonProps={{ className: 'bg-blue-500' }}>
                             <Typography.Link type="danger" disabled={editingKey !== ''}>
-                                Delete
+                                {t("COMMON.delete")}
                             </Typography.Link>
                         </Popconfirm>
                     </div>
@@ -187,11 +189,11 @@ export const AutoAssesmentRubric = ({ openSelfAssesmentRubricModal, setOpenSelfA
     });
 
     return (
-        <Modal title="Self-Assesment Rubric" open={openSelfAssesmentRubricModal} onOk={handleOk} width={1500} onCancel={handleCancel} okText={'Save Changes'} okButtonProps={{ className: 'bg-blue-500' }}>
-            <p>Define the criteria on the rubric for evaluating the process and progression of the task. </p>
+        <Modal title={t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.SELF_ASSESSMENT.title")} open={openSelfAssesmentRubricModal} onOk={handleOk} width={1500} onCancel={handleCancel} okText={t("COMMON.save_changes")} okButtonProps={{ className: 'bg-blue-500' }}>
+            <p>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.SELF_ASSESSMENT.description")} </p>
             <Form form={form} component={false}>
                 <div className="flex gap-3 my-3">
-                    <Button onClick={addRow}>Add Row</Button>
+                    <Button onClick={addRow}>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.add_row")} </Button>
                 </div>
                 <Table
                     pagination={false}

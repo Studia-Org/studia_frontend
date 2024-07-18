@@ -11,7 +11,9 @@
         "professor": "Profesor",
         "student": "Estudiante",
         "yes": "Sí",
-        "no": "No"
+        "no": "No",
+        "delete": "Eliminar",
+        "edit": "Editar"
     },
     "HOME": {
         "title": "Bienvenido/a a la nueva era del aprendizaje",
@@ -510,7 +512,30 @@
                     "Options": "Opciones",
                     "previous": "Anterior",
                     "next": "Siguiente",
-                    "select_task": "Selecciona la tarea"
+                    "select_task": "Selecciona la tarea",
+                    "autocorrect": "Autocorrección",
+                    "autocorrect_text": "Verifique las respuestas correctas a las preguntas, y el cuestionario se evaluará automáticamente una vez que el estudiante lo envíe.",
+                    "ERRORS_SUBSECTION": {
+                        "date_missing": "Faltan la fecha de inicio y fin",
+                        "categories_missing": "No hay categorías",
+                        "question_missing": "No hay preguntas",
+                        "answer_questions": "No todas las preguntas tienen respuestas correctas",
+                        "rubric_empty": "La rúbrica está vacía",
+                        "no_description": "No hay descripción",
+                        "no_content": "No hay contenido",
+                        "no_task": "No hay tarea para revisar",
+                        "text": "Complétalo o no podrás crear un curso.",
+                        "title": "La subsección está incompleta"
+                    },
+                    "SELF_ASSESSMENT": {
+                        "title": "Rúbrica de autoevaluación",
+                        "description": "Define los criterios en la rúbrica para evaluar el proceso y la progresión de la tarea.",
+                        "placeholder_0": "Introduce el criterio, por ejemplo: Escucha",
+                        "placeholder_1": "Introduce la Evaluación 1, por ejemplo: No pude escuchar cuando mi profesor dio instrucciones.",
+                        "placeholder_2": "Introduce la Evaluación 2, por ejemplo: Necesité más de 2 indicaciones para escuchar cuando mi profesor dio instrucciones.",
+                        "placeholder_3": "Introduce la Evaluación 3, por ejemplo: Necesité 1-2 indicaciones para escuchar cuando mi profesor dio instrucciones.",
+                        "placeholder_4": "Introduce la Evaluación 4, por ejemplo: Escuché cuando mi profesor dio instrucciones."
+                    }
                 },
                 "SEQUENCES": {
                     "ELEMENTS": {

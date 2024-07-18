@@ -11,7 +11,9 @@
         "professor": "Professor",
         "student": "Estudiant",
         "yes": "Si",
-        "no": "No"
+        "no": "No",
+        "delete": "Eliminar",
+        "edit": "Editar"
     },
     "HOME": {
         "title": "Benvingut/da a la nova era de l'aprenentatge",
@@ -510,7 +512,30 @@
                     "Options": "Opcions",
                     "previous": "Anterior",
                     "next": "Següent",
-                    "select_task": "Selecciona la tasca"
+                    "select_task": "Selecciona la tasca",
+                    "autocorrect": "Autocorrecció",
+                    "autocorrect_text": "Verifica les respostes correctes a les preguntes, i el qüestionari s'avaluarà automàticament una vegada que l'estudiant el lliuri.",
+                    "ERRORS_SUBSECTION": {
+                        "date_missing": "Falten la data d'inici i final",
+                        "categories_missing": "No hi ha categories",
+                        "question_missing": "No hi ha preguntes",
+                        "answer_questions": "No totes les preguntes tenen respostes correctes",
+                        "rubric_empty": "La rúbrica està buida",
+                        "no_description": "No hi ha descripció",
+                        "no_content": "No hi ha contingut",
+                        "no_task": "No hi ha tasca per revisar",
+                        "text": "Completa-ho o no podràs crear un curs.",
+                        "title": "La subsecció està incompleta"
+                    },
+                    "SELF_ASSESSMENT": {
+                        "title": "Rúbrica d'autoavaluació",
+                        "description": "Defineix els criteris a la rúbrica per avaluar el procés i la progressió de la tasca.",
+                        "placeholder_0": "Introdueix el criteri, per exemple: Escolta",
+                        "placeholder_1": "Introdueix l'Avaluació 1, per exemple: No vaig poder escoltar quan el meu professor va donar instruccions.",
+                        "placeholder_2": "Introdueix l'Avaluació 2, per exemple: Vaig necessitar més de 2 indicacions per escoltar quan el meu professor va donar instruccions.",
+                        "placeholder_3": "Introdueix l'Avaluació 3, per exemple: Vaig necessitar 1-2 indicacions per escoltar quan el meu professor va donar instruccions.",
+                        "placeholder_4": "Introdueix l'Avaluació 4, per exemple: Vaig escoltar quan el meu professor va donar instruccions."
+                    }
                 },
                 "SEQUENCES": {
                     "ELEMENTS": {

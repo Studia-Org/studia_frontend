@@ -239,7 +239,7 @@ export const CreateCourseEditSubsection = ({
             <label className='text-sm text-gray-500 !mt-4'>
               {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.title")} *
             </label>
-            <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-lg pl-3 mb-4 font-medium' placeholder="Description"
+            <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-lg pl-3 mb-4 font-medium' placeholder={t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.description")}
               onChange={(e) => {
                 handleTitleChange(e.target.value)
               }} defaultValue={subsection.title} />
@@ -423,13 +423,13 @@ export const CreateCourseEditSubsection = ({
                     subsectionEditing={subsection}
                   />
                   <label className='mb-2 text-sm text-gray-500' htmlFor=''>
-                    Self-Assesment Rubric *
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.SELF_ASSESSMENT.title")} *
                   </label>
                   <Button className='py-5 pb-10 mb-5' onClick={() => {
                     setOpenSelfAssesmentRubricModal(true);
                     document.body.style.overflow = 'hidden';
                   }}>
-                    Edit Self-Assesment Rubric
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.peer_review_rubric_text")}
                   </Button>
                 </div>
               )

@@ -12,6 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import { PonderationWarning } from './PonderationWarning';
 import { QuestionnaireInfo } from './EditSubsection/QuestionnaireInfo';
+import { useTranslation } from 'react-i18next';
 
 
 const { RangePicker } = DatePicker;
@@ -38,6 +39,9 @@ const item = {
 
 
 export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSectionsList, createCourseSectionsList, sectionId, categories }) => {
+
+    const { t } = useTranslation();
+
     const questionsPerPage = 3;
     const [currentPage, setCurrentPage] = useState(1);
     const [selectorValue, setSelectorValue] = useState({ value: 'open-ended', label: 'Text' })
@@ -634,8 +638,14 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                     </div>
                 </div>
                 <div className='space-y-4 bg-white rounded-md '>
-                    <label className='text-sm text-gray-500' htmlFor="" >Questionnaire Date *</label>
+                    <label className='text-sm text-gray-500' htmlFor="" > {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.date")} *</label>
                     <RangePicker
+                        placeholder={
+                            [
+                                t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.date_placeholder_start"),
+                                t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.date_placeholder_end")
+                            ]
+                        }
                         className='w-full py-4'
                         showTime={{
                             format: 'HH:mm',
@@ -645,25 +655,25 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                         onChange={onChangeDate}
                     />
                     <div className='mt-7'>
-                        <label className='block mr-3 text-sm text-gray-500' htmlFor=''>Categories * </label>
+                        <label className='block mr-3 text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.categories")} * </label>
                         <TableCategories categories={categories[sectionId]} setCreateCourseSectionsList={setCreateCourseSectionsList}
                             subsection={subsection} sectionID={sectionId} createCourseSectionsList={createCourseSectionsList} />
                     </div>
                     <div className='flex items-center justify-between'>
                         <div className='flex items-center'>
-                            <label className='block mr-3 text-sm text-gray-500' htmlFor=''>Evaluable * </label>
+                            <label className='block mr-3 text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.evaluable")} * </label>
                             <Switch checked={subsection.activity?.evaluable} onChange={(e) => handleSwitchChange(e)} className='bg-gray-300' />
                         </div>
                         {
                             subsection.activity?.evaluable && (
                                 <div className='flex items-center'>
-                                    <Tooltip title="Check the correct answers to the questions, and the questionnaire will be automatically evaluated once the student submits it.">
+                                    <Tooltip title={t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.autocorrect_text")}>
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 mr-2">
                                             <path fillRule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a.75.75 0 0 0 0 1.5h.253a.25.25 0 0 1 .244.304l-.459 2.066A1.75 1.75 0 0 0 10.747 15H11a.75.75 0 0 0 0-1.5h-.253a.25.25 0 0 1-.244-.304l.459-2.066A1.75 1.75 0 0 0 9.253 9H9Z" clipRule="evenodd" />
                                         </svg>
                                     </Tooltip>
 
-                                    <label className='block mr-3 text-sm text-gray-500' htmlFor=''>Autocorrect * </label>
+                                    <label className='block mr-3 text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.autocorrect")} * </label>
                                     <Switch checked={autocorrectTest} onChange={(e) => handleChangeAutocorrect(e)} className='bg-gray-300' />
                                 </div>
                             )
@@ -675,7 +685,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                                     <PonderationWarning createCourseSectionsList={createCourseSectionsList} sectionID={sectionId} />
                                 )
                             }
-                            <label className='text-sm text-gray-500' htmlFor=''>Ponderation *</label>
+                            <label className='text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ponderation")} *</label>
                             <InputNumber
                                 disabled={!subsection.activity?.evaluable}
                                 defaultValue={0}
@@ -691,7 +701,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                     </div>
                     <div className='mt-7'>
                         <div className='flex items-center gap-3'>
-                            <label className='text-sm text-gray-500' htmlFor=''>Questionnaire type *</label>
+                            <label className='text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.questionnaire_type")} *</label>
                             <QuestionnaireInfo />
                         </div>
 
@@ -729,14 +739,14 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                             }}
                             value={subsection.questionnaire.attributes.type}
                             options={[
-                                { value: 'standard', label: 'Standard' },
-                                { value: 'scaling', label: 'Scaling' },
+                                { value: 'standard', label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.standard") },
+                                { value: 'scaling', label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.scaling") },
                             ]}
 
                         />
                     </div>
                     <div className='mt-7'>
-                        <label className='text-sm text-gray-500 mt-7 ' htmlFor="" >Description</label>
+                        <label className='text-sm text-gray-500 mt-7 ' htmlFor="" >{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.description")}</label>
                         <div className='flex w-full mt-2'>
                             <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3' placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} onBlur={(e) => handleChangeDescription(e.target.value)} />
                         </div>
@@ -757,14 +767,14 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                     className='bg-white shadow-md rounded-md p-5 border-l-8 mt-5 flex flex-col justify-center border-[#6366f1]'
                     variants={item}>
                     <div className='flex items-center justify-between mb-5'>
-                        <p className="mb-4 font-medium">Add question</p>
+                        <p className="mb-4 font-medium">{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.add_question")}</p>
                         <FormControl >
                             <Select
                                 className='w-40'
                                 value={selectorValue}
                                 options={[
-                                    { value: 'open-ended', label: 'Text' },
-                                    { value: 'options', label: 'Options' }
+                                    { value: 'open-ended', label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.text") },
+                                    { value: 'options', label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.Options") }
                                 ]}
                                 onChange={(e) => {
                                     setSelectorValue(e)
@@ -778,9 +788,10 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                             </Select>
                         </FormControl>
                     </div>
-                    <label className='mb-3 text-sm text-gray-500' htmlFor="" >Question</label>
+                    <label className='mb-3 text-sm text-gray-500' htmlFor="" >{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.question")}</label>
                     <TextArea
                         value={addQuestionText.question}
+                        placeholder={t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.question_placeholder")}
                         className='w-full'
                         allowClear
                         onChange={(e) => setAddQuestionText(prevQuestionText => ({ ...prevQuestionText, question: e.target.value }))}
@@ -790,7 +801,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                     {
                         selectorValue === 'options' &&
                         <>
-                            <label className='mt-5 mb-3 text-sm text-gray-500' htmlFor="" >Options</label>
+                            <label className='mt-5 mb-3 text-sm text-gray-500' htmlFor="" >{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.Options")}</label>
                             <div className='flex flex-col'>
 
                                 {
@@ -823,7 +834,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                     }
 
                     <button onClick={() => addQuestion()} className='ml-auto  mt-5 rounded-md bg-[#6366f1]  p-2 text-white'>
-                        Create
+                        {t("CREATE_COURSES.COURSE_SECTIONS.create")}
                     </button>
                 </div>
             }
@@ -834,10 +845,10 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 mr-2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75" />
                     </svg>
-                    Previous
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.previous")}
                 </button>
                 <button className='flex items-center mx-4 duration-200 hover:translate-x-2 disabled:text-gray-300 disabled:translate-x-0' onClick={handleNextPage} disabled={currentPage === totalPages}>
-                    Next
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.next")}
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
                     </svg>

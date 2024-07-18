@@ -11,7 +11,9 @@
         "professor": "Professor",
         "student": "Student",
         "yes": "Yes",
-        "no": "No"
+        "no": "No",
+        "delete": "Delete",
+        "edit": "Edit"
     },
     "HOME": {
         "title": "Welcome to the new era of Learning",
@@ -510,7 +512,30 @@
                     "Options": "Options",
                     "previous": "Previous",
                     "next": "Next",
-                    "select_task": "Select a task"
+                    "select_task": "Select a task",
+                    "autocorrect": "Autocorrect",
+                    "autocorrect_text": "Check the correct answers to the questions, and the questionnaire will be automatically evaluated once the student submits it.",
+                    "ERRORS_SUBSECTION": {
+                        "date_missing": "Start and end date are missing",
+                        "categories_missing": "No categories",
+                        "question_missing": "No questions",
+                        "answer_questions": "Not all questions have correct answers",
+                        "rubric_empty": "Rubric is empty",
+                        "no_description": "No description",
+                        "no_content": "No content",
+                        "no_task": "No task to review",
+                        "text": "Complete it or you will not be able to create a course.",
+                        "title": "Subsection is incomplete"
+                    },
+                    "SELF_ASSESSMENT": {
+                        "title": "Self-assessment Rubric",
+                        "description": "Define the criteria on the rubric for evaluating the process and progression of the task.",
+                        "placeholder_0": "Enter Criteria, e.g.: Listening",
+                        "placeholder_1": "Enter Evaluation 1, e.g.: I was unable to listen when my teacher gave directions. ",
+                        "placeholder_2": "Enter Evaluation 2, e.g.: I needed more than 2 prompts to listen whan my teacher gave directions.",
+                        "placeholder_3": "Enter Evaluation 3, e.g.: I needed 1-2 prompts to listen whan my teacher gave directions.",
+                        "placeholder_4": "Enter Evaluation 4, e.g.: I listened when my teacher gave directions."
+                    }
                 },
                 "SEQUENCES": {
                     "ELEMENTS": {
