@@ -1,11 +1,10 @@
-import { BarChart, Title } from "@tremor/react";
+import { Title } from "@tremor/react";
 import { useEffect, useState } from "react";
 import { fetchAverageCourse } from "../../../../fetches/fetchAverageCourse";
 import { useAuthContext } from "../../../../context/AuthContext";
-import { set } from "date-fns";
 import ReactApexChart from 'react-apexcharts'
 import { MoonLoader } from "react-spinners";
-
+import { useTranslation } from "react-i18next";
 const chartdata2 = [
   {
     name: "Topic 1",
@@ -45,9 +44,12 @@ const chartdata2 = [
   },
 ];
 export function TimeDedicated({ courses }) {
+  const { t } = useTranslation();
   const { user } = useAuthContext();
   const [loading, setLoading] = useState(false);
   const [charData, setCharData] = useState([]);
+  const text = t("DASHBOARD.average_course");
+  const text2 = t("DASHBOARD.your_mark");
 
   useEffect(() => {
     async function getAverageAndQualification() {
@@ -59,17 +61,14 @@ export function TimeDedicated({ courses }) {
       await Promise.all(courses.map(async (course) => {
         dict[course.title] = await fetchAverageCourse({ courseId: course.id, user: user });
       }));
-      // Imprimir el diccionario después de que todas las promesas se hayan resuelto
-      setCharData(
-        Object.keys(dict).map((key) => {
-          return {
-            name: key,
-            "Average course": dict[key].averageMainActivity,
-            "Your mark": dict[key].averageMainActivityUser,
-
-          };
-        })
-      );
+      const data = Object.keys(dict).map((key) => {
+        return {
+          name: key,
+          [text]: dict[key].averageMainActivity,
+          [text2]: dict[key].averageMainActivityUser,
+        };
+      });
+      setCharData(data)
 
       //const qualification = await fetchSingleQualification({ activityId, userId })
       setLoading(false);
@@ -82,7 +81,7 @@ export function TimeDedicated({ courses }) {
 
   return (
     <section className="box-border w-full p-5 bg-white rounded-lg shadow-lg ">
-      <Title>Average course marks</Title>
+      <Title>{t("DASHBOARD.average_course_marks")}</Title>
       {
         loading ? (
           <div className="flex items-center justify-center w-full h-full">
@@ -141,23 +140,21 @@ export function TimeDedicated({ courses }) {
               user.role_str !== "student" ?
                 [
                   {
-                    name: 'Average course grade',
-                    data: Object.keys(charData).map((key) => charData[key]["Average course"])
+                    name: text,
+                    data: Object.keys(charData).map((key) => charData[key][text])
                   }
                 ]
                 :
                 [
                   {
-                    name: 'Average course grade',
-                    data: Object.keys(charData).map((key) => charData[key]["Average course"])
+                    name: text,
+                    data: Object.keys(charData).map((key) => charData[key][text])
                   }, {
-                    name: 'Your grade',
-                    data: Object.keys(charData).map((key) => charData[key]["Your mark"])
+                    name: t("DASHBOARD.your_mark"),
+                    data: Object.keys(charData).map((key) => charData[key][text2])
                   }
                 ]
-
             }
-
             type="bar" height={'95%'} />
         )
       }
