@@ -374,7 +374,7 @@ export const CreateCourseEditSubsection = ({
               subsection?.type === 'task' && (
                 <div className='mb-5 space-y-3'>
                   <label className='text-sm text-gray-500' htmlFor=''>
-                    Cover (image)
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.cover")}
                   </label>
                   <UploadFiles fileList={landscape_photo} setFileList={setLandscape_photo} listType={'picture'} maxCount={1} />
                   <div>
