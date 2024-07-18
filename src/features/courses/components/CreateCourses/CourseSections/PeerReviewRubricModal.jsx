@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, InputNumber, Popconfirm, Table, Typography, Modal, Button } from 'antd';
 import './Rubric.css'
+import { useTranslation } from 'react-i18next';
 
 
 const EditableCell = ({
@@ -67,6 +68,8 @@ export const PeerReviewRubricModal = ({ isModalOpen, setIsModalOpen, rubricData,
     const [data, setData] = useState(rubricData ? rubricDataConverter(rubricData) : null);
     const [editingKey, setEditingKey] = useState('');
     const [evaluationMethod, setEvaluationMethod] = useState('numeric')
+
+    const { t } = useTranslation();
 
     useEffect(() => {
         if (rubricData) {
@@ -176,27 +179,27 @@ export const PeerReviewRubricModal = ({ isModalOpen, setIsModalOpen, rubricData,
     };
     const columns = [
         {
-            title: 'Criteria',
+            title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.criteria"),
             dataIndex: 'criteria',
             editable: true,
         },
         {
-            title: evaluationMethod === 'numeric' ? '1-3' : 'Unsatisfactory',
+            title: evaluationMethod === 'numeric' ? '1-3' : t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.unsatisfactory"),
             dataIndex: 'evalution1',
             editable: true,
         },
         {
-            title: evaluationMethod === 'numeric' ? '3-5' : 'Needs Improvement',
+            title: evaluationMethod === 'numeric' ? '3-5' : t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.needs_improvement"),
             dataIndex: 'evalution2',
             editable: true,
         },
         {
-            title: evaluationMethod === 'numeric' ? '5-8' : 'Great',
+            title: evaluationMethod === 'numeric' ? '5-8' : t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.great"),
             dataIndex: 'evalution3',
             editable: true,
         },
         {
-            title: evaluationMethod === 'numeric' ? '8-10' : 'Excellent',
+            title: evaluationMethod === 'numeric' ? '8-10' : t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.excellent"),
             dataIndex: 'evalution4',
             editable: true,
         },
@@ -214,20 +217,20 @@ export const PeerReviewRubricModal = ({ isModalOpen, setIsModalOpen, rubricData,
                                 marginRight: 8,
                             }}
                         >
-                            Save
+                            {t("COMMON.save_changes")}
                         </Typography.Link>
                         <Popconfirm title="Sure to cancel?" onConfirm={cancel} okButtonProps={{ className: 'bg-blue-500' }}>
-                            <a>Cancel</a>
+                            {t("COMMON.cancel")}
                         </Popconfirm>
                     </span>
                 ) : (
                     <div className='flex justify-between'>
                         <Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
-                            Edit
+                            {t("COMMON.edit")}
                         </Typography.Link>
                         <Popconfirm title="Sure to delete?" onConfirm={() => deleteRow(record)} okButtonProps={{ className: 'bg-blue-500' }}>
                             <Typography.Link type='danger' disabled={editingKey !== ''} >
-                                Delete
+                                {t("COMMON.delete")}
                             </Typography.Link>
                         </Popconfirm>
                     </div>
@@ -272,14 +275,17 @@ export const PeerReviewRubricModal = ({ isModalOpen, setIsModalOpen, rubricData,
     }
 
     return (
-        <Modal title="Peer Review Rubric" open={isModalOpen} onOk={handleOk} width={1500} onCancel={handleCancel} okText={'Save Changes'} okButtonProps={{ className: 'bg-blue-500' }}>
+        <Modal title={t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.peer_review_rubric")} open={isModalOpen} onOk={handleOk} width={1500} onCancel={handleCancel} cancelText={t("COMMON.cancel")} okText={t("COMMON.save_changes")} okButtonProps={{ className: 'bg-blue-500' }}>
             <Form form={form} component={false}>
                 <div className='flex gap-3 my-3'>
                     <Button className='ml-auto' onClick={() => handleEvaluation()}>
-                        Switch to {evaluationMethod === 'numeric' ? 'text' : 'numeric'}
+                        {evaluationMethod === 'numeric' ?
+                            t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.switch_text")
+                            :
+                            t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.switch_numeric")}
                     </Button>
                     <Button onClick={() => addRow()}>
-                        Add Row
+                        {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.add_row")}
                     </Button>
                 </div>
 

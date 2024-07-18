@@ -11,7 +11,9 @@
         "professor": "Profesor",
         "student": "Estudiante",
         "yes": "Sí",
-        "no": "No"
+        "no": "No",
+        "delete": "Eliminar",
+        "edit": "Editar"
     },
     "HOME": {
         "title": "Bienvenido/a a la nueva era del aprendizaje",
@@ -102,7 +104,45 @@
         "Creative and entrepreneurial capacity": "Capacidad creativa y emprendedora",
         "Sustainability": "Sostenibilidad",
         "Communicative ability": "Capacidad comunicativa",
-        "linked_objectives": "¡Esta tarea está vinculada con tus objetivos!"
+        "linked_objectives": "¡Esta tarea está vinculada con tus objetivos!",
+        "CRITERIA": {
+            "Ethical commitment": {
+                "criteria": [
+                    "Capacidad de autocrítica y pensamiento crítico",
+                    "Capacidad para demostrar actitudes coherentes con los principios éticos y deontológicos"
+                ]
+            },
+            "Learning capability and responsibility": {
+                "criteria": [
+                    "Capacidad de análisis, síntesis, perspectivas globales y aplicaciones prácticas del conocimiento",
+                    "Capacidad para tomar decisiones y adaptarse a nuevas situaciones"
+                ]
+            },
+            "Teamwork": {
+                "criteria": [
+                    "Capacidad para colaborar con otros y contribuir a un proyecto común",
+                    "Capacidad para colaborar en equipos interdisciplinarios y multiculturales"
+                ]
+            },
+            "Creative and entrepreneurial capacity": {
+                "criteria": [
+                    "Capacidad para formular, diseñar y gestionar proyectos",
+                    "Capacidad para buscar e integrar nuevos conocimientos y actitudes"
+                ]
+            },
+            "Sustainability": {
+                "criteria": [
+                    "Capacidad para evaluar el impacto social y ambiental de las acciones en su campo",
+                    "Capacidad para expresar visiones integradas y sistemáticas"
+                ]
+            },
+            "Communicative ability": {
+                "criteria": [
+                    "Capacidad para comprender y expresarse oralmente y por escrito en catalán y español y en otro idioma, utilizando el lenguaje especializado en la disciplina",
+                    "Capacidad para buscar, usar e integrar información"
+                ]
+            }
+        }
     },
     "NAVBAR": {
         "professor": "Profesor",
@@ -427,6 +467,76 @@
                 "items_sequences": "Añadir elementos a la secuencia",
                 "sequence_text": "Puedes editar todas las secuencias para personalización cuando se añaden a una sección.",
                 "add_sequence": "Añadir secuencia",
+                "EDIT_SUBSECTION": {
+                    "title": "Título",
+                    "description": "Descripción",
+                    "files": "Archivos (máximo 5)",
+                    "date": "Fecha de la subsección",
+                    "date_placeholder_start": "Fecha de inicio",
+                    "date_placeholder_end": "Fecha de finalización",
+                    "content": "Contenido",
+                    "content_placeholder": "Editar contenido de la subsección",
+                    "cover": "Portada (opcional)",
+                    "pairs_or_individual": "¿La actividad se realizará en parejas o individualmente?",
+                    "individual": "Individual",
+                    "groups": "Grupos",
+                    "students_per_group": "¿Cuántos estudiantes por grupo?",
+                    "categories": "Categorías",
+                    "categories_text": "Asocia criterios de las categorías seleccionadas con la actividad.",
+                    "add_row": "Agregar fila",
+                    "criteria": "Criterios",
+                    "check": "Marcar",
+                    "evaluable": "¿Es la actividad evaluable?",
+                    "ponderation": "Ponderación",
+                    "ponderation_error": "La ponderación no suma 100",
+                    "ponderation_good": "La ponderación suma 100",
+                    "ponderation_error_text": "No podrás crear un curso, la ponderación de todas las subsecciones no suma 100%, sino",
+                    "peer_review_rubric": "Rúbrica de revisión por pares",
+                    "peer_review_rubric_text": "Editar rúbrica",
+                    "peer_review_task": "Selecciona la tarea para la cual se realizará la revisión por pares",
+                    "students_review": "¿Cuántos se van a revisar entre sí entre los ",
+                    "students_grade": "¿Qué porcentaje de la calificación dada por el estudiante se aplicará a la calificación final?",
+                    "switch_text": "Cambiar a texto",
+                    "switch_numeric": "Cambiar a numérico",
+                    "unsatisfactory": "Insatisfactorio",
+                    "needs_improvement": "Necesita mejora",
+                    "great": "Genial",
+                    "excellent": "Excelente",
+                    "questionnaire_type": "Tipo de cuestionario",
+                    "standard": "Estándar",
+                    "scaling": "Escala",
+                    "add_question": "Agregar pregunta",
+                    "question": "Pregunta",
+                    "question_placeholder": "Introduce la pregunta",
+                    "text": "Texto",
+                    "Options": "Opciones",
+                    "previous": "Anterior",
+                    "next": "Siguiente",
+                    "select_task": "Selecciona la tarea",
+                    "autocorrect": "Autocorrección",
+                    "autocorrect_text": "Verifique las respuestas correctas a las preguntas, y el cuestionario se evaluará automáticamente una vez que el estudiante lo envíe.",
+                    "ERRORS_SUBSECTION": {
+                        "date_missing": "Faltan la fecha de inicio y fin",
+                        "categories_missing": "No hay categorías",
+                        "question_missing": "No hay preguntas",
+                        "answer_questions": "No todas las preguntas tienen respuestas correctas",
+                        "rubric_empty": "La rúbrica está vacía",
+                        "no_description": "No hay descripción",
+                        "no_content": "No hay contenido",
+                        "no_task": "No hay tarea para revisar",
+                        "text": "Complétalo o no podrás crear un curso.",
+                        "title": "La subsección está incompleta"
+                    },
+                    "SELF_ASSESSMENT": {
+                        "title": "Rúbrica de autoevaluación",
+                        "description": "Define los criterios en la rúbrica para evaluar el proceso y la progresión de la tarea.",
+                        "placeholder_0": "Introduce el criterio, por ejemplo: Escucha",
+                        "placeholder_1": "Introduce la Evaluación 1, por ejemplo: No pude escuchar cuando mi profesor dio instrucciones.",
+                        "placeholder_2": "Introduce la Evaluación 2, por ejemplo: Necesité más de 2 indicaciones para escuchar cuando mi profesor dio instrucciones.",
+                        "placeholder_3": "Introduce la Evaluación 3, por ejemplo: Necesité 1-2 indicaciones para escuchar cuando mi profesor dio instrucciones.",
+                        "placeholder_4": "Introduce la Evaluación 4, por ejemplo: Escuché cuando mi profesor dio instrucciones."
+                    }
+                },
                 "SEQUENCES": {
                     "ELEMENTS": {
                         "PLANNING_QUESTIONNAIRE": {

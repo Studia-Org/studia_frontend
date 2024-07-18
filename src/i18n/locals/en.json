@@ -11,7 +11,9 @@
         "professor": "Professor",
         "student": "Student",
         "yes": "Yes",
-        "no": "No"
+        "no": "No",
+        "delete": "Delete",
+        "edit": "Edit"
     },
     "HOME": {
         "title": "Welcome to the new era of Learning",
@@ -102,7 +104,45 @@
         "Creative and entrepreneurial capacity": "Creative and entrepreneurial capacity",
         "Sustainability": "Sustainability",
         "Communicative ability": "Communicative ability",
-        "linked_objectives": "This task is linked with your objectives!"
+        "linked_objectives": "This task is linked with your objectives!",
+        "CRITERIA": {
+            "Ethical commitment": {
+                "criteria": [
+                    "Ability for self-criticism and critical thinking",
+                    "Ability to demonstrate attitudes consistent with ethical and deontological principles"
+                ]
+            },
+            "Learning capability and responsibility": {
+                "criteria": [
+                    "Ability for analysis, synthesis, global perspectives, and practical applications of knowledge",
+                    "Ability to make decisions and adapt to new situations"
+                ]
+            },
+            "Teamwork": {
+                "criteria": [
+                    "Ability to collaborate with others and contribute to a common project",
+                    "Ability to collaborate in interdisciplinary and multicultural teams"
+                ]
+            },
+            "Creative and entrepreneurial capacity": {
+                "criteria": [
+                    "Ability to formulate, design, and manage projects",
+                    "Ability to seek and integrate new knowledge and attitudes"
+                ]
+            },
+            "Sustainability": {
+                "criteria": [
+                    "Ability to assess the social and environmental impact of actions in their field",
+                    "Ability to express integrated and systematic visions"
+                ]
+            },
+            "Communicative ability": {
+                "criteria": [
+                    "Ability to understand and express oneself orally and in writing in Catalan and Spanish and in another language, using specialized language in the discipline",
+                    "Ability to search, use, and integrate information"
+                ]
+            }
+        }
     },
     "NAVBAR": {
         "professor": "Professor",
@@ -427,6 +467,76 @@
                 "items_sequences": "Add items to the sequence",
                 "sequence_text": "You can edit all the sequences for customization when they are added on a section.",
                 "add_sequence": "Add sequence",
+                "EDIT_SUBSECTION": {
+                    "title": "Title",
+                    "description": "Description",
+                    "files": "Files (max 5)",
+                    "date": "Subsection date",
+                    "date_placeholder_start": "Start date",
+                    "date_placeholder_end": "End date",
+                    "content": "Content",
+                    "content_placeholder": "Edit subsection content",
+                    "cover": "Cover (optional)",
+                    "pairs_or_individual": "Will the activity be carried out in pairs or individually?",
+                    "individual": "Individual",
+                    "groups": "Groups",
+                    "students_per_group": "How many students per group?",
+                    "categories": "Categories",
+                    "categories_text": "Associate criteria of the categories you selected with the activity.",
+                    "add_row": "Add row",
+                    "criteria": "Criteria",
+                    "check": "Check",
+                    "evaluable": "Is the activity evaluable?",
+                    "ponderation": "Ponderation",
+                    "ponderation_error": "Ponderation do not sum 100",
+                    "ponderation_good": "Ponderation sum 100",
+                    "ponderation_error_text": "You will not be able to create a course, the ponderation of all subsections do not sum 100%, they do sum",
+                    "peer_review_rubric": "Peer review rubric",
+                    "peer_review_rubric_text": "Edit rubric",
+                    "peer_review_task": "Select the task for which the peer review will be conducted",
+                    "students_review": "How many are going to review each other among the ",
+                    "students_grade": "What percentage of the grade given by the student will be applied to the final grade?",
+                    "switch_text": "Switch to text",
+                    "switch_numeric": "Switch to numeric",
+                    "unsatisfactory": "Unsatisfactory",
+                    "needs_improvement": "Needs improvement",
+                    "great": "Great",
+                    "excellent": "Excellent",
+                    "questionnaire_type": "Questionnaire type",
+                    "standard": "Standard",
+                    "scaling": "Scaling",
+                    "add_question": "Add question",
+                    "question": "Question",
+                    "question_placeholder": "Enter the question",
+                    "text": "Text",
+                    "Options": "Options",
+                    "previous": "Previous",
+                    "next": "Next",
+                    "select_task": "Select a task",
+                    "autocorrect": "Autocorrect",
+                    "autocorrect_text": "Check the correct answers to the questions, and the questionnaire will be automatically evaluated once the student submits it.",
+                    "ERRORS_SUBSECTION": {
+                        "date_missing": "Start and end date are missing",
+                        "categories_missing": "No categories",
+                        "question_missing": "No questions",
+                        "answer_questions": "Not all questions have correct answers",
+                        "rubric_empty": "Rubric is empty",
+                        "no_description": "No description",
+                        "no_content": "No content",
+                        "no_task": "No task to review",
+                        "text": "Complete it or you will not be able to create a course.",
+                        "title": "Subsection is incomplete"
+                    },
+                    "SELF_ASSESSMENT": {
+                        "title": "Self-assessment Rubric",
+                        "description": "Define the criteria on the rubric for evaluating the process and progression of the task.",
+                        "placeholder_0": "Enter Criteria, e.g.: Listening",
+                        "placeholder_1": "Enter Evaluation 1, e.g.: I was unable to listen when my teacher gave directions. ",
+                        "placeholder_2": "Enter Evaluation 2, e.g.: I needed more than 2 prompts to listen whan my teacher gave directions.",
+                        "placeholder_3": "Enter Evaluation 3, e.g.: I needed 1-2 prompts to listen whan my teacher gave directions.",
+                        "placeholder_4": "Enter Evaluation 4, e.g.: I listened when my teacher gave directions."
+                    }
+                },
                 "SEQUENCES": {
                     "ELEMENTS": {
                         "PLANNING_QUESTIONNAIRE": {
