@@ -104,13 +104,13 @@
         "Communicative ability": "Communicative ability",
         "linked_objectives": "This task is linked with your objectives!",
         "CRITERIA": {
-            "Ethical_commitment": {
+            "Ethical commitment": {
                 "criteria": [
                     "Ability for self-criticism and critical thinking",
                     "Ability to demonstrate attitudes consistent with ethical and deontological principles"
                 ]
             },
-            "Learning_capability_and_responsibility": {
+            "Learning capability and responsibility": {
                 "criteria": [
                     "Ability for analysis, synthesis, global perspectives, and practical applications of knowledge",
                     "Ability to make decisions and adapt to new situations"
@@ -122,7 +122,7 @@
                     "Ability to collaborate in interdisciplinary and multicultural teams"
                 ]
             },
-            "Creative_and_entrepreneurial_capacity": {
+            "Creative and entrepreneurial capacity": {
                 "criteria": [
                     "Ability to formulate, design, and manage projects",
                     "Ability to seek and integrate new knowledge and attitudes"
@@ -134,7 +134,7 @@
                     "Ability to express integrated and systematic visions"
                 ]
             },
-            "Communicative_ability": {
+            "Communicative ability": {
                 "criteria": [
                     "Ability to understand and express oneself orally and in writing in Catalan and Spanish and in another language, using specialized language in the discipline",
                     "Ability to search, use, and integrate information"
@@ -488,7 +488,29 @@
                     "ponderation": "Ponderation",
                     "ponderation_error": "Ponderation do not sum 100",
                     "ponderation_good": "Ponderation sum 100",
-                    "ponderation_error_text": "You will not be able to create a course, the ponderation of all subsections do not sum 100%, they do sum"
+                    "ponderation_error_text": "You will not be able to create a course, the ponderation of all subsections do not sum 100%, they do sum",
+                    "peer_review_rubric": "Peer review rubric",
+                    "peer_review_rubric_text": "Edit rubric",
+                    "peer_review_task": "Select the task for which the peer review will be conducted",
+                    "students_review": "How many are going to review each other among the ",
+                    "students_grade": "What percentage of the grade given by the student will be applied to the final grade?",
+                    "switch_text": "Switch to text",
+                    "switch_numeric": "Switch to numeric",
+                    "unsatisfactory": "Unsatisfactory",
+                    "needs_improvement": "Needs improvement",
+                    "great": "Great",
+                    "excellent": "Excellent",
+                    "questionnaire_type": "Questionnaire type",
+                    "standard": "Standard",
+                    "scaling": "Scaling",
+                    "add_question": "Add question",
+                    "question": "Question",
+                    "question_placeholder": "Enter the question",
+                    "text": "Text",
+                    "Options": "Options",
+                    "previous": "Previous",
+                    "next": "Next",
+                    "select_task": "Select a task"
                 },
                 "SEQUENCES": {
                     "ELEMENTS": {

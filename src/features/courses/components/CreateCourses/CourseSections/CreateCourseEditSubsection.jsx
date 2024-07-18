@@ -256,23 +256,23 @@ export const CreateCourseEditSubsection = ({
                     subsectionEditing={subsection}
                   />
                   <label className='text-sm text-gray-500 '>
-                    Peer review rubric *
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.peer_review_rubric")} *
                   </label>
                   <Button onClick={() => {
                     setIsModalOpen(true);
                     document.body.style.overflow = 'hidden';
                   }}>
-                    Edit Rubric
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.peer_review_rubric_text")}
                   </Button>
                   <label className='text-sm text-gray-500 !mt-4'>
-                    Select the task for which the peer review will be conducted  *
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.peer_review_task")}  *
                   </label>
                   <Select
                     defaultValue={() => {
                       const act = filteredSubsections.find((sub) => sub.id === subsection.activity.task_to_review)
                       if (act === undefined) {
                         subsection.activity.task_to_review = null
-                        return 'Select a task'
+                        return t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.select_task")
                       }
                       return act.id
                     }
@@ -289,11 +289,11 @@ export const CreateCourseEditSubsection = ({
                     defaultValue={isGroup}
                     style={{ width: '100%', marginTop: '5px' }}
                     onChange={(number) => { handleSubsectionChange('group', number) }}
-                    options={[{ label: 'Individual', value: false }, { label: 'Groups', value: true }]}
+                    options={[{ label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.individual"), value: false }, { label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.groups"), value: true }]}
                   />
 
                   <label className='text-sm text-gray-500'>
-                    How many {isGroup ? "groups" : "students"} are going to review each other  *
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.students_review")}  {isGroup ? t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.groups").toLowerCase() : t("ACTIVITY.create_groups.students").toLowerCase()}   *
                   </label>
                   <Select
                     defaultValue={subsection.activity.usersToPair || 1}
@@ -357,7 +357,7 @@ export const CreateCourseEditSubsection = ({
 
                   />
                   <label className='text-sm text-gray-500 ' htmlFor=''>
-                    What percentage of the grade given by the student will be applied to the final grade? *
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.students_grade")} *
                   </label>
                   <InputNumber
                     defaultValue={filteredSubsections.find((sub) => sub.id === subsection.activity.task_to_review)?.activity?.ponderationStudent || 0}

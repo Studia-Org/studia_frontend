@@ -104,37 +104,37 @@
         "Communicative ability": "Capacitat comunicativa",
         "linked_objectives": "Aquesta tasca està vinculada amb els teus objectius!",
         "CRITERIA": {
-            "Compromís_ètic": {
+            "Ethical commitment": {
                 "criteria": [
                     "Capacitat d'autocrítica i pensament crític",
                     "Capacitat per demostrar actituds coherents amb els principis ètics i deontològics"
                 ]
             },
-            "Capacitat_d'aprenentatge_i_responsabilitat": {
+            "Learning capability and responsibility": {
                 "criteria": [
                     "Capacitat d'anàlisi, síntesi, perspectives globals i aplicacions pràctiques del coneixement",
                     "Capacitat per prendre decisions i adaptar-se a noves situacions"
                 ]
             },
-            "Treball_en_equip": {
+            "Teamwork": {
                 "criteria": [
                     "Capacitat per col·laborar amb altres i contribuir a un projecte comú",
                     "Capacitat per col·laborar en equips interdisciplinaris i multiculturals"
                 ]
             },
-            "Capacitat_creativa_i_emprenedora": {
+            "Creative and entrepreneurial capacity": {
                 "criteria": [
                     "Capacitat per formular, dissenyar i gestionar projectes",
                     "Capacitat per cercar i integrar nous coneixements i actituds"
                 ]
             },
-            "Sostenibilitat": {
+            "Sustainability": {
                 "criteria": [
                     "Capacitat per avaluar l'impacte social i ambiental de les accions en el seu camp",
                     "Capacitat per expressar visions integrades i sistemàtiques"
                 ]
             },
-            "Habilitat_comunicativa": {
+            "Communicative ability": {
                 "criteria": [
                     "Capacitat per comprendre i expressar-se oralment i per escrit en català i espanyol i en un altre idioma, utilitzant el llenguatge especialitzat en la disciplina",
                     "Capacitat per cercar, usar i integrar informació"
@@ -488,7 +488,29 @@
                     "ponderation": "Ponderació",
                     "ponderation_error": "La ponderació no suma 100",
                     "ponderation_good": "La ponderació suma 100",
-                    "ponderation_error_text": "No podràs crear un curs, la ponderació de totes les subseccions no suma 100%, en canvi, suma"
+                    "ponderation_error_text": "No podràs crear un curs, la ponderació de totes les subseccions no suma 100%, en canvi, suma",
+                    "peer_review_rubric": "Rúbrica de revisió per parells",
+                    "peer_review_rubric_text": "Editar rúbrica",
+                    "peer_review_task": "Selecciona la tasca per a la qual es realitzarà la revisió per parells",
+                    "students_review": "Quants es revisaran entre ells entre els ",
+                    "students_grade": "Quin percentatge de la qualificació donada per l'estudiant s'aplicarà a la qualificació final?",
+                    "switch_text": "Canviar a text",
+                    "switch_numeric": "Canviar a numèric",
+                    "unsatisfactory": "Insatisfactori",
+                    "needs_improvement": "Necessita millora",
+                    "great": "Genial",
+                    "excellent": "Excel·lent",
+                    "questionnaire_type": "Tipus de qüestionari",
+                    "standard": "Estàndard",
+                    "scaling": "Escala",
+                    "add_question": "Afegir pregunta",
+                    "question": "Pregunta",
+                    "question_placeholder": "Introdueix la pregunta",
+                    "text": "Text",
+                    "Options": "Opcions",
+                    "previous": "Anterior",
+                    "next": "Següent",
+                    "select_task": "Selecciona la tasca"
                 },
                 "SEQUENCES": {
                     "ELEMENTS": {

@@ -4,15 +4,15 @@ import { ACTIVITY_CATEGORIES } from '../../../../../constant';
 import './TableAntd.css'
 import { useTranslation } from 'react-i18next';
 
-const dataSourceMap = (category, createCourseSectionsList, subsection) => {
+const dataSourceMap = (category, createCourseSectionsList, subsection, t) => {
     let resultArray = [];
 
     if (ACTIVITY_CATEGORIES[category]?.criteria) {
         resultArray = ACTIVITY_CATEGORIES[category].criteria.map((item, index) => {
-            console.log(item)
             return {
                 key: Math.floor(Date.now() * Math.random()),
-                Criteria: item
+                Criteria: item,
+                label: t(`OBJECTIVES_CONSTANT.CRITERIA.${category}.criteria.${index}`),
             };
         });
     }
@@ -25,7 +25,8 @@ const dataSourceMap = (category, createCourseSectionsList, subsection) => {
                         if (!resultArray.some((result) => result.Criteria === item)) {
                             resultArray.push({
                                 key: Math.floor(Date.now() * Math.random()),
-                                Criteria: item
+                                Criteria: item,
+                                label: t("OBJECTIVES_CONSTANT.CRITERIA[category][index]"),
                             })
                         }
                     })
@@ -140,17 +141,19 @@ export const TableCategories = ({ categories, setCreateCourseSectionsList, subse
 
     const categoriesOptions = categories?.map((category) => {
         return {
-            label: category,
+            label: t(`OBJECTIVES_CONSTANT.${category}`),
             value: category,
         }
     })
 
-    const [dataSource, setDataSource] = useState(dataSourceMap(categories[0], createCourseSectionsList, subsection));
+    console.log(categoriesOptions)
+
+    const [dataSource, setDataSource] = useState(dataSourceMap(categories[0], createCourseSectionsList, subsection, t));
     const [selectOption, setSelectOption] = useState(categoriesOptions[0]?.label);
 
 
     useEffect(() => {
-        setDataSource(dataSourceMap(categories[0], createCourseSectionsList, subsection))
+        setDataSource(dataSourceMap(categories[0], createCourseSectionsList, subsection, t))
     }, [categories])
 
     const handleCategoryChange = (checked, record) => {
@@ -217,7 +220,7 @@ export const TableCategories = ({ categories, setCreateCourseSectionsList, subse
     const defaultColumns = [
         {
             title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.criteria"),
-            dataIndex: 'Criteria',
+            dataIndex: 'label',
             editable: true,
         },
         {
@@ -304,6 +307,7 @@ export const TableCategories = ({ categories, setCreateCourseSectionsList, subse
         const newData = {
             key: Math.floor(Date.now() * Math.random()),
             Criteria: '',
+            label: '',
             check: true,
         };
         setDataSource([...dataSource, newData]);
@@ -375,7 +379,7 @@ export const TableCategories = ({ categories, setCreateCourseSectionsList, subse
                 className='flex w-full mt-2 mb-3'
                 onChange={(value) => {
                     setSelectOption(value)
-                    setDataSource(dataSourceMap(value, createCourseSectionsList, subsection))
+                    setDataSource(dataSourceMap(value, createCourseSectionsList, subsection, t))
                 }}
                 value={selectOption}
             />
