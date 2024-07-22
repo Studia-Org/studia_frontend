@@ -1,8 +1,9 @@
 import Rubrica from './Rubrica';
 import { Button } from "antd"
-
+import { useTranslation } from 'react-i18next';
 function EvaluateScreen({ data, setShowEvaluate, sendEvalution, answersDelivered, sendDataLoader }) {
-    let buttonText = answersDelivered === null || answersDelivered === undefined ? "Send" : "Update FeedBack"
+    const { t } = useTranslation();
+    let buttonText = answersDelivered === null || answersDelivered === undefined ? t("COMMON.send") : t("PEERREVIEW.update_feedback")
     return (
         <>
             <div className="pt-4 pl-8">
@@ -12,7 +13,7 @@ function EvaluateScreen({ data, setShowEvaluate, sendEvalution, answersDelivered
                     <svg fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
                     </svg>
-                    Go back
+                    {t("PEERREVIEW.go_to_rubric")}
                 </Button>
             </div>
             <div className="flex flex-col-reverse flex-wrap max-w-full pl-8 md2:flex-row">
@@ -20,7 +21,7 @@ function EvaluateScreen({ data, setShowEvaluate, sendEvalution, answersDelivered
                     <Rubrica petite={true} data={data} index={"-1"} />
                 </div>
                 <div className=" md2:max-w-[calc(50%)] w-full  flex flex-col pb-2 ">
-                    <h3 className='w-full mb-3 text-xl text-center' >Evaluate</h3>
+                    <h3 className='w-full mb-3 text-xl text-center' >{t("PEERREVIEW.evaluate")}</h3>
                     <div className="px-4 w-full grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-[5px]">
                         {Object.keys(data).map((key, index) => {
                             if (key === 'Criteria') return;

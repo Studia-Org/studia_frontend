@@ -4,8 +4,6 @@ import { useTranslation } from 'react-i18next';
 
 function ActivityTitle({ type, title, evaluated, qualification, setTitle, enableEdit, userRole, titleState, passedDeadline }) {
     const { t } = useTranslation();
-    console.log(userRole)
-    console.log(!(userRole === 'professor' || userRole === 'admin' || type === 'Peer Review') && passedDeadline)
     return (
         <div className='relative flex items-center p-5 mt-5 mb-6 bg-white border rounded-md'>
             <div className='flex items-center w-full space-x-3'>

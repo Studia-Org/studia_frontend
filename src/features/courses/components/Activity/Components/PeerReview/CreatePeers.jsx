@@ -7,8 +7,9 @@ import { useParams } from "react-router-dom";
 import { API } from "../../../../../../constant";
 import { getToken } from "../../../../../../helpers";
 import { useAuthContext } from "../../../../../../context/AuthContext";
+import { Trans, useTranslation } from "react-i18next";
 function CreatePeers({ students: allStudents, setCreatePeerReview, activityToReview, activity }) {
-
+    const { t } = useTranslation();
     const { user } = useAuthContext();
     const [students, setStudents] = useState([])
     const [studentsToReview, setStudentsToReview] = useState([])
@@ -19,7 +20,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
     const usersToPair = activity?.attributes?.usersToPair
     const [activityHasStarted] = useState(new Date(activity.attributes.start_date) < new Date())
     const [groupWithMoreStudents, setGroupWithMoreStudents] = useState(null)
-    const [buttonTextPeerReview, setButtonTextPeerReview] = useState("Create peers")
+    const [buttonTextPeerReview, setButtonTextPeerReview] = useState(t("PEERREVIEW.create_peers"))
     const height = Math.max(studentsPerGroup, 1) * 52 + "px"
     useEffect(() => {
         const added = []
@@ -145,7 +146,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                     }
                     groups.push(group)
                 }
-                if (qualificationsAlreadyDone.length > 0) setButtonTextPeerReview("Update peers")
+                if (qualificationsAlreadyDone.length > 0) setButtonTextPeerReview(t("PEERREVIEW.update_peers"))
 
                 const groupWithMoreStudents = qualificationsToReview.find((group) => group.users.length > studentsPerGroup)
                 setGroupWithMoreStudents(groupWithMoreStudents)
@@ -187,7 +188,8 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
         // dropped outside the list
         // if (activityHasStarted) return message.error("Activity has started, you can't modify the peers")
         if (!destination) {
-            return message.error("You can't drop the student outside the list")
+            message.error(t('PEERREVIEW.cannot_drop_outside_list'));
+            return
         }
         const sInd = +source.droppableId;
         const dInd = +destination.droppableId;
@@ -211,22 +213,21 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                 groupExist = false;
                 groupExistInDestination = false;
             }
-
             if (groupExistInDestination) {
-                message.error("Group already exists in this group")
-                return
+                message.error(t('PEERREVIEW.group_exists_in_destination'));
+                return;
             }
             if (groupExist) {
-                message.error("Group can't review his own activity")
-                return
+                message.error(t('PEERREVIEW.group_cannot_review_own_activity'));
+                return;
             }
             if (studentExistInDestination) {
-                message.error("Student already exists in this group")
-                return
+                message.error(t('PEERREVIEW.student_exists_in_destination'));
+                return;
             }
             if (studentExist) {
-                message.error("Student can't review his own activity")
-                return
+                message.error(t('PEERREVIEW.student_cannot_review_own_activity'));
+                return;
             }
         }
 
@@ -367,10 +368,9 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
             }
         )
         if (response.ok) {
-            message.success("Peers created successfully")
-        }
-        else {
-            message.error("Error creating peers")
+            message.success(t('PEERREVIEW.peers_created_success'));
+        } else {
+            message.error(t('PEERREVIEW.error_creating_peers'));
         }
 
         setCreatingGroups(false)
@@ -380,11 +380,18 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
         <>
             <div className='p-10'>
                 <div className="-m-5">
-                    <BackButton text={"Back to peer reviews"} onClick={() => setCreatePeerReview(false)} />
+                    <BackButton text={t("PEERREVIEW.back_to_peer_review")} onClick={() => setCreatePeerReview(false)} />
                 </div>
-                <h2 className='mt-10 mb-2 text-lg font-medium'>Peer Review </h2>
-                <p className='mb-1 text-sm text-gray-700'>Peer review was designed to <b>each student review {usersToPair} activities</b></p>
-                <p className='mb-1 text-sm text-gray-700'>Assign students to review each activity</p>
+                <h2 className='mt-10 mb-2 text-lg font-medium'>{t("PEERREVIEW.peer_review")}</h2>
+                <p className='mb-1 text-sm text-gray-700'>
+                    <Trans i18nKey="PEERREVIEW.peer_review_text"
+                        values={{
+                            number: usersToPair
+                        }}
+                        components={{ bold: <b /> }}
+                    />
+                </p>
+                <p className='mb-1 text-sm text-gray-700'>{t("PEERREVIEW.assing_students")}</p>
 
                 <div className="flex gap-2 mt-5">
                     <Button
@@ -393,7 +400,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                         disabled={activityHasStarted && false}
                         onClick={createGroupsAutomatically}
                     >
-                        Create peers automatically
+                        {t("PEERREVIEW.create_peers_auto")}
                     </Button>
                     <Button
                         className="mb-4"
@@ -408,12 +415,12 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                 {/* {activityHasStarted && <p className="text-xs text-red-500">Activity has started, you can't modify the peers</p>} */}
                 <Divider className="mt-2" />
                 {!activityToReviewWasInGroups && studentsToReview.length < allStudents.length
-                    && <p className="mb-2 text-sm text-red-500">There are students who have not delivered the activity</p>}
+                    && <p className="mb-2 text-sm text-red-500">{t("QUALIFICATIONS.students_who_dont_delivered")}</p>}
                 {activityToReviewWasInGroups &&
                     (studentsToReview.length < (groupWithMoreStudents ?
                         Math.floor((allStudents.length) / studentsPerGroup) :
                         Math.ceil((allStudents.length) / studentsPerGroup)))
-                    && <p className="mb-2 text-sm text-red-500">There are groups who have not delivered the activity</p>}
+                    && <p className="mb-2 text-sm text-red-500">{t("QUALIFICATIONS.groups_who_dont_delivered")}</p>}
                 <section>
                     <DragDropContext className="mt-5" onDragEnd={onDragEnd}   >
                         <div className="flex gap-3">
@@ -423,8 +430,8 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                                     <section className={`flex flex-col gap-2 p-2 sticky}`}>
                                         {
                                             activity.attributes.groupActivity ?
-                                                <p>Groups</p>
-                                                : <p>Students</p>
+                                                <p>{t("QUALIFICATIONS.groups")}</p>
+                                                : <p>{t("ACTIVITY.create_groups.students")}</p>
                                         }
                                         <ul className={`flex flex-col gap-y-4 w-[300px] min-h-[200px] bg-white rounded-lg p-2 overflow-x-clip`}
                                             {...provided.droppableProps}
@@ -486,15 +493,15 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                                 )}
                             </StrictModeDroppable>
                             <section>
-                                {studentsToReview.length === 0 && <p className="text-sm text-red-500">No students to review</p>}
-                                {studentsToReview.length === 0 && <p className="text-sm text-red-500">No students have submitted the activity</p>}
+                                {studentsToReview.length === 0 && <p className="text-sm text-red-500">{t("PEERREVIEW.no_students_to_review")}</p>}
+                                {studentsToReview.length === 0 && <p className="text-sm text-red-500">{t("PEERREVIEW.no_students_have_delivered")}</p>}
                             </section>
                             <section className="flex flex-wrap max-w-[100%] h-fit gap-3 mt-2">
                                 {
                                     studentsToReview.map((student, index) => {
                                         return (
                                             <section className="flex flex-col gap-y-2">
-                                                <p className="text-sm text-gray-700">Activity done by </p>
+                                                <p className="text-sm text-gray-700">{t("PEERREVIEW.activity_done")}</p>
                                                 <ul style={{ minHeight: height }} className="bg-white rounded-lg">
                                                     {
                                                         student.users.map((user, index) => {
@@ -513,8 +520,8 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                                                 </ul>
                                                 {
                                                     activity.attributes.groupActivity ?
-                                                        <p className="text-sm text-gray-700">Group who are going to review</p>
-                                                        : <p className="text-sm text-gray-700">Users who are going to review</p>
+                                                        <p className="text-sm text-gray-700">{t("PEERREVIEW.groups_who_review")}</p>
+                                                        : <p className="text-sm text-gray-700">{t("PEERREVIEW.users_who_review")}</p>
                                                 }
                                                 {/* forzar activacion */}
                                                 <StrictModeDroppable key={index + 1} droppableId={`${index + 1}`} isDropDisabled={activityHasStarted && false}>

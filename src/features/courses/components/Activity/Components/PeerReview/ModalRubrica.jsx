@@ -1,8 +1,9 @@
 import React from 'react'
 import { Modal, Table } from 'antd';
-
+import { useTranslation } from 'react-i18next';
 
 export const ModalRubrica = ({ setIsModalOpen, isModalOpen, rubricData }) => {
+    const { t } = useTranslation();
     let transformedData = []
     if (rubricData.attributes?.Answers) {
         transformedData = Object.keys(rubricData.attributes.Answers).map((key) => {
@@ -19,17 +20,17 @@ export const ModalRubrica = ({ setIsModalOpen, isModalOpen, rubricData }) => {
 
     const columns = [
         {
-            title: 'Category',
+            title: '',
             dataIndex: 'key',
             key: 'key',
         },
         {
-            title: 'Qualification',
+            title: t("QUALIFICATIONS.qualificacion"),
             dataIndex: 'numericValue',
             key: 'numericValue',
         },
         {
-            title: 'Comment',
+            title: t("QUALIFICATIONS.comments"),
             dataIndex: 'comment',
             key: 'comment',
         },
@@ -42,7 +43,7 @@ export const ModalRubrica = ({ setIsModalOpen, isModalOpen, rubricData }) => {
     };
 
     return (
-        <Modal title="Peer Review Answers" width={1000} open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <Modal title={t("PEERREVIEW.peer_review_answers")} width={1000} open={isModalOpen} onOk={handleOk} onCancel={handleCancel} cancelText={t("COMMON.cancel")}>
             <Table className='mt-5 w-full' dataSource={transformedData} columns={columns} pagination={false} />
         </Modal>
     )
