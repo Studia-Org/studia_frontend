@@ -48,7 +48,7 @@ export const CheckSubsectionErrors = ({ subsection }) => {
                     newErrorsList.push({ svg: dangerSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.date_missing") });
                     setColor('text-red-500')
                 }
-                if (Object.keys(subsection.activity.categories).length === 0) {
+                if (Object.keys(subsection?.activity?.categories)?.length === 0) {
                     newErrorsList.push({ svg: dangerSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.categories_missing") });
                     setColor('text-red-500')
                 }

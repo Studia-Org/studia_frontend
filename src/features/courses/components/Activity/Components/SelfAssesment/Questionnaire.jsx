@@ -3,7 +3,7 @@ import { Button, message } from 'antd'
 import { motion } from 'framer-motion'
 import { useAuthContext } from '../../../../../../context/AuthContext'
 import { Header } from './Header'
-import { SelfAssesmentData } from '../../../CreateCourses/CourseSections/QuestionnaireData'
+import QuestionnaireData from '../../../CreateCourses/CourseSections/QuestionnaireData'
 import { Questions } from './Questions'
 import { API } from '../../../../../../constant'
 import { getToken } from '../../../../../../helpers'
@@ -11,8 +11,11 @@ import { useParams } from 'react-router-dom'
 
 
 
+
+
 export const Questionnaire = ({ setState, setSelfAssesmentData, setQualificationId, questionnaireAnswers }) => {
     const { user } = useAuthContext();
+    const { SelfAssesmentData } = QuestionnaireData()
     const [userResponses, setUserResponses] = useState([]);
     const [completed, setCompleted] = useState(questionnaireAnswers?.length > 0);
     const [sendingData, setSendingData] = useState(false);

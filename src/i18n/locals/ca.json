@@ -590,6 +590,89 @@
                         "FEEDBACK_REFLECTION_QUESTIONNAIRE": {
                             "title": "Qüestionari de Feedback i Reflexió",
                             "description": "El qüestionari de feedback i reflexió és una eina valuosa per recopilar informació sobre l'eficàcia de les tasques i activitats, així com per identificar àrees d'aprenentatge i millora. Aquest qüestionari ajuda a individus o equips a reflexionar sobre el seu aprenentatge i a identificar accions per millorar."
+                        },
+                        "QUESTIONNAIRE_DATA": {
+                            "PLANNING": {
+                                "QUESTIONS": {
+                                    "QUESTION_1": "Quin és el teu objectiu principal per a aquesta tasca?",
+                                    "QUESTION_2": "Com valoraries el teu nivell de coneixement actual sobre el tema?",
+                                    "QUESTION_3": "En quins subtemes específics tens previst enfocar-te?",
+                                    "QUESTION_4": "Com tens previst recopilar informació per a la teva investigació?",
+                                    "QUESTION_5": "Quin termini has establert per completar aquesta tasca?",
+                                    "QUESTION_6": "Quines estratègies tens previst utilitzar per a l'aprenentatge autoregulat durant aquesta tasca?"
+                                }
+                            },
+                            "SELF_ASSESSMENT": {
+                                "QUESTIONS": {
+                                    "QUESTION_1": "Vaig aconseguir els objectius de la tasca?",
+                                    "QUESTION_2": "Va ser satisfactòria la qualitat de la meva feina?",
+                                    "QUESTION_3": "Vaig gestionar el meu temps de manera efectiva?",
+                                    "QUESTION_4": "Vaig gestionar bé els desafiaments de la tasca?",
+                                    "QUESTION_5": "Va ser clara i efectiva la meva comunicació?",
+                                    "QUESTION_6": "Vaig col·laborar bé amb els altres?",
+                                    "QUESTION_7": "Vaig demostrar creativitat o innovació?",
+                                    "QUESTION_8": "Què vaig aprendre d'aquesta tasca?",
+                                    "QUESTION_9": "Com puc millorar en el futur?",
+                                    "QUESTION_10": "En general, com de satisfet estic amb el meu rendiment?"
+                                }
+                            },
+                            "SRLO": {
+                                "QUESTIONS": {
+                                    "QUESTION_1": "Estic segur que seré capaç de dominar el contingut i les tasques en aquesta classe en línia.",
+                                    "QUESTION_2": "Estic segur de la meva capacitat per persistir amb èxit en aquesta classe en línia, fins i tot si trobo el contingut difícil.",
+                                    "QUESTION_3": "Estic segur que puc posar l'esforç necessari per obtenir una qualificació alta en aquesta classe en línia.",
+                                    "QUESTION_4": "Estic segur que puc esbrinar amb precisió què requereix la tasca que faci.",
+                                    "QUESTION_5": "Sempre trobo aspectes del contingut que desperten la meva curiositat.",
+                                    "QUESTION_6": "M'encanta aprendre coses noves en aquesta classe en línia.",
+                                    "QUESTION_7": "Trobo agradable estudiar per aquesta classe en línia.",
+                                    "QUESTION_8": "Trobo molt satisfactori quan aprenc nou material en aquest curs en línia.",
+                                    "QUESTION_9": "Sento una sensació d'assoliment quan aprenc noves habilitats o informació.",
+                                    "QUESTION_10": "Vull fer-ho bé en aquest curs en línia per presumir davant els meus amics i familiars.",
+                                    "QUESTION_11": "Vull fer-ho bé a causa de les expectatives reals o percebudes dels altres.",
+                                    "QUESTION_12": "Vull obtenir una millor qualificació que els altres a la meva classe en línia.",
+                                    "QUESTION_13": "Em sento tan impotent que no puc dedicar tot el meu esforç als meus estudis en línia.",
+                                    "QUESTION_14": "Mentre estudio, vull distreure'm per reduir el meu nivell d'ansietat.",
+                                    "QUESTION_15": "Em poso tan ansiós que ni tan sols vull començar a estudiar en línia.",
+                                    "QUESTION_16": "Quan he de estudiar en línia, començo a sentir-me malament.",
+                                    "QUESTION_17": "Estableixo metes a curt termini (diàries o setmanals).",
+                                    "QUESTION_18": "Estableixo terminis realistes per a l'aprenentatge.",
+                                    "QUESTION_19": "Divideixo els objectius més grans en metes més petites i assolibles.",
+                                    "QUESTION_20": "Faig una llista d'accions detallades que necessito completar.",
+                                    "QUESTION_21": "Planifico el meu horari cada setmana per tenir el temps adequat disponible per estudiar en línia.",
+                                    "QUESTION_22": "Penso en quines estratègies d'aprenentatge m'han funcionat en el passat a l'hora de fer tasques o tipus d'estudi similars.",
+                                    "QUESTION_23": "Passo temps intentant interpretar la tasca per assegurar-me que entenc amb precisió què necessito fer.",
+                                    "QUESTION_24": "Reviso els comentaris que he rebut en el passat i verifico que he millorat en el meu aprenentatge actual.",
+                                    "QUESTION_25": "Penso en com podria millorar el meu treball avaluant-lo contra els criteris de qualificació proporcionats pel professor.",
+                                    "QUESTION_26": "Puc estudiar per al meu curs en línia sense distraccions.",
+                                    "QUESTION_27": "Tinc accés a un lloc tranquil i sense distraccions per estudiar.",
+                                    "QUESTION_28": "Sé on puc estudiar més eficientment per a aquest curs en línia.",
+                                    "QUESTION_29": "Treballo dur en el meu estudi en línia, fins i tot quan hi ha coses més interessants a fer.",
+                                    "QUESTION_30": "Quan el meu estudi en línia es posa difícil, em mantinc compromès amb assolir les meves metes d'estudi.",
+                                    "QUESTION_31": "Quan la meva ment comença a divagar durant una sessió d'aprenentatge per a aquest curs en línia, faig un esforç especial per mantenir-me concentrat.",
+                                    "QUESTION_32": "No importa com em senti, persevero amb el meu estudi en línia.",
+                                    "QUESTION_33": "Intento ajudar altres estudiants quan fan una pregunta en línia que puc respondre.",
+                                    "QUESTION_34": "Demano ajuda a persones coneixedores a través de canals en línia quan no estic segur de què fer a la meva classe en línia.",
+                                    "QUESTION_35": "Demano al professor i/o als meus companys que aclareixin la informació al meu curs en línia.",
+                                    "QUESTION_36": "Quan tinc dificultats amb la meva classe en línia, busco ajuda d'altres a través de mitjans en línia (taulers de discussió, xarxes socials, correu electrònic, missatgeria instantània, etc.).",
+                                    "QUESTION_37": "Utilitzo correu electrònic, taulers de discussió, xarxes socials, etc., per connectar-me amb el professor i altres estudiants quan necessito ajuda.",
+                                    "QUESTION_38": "Quan estudio en línia, creo els meus propis exemples del contingut per fer-lo més significatiu.",
+                                    "QUESTION_39": "Quan estudio en línia, organitzo els meus pensaments fent resums del que estic aprenent.",
+                                    "QUESTION_40": "Quan estudio en línia, intento relacionar el contingut amb el que ja sé.",
+                                    "QUESTION_41": "Quan aprenc el contingut en línia, intento desenvolupar les meves pròpies idees sobre això.",
+                                    "QUESTION_42": "Intento millorar la meva comprensió fent treball addicional més enllà del contingut principal (per exemple, fent activitats addicionals de resolució de problemes o lectures addicionals)."
+                                }
+                            },
+                            "GENERAL_OPTIONS": {
+                                "options": [
+                                    "Totalment en desacord",
+                                    "En desacord",
+                                    "Una mica en desacord",
+                                    "Neutral",
+                                    "Una mica d'acord",
+                                    "D'acord",
+                                    "Totalment d'acord"
+                                ]
+                            }
                         }
                     },
                     "CONTINUOUS_FEEDBACK": {

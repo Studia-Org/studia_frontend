@@ -590,6 +590,89 @@
                         "FEEDBACK_REFLECTION_QUESTIONNAIRE": {
                             "title": "Feedback and Reflection Questionnaire",
                             "description": "Feedback and reflection questionnaire."
+                        },
+                        "QUESTIONNAIRE_DATA": {
+                            "PLANNING": {
+                                "QUESTIONS": {
+                                    "QUESTION_1": "What is your primary objective for this task?",
+                                    "QUESTION_2": "How would you rate your current knowledge level on the topic?",
+                                    "QUESTION_3": "What specific subtopics are you planning to focus on?",
+                                    "QUESTION_4": "How do you plan to gather information for your research?",
+                                    "QUESTION_5": "What time frame have you set for completing this task?",
+                                    "QUESTION_6": "What strategies do you plan to use for self-regulated learning during this task?"
+                                }
+                            },
+                            "SELF_ASSESSMENT": {
+                                "QUESTIONS": {
+                                    "QUESTION_1": "Did I achieve the task's objectives?",
+                                    "QUESTION_2": "Was the quality of my work satisfactory?",
+                                    "QUESTION_3": "Did I manage my time effectively?",
+                                    "QUESTION_4": "Did I handle the task's challenges well?",
+                                    "QUESTION_5": "Was my communication clear and effective?",
+                                    "QUESTION_6": "Did I collaborate well with others?",
+                                    "QUESTION_7": "Did I demonstrate creativity or innovation?",
+                                    "QUESTION_8": "What did I learn from this task?",
+                                    "QUESTION_9": "How can I improve in the future?",
+                                    "QUESTION_10": "Overall, how satisfied am I with my performance?"
+                                }
+                            },
+                            "SRLO": {
+                                "QUESTIONS": {
+                                    "QUESTION_1": "I am confident that I will be able to master the content and assignments in this online class.",
+                                    "QUESTION_2": "I am confident in my ability to successfully persist in this online class, even if I find the content difficult.",
+                                    "QUESTION_3": "I am confident I can put in the effort required to get a high grade in this online class.",
+                                    "QUESTION_4": "I am confident that I can accurately work out what the task is requiring me to do.",
+                                    "QUESTION_5": "I always find aspects of the content that arouse my curiosity.",
+                                    "QUESTION_6": "I love learning new things in this online class.",
+                                    "QUESTION_7": "I find studying for this online class enjoyable.",
+                                    "QUESTION_8": "I find it very satisfying when I learn new material in this online course.",
+                                    "QUESTION_9": "I get a sense of achievement when I learn new skills or information.",
+                                    "QUESTION_10": "I want to do well in this online course so I can show off to my friends and family.",
+                                    "QUESTION_11": "I want to do well because of others' real or perceived expectations of me.",
+                                    "QUESTION_12": "I want to get a better grade than others in my online class.",
+                                    "QUESTION_13": "I feel so helpless that I cannot dedicate all my effort to my online studies.",
+                                    "QUESTION_14": "While studying, I want to distract myself to lower my anxiety level.",
+                                    "QUESTION_15": "I get so anxious that I don't even want to start studying online.",
+                                    "QUESTION_16": "When I have to study online, I start to feel bad.",
+                                    "QUESTION_17": "I set short-term (daily or weekly) goals.",
+                                    "QUESTION_18": "I set realistic deadlines for learning.",
+                                    "QUESTION_19": "I break larger goals into smaller actionable goals.",
+                                    "QUESTION_20": "I make a list of detailed actions that I need to complete.",
+                                    "QUESTION_21": "I plan out my schedule each week so I have the appropriate amount of time available for online study.",
+                                    "QUESTION_22": "I think about what learning strategies have worked for me in the past when doing similar assignments/types of study.",
+                                    "QUESTION_23": "I spend time trying to interpret the task to ensure I understand accurately what I need to do.",
+                                    "QUESTION_24": "I look over past feedback I have received and check that I have made improvements in my current learning.",
+                                    "QUESTION_25": "I think about how I might improve my work by evaluating it against the marking criteria provided by the teacher.",
+                                    "QUESTION_26": "I am able to study for my online course without distraction.",
+                                    "QUESTION_27": "I have access to a quiet and distraction-free place to study.",
+                                    "QUESTION_28": "I know where I can study most efficiently for this online course.",
+                                    "QUESTION_29": "I work hard in my online study, even when there are more interesting things to do.",
+                                    "QUESTION_30": "When my online study gets difficult, I remain committed to reaching my study goals.",
+                                    "QUESTION_31": "When my mind begins to wander during a learning session for this online course, I make a special effort to keep concentrating.",
+                                    "QUESTION_32": "No matter how I am feeling, I persevere with my online study.",
+                                    "QUESTION_33": "I try to help other students when they ask a question online, I can answer.",
+                                    "QUESTION_34": "I ask for help from knowledgeable others through online channels when I am not sure what to do in my online class.",
+                                    "QUESTION_35": "I ask the teacher and/or my peers to clarify information in my online course.",
+                                    "QUESTION_36": "When I have difficulties with my online class, I seek assistance from others through online means (discussion boards, social media, email, instant messaging etc.).",
+                                    "QUESTION_37": "I use email, discussion boards, social media, etc., to connect with the teacher and other students when I need help.",
+                                    "QUESTION_38": "When studying online, I create my own examples of the content to make it more meaningful.",
+                                    "QUESTION_39": "When studying online, I organise my thoughts by making summaries of what I am learning.",
+                                    "QUESTION_40": "When studying online, I try and relate the content to what I already know.",
+                                    "QUESTION_41": "When learning the online content, I try and develop my own ideas about it.",
+                                    "QUESTION_42": "I try and improve my understanding by doing additional work beyond the core content (e.g., doing extra problem-solving activities or extra readings)."
+                                }
+                            },
+                            "GENERAL_OPTIONS": {
+                                "options": [
+                                    "Strongly Disagree",
+                                    "Disagree",
+                                    "Somewhat Disagree",
+                                    "Neutral",
+                                    "Somewhat Agree",
+                                    "Agree",
+                                    "Strongly Agree"
+                                ]
+                            }
                         }
                     },
                     "CONTINUOUS_FEEDBACK": {

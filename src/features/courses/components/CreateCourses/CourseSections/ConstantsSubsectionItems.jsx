@@ -1,11 +1,10 @@
-import { EmptyQuestionnaireData, PlannificationQuestionnaireData, SRLOQuestionnaireData } from './QuestionnaireData'
+import QuestionnaireData from './QuestionnaireData';
 import { PeerReviewData, ForumData, ThinkAloudData, SelfAssessmentData } from './ActivityData';
 import React from 'react'
 import { useTranslation } from 'react-i18next';
 
 function createSubsection(subsectionName, fase, questionnaireData, setCreateCourseSectionsList, sectionToEdit, type, context, activityData) {
     const id = crypto.randomUUID();
-
     if (context === 'coursesInside') {
         if (activityData?.id) {
             delete activityData.id
@@ -191,6 +190,7 @@ function addSequence(modifiedSequence, setCreateCourseSectionsList, sectionToEdi
 }
 
 export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask, context }) => {
+    const { SRLOQuestionnaireData, PlannificationQuestionnaireData, EmptyQuestionnaireData } = QuestionnaireData();
     const { t } = useTranslation();
 
     const sequence = [
@@ -232,6 +232,7 @@ export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit, se
 }
 
 export const SequenceDevelopEducation1 = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask, context }) => {
+    const { SRLOQuestionnaireData, PlannificationQuestionnaireData, EmptyQuestionnaireData } = QuestionnaireData();
     const { t } = useTranslation();
     const sequence = [
         { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_STATEMENT.title"), iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
@@ -276,6 +277,7 @@ export const SequenceDevelopEducation1 = ({ setCreateCourseSectionsList, section
 }
 
 export const SequenceDevelopEducation2 = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask, context }) => {
+    const { SRLOQuestionnaireData, PlannificationQuestionnaireData, EmptyQuestionnaireData } = QuestionnaireData();
     const { t } = useTranslation();
     const sequence = [
         { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_STATEMENT.title"), iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
@@ -317,6 +319,7 @@ export const SequenceDevelopEducation2 = ({ setCreateCourseSectionsList, section
 
 
 export const SequenceFeedUP = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask, context }) => {
+    const { SRLOQuestionnaireData, PlannificationQuestionnaireData, EmptyQuestionnaireData } = QuestionnaireData();
     const { t } = useTranslation();
     const sequence = [
         { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_STATEMENT.title"), iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
@@ -394,6 +397,7 @@ export const SequenceThinkAloud = ({ setCreateCourseSectionsList, sectionToEdit,
 
 
 export const SequenceDevelopNoMSLQForum = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask, context }) => {
+    const { SRLOQuestionnaireData, PlannificationQuestionnaireData, EmptyQuestionnaireData } = QuestionnaireData();
     const { t } = useTranslation();
     const sequence = [
         { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_STATEMENT.title"), iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
@@ -434,6 +438,7 @@ export const SequenceDevelopNoMSLQForum = ({ setCreateCourseSectionsList, sectio
 }
 
 export const PerformancePage = ({ setCreateCourseSectionsList, sectionToEdit, context, sectionTask }) => {
+    const { SRLOQuestionnaireData, PlannificationQuestionnaireData, EmptyQuestionnaireData } = QuestionnaireData();
     const { t } = useTranslation();
 
     return (
@@ -565,6 +570,7 @@ export const buttonGroup = ({ handleBack, handleContinue }) => {
 export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, context, sectionTask }) => {
 
     const { t } = useTranslation();
+    const { SRLOQuestionnaireData, PlannificationQuestionnaireData, EmptyQuestionnaireData } = QuestionnaireData();
 
     return (
         <>
@@ -691,6 +697,7 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, co
 
 export const SelfReflectionPage = ({ setCreateCourseSectionsList, sectionToEdit, context, sectionTask }) => {
     const { t } = useTranslation();
+    const { SRLOQuestionnaireData, PlannificationQuestionnaireData, EmptyQuestionnaireData } = QuestionnaireData();
 
     return (
         <>

@@ -590,6 +590,89 @@
                         "FEEDBACK_REFLECTION_QUESTIONNAIRE": {
                             "title": "Cuestionario de Feedback y Reflexión",
                             "description": "El cuestionario de feedback y reflexión es una herramienta valiosa para recopilar información esencial para mejorar el rendimiento y la calidad del trabajo. Este cuestionario ayuda a individuos o equipos a identificar áreas de mejora, establecer metas y desarrollar un plan de acción para la mejora continua."
+                        },
+                        "QUESTIONNAIRE_DATA": {
+                            "PLANNING": {
+                                "QUESTIONS": {
+                                    "QUESTION_1": "¿Cuál es tu objetivo principal para esta tarea?",
+                                    "QUESTION_2": "¿Cómo calificarías tu nivel de conocimiento actual sobre el tema?",
+                                    "QUESTION_3": "¿En qué subtemas específicos planeas enfocarte?",
+                                    "QUESTION_4": "¿Cómo planeas recopilar información para tu investigación?",
+                                    "QUESTION_5": "¿Qué plazo has establecido para completar esta tarea?",
+                                    "QUESTION_6": "¿Qué estrategias planeas utilizar para el aprendizaje autorregulado durante esta tarea?"
+                                }
+                            },
+                            "SELF_ASSESSMENT": {
+                                "QUESTIONS": {
+                                    "QUESTION_1": "¿Logré los objetivos de la tarea?",
+                                    "QUESTION_2": "¿Fue satisfactoria la calidad de mi trabajo?",
+                                    "QUESTION_3": "¿Manejé mi tiempo de manera efectiva?",
+                                    "QUESTION_4": "¿Manejé bien los desafíos de la tarea?",
+                                    "QUESTION_5": "¿Fue clara y efectiva mi comunicación?",
+                                    "QUESTION_6": "¿Colaboré bien con los demás?",
+                                    "QUESTION_7": "¿Demostré creatividad o innovación?",
+                                    "QUESTION_8": "¿Qué aprendí de esta tarea?",
+                                    "QUESTION_9": "¿Cómo puedo mejorar en el futuro?",
+                                    "QUESTION_10": "En general, ¿qué tan satisfecho estoy con mi desempeño?"
+                                }
+                            },
+                            "SRLO": {
+                                "QUESTIONS": {
+                                    "QUESTION_1": "Estoy seguro de que seré capaz de dominar el contenido y las tareas en esta clase en línea.",
+                                    "QUESTION_2": "Estoy seguro de mi capacidad para persistir con éxito en esta clase en línea, incluso si encuentro el contenido difícil.",
+                                    "QUESTION_3": "Estoy seguro de que puedo poner el esfuerzo necesario para obtener una calificación alta en esta clase en línea.",
+                                    "QUESTION_4": "Estoy seguro de que puedo averiguar con precisión qué requiere la tarea que haga.",
+                                    "QUESTION_5": "Siempre encuentro aspectos del contenido que despiertan mi curiosidad.",
+                                    "QUESTION_6": "Me encanta aprender cosas nuevas en esta clase en línea.",
+                                    "QUESTION_7": "Encuentro agradable estudiar para esta clase en línea.",
+                                    "QUESTION_8": "Encuentro muy satisfactorio cuando aprendo nuevo material en este curso en línea.",
+                                    "QUESTION_9": "Siento una sensación de logro cuando aprendo nuevas habilidades o información.",
+                                    "QUESTION_10": "Quiero hacerlo bien en este curso en línea para presumir ante mis amigos y familiares.",
+                                    "QUESTION_11": "Quiero hacerlo bien debido a las expectativas reales o percibidas de los demás.",
+                                    "QUESTION_12": "Quiero obtener una mejor calificación que los demás en mi clase en línea.",
+                                    "QUESTION_13": "Me siento tan impotente que no puedo dedicar todo mi esfuerzo a mis estudios en línea.",
+                                    "QUESTION_14": "Mientras estudio, quiero distraerme para reducir mi nivel de ansiedad.",
+                                    "QUESTION_15": "Me pongo tan ansioso que ni siquiera quiero empezar a estudiar en línea.",
+                                    "QUESTION_16": "Cuando tengo que estudiar en línea, empiezo a sentirme mal.",
+                                    "QUESTION_17": "Establezco metas a corto plazo (diarias o semanales).",
+                                    "QUESTION_18": "Establezco plazos realistas para el aprendizaje.",
+                                    "QUESTION_19": "Divido los objetivos más grandes en metas más pequeñas y alcanzables.",
+                                    "QUESTION_20": "Hago una lista de acciones detalladas que necesito completar.",
+                                    "QUESTION_21": "Planifico mi horario cada semana para tener el tiempo apropiado disponible para estudiar en línea.",
+                                    "QUESTION_22": "Pienso en qué estrategias de aprendizaje me han funcionado en el pasado al realizar tareas o tipos de estudio similares.",
+                                    "QUESTION_23": "Paso tiempo tratando de interpretar la tarea para asegurarme de entender con precisión lo que necesito hacer.",
+                                    "QUESTION_24": "Reviso los comentarios que he recibido en el pasado y verifico que he mejorado en mi aprendizaje actual.",
+                                    "QUESTION_25": "Pienso en cómo podría mejorar mi trabajo evaluándolo contra los criterios de calificación proporcionados por el maestro.",
+                                    "QUESTION_26": "Puedo estudiar para mi curso en línea sin distracciones.",
+                                    "QUESTION_27": "Tengo acceso a un lugar tranquilo y sin distracciones para estudiar.",
+                                    "QUESTION_28": "Sé dónde puedo estudiar más eficientemente para este curso en línea.",
+                                    "QUESTION_29": "Trabajo duro en mi estudio en línea, incluso cuando hay cosas más interesantes que hacer.",
+                                    "QUESTION_30": "Cuando mi estudio en línea se pone difícil, me mantengo comprometido con alcanzar mis metas de estudio.",
+                                    "QUESTION_31": "Cuando mi mente comienza a divagar durante una sesión de aprendizaje para este curso en línea, hago un esfuerzo especial para seguir concentrado.",
+                                    "QUESTION_32": "No importa cómo me sienta, persevero con mi estudio en línea.",
+                                    "QUESTION_33": "Trato de ayudar a otros estudiantes cuando hacen una pregunta en línea que puedo responder.",
+                                    "QUESTION_34": "Pido ayuda a personas conocedoras a través de canales en línea cuando no estoy seguro de qué hacer en mi clase en línea.",
+                                    "QUESTION_35": "Pido al maestro y/o a mis compañeros que aclaren la información en mi curso en línea.",
+                                    "QUESTION_36": "Cuando tengo dificultades con mi clase en línea, busco ayuda de otros a través de medios en línea (foros de discusión, redes sociales, correo electrónico, mensajería instantánea, etc.).",
+                                    "QUESTION_37": "Utilizo correo electrónico, foros de discusión, redes sociales, etc., para conectarme con el maestro y otros estudiantes cuando necesito ayuda.",
+                                    "QUESTION_38": "Cuando estudio en línea, creo mis propios ejemplos del contenido para hacerlo más significativo.",
+                                    "QUESTION_39": "Cuando estudio en línea, organizo mis pensamientos haciendo resúmenes de lo que estoy aprendiendo.",
+                                    "QUESTION_40": "Cuando estudio en línea, trato de relacionar el contenido con lo que ya sé.",
+                                    "QUESTION_41": "Cuando aprendo el contenido en línea, trato de desarrollar mis propias ideas al respecto.",
+                                    "QUESTION_42": "Trato de mejorar mi comprensión haciendo trabajo adicional más allá del contenido principal (por ejemplo, haciendo actividades adicionales de resolución de problemas o lecturas adicionales)."
+                                }
+                            },
+                            "GENERAL_OPTIONS": {
+                                "options": [
+                                    "Totalmente en desacuerdo",
+                                    "En desacuerdo",
+                                    "Algo en desacuerdo",
+                                    "Neutral",
+                                    "Algo de acuerdo",
+                                    "De acuerdo",
+                                    "Totalmente de acuerdo"
+                                ]
+                            }
                         }
                     },
                     "CONTINUOUS_FEEDBACK": {
