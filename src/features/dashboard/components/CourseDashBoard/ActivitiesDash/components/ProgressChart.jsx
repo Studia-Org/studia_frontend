@@ -1,7 +1,6 @@
 import React from 'react'
 import { Progress, Divider } from 'antd';
 import { BadgeProgress } from './BadgeProgress';
-
 export const ProgressChart = ({ objectivesList }) => {
     return (
         <div className="space-y-4">

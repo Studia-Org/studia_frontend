@@ -1,7 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import "../../styles/cardDash.css";
-import { useEffect, useState } from "react";
-import { API } from "../../../../constant"
 import Slider from "./Slider";
 
 

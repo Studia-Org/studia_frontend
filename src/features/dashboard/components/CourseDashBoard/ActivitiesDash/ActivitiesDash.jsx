@@ -13,9 +13,10 @@ import { fetchQuestionnaireTimeByCourse } from "../../../../../fetches/fetchQues
 import { ProgressChart } from "./components/ProgressChart";
 import { Empty } from "antd";
 import { fetchStudentsAverageWithLabel } from "../../../../../fetches/fetchStudentsAverageWithLabel";
+import { useTranslation } from "react-i18next";
 
 export function ActivitiesDash({ courseInformation, styles, courseId }) {
-
+    const { t } = useTranslation();
     const [loading, setLoading] = useState(true);
     const [studentsAverage, setStudentsAverage] = useState()
     const [activitiesAverage, setActivitiesAverage] = useState();
@@ -75,8 +76,8 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
         return (
             !loading ?
                 <>
-                    <p className="mb-1 text-lg font-medium">Objective progress</p>
-                    <p className="pb-5 text-sm font-normal text-gray-600">Check how are you progressing on the objectives of the course.</p>
+                    <p className="mb-1 text-lg font-medium">{t("DASHBOARD.objective_progress")}</p>
+                    <p className="pb-5 text-sm font-normal text-gray-600">{t("DASHBOARD.check_progress")}</p>
                     <div className="">
                         {
                             objectives.length !== 0 ?
@@ -119,8 +120,8 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
 
         return (
             <>
-                <p className="mb-1 text-lg font-medium">Qualifications distribution</p>
-                <p className="pb-5 text-sm font-normal text-gray-600">Distribution of the qualifiactions based on the activities of the course.</p>
+                <p className="mb-1 text-lg font-medium">{t("DASHBOARD.qualifications_distribution")}</p>
+                <p className="pb-5 text-sm font-normal text-gray-600">{t("DASHBOARD.distribution_based_on_activities")}</p>
                 {
                     checkIfNoQualifications(totalQualifications) ?
                         <div className="flex items-center justify-center h-full pb-32">
@@ -143,8 +144,8 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
     function QuestionnarieTime() {
         return (
             <>
-                <p className="mb-1 text-lg font-medium">Questionnarie time (min)</p>
-                <p className="pb-5 text-sm font-normal text-gray-600">Compare the time you dedicated to the questionnaires against other students.</p>
+                <p className="mb-1 text-lg font-medium">{t("DASHBOARD.questionnaire_time_min")}</p>
+                <p className="pb-5 text-sm font-normal text-gray-600">{t("DASHBOARD.compare_time")}</p>
                 {
                     questionnaireTime[0] === '0.00' && questionnaireTime[1] === '0.00' ?
                         <div className="flex items-center justify-center h-full pb-32">
@@ -183,7 +184,7 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
                                     colors: ['transparent']
                                 },
                                 xaxis: {
-                                    categories: ["Average time spent", "Your time spent"],
+                                    categories: [t("DASHBOARD.average_time_spent"), t("DASHBOARD.your_time_spent")],
                                 },
                                 fill: {
                                     opacity: 1,
@@ -218,12 +219,12 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
     function PostChart() {
         return (
             <>
-                <p className="mb-1 text-lg font-medium">Participation in Forums</p>
-                <p className="pb-5 text-sm font-normal text-gray-600">Measure the engagement in forum discussions.</p>
+                <p className="mb-1 text-lg font-medium">{t("DASHBOARD.participation_forums")}</p>
+                <p className="pb-5 text-sm font-normal text-gray-600">{t("DASHBOARD.measure_engagement")}</p>
                 {
                     posts.totalPosts === 0 && posts.totalRespuestas === 0 ?
                         <div className="flex items-center justify-center h-full pb-32">
-                            <Empty description='No data to show' />
+                            <Empty description={t("DASHBOARD.no_data")} />
                         </div>
                         :
                         <ReactApexChart
@@ -262,7 +263,7 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
                                     }
                                 }],
                                 xaxis: {
-                                    categories: ['Posts forum', 'Replies forum']
+                                    categories: [t("DASHBOARD.posts_forum"), t("DASHBOARD.replies_forum")]
                                 },
                                 fill: {
                                     opacity: 1
@@ -284,19 +285,19 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
                             height={'90%'}
                             series={[
                                 {
-                                    name: 'Total posts',
+                                    name: t("DASHBOARD.total_posts"),
                                     data: [posts.totalPosts, 0]
                                 },
                                 {
-                                    name: 'Total answers',
+                                    name: t("DASHBOARD.total_answers"),
                                     data: [0, posts.totalRespuestas]
                                 },
                                 {
-                                    name: 'Your posts',
+                                    name: t("DASHBOARD.your_posts"),
                                     data: [posts.postsUsuario, 0]
                                 },
                                 {
-                                    name: 'Your answers',
+                                    name: t("DASHBOARD.your_answers"),
                                     data: [0, posts.respuestasUsuario]
                                 }
                             ]}
@@ -319,10 +320,10 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                                 <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
                             </svg>
-                            <p className='ml-1 '>Go back to dashboard</p>
+                            <p className='ml-1 '>{t("DASHBOARD.go_back_dashboard")}</p>
                         </button>
-                        <h2 className="mb-1 text-xl font-semibold">Course Dashboard</h2>
-                        <p className="mb-5 text-sm text-gray-500">Explore your performance metrics and track your progress throughout the course.</p>
+                        <h2 className="mb-1 text-xl font-semibold">{t("DASHBOARD.course_dashboard")}</h2>
+                        <p className="mb-5 text-sm text-gray-500">{t("DASHBOARD.explore_performance_metrics")}</p>
 
                         <div className="grid gap-6 pb-16  grid-cols-1 lg:grid-cols-[repeat(auto-fit,minmax(30vw,1fr))] ">
                             {

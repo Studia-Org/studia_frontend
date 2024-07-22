@@ -1,7 +1,8 @@
 import React from 'react'
 import ReactApexChart from 'react-apexcharts'
-
+import { useTranslation } from 'react-i18next';
 export const StudentGradesProfessor = ({ data }) => {
+    const { t } = useTranslation();
     const dataEntries = Object.entries(data);
 
     // Extraer los nombres y las calificaciones para las categorías y los datos del gráfico
@@ -16,7 +17,7 @@ export const StudentGradesProfessor = ({ data }) => {
             y: value,
             goals: [
                 {
-                    name: 'Course average',
+                    name: t("DASHBOARD.average_course"),
                     value: average,
                     strokeHeight: 2,
                     strokeDashArray: 2,
@@ -28,7 +29,7 @@ export const StudentGradesProfessor = ({ data }) => {
     })
 
     const series = [{
-        name: 'Grades',
+        name: t("DASHBOARD.average_student"),
         data: finalChartData
     }];
 
@@ -78,8 +79,8 @@ export const StudentGradesProfessor = ({ data }) => {
 
     return (
         <>
-            <p className="mb-1 text-lg font-medium">Students average</p>
-            <p className="pb-5 text-sm font-normal text-gray-600">Check how are your students progressing in the course.</p>
+            <p className="mb-1 text-lg font-medium">{t("DASHBOARD.students_average")}</p>
+            <p className="pb-5 text-sm font-normal text-gray-600">{t("DASHBOARD.check_students")}</p>
             <div id="chart">
                 <ReactApexChart options={options} series={series} type="bar" height={350} />
             </div>
