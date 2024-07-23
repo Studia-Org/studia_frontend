@@ -613,6 +613,13 @@
                             "SELF_ASSESSMENT": {
                                 "title": "Self-assessment Questionnaire",
                                 "description": "The self-assessment questionnaire is a valuable tool for evaluating your performance on a task or project. It helps you reflect on your strengths and weaknesses, identify areas for improvement, and set goals for future development.",
+                                "OPTIONS": {
+                                    "OPTION_1": "Strongly Disagree",
+                                    "OPTION_2": "Disagree",
+                                    "OPTION_3": "Neutral",
+                                    "OPTION_4": "Agree",
+                                    "OPTION_5": "Strongly Agree"
+                                },
                                 "QUESTIONS": {
                                     "QUESTION_1": "Did I achieve the task's objectives?",
                                     "QUESTION_2": "Was the quality of my work satisfactory?",
