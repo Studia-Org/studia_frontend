@@ -1,16 +1,17 @@
 import Rubrica from "../Rubrica"
 import { AvatarGroup, Avatar } from "rsuite"
-
+import { Trans, useTranslation } from "react-i18next"
 
 export default function UsersToReview({ usersToCorrect, usersWithAnswers, setUserIndexSelected, data, usersToPair, correctActivityGroup }) {
-
+    const { t } = useTranslation();
     const usersToPairAdapted = correctActivityGroup ? usersToCorrect.length : usersToPair
     return (
         <section className="flex flex-wrap flex-1 w-full gap-x-10 ">
             <div className="flex flex-col px-5 my-2">
-                <h3 className="mb-2"> You have to review {usersToPairAdapted} colleagues to finish the activity</h3>
-                <h3 >Left to review: {usersToPairAdapted - usersWithAnswers.length} </h3>
+                <h3 className="mb-2"><Trans i18nKey="PEERREVIEW.users_to_review" components={{ "usersToPairAdapted": usersToPairAdapted }} /></h3>
+                <h3 >{t("PEERREVIEW.left_to_review")}: {usersToPairAdapted - usersWithAnswers.length} </h3>
                 {usersToCorrect.map((user, index) => {
+                    const groupName = user.attributes.GroupName || (index + 1)
                     return (
                         <div key={index}
                             onClick={() => setUserIndexSelected(index)}
@@ -33,7 +34,7 @@ export default function UsersToReview({ usersToCorrect, usersWithAnswers, setUse
 
                             <p className="text-lg text-black">{
                                 correctActivityGroup ?
-                                    ("Group " + user.attributes.GroupName || "Group " + (index + 1)) :
+                                    ("Group " + groupName || "Group " + groupName) :
                                     user.attributes.username
                             }</p>
                             {

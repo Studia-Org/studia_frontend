@@ -8,7 +8,7 @@ import { Questions } from './Questions'
 import { API } from '../../../../../../constant'
 import { getToken } from '../../../../../../helpers'
 import { useParams } from 'react-router-dom'
-
+import { useTranslation } from 'react-i18next'
 
 
 
@@ -19,7 +19,7 @@ export const Questionnaire = ({ setState, setSelfAssesmentData, setQualification
     const [userResponses, setUserResponses] = useState([]);
     const [completed, setCompleted] = useState(questionnaireAnswers?.length > 0);
     const [sendingData, setSendingData] = useState(false);
-
+    const { t } = useTranslation()
     let { activityId } = useParams()
 
 
@@ -125,7 +125,7 @@ export const Questionnaire = ({ setState, setSelfAssesmentData, setQualification
                                     <>
                                         <Button type='primary' loading={sendingData} onClick={handleSubmission}
                                             className="flex">
-                                            Submit
+                                            {t('COMMON.submit')}
                                         </Button>
                                     </>
                                 )

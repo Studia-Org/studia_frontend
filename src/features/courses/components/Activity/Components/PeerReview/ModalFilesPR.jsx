@@ -1,7 +1,8 @@
 import React from 'react'
 import { Modal, Button, Empty } from 'antd'
+import { Trans } from 'react-i18next';
 
-export const ModalFilesPR = ({ files, activityTitle, isModalOpen, setIsModalOpen, studentName }) => {
+export const ModalFilesPR = ({ files, activityTitle, isModalOpen, setIsModalOpen, studentName = "" }) => {
     const downloadFile = async (file) => {
         try {
             const response = await fetch(file.url);
@@ -39,7 +40,14 @@ export const ModalFilesPR = ({ files, activityTitle, isModalOpen, setIsModalOpen
                     OK
                 </Button>
             ]}>
-            <p className='text-sm text-gray-700'>Files delivered by {studentName} on activity {activityTitle}</p>
+            <p className='text-sm text-gray-700'>
+                <Trans i18nKey='QUALIFICATIONS.files_delivered_by'
+                    components={{
+                        student: studentName,
+                        activity: activityTitle
+                    }}
+                />
+            </p>
             {
                 (files?.length === 0 || !files) &&
                 <Empty className='mt-7' description='There are no files delivered' />

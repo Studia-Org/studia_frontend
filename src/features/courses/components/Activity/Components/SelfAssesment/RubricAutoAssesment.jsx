@@ -3,6 +3,7 @@ import { Table, Input, InputNumber, Button, message } from 'antd'
 import { getToken } from '../../../../../../helpers';
 import { API } from '../../../../../../constant';
 import { useAuthContext } from '../../../../../../context/AuthContext';
+import { useTranslation } from 'react-i18next';
 const { TextArea } = Input;
 
 export const RubricAutoAssesment = ({ activityData, setState, qualificationId, setSelfAssesmentData, selfAssesmentData, subsectionID }) => {
@@ -10,6 +11,7 @@ export const RubricAutoAssesment = ({ activityData, setState, qualificationId, s
     const [loading, setLoading] = useState(false)
     const [grade, setGrade] = useState(1)
     const { user } = useAuthContext()
+    const { t } = useTranslation()
 
     const columns = [
         {
@@ -18,22 +20,22 @@ export const RubricAutoAssesment = ({ activityData, setState, qualificationId, s
             rowScope: 'row',
         },
         {
-            title: 'Bad',
+            title: t("SELFASSESTMENT.bad"),
             dataIndex: 'evaluation1',
 
         },
         {
-            title: 'Regular',
+            title: t("SELFASSESTMENT.regular"),
             dataIndex: 'evaluation2',
 
         },
         {
-            title: 'Good',
+            title: t("SELFASSESTMENT.good"),
             dataIndex: 'evaluation3',
 
         },
         {
-            title: 'Excellent',
+            title: t("SELFASSESTMENT.very_good"),
             dataIndex: 'evaluation4',
 
         },
@@ -43,7 +45,7 @@ export const RubricAutoAssesment = ({ activityData, setState, qualificationId, s
         setLoading(true)
         if (!comments || !grade) {
             setLoading(false)
-            message.error('Please fill in all fields')
+            message.error(t("REGISTER.fill_all_fields"))
             return
         }
         try {
@@ -91,31 +93,31 @@ export const RubricAutoAssesment = ({ activityData, setState, qualificationId, s
             const response = await temp.json();
             console.log(response)
             setSelfAssesmentData([responseAssesmentData.data]);
-            message.success('Your evaluation has been submitted')
+            message.success(t("SELFASSESTMENT.your_evaluation_submitted"))
             setState(2)
             setLoading(false)
         } catch (error) {
             setLoading(false)
             console.error(error)
-            message.error('Something went wrong')
+            message.error(t("PASSWORD_RECOVERY.smth_wrong"))
         }
     }
 
     return (
         <>
-            <h2 className='mt-5 text-lg font-medium'>Rubric and Autoevaluation</h2>
-            <p className='mt-3 mb-3 text-sm font-normal text-gray-500'>Thoroughly read the criteria outlined in the rubric. Take some time to reflect on your project and assess how well it meets each of the outlined criteria. </p>
+            <h2 className='mt-5 text-lg font-medium'>{t("SELFASSESTMENT.rubric_autoevalution")}</h2>
+            <p className='mt-3 mb-3 text-sm font-normal text-gray-500'>{t("SELFASSESTMENT.rubric_text")}</p>
             <Table columns={columns} dataSource={activityData.activity.data.attributes.SelfAssesmentRubrica} pagination={false} className='border rounded-md' />
-            <p className='my-3 text-sm font-normal text-gray-500'>Now that you have reviewed the rubric, use it to self-evaluate your project. Consider each criterion carefully and assess how well your project fulfills the requirements. After reflecting on these aspects, assign a grade to your project.</p>
+            <p className='my-3 text-sm font-normal text-gray-500'>{t("SELFASSESTMENT.rubric_text2")}</p>
             <div className='p-6 mt-5 bg-white border rounded-md'>
-                <p className='mb-1 text-xs'>Add your comments about your project.</p>
+                <p className='mb-1 text-xs'>{t("SELFASSESTMENT.add_your_comments")}</p>
                 <TextArea rows={5} value={comments} onChange={(e) => setComments(e.target.value)} />
                 <div className='mt-5'>
-                    <p className='mb-1 text-xs'>Evaluate your project with a score from 1 to 10.</p>
+                    <p className='mb-1 text-xs'>{t("SELFASSESTMENT.evaluate_1_10")}</p>
                     <InputNumber min={1} max={10} value={grade} onChange={setGrade} />
                 </div>
             </div>
-            <Button loading={loading} className='my-4' type='primary' onClick={handleSubmit} >Submit</Button>
+            <Button loading={loading} className='my-4' type='primary' onClick={handleSubmit} >{t("COMMON.submit")}</Button>
         </>
 
     )
