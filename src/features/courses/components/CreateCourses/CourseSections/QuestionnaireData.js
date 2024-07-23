@@ -5,8 +5,8 @@ const QuestionnaireData = () => {
 
     const SRLOQuestionnaireData = {
         attributes: {
-            Title: "SRL-O Questionnaire",
-            description: "Questionnaire for measuring student self-regulated learning",
+            Title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SRLO.title"),
+            description: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SRLO.description"),
             autocorrect: false,
             editable: false,
             type: "scaling",
@@ -14,8 +14,8 @@ const QuestionnaireData = () => {
                 questionnaire: {
                     editable: false,
                     type: "SRL-O",
-                    title: "SRL-O Questionnaire",
-                    description: "Questionnaire for measuring student self-regulated learning",
+                    title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SRLO.title"),
+                    description: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SRLO.description"),
                     questions:
                         [
                             {
@@ -197,8 +197,8 @@ const QuestionnaireData = () => {
 
     const EmptyQuestionnaireData = {
         attributes: {
-            Title: "Empty Questionnaire",
-            description: "Empty Questionnaire",
+            Title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.EMPTY.title"),
+            description: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.EMPTY.description"),
             autocorrect: false,
             editable: true,
             type: "standard",
@@ -206,8 +206,8 @@ const QuestionnaireData = () => {
                 questionnaire: {
                     editable: true,
                     type: "Empty",
-                    title: "Empty Questionnaire",
-                    description: "Empty Questionnaire",
+                    title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.EMPTY.title"),
+                    description: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.EMPTY.description"),
                     questions:
                         [],
                     correctAnswers: {}
@@ -219,15 +219,15 @@ const QuestionnaireData = () => {
 
     const PlannificationQuestionnaireData = {
         attributes: {
-            Title: "Plannification Questionnaire",
-            description: "Questionnaire for measuring student plannification",
+            Title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.PLANNING.title"),
+            description: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.PLANNING.description"),
             autocorrect: false,
             editable: true,
             type: "standard",
             Options: {
                 questionnaire: {
-                    title: "Plannification Questionnaire",
-                    description: "Questionnaire for measuring student plannification",
+                    title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.PLANNING.title"),
+                    description: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.PLANNING.description"),
                     editable: true,
                     type: "Plannification",
                     questions:
@@ -265,15 +265,15 @@ const QuestionnaireData = () => {
 
     const SelfAssesmentData = {
         attributes: {
-            Title: "Self-Assessment Questionnaire",
-            description: "Questionnaire for measuring the performance and progress of students.",
+            Title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SELF_ASSESSMENT.title"),
+            description: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SELF_ASSESSMENT.description"),
             autocorrect: false,
             editable: true,
             type: "standard",
             Options: {
                 questionnaire: {
-                    title: "Self-Assessment Questionnaire",
-                    description: "Questionnaire for measuring student self-assessment",
+                    title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SELF_ASSESSMENT.title"),
+                    description: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SELF_ASSESSMENT.description"),
                     editable: true,
                     type: "Self-Assessment",
                     questions:

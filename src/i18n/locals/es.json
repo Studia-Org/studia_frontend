@@ -592,7 +592,13 @@
                             "description": "El cuestionario de feedback y reflexión es una herramienta valiosa para recopilar información esencial para mejorar el rendimiento y la calidad del trabajo. Este cuestionario ayuda a individuos o equipos a identificar áreas de mejora, establecer metas y desarrollar un plan de acción para la mejora continua."
                         },
                         "QUESTIONNAIRE_DATA": {
+                            "EMPTY": {
+                                "title": "Cuestionario Vacío",
+                                "description": "Crea un nuevo cuestionario desde cero."
+                            },
                             "PLANNING": {
+                                "title": "Cuestionario de Planificación",
+                                "description": "Un cuestionario de planificación es una herramienta valiosa para recopilar información esencial para crear planes efectivos. Este cuestionario ayuda a individuos o equipos a definir metas, identificar recursos y establecer una hoja de ruta para una ejecución exitosa.",
                                 "QUESTIONS": {
                                     "QUESTION_1": "¿Cuál es tu objetivo principal para esta tarea?",
                                     "QUESTION_2": "¿Cómo calificarías tu nivel de conocimiento actual sobre el tema?",
@@ -603,6 +609,8 @@
                                 }
                             },
                             "SELF_ASSESSMENT": {
+                                "title": "Cuestionario de Autoevaluación",
+                                "description": "La autoevaluación es un proceso que permite a los estudiantes reflexionar sobre su aprendizaje, identificar áreas de fortaleza y debilidad, y establecer metas para la mejora. Es una habilidad esencial para el aprendizaje permanente y el desarrollo personal.",
                                 "QUESTIONS": {
                                     "QUESTION_1": "¿Logré los objetivos de la tarea?",
                                     "QUESTION_2": "¿Fue satisfactoria la calidad de mi trabajo?",
@@ -617,6 +625,8 @@
                                 }
                             },
                             "SRLO": {
+                                "title": "Cuestionario de Autorregulación SRL-O",
+                                "description": "El cuestionario de Autorregulación para el aprendizaje en línea (SRL-O) mide la frecuencia y la calidad de las estrategias de aprendizaje cuando se aplican a entornos en línea, mixtos o híbridos.",
                                 "QUESTIONS": {
                                     "QUESTION_1": "Estoy seguro de que seré capaz de dominar el contenido y las tareas en esta clase en línea.",
                                     "QUESTION_2": "Estoy seguro de mi capacidad para persistir con éxito en esta clase en línea, incluso si encuentro el contenido difícil.",
