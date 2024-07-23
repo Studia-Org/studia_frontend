@@ -594,7 +594,13 @@
                             "description": "El qüestionari de feedback i reflexió és una eina valuosa per recopilar informació sobre l'eficàcia de les tasques i activitats, així com per identificar àrees d'aprenentatge i millora. Aquest qüestionari ajuda a individus o equips a reflexionar sobre el seu aprenentatge i a identificar accions per millorar."
                         },
                         "QUESTIONNAIRE_DATA": {
+                            "EMPTY": {
+                                "title": "Qüestionari Buit",
+                                "description": "Crea un nou qüestionari des de zero."
+                            },
                             "PLANNING": {
+                                "title": "Qüestionari de Planificació",
+                                "description": "Un qüestionari de planificació és una eina valuosa per recopilar informació essencial per crear plans efectius. Aquest qüestionari ajuda a individus o equips a definir metes, identificar recursos i establir una fulla de ruta per a una execució reeixida.",
                                 "QUESTIONS": {
                                     "QUESTION_1": "Quin és el teu objectiu principal per a aquesta tasca?",
                                     "QUESTION_2": "Com valoraries el teu nivell de coneixement actual sobre el tema?",
@@ -605,6 +611,8 @@
                                 }
                             },
                             "SELF_ASSESSMENT": {
+                                "title": "Qüestionari d'Autoavaluació",
+                                "description": "El questionari d'autoavaluació és un procés que permet als estudiants reflexionar sobre el seu aprenentatge, identificar àrees de fortalesa i feblesa, i establir metes per a la millora. És una habilitat essencial per a l'aprenentatge permanent i el desenvolupament personal.",
                                 "QUESTIONS": {
                                     "QUESTION_1": "Vaig aconseguir els objectius de la tasca?",
                                     "QUESTION_2": "Va ser satisfactòria la qualitat de la meva feina?",
@@ -619,6 +627,8 @@
                                 }
                             },
                             "SRLO": {
+                                "title": "Qüestionari d'Autorregulació SRL-O",
+                                "description": "El qüestionari d'Autorregulació per a l'aprenentatge en línia (SRL-O) mesura la freqüència i la qualitat de les estratègies d'aprenentatge quan s'apliquen a entorns en línia, mixtos o híbrids.",
                                 "QUESTIONS": {
                                     "QUESTION_1": "Estic segur que seré capaç de dominar el contingut i les tasques en aquesta classe en línia.",
                                     "QUESTION_2": "Estic segur de la meva capacitat per persistir amb èxit en aquesta classe en línia, fins i tot si trobo el contingut difícil.",

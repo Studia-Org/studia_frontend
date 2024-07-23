@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 import { Collapse } from 'antd';
 import { CaretRightOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 
 export const AccordionCourse = ({ createCourseSectionsList, setSectionContentSelector, setSectionId, selectedSubsection, sectionId }) => {
     const { Panel } = Collapse;
     const [sectionNumber, setSectionNumber] = useState(1);
+
+    const { t } = useTranslation()
 
 
     function RenderCourseSubsections({ subsection, sectionId }) {
@@ -55,7 +58,7 @@ export const AccordionCourse = ({ createCourseSectionsList, setSectionContentSel
                     header={
                         <div className='flex items-center py-4 '>
                             <div className='flex flex-col w-full text-left ml-9'>
-                                <p className='mb-1 text-sm'>Section {sectionNumber}</p>
+                                <p className='mb-1 text-sm'>{t("COURSEINSIDE.ACCORDION.section")}  {sectionNumber}</p>
                                 <h2 className='w-3/4 text-lg font-medium text-left line-clamp-2'>
                                     {section.name}
 
@@ -78,7 +81,7 @@ export const AccordionCourse = ({ createCourseSectionsList, setSectionContentSel
 
     return (
         <div className='p-5 bg-white rounded-lg shadow-md'>
-            <p className='text-xl font-semibold'>Course content</p>
+            <p className='text-xl font-semibold'>{t("COURSEINSIDE.ACCORDION.title")}</p>
             <hr className="h-px my-8 bg-gray-400 border-0"></hr>
             {
                 createCourseSectionsList.map((section, index) => (

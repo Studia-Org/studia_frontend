@@ -6,6 +6,7 @@ import RadioGroup, { useRadioGroup } from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
 import Radio from '@mui/material/Radio';
 import { ScaleQuestionnaireForm } from '../../CoursesInside/Questionnaire/ScaleQuestionnaireForm';
+import { useTranslation } from 'react-i18next';
 
 const list = {
     visible: { opacity: 1 },
@@ -26,6 +27,9 @@ const item = {
 
 
 export const QuestionnaireConfirmation = ({ questionnaire }) => {
+
+    const { t } = useTranslation()
+
     const questionsPerPage = 3;
     const [groupValues, setGroupValues] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -152,10 +156,10 @@ export const QuestionnaireConfirmation = ({ questionnaire }) => {
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 mr-2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75" />
                     </svg>
-                    Previous
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.previous")}
                 </button>
                 <button className='flex items-center mx-4 duration-200 hover:translate-x-2 disabled:text-gray-300 disabled:translate-x-0' onClick={handleNextPage} disabled={currentPage === totalPages}>
-                    Next
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.next")}
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-2">
                         <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
                     </svg>

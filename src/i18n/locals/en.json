@@ -64,7 +64,7 @@
         "repassword": "Re-enter password",
         "continue": "Continue",
         "objectives_register": {
-            "title": "One last steps...",
+            "title": "One last step...",
             "subtitle": "Add some personalization to your profile and set your goals!",
             "add_brief_description": "Add a brief description about yourself",
             "set_your_goals": "Set your goals",
@@ -594,7 +594,13 @@
                             "description": "Feedback and reflection questionnaire."
                         },
                         "QUESTIONNAIRE_DATA": {
+                            "EMPTY": {
+                                "title": "Empty Questionnaire",
+                                "description": "Create a new questionnaire from scratch."
+                            },
                             "PLANNING": {
+                                "title": "Planning Questionnaire",
+                                "description": "The planning questionnaire is a valuable tool for gathering essential information to create effective plans. This questionnaire helps individuals or teams define goals, identify resources, and establish a roadmap for successful execution.",
                                 "QUESTIONS": {
                                     "QUESTION_1": "What is your primary objective for this task?",
                                     "QUESTION_2": "How would you rate your current knowledge level on the topic?",
@@ -605,6 +611,8 @@
                                 }
                             },
                             "SELF_ASSESSMENT": {
+                                "title": "Self-assessment Questionnaire",
+                                "description": "The self-assessment questionnaire is a valuable tool for evaluating your performance on a task or project. It helps you reflect on your strengths and weaknesses, identify areas for improvement, and set goals for future development.",
                                 "QUESTIONS": {
                                     "QUESTION_1": "Did I achieve the task's objectives?",
                                     "QUESTION_2": "Was the quality of my work satisfactory?",
@@ -619,6 +627,8 @@
                                 }
                             },
                             "SRLO": {
+                                "title": "SRL-O Self-regulation Questionnaire",
+                                "description": "The Self-regulation for learning online (SRL-O) questionnaire measures the frequency and quality of learning strategies when applied to online or blended or hybrid environments.",
                                 "QUESTIONS": {
                                     "QUESTION_1": "I am confident that I will be able to master the content and assignments in this online class.",
                                     "QUESTION_2": "I am confident in my ability to successfully persist in this online class, even if I find the content difficult.",
