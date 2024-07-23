@@ -190,7 +190,7 @@ export const AccordionNavigator = ({ subsectionsCompleted }) => {
 
     return (
         <div className='w-full p-5 bg-white border rounded-lg'>
-            <p className='text-xl font-semibold'>{t("COURSEINSIDE.ACCORDION.title")}</p>
+            <p className='text-xl font-semibold'>{t("COURSEINSIDE.course_content")}</p>
             <hr className="h-px my-8 bg-gray-400 border-0"></hr>
             {
                 course && course?.sections.data.map((section, index) => (
