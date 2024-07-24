@@ -741,7 +741,7 @@
         "event_added": "Esdeveniment afegit correctament",
         "event_deleted": "Esdeveniment esborrat correctament",
         "error_fetching_events": "Error en recuperar els esdeveniments",
-        "export_calendar": "Exporta el calendari",
+        "export_calendar": "Exportar calendari",
         "add_event": "Afegeix esdeveniment",
         "event_title": "Títol de l'esdeveniment",
         "date": "Data",

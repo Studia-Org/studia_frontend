@@ -93,7 +93,7 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.2",
     "remarkable": "^2.0.1",
-    "rsuite": "^5.33.0",
+    "rsuite": "^5.67.0",
     "sweetalert2": "^11.7.3",
     "tailwind-datepicker-react": "^1.4.3",
     "typeface-roboto": "^1.1.13",

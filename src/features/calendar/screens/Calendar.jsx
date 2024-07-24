@@ -10,7 +10,7 @@ import { getToken } from "../../../helpers";
 import { FiPlus } from 'react-icons/fi';
 import { MoonLoader } from "react-spinners";
 import { useTranslation } from "react-i18next";
-import { esES, enUS } from 'rsuite/locales'
+import { esES, enUS, caES } from 'rsuite/locales'
 import './calendar.css'
 
 const CalendarEvents = () => {
@@ -18,6 +18,7 @@ const CalendarEvents = () => {
     const locales = {
         'es': esES,
         'en': enUS,
+        'ca': caES
     }
     const locale = locales[i18n.language] || enUS;
     const { user } = useAuthContext();
