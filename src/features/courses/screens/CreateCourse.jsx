@@ -25,6 +25,9 @@ const CreateCourse = () => {
         return savedSections ? JSON.parse(savedSections) : [];
     });
 
+    console.log(createCourseSectionsList)
+    console.log(localStorage.getItem('createCourseSectionsList'))
+
     const [courseBasicInfo, setCourseBasicInfo] = useState(() => {
         const savedInfo = localStorage.getItem('courseBasicInfo');
         return savedInfo ? JSON.parse(savedInfo) : { tags: [] };

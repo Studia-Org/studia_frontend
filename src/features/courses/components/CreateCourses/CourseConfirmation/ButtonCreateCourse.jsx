@@ -17,6 +17,13 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
 
     const navigate = useNavigate();
 
+    function emptyLocalStorage() {
+        localStorage.removeItem('courseBasicInfo')
+        localStorage.removeItem('createCourseSectionsList')
+        localStorage.removeItem('categories')
+        localStorage.removeItem('task')        
+    }
+
     const isValidCourseBasicInfo = (courseBasicInfo) => {
         if (!courseBasicInfo) {
             throw new Error("courseBasicInfo is missing");
@@ -331,7 +338,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                 end_date: new Date(lastDate),
             }
             const formData = new FormData();
-            formData.append('files', courseBasicInfo.cover[0].file);
+            formData.append('files', courseBasicInfo.cover[0].originFileObj);
             const coverUpload = await fetch(`${API}/upload/`, {
                 method: 'POST',
                 headers: {
@@ -367,6 +374,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                     }
                 }),
             })
+            emptyLocalStorage()
             message.success('Course created successfully');
             setIsLoading(false)
             navigate(`/app/courses/`)

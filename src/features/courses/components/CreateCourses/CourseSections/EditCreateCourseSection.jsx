@@ -185,6 +185,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
     };
     function saveChanges() {
         setCreateCourseSectionsList(createCourseSectionsListCopy)
+        localStorage.setItem('createCourseSectionsList', JSON.stringify(createCourseSectionsListCopy))
         setEditSubsectionFlag(false)
         setThereIsChanges(false)
         message.success('Changes saved successfully');

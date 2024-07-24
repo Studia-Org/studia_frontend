@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import '../../styles/filepondStyles.css'
 import { message, Select } from "antd";
 import 'react-tagsinput/react-tagsinput.css'
 import { DndContext, closestCenter } from '@dnd-kit/core';
@@ -13,12 +12,8 @@ import { TaskContent } from './CourseConfirmation/TaskContent';
 import { Empty, Popconfirm, Button } from 'antd';
 import { ButtonCreateCourse } from './CourseConfirmation/ButtonCreateCourse';
 import SelectProfessor from './CourseInfo/SelectProfessor';
-import { FilePond, registerPlugin } from 'react-filepond';
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
-import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
-import 'filepond/dist/filepond.min.css';
 import { useTranslation } from 'react-i18next';
-registerPlugin(FilePondPluginImagePreview);
+import { UploadFiles } from './CourseSections/UploadFiles';
 
 const variants = {
   hidden: { opacity: 0, y: 20 },
@@ -55,7 +50,7 @@ const CreateCourseButtons = (createCourseOption, setCreateCourseOption, visibili
                 localStorage.removeItem('courseBasicInfo');
                 localStorage.removeItem('createCourseSectionsList');
                 localStorage.removeItem('task');
-                localStorage.removeItem('categories');   
+                localStorage.removeItem('categories');
                 navigate('/app/courses')
               }}
               okText={<span className="text-white">Yes</span>}
@@ -97,10 +92,8 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
     courseType: '',
     tags: [],
   });
-  console.log('hola mundo');
-
-  console.log('courseBasicInfo', courseBasicInfo);
   const { t } = useTranslation();
+  const [files, setFiles] = useState(courseBasicInfo.cover ? courseBasicInfo.cover : []);
 
   const handleChange = (field, value) => {
     setFormData((prevData) => ({ ...prevData, [field]: value }));
@@ -110,6 +103,20 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
       return newInfo;
     });
   };
+
+  useEffect(() => {
+    const saveFilesToLocalStorage = async () => {
+      if (files.length > 0) {
+        setCourseBasicInfo((prevInfo) => {
+          const newInfo = { ...prevInfo, cover: files };
+          return newInfo;
+        });
+      }
+    };
+
+    saveFilesToLocalStorage();
+  }, [files]);
+
 
   return (
     <motion.div className='flex flex-col w-2/4' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
@@ -152,25 +159,17 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
       </div>
 
       <div className='flex justify-between mt-8'>
-        <div className='w-full font-medium'>
+        <div className='w-full font-medium mb-5'>
           <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 ">
             {t("CREATE_COURSES.COURSE_INFO.course_cover")} *
           </label>
-          <FilePond
-            allowMultiple={true}
-            files={courseBasicInfo.cover}
-            maxFiles={1}
-            onupdatefiles={(e) => {
-              setCourseBasicInfo((prevInfo) => {
-                const newInfo = { ...prevInfo, cover: e };
-                localStorage.setItem('courseBasicInfo', JSON.stringify(newInfo));
-                return newInfo;
-              });
-            }}
-          />
+          <UploadFiles fileList={files} setFileList={setFiles} listType={'picture'} maxCount={1} accept={'.jpg,.jpeg,.png'} styles={{ 'background': 'white' }} />
         </div>
       </div>
-      {CreateCourseButtons(createCourseOption, setCreateCourseOption, null, courseBasicInfo)}
+      <div className='mt-16'>
+        {CreateCourseButtons(createCourseOption, setCreateCourseOption, null, courseBasicInfo)}
+
+      </div>
     </motion.div>
   )
 }
