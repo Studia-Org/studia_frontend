@@ -7,9 +7,10 @@ import { MoonLoader } from 'react-spinners';
 import Swal from "sweetalert2";
 import { useAuthContext } from "../../../../context/AuthContext";
 import { ProfessorPeerReview } from "./ProfessorPeerReview";
-import { sub } from "date-fns";
+import { useTranslation } from "react-i18next";
 
 export default function PeerReviewComponent({ activityData }) {
+    const { t } = useTranslation()
     const [showEvaluate, setShowEvaluate] = useState(false);
     const [sendDataLoader, setSendDataLoader] = useState(false);
     const data = activityData?.activity?.data?.attributes?.PeerReviewRubrica
@@ -41,6 +42,7 @@ export default function PeerReviewComponent({ activityData }) {
         }
 
     }, [user, userIndexSelected]);
+
     useEffect(() => {
         if (user.role_str !== 'student') return
         if (qualificationIds === null) {
@@ -244,7 +246,7 @@ export default function PeerReviewComponent({ activityData }) {
 
                             Swal.fire({
                                 icon: 'success',
-                                title: 'Your feedback has been sent',
+                                title: t("PEERREVIEW.feedback_sent"),
                                 showConfirmButton: true,
                             }).then(() => {
                                 if (usersToPair > 1) {
@@ -273,7 +275,7 @@ export default function PeerReviewComponent({ activityData }) {
                                 console.error(err)
                                 Swal.fire({
                                     icon: 'error',
-                                    title: 'Your feedback has not been sent, try again later',
+                                    title: t("PEERREVIEW.feedback_not_sent"),
                                     showConfirmButton: false,
                                     timer: 2000
                                 })
@@ -295,7 +297,7 @@ export default function PeerReviewComponent({ activityData }) {
                         }).then(data => {
                             Swal.fire({
                                 icon: 'success',
-                                title: 'Your feedback has been sent',
+                                title: t("PEERREVIEW.feedback_sent"),
                                 showConfirmButton: true,
                             }).then(() => {
                                 if (usersToPair > 1) {
@@ -319,7 +321,7 @@ export default function PeerReviewComponent({ activityData }) {
                             console.error(err)
                             Swal.fire({
                                 icon: 'error',
-                                title: 'Your feedback has not been sent, try again later',
+                                title: t("PEERREVIEW.feedback_not_sent"),
                                 showConfirmButton: false,
                                 timer: 2000
                             })
@@ -334,7 +336,7 @@ export default function PeerReviewComponent({ activityData }) {
             console.error(err)
             Swal.fire({
                 icon: 'error',
-                title: 'Your feedback has not been sent, try again later',
+                title: t("PEERREVIEW.feedback_not_sent"),
                 showConfirmButton: false,
                 timer: 2000
             })
@@ -388,7 +390,7 @@ export default function PeerReviewComponent({ activityData }) {
     } else {
         return (
 
-            <div className={`flex min-h-full transition-transform duration-700 ${showEvaluate ? 'xl:-translate-x-[calc(100vw-21rem)] -translate-x-[calc(100vw-1rem)]' : ''}`}>
+            <div className={`flex min-h-full transition-transform duration-700 ${showEvaluate ? 'xl:-translate-x-[calc(100vw-8rem)] -translate-x-[calc(100vw-1rem)]' : ''}`}>
 
                 {
                     loading ?
@@ -398,9 +400,9 @@ export default function PeerReviewComponent({ activityData }) {
                         :
                         QualificationIdPartnerReview === "Error" ?
                             <div className="flex flex-col items-center justify-center w-full h-full gap-10">
-                                <h1 className="text-2xl text-center">You have not been assigned a partner to evaluate</h1>
-                                <h3 className="text-xl text-center">Maybe you should not be here yet ;)</h3>
-                                <h3 className="text-xl text-center">If it's not the case, please contact your teacher</h3>
+                                <h1 className="text-2xl text-center">{t("PEERREVIEW.no_partner_assigned")}</h1>
+                                <h3 className="text-xl text-center">{t("PEERREVIEW.maybe_not_here")}</h3>
+                                <h3 className="text-xl text-center">{t("PEERREVIEW.contact_teacher")}</h3>
                             </div>
                             : qualificationIds !== null &&
                             <>

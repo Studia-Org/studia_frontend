@@ -11,7 +11,11 @@
         "professor": "Professor",
         "student": "Student",
         "yes": "Yes",
-        "no": "No"
+        "no": "No",
+        "delete": "Delete",
+        "edit": "Edit",
+        "search_students": "Search students",
+        "submit": "Submit"
     },
     "HOME": {
         "title": "Welcome to the new era of Learning",
@@ -60,7 +64,7 @@
         "repassword": "Re-enter password",
         "continue": "Continue",
         "objectives_register": {
-            "title": "One last steps...",
+            "title": "One last step...",
             "subtitle": "Add some personalization to your profile and set your goals!",
             "add_brief_description": "Add a brief description about yourself",
             "set_your_goals": "Set your goals",
@@ -102,7 +106,45 @@
         "Creative and entrepreneurial capacity": "Creative and entrepreneurial capacity",
         "Sustainability": "Sustainability",
         "Communicative ability": "Communicative ability",
-        "linked_objectives": "This task is linked with your objectives!"
+        "linked_objectives": "This task is linked with your objectives!",
+        "CRITERIA": {
+            "Ethical commitment": {
+                "criteria": [
+                    "Ability for self-criticism and critical thinking",
+                    "Ability to demonstrate attitudes consistent with ethical and deontological principles"
+                ]
+            },
+            "Learning capability and responsibility": {
+                "criteria": [
+                    "Ability for analysis, synthesis, global perspectives, and practical applications of knowledge",
+                    "Ability to make decisions and adapt to new situations"
+                ]
+            },
+            "Teamwork": {
+                "criteria": [
+                    "Ability to collaborate with others and contribute to a common project",
+                    "Ability to collaborate in interdisciplinary and multicultural teams"
+                ]
+            },
+            "Creative and entrepreneurial capacity": {
+                "criteria": [
+                    "Ability to formulate, design, and manage projects",
+                    "Ability to seek and integrate new knowledge and attitudes"
+                ]
+            },
+            "Sustainability": {
+                "criteria": [
+                    "Ability to assess the social and environmental impact of actions in their field",
+                    "Ability to express integrated and systematic visions"
+                ]
+            },
+            "Communicative ability": {
+                "criteria": [
+                    "Ability to understand and express oneself orally and in writing in Catalan and Spanish and in another language, using specialized language in the discipline",
+                    "Ability to search, use, and integrate information"
+                ]
+            }
+        }
     },
     "NAVBAR": {
         "professor": "Professor",
@@ -427,6 +469,76 @@
                 "items_sequences": "Add items to the sequence",
                 "sequence_text": "You can edit all the sequences for customization when they are added on a section.",
                 "add_sequence": "Add sequence",
+                "EDIT_SUBSECTION": {
+                    "title": "Title",
+                    "description": "Description",
+                    "files": "Files (max 5)",
+                    "date": "Subsection date",
+                    "date_placeholder_start": "Start date",
+                    "date_placeholder_end": "End date",
+                    "content": "Content",
+                    "content_placeholder": "Edit subsection content",
+                    "cover": "Cover (optional)",
+                    "pairs_or_individual": "Will the activity be carried out in pairs or individually?",
+                    "individual": "Individual",
+                    "groups": "Groups",
+                    "students_per_group": "How many students per group?",
+                    "categories": "Categories",
+                    "categories_text": "Associate criteria of the categories you selected with the activity.",
+                    "add_row": "Add row",
+                    "criteria": "Criteria",
+                    "check": "Check",
+                    "evaluable": "Is the activity evaluable?",
+                    "ponderation": "Ponderation",
+                    "ponderation_error": "Ponderation do not sum 100",
+                    "ponderation_good": "Ponderation sum 100",
+                    "ponderation_error_text": "You will not be able to create a course, the ponderation of all subsections do not sum 100%, they do sum",
+                    "peer_review_rubric": "Peer review rubric",
+                    "peer_review_rubric_text": "Edit rubric",
+                    "peer_review_task": "Select the task for which the peer review will be conducted",
+                    "students_review": "How many are going to review each other among the ",
+                    "students_grade": "What percentage of the grade given by the student will be applied to the final grade?",
+                    "switch_text": "Switch to text",
+                    "switch_numeric": "Switch to numeric",
+                    "unsatisfactory": "Unsatisfactory",
+                    "needs_improvement": "Needs improvement",
+                    "great": "Great",
+                    "excellent": "Excellent",
+                    "questionnaire_type": "Questionnaire type",
+                    "standard": "Standard",
+                    "scaling": "Scaling",
+                    "add_question": "Add question",
+                    "question": "Question",
+                    "question_placeholder": "Enter the question",
+                    "text": "Text",
+                    "Options": "Options",
+                    "previous": "Previous",
+                    "next": "Next",
+                    "select_task": "Select a task",
+                    "autocorrect": "Autocorrect",
+                    "autocorrect_text": "Check the correct answers to the questions, and the questionnaire will be automatically evaluated once the student submits it.",
+                    "ERRORS_SUBSECTION": {
+                        "date_missing": "Start and end date are missing",
+                        "categories_missing": "No categories",
+                        "question_missing": "No questions",
+                        "answer_questions": "Not all questions have correct answers",
+                        "rubric_empty": "Rubric is empty",
+                        "no_description": "No description",
+                        "no_content": "No content",
+                        "no_task": "No task to review",
+                        "text": "Complete it or you will not be able to create a course.",
+                        "title": "Subsection is incomplete"
+                    },
+                    "SELF_ASSESSMENT": {
+                        "title": "Self-assessment Rubric",
+                        "description": "Define the criteria on the rubric for evaluating the process and progression of the task.",
+                        "placeholder_0": "Enter Criteria, e.g.: Listening",
+                        "placeholder_1": "Enter Evaluation 1, e.g.: I was unable to listen when my teacher gave directions. ",
+                        "placeholder_2": "Enter Evaluation 2, e.g.: I needed more than 2 prompts to listen whan my teacher gave directions.",
+                        "placeholder_3": "Enter Evaluation 3, e.g.: I needed 1-2 prompts to listen whan my teacher gave directions.",
+                        "placeholder_4": "Enter Evaluation 4, e.g.: I listened when my teacher gave directions."
+                    }
+                },
                 "SEQUENCES": {
                     "ELEMENTS": {
                         "PLANNING_QUESTIONNAIRE": {
@@ -480,6 +592,106 @@
                         "FEEDBACK_REFLECTION_QUESTIONNAIRE": {
                             "title": "Feedback and Reflection Questionnaire",
                             "description": "Feedback and reflection questionnaire."
+                        },
+                        "QUESTIONNAIRE_DATA": {
+                            "EMPTY": {
+                                "title": "Empty Questionnaire",
+                                "description": "Create a new questionnaire from scratch."
+                            },
+                            "PLANNING": {
+                                "title": "Planning Questionnaire",
+                                "description": "The planning questionnaire is a valuable tool for gathering essential information to create effective plans. This questionnaire helps individuals or teams define goals, identify resources, and establish a roadmap for successful execution.",
+                                "QUESTIONS": {
+                                    "QUESTION_1": "What is your primary objective for this task?",
+                                    "QUESTION_2": "How would you rate your current knowledge level on the topic?",
+                                    "QUESTION_3": "What specific subtopics are you planning to focus on?",
+                                    "QUESTION_4": "How do you plan to gather information for your research?",
+                                    "QUESTION_5": "What time frame have you set for completing this task?",
+                                    "QUESTION_6": "What strategies do you plan to use for self-regulated learning during this task?"
+                                }
+                            },
+                            "SELF_ASSESSMENT": {
+                                "title": "Self-assessment Questionnaire",
+                                "description": "The self-assessment questionnaire is a valuable tool for evaluating your performance on a task or project. It helps you reflect on your strengths and weaknesses, identify areas for improvement, and set goals for future development.",
+                                "OPTIONS": {
+                                    "OPTION_1": "Strongly Disagree",
+                                    "OPTION_2": "Disagree",
+                                    "OPTION_3": "Neutral",
+                                    "OPTION_4": "Agree",
+                                    "OPTION_5": "Strongly Agree"
+                                },
+                                "QUESTIONS": {
+                                    "QUESTION_1": "Did I achieve the task's objectives?",
+                                    "QUESTION_2": "Was the quality of my work satisfactory?",
+                                    "QUESTION_3": "Did I manage my time effectively?",
+                                    "QUESTION_4": "Did I handle the task's challenges well?",
+                                    "QUESTION_5": "Was my communication clear and effective?",
+                                    "QUESTION_6": "Did I collaborate well with others?",
+                                    "QUESTION_7": "Did I demonstrate creativity or innovation?",
+                                    "QUESTION_8": "What did I learn from this task?",
+                                    "QUESTION_9": "How can I improve in the future?",
+                                    "QUESTION_10": "Overall, how satisfied am I with my performance?"
+                                }
+                            },
+                            "SRLO": {
+                                "title": "SRL-O Self-regulation Questionnaire",
+                                "description": "The Self-regulation for learning online (SRL-O) questionnaire measures the frequency and quality of learning strategies when applied to online or blended or hybrid environments.",
+                                "QUESTIONS": {
+                                    "QUESTION_1": "I am confident that I will be able to master the content and assignments in this online class.",
+                                    "QUESTION_2": "I am confident in my ability to successfully persist in this online class, even if I find the content difficult.",
+                                    "QUESTION_3": "I am confident I can put in the effort required to get a high grade in this online class.",
+                                    "QUESTION_4": "I am confident that I can accurately work out what the task is requiring me to do.",
+                                    "QUESTION_5": "I always find aspects of the content that arouse my curiosity.",
+                                    "QUESTION_6": "I love learning new things in this online class.",
+                                    "QUESTION_7": "I find studying for this online class enjoyable.",
+                                    "QUESTION_8": "I find it very satisfying when I learn new material in this online course.",
+                                    "QUESTION_9": "I get a sense of achievement when I learn new skills or information.",
+                                    "QUESTION_10": "I want to do well in this online course so I can show off to my friends and family.",
+                                    "QUESTION_11": "I want to do well because of others' real or perceived expectations of me.",
+                                    "QUESTION_12": "I want to get a better grade than others in my online class.",
+                                    "QUESTION_13": "I feel so helpless that I cannot dedicate all my effort to my online studies.",
+                                    "QUESTION_14": "While studying, I want to distract myself to lower my anxiety level.",
+                                    "QUESTION_15": "I get so anxious that I don't even want to start studying online.",
+                                    "QUESTION_16": "When I have to study online, I start to feel bad.",
+                                    "QUESTION_17": "I set short-term (daily or weekly) goals.",
+                                    "QUESTION_18": "I set realistic deadlines for learning.",
+                                    "QUESTION_19": "I break larger goals into smaller actionable goals.",
+                                    "QUESTION_20": "I make a list of detailed actions that I need to complete.",
+                                    "QUESTION_21": "I plan out my schedule each week so I have the appropriate amount of time available for online study.",
+                                    "QUESTION_22": "I think about what learning strategies have worked for me in the past when doing similar assignments/types of study.",
+                                    "QUESTION_23": "I spend time trying to interpret the task to ensure I understand accurately what I need to do.",
+                                    "QUESTION_24": "I look over past feedback I have received and check that I have made improvements in my current learning.",
+                                    "QUESTION_25": "I think about how I might improve my work by evaluating it against the marking criteria provided by the teacher.",
+                                    "QUESTION_26": "I am able to study for my online course without distraction.",
+                                    "QUESTION_27": "I have access to a quiet and distraction-free place to study.",
+                                    "QUESTION_28": "I know where I can study most efficiently for this online course.",
+                                    "QUESTION_29": "I work hard in my online study, even when there are more interesting things to do.",
+                                    "QUESTION_30": "When my online study gets difficult, I remain committed to reaching my study goals.",
+                                    "QUESTION_31": "When my mind begins to wander during a learning session for this online course, I make a special effort to keep concentrating.",
+                                    "QUESTION_32": "No matter how I am feeling, I persevere with my online study.",
+                                    "QUESTION_33": "I try to help other students when they ask a question online, I can answer.",
+                                    "QUESTION_34": "I ask for help from knowledgeable others through online channels when I am not sure what to do in my online class.",
+                                    "QUESTION_35": "I ask the teacher and/or my peers to clarify information in my online course.",
+                                    "QUESTION_36": "When I have difficulties with my online class, I seek assistance from others through online means (discussion boards, social media, email, instant messaging etc.).",
+                                    "QUESTION_37": "I use email, discussion boards, social media, etc., to connect with the teacher and other students when I need help.",
+                                    "QUESTION_38": "When studying online, I create my own examples of the content to make it more meaningful.",
+                                    "QUESTION_39": "When studying online, I organise my thoughts by making summaries of what I am learning.",
+                                    "QUESTION_40": "When studying online, I try and relate the content to what I already know.",
+                                    "QUESTION_41": "When learning the online content, I try and develop my own ideas about it.",
+                                    "QUESTION_42": "I try and improve my understanding by doing additional work beyond the core content (e.g., doing extra problem-solving activities or extra readings)."
+                                }
+                            },
+                            "GENERAL_OPTIONS": {
+                                "options": [
+                                    "Strongly Disagree",
+                                    "Disagree",
+                                    "Somewhat Disagree",
+                                    "Neutral",
+                                    "Somewhat Agree",
+                                    "Agree",
+                                    "Strongly Agree"
+                                ]
+                            }
                         }
                     },
                     "CONTINUOUS_FEEDBACK": {
@@ -660,5 +872,103 @@
         "peer_review_did_not_finish": "Peer review did not finish",
         "student_missing": "Student {{name}} does not have a qualification or comments. Please check the data.",
         "select_activity": "Select activity"
+    },
+    "DASHBOARD": {
+        "average_course_grade": "Average course grade",
+        "average_course_marks": "Average course marks",
+        "students_average": "Students average",
+        "check_students": "Check how are you progressing in the course.",
+        "average_student": "Average student grade",
+        "your_grade": "Your grade",
+        "activity_average": "Activity average",
+        "activities_average": "Activities average",
+        "compare_activity": "Compare all the activities average.",
+        "average_course": "Average course",
+        "your_mark": "Your mark",
+        "course_dashboard": "Course Dashboard",
+        "explore_performance_metrics": "Explore your performance metrics and track your progress throughout the course.",
+        "objective_progress": "Objective progress",
+        "check_progress": "Check how are you progressing on the objectives of the course.",
+        "creative_capacity": "Creative and entrepreneurial capacity",
+        "teamwork": "Teamwork",
+        "qualifications_distribution": "Qualifications distribution",
+        "distribution_based_on_activities": "Distribution of the qualifications based on the activities of the course.",
+        "questionnaire_time_min": "Questionnaire time (min)",
+        "compare_time": "Compare the time you dedicated to the questionnaires against other students.",
+        "average_time_spent": "Average time spent",
+        "your_time_spent": "Your time spent",
+        "participation_forums": "Participation in Forums",
+        "measure_engagement": "Measure the engagement in forum discussions.",
+        "total_posts": "Total posts",
+        "total_answers": "Total answers",
+        "your_posts": "Your posts",
+        "your_answers": "Your answers",
+        "posts_forum": "Posts forum",
+        "replies_forum": "Replies forum",
+        "go_back_dashboard": "Go back to dashboard",
+        "no_data": "There is no data to visualize"
+    },
+    "SELFASSESTMENT": {
+        "self_assessment": "Self-assessment",
+        "self_assessment_text_prof": "See how your students have evaluated themselves.",
+        "select_another_student": "Select another student",
+        "bad": "Bad",
+        "regular": "Regular",
+        "good": "Good",
+        "very_good": "Excellent",
+        "your_evaluation_submitted": "Your evaluation has been submitted",
+        "rubric_autoevalution": "Rubric and Autoevaluation",
+        "rubric_text": "Thoroughly read the criteria outlined in the rubric. Take some time to reflect on your project and assess how well it meets each of the outlined criteria.",
+        "rubric_text2": "Now that you have reviewed the rubric, use it to self-evaluate your project. Consider each criterion carefully and assess how well your project fulfills the requirements. After reflecting on these aspects, assign a grade to your project.",
+        "add_your_comments": "Add your comments about your project.",
+        "evaluate_1_10": "Evaluate your project with a score from 1 to 10."
+    },
+    "PEERREVIEW": {
+        "no_partner_assigned": "You have not been assigned a partner to evaluate",
+        "maybe_not_here": "Maybe you should not be here yet ;)",
+        "contact_teacher": "If it's not the case, please contact your teacher",
+        "peer_review": "Peer review",
+        "feedback": "Peer Review feedback",
+        "no_feedback": "Your partner didn't give you a review :(",
+        "change_user": "Change user",
+        "evaluate": "Evaluate",
+        "users_to_review": "You have to review {{usersToPairAdapted}} colleagues to finish the activity",
+        "left_to_review": "Left to review",
+        "task_evaluation_criteria": "Task evaluation criteria",
+        "criteria": "Criteria",
+        "correct": "Correct group {{name}} delivery",
+        "correct_individual": "Correct {{name}}'s delivery",
+        "files_to_review": "Files to review",
+        "update_feedback": "Update feedback",
+        "go_to_rubric": "Go to rubric",
+        "feedback_sent": "Your feedback has been sent",
+        "no_feedback_sent": "Your feedback has not been sent, try again later",
+        "review_prof_text1": "In this section, you will be able to see the evaluations that students have given to their peers.",
+        "review_prof_text2": "Peers will be created automatically if you don't create them manually",
+        "qualificacion_received": "Qualification received",
+        "qualificacion_given": "Qualification given",
+        "peer_review_answers": "Peer review answers",
+        "create_peers_manually": "Create peers manually",
+        "download_all": "Download all",
+        "create_peers": "Create peers",
+        "update_peers": "Update peers",
+        "back_to_peer_review": "Back to peer review",
+        "peer_review_text": "La revisión por iguales se ha diseñado para cada estudiante <bold>{{number}}actividades de revisión</bold>",
+        "assing_students": "Assign students to review each activity",
+        "create_peers_auto": "Create peers automatically",
+        "students_who_dont_delivered": "There are students who have not delivered the activity",
+        "groups_who_dont_delivered": "There are groups who have not delivered the activity",
+        "no_students_to_review": "There are no students to review",
+        "no_students_have_delivered": "There are no students who have delivered the activity",
+        "activity_done": "Activity done by",
+        "groups_who_review": "Group who are going to review the activity:",
+        "users_who_review": "Users who are going to review the activity:",
+        "group_exists_in_destination": "Group already exists in this group",
+        "group_cannot_review_own_activity": "Group can't review his own activity",
+        "student_exists_in_destination": "Student already exists in this group",
+        "student_cannot_review_own_activity": "Student can't review his own activity",
+        "cannot_drop_outside_list": "You can't drop the student outside the list",
+        "peers_created_success": "Peers created successfully",
+        "error_creating_peers": "Error creating peers"
     }
 }

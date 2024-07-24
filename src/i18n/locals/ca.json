@@ -11,7 +11,11 @@
         "professor": "Professor",
         "student": "Estudiant",
         "yes": "Si",
-        "no": "No"
+        "no": "No",
+        "delete": "Eliminar",
+        "edit": "Editar",
+        "search_students": "Cerca estudiants",
+        "submit": "Enviar"
     },
     "HOME": {
         "title": "Benvingut/da a la nova era de l'aprenentatge",
@@ -102,7 +106,45 @@
         "Creative and entrepreneurial capacity": "Capacitat creativa i emprenedora",
         "Sustainability": "Sostenibilitat",
         "Communicative ability": "Capacitat comunicativa",
-        "linked_objectives": "Aquesta tasca està vinculada amb els teus objectius!"
+        "linked_objectives": "Aquesta tasca està vinculada amb els teus objectius!",
+        "CRITERIA": {
+            "Ethical commitment": {
+                "criteria": [
+                    "Capacitat d'autocrítica i pensament crític",
+                    "Capacitat per demostrar actituds coherents amb els principis ètics i deontològics"
+                ]
+            },
+            "Learning capability and responsibility": {
+                "criteria": [
+                    "Capacitat d'anàlisi, síntesi, perspectives globals i aplicacions pràctiques del coneixement",
+                    "Capacitat per prendre decisions i adaptar-se a noves situacions"
+                ]
+            },
+            "Teamwork": {
+                "criteria": [
+                    "Capacitat per col·laborar amb altres i contribuir a un projecte comú",
+                    "Capacitat per col·laborar en equips interdisciplinaris i multiculturals"
+                ]
+            },
+            "Creative and entrepreneurial capacity": {
+                "criteria": [
+                    "Capacitat per formular, dissenyar i gestionar projectes",
+                    "Capacitat per cercar i integrar nous coneixements i actituds"
+                ]
+            },
+            "Sustainability": {
+                "criteria": [
+                    "Capacitat per avaluar l'impacte social i ambiental de les accions en el seu camp",
+                    "Capacitat per expressar visions integrades i sistemàtiques"
+                ]
+            },
+            "Communicative ability": {
+                "criteria": [
+                    "Capacitat per comprendre i expressar-se oralment i per escrit en català i espanyol i en un altre idioma, utilitzant el llenguatge especialitzat en la disciplina",
+                    "Capacitat per cercar, usar i integrar informació"
+                ]
+            }
+        }
     },
     "NAVBAR": {
         "professor": "Professor",
@@ -427,6 +469,76 @@
                 "items_sequences": "Afegeix elements a la seqüència",
                 "sequence_text": "Pots editar totes les seqüències per a la personalització quan s'afegeixen a una secció.",
                 "add_sequence": "Afegeix seqüència",
+                "EDIT_SUBSECTION": {
+                    "title": "Títol",
+                    "description": "Descripció",
+                    "files": "Arxius (màxim 5)",
+                    "date": "Data de la subsecció",
+                    "date_placeholder_start": "Data d'inici",
+                    "date_placeholder_end": "Data de finalització",
+                    "content": "Contingut",
+                    "content_placeholder": "Editar el contingut de la subsecció",
+                    "cover": "Portada (opcional)",
+                    "pairs_or_individual": "L'activitat es durà a terme en parelles o individualment?",
+                    "individual": "Individual",
+                    "groups": "Grups",
+                    "students_per_group": "Quants estudiants per grup?",
+                    "categories": "Categories",
+                    "categories_text": "Associeu criteris de les categories que heu seleccionat amb l'activitat.",
+                    "add_row": "Afegeix fila",
+                    "criteria": "Criteris",
+                    "check": "Marcar",
+                    "evaluable": "És l'activitat avaluable?",
+                    "ponderation": "Ponderació",
+                    "ponderation_error": "La ponderació no suma 100",
+                    "ponderation_good": "La ponderació suma 100",
+                    "ponderation_error_text": "No podràs crear un curs, la ponderació de totes les subseccions no suma 100%, en canvi, suma",
+                    "peer_review_rubric": "Rúbrica de revisió per parells",
+                    "peer_review_rubric_text": "Editar rúbrica",
+                    "peer_review_task": "Selecciona la tasca per a la qual es realitzarà la revisió per parells",
+                    "students_review": "Quants es revisaran entre ells entre els ",
+                    "students_grade": "Quin percentatge de la qualificació donada per l'estudiant s'aplicarà a la qualificació final?",
+                    "switch_text": "Canviar a text",
+                    "switch_numeric": "Canviar a numèric",
+                    "unsatisfactory": "Insatisfactori",
+                    "needs_improvement": "Necessita millora",
+                    "great": "Genial",
+                    "excellent": "Excel·lent",
+                    "questionnaire_type": "Tipus de qüestionari",
+                    "standard": "Estàndard",
+                    "scaling": "Escala",
+                    "add_question": "Afegir pregunta",
+                    "question": "Pregunta",
+                    "question_placeholder": "Introdueix la pregunta",
+                    "text": "Text",
+                    "Options": "Opcions",
+                    "previous": "Anterior",
+                    "next": "Següent",
+                    "select_task": "Selecciona la tasca",
+                    "autocorrect": "Autocorrecció",
+                    "autocorrect_text": "Verifica les respostes correctes a les preguntes, i el qüestionari s'avaluarà automàticament una vegada que l'estudiant el lliuri.",
+                    "ERRORS_SUBSECTION": {
+                        "date_missing": "Falten la data d'inici i final",
+                        "categories_missing": "No hi ha categories",
+                        "question_missing": "No hi ha preguntes",
+                        "answer_questions": "No totes les preguntes tenen respostes correctes",
+                        "rubric_empty": "La rúbrica està buida",
+                        "no_description": "No hi ha descripció",
+                        "no_content": "No hi ha contingut",
+                        "no_task": "No hi ha tasca per revisar",
+                        "text": "Completa-ho o no podràs crear un curs.",
+                        "title": "La subsecció està incompleta"
+                    },
+                    "SELF_ASSESSMENT": {
+                        "title": "Rúbrica d'autoavaluació",
+                        "description": "Defineix els criteris a la rúbrica per avaluar el procés i la progressió de la tasca.",
+                        "placeholder_0": "Introdueix el criteri, per exemple: Escolta",
+                        "placeholder_1": "Introdueix l'Avaluació 1, per exemple: No vaig poder escoltar quan el meu professor va donar instruccions.",
+                        "placeholder_2": "Introdueix l'Avaluació 2, per exemple: Vaig necessitar més de 2 indicacions per escoltar quan el meu professor va donar instruccions.",
+                        "placeholder_3": "Introdueix l'Avaluació 3, per exemple: Vaig necessitar 1-2 indicacions per escoltar quan el meu professor va donar instruccions.",
+                        "placeholder_4": "Introdueix l'Avaluació 4, per exemple: Vaig escoltar quan el meu professor va donar instruccions."
+                    }
+                },
                 "SEQUENCES": {
                     "ELEMENTS": {
                         "PLANNING_QUESTIONNAIRE": {
@@ -480,6 +592,106 @@
                         "FEEDBACK_REFLECTION_QUESTIONNAIRE": {
                             "title": "Qüestionari de Feedback i Reflexió",
                             "description": "El qüestionari de feedback i reflexió és una eina valuosa per recopilar informació sobre l'eficàcia de les tasques i activitats, així com per identificar àrees d'aprenentatge i millora. Aquest qüestionari ajuda a individus o equips a reflexionar sobre el seu aprenentatge i a identificar accions per millorar."
+                        },
+                        "QUESTIONNAIRE_DATA": {
+                            "EMPTY": {
+                                "title": "Qüestionari Buit",
+                                "description": "Crea un nou qüestionari des de zero."
+                            },
+                            "PLANNING": {
+                                "title": "Qüestionari de Planificació",
+                                "description": "Un qüestionari de planificació és una eina valuosa per recopilar informació essencial per crear plans efectius. Aquest qüestionari ajuda a individus o equips a definir metes, identificar recursos i establir una fulla de ruta per a una execució reeixida.",
+                                "QUESTIONS": {
+                                    "QUESTION_1": "Quin és el teu objectiu principal per a aquesta tasca?",
+                                    "QUESTION_2": "Com valoraries el teu nivell de coneixement actual sobre el tema?",
+                                    "QUESTION_3": "En quins subtemes específics tens previst enfocar-te?",
+                                    "QUESTION_4": "Com tens previst recopilar informació per a la teva investigació?",
+                                    "QUESTION_5": "Quin termini has establert per completar aquesta tasca?",
+                                    "QUESTION_6": "Quines estratègies tens previst utilitzar per a l'aprenentatge autoregulat durant aquesta tasca?"
+                                }
+                            },
+                            "SELF_ASSESSMENT": {
+                                "title": "Qüestionari d'Autoavaluació",
+                                "description": "El questionari d'autoavaluació és un procés que permet als estudiants reflexionar sobre el seu aprenentatge, identificar àrees de fortalesa i feblesa, i establir metes per a la millora. És una habilitat essencial per a l'aprenentatge permanent i el desenvolupament personal.",
+                                "OPTIONS": {
+                                    "OPTION_1": "Totalment en desacord",
+                                    "OPTION_2": "En desacord",
+                                    "OPTION_3": "Neutral",
+                                    "OPTION_4": "D'acord",
+                                    "OPTION_5": "Totalment d'acord"
+                                },
+                                "QUESTIONS": {
+                                    "QUESTION_1": "Vaig aconseguir els objectius de la tasca?",
+                                    "QUESTION_2": "Va ser satisfactòria la qualitat de la meva feina?",
+                                    "QUESTION_3": "Vaig gestionar el meu temps de manera efectiva?",
+                                    "QUESTION_4": "Vaig gestionar bé els desafiaments de la tasca?",
+                                    "QUESTION_5": "Va ser clara i efectiva la meva comunicació?",
+                                    "QUESTION_6": "Vaig col·laborar bé amb els altres?",
+                                    "QUESTION_7": "Vaig demostrar creativitat o innovació?",
+                                    "QUESTION_8": "Què vaig aprendre d'aquesta tasca?",
+                                    "QUESTION_9": "Com puc millorar en el futur?",
+                                    "QUESTION_10": "En general, com de satisfet estic amb el meu rendiment?"
+                                }
+                            },
+                            "SRLO": {
+                                "title": "Qüestionari d'Autorregulació SRL-O",
+                                "description": "El qüestionari d'Autorregulació per a l'aprenentatge en línia (SRL-O) mesura la freqüència i la qualitat de les estratègies d'aprenentatge quan s'apliquen a entorns en línia, mixtos o híbrids.",
+                                "QUESTIONS": {
+                                    "QUESTION_1": "Estic segur que seré capaç de dominar el contingut i les tasques en aquesta classe en línia.",
+                                    "QUESTION_2": "Estic segur de la meva capacitat per persistir amb èxit en aquesta classe en línia, fins i tot si trobo el contingut difícil.",
+                                    "QUESTION_3": "Estic segur que puc posar l'esforç necessari per obtenir una qualificació alta en aquesta classe en línia.",
+                                    "QUESTION_4": "Estic segur que puc esbrinar amb precisió què requereix la tasca que faci.",
+                                    "QUESTION_5": "Sempre trobo aspectes del contingut que desperten la meva curiositat.",
+                                    "QUESTION_6": "M'encanta aprendre coses noves en aquesta classe en línia.",
+                                    "QUESTION_7": "Trobo agradable estudiar per aquesta classe en línia.",
+                                    "QUESTION_8": "Trobo molt satisfactori quan aprenc nou material en aquest curs en línia.",
+                                    "QUESTION_9": "Sento una sensació d'assoliment quan aprenc noves habilitats o informació.",
+                                    "QUESTION_10": "Vull fer-ho bé en aquest curs en línia per presumir davant els meus amics i familiars.",
+                                    "QUESTION_11": "Vull fer-ho bé a causa de les expectatives reals o percebudes dels altres.",
+                                    "QUESTION_12": "Vull obtenir una millor qualificació que els altres a la meva classe en línia.",
+                                    "QUESTION_13": "Em sento tan impotent que no puc dedicar tot el meu esforç als meus estudis en línia.",
+                                    "QUESTION_14": "Mentre estudio, vull distreure'm per reduir el meu nivell d'ansietat.",
+                                    "QUESTION_15": "Em poso tan ansiós que ni tan sols vull començar a estudiar en línia.",
+                                    "QUESTION_16": "Quan he de estudiar en línia, començo a sentir-me malament.",
+                                    "QUESTION_17": "Estableixo metes a curt termini (diàries o setmanals).",
+                                    "QUESTION_18": "Estableixo terminis realistes per a l'aprenentatge.",
+                                    "QUESTION_19": "Divideixo els objectius més grans en metes més petites i assolibles.",
+                                    "QUESTION_20": "Faig una llista d'accions detallades que necessito completar.",
+                                    "QUESTION_21": "Planifico el meu horari cada setmana per tenir el temps adequat disponible per estudiar en línia.",
+                                    "QUESTION_22": "Penso en quines estratègies d'aprenentatge m'han funcionat en el passat a l'hora de fer tasques o tipus d'estudi similars.",
+                                    "QUESTION_23": "Passo temps intentant interpretar la tasca per assegurar-me que entenc amb precisió què necessito fer.",
+                                    "QUESTION_24": "Reviso els comentaris que he rebut en el passat i verifico que he millorat en el meu aprenentatge actual.",
+                                    "QUESTION_25": "Penso en com podria millorar el meu treball avaluant-lo contra els criteris de qualificació proporcionats pel professor.",
+                                    "QUESTION_26": "Puc estudiar per al meu curs en línia sense distraccions.",
+                                    "QUESTION_27": "Tinc accés a un lloc tranquil i sense distraccions per estudiar.",
+                                    "QUESTION_28": "Sé on puc estudiar més eficientment per a aquest curs en línia.",
+                                    "QUESTION_29": "Treballo dur en el meu estudi en línia, fins i tot quan hi ha coses més interessants a fer.",
+                                    "QUESTION_30": "Quan el meu estudi en línia es posa difícil, em mantinc compromès amb assolir les meves metes d'estudi.",
+                                    "QUESTION_31": "Quan la meva ment comença a divagar durant una sessió d'aprenentatge per a aquest curs en línia, faig un esforç especial per mantenir-me concentrat.",
+                                    "QUESTION_32": "No importa com em senti, persevero amb el meu estudi en línia.",
+                                    "QUESTION_33": "Intento ajudar altres estudiants quan fan una pregunta en línia que puc respondre.",
+                                    "QUESTION_34": "Demano ajuda a persones coneixedores a través de canals en línia quan no estic segur de què fer a la meva classe en línia.",
+                                    "QUESTION_35": "Demano al professor i/o als meus companys que aclareixin la informació al meu curs en línia.",
+                                    "QUESTION_36": "Quan tinc dificultats amb la meva classe en línia, busco ajuda d'altres a través de mitjans en línia (taulers de discussió, xarxes socials, correu electrònic, missatgeria instantània, etc.).",
+                                    "QUESTION_37": "Utilitzo correu electrònic, taulers de discussió, xarxes socials, etc., per connectar-me amb el professor i altres estudiants quan necessito ajuda.",
+                                    "QUESTION_38": "Quan estudio en línia, creo els meus propis exemples del contingut per fer-lo més significatiu.",
+                                    "QUESTION_39": "Quan estudio en línia, organitzo els meus pensaments fent resums del que estic aprenent.",
+                                    "QUESTION_40": "Quan estudio en línia, intento relacionar el contingut amb el que ja sé.",
+                                    "QUESTION_41": "Quan aprenc el contingut en línia, intento desenvolupar les meves pròpies idees sobre això.",
+                                    "QUESTION_42": "Intento millorar la meva comprensió fent treball addicional més enllà del contingut principal (per exemple, fent activitats addicionals de resolució de problemes o lectures addicionals)."
+                                }
+                            },
+                            "GENERAL_OPTIONS": {
+                                "options": [
+                                    "Totalment en desacord",
+                                    "En desacord",
+                                    "Una mica en desacord",
+                                    "Neutral",
+                                    "Una mica d'acord",
+                                    "D'acord",
+                                    "Totalment d'acord"
+                                ]
+                            }
                         }
                     },
                     "CONTINUOUS_FEEDBACK": {
@@ -550,7 +762,7 @@
         "not_qualifications": "No hi ha qualificacions disponibles per a tu",
         "not_qualifications_explore": "Explora altres àrees de la plataforma o torna més tard per veure noves opcions de qualificacions.",
         "qualifications": "Qualificacions",
-        "qualification": "Qualificació",
+        "qualificacion": "Qualificació",
         "search_users": "Cercar usuaris",
         "attention": "Atenció",
         "peerreview_deadline": "La data límit per a la revisió entre iguals és el",
@@ -610,5 +822,102 @@
         "peer_review_did_not_finish": "La revisió per iguals no ha acabat",
         "student_missing": "L'estudiant {{name}} no té cap qualificació o comentaris. Comproveu les dades.",
         "select_activity": "Selecciona l'activitat"
+    },
+    "DASHBOARD": {
+        "average_course_grade": "Nota mitjana del curs",
+        "average_course_marks": "Notes mitjanes del curs",
+        "students_average": "Mitjana d'estudiants",
+        "check_students": "Comprova com estàs progressant al curs.",
+        "your_grade": "La teva nota",
+        "activity_average": "Mitjana d'activitat",
+        "activities_average": "Mitjana de les activitats",
+        "compare_activity": "Compareu totes les activitats mitjanes.",
+        "average_course": "Nota mitjana del curs",
+        "average_student": "Nota mitjana de l'estudiant",
+        "your_mark": "La teva nota",
+        "course_dashboard": "Tauler de Control del Curs",
+        "explore_performance_metrics": "Explora les teves mètriques de rendiment i fes un seguiment del teu progrés al llarg del curs.",
+        "objective_progress": "Progrés dels objectius",
+        "check_progress": "Comprova com estàs progressant en els objectius del curs.",
+        "creative_capacity": "Capacitat creativa i emprenedora",
+        "teamwork": "Treball en equip",
+        "qualifications_distribution": "Distribució de qualificacions",
+        "distribution_based_on_activities": "Distribució de les qualificacions basades en les activitats del curs.",
+        "questionnaire_time_min": "Temps del qüestionari (min)",
+        "compare_time": "Compara el temps que has dedicat als qüestionaris amb altres estudiants.",
+        "average_time_spent": "Temps mitjà dedicat",
+        "your_time_spent": "El teu temps dedicat",
+        "participation_forums": "Participació en fòrums",
+        "measure_engagement": "Mesura la participació en les discussions del fòrum.",
+        "total_posts": "Total de publicacions",
+        "total_answers": "Total de respostes",
+        "your_posts": "Les teves publicacions",
+        "your_answers": "Les teves respostes",
+        "posts_forum": "Publicacions al fòrum",
+        "replies_forum": "Respostes al fòrum",
+        "go_back_dashboard": "Tornar al tauler de control",
+        "no_data": "No hi ha dades per visualitzar"
+    },
+    "SELFASSESTMENT": {
+        "self_assessment": "Autoavaluació",
+        "self_assessment_text_prof": "Mireu com s'han avaluat els vostres alumnes.",
+        "select_another_student": "Seleccioneu un altre estudiant",
+        "bad": "Dolent",
+        "regular": "Normal",
+        "good": "Bé",
+        "very_good": "Excel·lent",
+        "your_evaluation_submitted": "La vostra avaluació ha estat enviada",
+        "rubric_autoevalution": "Rúbrica i autoavaluació",
+        "rubric_text": "Llegiu detingudament els criteris descrits a la rúbrica. Preneu-vos una estona per reflexionar sobre el vostre projecte i avalueu fins a quin punt compleix cadascun dels criteris descrits.",
+        "rubric_text2": "Ara que ja heu revisat la rúbrica, feu-ne servir per autoavaluar el vostre projecte. Considereu cada criteri amb cura i avalueu fins a quin punt el vostre projecte compleix els requisits. Després de reflexionar sobre aquests aspectes, assigneu una nota al vostre projecte.",
+        "add_your_comments": "Afegiu els vostres comentaris sobre el vostre projecte.",
+        "evaluate_1_10": "Avalua el teu projecte amb una puntuació d'1 a 10."
+    },
+    "PEERREVIEW": {
+        "no_partner_assigned": "No se t'ha assignat un company per avaluar",
+        "maybe_not_here": "Potser no hauries d'estar aquí encara ;)",
+        "contact_teacher": "Si no és el cas, si us plau contacta amb el teu professor",
+        "peer_review": "Revisió per parells",
+        "feedback": "Comentaris de revisió per parells",
+        "no_feedback": "La teva parella no t'ha fet cap ressenya :(",
+        "evaluate": "Avaluar",
+        "users_to_review": "Heu de revisar {{usersToPairAdapted}} companys per acabar l'activitat",
+        "left_to_review": "Queden per revisar",
+        "task_evaluation_criteria": "Criteris d'avaluació de la tasca",
+        "criteria": "Criteris",
+        "correct": "Corregeix l'entrega del Grup {{name}}",
+        "correct_individual": "Corregeix l'entrega de {{name}}",
+        "files_to_review": "Fitxers a revisar",
+        "update_feedback": "Actualitza els teus comentaris",
+        "go_to_rubric": "Anar a la rúbrica",
+        "feedback_sent": "Els vostres comentaris han estat enviats",
+        "no_feedback_sent": "Els vostres comentaris no s'han enviat, torneu-ho a provar més tard",
+        "review_prof_text1": "En aquesta secció podreu veure les avaluacions que els estudiants han fet als seus companys.",
+        "review_prof_text2": "Els companys es crearan automàticament si no els creeu manualment",
+        "qualificacion_received": "Qualificació rebuda",
+        "qualificacion_given": "Qualificació donada",
+        "peer_review_answers": "Respostes de la revisió per parells",
+        "create_peers_manually": "Crear parelles manualment",
+        "download_all": "Descarregar tot",
+        "create_peers": "Crear parelles",
+        "update_peers": "Actualitza les parelles",
+        "back_to_peer_review": "Torna a la revisió per parells",
+        "peer_review_text": "La revisió per iguals s'ha dissenyat per a cada estudiant <bold>{{number}}activitats de revisió</bold>",
+        "assing_students": "Assigna estudiants per revisar cada activitat",
+        "create_peers_auto": "Crear parelles automàticament",
+        "students_who_dont_delivered": "Hi ha estudiants que no han lliurat l'activitat",
+        "groups_who_dont_delivered": "Hi ha grups que no han lliurat l'activitat",
+        "no_students_to_review": "No hi ha estudiants per revisar",
+        "no_students_have_delivered": "No hi ha estudiants que hagin lliurat l'activitat",
+        "activity_done": "Activitat feta per:",
+        "groups_who_review": "Grup que revisarà l'activitat:",
+        "users_who_review": "Usuaris que revisaran l'activitat:",
+        "group_exists_in_destination": "El grup ja existeix en aquest grup",
+        "group_cannot_review_own_activity": "El grup no pot revisar la seva pròpia activitat",
+        "student_exists_in_destination": "L'estudiant ja existeix en aquest grup",
+        "student_cannot_review_own_activity": "L'estudiant no pot revisar la seva pròpia activitat",
+        "cannot_drop_outside_list": "No pots deixar l'estudiant fora de la llista",
+        "peers_created_success": "Parells creats amb èxit",
+        "error_creating_peers": "Error en crear els parells"
     }
 }

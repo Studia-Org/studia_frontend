@@ -10,7 +10,7 @@ import UsersToReview from "./UsersToReview.jsx"
 import { Button } from "antd"
 import GroupMembers from "../../GroupMembers.jsx"
 import { BreadcrumbCourse } from "../../../../CoursesInside/BreadcrumbCourse.jsx"
-
+import { Trans, useTranslation } from "react-i18next"
 
 function MainScreen({
     qualificationIds, peerReviewInGroups,
@@ -18,11 +18,9 @@ function MainScreen({
     userIndexSelected, setUserIndexSelected,
     usersToPair, resetUser, correctActivityGroup }) {
     const { user } = useAuthContext();
-    const navigate = useNavigate();
     const evaluated = activityData.qualification ? true : false;
-    const { courseId } = useParams();
     const USER_OBJECTIVES = [...new Set(user?.user_objectives?.map((objective) => objective.categories.map((category) => category)).flat() || [])];
-
+    const { t } = useTranslation();
     /////////// coger user index selected////////////////   
     const PeerReview = activityData?.peer_review_qualifications.data[userIndexSelected]
     const usersToCorrect = correctActivityGroup ?
@@ -111,11 +109,13 @@ function MainScreen({
             {userIndexSelected !== null && PeerReview !== undefined && PeerReview !== null && deadLine > new Date() ?
                 <section className="flex md3:justify-end min-w-[350px] max-w-full xl:max-w-[30%] md3:ms-3 xl:pr-10 p-5 !mt-6">
                     <div className="flex flex-col w-full gap-y-1">
-                        <h3 className='text-xl font-semibold'>Peer Review</h3>
-
-                        <p className='mt-5 text-lg'>Correct {" "}
+                        <h3 className='text-xl font-semibold'>{t("PEERREVIEW.files_to_review")}</h3>
+                        <p className='mt-1 text-lg'>
                             {!correctActivityGroup ?
-                                PeerReview.attributes.user.data.attributes.username + "'s" : "group " + PeerReview.attributes.group.data.attributes.GroupName || "Group " + (userIndexSelected + 1)} delivery!</p>
+                                <Trans i18nKey="PEERREVIEW.correct_individual" components={{ "name": PeerReview.attributes.user.data.attributes.username }} /> :
+                                <Trans i18nKey="PEERREVIEW.correct" components={{ "name": (PeerReview.attributes.group.data.attributes.GroupName || (userIndexSelected + 1)) }} />
+                            }
+                        </p>
                         {PeerReview?.attributes?.file?.data?.map(renderFiles)}
                     </div>
                 </section> : null
@@ -145,12 +145,12 @@ function MainScreen({
                                     userIndexSelected !== null && usersToPair > 1 &&
                                     <Button danger onClick={() => resetUser()}
                                         className="gap-1 font-bold duration-200 hover:scale-95">
-                                        Change user
+                                        {t('PEERREVIEW.change_user')}
                                     </Button>
                                 }
                                 <Button type="primary" onClick={() => setShowEvaluate(prev => !prev)}
                                     className="flex flex-wrap items-center gap-1 font-bold duration-200 hover:translate-x-2">
-                                    Evaluate
+                                    {t('PEERREVIEW.evaluate')}
                                     <svg viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                                     </svg>

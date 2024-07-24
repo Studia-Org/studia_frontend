@@ -11,7 +11,11 @@
         "professor": "Profesor",
         "student": "Estudiante",
         "yes": "Sí",
-        "no": "No"
+        "no": "No",
+        "delete": "Eliminar",
+        "edit": "Editar",
+        "search_students": "Buscar estudiantes",
+        "submit": "Enviar"
     },
     "HOME": {
         "title": "Bienvenido/a a la nueva era del aprendizaje",
@@ -102,7 +106,45 @@
         "Creative and entrepreneurial capacity": "Capacidad creativa y emprendedora",
         "Sustainability": "Sostenibilidad",
         "Communicative ability": "Capacidad comunicativa",
-        "linked_objectives": "¡Esta tarea está vinculada con tus objetivos!"
+        "linked_objectives": "¡Esta tarea está vinculada con tus objetivos!",
+        "CRITERIA": {
+            "Ethical commitment": {
+                "criteria": [
+                    "Capacidad de autocrítica y pensamiento crítico",
+                    "Capacidad para demostrar actitudes coherentes con los principios éticos y deontológicos"
+                ]
+            },
+            "Learning capability and responsibility": {
+                "criteria": [
+                    "Capacidad de análisis, síntesis, perspectivas globales y aplicaciones prácticas del conocimiento",
+                    "Capacidad para tomar decisiones y adaptarse a nuevas situaciones"
+                ]
+            },
+            "Teamwork": {
+                "criteria": [
+                    "Capacidad para colaborar con otros y contribuir a un proyecto común",
+                    "Capacidad para colaborar en equipos interdisciplinarios y multiculturales"
+                ]
+            },
+            "Creative and entrepreneurial capacity": {
+                "criteria": [
+                    "Capacidad para formular, diseñar y gestionar proyectos",
+                    "Capacidad para buscar e integrar nuevos conocimientos y actitudes"
+                ]
+            },
+            "Sustainability": {
+                "criteria": [
+                    "Capacidad para evaluar el impacto social y ambiental de las acciones en su campo",
+                    "Capacidad para expresar visiones integradas y sistemáticas"
+                ]
+            },
+            "Communicative ability": {
+                "criteria": [
+                    "Capacidad para comprender y expresarse oralmente y por escrito en catalán y español y en otro idioma, utilizando el lenguaje especializado en la disciplina",
+                    "Capacidad para buscar, usar e integrar información"
+                ]
+            }
+        }
     },
     "NAVBAR": {
         "professor": "Profesor",
@@ -427,6 +469,76 @@
                 "items_sequences": "Añadir elementos a la secuencia",
                 "sequence_text": "Puedes editar todas las secuencias para personalización cuando se añaden a una sección.",
                 "add_sequence": "Añadir secuencia",
+                "EDIT_SUBSECTION": {
+                    "title": "Título",
+                    "description": "Descripción",
+                    "files": "Archivos (máximo 5)",
+                    "date": "Fecha de la subsección",
+                    "date_placeholder_start": "Fecha de inicio",
+                    "date_placeholder_end": "Fecha de finalización",
+                    "content": "Contenido",
+                    "content_placeholder": "Editar contenido de la subsección",
+                    "cover": "Portada (opcional)",
+                    "pairs_or_individual": "¿La actividad se realizará en parejas o individualmente?",
+                    "individual": "Individual",
+                    "groups": "Grupos",
+                    "students_per_group": "¿Cuántos estudiantes por grupo?",
+                    "categories": "Categorías",
+                    "categories_text": "Asocia criterios de las categorías seleccionadas con la actividad.",
+                    "add_row": "Agregar fila",
+                    "criteria": "Criterios",
+                    "check": "Marcar",
+                    "evaluable": "¿Es la actividad evaluable?",
+                    "ponderation": "Ponderación",
+                    "ponderation_error": "La ponderación no suma 100",
+                    "ponderation_good": "La ponderación suma 100",
+                    "ponderation_error_text": "No podrás crear un curso, la ponderación de todas las subsecciones no suma 100%, sino",
+                    "peer_review_rubric": "Rúbrica de revisión por pares",
+                    "peer_review_rubric_text": "Editar rúbrica",
+                    "peer_review_task": "Selecciona la tarea para la cual se realizará la revisión por pares",
+                    "students_review": "¿Cuántos se van a revisar entre sí entre los ",
+                    "students_grade": "¿Qué porcentaje de la calificación dada por el estudiante se aplicará a la calificación final?",
+                    "switch_text": "Cambiar a texto",
+                    "switch_numeric": "Cambiar a numérico",
+                    "unsatisfactory": "Insatisfactorio",
+                    "needs_improvement": "Necesita mejora",
+                    "great": "Genial",
+                    "excellent": "Excelente",
+                    "questionnaire_type": "Tipo de cuestionario",
+                    "standard": "Estándar",
+                    "scaling": "Escala",
+                    "add_question": "Agregar pregunta",
+                    "question": "Pregunta",
+                    "question_placeholder": "Introduce la pregunta",
+                    "text": "Texto",
+                    "Options": "Opciones",
+                    "previous": "Anterior",
+                    "next": "Siguiente",
+                    "select_task": "Selecciona la tarea",
+                    "autocorrect": "Autocorrección",
+                    "autocorrect_text": "Verifique las respuestas correctas a las preguntas, y el cuestionario se evaluará automáticamente una vez que el estudiante lo envíe.",
+                    "ERRORS_SUBSECTION": {
+                        "date_missing": "Faltan la fecha de inicio y fin",
+                        "categories_missing": "No hay categorías",
+                        "question_missing": "No hay preguntas",
+                        "answer_questions": "No todas las preguntas tienen respuestas correctas",
+                        "rubric_empty": "La rúbrica está vacía",
+                        "no_description": "No hay descripción",
+                        "no_content": "No hay contenido",
+                        "no_task": "No hay tarea para revisar",
+                        "text": "Complétalo o no podrás crear un curso.",
+                        "title": "La subsección está incompleta"
+                    },
+                    "SELF_ASSESSMENT": {
+                        "title": "Rúbrica de autoevaluación",
+                        "description": "Define los criterios en la rúbrica para evaluar el proceso y la progresión de la tarea.",
+                        "placeholder_0": "Introduce el criterio, por ejemplo: Escucha",
+                        "placeholder_1": "Introduce la Evaluación 1, por ejemplo: No pude escuchar cuando mi profesor dio instrucciones.",
+                        "placeholder_2": "Introduce la Evaluación 2, por ejemplo: Necesité más de 2 indicaciones para escuchar cuando mi profesor dio instrucciones.",
+                        "placeholder_3": "Introduce la Evaluación 3, por ejemplo: Necesité 1-2 indicaciones para escuchar cuando mi profesor dio instrucciones.",
+                        "placeholder_4": "Introduce la Evaluación 4, por ejemplo: Escuché cuando mi profesor dio instrucciones."
+                    }
+                },
                 "SEQUENCES": {
                     "ELEMENTS": {
                         "PLANNING_QUESTIONNAIRE": {
@@ -480,6 +592,106 @@
                         "FEEDBACK_REFLECTION_QUESTIONNAIRE": {
                             "title": "Cuestionario de Feedback y Reflexión",
                             "description": "El cuestionario de feedback y reflexión es una herramienta valiosa para recopilar información esencial para mejorar el rendimiento y la calidad del trabajo. Este cuestionario ayuda a individuos o equipos a identificar áreas de mejora, establecer metas y desarrollar un plan de acción para la mejora continua."
+                        },
+                        "QUESTIONNAIRE_DATA": {
+                            "EMPTY": {
+                                "title": "Cuestionario Vacío",
+                                "description": "Crea un nuevo cuestionario desde cero."
+                            },
+                            "PLANNING": {
+                                "title": "Cuestionario de Planificación",
+                                "description": "Un cuestionario de planificación es una herramienta valiosa para recopilar información esencial para crear planes efectivos. Este cuestionario ayuda a individuos o equipos a definir metas, identificar recursos y establecer una hoja de ruta para una ejecución exitosa.",
+                                "QUESTIONS": {
+                                    "QUESTION_1": "¿Cuál es tu objetivo principal para esta tarea?",
+                                    "QUESTION_2": "¿Cómo calificarías tu nivel de conocimiento actual sobre el tema?",
+                                    "QUESTION_3": "¿En qué subtemas específicos planeas enfocarte?",
+                                    "QUESTION_4": "¿Cómo planeas recopilar información para tu investigación?",
+                                    "QUESTION_5": "¿Qué plazo has establecido para completar esta tarea?",
+                                    "QUESTION_6": "¿Qué estrategias planeas utilizar para el aprendizaje autorregulado durante esta tarea?"
+                                }
+                            },
+                            "SELF_ASSESSMENT": {
+                                "title": "Cuestionario de Autoevaluación",
+                                "description": "La autoevaluación es un proceso que permite a los estudiantes reflexionar sobre su aprendizaje, identificar áreas de fortaleza y debilidad, y establecer metas para la mejora. Es una habilidad esencial para el aprendizaje permanente y el desarrollo personal.",
+                                "OPTIONS": {
+                                    "OPTION_1": "Totalmente en desacuerdo",
+                                    "OPTION_2": "En desacuerdo",
+                                    "OPTION_3": "Neutral",
+                                    "OPTION_4": "De acuerdo",
+                                    "OPTION_5": "Totalmente de acuerdo"
+                                },
+                                "QUESTIONS": {
+                                    "QUESTION_1": "¿Logré los objetivos de la tarea?",
+                                    "QUESTION_2": "¿Fue satisfactoria la calidad de mi trabajo?",
+                                    "QUESTION_3": "¿Manejé mi tiempo de manera efectiva?",
+                                    "QUESTION_4": "¿Manejé bien los desafíos de la tarea?",
+                                    "QUESTION_5": "¿Fue clara y efectiva mi comunicación?",
+                                    "QUESTION_6": "¿Colaboré bien con los demás?",
+                                    "QUESTION_7": "¿Demostré creatividad o innovación?",
+                                    "QUESTION_8": "¿Qué aprendí de esta tarea?",
+                                    "QUESTION_9": "¿Cómo puedo mejorar en el futuro?",
+                                    "QUESTION_10": "En general, ¿qué tan satisfecho estoy con mi desempeño?"
+                                }
+                            },
+                            "SRLO": {
+                                "title": "Cuestionario de Autorregulación SRL-O",
+                                "description": "El cuestionario de Autorregulación para el aprendizaje en línea (SRL-O) mide la frecuencia y la calidad de las estrategias de aprendizaje cuando se aplican a entornos en línea, mixtos o híbridos.",
+                                "QUESTIONS": {
+                                    "QUESTION_1": "Estoy seguro de que seré capaz de dominar el contenido y las tareas en esta clase en línea.",
+                                    "QUESTION_2": "Estoy seguro de mi capacidad para persistir con éxito en esta clase en línea, incluso si encuentro el contenido difícil.",
+                                    "QUESTION_3": "Estoy seguro de que puedo poner el esfuerzo necesario para obtener una calificación alta en esta clase en línea.",
+                                    "QUESTION_4": "Estoy seguro de que puedo averiguar con precisión qué requiere la tarea que haga.",
+                                    "QUESTION_5": "Siempre encuentro aspectos del contenido que despiertan mi curiosidad.",
+                                    "QUESTION_6": "Me encanta aprender cosas nuevas en esta clase en línea.",
+                                    "QUESTION_7": "Encuentro agradable estudiar para esta clase en línea.",
+                                    "QUESTION_8": "Encuentro muy satisfactorio cuando aprendo nuevo material en este curso en línea.",
+                                    "QUESTION_9": "Siento una sensación de logro cuando aprendo nuevas habilidades o información.",
+                                    "QUESTION_10": "Quiero hacerlo bien en este curso en línea para presumir ante mis amigos y familiares.",
+                                    "QUESTION_11": "Quiero hacerlo bien debido a las expectativas reales o percibidas de los demás.",
+                                    "QUESTION_12": "Quiero obtener una mejor calificación que los demás en mi clase en línea.",
+                                    "QUESTION_13": "Me siento tan impotente que no puedo dedicar todo mi esfuerzo a mis estudios en línea.",
+                                    "QUESTION_14": "Mientras estudio, quiero distraerme para reducir mi nivel de ansiedad.",
+                                    "QUESTION_15": "Me pongo tan ansioso que ni siquiera quiero empezar a estudiar en línea.",
+                                    "QUESTION_16": "Cuando tengo que estudiar en línea, empiezo a sentirme mal.",
+                                    "QUESTION_17": "Establezco metas a corto plazo (diarias o semanales).",
+                                    "QUESTION_18": "Establezco plazos realistas para el aprendizaje.",
+                                    "QUESTION_19": "Divido los objetivos más grandes en metas más pequeñas y alcanzables.",
+                                    "QUESTION_20": "Hago una lista de acciones detalladas que necesito completar.",
+                                    "QUESTION_21": "Planifico mi horario cada semana para tener el tiempo apropiado disponible para estudiar en línea.",
+                                    "QUESTION_22": "Pienso en qué estrategias de aprendizaje me han funcionado en el pasado al realizar tareas o tipos de estudio similares.",
+                                    "QUESTION_23": "Paso tiempo tratando de interpretar la tarea para asegurarme de entender con precisión lo que necesito hacer.",
+                                    "QUESTION_24": "Reviso los comentarios que he recibido en el pasado y verifico que he mejorado en mi aprendizaje actual.",
+                                    "QUESTION_25": "Pienso en cómo podría mejorar mi trabajo evaluándolo contra los criterios de calificación proporcionados por el maestro.",
+                                    "QUESTION_26": "Puedo estudiar para mi curso en línea sin distracciones.",
+                                    "QUESTION_27": "Tengo acceso a un lugar tranquilo y sin distracciones para estudiar.",
+                                    "QUESTION_28": "Sé dónde puedo estudiar más eficientemente para este curso en línea.",
+                                    "QUESTION_29": "Trabajo duro en mi estudio en línea, incluso cuando hay cosas más interesantes que hacer.",
+                                    "QUESTION_30": "Cuando mi estudio en línea se pone difícil, me mantengo comprometido con alcanzar mis metas de estudio.",
+                                    "QUESTION_31": "Cuando mi mente comienza a divagar durante una sesión de aprendizaje para este curso en línea, hago un esfuerzo especial para seguir concentrado.",
+                                    "QUESTION_32": "No importa cómo me sienta, persevero con mi estudio en línea.",
+                                    "QUESTION_33": "Trato de ayudar a otros estudiantes cuando hacen una pregunta en línea que puedo responder.",
+                                    "QUESTION_34": "Pido ayuda a personas conocedoras a través de canales en línea cuando no estoy seguro de qué hacer en mi clase en línea.",
+                                    "QUESTION_35": "Pido al maestro y/o a mis compañeros que aclaren la información en mi curso en línea.",
+                                    "QUESTION_36": "Cuando tengo dificultades con mi clase en línea, busco ayuda de otros a través de medios en línea (foros de discusión, redes sociales, correo electrónico, mensajería instantánea, etc.).",
+                                    "QUESTION_37": "Utilizo correo electrónico, foros de discusión, redes sociales, etc., para conectarme con el maestro y otros estudiantes cuando necesito ayuda.",
+                                    "QUESTION_38": "Cuando estudio en línea, creo mis propios ejemplos del contenido para hacerlo más significativo.",
+                                    "QUESTION_39": "Cuando estudio en línea, organizo mis pensamientos haciendo resúmenes de lo que estoy aprendiendo.",
+                                    "QUESTION_40": "Cuando estudio en línea, trato de relacionar el contenido con lo que ya sé.",
+                                    "QUESTION_41": "Cuando aprendo el contenido en línea, trato de desarrollar mis propias ideas al respecto.",
+                                    "QUESTION_42": "Trato de mejorar mi comprensión haciendo trabajo adicional más allá del contenido principal (por ejemplo, haciendo actividades adicionales de resolución de problemas o lecturas adicionales)."
+                                }
+                            },
+                            "GENERAL_OPTIONS": {
+                                "options": [
+                                    "Totalmente en desacuerdo",
+                                    "En desacuerdo",
+                                    "Algo en desacuerdo",
+                                    "Neutral",
+                                    "Algo de acuerdo",
+                                    "De acuerdo",
+                                    "Totalmente de acuerdo"
+                                ]
+                            }
                         }
                     },
                     "CONTINUOUS_FEEDBACK": {
@@ -550,7 +762,7 @@
         "not_qualifications": "No hay calificaciones disponibles para ti",
         "not_qualifications_explore": "Explora otras áreas de la plataforma o vuelve más tarde para ver nuevas opciones de calificaciones.",
         "qualifications": "Calificaciones",
-        "qualification": "Calificación",
+        "qualificacion": "Calificación",
         "search_users": "Buscar usuarios",
         "attention": "Atención",
         "peerreview_deadline": "La fecha límite para la revisión por pares es el",
@@ -609,5 +821,103 @@
         "peer_review_did_not_finish": "La revisión por pares no finalizó",
         "student_missing": "El estudiante {{name}} no tiene calificaciones o comentarios. Por favor verifique los datos.",
         "select_activity": "Selecciona una actividad"
+    },
+    "DASHBOARD": {
+        "average_course_grade": "Calificación promedio del curso",
+        "average_course_marks": "Calificaciones promedio del curso",
+        "students_average": "Promedio de estudiantes",
+        "check_students": "Comprueba cómo estás progresando en el curso.",
+        "your_grade": "Tu calificación",
+        "average_course": "Nota promedio del curso",
+        "average_student": "Nota promedio del estudiante",
+        "your_mark": "Tu nota",
+        "activity_average": "Promedio de actividad",
+        "activities_average": "Promedio de las actividades",
+        "compare_activity": "Compara el promedio de todas las actividades.",
+        "course_dashboard": "Panel de Control del Curso",
+        "explore_performance_metrics": "Explora tus métricas de rendimiento y haz un seguimiento de tu progreso a lo largo del curso.",
+        "objective_progress": "Progreso de los objetivos",
+        "check_progress": "Verifica cómo estás progresando en los objetivos del curso.",
+        "creative_capacity": "Capacidad creativa y emprendedora",
+        "teamwork": "Trabajo en equipo",
+        "qualifications_distribution": "Distribución de calificaciones",
+        "distribution_based_on_activities": "Distribución de las calificaciones basadas en las actividades del curso.",
+        "questionnaire_time_min": "Tiempo del cuestionario (min)",
+        "compare_time": "Compara el tiempo que dedicaste a los cuestionarios con otros estudiantes.",
+        "average_time_spent": "Tiempo medio dedicado",
+        "your_time_spent": "Tu tiempo dedicado",
+        "participation_forums": "Participación en foros",
+        "measure_engagement": "Mide la participación en las discusiones del foro.",
+        "total_posts": "Total de publicaciones",
+        "total_answers": "Total de respuestas",
+        "your_posts": "Tus publicaciones",
+        "your_answers": "Tus respuestas",
+        "posts_forum": "Publicaciones en el foro",
+        "replies_forum": "Respuestas en el foro",
+        "go_back_dashboard": "Volver al panel de control",
+        "no_data": "No hay datos para visualizar"
+    },
+    "SELFASSESTMENT": {
+        "self_assessment": "Autoevaluación",
+        "self_assessment_text_prof": "Vea cómo sus estudiantes se han evaluado a sí mismos.",
+        "select_another_student": "Selecciona otro estudiante",
+        "bad": "Mal",
+        "regular": "Regular",
+        "good": "Bien",
+        "very_good": "Excelente",
+        "your_evaluación_submitted": "Su evaluación ha sido enviada",
+        "rubric_autoevalution": "Rúbrica y Autoevaluación",
+        "rubric_text": "Lea detenidamente los criterios descritos en la rúbrica. Tómese un tiempo para reflexionar sobre su proyecto y evaluar qué tan bien cumple con cada uno de los criterios descritos.",
+        "rubric_text2": "Ahora que has revisado la rúbrica, úsala para autoevaluar tu proyecto. Considera cada criterio cuidadosamente y evalúa qué tan bien tu proyecto cumple con los requisitos. Después de reflexionar sobre estos aspectos, asigna una calificación a tu proyecto.",
+        "add_your_comments": "Agrega tus comentarios sobre tu proyecto.",
+        "evaluate_1_10": "Evalúa tu proyecto con una puntuación del 1 al 10."
+    },
+    "PEERREVIEW": {
+        "no_partner_assigned": "No se te ha asignado un compañero para evaluar",
+        "maybe_not_here": "Quizás no deberías estar aquí aún ;)",
+        "contact_teacher": "Si no es el caso, por favor contacta a tu profesor",
+        "peer_review": "Revisión por pares",
+        "feedback": "Comentarios de la revisión por pares",
+        "no_feedback": "Tu socio no te dio una reseña :(",
+        "change_user": "Cambiar de usuario",
+        "evaluate": "Evaluar",
+        "users_to_review": "Tienes que revisar a {{usersToPairAdapted}} compañeros para finalizar la actividad",
+        "left_to_review": "Compañeros por revisar",
+        "task_evaluación_criteria": "Criterios de evaluación de la actividad",
+        "criteria": "Criterios",
+        "correct": "Corrige la entrega del Grupo {{name}}",
+        "correct_individual": "Corrige la entrega de {{name}}",
+        "files_to_review": "Archivos a corregir",
+        "update_feedback": "Actualizar comentarios",
+        "go_to_rubric": "Ir a la rúbrica",
+        "feedback_sent": "Tus comentarios han sido enviados",
+        "no_feedback_sent": "Tus comentarios no han sido enviados, inténtalo de nuevo más tarde",
+        "review_prof_text1": "En esta sección podrás ver las evaluaciones que los estudiantes han dado a sus compañeros.",
+        "review_prof_text2": "Los pares se crearán automáticamente si no los creas manualmente",
+        "qualificacion_received": "Calificación recibida",
+        "qualificacion_given": "Calificación otorgada",
+        "peer_review_answers": "Respuestas de la revisión por pares",
+        "create_peers_manually": "Crear pares manualmente",
+        "download_all": "Descargar todo",
+        "create_peers": "Crear pares",
+        "update_peers": "Actualizar pares",
+        "back_to_peer_review": "Volver a la revisión por pares",
+        "peer_review_text": "La revisión por pares fue diseñada para que cada estudiante revise <bold>{{number}} actividades</bold>",
+        "assing_students": "Asigna a los estudiantes que revisen cada actividad",
+        "create_peers_auto": "Crear pares automáticamente",
+        "students_who_dont_delivered": "Hay alumnos que no han entregado la actividad",
+        "groups_who_dont_delivered": "Hay grupos que no han entregado la actividad",
+        "no_students_to_review": "No hay estudiantes para revisar",
+        "no_students_have_delivered": "No hay estudiantes que hayan entregado la actividad",
+        "activity_done": "Actividad realizada por:",
+        "groups_who_review": "Grupos que van a revisar la actividad:",
+        "users_who_review": "Usuarios que van a revisar la actividad:",
+        "group_exists_in_destination": "El grupo ya existe en este grupo",
+        "group_cannot_review_own_activity": "El grupo no puede revisar su propia actividad",
+        "student_exists_in_destination": "El estudiante ya existe en este grupo",
+        "student_cannot_review_own_activity": "El estudiante no puede revisar su propia actividad",
+        "cannot_drop_outside_list": "No puedes soltar al estudiante fuera de la lista",
+        "peers_created_success": "Pares creados con éxito",
+        "error_creating_peers": "Error al crear los pares"
     }
 }

@@ -19,6 +19,7 @@ html {
     background-clip: content-box;
 }
 
+
 ::-webkit-scrollbar-track {
     background-color: transparent;
 }

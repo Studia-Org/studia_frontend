@@ -1,7 +1,8 @@
 import React from 'react'
 import ReactApexChart from 'react-apexcharts'
-
+import { useTranslation } from 'react-i18next';
 export const ActivityDetailChart = ({ data }) => {
+    const { t } = useTranslation();
     const dataEntries = Object.entries(data);
 
     // Extraer los nombres y las calificaciones para las categorías y los datos del gráfico
@@ -10,7 +11,7 @@ export const ActivityDetailChart = ({ data }) => {
 
 
     const series = [{
-        name: 'Grade',
+        name: t("DASHBOARD.activity_average"),
         data: chartData
     }]
     const options = {
@@ -51,8 +52,8 @@ export const ActivityDetailChart = ({ data }) => {
 
     return (
         <>
-            <p className="mb-1 text-lg font-medium">Activity average</p>
-            <p className="pb-5 text-sm font-normal text-gray-600">Compare all the activities average.</p>
+            <p className="mb-1 text-lg font-medium">{t("DASHBOARD.activities_average")}</p>
+            <p className="pb-5 text-sm font-normal text-gray-600">{t("DASHBOARD.compare_activity")}</p>
             <div id="chart">
                 <ReactApexChart options={options} series={series} type="bar" height={350} />
             </div>

@@ -263,6 +263,7 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
 }
 
 export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption, createCourseSectionsList, evaluator, courseBasicInfo, task }) => {
+  const { t } = useTranslation();
   const [sectionContentSelector, setSectionContentSelector] = useState('course');
   const [visibilityTask, setVisibilityTask] = useState(false);
   const [selectedSubsection, setSelectedSubsection] = useState(createCourseSectionsList[0]?.subsections[0]);
@@ -321,9 +322,10 @@ export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption, 
           <>
             <div className='flex flex-row'>
               {renderContent()}
+
             </div>
             <button onClick={() => setCreateCourseOption(createCourseOption - 1)} type="button" class="mb-10 mt-5 duration-150 text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center mr-2 ">
-              Back
+              {t("CREATE_COURSES.NAVIGATION.back")}
             </button>
           </> :
           <>
@@ -332,14 +334,14 @@ export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption, 
                 <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                   <path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
                 </svg>
-                <h3 class="mt-2 text-sm font-medium text-gray-900">No sections</h3>
-                <p class="mt-1 text-sm font-medium text-gray-500">Get started defining your course sections</p>
+                <h3 class="mt-2 text-sm font-medium text-gray-900">{t("CREATE_COURSES.COURSE_SECTIONS.no_sections")}</h3>
+                <p class="mt-1 text-sm font-medium text-gray-500">{t("CREATE_COURSES.COURSE_SECTIONS.principal_text")}</p>
                 <div class="mt-6">
                   <button onClick={() => setCreateCourseOption(createCourseOption - 1)} type="button" class="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 mr-1">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-11.25a.75.75 0 00-1.5 0v2.5h-2.5a.75.75 0 000 1.5h2.5v2.5a.75.75 0 001.5 0v-2.5h2.5a.75.75 0 000-1.5h-2.5v-2.5z" clipRule="evenodd" />
                     </svg>
-                    Add a section
+                    {t("CREATE_COURSES.COURSE_SECTIONS.add_section")}
                   </button>
                 </div>
               </div>

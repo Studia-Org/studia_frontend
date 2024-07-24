@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import { Questionnaire } from './Components/SelfAssesment/Questionnaire'
 import { Breadcrumb } from './Components/SelfAssesment/Breadcrumb'
-import { BackButton } from './Components/BackToCourse'
-import { useNavigate, useParams } from 'react-router-dom'
 import { RubricAutoAssesment } from './Components/SelfAssesment/RubricAutoAssesment'
 import { FinalResultsAutoAssesment } from './Components/SelfAssesment/FinalResultsAutoAssesment'
 import { useAuthContext } from '../../../../context/AuthContext'
@@ -11,10 +9,8 @@ import { BreadcrumbCourse } from '../CoursesInside/BreadcrumbCourse'
 
 
 export const SelfAssesmentComponent = ({ activityData, idQualification, idSubsection }) => {
-    const navigate = useNavigate()
     const [selfAssesmentData, setSelfAssesmentData] = useState(activityData.SelfAssesmentAnswers?.data || [])
     const [qualificationId, setQualificationId] = useState(idQualification)
-    let { courseId } = useParams()
     const { user } = useAuthContext()
     const [state, setState] = useState(checkState(activityData))
 
@@ -60,9 +56,7 @@ export const SelfAssesmentComponent = ({ activityData, idQualification, idSubsec
                             <SelfAssesmentItem />
                         </>
                         :
-                        <>
-                            <ProfessorAutoAssesment />
-                        </>
+                        <ProfessorAutoAssesment />
                 }
             </div>
         </div>

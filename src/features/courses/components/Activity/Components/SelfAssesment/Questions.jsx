@@ -4,8 +4,10 @@ import { styled } from '@mui/material/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { useRadioGroup } from '@mui/material/RadioGroup';
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next';
 
 export const Questions = ({ questionnaire, user, setUserResponses, questionnaireAnswers = [] }) => {
+    const { t } = useTranslation()
     const item = {
         visible: { opacity: 1, x: 0 },
         hidden: { opacity: 0, x: -100 },
@@ -31,10 +33,10 @@ export const Questions = ({ questionnaire, user, setUserResponses, questionnaire
         })
     );
 
-    function handleOnChange(e, index, question) {
+    function handleOnChange(e, index, question, optionindex) {
         setUserResponses(prev => {
             const updatedResponses = [...prev];
-            updatedResponses[index] = { question: question, answer: e.target.value };
+            updatedResponses[index] = { question: question, answer: e.target.value, answerId: optionindex };
             return updatedResponses;
         });
 
@@ -48,17 +50,18 @@ export const Questions = ({ questionnaire, user, setUserResponses, questionnaire
                 key={index}
             >
                 <p className="font-medium">{question.question}</p>
+
                 {Array.isArray(question.options) ? (
                     user.role_str !== "student" || questionnaireAnswers.length > 0 ?
-                        <RadioGroup className="mt-4" name={`use-radio-group-${index}`} value={questionnaireAnswers[index]?.answer}>
+                        <RadioGroup className="mt-4" name={`use-radio-group-${index}`} value={Object.values(t(`CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SELF_ASSESSMENT.OPTIONS`, { returnObjects: true }))[questionnaireAnswers[index]?.answerId]}>
                             {question.options.map((option, optionIndex) => (
-                                <MyFormControlLabel key={optionIndex} value={option} label={option} control={<Radio disabled readOnly />} />
+                                <MyFormControlLabel key={optionIndex} value={option.label} label={option.label} control={<Radio disabled readOnly />} />
                             ))}
                         </RadioGroup>
                         :
-                        <RadioGroup className="mt-4" onChange={(e) => handleOnChange(e, index, question.question)} name={`use-radio-group-${index}`}>
+                        <RadioGroup className="mt-4" name={`use-radio-group-${index}`}>
                             {question.options.map((option, optionIndex) => (
-                                <MyFormControlLabel key={optionIndex} value={option} label={option} control={<Radio />} />
+                                <MyFormControlLabel key={optionIndex} onChange={(e) => handleOnChange(e, index, question.question, optionIndex)} value={option.label} label={option.label} control={<Radio />} />
                             ))}
                         </RadioGroup>
                 ) : (

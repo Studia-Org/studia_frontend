@@ -3,20 +3,23 @@ import { Button, message } from 'antd'
 import { motion } from 'framer-motion'
 import { useAuthContext } from '../../../../../../context/AuthContext'
 import { Header } from './Header'
-import { SelfAssesmentData } from '../../../CreateCourses/CourseSections/QuestionnaireData'
+import QuestionnaireData from '../../../CreateCourses/CourseSections/QuestionnaireData'
 import { Questions } from './Questions'
 import { API } from '../../../../../../constant'
 import { getToken } from '../../../../../../helpers'
 import { useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
+
 
 
 
 export const Questionnaire = ({ setState, setSelfAssesmentData, setQualificationId, questionnaireAnswers }) => {
     const { user } = useAuthContext();
+    const { SelfAssesmentData } = QuestionnaireData()
     const [userResponses, setUserResponses] = useState([]);
     const [completed, setCompleted] = useState(questionnaireAnswers?.length > 0);
     const [sendingData, setSendingData] = useState(false);
-
+    const { t } = useTranslation()
     let { activityId } = useParams()
 
 
@@ -94,6 +97,8 @@ export const Questionnaire = ({ setState, setSelfAssesmentData, setQualification
         }
     }
 
+    console.log(questionnaireAnswers)
+
     return (
         <div className="flex flex-col mt-5">
             <Header questionnaire={SelfAssesmentData} />
@@ -122,7 +127,7 @@ export const Questionnaire = ({ setState, setSelfAssesmentData, setQualification
                                     <>
                                         <Button type='primary' loading={sendingData} onClick={handleSubmission}
                                             className="flex">
-                                            Submit
+                                            {t('COMMON.submit')}
                                         </Button>
                                     </>
                                 )

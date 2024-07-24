@@ -11,8 +11,8 @@ import { UploadFiles } from './UploadFiles';
 import '../../../styles/antdButtonStyles.css'
 import { PonderationWarning } from './PonderationWarning';
 import { debounce } from 'lodash';
-import { set, sub } from 'date-fns';
 import { AutoAssesmentRubric } from './AutoAssesmentRubric';
+import { useTranslation } from 'react-i18next';
 
 
 const { RangePicker } = DatePicker;
@@ -46,6 +46,8 @@ export const CreateCourseEditSubsection = ({
   const [typingTimeout, setTypingTimeout] = useState(null);
   if (subsection.activity?.groupActivity === undefined) subsection.activity.groupActivity = false;
   if (subsection.activity?.numberOfStudentsperGroup === undefined) subsection.activity.numberOfStudentsperGroup = 1;
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     const matchingSubsection = createCourseSectionsList
@@ -206,7 +208,7 @@ export const CreateCourseEditSubsection = ({
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
           <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
         </svg>
-        <p className='ml-1'>Add items to the sequence</p>
+        <p className='ml-1'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.items_sequences")}</p>
       </button>
       {subsection?.questionnaire ? (
         <QuestionnaireComponentEditable
@@ -235,9 +237,9 @@ export const CreateCourseEditSubsection = ({
             className={`p-5 mb-10 bg-white rounded-md shadow-md border-t-[14px] border-${selectBorderColor(subsection?.type)} `}
           >
             <label className='text-sm text-gray-500 !mt-4'>
-              Title  *
+              {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.title")} *
             </label>
-            <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-lg pl-3 mb-4 font-medium' placeholder="Description"
+            <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-lg pl-3 mb-4 font-medium' placeholder={t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.description")}
               onChange={(e) => {
                 handleTitleChange(e.target.value)
               }} defaultValue={subsection.title} />
@@ -254,23 +256,23 @@ export const CreateCourseEditSubsection = ({
                     subsectionEditing={subsection}
                   />
                   <label className='text-sm text-gray-500 '>
-                    Peer review rubric *
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.peer_review_rubric")} *
                   </label>
                   <Button onClick={() => {
                     setIsModalOpen(true);
                     document.body.style.overflow = 'hidden';
                   }}>
-                    Edit Rubric
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.peer_review_rubric_text")}
                   </Button>
                   <label className='text-sm text-gray-500 !mt-4'>
-                    Select the task for which the peer review will be conducted  *
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.peer_review_task")}  *
                   </label>
                   <Select
                     defaultValue={() => {
                       const act = filteredSubsections.find((sub) => sub.id === subsection.activity.task_to_review)
                       if (act === undefined) {
                         subsection.activity.task_to_review = null
-                        return 'Select a task'
+                        return t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.select_task")
                       }
                       return act.id
                     }
@@ -280,18 +282,18 @@ export const CreateCourseEditSubsection = ({
                     options={filteredSubsections.map((sub) => ({ label: sub.title, value: sub.id }))}
                   />
                   <label className='text-sm text-gray-500 ' htmlFor=''>
-                    Will the activity be carried out in pairs or individually? *
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.pairs_or_individual")}
                   </label>
                   <Select
                     key={subsection.id + "grouppeerreview"}
                     defaultValue={isGroup}
                     style={{ width: '100%', marginTop: '5px' }}
                     onChange={(number) => { handleSubsectionChange('group', number) }}
-                    options={[{ label: 'Individual', value: false }, { label: 'Groups', value: true }]}
+                    options={[{ label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.individual"), value: false }, { label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.groups"), value: true }]}
                   />
 
                   <label className='text-sm text-gray-500'>
-                    How many {isGroup ? "groups" : "students"} are going to review each other  *
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.students_review")}  {isGroup ? t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.groups").toLowerCase() : t("ACTIVITY.create_groups.students").toLowerCase()}   *
                   </label>
                   <Select
                     defaultValue={subsection.activity.usersToPair || 1}
@@ -355,7 +357,7 @@ export const CreateCourseEditSubsection = ({
 
                   />
                   <label className='text-sm text-gray-500 ' htmlFor=''>
-                    What percentage of the grade given by the student will be applied to the final grade? *
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.students_grade")} *
                   </label>
                   <InputNumber
                     defaultValue={filteredSubsections.find((sub) => sub.id === subsection.activity.task_to_review)?.activity?.ponderationStudent || 0}
@@ -372,25 +374,27 @@ export const CreateCourseEditSubsection = ({
               subsection?.type === 'task' && (
                 <div className='mb-5 space-y-3'>
                   <label className='text-sm text-gray-500' htmlFor=''>
-                    Cover (image)
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.cover")}
                   </label>
                   <UploadFiles fileList={landscape_photo} setFileList={setLandscape_photo} listType={'picture'} maxCount={1} />
                   <div>
                     <label className='text-sm text-gray-500 ' htmlFor=''>
-                      Will the activity be carried out in pairs or individually? *
+                      {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.pairs_or_individual")} *
+
                     </label>
                     <Select
                       defaultValue={isGroup}
                       key={subsection.id + "grouptask"}
                       style={{ width: '100%', marginTop: '5px' }}
                       onChange={(number) => { handleSubsectionChange('group', number) }}
-                      options={[{ label: 'Individual', value: false }, { label: 'Groups', value: true }]}
+                      options={[{ label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.individual"), value: false },
+                      { label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.groups"), value: true }]}
                     />
                     {
                       isGroup && (
                         <div className='mt-4'>
                           <label className='text-sm text-gray-500 ' htmlFor=''>
-                            How many students per group? *
+                            {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.students_per_group")} *
                           </label>
                           <Select
                             key={subsection.id + "numberofstudents"}
@@ -419,13 +423,13 @@ export const CreateCourseEditSubsection = ({
                     subsectionEditing={subsection}
                   />
                   <label className='mb-2 text-sm text-gray-500' htmlFor=''>
-                    Self-Assesment Rubric *
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.SELF_ASSESSMENT.title")} *
                   </label>
                   <Button className='py-5 pb-10 mb-5' onClick={() => {
                     setOpenSelfAssesmentRubricModal(true);
                     document.body.style.overflow = 'hidden';
                   }}>
-                    Edit Self-Assesment Rubric
+                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.peer_review_rubric_text")}
                   </Button>
                 </div>
               )
@@ -433,19 +437,25 @@ export const CreateCourseEditSubsection = ({
 
             <div className='flex flex-col mb-4'>
               <label className='text-sm text-gray-500' htmlFor=''>
-                Subsection content *
+                {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.content")} *
               </label>
               <Button className='py-5 pb-10 mt-2' onClick={() => {
                 setIsSubsectionModalOpen(true);
                 document.body.style.overflow = 'hidden';
               }}>
-                Edit subsection content
+                {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.content_placeholder")}
               </Button>
             </div>
             <div className='flex items-center justify-between w-full '>
               <div className='w-full space-y-2'>
-                <label className='mb-4 text-sm text-gray-500'>Subsection Date *</label>
+                <label className='mb-4 text-sm text-gray-500'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.date")} *</label>
                 <RangePicker
+                  placeholder={
+                    [
+                      t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.date_placeholder_start"),
+                      t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.date_placeholder_end")
+                    ]
+                  }
                   className='w-full py-4'
                   showTime={{
                     format: 'HH:mm',
@@ -457,13 +467,13 @@ export const CreateCourseEditSubsection = ({
               </div>
             </div>
             <div className='mt-7'>
-              <label className='block mr-3 text-sm text-gray-500' htmlFor=''>Categories * </label>
+              <label className='block mr-3 text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.categories")} * </label>
               <TableCategories categories={categories[sectionId]} setCreateCourseSectionsList={setCreateCourseSectionsList}
                 subsection={subsection} sectionID={sectionId} createCourseSectionsList={createCourseSectionsList} />
             </div>
             <div className='flex items-center justify-between mt-7'>
               <div className='flex items-center'>
-                <label className='block mr-3 text-sm text-gray-500' htmlFor=''>Evaluable * </label>
+                <label className='block mr-3 text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.evaluable")} * </label>
                 <Switch onChange={(e) => handleSubsectionChange('evaluable', e)} checked={subsection.activity?.evaluable} className='bg-gray-300' />
               </div>
               <div className='flex items-center gap-4'>
@@ -472,7 +482,7 @@ export const CreateCourseEditSubsection = ({
                     <PonderationWarning createCourseSectionsList={createCourseSectionsList} sectionID={sectionId} />
                   )
                 }
-                <label className='text-sm text-gray-500' htmlFor=''>Ponderation *</label>
+                <label className='text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ponderation")} *</label>
                 <InputNumber
                   disabled={!subsection.activity?.evaluable}
                   defaultValue={0}
@@ -486,15 +496,15 @@ export const CreateCourseEditSubsection = ({
               </div>
             </div>
             <div className='space-y-2 mt-7'>
-              <label className='text-sm text-gray-500 mt-7 ' htmlFor=''>Subsection description</label>
+              <label className='text-sm text-gray-500 mt-7 ' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.description")} *</label>
               <div className='flex w-full '>
-                <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3' placeholder="Description" value={subsection.description}
+                <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3' placeholder={t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.description")} value={subsection.description}
                   onChange={(e) => handleSubsectionChange('description', e.target.value)} />
               </div>
             </div>
             <div className='mt-3 mb-5 space-y-2'>
               <label className='text-sm text-gray-500 ' htmlFor=''>
-                Subsection Files (max 5)
+                {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.files")}
               </label>
               <UploadFiles fileList={files} setFileList={setFiles} listType={'text'} maxCount={5} />
             </div>

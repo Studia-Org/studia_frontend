@@ -90,7 +90,7 @@ export const GroupRows = ({ group, activityToReviewID, activityTitle, peerReview
     }
     return (
         <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-            <ModalFilesPR files={studentFiles} activityTitle={activityTitle} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} studentName={"patata"} />
+            <ModalFilesPR files={studentFiles} activityTitle={activityTitle} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
             <ModalRubrica isModalOpen={isRubricModalOpen} setIsModalOpen={setIsRubricModalOpen} rubricData={rubricData} />
             <th scope="row" className="flex flex-col px-6 py-4 text-gray-900 gap-y-2 whitespace-nowrap">
                 {

@@ -1,9 +1,12 @@
 import { Popover, List, Typography } from 'antd'
 import React, { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export const CheckSubsectionErrors = ({ subsection }) => {
     const [color, setColor] = useState('text-yellow-400')
     const [errorsList, setErrorsList] = useState([])
+
+    const { t } = useTranslation()
 
     useEffect(() => {
         setColor('text-yellow-400');
@@ -38,27 +41,26 @@ export const CheckSubsectionErrors = ({ subsection }) => {
 
     const checkCompletion = () => {
         let newErrorsList = [];
-        console.log(subsection.type)
         switch (subsection.type) {
 
             case 'questionnaire':
                 if (!subsection.start_date && !subsection.end_date) {
-                    newErrorsList.push({ svg: dangerSvg, comment: 'Start and end date are missing' });
+                    newErrorsList.push({ svg: dangerSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.date_missing") });
                     setColor('text-red-500')
                 }
-                if (Object.keys(subsection.activity.categories).length === 0) {
-                    newErrorsList.push({ svg: dangerSvg, comment: 'No categories' });
+                if (Object.keys(subsection?.activity?.categories)?.length === 0) {
+                    newErrorsList.push({ svg: dangerSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.categories_missing") });
                     setColor('text-red-500')
                 }
                 if (subsection.questionnaire.attributes.Options.questionnaire.questions.length === 0) {
-                    newErrorsList.push({ svg: dangerSvg, comment: 'No questions' });
+                    newErrorsList.push({ svg: dangerSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.question_missing") });
                     setColor('text-red-500')
                 }
                 if (Object.keys(subsection.questionnaire.attributes.Options.questionnaire.correctAnswers).length !==
                     subsection.questionnaire.attributes.Options.questionnaire.questions
                         .filter(question => question.options !== 'open-ended-long' && question.options !== 'open-ended-short').length) {
                     if (subsection.questionnaire.attributes.autocorrect === true) {
-                        newErrorsList.push({ svg: warningSvg, comment: 'Not all questions have correct answers' });
+                        newErrorsList.push({ svg: warningSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.answer_questions") });
                     }
                 }
                 break;
@@ -66,83 +68,81 @@ export const CheckSubsectionErrors = ({ subsection }) => {
             case 'selfAssessment':
                 console.log(subsection.activity?.SelfAssesmentRubrica)
                 if (!subsection.start_date && !subsection.end_date) {
-                    newErrorsList.push({ svg: dangerSvg, comment: 'Start and end date are missing' });
+                    newErrorsList.push({ svg: dangerSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.date_missing") });
                     setColor('text-red-500')
                 }
                 if (!subsection.activity?.SelfAssesmentRubrica?.length || subsection.activity?.SelfAssesmentRubrica.length < 2) {
-                    newErrorsList.push({ svg: dangerSvg, comment: 'Self assessment rubric is empty' });
+                    newErrorsList.push({ svg: dangerSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.rubric_empty") });
                     setColor('text-red-500')
                 }
                 if (Object.keys(subsection.activity.categories).length === 0) {
-                    newErrorsList.push({ svg: dangerSvg, comment: 'No categories' });
+                    newErrorsList.push({ svg: dangerSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.categories_missing") });
                     setColor('text-red-500')
                 }
                 if (subsection.description === '' || subsection.description === null) {
-                    newErrorsList.push({ svg: warningSvg, comment: 'No description' });
+                    newErrorsList.push({ svg: warningSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.no_description") });
                 }
                 if (subsection.content === '' || subsection.content === null) {
-                    newErrorsList.push({ svg: warningSvg, comment: 'No content' });
+                    newErrorsList.push({ svg: warningSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.no_content") });
                 }
                 break;
             case 'thinkAloud':
             case 'task':
-                console.log(subsection.activity?.SelfAssesmentRubrica)
-                console.log(subsection.type === 'selfAssesment')
                 if (!subsection.start_date && !subsection.end_date) {
-                    newErrorsList.push({ svg: dangerSvg, comment: 'Start and end date are missing' });
+                    newErrorsList.push({ svg: dangerSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.date_missing") });
                     setColor('text-red-500')
                 }
                 if (Object.keys(subsection.activity.categories).length === 0) {
-                    newErrorsList.push({ svg: dangerSvg, comment: 'No categories' });
+                    newErrorsList.push({ svg: dangerSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.categories_missing") });
                     setColor('text-red-500')
                 }
                 if (subsection.description === '' || subsection.description === null) {
-                    newErrorsList.push({ svg: warningSvg, comment: 'No description' });
+                    newErrorsList.push({ svg: warningSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.no_description") });
                 }
                 if (subsection.content === '' || subsection.content === null) {
-                    newErrorsList.push({ svg: warningSvg, comment: 'No content' });
+                    newErrorsList.push({ svg: warningSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.no_content") });
                 }
                 break;
 
             case 'peerReview':
                 if (!subsection.start_date && !subsection.end_date) {
-                    newErrorsList.push({ svg: dangerSvg, comment: 'Start and end date are missing' });
+                    newErrorsList.push({ svg: dangerSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.date_missing") });
                     setColor('text-red-500')
                 }
                 if (Object.keys(subsection.activity.categories).length === 0) {
-                    newErrorsList.push({ svg: dangerSvg, comment: 'No categories' });
+                    newErrorsList.push({ svg: dangerSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.categories_missing") });
                     setColor('text-red-500')
                 }
                 if (Object.keys(subsection.activity?.PeerReviewRubrica).length < 2) {
-                    newErrorsList.push({ svg: dangerSvg, comment: 'Peer review rubric is empty' });
+                    newErrorsList.push({ svg: dangerSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.rubric_empty") });
                     setColor('text-red-500')
                 }
                 if (subsection.activity?.task_to_review === '' || subsection.activity?.task_to_review === null) {
-                    newErrorsList.push({ svg: dangerSvg, comment: 'No task to review' });
+                    newErrorsList.push({ svg: dangerSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.no_task") });
                     setColor('text-red-500')
                 }
                 if (subsection.description === '' || subsection.description === null) {
-                    newErrorsList.push({ svg: warningSvg, comment: 'No description' });
+                    newErrorsList.push({ svg: warningSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.no_description") });
                 }
                 if (subsection.content === '' || subsection.content === null) {
-                    newErrorsList.push({ svg: warningSvg, comment: 'No content' });
+                    newErrorsList.push({ svg: warningSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.no_content") });
                 }
                 break;
 
             case 'forum':
                 if (!subsection.start_date && !subsection.end_date) {
-                    newErrorsList.push({ svg: dangerSvg, comment: 'Start and end date are missing' });
+                    newErrorsList.push({ svg: dangerSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.date_missing") });
                     setColor('text-red-500')
                 }
                 if (Object.keys(subsection.activity.categories).length === 0) {
-                    newErrorsList.push({ svg: dangerSvg, comment: 'No categories' });
+                    newErrorsList.push({ svg: dangerSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.categories_missing") });
                     setColor('text-red-500')
                 }
                 if (subsection.description === '' || subsection.description === null) {
-                    newErrorsList.push({ svg: warningSvg, comment: 'No description' });
+                    newErrorsList.push({ svg: warningSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.no_description") });
                 }
                 if (subsection.content === '' || subsection.content === null) {
-                    newErrorsList.push({ svg: warningSvg, comment: 'No content' });
+                    newErrorsList.push({ svg: warningSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.no_content") });
                 }
                 break;
             default:
@@ -155,7 +155,7 @@ export const CheckSubsectionErrors = ({ subsection }) => {
 
     const content = (
         <div>
-            <p className='mb-2'>Complete it or you will not be able to create a course.</p>
+            <p className='mb-2'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.text")}</p>
             <List
                 bordered
                 dataSource={errorsList}
@@ -176,7 +176,7 @@ export const CheckSubsectionErrors = ({ subsection }) => {
             {
                 errorsList.length > 0 &&
                 (
-                    <Popover content={content} title="Subsection is incomplete">
+                    <Popover content={content} title={t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.title")}>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
