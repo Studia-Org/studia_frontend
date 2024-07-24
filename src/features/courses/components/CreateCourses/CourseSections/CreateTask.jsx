@@ -32,10 +32,13 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
         const newCategories = {
             [section.id]: categoriesInside,
         }
-        setCategories(prevCategories => ({
-            ...prevCategories,
-            ...newCategories,
-        }));
+
+        setCategories(prevCategories => {
+            const updatedCategories = { ...prevCategories, ...newCategories };
+            localStorage.setItem('categories', JSON.stringify(updatedCategories));
+            return updatedCategories;
+        });
+
 
         setCreateCourseSectionsList((prevSections) => {
             let updatedTask;
@@ -53,10 +56,11 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                     order: section.task.order,
                 };
                 if (section?.task) {
-                    setTask((prevTask) => ({
-                        ...prevTask,
-                        [section.id]: updatedTask,
-                    }));
+                    setTask((prevTask) => {
+                        const newTask = { ...prevTask, [section.id]: updatedTask };
+                        localStorage.setItem('task', JSON.stringify(newTask));
+                        return newTask;
+                    });
 
                     return {
                         ...section,
@@ -104,10 +108,11 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                 };
 
                 if (section?.task) {
-                    setTask((prevTask) => ({
-                        ...prevTask,
-                        [section.id]: updatedTask,
-                    }));
+                    setTask((prevTask) => {
+                        const newTask = { ...prevTask, [section.id]: updatedTask };
+                        localStorage.setItem('task', JSON.stringify(newTask));
+                        return newTask;
+                    });
 
                     return {
                         ...section,
@@ -180,18 +185,20 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                     evaluable: true,
                 },
             }
-            setTask(prevTask => ({
-                ...prevTask,
-                ...newTask,
-            }));
+            setTask(prevTask => {
+                const updatedTask = { ...prevTask, ...newTask };
+                localStorage.setItem('task', JSON.stringify(updatedTask));
+                return updatedTask;
+            });
 
             const newCategories = {
                 [section.id]: categoriesInside,
             }
-            setCategories(prevCategories => ({
-                ...prevCategories,
-                ...newCategories,
-            }));
+            setCategories(prevCategories => {
+                const updatedCategories = { ...prevCategories, ...newCategories };
+                localStorage.setItem('categories', JSON.stringify(updatedCategories));
+                return updatedCategories;
+            });
 
             setCreateCourseSectionsList((prevSections) => {
                 const newSections = prevSections.map((section) => {

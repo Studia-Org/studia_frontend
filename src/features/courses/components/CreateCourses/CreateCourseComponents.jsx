@@ -51,7 +51,13 @@ const CreateCourseButtons = (createCourseOption, setCreateCourseOption, visibili
               className=''
               title="Cancel course creation?"
               description="You will lose all your changes!"
-              onConfirm={() => navigate('/app/courses')}
+              onConfirm={() => {
+                localStorage.removeItem('courseBasicInfo');
+                localStorage.removeItem('createCourseSectionsList');
+                localStorage.removeItem('task');
+                localStorage.removeItem('categories');   
+                navigate('/app/courses')
+              }}
               okText={<span className="text-white">Yes</span>}
               cancelText={<span className="">No</span>}
               okButtonProps={{ className: 'bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5' }}
@@ -91,12 +97,18 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
     courseType: '',
     tags: [],
   });
+  console.log('hola mundo');
 
+  console.log('courseBasicInfo', courseBasicInfo);
   const { t } = useTranslation();
 
   const handleChange = (field, value) => {
     setFormData((prevData) => ({ ...prevData, [field]: value }));
-    setCourseBasicInfo((prevInfo) => ({ ...prevInfo, [field]: value }));
+    setCourseBasicInfo((prevInfo) => {
+      const newInfo = { ...prevInfo, [field]: value };
+      localStorage.setItem('courseBasicInfo', JSON.stringify(newInfo));
+      return newInfo;
+    });
   };
 
   return (
@@ -149,7 +161,11 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
             files={courseBasicInfo.cover}
             maxFiles={1}
             onupdatefiles={(e) => {
-              setCourseBasicInfo((prevInfo) => ({ ...prevInfo, 'cover': e }));
+              setCourseBasicInfo((prevInfo) => {
+                const newInfo = { ...prevInfo, cover: e };
+                localStorage.setItem('courseBasicInfo', JSON.stringify(newInfo));
+                return newInfo;
+              });
             }}
           />
         </div>
