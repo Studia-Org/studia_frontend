@@ -613,6 +613,13 @@
                             "SELF_ASSESSMENT": {
                                 "title": "Cuestionario de Autoevaluación",
                                 "description": "La autoevaluación es un proceso que permite a los estudiantes reflexionar sobre su aprendizaje, identificar áreas de fortaleza y debilidad, y establecer metas para la mejora. Es una habilidad esencial para el aprendizaje permanente y el desarrollo personal.",
+                                "OPTIONS": {
+                                    "OPTION_1": "Totalmente en desacuerdo",
+                                    "OPTION_2": "En desacuerdo",
+                                    "OPTION_3": "Neutral",
+                                    "OPTION_4": "De acuerdo",
+                                    "OPTION_5": "Totalmente de acuerdo"
+                                },
                                 "QUESTIONS": {
                                     "QUESTION_1": "¿Logré los objetivos de la tarea?",
                                     "QUESTION_2": "¿Fue satisfactoria la calidad de mi trabajo?",

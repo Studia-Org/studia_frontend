@@ -613,6 +613,13 @@
                             "SELF_ASSESSMENT": {
                                 "title": "Qüestionari d'Autoavaluació",
                                 "description": "El questionari d'autoavaluació és un procés que permet als estudiants reflexionar sobre el seu aprenentatge, identificar àrees de fortalesa i feblesa, i establir metes per a la millora. És una habilitat essencial per a l'aprenentatge permanent i el desenvolupament personal.",
+                                "OPTIONS": {
+                                    "OPTION_1": "Totalment en desacord",
+                                    "OPTION_2": "En desacord",
+                                    "OPTION_3": "Neutral",
+                                    "OPTION_4": "D'acord",
+                                    "OPTION_5": "Totalment d'acord"
+                                },
                                 "QUESTIONS": {
                                     "QUESTION_1": "Vaig aconseguir els objectius de la tasca?",
                                     "QUESTION_2": "Va ser satisfactòria la qualitat de la meva feina?",
