@@ -309,6 +309,8 @@ const CourseInside = () => {
     return true;
   });
 
+  if (user.role_str === 'student') items.splice(2, 1);
+
   return (
     <>
       {isLoading ? (
