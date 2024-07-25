@@ -142,7 +142,7 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
         value={courseBasicInfo.description}
         onChange={(e) => handleChange('description', e.target.value)}
       />
-      <SelectProfessor setCourseBasicInfo={setCourseBasicInfo} />
+      <SelectProfessor setCourseBasicInfo={setCourseBasicInfo} courseBasicInfo={courseBasicInfo} />
       <div className='text-sm font-normal'>
         <label htmlFor="message" className="block mt-8 mb-4 text-sm font-medium text-gray-900">
           {t("CREATE_COURSES.COURSE_INFO.course_tags")} *
@@ -159,7 +159,7 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
       </div>
 
       <div className='flex justify-between mt-8'>
-        <div className='w-full font-medium mb-5'>
+        <div className='w-full mb-5 font-medium'>
           <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900 ">
             {t("CREATE_COURSES.COURSE_INFO.course_cover")} *
           </label>

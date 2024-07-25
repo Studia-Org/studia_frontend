@@ -6,6 +6,7 @@ import { API } from '../../../../../constant';
 import LoadingBar from 'react-top-loading-bar'
 import { BeatLoader } from 'react-spinners';
 import { useTranslation } from 'react-i18next';
+import { m } from 'framer-motion';
 
 
 export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }) => {
@@ -14,14 +15,13 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
 
     const [isLoading, setIsLoading] = useState(false);
     const [progress, setProgress] = useState(0);
-
     const navigate = useNavigate();
 
     function emptyLocalStorage() {
         localStorage.removeItem('courseBasicInfo')
         localStorage.removeItem('createCourseSectionsList')
         localStorage.removeItem('categories')
-        localStorage.removeItem('task')        
+        localStorage.removeItem('task')
     }
 
     const isValidCourseBasicInfo = (courseBasicInfo) => {
@@ -339,16 +339,21 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
             }
             const formData = new FormData();
             formData.append('files', courseBasicInfo.cover[0].originFileObj);
-            const coverUpload = await fetch(`${API}/upload/`, {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${getToken()}`,
-                },
-                body: formData,
-            });
-            const data = await coverUpload.json();
-            newCourse.cover = data[0].id;
-
+            try {
+                const coverUpload = await fetch(`${API}/upload/`, {
+                    method: 'POST',
+                    headers: {
+                        Authorization: `Bearer ${getToken()}`,
+                    },
+                    body: formData,
+                });
+                const data = await coverUpload.json();
+                newCourse.cover = data[0].id;
+            } catch (error) {
+                setIsLoading(false)
+                setProgress(100)
+                message.error('Error uploading cover image');
+            }
             const createCourseFinal = await fetch(`${API}/courses`, {
                 method: 'POST',
                 headers: {
