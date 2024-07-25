@@ -9,7 +9,7 @@ import { AccordionCourseContent } from "../components/CoursesInside/AccordionCou
 import { ForumClickable } from "../components/CoursesInside/Forum/ForumClickable";
 import { ForumComponent } from '../components/CoursesInside/Forum/ForumComponent'
 import { QuestionnaireComponent } from '../components/CoursesInside/QuestionnaireComponent';
-import { CourseParticipantsClickable, CourseContent, CourseFiles } from "../components/CoursesInside/TabComponents";
+import { CourseParticipantsClickable, CourseContent, CourseFiles, SubsectionsSettings } from "../components/CoursesInside/TabComponents";
 import { useAuthContext } from "../../../context/AuthContext";
 import { EditSection } from "../components/CoursesInside/EditSection";
 import { SideBar } from "../components/CoursesInside/FloatingButtonNavigation";
@@ -283,7 +283,7 @@ const CourseInside = () => {
 
   const items = [
     {
-      key: '1',
+      key: 1,
       label: t('COURSEINSIDE.course'),
       children:
         <CourseContent setForumFlag={setForumFlag} course={course} courseSection={sectionSelected}
@@ -293,9 +293,14 @@ const CourseInside = () => {
         />,
     },
     {
-      key: '2',
+      key: 2,
       label: t('COURSEINSIDE.files'),
       children: <CourseFiles course={course} courseSection={sectionSelected} courseSubsection={subsectionSelected} enableEdit={enableEdit} setCourse={setCourse} />,
+    },
+    {
+      key: 3,
+      label: t('COURSEINSIDE.subsection_settings'),
+      children: <SubsectionsSettings course={course} courseSection={sectionSelected} courseSubsection={subsectionSelected} students={students} />,
     }
   ].filter(item => {
     if (item.label === 'Participants') {

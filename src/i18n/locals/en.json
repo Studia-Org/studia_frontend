@@ -323,6 +323,7 @@
     "COURSEINSIDE": {
         "course": "Course",
         "files": "Files",
+        "subsection_settings": "Subsection settings",
         "activity": "Activity",
         "course_content": "Course content",
         "edit_mode": "Edit mode",
@@ -365,6 +366,16 @@
             "participants_tile": "Explora todos los participantes actualmente inscritos en este curso.",
             "to_add_student": "Para agregar un nuevo estudiante, por favor navega a la sección de configuración del curso.",
             "placeholder_search": "Buscar un estudiante"
+        },
+        "SUB_SETTINGS": {
+            "complete_students": "Complete subsection",
+            "participants_completed": "Students who completed this subsection",
+            "participants_not_completed": "Students who have not completed this subsection",
+            "select_students_to_not_complete": "Select students to mark the subsection as not completed.",
+            "select_students_to_complete": "Select students to mark the subsection as completed.",
+            "select_all": "Move all",
+            "all_completed": "All students have completed this subsection",
+            "all_not_completed": "No students have completed this subsection"
         }
     },
     "ACTIVITY": {

@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { TaskComponentCard } from "../CreateCourses/CourseConfirmation/TaskComponentCard";
 import ReactMarkdown from "react-markdown";
 import { Empty, Button, message } from "antd";
-import { AvatarGroup, Avatar } from 'rsuite';
+import { AvatarGroup, Avatar, Divider } from 'rsuite';
 import MDEditor, { image } from "@uiw/react-md-editor";
 import '@mdxeditor/editor/style.css'
 import { API } from "../../../../constant";
@@ -12,6 +12,8 @@ import { MoonLoader } from "react-spinners";
 import './participants.css'
 import { useCourseContext } from "../../../../context/CourseContext";
 import { useTranslation } from "react-i18next";
+import { use } from "i18next";
+import { set } from "date-fns";
 
 
 export const CourseContent = ({ setForumFlag, courseId, enableEdit, setEnableEdit, titleSubsection, dateSubsection, backgroundPhotoSubsection }) => {
@@ -405,6 +407,191 @@ export const CourseFiles = ({ enableEdit }) => {
     )
 }
 
+export const SubsectionsSettings = ({ course, courseSection, courseSubsection, students }) => {
+    const [loading, setLoading] = useState(true);
+    const [fetchLoading, setFetchLoading] = useState(false);
+    const { t } = useTranslation();
+
+    const studentsCompletedRef = useRef();
+    const studentsNotCompletedRef = useRef();
+    const [studentsCompleted, setStudentsCompleted] = useState([])
+    const [studentsNotCompleted, setStudentsNotCompleted] = useState([])
+
+
+    useEffect(() => {
+        fetch(`${API}/subsections/${courseSubsection.id}?populate[users_who_completed][populate][profile_photo]=url`, {
+            headers: {
+                Authorization: `Bearer ${getToken()}`
+            }
+        }).then((response) => response.json())
+            .then((data) => {
+                setStudentsCompleted(data?.data?.attributes?.users_who_completed?.data)
+                setStudentsNotCompleted(students?.data.filter(student => !data?.data?.attributes?.users_who_completed?.data?.some(user => user.id === student.id)))
+                studentsCompletedRef.current = data?.data?.attributes?.users_who_completed?.data
+                studentsNotCompletedRef.current = students?.data.filter(student => !data?.data?.attributes?.users_who_completed?.data?.some(user => user.id === student.id))
+                setLoading(false)
+            })
+    }, [])
+
+    async function saveChanges() {
+        try {
+            setFetchLoading(true)
+            const result = await fetch(`${API}/subsections/${courseSubsection.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
+                body: JSON.stringify({
+                    data: { users_who_completed: studentsCompletedRef.current.map(student => student.id) }
+                })
+            })
+            if (result.ok) {
+                message.success(t("ACTIVITY.changed_saved_success"))
+            }
+            else {
+                message.success(t("ACTIVITY.changed_saved_error"))
+            }
+        } catch (error) {
+
+        } finally {
+            setFetchLoading(false)
+        }
+    }
+
+    return (
+        <div className="p-4 pb-0 bg-white border border-[#DADADA] rounded-lg min-h-[calc(100vh-23rem)] relative  ">
+            {loading && <MoonLoader size={72} color={"#3730a3"} className="self-center mx-auto" />}
+            {!loading &&
+                <>
+                    <div className="flex max-h-[calc(100vh-23rem)] min-h-[calc(100vh-23rem)] overflow-y-scroll">
+                        <section className="w-[calc(50%-0.5rem)]">
+                            <div className="flex items-center">
+                                <h3 className="text-lg font-medium ">{t("COURSEINSIDE.SUB_SETTINGS.participants_completed") + " (" + studentsCompletedRef.current.length + ")"}</h3>
+                            </div>
+                            <input id="search_completed" type="text" placeholder={t("COMMON.search_students")} className=" px-2 border border-[#DADADA] rounded-md w-5/6 mt-3"
+                                onChange={(e) => {
+                                    if (e.target.value === '') {
+                                        setStudentsCompleted(studentsCompletedRef.current)
+                                        return
+                                    }
+                                    setStudentsCompleted(studentsCompletedRef.current.filter(user => user.attributes.name.toLowerCase().includes(e.target.value.toLowerCase())))
+                                }}
+                            />
+                            <p className="mt-2">{t("COURSEINSIDE.SUB_SETTINGS.select_students_to_not_complete")}</p>
+                            <ul id="completed-list" className="flex flex-col justify-start mt-5 relative ">
+                                {studentsCompleted?.length !== 0 &&
+                                    <Button className="absolute right-[2%] top-0" disabled={studentsCompleted.length !== studentsCompletedRef.current.length}
+                                        onClick={() => {
+                                            setStudentsNotCompleted([...studentsNotCompleted, ...studentsCompleted])
+                                            setStudentsCompleted([])
+                                            studentsNotCompletedRef.current = [...studentsNotCompleted, ...studentsCompleted]
+                                            studentsCompletedRef.current = []
+                                            document.getElementById('search_completed').value = ''
+                                            document.getElementById('search_not_completed').value = ''
+
+
+                                        }}
+                                    >{t("COURSEINSIDE.SUB_SETTINGS.select_all")}
+                                    </Button>
+                                }
+                                {studentsCompleted?.map(user => {
+                                    return (
+                                        <li onClick={() => {
+                                            const newStudentsCompleted = studentsCompletedRef.current.filter(student => student.id !== user.id)
+                                            const newStudentsNotCompleted = [user, ...studentsNotCompleted]
+                                            setStudentsCompleted(newStudentsCompleted)
+                                            setStudentsNotCompleted(newStudentsNotCompleted)
+                                            studentsCompletedRef.current = newStudentsCompleted
+                                            studentsNotCompletedRef.current = newStudentsNotCompleted
+                                            document.getElementById('search_not_completed').value = ''
+                                            document.getElementById('search_completed').value = ''
+                                        }}
+                                            className="flex items-center gap-x-2 cursor-pointer mb-1 p-[2px] border border-transparent hover:border-gray-500 w-3/5 overflow-y-hidden rounded-md" id={user.id} key={user.id}>
+                                            <Avatar
+                                                circle
+                                                size="md"
+                                                src={user.attributes.profile_photo?.data?.attributes?.url}
+                                                alt={user.attributes.username}
+                                                className="w-8 h-8 min-h-[2rem] min-w-[2.5rem] object-cover"
+                                            />
+                                            <span className="line-clamp-1 text-ellipsis pr-2 ">{user.attributes.name}</span>
+                                        </li>
+                                    )
+                                })}
+                                {studentsCompleted?.length === 0 &&
+                                    <div className="rounded-md  mx-12 mt-5 border border-[#DADADA]">
+                                        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t("COURSEINSIDE.SUB_SETTINGS.all_not_completed")} />
+                                    </div>
+                                }
+                            </ul>
+                        </section>
+                        <div className="sticky border-r border-[#DADADA] inset-y-0 w-px left-1/2 transform -translate-x-1/2"></div>
+                        <section className="w-[calc(50%+0.5rem)] pl-6 ">
+                            <div className="flex items-center ">
+                                <h3 className="text-lg font-medium ">{t("COURSEINSIDE.SUB_SETTINGS.participants_not_completed") + " (" + studentsNotCompletedRef.current.length + ")"}</h3>
+                            </div>
+                            <input id="search_not_completed" type="text" placeholder={t("COMMON.search_students")} className="mt-3 px-2 border border-[#DADADA] rounded-md w-5/6"
+                                onChange={(e) => {
+                                    if (e.target.value === '') {
+                                        setStudentsNotCompleted(studentsNotCompletedRef.current)
+                                        return
+                                    }
+                                    setStudentsNotCompleted(studentsNotCompletedRef.current.filter(user => user.attributes.name.toLowerCase().includes(e.target.value.toLowerCase())))
+                                }}
+                            />
+                            <p className="mt-2">{t("COURSEINSIDE.SUB_SETTINGS.select_students_to_complete")}</p>
+                            <ul id="uncompleted-list" className="flex flex-col justify-start mt-5 relative">
+                                {studentsNotCompleted?.length !== 0 &&
+                                    <Button className="absolute right-[2%] top-0" disabled={studentsNotCompleted.length !== studentsNotCompletedRef.current.length}
+                                        onClick={() => {
+                                            setStudentsCompleted([...studentsCompleted, ...studentsNotCompleted])
+                                            setStudentsNotCompleted([])
+                                            studentsCompletedRef.current = [...studentsCompleted, ...studentsNotCompleted]
+                                            studentsNotCompletedRef.current = []
+                                            document.getElementById('search_completed').value = ''
+                                            document.getElementById('search_not_completed').value = ''
+                                        }}
+                                    >{t("COURSEINSIDE.SUB_SETTINGS.select_all")}
+                                    </Button>}
+                                {studentsNotCompleted?.map(user => {
+                                    return (
+                                        <li
+                                            onClick={() => {
+                                                const newStudentsCompleted = [user, ...studentsCompleted]
+                                                const newStudentsNotCompleted = studentsNotCompletedRef.current.filter(student => student.id !== user.id)
+                                                setStudentsCompleted(newStudentsCompleted)
+                                                setStudentsNotCompleted(newStudentsNotCompleted)
+                                                studentsCompletedRef.current = newStudentsCompleted
+                                                studentsNotCompletedRef.current = newStudentsNotCompleted
+                                                document.getElementById('search_not_completed').value = ''
+                                                document.getElementById('search_completed').value = ''
+                                            }}
+                                            className="flex items-center gap-x-2 cursor-pointer mb-1 p-[2px] border border-transparent hover:border-gray-500 rounded-md w-3/5 overflow-y-hidden" id={user.id} key={user.id}>
+                                            <Avatar
+                                                circle
+                                                size="md"
+                                                src={user.attributes.profile_photo?.data?.attributes?.url}
+                                                alt={user.attributes.username}
+                                                className="w-8 h-8 min-h-[2rem] min-w-[2rem] object-cover"
+                                            />
+                                            <span className="line-clamp-1 text-ellipsis pr-2 ">{user.attributes.name}</span>
+                                        </li>
+                                    )
+                                })}
+                                {studentsNotCompleted?.length === 0 &&
+                                    <div className="rounded-md  mx-12 mt-5 border border-[#DADADA]">
+                                        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t("COURSEINSIDE.SUB_SETTINGS.all_completed")} />
+                                    </div>
+                                }
+                            </ul>
+                        </section>
+                    </div>
+                    <Button onClick={saveChanges} loading={fetchLoading} type="primary" className="absolute bottom-5 right-5">
+                        {t("COMMON.save_changes")}
+                    </Button>
+                </>
+            }
+        </div>
+    )
+}
 
 export const CourseParticipantsClickable = ({ students, enableEdit, setSettingsFlag, setParticipantsFlag, setVisible, setForumFlag }) => {
     const { t } = useTranslation();
