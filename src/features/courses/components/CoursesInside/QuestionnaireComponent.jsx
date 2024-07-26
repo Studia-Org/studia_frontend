@@ -22,6 +22,7 @@ import { fetchUserResponsesQuestionnaires } from "../../../../fetches/fetchUserR
 import { StepsQuestionnaire } from './Questionnaire/StepsQuestionnaire';
 import { BreadcrumbCourse } from './BreadcrumbCourse';
 import { useCourseContext } from '../../../../context/CourseContext';
+import { useTranslation } from 'react-i18next';
 
 const { TextArea } = Input;
 
@@ -41,6 +42,8 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
   const { minutes, seconds, stopTimer } = useTimer({ testCompleted: questionnaireAnswerData.length > 0 });
   const [editedQuestions, setEditedQuestions] = useState({});
 
+  const { t } = useTranslation();
+
   const {
     subsectionSelected
   } = useCourseContext();
@@ -53,7 +56,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
 
     if (questionnaireAnswerData.length > 0) {
       if (questionnaire.attributes.Options.questionnaire?.type === 'SRL-O') {
-        setRecommendationList(getRecommendationsSRLO(questionnaireAnswerData[0].responses.responses))
+        setRecommendationList(getRecommendationsSRLO(questionnaireAnswerData[0].responses.responses, t))
       }
       setCompleted(true);
       stopTimer()
