@@ -40,7 +40,6 @@ const CreateCourse = () => {
         return savedTask ? JSON.parse(savedTask) : {};
     });
 
-
     function RenderCreateCourse() {
         switch (createCourseOption) {
             case 0:
