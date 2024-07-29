@@ -12,14 +12,33 @@ const CreateCourse = () => {
     const { t } = useTranslation();
     document.title = 'Create Course - Uptitude'
     const [createCourseOption, setCreateCourseOption] = useState(0);
-    const [createCourseSectionsList, setCreateCourseSectionsList] = useState([])
-    const [createCourseSectionsListCopy, setCreateCourseSectionsListCopy] = useState([])
-    const [courseBasicInfo, setCourseBasicInfo] = useState({ tags: [] })
     const [editCourseSectionFlag, setEditCourseSectionFlag] = useState(false)
     const [sectionToEdit, setSectionToEdit] = useState({})
-    const [categories, setCategories] = useState({})
-    const [task, setTask] = useState({})
 
+    const [createCourseSectionsListCopy, setCreateCourseSectionsListCopy] = useState(() => {
+        const savedSections = localStorage.getItem('createCourseSectionsList');
+        return savedSections ? JSON.parse(savedSections) : [];
+    });
+
+    const [createCourseSectionsList, setCreateCourseSectionsList] = useState(() => {
+        const savedSections = localStorage.getItem('createCourseSectionsList');
+        return savedSections ? JSON.parse(savedSections) : [];
+    });
+
+    const [courseBasicInfo, setCourseBasicInfo] = useState(() => {
+        const savedInfo = localStorage.getItem('courseBasicInfo');
+        return savedInfo ? JSON.parse(savedInfo) : { tags: [] };
+    });
+
+    const [categories, setCategories] = useState(() => {
+        const savedCategories = localStorage.getItem('categories');
+        return savedCategories ? JSON.parse(savedCategories) : {};
+    });
+
+    const [task, setTask] = useState(() => {
+        const savedTask = localStorage.getItem('task');
+        return savedTask ? JSON.parse(savedTask) : {};
+    });
 
     function RenderCreateCourse() {
         switch (createCourseOption) {
