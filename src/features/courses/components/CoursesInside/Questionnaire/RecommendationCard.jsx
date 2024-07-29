@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { List, Typography, Button } from 'antd'
+import { RecommendationImprovement } from './RecommendationImprovement'
 
 export const RecommendationCard = ({ recommendationList, checkImprovement }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
         <div className='relative mt-5'>
@@ -23,8 +25,13 @@ export const RecommendationCard = ({ recommendationList, checkImprovement }) => 
             />
 
             {
+                checkImprovement &&
+                <RecommendationImprovement checkImprovement={checkImprovement} setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />
+            }
+
+            {
                 checkImprovement.status && (
-                    <Button className='absolute bg-white rounded-md -top-3 -right-3 ' size='large'>
+                    <Button onClick={() => setIsModalOpen(true)} className='absolute bg-white rounded-md -top-3 -right-3 ' size='large'>
                         <span class="absolute flex h-3 w-3 -top-3 -right-1">
                             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75 mt-[0.415rem]"></span>
                             <span class="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>

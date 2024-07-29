@@ -23,6 +23,7 @@ import { useCourseContext } from "../../../context/CourseContext";
 import { useTranslation } from "react-i18next";
 import { ca, es, enUS } from 'date-fns/locale';
 import { format } from 'date-fns';
+import { getRecommendationsSRLO } from "../components/CoursesInside/Questionnaire/getRecommendationsSRLO";
 const { TextArea } = Input;
 const { RangePicker } = DatePicker;
 
@@ -97,10 +98,11 @@ const CourseInside = () => {
         let isSubsectionCompleted = subsectionsCompleted.some(subsectionCompleted => subsectionCompleted.id === subsection.id);
   
         if (subsection.attributes.questionnaire.data?.attributes && subsection.attributes.questionnaire.data.attributes.Options.questionnaire.type === 'SRL-O' && isSubsectionCompleted) {
+          const answersData = questionnaireAnswers.filter((answer) => answer.questionnaire?.id === subsection.attributes.questionnaire.data?.id);
           if (Object.keys(improvement.previous).length === 0) {
-            improvement = { status: false, previous: subsection.attributes.questionnaire.data.attributes.Options.questionnaire, current: {} };
+            improvement = { status: false, previous: getRecommendationsSRLO(answersData[0].responses.responses, t), current: {} };
           } else {
-            improvement = { status: true, previous: improvement.previous, current: subsection.attributes.questionnaire.data.attributes.Options.questionnaire };
+            improvement = { status: true, previous: improvement.previous, current: getRecommendationsSRLO(answersData[0].responses.responses, t) };
           }          
           if (subsectionSelected.id === subsection.id) {
             return improvement;
