@@ -50,17 +50,18 @@ const CourseInside = () => {
   const [courseSubsectionQuestionnaire, setCourseSubsectionQuestionnaire] = useState([]);
   const [students, setStudents] = useState([]);
   const [professor, setProfessor] = useState([]);
+  const [checkImprovement, setCheckImprovement] = useState({ status: false, previous: {}, current: {} });
 
   const {
     course,
     sectionSelected,
     subsectionSelected,
-    activitySelected,
     setCourse,
     setSectionSelected,
     setSubsectionSelected,
     setActivitySelected,
   } = useCourseContext();
+
 
 
   let { courseId } = useParams();
@@ -72,6 +73,9 @@ const CourseInside = () => {
   }, [])
 
 
+
+
+
   function handleLandscapePhotoChange(event) {
     setBackgroundPhotoSubsection(event.target.files[0]);
   }
@@ -81,6 +85,33 @@ const CourseInside = () => {
     const startDate = new Date(start_date);
     return currentDate >= startDate;
   }
+
+  function completePreviousSRLOCompleted() {
+    let improvement = { status: false, previous: {}, current: {} };
+  
+    if (subsectionSelected?.attributes?.questionnaire?.data && sectionSelected && course && subsectionsCompleted) {
+      const currentSectionData = course.sections.data.find(section => section.attributes.title === sectionSelected);
+  
+      for (let i = 0; i < currentSectionData.attributes.subsections.data.length; i++) {
+        const subsection = currentSectionData.attributes.subsections.data[i];
+        let isSubsectionCompleted = subsectionsCompleted.some(subsectionCompleted => subsectionCompleted.id === subsection.id);
+  
+        if (subsection.attributes.questionnaire.data?.attributes && subsection.attributes.questionnaire.data.attributes.Options.questionnaire.type === 'SRL-O' && isSubsectionCompleted) {
+          if (Object.keys(improvement.previous).length === 0) {
+            improvement = { status: false, previous: subsection.attributes.questionnaire.data.attributes.Options.questionnaire, current: {} };
+          } else {
+            improvement = { status: true, previous: improvement.previous, current: subsection.attributes.questionnaire.data.attributes.Options.questionnaire };
+          }          
+          if (subsectionSelected.id === subsection.id) {
+            return improvement;
+          }
+        }
+      }
+    }
+  
+    return improvement;
+  }
+
 
   const fetchPostData = async () => {
     try {
@@ -228,7 +259,6 @@ const CourseInside = () => {
       }
       loadQuestionnaire();
     }
-
   }, [course, subsectionsCompleted]);
 
   function deleteFile() {
@@ -246,6 +276,7 @@ const CourseInside = () => {
     setTitleSubsection(subsectionSelected?.attributes?.title);
     setDateSubsection([subsectionSelected?.attributes?.start_date, subsectionSelected?.attributes?.end_date]);
     setBackgroundPhotoSubsection(subsectionSelected?.attributes?.landscape_photo?.data?.attributes?.url)
+    setCheckImprovement(completePreviousSRLOCompleted());
   }, [subsectionSelected]);
 
   useEffect(() => {
@@ -434,6 +465,7 @@ const CourseInside = () => {
                             activity: null
                           }
                         }
+                        checkImprovement={checkImprovement}
 
                       />
                     ) :

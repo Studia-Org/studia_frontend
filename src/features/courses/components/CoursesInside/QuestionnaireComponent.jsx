@@ -27,7 +27,7 @@ import { useTranslation } from 'react-i18next';
 const { TextArea } = Input;
 
 
-export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, enableEdit, setEnableEdit, setCourseSubsectionQuestionnaire, professorID }) => {
+export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, enableEdit, setEnableEdit, setCourseSubsectionQuestionnaire, professorID, checkImprovement }) => {
   const { user } = useAuthContext();
   const [groupValues, setGroupValues] = useState({});
   const [loadingData, setLoadingData] = useState(true);
@@ -480,7 +480,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
 
             {
               completed === true && questionnaire.attributes.Options.questionnaire?.type === 'SRL-O' && recommendationList && (
-                <RecommendationCard recommendationList={recommendationList} />
+                <RecommendationCard recommendationList={recommendationList} checkImprovement={checkImprovement} />
               )
             }
 
