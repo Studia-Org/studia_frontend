@@ -368,6 +368,9 @@
             "placeholder_search": "Buscar un estudiante"
         },
         "SUB_SETTINGS": {
+            "complete_uncomplete_subsection": "Complete / Uncomplete subsection",
+            "date": "Date of start and end of the subsection",
+            "back_to_settings": "Back to settings",
             "complete_students": "Complete subsection",
             "participants_completed": "Students who completed this subsection",
             "participants_not_completed": "Students who have not completed this subsection",
