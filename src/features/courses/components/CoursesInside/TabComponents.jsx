@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { TaskComponentCard } from "../CreateCourses/CourseConfirmation/TaskComponentCard";
 import ReactMarkdown from "react-markdown";
-import { Empty, Button, message } from "antd";
+import { Empty, Button, message, DatePicker } from "antd";
 import { AvatarGroup, Avatar } from 'rsuite';
-import MDEditor, { image } from "@uiw/react-md-editor";
+import MDEditor from "@uiw/react-md-editor";
 import '@mdxeditor/editor/style.css'
 import { API } from "../../../../constant";
 import { getToken } from "../../../../helpers";
@@ -12,9 +12,10 @@ import { MoonLoader } from "react-spinners";
 import './participants.css'
 import { useCourseContext } from "../../../../context/CourseContext";
 import { useTranslation } from "react-i18next";
+import dayjs from "dayjs";
 
 
-export const CourseContent = ({ setForumFlag, courseId, enableEdit, setEnableEdit, titleSubsection, dateSubsection, backgroundPhotoSubsection }) => {
+export const CourseContent = ({ setForumFlag, courseId, enableEdit, setEnableEdit, titleSubsection, backgroundPhotoSubsection }) => {
     const [loading, setLoading] = useState(false);
     const { t } = useTranslation();
     const {
@@ -38,6 +39,7 @@ export const CourseContent = ({ setForumFlag, courseId, enableEdit, setEnableEdi
     useEffect(() => {
         setSubsectionContent(subsection_?.attributes?.content)
     }, [subsection_?.attributes?.content])
+
     const saveChanges = async () => {
         setLoading(true)
         let background_photo_id = null;
@@ -72,24 +74,7 @@ export const CourseContent = ({ setForumFlag, courseId, enableEdit, setEnableEdi
                 data: {
                     content: subsectionContent,
                     landscape_photo: background_photo_id,
-                    start_date: dateSubsection[0],
-                    end_date: dateSubsection[1],
                     title: titleSubsection,
-                }
-            })
-        })
-
-        await fetch(`${API}/activities/${subsection_?.attributes?.activity?.data.id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${getToken()}`
-            },
-            body: JSON.stringify({
-                data: {
-                    start_date: dateSubsection[0],
-                    end_date: dateSubsection[1],
-
                 }
             })
         })
@@ -111,8 +96,6 @@ export const CourseContent = ({ setForumFlag, courseId, enableEdit, setEnableEdi
                                                 ...subsection.attributes,
                                                 landscape_photo: backgroundPhotoSubsection,
                                                 content: subsectionContent,
-                                                start_date: dateSubsection[0],
-                                                end_date: dateSubsection[1],
                                                 title: titleSubsection,
                                             }
                                         }
@@ -404,6 +387,304 @@ export const CourseFiles = ({ enableEdit }) => {
         </div >
     )
 }
+
+export const SubsectionsSettings = ({ course, courseSection, courseSubsection, students, dateSubsection, setDateSubsection, setCourse }) => {
+
+    const [settingSelected, setSettingSelected] = useState(null);
+    const { t } = useTranslation();
+    const { RangePicker } = DatePicker;
+
+    const settings = {
+        "complete_uncomplete": <CompleteUncompleteSubsection courseSubsection={courseSubsection} students={students} setSettingSelected={setSettingSelected} />,
+    }
+    if (settingSelected) {
+        return settings[settingSelected]
+    }
+    const CardSettings = ({ title, svg, onClick }) => {
+        return (
+            <article onClick={onClick}
+                className="mt-4 overflow-hidden border border-[#DADADA] col-span-1 transform hover:scale-[1.01] duration-150 bg-white rounded-md gap-x-2 p-5 h-[5rem] shadow-md flex items-center cursor-pointer">
+                {svg}
+                <p className="break-words text-ellipsis">{title}</p>
+            </article>
+        )
+    }
+
+    const SVGCompleteUncomplete = () => (
+        <svg fill="currentColor" viewBox="0 0 16 16" height="1.5rem" width="1.5rem">
+            <path d="M2 10h3a1 1 0 011 1v3a1 1 0 01-1 1H2a1 1 0 01-1-1v-3a1 1 0 011-1zm9-9h3a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1V2a1 1 0 011-1zm0 9a1 1 0 00-1 1v3a1 1 0 001 1h3a1 1 0 001-1v-3a1 1 0 00-1-1h-3zm0-10a2 2 0 00-2 2v3a2 2 0 002 2h3a2 2 0 002-2V2a2 2 0 00-2-2h-3zM2 9a2 2 0 00-2 2v3a2 2 0 002 2h3a2 2 0 002-2v-3a2 2 0 00-2-2H2zm7 2a2 2 0 012-2h3a2 2 0 012 2v3a2 2 0 01-2 2h-3a2 2 0 01-2-2v-3zM0 2a2 2 0 012-2h3a2 2 0 012 2v3a2 2 0 01-2 2H2a2 2 0 01-2-2V2zm5.354.854a.5.5 0 10-.708-.708L3 3.793l-.646-.647a.5.5 0 10-.708.708l1 1a.5.5 0 00.708 0l2-2z" />
+        </svg>
+    )
+    async function handleDateChange(date, dateString) {
+        dateString = dateString.map(date => dayjs(date).format('YYYY-MM-DDTHH:mm:ssZ'))
+
+        const response = await fetch(`${API}/subsections/${courseSubsection.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${getToken()}`
+            },
+            body: JSON.stringify({
+                data: {
+                    start_date: dateString[0],
+                    end_date: dateString[1],
+                }
+            })
+        })
+
+        const response2 = await fetch(`${API}/activities/${courseSubsection?.attributes?.activity?.data.id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${getToken()}`
+            },
+            body: JSON.stringify({
+                data: {
+                    start_date: dateString[0],
+                    end_date: dateString[1],
+
+                }
+            })
+        })
+
+
+        if (response.ok && response2.ok) {
+            const copyCourse = { ...course }
+
+            const section_ = course.sections.data.find((seccion) => seccion.attributes.title === courseSection);
+            const sectionIndex = copyCourse.sections.data.findIndex((seccion) => seccion.id === section_.id)
+            const subsectionIndex = copyCourse.sections.data[sectionIndex].attributes.subsections.data.findIndex((subseccion) => subseccion.id === courseSubsection.id)
+            copyCourse.sections.data[sectionIndex].attributes.subsections.data[subsectionIndex].attributes.start_date = dateString[0]
+            copyCourse.sections.data[sectionIndex].attributes.subsections.data[subsectionIndex].attributes.end_date = dateString[1]
+
+            setCourse(copyCourse)
+
+            message.success(t("ACTIVITY.changed_saved_success"))
+        }
+    }
+
+    return (
+        <div className="grid grid-cols-2 gap-x-24">
+            <CardSettings
+                title={t("COURSEINSIDE.SUB_SETTINGS.complete_uncomplete_subsection")}
+                svg={<SVGCompleteUncomplete />}
+                onClick={() => setSettingSelected("complete_uncomplete")} />
+
+            <article className="flex flex-col items-center gap-y-5">
+                <h3 className="text-lg font-medium ">{t("COURSEINSIDE.SUB_SETTINGS.date")}</h3>
+                <RangePicker
+                    value={[dayjs(dateSubsection[0]), dayjs(dateSubsection[1])]}
+                    showTime
+                    className="w-full"
+                    clearIcon={null}
+                    onChange={(value, dateString) => { setDateSubsection(dateString) }}
+                />
+                <Button onClick={() => handleDateChange(null, dateSubsection)} type="primary">
+                    {t("COMMON.save_changes")}
+                </Button>
+            </article>
+        </div>
+    )
+}
+
+
+export const CompleteUncompleteSubsection = ({ courseSubsection, students, setSettingSelected }) => {
+    const [loading, setLoading] = useState(true);
+    const [fetchLoading, setFetchLoading] = useState(false);
+    const { t } = useTranslation();
+
+    const studentsCompletedRef = useRef();
+    const studentsNotCompletedRef = useRef();
+    const [studentsCompleted, setStudentsCompleted] = useState([])
+    const [studentsNotCompleted, setStudentsNotCompleted] = useState([])
+
+
+    useEffect(() => {
+        fetch(`${API}/subsections/${courseSubsection.id}?populate[users_who_completed][populate][profile_photo]=url`, {
+            headers: {
+                Authorization: `Bearer ${getToken()}`
+            }
+        }).then((response) => response.json())
+            .then((data) => {
+                setStudentsCompleted(data?.data?.attributes?.users_who_completed?.data)
+                setStudentsNotCompleted(students?.data.filter(student => !data?.data?.attributes?.users_who_completed?.data?.some(user => user.id === student.id)))
+                studentsCompletedRef.current = data?.data?.attributes?.users_who_completed?.data
+                studentsNotCompletedRef.current = students?.data.filter(student => !data?.data?.attributes?.users_who_completed?.data?.some(user => user.id === student.id))
+                setLoading(false)
+            })
+    }, [])
+
+    async function saveChanges() {
+        try {
+            setFetchLoading(true)
+            const result = await fetch(`${API}/subsections/${courseSubsection.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getToken()}` },
+                body: JSON.stringify({
+                    data: { users_who_completed: studentsCompletedRef.current.map(student => student.id) }
+                })
+            })
+            if (result.ok) {
+                message.success(t("ACTIVITY.changed_saved_success"))
+            }
+            else {
+                message.success(t("ACTIVITY.changed_saved_error"))
+            }
+        } catch (error) {
+
+        } finally {
+            setFetchLoading(false)
+        }
+    }
+
+    return (
+        <>
+            <Button type='primary'
+                className="flex flex-wrap items-center gap-1 font-bold text-white duration-200 bg-blue-500 w-fit hover:-translate-x-2 hover:bg-blue-700 "
+                onClick={() => setSettingSelected(null)}>
+                <svg fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                </svg>
+                {t("COURSEINSIDE.SUB_SETTINGS.back_to_settings")}
+            </Button>
+            <div className="p-4 pb-0 mt-2 bg-white border border-[#DADADA] rounded-lg min-h-[calc(100vh-25rem)] relative  ">
+                {loading && <div className="flex items-center justify-center w-full min-h-[calc(100vh-25rem)]"><MoonLoader size={72} color={"#3730a3"} /></div>}
+                {!loading &&
+                    <>
+                        <main className="flex max-h-[calc(100vh-25rem)] min-h-[calc(100vh-25rem)] overflow-y-scroll">
+
+                            <section className="w-[calc(50%-0.5rem)]">
+                                <div className="flex items-center">
+                                    <h3 className="text-lg font-medium ">{t("COURSEINSIDE.SUB_SETTINGS.participants_completed") + " (" + studentsCompletedRef.current.length + ")"}</h3>
+                                </div>
+                                <input id="search_completed" type="text" placeholder={t("COMMON.search_students")} className=" px-2 border border-[#DADADA] rounded-md w-5/6 mt-3"
+                                    onChange={(e) => {
+                                        if (e.target.value === '') {
+                                            setStudentsCompleted(studentsCompletedRef.current)
+                                            return
+                                        }
+                                        setStudentsCompleted(studentsCompletedRef.current.filter(user => user.attributes.name.toLowerCase().includes(e.target.value.toLowerCase())))
+                                    }}
+                                />
+                                <p className="mt-2">{t("COURSEINSIDE.SUB_SETTINGS.select_students_to_not_complete")}</p>
+                                <ul id="completed-list" className="relative flex flex-col justify-start mt-5 ">
+                                    {studentsCompleted?.length !== 0 &&
+                                        <Button className="absolute right-[2%] top-0" disabled={studentsCompleted.length !== studentsCompletedRef.current.length}
+                                            onClick={() => {
+                                                setStudentsNotCompleted([...studentsNotCompleted, ...studentsCompleted])
+                                                setStudentsCompleted([])
+                                                studentsNotCompletedRef.current = [...studentsNotCompleted, ...studentsCompleted]
+                                                studentsCompletedRef.current = []
+                                                document.getElementById('search_completed').value = ''
+                                                document.getElementById('search_not_completed').value = ''
+
+
+                                            }}
+                                        >{t("COURSEINSIDE.SUB_SETTINGS.select_all")}
+                                        </Button>
+                                    }
+                                    {studentsCompleted?.map(user => {
+                                        return (
+                                            <li onClick={() => {
+                                                const newStudentsCompleted = studentsCompletedRef.current.filter(student => student.id !== user.id)
+                                                const newStudentsNotCompleted = [user, ...studentsNotCompleted]
+                                                setStudentsCompleted(newStudentsCompleted)
+                                                setStudentsNotCompleted(newStudentsNotCompleted)
+                                                studentsCompletedRef.current = newStudentsCompleted
+                                                studentsNotCompletedRef.current = newStudentsNotCompleted
+                                                document.getElementById('search_not_completed').value = ''
+                                                document.getElementById('search_completed').value = ''
+                                            }}
+                                                className="flex items-center gap-x-2 cursor-pointer mb-1 p-[2px] border border-transparent hover:border-gray-500 w-3/5 overflow-y-hidden rounded-md" id={user.id} key={user.id}>
+                                                <Avatar
+                                                    circle
+                                                    size="md"
+                                                    src={user.attributes.profile_photo?.data?.attributes?.url}
+                                                    alt={user.attributes.username}
+                                                    className="w-8 h-8 min-h-[2rem] min-w-[2.5rem] object-cover"
+                                                />
+                                                <span className="pr-2 line-clamp-1 text-ellipsis ">{user.attributes.name}</span>
+                                            </li>
+                                        )
+                                    })}
+                                    {studentsCompleted?.length === 0 &&
+                                        <div className="rounded-md  mx-12 mt-5 border border-[#DADADA]">
+                                            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t("COURSEINSIDE.SUB_SETTINGS.all_not_completed")} />
+                                        </div>
+                                    }
+                                </ul>
+                            </section>
+                            <div className="sticky border-r border-[#DADADA] inset-y-0 w-px left-1/2 transform -translate-x-1/2"></div>
+                            <section className="w-[calc(50%+0.5rem)] pl-6 ">
+                                <div className="flex items-center ">
+                                    <h3 className="text-lg font-medium ">{t("COURSEINSIDE.SUB_SETTINGS.participants_not_completed") + " (" + studentsNotCompletedRef.current.length + ")"}</h3>
+                                </div>
+                                <input id="search_not_completed" type="text" placeholder={t("COMMON.search_students")} className="mt-3 px-2 border border-[#DADADA] rounded-md w-5/6"
+                                    onChange={(e) => {
+                                        if (e.target.value === '') {
+                                            setStudentsNotCompleted(studentsNotCompletedRef.current)
+                                            return
+                                        }
+                                        setStudentsNotCompleted(studentsNotCompletedRef.current.filter(user => user.attributes.name.toLowerCase().includes(e.target.value.toLowerCase())))
+                                    }}
+                                />
+                                <p className="mt-2">{t("COURSEINSIDE.SUB_SETTINGS.select_students_to_complete")}</p>
+                                <ul id="uncompleted-list" className="relative flex flex-col justify-start mt-5">
+                                    {studentsNotCompleted?.length !== 0 &&
+                                        <Button className="absolute right-[2%] top-0" disabled={studentsNotCompleted.length !== studentsNotCompletedRef.current.length}
+                                            onClick={() => {
+                                                setStudentsCompleted([...studentsCompleted, ...studentsNotCompleted])
+                                                setStudentsNotCompleted([])
+                                                studentsCompletedRef.current = [...studentsCompleted, ...studentsNotCompleted]
+                                                studentsNotCompletedRef.current = []
+                                                document.getElementById('search_completed').value = ''
+                                                document.getElementById('search_not_completed').value = ''
+                                            }}
+                                        >{t("COURSEINSIDE.SUB_SETTINGS.select_all")}
+                                        </Button>}
+                                    {studentsNotCompleted?.map(user => {
+                                        return (
+                                            <li
+                                                onClick={() => {
+                                                    const newStudentsCompleted = [user, ...studentsCompleted]
+                                                    const newStudentsNotCompleted = studentsNotCompletedRef.current.filter(student => student.id !== user.id)
+                                                    setStudentsCompleted(newStudentsCompleted)
+                                                    setStudentsNotCompleted(newStudentsNotCompleted)
+                                                    studentsCompletedRef.current = newStudentsCompleted
+                                                    studentsNotCompletedRef.current = newStudentsNotCompleted
+                                                    document.getElementById('search_not_completed').value = ''
+                                                    document.getElementById('search_completed').value = ''
+                                                }}
+                                                className="flex items-center gap-x-2 cursor-pointer mb-1 p-[2px] border border-transparent hover:border-gray-500 rounded-md w-3/5 overflow-y-hidden" id={user.id} key={user.id}>
+                                                <Avatar
+                                                    circle
+                                                    size="md"
+                                                    src={user.attributes.profile_photo?.data?.attributes?.url}
+                                                    alt={user.attributes.username}
+                                                    className="w-8 h-8 min-h-[2rem] min-w-[2rem] object-cover"
+                                                />
+                                                <span className="pr-2 line-clamp-1 text-ellipsis ">{user.attributes.name}</span>
+                                            </li>
+                                        )
+                                    })}
+                                    {studentsNotCompleted?.length === 0 &&
+                                        <div className="rounded-md  mx-12 mt-5 border border-[#DADADA]">
+                                            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t("COURSEINSIDE.SUB_SETTINGS.all_completed")} />
+                                        </div>
+                                    }
+                                </ul>
+                            </section>
+                        </main>
+                        <Button onClick={saveChanges} loading={fetchLoading} type="primary" className="absolute bottom-5 right-5">
+                            {t("COMMON.save_changes")}
+                        </Button>
+                    </>
+                }
+            </div>
+        </>
+    )
+}
+
 
 
 export const CourseParticipantsClickable = ({ students, enableEdit, setSettingsFlag, setParticipantsFlag, setVisible, setForumFlag }) => {

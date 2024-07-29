@@ -15,7 +15,8 @@
         "delete": "Delete",
         "edit": "Edit",
         "search_students": "Search students",
-        "submit": "Submit"
+        "submit": "Submit",
+        "deadline": "Deadline"
     },
     "HOME": {
         "title": "Welcome to the new era of Learning",
@@ -323,6 +324,7 @@
     "COURSEINSIDE": {
         "course": "Course",
         "files": "Files",
+        "subsection_settings": "Subsection settings",
         "activity": "Activity",
         "course_content": "Course content",
         "edit_mode": "Edit mode",
@@ -365,6 +367,19 @@
             "participants_tile": "Explora todos los participantes actualmente inscritos en este curso.",
             "to_add_student": "Para agregar un nuevo estudiante, por favor navega a la sección de configuración del curso.",
             "placeholder_search": "Buscar un estudiante"
+        },
+        "SUB_SETTINGS": {
+            "complete_uncomplete_subsection": "Complete / Uncomplete subsection",
+            "date": "Date of start and end of the subsection",
+            "back_to_settings": "Back to settings",
+            "complete_students": "Complete subsection",
+            "participants_completed": "Students who completed this subsection",
+            "participants_not_completed": "Students who have not completed this subsection",
+            "select_students_to_not_complete": "Select students to mark the subsection as not completed.",
+            "select_students_to_complete": "Select students to mark the subsection as completed.",
+            "select_all": "Move all",
+            "all_completed": "All students have completed this subsection",
+            "all_not_completed": "No students have completed this subsection"
         }
     },
     "ACTIVITY": {
@@ -736,6 +751,10 @@
             "course_sections": "Course sections",
             "course_visualization": "Course visualization"
         }
+    },
+    "QUESTIONNAIRE": {
+        "go_back_users": "Go back to users",
+        "download_all_answers": "Download all answers"
     },
     "STUDENT_COURSES": {
         "TFG": {

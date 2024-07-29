@@ -15,7 +15,8 @@
         "delete": "Eliminar",
         "edit": "Editar",
         "search_students": "Buscar estudiantes",
-        "submit": "Enviar"
+        "submit": "Enviar",
+        "deadline": "Fecha límite"
     },
     "HOME": {
         "title": "Bienvenido/a a la nueva era del aprendizaje",
@@ -323,6 +324,7 @@
     "COURSEINSIDE": {
         "course": "Curso",
         "files": "Archivos",
+        "subsection_settings": "Configuración de la subsección",
         "activity": "Actividad",
         "course_content": "Contenido del curso",
         "edit_mode": "Modo de edición",
@@ -365,6 +367,19 @@
             "participants_tile": "Explora todos los participantes actualmente inscritos en este curso.",
             "to_add_student": "Para agregar un nuevo estudiante, por favor navega a la sección de configuración del curso.",
             "placeholder_search": "Buscar un estudiante"
+        },
+        "SUB_SETTINGS": {
+            "complete_uncomplete_subsection": "Completar / Descompletar subsección",
+            "date": "Fecha de inicio y finalización de la subsección",
+            "back_to_settings": "Volver a la configuración",
+            "complete_students": "Completar subsección",
+            "participants_completed": "Estudiantes que han completado esta subsección",
+            "participants_not_completed": "Estudiantes que no han completado esta subsección",
+            "select_students_to_not_complete": "Seleccione a los estudiantes para marcar la subsección como no completada.",
+            "select_students_to_complete": "Seleccione a los estudiantes para marcar la subsección como completada.",
+            "select_all": "Mover todos",
+            "all_completed": "Todos los estudiantes han completado esta subsección",
+            "all_not_completed": "Ningún estudiante ha completado esta subsección"
         }
     },
     "ACTIVITY": {
@@ -426,6 +441,10 @@
             "students": "Estudiantes",
             "group": "Grupo"
         }
+    },
+    "QUESTIONNAIRE": {
+        "go_back_users": "Volver a los usuarios",
+        "download_all_answers": "Descargar todas las respuestas"
     },
     "CREATE_COURSES": {
         "principal_text": "Crear un curso nuevo",

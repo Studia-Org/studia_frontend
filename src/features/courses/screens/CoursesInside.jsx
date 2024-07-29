@@ -9,7 +9,7 @@ import { AccordionCourseContent } from "../components/CoursesInside/AccordionCou
 import { ForumClickable } from "../components/CoursesInside/Forum/ForumClickable";
 import { ForumComponent } from '../components/CoursesInside/Forum/ForumComponent'
 import { QuestionnaireComponent } from '../components/CoursesInside/QuestionnaireComponent';
-import { CourseParticipantsClickable, CourseContent, CourseFiles } from "../components/CoursesInside/TabComponents";
+import { CourseParticipantsClickable, CourseContent, CourseFiles, SubsectionsSettings } from "../components/CoursesInside/TabComponents";
 import { useAuthContext } from "../../../context/AuthContext";
 import { EditSection } from "../components/CoursesInside/EditSection";
 import { SideBar } from "../components/CoursesInside/FloatingButtonNavigation";
@@ -17,14 +17,12 @@ import { MoonLoader } from "react-spinners";
 import { CourseHasNotStarted } from "../components/CoursesInside/CourseHasNotStarted";
 import { ButtonSettings } from "../components/CoursesInside/EditSection/buttonEditCourse";
 import { Participants } from "../components/CoursesInside/Participants";
-import dayjs from "dayjs";
 import { BreadcrumbCourse } from "../components/CoursesInside/BreadcrumbCourse";
 import { useCourseContext } from "../../../context/CourseContext";
 import { useTranslation } from "react-i18next";
 import { ca, es, enUS } from 'date-fns/locale';
 import { format } from 'date-fns';
 const { TextArea } = Input;
-const { RangePicker } = DatePicker;
 
 const CourseInside = () => {
   const { t, i18n } = useTranslation();
@@ -283,7 +281,7 @@ const CourseInside = () => {
 
   const items = [
     {
-      key: '1',
+      key: 1,
       label: t('COURSEINSIDE.course'),
       children:
         <CourseContent setForumFlag={setForumFlag} course={course} courseSection={sectionSelected}
@@ -293,11 +291,19 @@ const CourseInside = () => {
         />,
     },
     {
-      key: '2',
+      key: 2,
       label: t('COURSEINSIDE.files'),
       children: <CourseFiles course={course} courseSection={sectionSelected} courseSubsection={subsectionSelected} enableEdit={enableEdit} setCourse={setCourse} />,
+    },
+    {
+      key: "subsection_settings",
+      label: t('COURSEINSIDE.subsection_settings'),
+      children: <SubsectionsSettings
+        course={course} courseSection={sectionSelected} courseSubsection={subsectionSelected} setCourse={setCourse}
+        students={students} dateSubsection={dateSubsection} setDateSubsection={setDateSubsection} />,
     }
   ].filter(item => {
+    if (user.role_str === 'student' && item.key === 'subsection_settings') return false;
     if (item.label === 'Participants') {
       return courseBasicInformation && courseBasicInformation.studentManaged !== true;
     }
@@ -464,19 +470,7 @@ const CourseInside = () => {
                               <Badge color="#6366f1" count={format(new Date(subsectionSelected?.attributes?.end_date), "EEE MMM dd yyyy", { locale: local })} />
                             </div>
                         }
-                        {
-                          enableEdit && (
-                            <RangePicker
-                              value={[dayjs(dateSubsection[0]), dayjs(dateSubsection[1])]}
-                              showTime
-                              className="w-1/2 mx-5"
-                              clearIcon={null}
-                              onChange={(value, dateString) => {
-                                setDateSubsection(dateString)
-                              }}
-                            />
-                          )
-                        }
+
                         {
                           user?.role_str === 'professor' || user?.role_str === 'admin' ?
                             <div className='flex items-center ml-auto'>

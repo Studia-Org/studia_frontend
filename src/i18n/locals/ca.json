@@ -15,7 +15,8 @@
         "delete": "Eliminar",
         "edit": "Editar",
         "search_students": "Cercar estudiants",
-        "submit": "Enviar"
+        "submit": "Enviar",
+        "deadline": "Data límit"
     },
     "HOME": {
         "title": "Benvingut/da a la nova era de l'aprenentatge",
@@ -323,6 +324,7 @@
     "COURSEINSIDE": {
         "course": "Curs",
         "files": "Arxius",
+        "subsection_settings": "Configuració de la subsecció",
         "activity": "Activitat",
         "course_content": "Contingut del curs",
         "edit_mode": "Mode d'edició",
@@ -365,6 +367,19 @@
             "participants_tile": "Explora tots els participants actualment inscrits en aquest curs.",
             "to_add_student": "Per afegir un nou estudiant, si us plau, navega fins a la secció de configuració del curs.",
             "placeholder_search": "Cerca un estudiant"
+        },
+        "SUB_SETTINGS": {
+            "complete_uncomplete_subsection": "Completar / Descompletar subsecció",
+            "date": "Data de inici i final de la subsecció",
+            "back_to_settings": "Tornar a la configuració",
+            "complete_students": "Completar subsecció",
+            "participants_completed": "Estudiants que han completat la subsecció",
+            "participants_not_completed": "Estudiants que no han completat la subsecció",
+            "select_students_to_not_complete": "Seleccioneu els estudiants per marcar la subsecció com a no completada.",
+            "select_students_to_complete": "Seleccioneu els estudiants per marcar la subsecció com a completada.",
+            "select_all": "Moure tots",
+            "all_completed": "Tots els estudiants han completat aquesta subsecció",
+            "all_not_completed": "Ningun estudiant ha completat aquesta subsecció"
         }
     },
     "ACTIVITY": {
@@ -426,6 +441,10 @@
             "students": "Estudiants",
             "group": "Grup"
         }
+    },
+    "QUESTIONNAIRE": {
+        "go_back_users": "Tornar a la llista d'usuaris",
+        "download_all_answers": "Descarregar totes les respostes"
     },
     "CREATE_COURSES": {
         "principal_text": "Crear un curs nou",
