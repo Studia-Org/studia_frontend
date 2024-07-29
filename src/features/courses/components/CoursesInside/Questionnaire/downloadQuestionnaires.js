@@ -6,9 +6,9 @@ export async function createExcel(studentsData, activityName) {
 
     // Agregar encabezados
     worksheet.columns = [
-        { header: 'StudentId', key: 'studentId', width: 30 },
-        { header: 'StudentName', key: 'studentName', width: 30 },
-        { header: 'QuestionId', key: 'questionId', width: 15 },
+        { header: 'Student email', key: 'Student email', width: 30 },
+        { header: 'Student Name', key: 'student Name', width: 30 },
+        { header: 'Question Id', key: 'questionId', width: 15 },
         { header: 'Question', key: 'question', width: 50 },
         { header: 'Answer', key: 'answer', width: 100 }
     ];
