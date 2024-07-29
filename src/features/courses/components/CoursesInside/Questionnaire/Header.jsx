@@ -12,9 +12,10 @@ import { useAuthContext } from '../../../../../context/AuthContext';
 import { API } from '../../../../../constant';
 import dayjs from 'dayjs';
 import { getToken } from '../../../../../helpers';
-
-
-export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, completed, setEnableEdit, courseSubsection, editedQuestions, setQuestionnaireAnswerData }) => {
+import { useTranslation } from 'react-i18next';
+import { ca, es, enUS } from 'date-fns/locale';
+import formatDate from 'date-fns/format';
+export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, completed, setEnableEdit, courseSubsection, editedQuestions, setQuestionnaireAnswerData, downloadQuestionnaires, loadingQuestionnaires }) => {
     const { user } = useAuthContext()
     const [titleEdit, setTitleEdit] = useState(questionnaire.attributes.Title)
     const [titleEditFinal, setTitleEditFinal] = useState(questionnaire.attributes.Title)
@@ -23,7 +24,9 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
     const [deadline, setDeadline] = useState(new Date(questionnaire.attributes.deadline))
     const [deadlineFinal, setDeadlineFinal] = useState(new Date(questionnaire.attributes.deadline))
     const [loading, setLoading] = useState(false)
-
+    const { t, i18n } = useTranslation();
+    const locales = { ca, es }
+    const local = locales[i18n.language] || enUS;
 
     useEffect(() => {
         setTitleEdit(questionnaire.attributes.Title);
@@ -32,7 +35,7 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
         setTitleEditFinal(questionnaire.attributes.Title);
         setDescriptionEditFinal(questionnaire.attributes.description);
         setDeadlineFinal(dayjs(courseSubsection.attributes.end_date))
-    }, [questionnaire])
+    }, [])
 
 
     async function saveChanges() {
@@ -109,14 +112,14 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
 
     return (
         <div className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1] mb-2">
-            <div className="flex flex-col w-full my-7 mx-7">
+            <div className="flex flex-col w-full p-7">
                 <div className='flex items-center w-full '>
                     {enableEdit ? (
                         <Input value={titleEdit} className='w-full text-3xl font-semibold rounded-md mr-14' onChange={(e) => setTitleEdit(e.target.value)} />
                     ) : (
-                        <div className='flex items-center w-full gap-3'>
+                        <div className='flex items-center justify-between w-full gap-3'>
                             <p className="text-3xl font-semibold text-black">{titleEditFinal}</p>
-                            <Badge color="#6366f1" className='ml-auto mr-10' count={new Date(deadlineFinal).toDateString()} />
+                            {new Date(deadlineFinal) instanceof Date && !isNaN(new Date(deadlineFinal)) && <Badge color="#6366f1" count={formatDate(new Date(deadlineFinal), "EEE MMM dd yyyy", { locale: local })} />}
                         </div>
                     )}
                     {(questionnaireAnswerData.length > 0 && user?.role_str === 'student') && (
@@ -139,7 +142,7 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
                 {
                     enableEdit && (
                         <>
-                            <p className='mt-3 text-sm text-gray-500'>Deadline</p>
+                            <p className='mt-3 text-sm text-gray-500'>{t("COMMON.deadline")}</p>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <DemoContainer components={['DateTimePicker']}>
                                     <DateTimePicker className='w-1/2'
@@ -153,10 +156,10 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
 
             </div>
 
-            <div className='mr-3'>
-                {
-                    user.role_str !== 'student' && (
-                        <div className='flex items-center justify-between w-full mb-10 space-y-5 '>
+            {
+                user.role_str !== 'student' && (
+                    <section className='pb-5 p-7'>
+                        <div className='flex items-center justify-between w-full mb-10 gap-y-5 '>
                             <AnimatePresence>
                                 {enableEdit && (
                                     <motion.div
@@ -176,8 +179,8 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
                                                 <Button
                                                     type="primary"
                                                     loading={loading}
-                                                    className="justify-center px-4 text-sm font-medium text-white duration-150 bg-blue-600 border border-transparent rounded-md shadow-sm ml-7 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                                    Save Changes
+                                                    className="justify-center text-sm font-medium text-white duration-150 bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                                    {t('COMMON.save_changes')}
                                                 </Button>
 
                                             </Popconfirm>
@@ -195,15 +198,17 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
                                 )
                             }
                             {
-                                questionnaire.attributes.Options.questionnaire?.editable === true && (
-                                    <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} context={'questionnaire'}
-                                        setQuestionnaireAnswerData={setQuestionnaireAnswerData} />
-                                )
+                                questionnaire.attributes.Options.questionnaire?.editable === true &&
+                                <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} context={'questionnaire'}
+                                    setQuestionnaireAnswerData={setQuestionnaireAnswerData} />
+
                             }
+
                         </div>
-                    )
-                }
-            </div>
+                        <Button loading={loadingQuestionnaires} onClick={downloadQuestionnaires} className='w-full px-7'>{t('QUESTIONNAIRE.download_all_answers')}</Button>
+                    </section>
+                )
+            }
         </div>
 
     )

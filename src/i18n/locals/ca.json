@@ -15,7 +15,8 @@
         "delete": "Eliminar",
         "edit": "Editar",
         "search_students": "Cercar estudiants",
-        "submit": "Enviar"
+        "submit": "Enviar",
+        "deadline": "Data límit"
     },
     "HOME": {
         "title": "Benvingut/da a la nova era de l'aprenentatge",
@@ -440,6 +441,10 @@
             "students": "Estudiants",
             "group": "Grup"
         }
+    },
+    "QUESTIONNAIRE": {
+        "go_back_users": "Tornar a la llista d'usuaris",
+        "download_all_answers": "Descarregar totes les respostes"
     },
     "CREATE_COURSES": {
         "principal_text": "Crear un curs nou",

@@ -15,7 +15,8 @@
         "delete": "Eliminar",
         "edit": "Editar",
         "search_students": "Buscar estudiantes",
-        "submit": "Enviar"
+        "submit": "Enviar",
+        "deadline": "Fecha límite"
     },
     "HOME": {
         "title": "Bienvenido/a a la nueva era del aprendizaje",
@@ -440,6 +441,10 @@
             "students": "Estudiantes",
             "group": "Grupo"
         }
+    },
+    "QUESTIONNAIRE": {
+        "go_back_users": "Volver a los usuarios",
+        "download_all_answers": "Descargar todas las respuestas"
     },
     "CREATE_COURSES": {
         "principal_text": "Crear un curso nuevo",
