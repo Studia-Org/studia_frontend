@@ -143,7 +143,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
             setEditSubsectionFlag(false);
             message.success('Changes saved successfully');
         }
-    }, [createCourseSectionsListCopy, setCreateCourseSectionsList, setEditSubsectionFlag, setThereIsChanges, messageApi]);
+    }, []);
 
 
     useEffect(() => {
