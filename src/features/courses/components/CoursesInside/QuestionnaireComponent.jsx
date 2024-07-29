@@ -53,19 +53,6 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
   };
 
   useEffect(() => {
-
-    if (questionnaireAnswerData.length > 0) {
-      if (questionnaire.attributes.Options.questionnaire?.type === 'SRL-O') {
-        setRecommendationList(getRecommendationsSRLO(questionnaireAnswerData[0].responses.responses, t))
-      }
-      setCompleted(true);
-      stopTimer()
-    } else {
-      setCompleted(false);
-    }
-  }, [questionnaireAnswerData.length, questionnaire.id]);
-
-  useEffect(() => {
     setCurrentPage(1);
     setUserResponses([]);
     if (user.role_str !== 'student') {
@@ -76,7 +63,17 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
       };
       fetchData();
     }
-    setQuestionnaireAnswerData(answers.filter((answer) => answer.questionnaire?.id === questionnaire?.id));
+    const answersData = answers.filter((answer) => answer.questionnaire?.id === questionnaire?.id);
+    setQuestionnaireAnswerData(answersData);
+    if (questionnaire.attributes.Options.questionnaire?.type === 'SRL-O') {
+      setRecommendationList(getRecommendationsSRLO(answersData[0].responses.responses, t))
+    }
+    if (answersData.length > 0) {
+      setCompleted(true);
+      stopTimer()
+    } else {
+      setCompleted(false);
+    }
   }, [questionnaire.id]);
 
   const list = {
