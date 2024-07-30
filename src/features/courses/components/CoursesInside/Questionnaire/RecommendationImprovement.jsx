@@ -1,17 +1,20 @@
 import { Empty, List, Modal, Typography } from 'antd'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next';
 
 
 export const RecommendationImprovement = ({ isModalOpen, setIsModalOpen, checkImprovement }) => {
     const [improved, setImproved] = useState([]);
     const [worsen, setStillToImprove] = useState([]);
 
+    const { t } = useTranslation();
+
     let localeWorsen = {
-        emptyText: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="Congratulations! You haven't worsened anything. Keep up the great work!" />,
+        emptyText: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SRLO.RECOMMENDATION.no_worsen")} />,
     };
 
     let localeImprove = {
-        emptyText: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="You haven't improved anything. Keep working!" />,
+        emptyText: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SRLO.RECOMMENDATION.no_improved")} />,
     };
 
     const handleCancel = () => {
@@ -35,18 +38,18 @@ export const RecommendationImprovement = ({ isModalOpen, setIsModalOpen, checkIm
             });
         }
         setImproved(Array.from(improved));
-        setStillToImprove(['Se piensa que la motivación intrínseca es más útil que la motivación extrínseca. Sin embargo, puedes mejorar tu motivación extrínseca estableciendo una meta externa, como una calificación o ingresar a un curso de posgrado.']);
+        setStillToImprove(Array.from(worsen));
 
     }, [checkImprovement])
 
 
     return (
-        <Modal title="Feedback SRL-O questionnaire" open={isModalOpen} onCancel={handleCancel} footer={null} width={"60rem"}>
-            <p>What did you improve: </p>
+        <Modal title={t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SRLO.RECOMMENDATION.title")} open={isModalOpen} onCancel={handleCancel} footer={null} width={"60rem"}>
+            <p className='mb-6 text-sm text-gray-600'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SRLO.RECOMMENDATION.description")} </p>
 
             <List
                 locale={localeImprove}
-                className='my-3 border-r-[4rem] border-green-600 '
+                className={`my-3 border-r-[4rem] ${improved.length > 0 ? 'border-green-600' : ''}`}
                 bordered
                 dataSource={improved}
                 renderItem={(item) => (
@@ -60,7 +63,7 @@ export const RecommendationImprovement = ({ isModalOpen, setIsModalOpen, checkIm
             />
             <List
                 locale={localeWorsen}
-                className='my-3 border-r-[4rem] border-red-700'
+                className={`my-3 border-r-[4rem] ${worsen.length > 0 ? 'border-red-700' : ''}`}
                 bordered
                 dataSource={worsen}
                 renderItem={(item) => (

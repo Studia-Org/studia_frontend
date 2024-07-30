@@ -635,6 +635,12 @@
                             },
                             "SRLO": {
                                 "RECOMMENDATION": {
+                                    "recommendation": "Recomanació",
+                                    "text": "Recomanacions basades en les teves respostes",
+                                    "title": "Retroalimentació del qüestionari SRL-O",
+                                    "no_worsen": "Felicitats! No has empitjorat en res. Continua així!",
+                                    "no_improved": "No has millorat en res. Continua treballant!",
+                                    "description": "A la llista següent, pots veure el que has millorat en comparació amb l'últim qüestionari d'autoregulació que vas completar. Llegeix atentament la retroalimentació i continua esforçant-te per millorar!",
                                     "CASE_0": "Divideix les tasques en passos assolibles perquè puguis tenir èxit en aconseguir aquests passos. Comença amb alguna cosa petita, i a mesura que tinguis més èxit, fes els passos més grans. Mira al teu voltant als teus companys i observa com els va. Pots aprendre dels seus enfocaments? Cerca retroalimentació, de tu mateix i d'altres, sobre el que estàs fent bé. Assegura't de celebrar els teus èxits.",
                                     "CASE_1": "La motivació intrínseca en línia no prové de les qualificacions, sinó del teu propi interès. Reflexiona sobre les raons per les quals et vas matricular originalment a la universitat. Pensa en les teves pròpies raons personals per aprendre el material. Què vols aconseguir, què gaudeixes aprenent, per què és important per a tu fer-ho bé i aprendre el material? Pensa en el que estimula la teva curiositat. Per últim, assegura't de celebrar els teus èxits.",
                                     "CASE_2": "Es pensa que la motivació intrínseca és més útil que la motivació extrínseca. No obstant això, pots millorar la teva motivació extrínseca establint una meta externa, com una qualificació o ingressar a un curs de postgrau.",

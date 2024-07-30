@@ -635,6 +635,12 @@
                             },
                             "SRLO": {
                                 "RECOMMENDATION": {
+                                    "recommendation": "Recommendation",
+                                    "text": "Recommendations based on your answers",
+                                    "title": "Feedback SRL-O questionnaire",
+                                    "no_worsen": "Congratulations! You haven't worsened anything. Keep up the great work!",
+                                    "no_improved": "You haven't improved anything. Keep working!",
+                                    "description": "On the list below, you can see what you have improved compared to the last autoregulation questionnaire you completed. Read the feedback carefully and continue striving for improvement!",
                                     "CASE_0": "Break tasks into achievable steps so that you can be successful in achieving those steps. Start small, and as you become more successful, make the steps bigger. Look around you at peers and see how they are doing. Can you learn from their approaches? Seek feedback, from yourself and others, as to what you are doing well. Make sure you celebrate your successes.",
                                     "CASE_1": "Online Intrinsic motivation does not come from grades but from your own interest. Reflect on the reasons you originally enrolled in the university. Think about your own personal reasons for learning the material. What do you want to achieve, what do you enjoy learning about, why is it important for you to do well and learn the material? Think about what stimulates your curiosity? Lastly, make sure you celebrate your successes.",
                                     "CASE_2": "Intrinsic motivation is thought to be more helpful than extrinsic motivation. However, you can improve your extrinsic motivation through setting an external goal, such as grade or getting into a postgraduate course.",

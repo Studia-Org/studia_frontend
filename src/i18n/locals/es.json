@@ -635,6 +635,12 @@
                             },
                             "SRLO": {
                                 "RECOMMENDATION": {
+                                    "recommendation": "Recomendación",
+                                    "text": "Recomendaciones basadas en tus respuestas",
+                                    "title": "Retroalimentación del cuestionario SRL-O",
+                                    "no_worsen": "¡Felicidades! No has empeorado en nada. ¡Sigue así!",
+                                    "no_improved": "No has mejorado en nada. ¡Sigue trabajando!",
+                                    "description": "En la lista a continuación, puedes ver lo que has mejorado en comparación con el último cuestionario de autorregulación que completaste. ¡Lee cuidadosamente la retroalimentación y continúa esforzándote por mejorar!",
                                     "CASE_0": "Divide las tareas en pasos alcanzables para que puedas tener éxito en lograr esos pasos. Comienza con algo pequeño, y a medida que tengas más éxito, haz los pasos más grandes. Mira a tu alrededor a tus compañeros y observa cómo les va. ¿Puedes aprender de sus enfoques? Busca retroalimentación, de ti mismo y de otros, sobre lo que estás haciendo bien. Asegúrate de celebrar tus éxitos.",
                                     "CASE_1": "La motivación intrínseca en línea no proviene de las calificaciones, sino de tu propio interés. Reflexiona sobre las razones por las que te matriculaste originalmente en la universidad. Piensa en tus propias razones personales para aprender el material. ¿Qué quieres lograr, qué disfrutas aprender, por qué es importante para ti hacerlo bien y aprender el material? Piensa en lo que estimula tu curiosidad. Por último, asegúrate de celebrar tus éxitos.",
                                     "CASE_2": "Se piensa que la motivación intrínseca es más útil que la motivación extrínseca. Sin embargo, puedes mejorar tu motivación extrínseca estableciendo una meta externa, como una calificación o ingresar a un curso de posgrado.",
