@@ -42,7 +42,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
   const { minutes, seconds, stopTimer } = useTimer({ testCompleted: questionnaireAnswerData.length > 0 });
   const [editedQuestions, setEditedQuestions] = useState({});
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const {
     subsectionSelected
@@ -65,8 +65,8 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
     }
     const answersData = answers.filter((answer) => answer.questionnaire?.id === questionnaire?.id);
     setQuestionnaireAnswerData(answersData);
-    if (questionnaire.attributes.Options.questionnaire?.type === 'SRL-O') {
-      setRecommendationList(getRecommendationsSRLO(answersData[0].responses.responses, t))
+    if (questionnaire.attributes.Options.questionnaire?.type === 'SRL-O' && answersData[0]) {
+      setRecommendationList(getRecommendationsSRLO(answersData[0].responses.responses, t, answersData[0].responses.language))
     }
     if (answersData.length > 0) {
       setCompleted(true);
@@ -187,7 +187,8 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
             responses: Object.keys(groupValues).map(questionIndex => ({
               answer: groupValues[questionIndex],
               question: questionnaire.attributes.Options.questionnaire.questions[questionIndex].question
-            }))
+            })),
+            language : questionnaire.attributes.Options.questionnaire.language
           };
           const hour = Math.floor(minutes / 60) < 10 ? "0" + Math.floor(minutes / 60) : Math.floor(minutes / 60)
           const minutesLeft = minutes % 60;

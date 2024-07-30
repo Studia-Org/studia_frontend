@@ -89,28 +89,31 @@ const CourseInside = () => {
 
   function completePreviousSRLOCompleted() {
     let improvement = { status: false, previous: {}, current: {} };
-  
+
     if (subsectionSelected?.attributes?.questionnaire?.data && sectionSelected && course && subsectionsCompleted) {
       const currentSectionData = course.sections.data.find(section => section.attributes.title === sectionSelected);
-  
+
       for (let i = 0; i < currentSectionData.attributes.subsections.data.length; i++) {
         const subsection = currentSectionData.attributes.subsections.data[i];
         let isSubsectionCompleted = subsectionsCompleted.some(subsectionCompleted => subsectionCompleted.id === subsection.id);
-  
+
         if (subsection.attributes.questionnaire.data?.attributes && subsection.attributes.questionnaire.data.attributes.Options.questionnaire.type === 'SRL-O' && isSubsectionCompleted) {
           const answersData = questionnaireAnswers.filter((answer) => answer.questionnaire?.id === subsection.attributes.questionnaire.data?.id);
-          if (Object.keys(improvement.previous).length === 0) {
-            improvement = { status: false, previous: getRecommendationsSRLO(answersData[0].responses.responses, t), current: {} };
-          } else {
-            improvement = { status: true, previous: improvement.previous, current: getRecommendationsSRLO(answersData[0].responses.responses, t) };
-          }          
+          if (answersData[0]) {
+            if (Object.keys(improvement.previous).length === 0) {
+              improvement = { status: false, previous: getRecommendationsSRLO(answersData[0].responses.responses, t), current: {} };
+            } else {
+              improvement = { status: true, previous: improvement.previous, current: getRecommendationsSRLO(answersData[0].responses.responses, t) };
+            }
+          }
+
           if (subsectionSelected.id === subsection.id) {
             return improvement;
           }
         }
       }
     }
-  
+
     return improvement;
   }
 

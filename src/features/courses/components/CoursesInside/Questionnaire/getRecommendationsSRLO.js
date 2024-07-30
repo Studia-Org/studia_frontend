@@ -1,6 +1,6 @@
 
 
-export function getRecommendationsSRLO(userResponses, t) {
+export function getRecommendationsSRLO(userResponses, t, language) {
     const recomendationList = []
     const sizeSequence = [4, 5, 3, 5, 5, 5, 3, 4, 5, 5];
     let posicionSecuencia = 0;
@@ -10,7 +10,7 @@ export function getRecommendationsSRLO(userResponses, t) {
         posicionSecuencia += size;
 
         // Calcular la media del grupo actual
-        const respuestasNumeros = grupo.map(response => transformToNumber(response.answer, t));
+        const respuestasNumeros = grupo.map(response => transformToNumber(response.answer, language));
         const mediaGrupo = respuestasNumeros.reduce((a, b) => a + b, 0) / size;
         recomendationList.push(returnRecommendation(mediaGrupo, index, t) || null);
     })
@@ -76,23 +76,37 @@ function returnRecommendation(mediaGrupo, grupo, t) {
 }
 
 
-function transformToNumber(response, t) {
-    switch (response) {
-        case t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.GENERAL_OPTIONS.options.1"):
-            return 1
-        case t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.GENERAL_OPTIONS.options.2"):
-            return 2
-        case t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.GENERAL_OPTIONS.options.3"):
-            return 3
-        case t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.GENERAL_OPTIONS.options.4"):
-            return 4
-        case t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.GENERAL_OPTIONS.options.5"):
-            return 5
-        case t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.GENERAL_OPTIONS.options.6"):
-            return 6
-        case t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.GENERAL_OPTIONS.options.7"):
-            return 7
-        default:
-            return 4
-    }
+function transformToNumber(response, language) {
+    const translations = {
+        en: {
+            "Strongly Disagree": 1,
+            "Disagree": 2,
+            "Somewhat Disagree": 3,
+            "Neutral": 4,
+            "Somewhat Agree": 5,
+            "Agree": 6,
+            "Strongly Agree": 7
+        },
+        es: {
+            "Totalmente en desacuerdo": 1,
+            "En desacuerdo": 2,
+            "Algo en desacuerdo": 3,
+            "Neutral": 4,
+            "Algo de acuerdo": 5,
+            "De acuerdo": 6,
+            "Totalmente de acuerdo": 7
+        },
+        ca: {
+            "Totalment en desacord": 1,
+            "En desacord": 2,
+            "Una mica en desacord": 3,
+            "Neutral": 4,
+            "Una mica d'acord": 5,
+            "D'acord": 6,
+            "Totalment d'acord": 7
+        }
+    };
+
+    const currentLang = translations[language] || translations['en'];
+    return currentLang[response] || 4; 
 }
