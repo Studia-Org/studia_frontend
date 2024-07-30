@@ -3,11 +3,10 @@ import * as ExcelJS from 'exceljs';
 export async function createExcel(studentsData, activityName) {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Responses');
-
     // Agregar encabezados
     worksheet.columns = [
-        { header: 'Student email', key: 'Student email', width: 30 },
-        { header: 'Student Name', key: 'student Name', width: 30 },
+        { header: 'Student email', key: 'Studentemail', width: 30 },
+        { header: 'Student Name', key: 'studentName', width: 30 },
         { header: 'Question Id', key: 'questionId', width: 15 },
         { header: 'Question', key: 'question', width: 50 },
         { header: 'Answer', key: 'answer', width: 100 }
@@ -17,11 +16,13 @@ export async function createExcel(studentsData, activityName) {
     });
     studentsData.forEach(student => {
         const responses = student.attributes.responses.responses;
+        const name = student.attributes.user.data.attributes.name;
+        const email = student.attributes.user.data.attributes.email;
         responses.forEach((response, index) => {
             if (index === 0) {
                 const row = worksheet.addRow({
-                    studentId: student.attributes.user.data.attributes.email,
-                    studentName: student.attributes.user.data.attributes.name,
+                    Studentemail: email,
+                    studentName: name,
                     questionId: "Question Id",
                     question: "Questions",
                     answer: "Answers"
@@ -35,8 +36,8 @@ export async function createExcel(studentsData, activityName) {
                 });
             }
             worksheet.addRow({
-                studentId: student.attributes.user.data.attributes.email,
-                studentName: student.attributes.user.data.attributes.name,
+                Studentemail: "",
+                studentName: "",
                 questionId: index + 1,
                 question: response.question,
                 answer: response.answer
