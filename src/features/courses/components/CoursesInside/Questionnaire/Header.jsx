@@ -135,7 +135,7 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
                         <p>{descriptionEditFinal}</p>
                     )}
                     {completed === true ? (
-                        <span className='pl-2 mr-10 text-gray-500'>{"Completed in: " + format(questionnaireAnswerData[0]?.timeToComplete)}</span>
+                        <span className='pl-2 mr-10 text-gray-500'>{t("QUESTIONNAIRE.completed_in") + ": " + format(questionnaireAnswerData[0]?.timeToComplete)}</span>
                     ) : null}
                 </div>
 

@@ -754,7 +754,9 @@
     },
     "QUESTIONNAIRE": {
         "go_back_users": "Go back to users",
-        "download_all_answers": "Download all answers"
+        "download_all_answers": "Download all answers",
+        "completed_in": "Completed in",
+        "completation_date": "Completation date"
     },
     "STUDENT_COURSES": {
         "TFG": {

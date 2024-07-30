@@ -444,7 +444,9 @@
     },
     "QUESTIONNAIRE": {
         "go_back_users": "Volver a los usuarios",
-        "download_all_answers": "Descargar todas las respuestas"
+        "download_all_answers": "Descargar todas las respuestas",
+        "completed_in": "Completado en",
+        "completation_date": "Fecha de finalización"
     },
     "CREATE_COURSES": {
         "principal_text": "Crear un curso nuevo",

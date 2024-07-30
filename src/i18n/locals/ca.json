@@ -444,7 +444,9 @@
     },
     "QUESTIONNAIRE": {
         "go_back_users": "Tornar a la llista d'usuaris",
-        "download_all_answers": "Descarregar totes les respostes"
+        "download_all_answers": "Descarregar totes les respostes",
+        "completed_in": "Completat en",
+        "completation_date": "Data de completació"
     },
     "CREATE_COURSES": {
         "principal_text": "Crear un curs nou",
