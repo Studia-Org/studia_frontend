@@ -415,12 +415,12 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                 {/* {activityHasStarted && <p className="text-xs text-red-500">Activity has started, you can't modify the peers</p>} */}
                 <Divider className="mt-2" />
                 {!activityToReviewWasInGroups && studentsToReview.length < allStudents.length
-                    && <p className="mb-2 text-sm text-red-500">{t("QUALIFICATIONS.students_who_dont_delivered")}</p>}
+                    && <p className="mb-2 text-sm text-red-500">{t("PEERREVIEW.students_who_dont_delivered")}</p>}
                 {activityToReviewWasInGroups &&
                     (studentsToReview.length < (groupWithMoreStudents ?
                         Math.floor((allStudents.length) / studentsPerGroup) :
                         Math.ceil((allStudents.length) / studentsPerGroup)))
-                    && <p className="mb-2 text-sm text-red-500">{t("QUALIFICATIONS.groups_who_dont_delivered")}</p>}
+                    && <p className="mb-2 text-sm text-red-500">{t("PEERREVIEW.groups_who_dont_delivered")}</p>}
                 <section>
                     <DragDropContext className="mt-5" onDragEnd={onDragEnd}   >
                         <div className="flex gap-3">
@@ -500,7 +500,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                                 {
                                     studentsToReview.map((student, index) => {
                                         return (
-                                            <section className="flex flex-col gap-y-2">
+                                            <article className="flex flex-col gap-y-2">
                                                 <p className="text-sm text-gray-700">{t("PEERREVIEW.activity_done")}</p>
                                                 <ul style={{ minHeight: height }} className="bg-white rounded-lg">
                                                     {
@@ -584,7 +584,7 @@ function CreatePeers({ students: allStudents, setCreatePeerReview, activityToRev
                                                         </ul>
                                                     )}
                                                 </StrictModeDroppable>
-                                            </section>
+                                            </article>
                                         )
                                     })
                                 }

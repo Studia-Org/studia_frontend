@@ -10,7 +10,7 @@ import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import 'filepond/dist/filepond.min.css';
 import TagsInput from 'react-tagsinput'
 import { AddParticipants } from './AddParticipants';
-
+import { useTranslation } from 'react-i18next';
 registerPlugin(FilePondPluginImagePreview);
 
 
@@ -18,6 +18,7 @@ registerPlugin(FilePondPluginImagePreview);
 
 export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) => {
     const navigate = useNavigate()
+    const { t } = useTranslation()
     const [students, setStudents] = useState([])
     const [evaluators, setEvaluators] = useState([])
     const [selected, setSelected] = useState()
@@ -205,24 +206,22 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
     return (
         <div className="flex-1 mb-10">
             <div className="max-w-3xl px-4 pt-5 ml-2 sm:px-6 lg:px-8">
-                <h1 className="text-xl font-bold tracking-tight text-blue-gray-900">Edit Course</h1>
+                <h1 className="text-xl font-bold tracking-tight text-blue-gray-900">{t("COURSEINSIDE.SETTINGS.edit_course")}</h1>
                 <div className="grid grid-cols-1 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
                     <div className="flex items-center mt-8 sm:col-span-6">
                         <div>
-                            <h2 className="text-lg font-medium text-blue-gray-900 ">Course info</h2>
-                            <p className="mt-1 text-sm text-gray-500">
-                                This information will be displayed publicly to the students.
-                            </p>
+                            <h2 className="text-lg font-medium text-blue-gray-900 ">{t("COURSEINSIDE.SETTINGS.course_info")}</h2>
+                            <p className="mt-1 text-sm text-gray-500">{t("COURSEINSIDE.SETTINGS.course_info_text")}</p>
                         </div>
                         <Popconfirm
                             title="Delete the course"
                             description="Are you sure to delete this course?"
                             onConfirm={() => deleteCourse()}
-                            okText="Yes"
-                            cancelText="No"
+                            okText={t("COMMON.yes")}
+                            cancelText={t("COMMON.no")}
                         >
                             <Button loading={loadingDelete} danger className='ml-auto bg-[#ff4d4f] hover:bg-[#ff4d50c5] !text-white'>
-                                Delete Course
+                                {t("COURSEINSIDE.SETTINGS.delete_course")}
                             </Button>
                         </Popconfirm>
 
@@ -231,7 +230,7 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
 
                     <div className="sm:col-span-6">
                         <label htmlFor="first-name" className="block mb-2 text-sm font-medium text-blue-gray-900">
-                            Course name
+                            {t("COURSEINSIDE.SETTINGS.course_name")}
                         </label>
                         <input
                             type="text"
@@ -245,7 +244,7 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
                     </div>
                     <div className="sm:col-span-6">
                         <label htmlFor="description" className="block text-sm font-medium text-blue-gray-900">
-                            Description
+                            {t("COURSEINSIDE.SETTINGS.course_description")}
                         </label>
                         <div className="mt-2">
                             <textarea
@@ -261,7 +260,7 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
                     </div>
                     <div className="sm:col-span-6">
                         <label htmlFor="description" className="block mb-2 text-sm font-medium text-blue-gray-900">
-                            Cover
+                            {t("COURSEINSIDE.SETTINGS.course_cover")}
                         </label>
                         <FilePond
                             files={courseData?.cover?.data?.attributes.url}
@@ -283,9 +282,9 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
                     </div>
                     <div className="sm:col-span-6">
                         <label htmlFor="description" className="block mb-2 text-sm font-medium text-blue-gray-900">
-                            Tags
+                            {t("COURSEINSIDE.SETTINGS.tags")}
                         </label>
-                        <TagsInput value={courseData.tags} onChange={(e) => setCourseData(prevState => ({ ...prevState, tags: e }))} />
+                        <TagsInput inputProps={{ placeholder: t("COMMON.add_tag"), className: 'react-tagsinput-input !w-fit', }} value={courseData.tags} onChange={(e) => setCourseData(prevState => ({ ...prevState, tags: e }))} />
                     </div>
                 </div>
 
@@ -293,9 +292,9 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
                     !courseData.studentManaged && (
                         <div className="grid grid-cols-1 pt-8 gap-y-6 sm:grid-cols-6 sm:gap-x-6">
                             <div className="sm:col-span-6">
-                                <h2 className="text-lg font-medium text-blue-gray-900">Participants</h2>
+                                <h2 className="text-lg font-medium text-blue-gray-900">{t("COURSEINSIDE.SETTINGS.participants")}</h2>
                                 <p className="mt-1 text-sm text-gray-500">
-                                    Edit the number of students and evaluators for this course.
+                                    {t("COURSEINSIDE.SETTINGS.participants_title")}
                                 </p>
                                 <hr className='mt-5' />
                             </div>
@@ -314,14 +313,14 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
                         type="button"
                         className="px-4 text-sm font-medium bg-white border border-gray-300 rounded-md shadow-sm text-blue-gray-900 hover:bg-blue-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     >
-                        Cancel
+                        {t("COMMON.save_changes")}
                     </Button>
                     <Button
                         loading={loading}
                         onClick={() => saveChanges()}
                         className="inline-flex justify-center px-4 ml-3 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     >
-                        Save
+                        {t("COMMON.cancel")}
                     </Button>
                 </div>
             </div>

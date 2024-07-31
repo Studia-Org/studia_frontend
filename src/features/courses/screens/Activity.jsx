@@ -21,7 +21,6 @@ const Activity = () => {
   function completeContext(course_, section, subsection) {
 
     if (!course) {
-      console.log('course', course_)
       setCourse(course_.data.attributes);
       setSectionSelected(section);
       setSubsectionSelected(subsection);

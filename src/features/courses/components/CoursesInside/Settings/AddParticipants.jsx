@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
 import { UploadFiles } from '../../CreateCourses/CourseSections/UploadFiles';
 import { Select, Avatar, Button, Modal, message } from 'antd';
-
+import { Trans, useTranslation } from 'react-i18next';
 
 export const AddParticipants = ({ participants, addedParticipants, addParticipant, deleteParticipant, setSelected, addType, selected }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [files, setFiles] = useState([]);
+    const { t } = useTranslation();
     const { Option } = Select;
-
+    const translatedType = t(`COURSEINSIDE.SETTINGS.${addType}`)
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -59,9 +60,9 @@ export const AddParticipants = ({ participants, addedParticipants, addParticipan
                 <div className="space-y-1">
                     <div className='flex items-center'>
                         <label htmlFor="add-team-members" className="block text-sm font-medium text-gray-700">
-                            Add {addType}
+                            {t("COMMON.add")} {translatedType}
                         </label>
-                        <label className='block ml-auto text-sm font-medium text-gray-700'>{addType}: {addedParticipants?.length}</label>
+                        <label className='block ml-auto text-sm font-medium text-gray-700'>{translatedType}: {addedParticipants?.length}</label>
                     </div>
 
 
@@ -95,7 +96,7 @@ export const AddParticipants = ({ participants, addedParticipants, addParticipan
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4">
                                     <path fillRule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14Zm.75-10.25v2.5h2.5a.75.75 0 0 1 0 1.5h-2.5v2.5a.75.75 0 0 1-1.5 0v-2.5h-2.5a.75.75 0 0 1 0-1.5h2.5v-2.5a.75.75 0 0 1 1.5 0Z" clipRule="evenodd" />
                                 </svg>
-                                <span>Add</span>
+                                <span>{t("COMMON.add")}</span>
                             </Button>
                         </span>
                         <span className="mt-3 ml-3">
@@ -107,24 +108,27 @@ export const AddParticipants = ({ participants, addedParticipants, addParticipan
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" className="w-4 h-4">
                                     <path fillRule="evenodd" d="M4 2a1.5 1.5 0 0 0-1.5 1.5v9A1.5 1.5 0 0 0 4 14h8a1.5 1.5 0 0 0 1.5-1.5V6.621a1.5 1.5 0 0 0-.44-1.06L9.94 2.439A1.5 1.5 0 0 0 8.878 2H4Zm4 9.5a.75.75 0 0 1-.75-.75V8.06l-.72.72a.75.75 0 0 1-1.06-1.06l2-2a.75.75 0 0 1 1.06 0l2 2a.75.75 0 1 1-1.06 1.06l-.72-.72v2.69a.75.75 0 0 1-.75.75Z" clipRule="evenodd" />
                                 </svg>
-                                <span>Import from CSV</span>
+                                <span>{t("ACTIVITY.create_groups.import_from_csv")}</span>
                             </Button>
-                            <Modal title={`Import ${addType} from CSV`} open={isModalOpen}
+                            <Modal title={<Trans
+                                i18nKey="COURSEINSIDE.SETTINGS.import_from_csv"
+                                values={{ type: translatedType }}
+                            />} open={isModalOpen}
                                 onCancel={() => setIsModalOpen(false)}
                                 footer={[
                                     <Button key="back" onClick={() => setIsModalOpen(false)} className='bg-gray-200'>
-                                        Cancel
+                                        {t("COMMON.cancel")}
                                     </Button>,
                                     <Button key="submit" type="primary" loading={loading} onClick={uploadCSV}>
-                                        Import
+                                        {t("COMMON.import")}
                                     </Button>,
                                 ]}
                             >
-                                <p>Please upload a CSV spreadsheet file (comma or semi-colon separated) with the following format:</p>
+                                <p>{t("ACTIVITY.create_groups.please_upload_csv")}</p>
                                 <ol className='mb-5 ml-10 list-disc'>
-                                    <li>Column 1: Student's email</li>
+                                    <li>{t("COURSEINSIDE.SETTINGS.column1_student_email")}</li>
                                 </ol>
-                                <p>For example:</p>
+                                <p>{t("COMMON.for_example")}:</p>
                                 <img className='my-3' src={'https://res.cloudinary.com/dnmlszkih/image/upload/v1704474229/hwqyzbtduejhu3bwjrle.png'} alt="" />
                                 <UploadFiles fileList={files} setFileList={setFiles} listType={'picture'} maxCount={1} />
                             </Modal>

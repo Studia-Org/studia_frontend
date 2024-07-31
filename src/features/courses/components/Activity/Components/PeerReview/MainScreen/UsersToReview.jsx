@@ -34,7 +34,7 @@ export default function UsersToReview({ usersToCorrect, usersWithAnswers, setUse
 
                             <p className="text-lg text-black">{
                                 correctActivityGroup ?
-                                    ("Group " + groupName || "Group " + groupName) :
+                                    ("Group " + groupName) :
                                     user.attributes.username
                             }</p>
                             {

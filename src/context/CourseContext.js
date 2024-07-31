@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 export const CourseContext = createContext({
     course: [],
@@ -18,6 +18,7 @@ export const CourseProvider = ({ children }) => {
     const [sectionSelected, setSectionSelected] = useState(undefined);
     const [subsectionSelected, setSubsectionSelected] = useState(undefined);
     const [activitySelected, setActivitySelected] = useState(undefined);
+
 
     return (
         <CourseContext.Provider

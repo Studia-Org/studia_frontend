@@ -14,8 +14,11 @@
         "no": "No",
         "delete": "Eliminar",
         "edit": "Editar",
-        "search_students": "Cerca estudiants",
-        "submit": "Enviar"
+        "search_students": "Cercar estudiants",
+        "submit": "Enviar",
+        "deadline": "Data límit",
+        "add": "Afegir",
+        "add_tag": "Afegir etiqueta"
     },
     "HOME": {
         "title": "Benvingut/da a la nova era de l'aprenentatge",
@@ -323,12 +326,29 @@
     "COURSEINSIDE": {
         "course": "Curs",
         "files": "Arxius",
+        "subsection_settings": "Configuració de la subsecció",
         "activity": "Activitat",
         "course_content": "Contingut del curs",
         "edit_mode": "Mode d'edició",
         "SETTINGS": {
             "title": "Configuració del curs",
-            "button_edit": "Editar curs"
+            "button_edit": "Editar informació del curs",
+            "edit_course": "Editar curs",
+            "course_info": "Informació del curs",
+            "course_info_text": "Aquesta informació es mostrarà públicament als estudiants.",
+            "course_name": "Nom del curs",
+            "course_description": "Descripció del curs",
+            "course_cover": "Portada",
+            "tags": "Etiquetes",
+            "add_students": "Afegir estudiants",
+            "Students": "Estudiants",
+            "add_evaluators": "Afegir avaluadors",
+            "Evaluators": "Avaluadors",
+            "delete_course": "Eliminar curs",
+            "participants": "Participants",
+            "participants_title": "Edita el nombre d'estudiants i avaluadors per aquest curs.",
+            "column1_student_email": "Columna 1: Correu electrònic de l'estudiant",
+            "import_from_csv": "Importar {{type}} des de CSV"
         },
         "FORUM": {
             "forum": "Fòrum",
@@ -365,6 +385,19 @@
             "participants_tile": "Explora tots els participants actualment inscrits en aquest curs.",
             "to_add_student": "Per afegir un nou estudiant, si us plau, navega fins a la secció de configuració del curs.",
             "placeholder_search": "Cerca un estudiant"
+        },
+        "SUB_SETTINGS": {
+            "complete_uncomplete_subsection": "Completar / Descompletar subsecció",
+            "date": "Data de inici i final de la subsecció",
+            "back_to_settings": "Tornar a la configuració",
+            "complete_students": "Completar subsecció",
+            "participants_completed": "Estudiants que han completat la subsecció",
+            "participants_not_completed": "Estudiants que no han completat la subsecció",
+            "select_students_to_not_complete": "Seleccioneu els estudiants per marcar la subsecció com a no completada.",
+            "select_students_to_complete": "Seleccioneu els estudiants per marcar la subsecció com a completada.",
+            "select_all": "Moure tots",
+            "all_completed": "Tots els estudiants han completat aquesta subsecció",
+            "all_not_completed": "Ningun estudiant ha completat aquesta subsecció"
         }
     },
     "ACTIVITY": {
@@ -405,8 +438,8 @@
         "submit_files": "Enviar fitxers",
         "remember_submit": "Recorda enviar el/s teu/s fitxer una vegada hagis acabat.",
         "create_groups": {
-            "save_groups": "Desa grups",
-            "update_groups": "Actualitza grups",
+            "save_groups": "Desar grups",
+            "update_groups": "Actualitzar grups",
             "empty_groups": "Hi ha grups buits",
             "save_success": "Grups desats correctament",
             "save_error": "Error en desar els grups",
@@ -426,6 +459,12 @@
             "students": "Estudiants",
             "group": "Grup"
         }
+    },
+    "QUESTIONNAIRE": {
+        "go_back_users": "Tornar a la llista d'usuaris",
+        "download_all_answers": "Descarregar totes les respostes",
+        "completed_in": "Completat en",
+        "completation_date": "Data de completació"
     },
     "CREATE_COURSES": {
         "principal_text": "Crear un curs nou",
@@ -479,7 +518,7 @@
                     "content": "Contingut",
                     "content_placeholder": "Editar el contingut de la subsecció",
                     "cover": "Portada (opcional)",
-                    "pairs_or_individual": "L'activitat es durà a terme en parelles o individualment?",
+                    "pairs_or_individual": "L'activitat es durà a terme en grups o individualment?",
                     "individual": "Individual",
                     "groups": "Grups",
                     "students_per_group": "Quants estudiants per grup?",
@@ -741,7 +780,7 @@
         "event_added": "Esdeveniment afegit correctament",
         "event_deleted": "Esdeveniment esborrat correctament",
         "error_fetching_events": "Error en recuperar els esdeveniments",
-        "export_calendar": "Exporta el calendari",
+        "export_calendar": "Exportar calendari",
         "add_event": "Afegeix esdeveniment",
         "event_title": "Títol de l'esdeveniment",
         "date": "Data",
@@ -902,7 +941,7 @@
         "create_peers": "Crear parelles",
         "update_peers": "Actualitza les parelles",
         "back_to_peer_review": "Torna a la revisió per parells",
-        "peer_review_text": "La revisió per iguals s'ha dissenyat per a cada estudiant <bold>{{number}}activitats de revisió</bold>",
+        "peer_review_text": "La revisió per iguals s'ha dissenyat per a que cada estudiant revisi <bold>{{number}} activitats</bold>",
         "assing_students": "Assigna estudiants per revisar cada activitat",
         "create_peers_auto": "Crear parelles automàticament",
         "students_who_dont_delivered": "Hi ha estudiants que no han lliurat l'activitat",
