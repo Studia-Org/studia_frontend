@@ -74,7 +74,7 @@ export const TaskComponentCard = ({ task, setVisibilityTask, context, courseId, 
         }
         return (
             <button onClick={() => handleClickButton()}
-                className='relative flex items-center w-full p-5 py-5 mb-5 text-left duration-100 bg-white rounded-md shadow-md hover:bg-gray-50'>
+                className='relative flex items-center w-full p-5 py-5 mb-5 text-left duration-150 bg-white border border-[#DADADA] rounded-md hover:bg-gray-50'>
                 <div className='absolute bg-indigo-500 h-full left-0 top-0 w-[3rem] md:w-[5rem] rounded-l-md flex items-center justify-center'>
                     {svgType(task?.attributes?.type)}
                 </div>

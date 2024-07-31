@@ -369,7 +369,7 @@ export const CourseFiles = ({ enableEdit }) => {
                                 </div>
                             ) :
                                 (
-                                    <div className="p-5 bg-white rounded-md shadow-md">
+                                    <div className="p-5 bg-white rounded-md border border-[#DADADA]">
                                         <Empty
                                             className="mt-5"
                                             image={Empty.PRESENTED_IMAGE_SIMPLE}
@@ -403,7 +403,7 @@ export const SubsectionsSettings = ({ course, courseSection, courseSubsection, s
     const CardSettings = ({ title, svg, onClick }) => {
         return (
             <article onClick={onClick}
-                className="mt-4 overflow-hidden border border-[#DADADA] col-span-1 transform hover:scale-[1.01] duration-150 bg-white rounded-md gap-x-2 p-5 h-[5rem] shadow-md flex items-center cursor-pointer">
+                className="mt-4 overflow-hidden border border-[#DADADA] col-span-1 transform hover:scale-[1.01] duration-150 bg-white rounded-md gap-x-2 p-5 h-[5rem]  flex items-center cursor-pointer">
                 {svg}
                 <p className="break-words text-ellipsis">{title}</p>
             </article>
@@ -468,9 +468,10 @@ export const SubsectionsSettings = ({ course, courseSection, courseSubsection, s
             <CardSettings
                 title={t("COURSEINSIDE.SUB_SETTINGS.complete_uncomplete_subsection")}
                 svg={<SVGCompleteUncomplete />}
-                onClick={() => setSettingSelected("complete_uncomplete")} />
+                onClick={() => setSettingSelected("complete_uncomplete")}
+            />
 
-            <article className="flex flex-col items-center gap-y-5">
+            <article className="flex flex-col items-center bg-white border border-[#DADADA] gap-y-5 rounded-md p-5 mt-4 ">
                 <h3 className="text-lg font-medium ">{t("COURSEINSIDE.SUB_SETTINGS.date")}</h3>
                 <RangePicker
                     value={[dayjs(dateSubsection[0]), dayjs(dateSubsection[1])]}
