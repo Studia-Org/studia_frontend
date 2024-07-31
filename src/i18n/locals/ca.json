@@ -438,8 +438,8 @@
         "submit_files": "Enviar fitxers",
         "remember_submit": "Recorda enviar el/s teu/s fitxer una vegada hagis acabat.",
         "create_groups": {
-            "save_groups": "Desa grups",
-            "update_groups": "Actualitza grups",
+            "save_groups": "Desar grups",
+            "update_groups": "Actualitzar grups",
             "empty_groups": "Hi ha grups buits",
             "save_success": "Grups desats correctament",
             "save_error": "Error en desar els grups",
