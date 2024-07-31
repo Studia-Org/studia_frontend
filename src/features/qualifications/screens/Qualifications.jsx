@@ -57,6 +57,8 @@ const Qualifications = () => {
         }
     }
 
+    console.log(qualificationsProfessor)
+
 
     function callQualificationsData() {
         if (user) {
@@ -245,13 +247,33 @@ const Qualifications = () => {
                     <div className='max-w-full w-full max-h-full rounded-tl-3xl bg-[#e7eaf886] '>
                         <h1 className='ml-12 text-xl font-bold pt-11'>{t("QUALIFICATIONS.qualifications")}</h1>
                         {!loading ?
-                            <div className='px-12 text-2xl font-bold p-9'>
-                                <div className='flex'>
-                                    <motion.div className='flex flex-wrap w-full gap-8 ' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
-                                        {qualificationsProfessor && qualificationsProfessor.map(renderProfessorQualificationsCard)}
-                                    </motion.div>
+                            qualificationsProfessor.length === 0 ?
+                                <motion.div id='course-motion-div'
+                                    className='mx-10 mt-6 bg-white'
+                                    initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
+                                    <div
+                                        type="button"
+                                        className="relative block w-full p-12 text-center bg-white border border-gray-300 rounded-lg"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-12 h-12 mx-auto">
+                                            <path d="M11.7 2.805a.75.75 0 0 1 .6 0A60.65 60.65 0 0 1 22.83 8.72a.75.75 0 0 1-.231 1.337 49.948 49.948 0 0 0-9.902 3.912l-.003.002c-.114.06-.227.119-.34.18a.75.75 0 0 1-.707 0A50.88 50.88 0 0 0 7.5 12.173v-.224c0-.131.067-.248.172-.311a54.615 54.615 0 0 1 4.653-2.52.75.75 0 0 0-.65-1.352 56.123 56.123 0 0 0-4.78 2.589 1.858 1.858 0 0 0-.859 1.228 49.803 49.803 0 0 0-4.634-1.527.75.75 0 0 1-.231-1.337A60.653 60.653 0 0 1 11.7 2.805Z" />
+                                            <path d="M13.06 15.473a48.45 48.45 0 0 1 7.666-3.282c.134 1.414.22 2.843.255 4.284a.75.75 0 0 1-.46.711 47.87 47.87 0 0 0-8.105 4.342.75.75 0 0 1-.832 0 47.87 47.87 0 0 0-8.104-4.342.75.75 0 0 1-.461-.71c.035-1.442.121-2.87.255-4.286.921.304 1.83.634 2.726.99v1.27a1.5 1.5 0 0 0-.14 2.508c-.09.38-.222.753-.397 1.11.452.213.901.434 1.346.66a6.727 6.727 0 0 0 .551-1.607 1.5 1.5 0 0 0 .14-2.67v-.645a48.549 48.549 0 0 1 3.44 1.667 2.25 2.25 0 0 0 2.12 0Z" />
+                                            <path d="M4.462 19.462c.42-.419.753-.89 1-1.395.453.214.902.435 1.347.662a6.742 6.742 0 0 1-1.286 1.794.75.75 0 0 1-1.06-1.06Z" />
+                                        </svg>
+
+
+                                        <span className="block mt-2 text-base font-medium text-gray-900">{t("QUALIFICATIONS.not_qualifications")}</span>
+                                        <span className="block mt-2 text-sm font-medium text-gray-600">{t("QUALIFICATIONS.not_qualifications_explore")}</span>
+                                    </div>
+                                </motion.div>
+                                :
+                                <div className='px-12 text-2xl font-bold p-9'>
+                                    <div className='flex'>
+                                        <motion.div className='flex flex-wrap w-full gap-8 ' initial="hidden" animate="visible" exit="hidden" variants={variants} transition={transition}>
+                                            {qualificationsProfessor && qualificationsProfessor.map(renderProfessorQualificationsCard)}
+                                        </motion.div>
+                                    </div>
                                 </div>
-                            </div>
                             :
                             <div className='flex items-center justify-center w-full h-full'>
                                 <MoonLoader color="#363cd6" size={80} />

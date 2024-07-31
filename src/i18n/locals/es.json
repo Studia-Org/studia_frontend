@@ -798,6 +798,8 @@
         ]
     },
     "QUALIFICATIONS": {
+        "not_qualifications": "No hay calificaciones disponibles para ti",
+        "not_qualifications_explore": "Explora otras áreas de la plataforma o vuelve más tarde para ver nuevas opciones de calificaciones.",
         "qualifications": "Calificaciones",
         "qualificacion": "Calificación",
         "search_users": "Buscar usuarios",

@@ -848,6 +848,8 @@
         ]
     },
     "QUALIFICATIONS": {
+        "not_qualifications": "There are no qualifications available",
+        "not_qualifications_explore": "Explore other areas of the platform or check back later for new qualifications.",
         "qualifications": "Qualifications",
         "qualificacion": "Qualification",
         "search_users": "Search users",

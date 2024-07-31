@@ -798,6 +798,8 @@
         ]
     },
     "QUALIFICATIONS": {
+        "not_qualifications": "No hi ha qualificacions disponibles per a tu",
+        "not_qualifications_explore": "Explora altres àrees de la plataforma o torna més tard per veure noves opcions de qualificacions.",
         "qualifications": "Qualificacions",
         "qualificacion": "Qualificació",
         "search_users": "Cercar usuaris",

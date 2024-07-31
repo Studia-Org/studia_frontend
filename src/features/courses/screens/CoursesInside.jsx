@@ -59,8 +59,6 @@ const CourseInside = () => {
     setSubsectionSelected,
     setActivitySelected,
   } = useCourseContext();
-
-
   let { courseId } = useParams();
   let { activityId } = useParams();
   const { user } = useAuthContext()
@@ -118,19 +116,11 @@ const CourseInside = () => {
     let cursoTitle = null;
 
     for (const curso of course.sections.data) {
-      const {
-        id,
-        attributes: {
-          title,
-          subsections: { data: subsecciones },
-        },
-      } = curso;
+      const { id, attributes: { title, subsections: { data: subsecciones } } } = curso;
 
       for (const subseccion of subsecciones) {
         const subseccionId = subseccion.id;
-        const subseccionCompletada = subsectionsCompleted.find(
-          (sub) => sub.id === subseccionId
-        );
+        const subseccionCompletada = subsectionsCompleted.find((sub) => sub.id === subseccionId);
 
         const subseccionStartDate = new Date(subseccion.attributes.start_date);
         const subseccionEndDate = new Date(subseccion.attributes.end_date);
@@ -153,6 +143,8 @@ const CourseInside = () => {
     if (lastCompletedSubseccion) {
       return { subseccion: lastCompletedSubseccion, cursoTitle };
     }
+    const firstSubsection = course.sections.data[0]?.attributes?.subsections?.data[0];
+    if (firstSubsection) return { subseccion: firstSubsection, cursoTitle: course.sections.data[0].attributes.title };
 
     return null;
   }
@@ -174,18 +166,11 @@ const CourseInside = () => {
   };
 
   useEffect(() => {
-    if (subsectionSelected && Object.keys(subsectionSelected)?.length !== 0) {
-      return;
-    }
-    if (
-      course?.sections?.data?.length > 0 &&
-      subsectionsCompleted.length > 0
-    ) {
-      const firstSubsection = obtenerPrimeraSubseccion(
-        course,
-        subsectionsCompleted
-      );
-
+    if (subsectionSelected && Object.keys(subsectionSelected)?.length !== 0) return;
+    if (course?.sections?.data?.length > 0 &&
+      subsectionsCompleted.length > 0) {
+      const firstSubsection = obtenerPrimeraSubseccion(course, subsectionsCompleted);
+      console.log(firstSubsection)
       if (firstSubsection) {
         if (firstSubsection?.subseccion?.attributes?.activity?.data?.attributes?.type === 'questionnaire') {
           setSectionSelected(firstSubsection?.cursoTitle);
@@ -201,7 +186,7 @@ const CourseInside = () => {
         loadQuestionnaire();
       }
     } else if (
-      course?.sections.data?.length > 0 &&
+      course?.sections?.data?.length > 0 &&
       subsectionsCompleted.length === 0
     ) {
       const {
@@ -235,15 +220,13 @@ const CourseInside = () => {
 
   useEffect(() => {
     if (subsectionSelected?.length && subsectionSelected?.length !== 0) {
-      setSubsectionsLandscapePhoto(
-        subsectionSelected.attributes.landscape_photo?.data?.attributes?.url ??
-        null
-      );
+      setSubsectionsLandscapePhoto(subsectionSelected.attributes.landscape_photo?.data?.attributes?.url ?? null);
     }
     setActivitySelected(undefined);
     setTitleSubsection(subsectionSelected?.attributes?.title);
     setDateSubsection([subsectionSelected?.attributes?.start_date, subsectionSelected?.attributes?.end_date]);
     setBackgroundPhotoSubsection(subsectionSelected?.attributes?.landscape_photo?.data?.attributes?.url)
+
   }, [subsectionSelected]);
 
   useEffect(() => {
