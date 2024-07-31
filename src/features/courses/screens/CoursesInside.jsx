@@ -170,7 +170,6 @@ const CourseInside = () => {
     if (course?.sections?.data?.length > 0 &&
       subsectionsCompleted.length > 0) {
       const firstSubsection = obtenerPrimeraSubseccion(course, subsectionsCompleted);
-      console.log(firstSubsection)
       if (firstSubsection) {
         if (firstSubsection?.subseccion?.attributes?.activity?.data?.attributes?.type === 'questionnaire') {
           setSectionSelected(firstSubsection?.cursoTitle);
