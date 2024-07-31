@@ -7,6 +7,7 @@ export const RecommendationImprovement = ({ isModalOpen, setIsModalOpen, checkIm
     const [improved, setImproved] = useState([]);
     const [worsen, setStillToImprove] = useState([]);
 
+    console.log('checkImprovement:', checkImprovement);
     const { t } = useTranslation();
 
     let localeWorsen = {

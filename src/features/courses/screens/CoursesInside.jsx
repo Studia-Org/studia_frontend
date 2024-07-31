@@ -101,9 +101,10 @@ const CourseInside = () => {
           const answersData = questionnaireAnswers.filter((answer) => answer.questionnaire?.id === subsection.attributes.questionnaire.data?.id);
           if (answersData[0]) {
             if (Object.keys(improvement.previous).length === 0) {
-              improvement = { status: false, previous: getRecommendationsSRLO(answersData[0].responses.responses, t), current: {} };
+              console.log(getRecommendationsSRLO(answersData[0].responses.responses, t, answersData[0].responses.language))
+              improvement = { status: false, previous: getRecommendationsSRLO(answersData[0].responses.responses, t,  answersData[0].responses.language), current: {} };
             } else {
-              improvement = { status: true, previous: improvement.previous, current: getRecommendationsSRLO(answersData[0].responses.responses, t) };
+              improvement = { status: true, previous: improvement.previous, current: getRecommendationsSRLO(answersData[0].responses.responses, t,  answersData[0].responses.language) };
             }
           }
 
@@ -476,7 +477,7 @@ const CourseInside = () => {
                     ) :
                       <CourseHasNotStarted startDate={courseBasicInformation.start_date} />
 
-                  ) : sectionSelected && course.sections.data.length > 0 && (
+                  ) : sectionSelected && course.sections?.data?.length > 0 && (
                     <>
 
                       <BreadcrumbCourse
@@ -504,7 +505,7 @@ const CourseInside = () => {
                         {
                           enableEdit && (
                             <RangePicker
-                              value={[dayjs(dateSubsection[0]), dayjs(dateSubsection[1])]}
+                              value={[dayjs(dateSubsection[0] || new Date()), dayjs(dateSubsection[1] || new Date())]}
                               showTime
                               className="w-1/2 mx-5"
                               clearIcon={null}

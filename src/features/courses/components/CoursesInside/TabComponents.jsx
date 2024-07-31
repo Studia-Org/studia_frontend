@@ -135,6 +135,7 @@ export const CourseContent = ({ setForumFlag, courseId, enableEdit, setEnableEdi
             message.error('Something went wrong');
             setLoading(false);
         }
+        window.location.reload();
         setLoading(false);
     }
 

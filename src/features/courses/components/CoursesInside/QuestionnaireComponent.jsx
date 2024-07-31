@@ -42,6 +42,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
   const { minutes, seconds, stopTimer } = useTimer({ testCompleted: questionnaireAnswerData.length > 0 });
   const [editedQuestions, setEditedQuestions] = useState({});
 
+
   const { t, i18n } = useTranslation();
 
   const {

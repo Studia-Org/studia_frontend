@@ -357,7 +357,7 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFl
     <div className={` bg-white rounded-lg xl:p-5 xl:w-[30rem] w-full xl:shadow-md shadow-none sm:visible lg:max-w-[calc(100vw-4rem)] sm:w-auto z-20  lg:mr-0 `}>
       <p className="hidden text-xl font-semibold xl:block">{t("COURSEINSIDE.ACCORDION.title")}</p>
       <hr className="hidden h-px my-8 bg-gray-400 border-0 xl:block"></hr>
-      {course.sections.data.map((section, index) => (
+      {course?.sections?.data?.map((section, index) => (
         <RenderCourseContent
           key={index}
           section={section}
