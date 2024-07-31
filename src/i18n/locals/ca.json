@@ -16,7 +16,9 @@
         "edit": "Editar",
         "search_students": "Cercar estudiants",
         "submit": "Enviar",
-        "deadline": "Data límit"
+        "deadline": "Data límit",
+        "add": "Afegir",
+        "add_tag": "Afegir etiqueta"
     },
     "HOME": {
         "title": "Benvingut/da a la nova era de l'aprenentatge",
@@ -330,7 +332,23 @@
         "edit_mode": "Mode d'edició",
         "SETTINGS": {
             "title": "Configuració del curs",
-            "button_edit": "Editar curs"
+            "button_edit": "Editar informació del curs",
+            "edit_course": "Editar curs",
+            "course_info": "Informació del curs",
+            "course_info_text": "Aquesta informació es mostrarà públicament als estudiants.",
+            "course_name": "Nom del curs",
+            "course_description": "Descripció del curs",
+            "course_cover": "Portada",
+            "tags": "Etiquetes",
+            "add_students": "Afegir estudiants",
+            "Students": "Estudiants",
+            "add_evaluators": "Afegir avaluadors",
+            "Evaluators": "Avaluadors",
+            "delete_course": "Eliminar curs",
+            "participants": "Participants",
+            "participants_title": "Edita el nombre d'estudiants i avaluadors per aquest curs.",
+            "column1_student_email": "Columna 1: Correu electrònic de l'estudiant",
+            "import_from_csv": "Importar {{type}} des de CSV"
         },
         "FORUM": {
             "forum": "Fòrum",

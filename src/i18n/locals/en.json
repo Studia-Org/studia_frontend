@@ -16,7 +16,9 @@
         "edit": "Edit",
         "search_students": "Search students",
         "submit": "Submit",
-        "deadline": "Deadline"
+        "deadline": "Deadline",
+        "add": "Add",
+        "add_tag": "Add a tag"
     },
     "HOME": {
         "title": "Welcome to the new era of Learning",
@@ -330,7 +332,23 @@
         "edit_mode": "Edit mode",
         "SETTINGS": {
             "title": "Course settings",
-            "button_edit": "Edit course info"
+            "button_edit": "Edit course info",
+            "edit_course": "Edit course",
+            "course_info": "Course info",
+            "course_info_text": "This information will be displayed publicly to the students.",
+            "course_name": "Course name",
+            "course_description": "Course description",
+            "course_cover": "Cover",
+            "tags": "Tags",
+            "add_students": "Add students",
+            "Students": "Students",
+            "add_evaluators": "Add evaluators",
+            "Evaluators": "Evaluators",
+            "delete_course": "Delete course",
+            "participants": "Participants",
+            "participants_title": "Edit the number of students and evaluators for this course.",
+            "column1_student_email": "Column 1: Student's email",
+            "import_from_csv": "Import {{type}} from CSV"
         },
         "FORUM": {
             "forum": "Forum",

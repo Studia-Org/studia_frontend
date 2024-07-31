@@ -16,7 +16,9 @@
         "edit": "Editar",
         "search_students": "Buscar estudiantes",
         "submit": "Enviar",
-        "deadline": "Fecha límite"
+        "deadline": "Fecha límite",
+        "add": "Añadir",
+        "add_tag": "Añadir etiqueta"
     },
     "HOME": {
         "title": "Bienvenido/a a la nueva era del aprendizaje",
@@ -330,7 +332,23 @@
         "edit_mode": "Modo de edición",
         "SETTINGS": {
             "title": "Configuración del curso",
-            "button_edit": "Editar curso"
+            "button_edit": "Editar información del curso",
+            "edit_course": "Editar curso",
+            "course_info": "Información del curso",
+            "course_info_text": "Esta información se mostrará públicamente a los estudiantes.",
+            "course_name": "Nombre del curso",
+            "course_description": "Descripción del curso",
+            "course_cover": "Portada",
+            "tags": "Etiquetas",
+            "add_students": "Agregar estudiantes",
+            "Students": "Estudiantes",
+            "add_evaluators": "Agregar evaluadores",
+            "Evaluators": "Evaluadores",
+            "delete_course": "Eliminar curso",
+            "participants": "Participantes",
+            "participants_title": "Edita el número de estudiantes y evaluadores para este curso.",
+            "column1_student_email": "Columna 1: Correo electrónico del estudiante",
+            "import_from_csv": "Importar {{type}} desde CSV"
         },
         "FORUM": {
             "forum": "Foro",
