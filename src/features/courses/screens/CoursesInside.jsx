@@ -22,6 +22,7 @@ import { useCourseContext } from "../../../context/CourseContext";
 import { useTranslation } from "react-i18next";
 import { ca, es, enUS } from 'date-fns/locale';
 import { format } from 'date-fns';
+import { getRecommendationsSRLO } from "../components/CoursesInside/Questionnaire/getRecommendationsSRLO";
 const { TextArea } = Input;
 
 const CourseInside = () => {
@@ -48,17 +49,20 @@ const CourseInside = () => {
   const [courseSubsectionQuestionnaire, setCourseSubsectionQuestionnaire] = useState([]);
   const [students, setStudents] = useState([]);
   const [professor, setProfessor] = useState([]);
+  const [checkImprovement, setCheckImprovement] = useState({ status: false, previous: {}, current: {} });
 
   const {
     course,
     sectionSelected,
     subsectionSelected,
-    activitySelected,
     setCourse,
     setSectionSelected,
     setSubsectionSelected,
     setActivitySelected,
   } = useCourseContext();
+
+
+
   let { courseId } = useParams();
   let { activityId } = useParams();
   const { user } = useAuthContext()
@@ -66,6 +70,9 @@ const CourseInside = () => {
   const allPosts = allForums.map((forum) => forum.attributes.posts.data).reduce((accumulator, currentForum) => {
     return accumulator.concat(currentForum.map(forum => forum));
   }, [])
+
+
+
 
 
   function handleLandscapePhotoChange(event) {
@@ -77,6 +84,38 @@ const CourseInside = () => {
     const startDate = new Date(start_date);
     return currentDate >= startDate;
   }
+
+  function completePreviousSRLOCompleted() {
+    let improvement = { status: false, previous: {}, current: {} };
+
+    if (subsectionSelected?.attributes?.questionnaire?.data && sectionSelected && course && subsectionsCompleted) {
+      const currentSectionData = course.sections.data.find(section => section.attributes.title === sectionSelected);
+
+      for (let i = 0; i < currentSectionData.attributes.subsections.data.length; i++) {
+        const subsection = currentSectionData.attributes.subsections.data[i];
+        let isSubsectionCompleted = subsectionsCompleted.some(subsectionCompleted => subsectionCompleted.id === subsection.id);
+
+        if (subsection.attributes.questionnaire.data?.attributes && subsection.attributes.questionnaire.data.attributes.Options.questionnaire.type === 'SRL-O' && isSubsectionCompleted) {
+          const answersData = questionnaireAnswers.filter((answer) => answer.questionnaire?.id === subsection.attributes.questionnaire.data?.id);
+          if (answersData[0]) {
+            if (Object.keys(improvement.previous).length === 0) {
+              console.log(getRecommendationsSRLO(answersData[0].responses.responses, t, answersData[0].responses.language))
+              improvement = { status: false, previous: getRecommendationsSRLO(answersData[0].responses.responses, t,  answersData[0].responses.language), current: {} };
+            } else {
+              improvement = { status: true, previous: improvement.previous, current: getRecommendationsSRLO(answersData[0].responses.responses, t,  answersData[0].responses.language) };
+            }
+          }
+
+          if (subsectionSelected.id === subsection.id) {
+            return improvement;
+          }
+        }
+      }
+    }
+
+    return improvement;
+  }
+
 
   const fetchPostData = async () => {
     try {
@@ -210,7 +249,6 @@ const CourseInside = () => {
       }
       loadQuestionnaire();
     }
-
   }, [course, subsectionsCompleted]);
 
   function deleteFile() {
@@ -225,7 +263,7 @@ const CourseInside = () => {
     setTitleSubsection(subsectionSelected?.attributes?.title);
     setDateSubsection([subsectionSelected?.attributes?.start_date, subsectionSelected?.attributes?.end_date]);
     setBackgroundPhotoSubsection(subsectionSelected?.attributes?.landscape_photo?.data?.attributes?.url)
-
+    setCheckImprovement(completePreviousSRLOCompleted());
   }, [subsectionSelected]);
 
   useEffect(() => {
@@ -422,12 +460,13 @@ const CourseInside = () => {
                             activity: null
                           }
                         }
+                        checkImprovement={checkImprovement}
 
                       />
                     ) :
                       <CourseHasNotStarted startDate={courseBasicInformation.start_date} />
 
-                  ) : sectionSelected && course.sections.data.length > 0 && (
+                  ) : sectionSelected && course.sections?.data?.length > 0 && (
                     <>
 
                       <BreadcrumbCourse
@@ -452,7 +491,6 @@ const CourseInside = () => {
                               <Badge color="#6366f1" count={format(new Date(subsectionSelected?.attributes?.end_date), "EEE MMM dd yyyy", { locale: local })} />
                             </div>
                         }
-
                         {
                           user?.role_str === 'professor' || user?.role_str === 'admin' ?
                             <div className='flex items-center ml-auto'>

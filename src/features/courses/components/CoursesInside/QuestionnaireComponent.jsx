@@ -27,7 +27,7 @@ import { createExcel } from './Questionnaire/downloadQuestionnaires';
 const { TextArea } = Input;
 
 
-export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, enableEdit, setEnableEdit, setCourseSubsectionQuestionnaire, professorID }) => {
+export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, enableEdit, setEnableEdit, setCourseSubsectionQuestionnaire, professorID, checkImprovement }) => {
   const { user } = useAuthContext();
   const [groupValues, setGroupValues] = useState({});
   const [loadingData, setLoadingData] = useState(true);
@@ -49,19 +49,6 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
   };
 
   useEffect(() => {
-
-    if (questionnaireAnswerData.length > 0) {
-      if (questionnaire.attributes.Options.questionnaire?.type === 'SRL-O') {
-        setRecommendationList(getRecommendationsSRLO(questionnaireAnswerData[0].responses.responses))
-      }
-      setCompleted(true);
-      stopTimer()
-    } else {
-      setCompleted(false);
-    }
-  }, [questionnaireAnswerData.length, questionnaire.id]);
-
-  useEffect(() => {
     setCurrentPage(1);
     setUserResponses([]);
     if (user.role_str !== 'student') {
@@ -72,7 +59,17 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
       };
       fetchData();
     }
-    setQuestionnaireAnswerData(answers.filter((answer) => answer.questionnaire?.id === questionnaire?.id));
+    const answersData = answers.filter((answer) => answer.questionnaire?.id === questionnaire?.id);
+    setQuestionnaireAnswerData(answersData);
+    if (questionnaire.attributes.Options.questionnaire?.type === 'SRL-O' && answersData[0]) {
+      setRecommendationList(getRecommendationsSRLO(answersData[0].responses.responses, t, answersData[0].responses.language))
+    }
+    if (answersData.length > 0) {
+      setCompleted(true);
+      stopTimer()
+    } else {
+      setCompleted(false);
+    }
   }, [questionnaire.id]);
 
   const list = {
@@ -186,7 +183,8 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
             responses: Object.keys(groupValues).map(questionIndex => ({
               answer: groupValues[questionIndex],
               question: questionnaire.attributes.Options.questionnaire.questions[questionIndex].question
-            }))
+            })),
+            language : questionnaire.attributes.Options.questionnaire.language
           };
           const hour = Math.floor(minutes / 60) < 10 ? "0" + Math.floor(minutes / 60) : Math.floor(minutes / 60)
           const minutesLeft = minutes % 60;
@@ -482,7 +480,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
 
             {
               completed === true && questionnaire.attributes.Options.questionnaire?.type === 'SRL-O' && recommendationList && (
-                <RecommendationCard recommendationList={recommendationList} />
+                <RecommendationCard recommendationList={recommendationList} checkImprovement={checkImprovement} />
               )
             }
 

@@ -18,7 +18,8 @@
         "submit": "Enviar",
         "deadline": "Data límit",
         "add": "Afegir",
-        "add_tag": "Afegir etiqueta"
+        "add_tag": "Afegir etiqueta",
+        "completed": "Completat"
     },
     "HOME": {
         "title": "Benvingut/da a la nova era de l'aprenentatge",
@@ -673,6 +674,24 @@
                                 }
                             },
                             "SRLO": {
+                                "RECOMMENDATION": {
+                                    "recommendation": "Recomanació",
+                                    "text": "Recomanacions basades en les teves respostes",
+                                    "title": "Retroalimentació del qüestionari SRL-O",
+                                    "no_worsen": "Felicitats! No has empitjorat en res. Continua així!",
+                                    "no_improved": "No has millorat en res. Continua treballant!",
+                                    "description": "A la llista següent, pots veure el que has millorat en comparació amb l'últim qüestionari d'autoregulació que vas completar. Llegeix atentament la retroalimentació i continua esforçant-te per millorar!",
+                                    "CASE_0": "Divideix les tasques en passos assolibles perquè puguis tenir èxit en aconseguir aquests passos. Comença amb alguna cosa petita, i a mesura que tinguis més èxit, fes els passos més grans. Mira al teu voltant als teus companys i observa com els va. Pots aprendre dels seus enfocaments? Cerca retroalimentació, de tu mateix i d'altres, sobre el que estàs fent bé. Assegura't de celebrar els teus èxits.",
+                                    "CASE_1": "La motivació intrínseca en línia no prové de les qualificacions, sinó del teu propi interès. Reflexiona sobre les raons per les quals et vas matricular originalment a la universitat. Pensa en les teves pròpies raons personals per aprendre el material. Què vols aconseguir, què gaudeixes aprenent, per què és important per a tu fer-ho bé i aprendre el material? Pensa en el que estimula la teva curiositat. Per últim, assegura't de celebrar els teus èxits.",
+                                    "CASE_2": "Es pensa que la motivació intrínseca és més útil que la motivació extrínseca. No obstant això, pots millorar la teva motivació extrínseca establint una meta externa, com una qualificació o ingressar a un curs de postgrau.",
+                                    "CASE_3": "Si et sents ansiós o desesperat, respira profundament i digues 'puc fer això', parla amb la teva família, amics o un professional de la salut, practica exercicis de relaxació abans d'estudiar i concentra't en la tasca, no en el que altres puguin estar pensant, recorda moments en els que has tingut bon rendiment en el passat. Si et sents avorrit, barreja els temes que estàs estudiant, recompensa't amb descansos regulars o intenta fer que estudiar sigui divertit.",
+                                    "CASE_4": "Planificar i gestionar el temps pot ser a llarg o curt termini. Pensa en el que vols aconseguir en una sessió d'estudi, el que vols aconseguir en una assignatura i el teu curs. Considera dividir grans metes en metes més petites i accionables. Considera usar una agenda amb un horari per a la planificació setmanal. Planifica com compliràs amb els terminis de les assignatures al llarg del semestre. Al començament de cada sessió d'estudi, crea i prioritza llistes de tasques que vols aconseguir.",
+                                    "CASE_5": "Abans de començar una sessió d'estudi, fes un pla de les activitats que vols realitzar. Revisa les lectures/instruccions per tenir una idea de com estan organitzades. Mentre revises els recursos, verifica la teva comprensió del contingut o els requisits de l'activitat. Intenta determinar quins conceptes no entens bé perquè puguis dedicar-los més temps. Fes-te preguntes com, aquesta tasca és similar a tasques anteriors? Puc fer les coses de manera diferent a l'última vegada? Potser repassa l'assignatura anterior i revisa els comentaris que has rebut. Com es compara el teu rendiment actual? Pots ajustar el teu treball actual basat en comentaris anteriors? Si està disponible, compara el teu treball amb la rúbrica. Com es compara el teu treball? Estàs assolint els estàndards que vols aconseguir?",
+                                    "CASE_6": "Assegura't de trobar un lloc tranquil i sense distraccions per estudiar. Potser voldràs canviar el lloc on estudies, els horaris en els quals estudies o qui està al teu voltant quan estudies.",
+                                    "CASE_7": "Porta una llista dels temes que trobes procrastinant en lloc d'estudiar. Intenta analitzar per què posposes estudiar aquests temes. Pensa en les estratègies que podries usar per ajudar-te a persistir. Per exemple, al començament d'una sessió d'estudi, fes una llista de petites metes assolibles i concentra't en aconseguir només una a la vegada. Posa distraccions com el teu telèfon en una altra habitació. Posa't un temporitzador per estudiar per un període de temps (per exemple, 30 minuts), abans d'aturar-te per un descans. Dona't una recompensa si assoleixes una meta d'estudi planificada.",
+                                    "CASE_8": "Considera parlar amb el teu professor, companys de classe o assessors d'aprenentatge per veure com poden ajudar-te. Connectar-te amb, o aprendre de, professors i companys no ha de ser sincrònic; considera altres maneres de connectar-te a través de correus electrònics, fòrums de discussió i xarxes socials. Usa motors de cerca en línia per ajudar-te a entendre millor el contingut.",
+                                    "CASE_9": "Quan llegeixis o escoltis el contingut de les classes, dedica temps a pensar en com el material es relaciona amb la informació que ja coneixes. Pots crear els teus propis exemples que siguin diferents dels donats? Intenta fer resums del que has après amb les teves pròpies paraules. Pensa críticament sobre què significa la informació i si estàs d'acord amb les conclusions de l'autor."
+                                },
                                 "title": "Qüestionari d'Autorregulació SRL-O",
                                 "description": "El qüestionari d'Autorregulació per a l'aprenentatge en línia (SRL-O) mesura la freqüència i la qualitat de les estratègies d'aprenentatge quan s'apliquen a entorns en línia, mixtos o híbrids.",
                                 "QUESTIONS": {

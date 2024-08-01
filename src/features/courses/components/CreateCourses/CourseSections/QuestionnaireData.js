@@ -1,7 +1,8 @@
 import { useTranslation } from "react-i18next"
 
 const QuestionnaireData = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+
 
     const SRLOQuestionnaireData = {
         attributes: {
@@ -9,6 +10,7 @@ const QuestionnaireData = () => {
             description: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SRLO.description"),
             autocorrect: false,
             editable: false,
+            language: i18n.language, 
             type: "scaling",
             Options: {
                 questionnaire: {
@@ -201,6 +203,7 @@ const QuestionnaireData = () => {
             description: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.EMPTY.description"),
             autocorrect: false,
             editable: true,
+            language: i18n.language, 
             type: "standard",
             Options: {
                 questionnaire: {
@@ -229,6 +232,7 @@ const QuestionnaireData = () => {
                     title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.PLANNING.title"),
                     description: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.PLANNING.description"),
                     editable: true,
+                    language: i18n.language, 
                     type: "Plannification",
                     questions:
                         [
@@ -269,6 +273,7 @@ const QuestionnaireData = () => {
             description: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SELF_ASSESSMENT.description"),
             autocorrect: false,
             editable: true,
+            language: i18n.language, 
             type: "standard",
             Options: {
                 questionnaire: {

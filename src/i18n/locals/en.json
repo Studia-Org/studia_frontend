@@ -18,7 +18,8 @@
         "submit": "Submit",
         "deadline": "Deadline",
         "add": "Add",
-        "add_tag": "Add a tag"
+        "add_tag": "Add a tag",
+        "completed": "Completed"
     },
     "HOME": {
         "title": "Welcome to the new era of Learning",
@@ -667,6 +668,24 @@
                                 }
                             },
                             "SRLO": {
+                                "RECOMMENDATION": {
+                                    "recommendation": "Recommendation",
+                                    "text": "Recommendations based on your answers",
+                                    "title": "Feedback SRL-O questionnaire",
+                                    "no_worsen": "Congratulations! You haven't worsened anything. Keep up the great work!",
+                                    "no_improved": "You haven't improved anything. Keep working!",
+                                    "description": "On the list below, you can see what you have improved compared to the last autoregulation questionnaire you completed. Read the feedback carefully and continue striving for improvement!",
+                                    "CASE_0": "Break tasks into achievable steps so that you can be successful in achieving those steps. Start small, and as you become more successful, make the steps bigger. Look around you at peers and see how they are doing. Can you learn from their approaches? Seek feedback, from yourself and others, as to what you are doing well. Make sure you celebrate your successes.",
+                                    "CASE_1": "Online Intrinsic motivation does not come from grades but from your own interest. Reflect on the reasons you originally enrolled in the university. Think about your own personal reasons for learning the material. What do you want to achieve, what do you enjoy learning about, why is it important for you to do well and learn the material? Think about what stimulates your curiosity? Lastly, make sure you celebrate your successes.",
+                                    "CASE_2": "Intrinsic motivation is thought to be more helpful than extrinsic motivation. However, you can improve your extrinsic motivation through setting an external goal, such as grade or getting into a postgraduate course.",
+                                    "CASE_3": "If you are feeling anxious or hopeless, take a deep breath and say 'I can do this', speak to family, friends or a health professional, practice relaxation exercises before studying, and focus on the task, not what others might be thinking, remember times you have performed well in the past. If you are feeling bored, mix up the topics you are studying, reward yourself with regular breaks, or try and make studying fun.",
+                                    "CASE_4": "Planning and managing time can be long or short term. Think about what you want to achieve from a study session, what you want to achieve from an assignment, and your course. Consider breaking large goals into smaller actionable goals. Consider using a diary with a timetable for weekly planning. Plan out how you meet assignment deadlines across the semester. At the start of each study session, create and prioritise lists of tasks you want to achieve.",
+                                    "CASE_5": "Before you start a study session, make a plan of the activities you want to do. Look over the readings/instructions, so you get an idea of how it is organised. While looking over the resources, check your understanding of the content or the requirements of the activity. Try to determine which concepts you don't understand well so you can spend more time on them. Ask yourself questions such as, is this task similar to previous tasks? Can I do things differently from last time? Perhaps go back over the old assignment and look at the feedback you have received. How does your performance now compare? Can you adjust your current work based on previous feedback? If available, check your work against the rubric. How does your work compare? Are you meeting the standards you want to achieve?",
+                                    "CASE_6": "Make sure you can find a quiet, distraction-free place to study. You may want to change the place where you study, or the times when you study, or who is around you when you study.",
+                                    "CASE_7": "Keep a list of the topics that you find yourself procrastinating instead of studying. Try to analyse why you postpone studying these topics. Think about the strategies you could use to help you persist. For example, at the start of a study session, make a list of small achievable goals and concentrate on just achieving one at a time. Put distractions such as your phone in the other room. Set yourself a timer to study for a period of time (e.g. 30 minutes), before stopping for a break. Give yourself a reward if you reach a planned study goal.",
+                                    "CASE_8": "Consider talking to your teacher, peers in your class, or learning advisors to see how they can help. Connecting with, or learning from, teachers and peers does not have to be synchronous; consider other ways to connect through email, discussion boards and social media. Use online search engines to help you understand the content better.",
+                                    "CASE_9": "When reading or listening to lecture content, spend time thinking about how the material relates to information you already know. Can you create your own examples that are different from the ones given? Try and make summaries of what you have learnt in your own words. Think critically about what the information means and whether you agree with the author’s conclusions."
+                                },
                                 "title": "SRL-O Self-regulation Questionnaire",
                                 "description": "The Self-regulation for learning online (SRL-O) questionnaire measures the frequency and quality of learning strategies when applied to online or blended or hybrid environments.",
                                 "QUESTIONS": {
