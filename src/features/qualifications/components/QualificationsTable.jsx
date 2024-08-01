@@ -302,7 +302,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                             </th>
                                     }
                                     <th scope="col" class="px-6 py-3">
-                                        {t("QUALIFICATIONS.qualification")}
+                                        {t("QUALIFICATIONS.qualification")} 
                                     </th>
                                     <th scope="col" class="px-6 py-3 ">
                                         {t("QUALIFICATIONS.comments")}
