@@ -9,10 +9,10 @@ function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
 }
 
-export default function SelectProfessor({ setCourseBasicInfo }) {
+export default function SelectProfessor({ setCourseBasicInfo, courseBasicInfo }) {
     const { t } = useTranslation();
     const [professors, setProfessors] = useState([])
-    const [selected, setSelected] = useState()
+    const [selected, setSelected] = useState(courseBasicInfo.evaluator ? courseBasicInfo.evaluator : null)
 
     const fetchProfessorInformation = async () => {
         try {
@@ -41,7 +41,7 @@ export default function SelectProfessor({ setCourseBasicInfo }) {
     }, []);
 
     useEffect(() => {
-        if (professors.length > 0) {
+        if (professors.length > 0 && !courseBasicInfo.evaluator) {
             setSelected(professors[0]);
             setCourseBasicInfo(prevState => ({
                 ...prevState,

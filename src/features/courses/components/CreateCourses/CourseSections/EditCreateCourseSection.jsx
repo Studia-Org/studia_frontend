@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import { DndContext, closestCenter } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { CreateCourseSubsectionsList } from './CreateCourseSubsectionsList';
@@ -17,6 +17,10 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
     const [subsectionEditing, setSubsectionEditing] = useState()
     const [thereIsChanges, setThereIsChanges] = useState(false)
     const [editTaskFlag, setEditTaskFlag] = useState(false)
+    const [messageApi, contextHolder] = message.useMessage();
+
+    const intervalRef = useRef(null);
+
 
     const { t } = useTranslation();
 
@@ -119,11 +123,45 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
         }
     ];
 
+    const saveChanges = useCallback((autosave = false) => {
+        setCreateCourseSectionsList(createCourseSectionsListCopy);
+        localStorage.setItem('createCourseSectionsList', JSON.stringify(createCourseSectionsListCopy));
+        
+        if (autosave) {
+            messageApi
+                .open({
+                    type: 'loading',
+                    content: 'Auto-saving...',
+                    duration: 1.5,
+                })
+                .then(() => {
+                    setThereIsChanges(false);
+                    message.success('Changes auto-saved', 2.5)
+                });
+        } else {
+            setThereIsChanges(false);
+            setEditSubsectionFlag(false);
+            message.success('Changes saved successfully');
+        }
+    }, []);
+
 
     useEffect(() => {
         setSubsectionsToEdit((createCourseSectionsListCopy.filter((section) => section.id === sectionToEdit.id)[0]))
         setThereIsChanges(JSON.stringify(createCourseSectionsListCopy) !== JSON.stringify(createCourseSectionsList))
     }, [createCourseSectionsListCopy])
+
+    useEffect(() => {
+        const autoSave = () => {
+            if (thereIsChanges) {
+                saveChanges(true);
+            }
+        };
+        intervalRef.current = setInterval(autoSave, 10000); // 10 segundos
+        return () => {
+            clearInterval(intervalRef.current);
+        };
+    }, [thereIsChanges, saveChanges]);
 
     const handleDragEnd = (event) => {
         const { active, over } = event;
@@ -183,12 +221,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
 
         return true;
     };
-    function saveChanges() {
-        setCreateCourseSectionsList(createCourseSectionsListCopy)
-        setEditSubsectionFlag(false)
-        setThereIsChanges(false)
-        message.success('Changes saved successfully');
-    }
+
 
     const handleClick = () => {
         setOpen(true);
@@ -197,6 +230,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
 
     return (
         <div className='text-base font-normal'>
+             {contextHolder}
             <Tour open={open} onClose={() => {
                 setOpen(false)
                 document.body.style.overflow = 'auto'
@@ -237,7 +271,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
                                     <h2 className='text-xl font-medium '>{sectionToEdit.name}</h2>
                                     <Tag color="#108ee9">{t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.section")}</Tag>
                                 </div>
-                                <Button ref={ref4} disabled={!thereIsChanges} type='primary' onClick={saveChanges} className='bg-[#1677ff] text-white '>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.save_changes")}</Button>
+                                <Button ref={ref4} disabled={!thereIsChanges} type='primary' onClick={() => saveChanges(false)} className='bg-[#1677ff] text-white '>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.save_changes")}</Button>
                             </div>
                             <div ref={ref} className='p-5 mt-5 mb-5 text-base font-medium bg-white rounded-md shadow-md'>
                                 <div className='flex items-center'>

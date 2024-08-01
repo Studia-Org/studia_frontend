@@ -15,7 +15,10 @@
         "delete": "Eliminar",
         "edit": "Editar",
         "search_students": "Buscar estudiantes",
-        "submit": "Enviar"
+        "submit": "Enviar",
+        "deadline": "Fecha límite",
+        "add": "Añadir",
+        "add_tag": "Añadir etiqueta"
     },
     "HOME": {
         "title": "Bienvenido/a a la nueva era del aprendizaje",
@@ -323,12 +326,29 @@
     "COURSEINSIDE": {
         "course": "Curso",
         "files": "Archivos",
+        "subsection_settings": "Configuración de la subsección",
         "activity": "Actividad",
         "course_content": "Contenido del curso",
         "edit_mode": "Modo de edición",
         "SETTINGS": {
             "title": "Configuración del curso",
-            "button_edit": "Editar curso"
+            "button_edit": "Editar información del curso",
+            "edit_course": "Editar curso",
+            "course_info": "Información del curso",
+            "course_info_text": "Esta información se mostrará públicamente a los estudiantes.",
+            "course_name": "Nombre del curso",
+            "course_description": "Descripción del curso",
+            "course_cover": "Portada",
+            "tags": "Etiquetas",
+            "add_students": "Agregar estudiantes",
+            "Students": "Estudiantes",
+            "add_evaluators": "Agregar evaluadores",
+            "Evaluators": "Evaluadores",
+            "delete_course": "Eliminar curso",
+            "participants": "Participantes",
+            "participants_title": "Edita el número de estudiantes y evaluadores para este curso.",
+            "column1_student_email": "Columna 1: Correo electrónico del estudiante",
+            "import_from_csv": "Importar {{type}} desde CSV"
         },
         "FORUM": {
             "forum": "Foro",
@@ -365,6 +385,19 @@
             "participants_tile": "Explora todos los participantes actualmente inscritos en este curso.",
             "to_add_student": "Para agregar un nuevo estudiante, por favor navega a la sección de configuración del curso.",
             "placeholder_search": "Buscar un estudiante"
+        },
+        "SUB_SETTINGS": {
+            "complete_uncomplete_subsection": "Completar / Descompletar subsección",
+            "date": "Fecha de inicio y finalización de la subsección",
+            "back_to_settings": "Volver a la configuración",
+            "complete_students": "Completar subsección",
+            "participants_completed": "Estudiantes que han completado esta subsección",
+            "participants_not_completed": "Estudiantes que no han completado esta subsección",
+            "select_students_to_not_complete": "Seleccione a los estudiantes para marcar la subsección como no completada.",
+            "select_students_to_complete": "Seleccione a los estudiantes para marcar la subsección como completada.",
+            "select_all": "Mover todos",
+            "all_completed": "Todos los estudiantes han completado esta subsección",
+            "all_not_completed": "Ningún estudiante ha completado esta subsección"
         }
     },
     "ACTIVITY": {
@@ -427,6 +460,12 @@
             "group": "Grupo"
         }
     },
+    "QUESTIONNAIRE": {
+        "go_back_users": "Volver a los usuarios",
+        "download_all_answers": "Descargar todas las respuestas",
+        "completed_in": "Completado en",
+        "completation_date": "Fecha de finalización"
+    },
     "CREATE_COURSES": {
         "principal_text": "Crear un curso nuevo",
         "COURSE_INFO": {
@@ -479,7 +518,7 @@
                     "content": "Contenido",
                     "content_placeholder": "Editar contenido de la subsección",
                     "cover": "Portada (opcional)",
-                    "pairs_or_individual": "¿La actividad se realizará en parejas o individualmente?",
+                    "pairs_or_individual": "¿La actividad se realizará en grupos o individualmente?",
                     "individual": "Individual",
                     "groups": "Grupos",
                     "students_per_group": "¿Cuántos estudiantes por grupo?",
@@ -780,7 +819,7 @@
         "not_qualifications": "No hay calificaciones disponibles para ti",
         "not_qualifications_explore": "Explora otras áreas de la plataforma o vuelve más tarde para ver nuevas opciones de calificaciones.",
         "qualifications": "Calificaciones",
-        "qualificacion": "Calificación",
+        "qualification": "Calificación",
         "search_users": "Buscar usuarios",
         "attention": "Atención",
         "peerreview_deadline": "La fecha límite para la revisión por pares es el",

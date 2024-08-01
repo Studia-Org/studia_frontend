@@ -1,5 +1,5 @@
 import { useEffect, useState, React } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import 'react-loading-skeleton/dist/skeleton.css'
 import '../styles/utils.css'
@@ -14,6 +14,8 @@ import { ModalCreateCourseStudent } from '../components/CoursesHome/AddCourseStu
 import { ModalCompleteObjectives } from '../components/CoursesHome/ModalCompleteObjectives';
 import { replicateCourse } from '../components/CoursesHome/helpers/replicateCourse';
 import { useTranslation, Trans } from 'react-i18next';
+import { useCourseContext } from '../../../context/CourseContext';
+
 const CoursesHome = () => {
   document.title = 'Home - Uptitude'
   const { user } = useAuthContext();
@@ -28,7 +30,14 @@ const CoursesHome = () => {
   const [openObjectivesModal, setOpenObjectivesModal] = useState(false);
   const [objectiveSelected, setObjectiveSelected] = useState();
   const { t } = useTranslation();
+  const { setCourse, setSectionSelected, setSubsectionSelected, setActivitySelected, } = useCourseContext();
 
+  useEffect(() => {
+    setCourse(undefined);
+    setSectionSelected(undefined);
+    setSubsectionSelected(undefined);
+    setActivitySelected(undefined);
+  }, []);
 
   const variants = {
     hidden: { opacity: 0, y: 20 },

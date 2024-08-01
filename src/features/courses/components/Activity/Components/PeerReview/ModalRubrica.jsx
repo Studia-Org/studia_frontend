@@ -25,7 +25,7 @@ export const ModalRubrica = ({ setIsModalOpen, isModalOpen, rubricData }) => {
             key: 'key',
         },
         {
-            title: t("QUALIFICATIONS.qualificacion"),
+            title: t("QUALIFICATIONS.qualification"),
             dataIndex: 'numericValue',
             key: 'numericValue',
         },
@@ -44,7 +44,7 @@ export const ModalRubrica = ({ setIsModalOpen, isModalOpen, rubricData }) => {
 
     return (
         <Modal title={t("PEERREVIEW.peer_review_answers")} width={1000} open={isModalOpen} onOk={handleOk} onCancel={handleCancel} cancelText={t("COMMON.cancel")}>
-            <Table className='mt-5 w-full' dataSource={transformedData} columns={columns} pagination={false} />
+            <Table className='w-full mt-5' dataSource={transformedData} columns={columns} pagination={false} />
         </Modal>
     )
 }

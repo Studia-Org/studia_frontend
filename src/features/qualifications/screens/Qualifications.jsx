@@ -148,7 +148,7 @@ const Qualifications = () => {
                                 {t("QUALIFICATIONS.comments")}
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                {t("QUALIFICATIONS.qualification")}
+                                {t("QUALIFICATIONS.qualification")} 
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 {t("ACTIVITY.evaluator")}

@@ -99,18 +99,18 @@ export function ActivitiesDash({ courseInformation, styles, courseId }) {
 
     function generatePieChart() {
         const colors = [
-            '#1f77b4',
-            '#ff7f0e',
-            '#2ca02c',
-            '#d62728',
-            '#9467bd',
-            '#8c564b',
-            '#e377c2',
-            '#7f7f7f',
-            '#bcbd22',
-            '#17becf',
-            '#ffcc00'
-        ]
+            "#ff0000", // Rojo (0)
+            "#ff4000", // Rojo anaranjado (1)
+            "#ff8000", // Naranja (2)
+            "#ffbf00", // Amarillo anaranjado (3)
+            "#ffff00", // Amarillo (4)
+            "#bfff00", // Amarillo verdoso (5)
+            "#80cc00", // Verde amarillento suave (6)
+            "#66b200", // Verde claro suave (7)
+            "#4c9900", // Verde (8)
+            "#338000", // Verde oscuro (9)
+            "#1a6600"  // Verde muy oscuro (10)
+        ];
 
         // Añadir color a cada entrada de datos
         const coloredData = totalQualifications.map((item, index) => ({

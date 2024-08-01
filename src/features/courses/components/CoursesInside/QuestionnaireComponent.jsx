@@ -23,7 +23,7 @@ import { StepsQuestionnaire } from './Questionnaire/StepsQuestionnaire';
 import { BreadcrumbCourse } from './BreadcrumbCourse';
 import { useCourseContext } from '../../../../context/CourseContext';
 import { useTranslation } from 'react-i18next';
-
+import { createExcel } from './Questionnaire/downloadQuestionnaires';
 const { TextArea } = Input;
 
 
@@ -39,15 +39,10 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
   const questionsPerPage = questionnaire.attributes.type === 'scaling' ? 10 : 5;
   const totalQuestions = questionnaire.attributes.Options.questionnaire.questions.length;
   const totalPages = Math.ceil(totalQuestions / questionsPerPage);
-  const { minutes, seconds, stopTimer } = useTimer({ testCompleted: questionnaireAnswerData.length > 0 });
+  const { minutes, seconds, stopTimer } = useTimer({ testCompleted: questionnaireAnswerData.length > 0 || user.role_str !== 'student' });
   const [editedQuestions, setEditedQuestions] = useState({});
-
-
-  const { t, i18n } = useTranslation();
-
-  const {
-    subsectionSelected
-  } = useCourseContext();
+  const { t } = useTranslation();
+  const { subsectionSelected } = useCourseContext();
 
   const handleInputChange = (question, absoluteIndex) => {
     setEditedQuestions((prev) => ({ ...prev, [absoluteIndex]: { question: question.question, options: question.options } }));
@@ -456,6 +451,9 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
   };
 
 
+  const downloadQuestionnaires = async () => {
+    createExcel(userResponses, questionnaire.attributes.Title);
+  };
   const isLastPage = currentPage === totalPages;
 
   return (
@@ -467,7 +465,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
       />
       <Header enableEdit={enableEdit} questionnaire={questionnaire} questionnaireAnswerData={answers.filter((answer) => answer.questionnaire?.id === questionnaire?.id)}
         completed={completed} setEnableEdit={setEnableEdit} courseSubsection={subsectionSelected} editedQuestions={editedQuestions}
-        setQuestionnaireAnswerData={setQuestionnaireAnswerData}
+        setQuestionnaireAnswerData={setQuestionnaireAnswerData} downloadQuestionnaires={downloadQuestionnaires} loadingQuestionnaires={loadingData}
       />
       {
         user?.role_str === 'student' || ((questionnaireAnswerData.length > 0 && user?.role_str !== 'student') || enableEdit === true) ?
@@ -475,7 +473,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
             {
               (enableEdit === false && user.role_str !== 'student') && (
                 <Button onClick={() => setQuestionnaireAnswerData([])} className='mb-5 bg-white shadow-md'>
-                  Go back to users
+                  {t("QUESTIONNAIRE.go_back_users")}
                 </Button>
               )
             }
@@ -515,7 +513,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
 
                           <Button type='primary' loading={sendingData} onClick={handleSubmission}
                             className="ml-auto ">
-                            Submit
+                            {t("COMMON.submit")}
                           </Button>
                         </>
                       )

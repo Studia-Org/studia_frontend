@@ -15,7 +15,10 @@
         "delete": "Delete",
         "edit": "Edit",
         "search_students": "Search students",
-        "submit": "Submit"
+        "submit": "Submit",
+        "deadline": "Deadline",
+        "add": "Add",
+        "add_tag": "Add a tag"
     },
     "HOME": {
         "title": "Welcome to the new era of Learning",
@@ -323,12 +326,29 @@
     "COURSEINSIDE": {
         "course": "Course",
         "files": "Files",
+        "subsection_settings": "Subsection settings",
         "activity": "Activity",
         "course_content": "Course content",
         "edit_mode": "Edit mode",
         "SETTINGS": {
             "title": "Course settings",
-            "button_edit": "Edit course info"
+            "button_edit": "Edit course info",
+            "edit_course": "Edit course",
+            "course_info": "Course info",
+            "course_info_text": "This information will be displayed publicly to the students.",
+            "course_name": "Course name",
+            "course_description": "Course description",
+            "course_cover": "Cover",
+            "tags": "Tags",
+            "add_students": "Add students",
+            "Students": "Students",
+            "add_evaluators": "Add evaluators",
+            "Evaluators": "Evaluators",
+            "delete_course": "Delete course",
+            "participants": "Participants",
+            "participants_title": "Edit the number of students and evaluators for this course.",
+            "column1_student_email": "Column 1: Student's email",
+            "import_from_csv": "Import {{type}} from CSV"
         },
         "FORUM": {
             "forum": "Forum",
@@ -365,6 +385,19 @@
             "participants_tile": "Explora todos los participantes actualmente inscritos en este curso.",
             "to_add_student": "Para agregar un nuevo estudiante, por favor navega a la sección de configuración del curso.",
             "placeholder_search": "Buscar un estudiante"
+        },
+        "SUB_SETTINGS": {
+            "complete_uncomplete_subsection": "Complete / Uncomplete subsection",
+            "date": "Date of start and end of the subsection",
+            "back_to_settings": "Back to settings",
+            "complete_students": "Complete subsection",
+            "participants_completed": "Students who completed this subsection",
+            "participants_not_completed": "Students who have not completed this subsection",
+            "select_students_to_not_complete": "Select students to mark the subsection as not completed.",
+            "select_students_to_complete": "Select students to mark the subsection as completed.",
+            "select_all": "Move all",
+            "all_completed": "All students have completed this subsection",
+            "all_not_completed": "No students have completed this subsection"
         }
     },
     "ACTIVITY": {
@@ -479,7 +512,7 @@
                     "content": "Content",
                     "content_placeholder": "Edit subsection content",
                     "cover": "Cover (optional)",
-                    "pairs_or_individual": "Will the activity be carried out in pairs or individually?",
+                    "pairs_or_individual": "Will the activity be carried out in groups or individually?",
                     "individual": "Individual",
                     "groups": "Groups",
                     "students_per_group": "How many students per group?",
@@ -755,6 +788,12 @@
             "course_visualization": "Course visualization"
         }
     },
+    "QUESTIONNAIRE": {
+        "go_back_users": "Go back to users",
+        "download_all_answers": "Download all answers",
+        "completed_in": "Completed in",
+        "completation_date": "Completation date"
+    },
     "STUDENT_COURSES": {
         "TFG": {
             "task": {
@@ -830,7 +869,7 @@
         "not_qualifications": "There are no qualifications available",
         "not_qualifications_explore": "Explore other areas of the platform or check back later for new qualifications.",
         "qualifications": "Qualifications",
-        "qualificacion": "Qualification",
+        "qualification": "Qualification",
         "search_users": "Search users",
         "attention": "Attention",
         "peerreview_deadline": "Peer review deadline is on",
@@ -971,7 +1010,7 @@
         "create_peers": "Create peers",
         "update_peers": "Update peers",
         "back_to_peer_review": "Back to peer review",
-        "peer_review_text": "La revisión por iguales se ha diseñado para cada estudiante <bold>{{number}}actividades de revisión</bold>",
+        "peer_review_text": "Peer review has been designed so that each student reviews <bold>{{number}} activities</bold>",
         "assing_students": "Assign students to review each activity",
         "create_peers_auto": "Create peers automatically",
         "students_who_dont_delivered": "There are students who have not delivered the activity",

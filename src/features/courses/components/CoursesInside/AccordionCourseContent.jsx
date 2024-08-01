@@ -143,7 +143,7 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFl
                 </span>
               }
             </button>
-            {!startWhenFinished && isBeforeStartDate &&
+            {startWhenFinished && isBeforeStartDate &&
               <p className="w-5/6 -mt-1 text-xs text-gray-500">
                 <Trans i18nKey="COURSEINSIDE.ACCORDION.section_will_open"
                   components={{
@@ -355,7 +355,7 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFl
 
   return (
     <div className={` bg-white rounded-lg xl:p-5 xl:w-[30rem] w-full xl:shadow-md shadow-none sm:visible lg:max-w-[calc(100vw-4rem)] sm:w-auto z-20  lg:mr-0 `}>
-      <p className="hidden text-xl font-semibold xl:block">{t("COURSEINSIDE.ACCORDION.title")}</p>
+      <p className="hidden text-xl font-semibold xl:block">{t("COURSEINSIDE.course_content")}</p>
       <hr className="hidden h-px my-8 bg-gray-400 border-0 xl:block"></hr>
       {course?.sections?.data?.map((section, index) => (
         <RenderCourseContent

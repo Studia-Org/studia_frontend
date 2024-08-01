@@ -9,7 +9,7 @@ import { AccordionCourseContent } from "../components/CoursesInside/AccordionCou
 import { ForumClickable } from "../components/CoursesInside/Forum/ForumClickable";
 import { ForumComponent } from '../components/CoursesInside/Forum/ForumComponent'
 import { QuestionnaireComponent } from '../components/CoursesInside/QuestionnaireComponent';
-import { CourseParticipantsClickable, CourseContent, CourseFiles } from "../components/CoursesInside/TabComponents";
+import { CourseParticipantsClickable, CourseContent, CourseFiles, SubsectionsSettings } from "../components/CoursesInside/TabComponents";
 import { useAuthContext } from "../../../context/AuthContext";
 import { EditSection } from "../components/CoursesInside/EditSection";
 import { SideBar } from "../components/CoursesInside/FloatingButtonNavigation";
@@ -17,7 +17,6 @@ import { MoonLoader } from "react-spinners";
 import { CourseHasNotStarted } from "../components/CoursesInside/CourseHasNotStarted";
 import { ButtonSettings } from "../components/CoursesInside/EditSection/buttonEditCourse";
 import { Participants } from "../components/CoursesInside/Participants";
-import dayjs from "dayjs";
 import { BreadcrumbCourse } from "../components/CoursesInside/BreadcrumbCourse";
 import { useCourseContext } from "../../../context/CourseContext";
 import { useTranslation } from "react-i18next";
@@ -25,7 +24,6 @@ import { ca, es, enUS } from 'date-fns/locale';
 import { format } from 'date-fns';
 import { getRecommendationsSRLO } from "../components/CoursesInside/Questionnaire/getRecommendationsSRLO";
 const { TextArea } = Input;
-const { RangePicker } = DatePicker;
 
 const CourseInside = () => {
   const { t, i18n } = useTranslation();
@@ -157,19 +155,11 @@ const CourseInside = () => {
     let cursoTitle = null;
 
     for (const curso of course.sections.data) {
-      const {
-        id,
-        attributes: {
-          title,
-          subsections: { data: subsecciones },
-        },
-      } = curso;
+      const { id, attributes: { title, subsections: { data: subsecciones } } } = curso;
 
       for (const subseccion of subsecciones) {
         const subseccionId = subseccion.id;
-        const subseccionCompletada = subsectionsCompleted.find(
-          (sub) => sub.id === subseccionId
-        );
+        const subseccionCompletada = subsectionsCompleted.find((sub) => sub.id === subseccionId);
 
         const subseccionStartDate = new Date(subseccion.attributes.start_date);
         const subseccionEndDate = new Date(subseccion.attributes.end_date);
@@ -192,6 +182,8 @@ const CourseInside = () => {
     if (lastCompletedSubseccion) {
       return { subseccion: lastCompletedSubseccion, cursoTitle };
     }
+    const firstSubsection = course.sections.data[0]?.attributes?.subsections?.data[0];
+    if (firstSubsection) return { subseccion: firstSubsection, cursoTitle: course.sections.data[0].attributes.title };
 
     return null;
   }
@@ -213,18 +205,10 @@ const CourseInside = () => {
   };
 
   useEffect(() => {
-    if (subsectionSelected && Object.keys(subsectionSelected)?.length !== 0) {
-      return;
-    }
-    if (
-      course?.sections?.data?.length > 0 &&
-      subsectionsCompleted.length > 0
-    ) {
-      const firstSubsection = obtenerPrimeraSubseccion(
-        course,
-        subsectionsCompleted
-      );
-
+    if (subsectionSelected && Object.keys(subsectionSelected)?.length !== 0) return;
+    if (course?.sections?.data?.length > 0 &&
+      subsectionsCompleted.length > 0) {
+      const firstSubsection = obtenerPrimeraSubseccion(course, subsectionsCompleted);
       if (firstSubsection) {
         if (firstSubsection?.subseccion?.attributes?.activity?.data?.attributes?.type === 'questionnaire') {
           setSectionSelected(firstSubsection?.cursoTitle);
@@ -240,7 +224,7 @@ const CourseInside = () => {
         loadQuestionnaire();
       }
     } else if (
-      course?.sections.data?.length > 0 &&
+      course?.sections?.data?.length > 0 &&
       subsectionsCompleted.length === 0
     ) {
       const {
@@ -273,10 +257,7 @@ const CourseInside = () => {
 
   useEffect(() => {
     if (subsectionSelected?.length && subsectionSelected?.length !== 0) {
-      setSubsectionsLandscapePhoto(
-        subsectionSelected.attributes.landscape_photo?.data?.attributes?.url ??
-        null
-      );
+      setSubsectionsLandscapePhoto(subsectionSelected.attributes.landscape_photo?.data?.attributes?.url ?? null);
     }
     setActivitySelected(undefined);
     setTitleSubsection(subsectionSelected?.attributes?.title);
@@ -320,7 +301,7 @@ const CourseInside = () => {
 
   const items = [
     {
-      key: '1',
+      key: 1,
       label: t('COURSEINSIDE.course'),
       children:
         <CourseContent setForumFlag={setForumFlag} course={course} courseSection={sectionSelected}
@@ -330,11 +311,19 @@ const CourseInside = () => {
         />,
     },
     {
-      key: '2',
+      key: 2,
       label: t('COURSEINSIDE.files'),
       children: <CourseFiles course={course} courseSection={sectionSelected} courseSubsection={subsectionSelected} enableEdit={enableEdit} setCourse={setCourse} />,
+    },
+    {
+      key: "subsection_settings",
+      label: t('COURSEINSIDE.subsection_settings'),
+      children: <SubsectionsSettings
+        course={course} courseSection={sectionSelected} courseSubsection={subsectionSelected} setCourse={setCourse}
+        students={students} dateSubsection={dateSubsection} setDateSubsection={setDateSubsection} />,
     }
   ].filter(item => {
+    if (user.role_str === 'student' && item.key === 'subsection_settings') return false;
     if (item.label === 'Participants') {
       return courseBasicInformation && courseBasicInformation.studentManaged !== true;
     }
@@ -501,19 +490,6 @@ const CourseInside = () => {
                               <p className="text-2xl font-semibold max-w-[calc(100%-140px)]"> {subsectionSelected?.attributes?.title}</p>
                               <Badge color="#6366f1" count={format(new Date(subsectionSelected?.attributes?.end_date), "EEE MMM dd yyyy", { locale: local })} />
                             </div>
-                        }
-                        {
-                          enableEdit && (
-                            <RangePicker
-                              value={[dayjs(dateSubsection[0] || new Date()), dayjs(dateSubsection[1] || new Date())]}
-                              showTime
-                              className="w-1/2 mx-5"
-                              clearIcon={null}
-                              onChange={(value, dateString) => {
-                                setDateSubsection(dateString)
-                              }}
-                            />
-                          )
                         }
                         {
                           user?.role_str === 'professor' || user?.role_str === 'admin' ?
