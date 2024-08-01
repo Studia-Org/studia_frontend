@@ -113,7 +113,7 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
     return (
         <div className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1] mb-2">
             <div className="flex flex-col w-full p-7">
-                <div className='flex items-center w-full '>
+                <div className='flex items-center w-full gap-x-2 '>
                     {enableEdit ? (
                         <Input value={titleEdit} className='w-full text-3xl font-semibold rounded-md mr-14' onChange={(e) => setTitleEdit(e.target.value)} />
                     ) : (
@@ -124,7 +124,7 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
                     )}
                     {(questionnaireAnswerData.length > 0 && user?.role_str === 'student') && (
                         <div className='flex items-center justify-end'>
-                            <Chip className='mr-10 ' label="Completed" color="success" />
+                            <Chip label={t("COMMON.completed")} color="success" />
                         </div>
                     )}
                 </div>
@@ -135,7 +135,7 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
                         <p>{descriptionEditFinal}</p>
                     )}
                     {completed === true ? (
-                        <span className='pl-2 mr-10 text-gray-500'>{t("QUESTIONNAIRE.completed_in") + ": " + format(questionnaireAnswerData[0]?.timeToComplete)}</span>
+                        <span className='pl-2 text-gray-500'>{t("QUESTIONNAIRE.completed_in") + ": " + format(questionnaireAnswerData[0]?.timeToComplete)}</span>
                     ) : null}
                 </div>
 

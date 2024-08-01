@@ -18,7 +18,8 @@
         "submit": "Enviar",
         "deadline": "Fecha límite",
         "add": "Añadir",
-        "add_tag": "Añadir etiqueta"
+        "add_tag": "Añadir etiqueta",
+        "completed": "Completado"
     },
     "HOME": {
         "title": "Bienvenido/a a la nueva era del aprendizaje",

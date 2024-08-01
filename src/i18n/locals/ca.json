@@ -18,7 +18,8 @@
         "submit": "Enviar",
         "deadline": "Data límit",
         "add": "Afegir",
-        "add_tag": "Afegir etiqueta"
+        "add_tag": "Afegir etiqueta",
+        "completed": "Completat"
     },
     "HOME": {
         "title": "Benvingut/da a la nova era de l'aprenentatge",

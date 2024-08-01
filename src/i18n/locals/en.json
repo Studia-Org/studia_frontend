@@ -18,7 +18,8 @@
         "submit": "Submit",
         "deadline": "Deadline",
         "add": "Add",
-        "add_tag": "Add a tag"
+        "add_tag": "Add a tag",
+        "completed": "Completed"
     },
     "HOME": {
         "title": "Welcome to the new era of Learning",
