@@ -1027,6 +1027,7 @@
         "student_cannot_review_own_activity": "Student can't review his own activity",
         "cannot_drop_outside_list": "You can't drop the student outside the list",
         "peers_created_success": "Peers created successfully",
-        "error_creating_peers": "Error creating peers"
+        "error_creating_peers": "Error creating peers",
+        "updating_peer_reviews": "Updating peer reviews..."
     }
 }
