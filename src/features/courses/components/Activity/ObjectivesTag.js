@@ -1,6 +1,7 @@
 import { ACTIVITY_CATEGORIES } from '../../../../constant';
 import { Popover, Whisper } from 'rsuite';
 import { useTranslation } from 'react-i18next';
+
 export function ObjectivesTag({ category, USER_OBJECTIVES }) {
     const { t } = useTranslation();
     return (
@@ -14,7 +15,7 @@ export function ObjectivesTag({ category, USER_OBJECTIVES }) {
                     </Popover>}>
                 <span className={`relative z-10 text-sm font-medium bg-${ACTIVITY_CATEGORIES[category]?.color}-100 py-1 px-2  ${USER_OBJECTIVES.includes(category) ? "cursor-pointer" : ""}
                     rounded text-${ACTIVITY_CATEGORIES[category]?.color}-500 align-middle border-[1px] border-${ACTIVITY_CATEGORIES[category]?.color}-500`}>
-                    {t("OBJECTIVES_CONSTANT." + category)}
+                    {t("OBJECTIVES_CONSTANT." + category, category)}
                 </span>
             </Whisper>
             <div className={`absolute ${USER_OBJECTIVES.includes(category) ? "blur" : ""} inset-0 -top-[1px] bg-${ACTIVITY_CATEGORIES[category]?.color}-500 rounded w-full h-[calc(100%+4px)]`} ></div>

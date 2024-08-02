@@ -22,6 +22,7 @@ export async function fetchQuestionnaireTimeByCourse({ courseId, userId = null }
 
                     const time = userResponse.attributes.timeToComplete;
                     const user = userResponse.attributes.user.data;
+                    if (user === null) return;
                     if (user.id === userId) {
                         totalUserTime += convertirTiempoASeconds(time);
                         totalUserQuestionnaire++;
