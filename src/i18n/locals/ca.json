@@ -497,6 +497,8 @@
             },
             "EDIT_SECTION": {
                 "title": "Editar Secció",
+                "create_text": "Edita la secció i defineix tots els elements de cada ítem de la seqüència, el contingut, títol, dates límit, etc.",
+                "create_title": "Encara no has definit la seqüència",
                 "save_changes": "Desar canvis",
                 "course_sequence": "Seqüència del curs",
                 "course_sequence_text": "Fes clic en una subsecció per editar el contingut.",

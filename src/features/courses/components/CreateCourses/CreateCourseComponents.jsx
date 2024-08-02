@@ -299,11 +299,11 @@ export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption, 
         <>
           <div className='w-full mr-5'>
             <CourseContent
-              createCourseSectionsList={createCourseSectionsList}
-              sectionContentSelector={sectionContentSelector}
               setVisibilityTask={setVisibilityTask}
               selectedSubsection={selectedSubsection}
               sectionId={sectionId}
+              setCreateCourseOption={setCreateCourseOption}
+              createCourseOption={createCourseOption}
               task={task}
             />
           </div>

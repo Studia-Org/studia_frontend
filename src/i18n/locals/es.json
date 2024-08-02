@@ -497,6 +497,8 @@
             },
             "EDIT_SECTION": {
                 "title": "Editar Sección",
+                "create_text": "Edita la sección y define todos los elementos de cada ítem de la secuencia, el contenido, título, fechas límite, etc.",
+                "create_title": "Aún no has definido la secuencia",
                 "save_changes": "Guardar cambios",
                 "course_sequence": "Secuencia del curso",
                 "course_sequence_text": "Haz clic en una subsección para editar el contenido.",
