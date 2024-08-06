@@ -273,7 +273,9 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
 
                     <div className='flex flex-col justify-center mb-3 ml-10'>
                         <label className='mb-3 text-sm' htmlFor="" >{t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.task_end_date")} *</label>
-                        <DatePicker className='py-3' placeholder={t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.task_end_date_placeholder")} showTime onOk={(date) => { setDeadline(dayjs(date).format('YYYY-MM-DD HH:mm:ss')) }} value={deadline ? dayjs(deadline) : null} />
+                        <DatePicker className='py-3' placeholder={t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.task_end_date_placeholder")}
+                            showTime format={'YYYY-MM-DD HH:mm'}
+                            onOk={(date) => { setDeadline(dayjs(date).format('YYYY-MM-DD HH:mm:ss')) }} value={deadline ? dayjs(deadline) : null} />
                     </div>
                 </div>
                 <div>
