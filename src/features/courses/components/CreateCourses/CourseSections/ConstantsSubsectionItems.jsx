@@ -183,7 +183,20 @@ function modifySequence(sequence, sectionTask) {
 }
 
 
+
 function addSequence(modifiedSequence, setCreateCourseSectionsList, sectionToEdit, context) {
+    //Primero eliminamos la secuencia actual
+    setCreateCourseSectionsList(prevSections => {
+        return prevSections.map(section => {
+            if (section.id === sectionToEdit.id) {
+                const updatedSection = JSON.parse(JSON.stringify(section));
+                updatedSection.subsections = [];
+                return updatedSection;
+            }
+            return section;
+        })
+    });
+    //Añadir la nueva secuencia
     for (const item of modifiedSequence) {
         createSubsection(item.title, item.fase, item.questionnaireData, setCreateCourseSectionsList, sectionToEdit, item.type, context, item.activityData);
     }
