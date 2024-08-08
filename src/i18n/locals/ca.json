@@ -770,6 +770,10 @@
                         "title": "Feedback inicial del professor i reflexió",
                         "description": "La seqüència està dissenyada per girar al voltant de l'entrega d'una tasca, permetent als estudiants planificar la tasca i rebre feedback del professor abans de l'entrega final."
                     },
+                    "THINK_ALOUD": {
+                        "title": "Think aloud",
+                        "description": "El think aloud és una estratègia on verbalitzes els teus pensaments mentre treballes en un problema o tasca. Ajuda els estudiants a entendre el teu procés de raonament i a aprendre estratègies efectives de resolució de problemes."
+                    },
                     "WIP": {
                         "title": "Treball en progress",
                         "description": "Treball en progress."

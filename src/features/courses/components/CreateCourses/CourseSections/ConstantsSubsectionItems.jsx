@@ -387,8 +387,8 @@ export const SequenceThinkAloud = ({ setCreateCourseSectionsList, sectionToEdit,
                     {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.add_sequence")}
                 </button>
                 <div className="">
-                    <p className="text-base font-normal">{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.WIP.title")}</p>
-                    <p className="text-sm font-normal text-gray-500 ">{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.WIP.description")}</p>
+                    <p className="text-base font-normal">{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.THINK_ALOUD.title")}</p>
+                    <p className="text-sm font-normal text-gray-500 ">{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.THINK_ALOUD.description")}</p>
                 </div>
             </div>
         </div>

@@ -770,6 +770,10 @@
                         "title": "Feedback inicial del profesor y reflexión",
                         "description": "La secuencia está diseñada para girar en torno a la entrega de una tarea, permitiendo a los estudiantes planificar la tarea y recibir feedback del profesor antes de la entrega final."
                     },
+                    "THINK_ALOUD": {
+                        "title": "Think aloud",
+                        "description": "El think aloud es una estrategia en la que verbalizas tus pensamientos mientras trabajas en un problema o tarea. Ayuda a los estudiantes a entender tu proceso"
+                    },
                     "WIP": {
                         "title": "Trabajo en progreso",
                         "description": "Trabajo en progreso."

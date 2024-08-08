@@ -764,6 +764,10 @@
                         "title": "Early Professor feedback and reflection",
                         "description": "The sequence is designed to revolve around the delivery of a task, allowing students to plan the task and receive feedback from the professor before the final delivery."
                     },
+                    "THINK_ALOUD": {
+                        "title": "Think aloud",
+                        "description": "The think aloud is a strategy where you verbalize your thoughts while working on a problem or task. It helps students understand your reasoning process and learn effective problem-solving strategies."
+                    },
                     "WIP": {
                         "title": "Work in progress",
                         "description": "Work in progress."
