@@ -23,7 +23,7 @@
     },
     "HOME": {
         "title": "Welcome to the new era of Learning",
-        "subtitle": "Join the future of education with our user-friendly e-learning platform designed for the University of Barcelona.",
+        "subtitle": "Join the future of education with our user-friendly e-learning platform designed by a team from the University of Barcelona.",
         "button_enter": "Enter the classroom",
         "funded": "Funded by:"
     },
@@ -485,9 +485,9 @@
                 "task_files": "Task files",
                 "task_end_date": "Task end date",
                 "task_end_date_placeholder": "Select a date",
-                "task_categories": "Task categories",
+                "task_categories": "Task competences",
                 "task_categories_placeholder": "Select at least one category",
-                "task_categories_text": "Select the categories associated with this task that students will need to develop."
+                "task_categories_text": "Select the competences associated with this task that students will need to develop."
             },
             "EDIT_SECTION": {
                 "title": "Edit Section",
@@ -519,8 +519,8 @@
                     "individual": "Individual",
                     "groups": "Groups",
                     "students_per_group": "How many students per group?",
-                    "categories": "Categories",
-                    "categories_text": "Associate criteria of the categories you selected with the activity.",
+                    "categories": "competences",
+                    "categories_text": "Associate criteria of the competences you selected with the activity.",
                     "add_row": "Add row",
                     "criteria": "Criteria",
                     "check": "Check",
@@ -555,7 +555,7 @@
                     "autocorrect_text": "Check the correct answers to the questions, and the questionnaire will be automatically evaluated once the student submits it.",
                     "ERRORS_SUBSECTION": {
                         "date_missing": "Start and end date are missing",
-                        "categories_missing": "No categories",
+                        "categories_missing": "No competences",
                         "question_missing": "No questions",
                         "answer_questions": "Not all questions have correct answers",
                         "rubric_empty": "Rubric is empty",

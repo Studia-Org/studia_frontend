@@ -23,7 +23,7 @@
     },
     "HOME": {
         "title": "Bienvenido/a a la nueva era del aprendizaje",
-        "subtitle": "Únete al futuro de la educación con nuestra plataforma de e-learning fácil de usar, diseñada para la Universidad de Barcelona.",
+        "subtitle": "Únete al futuro de la educación con nuestra plataforma de e-learning fácil de usar, diseñada por un equipo de la Universidad de Barcelona.",
         "button_enter": "Entrar al aula",
         "funded": "Financiado por:"
     },
@@ -491,9 +491,9 @@
                 "task_files": "Archivos de la tarea",
                 "task_end_date": "Fecha de finalización de la tarea",
                 "task_end_date_placeholder": "Selecciona una fecha",
-                "task_categories": "Categorías de la tarea",
-                "task_categories_placeholder": "Selecciona como mínimo una categoría",
-                "task_categories_text": "Selecciona las categorías asociadas a esta tarea que los estudiantes tendrán que desarrollar."
+                "task_categories": "Competencias de la tarea",
+                "task_categories_placeholder": "Selecciona como mínimo una competencia",
+                "task_categories_text": "Selecciona las competencias asociadas a esta tarea que los estudiantes tendrán que desarrollar."
             },
             "EDIT_SECTION": {
                 "title": "Editar Sección",
@@ -525,8 +525,8 @@
                     "individual": "Individual",
                     "groups": "Grupos",
                     "students_per_group": "¿Cuántos estudiantes por grupo?",
-                    "categories": "Categorías",
-                    "categories_text": "Asocia criterios de las categorías seleccionadas con la actividad.",
+                    "categories": "Competencias",
+                    "categories_text": "Asocia criterios de las competencias seleccionadas con la actividad.",
                     "add_row": "Agregar fila",
                     "criteria": "Criterios",
                     "check": "Marcar",
@@ -561,7 +561,7 @@
                     "autocorrect_text": "Verifique las respuestas correctas a las preguntas, y el cuestionario se evaluará automáticamente una vez que el estudiante lo envíe.",
                     "ERRORS_SUBSECTION": {
                         "date_missing": "Faltan la fecha de inicio y fin",
-                        "categories_missing": "No hay categorías",
+                        "categories_missing": "No hay competencias",
                         "question_missing": "No hay preguntas",
                         "answer_questions": "No todas las preguntas tienen respuestas correctas",
                         "rubric_empty": "La rúbrica está vacía",

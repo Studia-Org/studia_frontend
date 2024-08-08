@@ -23,7 +23,7 @@
     },
     "HOME": {
         "title": "Benvingut/da a la nova era de l'aprenentatge",
-        "subtitle": "Uneix-te al futur de l'educació amb la nostra plataforma d'e-learning fàcil d'utilitzar, dissenyada per a la Universitat de Barcelona.",
+        "subtitle": "Uneix-te al futur de l'educació amb la nostra plataforma d'e-learning fàcil d'utilitzar, dissenyada per un equip de la Universitat de Barcelona.",
         "button_enter": "Entrar a l'aula",
         "funded": "Finançat per:"
     },
@@ -491,9 +491,9 @@
                 "task_files": "Arxius de la tasca",
                 "task_end_date": "Data de finalització de la tasca",
                 "task_end_date_placeholder": "Selecciona una data",
-                "task_categories": "Categories de la tasca",
+                "task_categories": "Competències de la tasca",
                 "task_categories_placeholder": "Selecciona com a mínim una categoria",
-                "task_categories_text": "Selecciona les categories associades a aquesta tasca que els estudiants hauran de desenvolupar."
+                "task_categories_text": "Selecciona les competències associades a aquesta tasca que els estudiants hauran de desenvolupar."
             },
             "EDIT_SECTION": {
                 "title": "Editar Secció",
@@ -525,8 +525,8 @@
                     "individual": "Individual",
                     "groups": "Grups",
                     "students_per_group": "Quants estudiants per grup?",
-                    "categories": "Categories",
-                    "categories_text": "Associeu criteris de les categories que heu seleccionat amb l'activitat.",
+                    "categories": "Competències",
+                    "categories_text": "Associeu criteris de les competències que heu seleccionat amb l'activitat.",
                     "add_row": "Afegeix fila",
                     "criteria": "Criteris",
                     "check": "Marcar",
@@ -561,7 +561,7 @@
                     "autocorrect_text": "Verifica les respostes correctes a les preguntes, i el qüestionari s'avaluarà automàticament una vegada que l'estudiant el lliuri.",
                     "ERRORS_SUBSECTION": {
                         "date_missing": "Falten la data d'inici i final",
-                        "categories_missing": "No hi ha categories",
+                        "categories_missing": "No hi ha competències",
                         "question_missing": "No hi ha preguntes",
                         "answer_questions": "No totes les preguntes tenen respostes correctes",
                         "rubric_empty": "La rúbrica està buida",
