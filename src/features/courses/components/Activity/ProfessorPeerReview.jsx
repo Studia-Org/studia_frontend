@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { fetchCourseInformation } from '../../../../fetches/fetchCourseInformation'
 import { fetchPeerReviewAnswers } from '../../../../fetches/fetchPeerReviewAnswers';
 import { StudentRow } from './Components/PeerReview/StudentRow';
@@ -20,6 +20,7 @@ export const ProfessorPeerReview = ({ activityData }) => {
 
   const peerReviewinGroups = activityData.activity?.data.attributes.groupActivity
   const [loading, setLoading] = useState(true)
+  const [deadline, setDeadline] = useState(activityData.activity?.data.attributes.deadline ? new Date(activityData.activity?.data.attributes.deadline) : null)
   const [messageApi, contextHolder] = message.useMessage();
   const activityToReviewID = activityData.activity?.data.attributes.task_to_review?.data?.id
   const { courseId, activityId } = useParams()
@@ -38,7 +39,8 @@ export const ProfessorPeerReview = ({ activityData }) => {
 
   async function fetchCourseData() {
     try {
-      if (!loading) {
+      const passedDeadline = deadline ? new Date() > deadline : false;
+      if (!loading && passedDeadline === false) {
         messageApi.open({
           type: 'loading',
           content: t("PEERREVIEW.updating_peer_reviews"),
@@ -71,10 +73,11 @@ export const ProfessorPeerReview = ({ activityData }) => {
   useEffect(() => {
     fetchCourseData();
     const interval = setInterval(() => {
-      if (!createPeerReview) fetchCourseData();
+      const passedDeadline = deadline ? new Date() > deadline : false;
+      if (createPeerReview === false && passedDeadline === false) fetchCourseData();
     }, 15000);
     return () => clearInterval(interval);
-  }, [createPeerReview, loading]);
+  }, [createPeerReview, loading, deadline]);
 
 
   function renderTableRows() {
