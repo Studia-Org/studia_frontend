@@ -566,6 +566,7 @@
                         "no_description": "No hi ha descripció",
                         "no_content": "No hi ha contingut",
                         "no_task": "No hi ha tasca per revisar",
+                        "no_evaluable_tasks": "No hi ha tasques avaluables",
                         "text": "Completa-ho o no podràs crear un curs.",
                         "title": "La subsecció està incompleta"
                     },

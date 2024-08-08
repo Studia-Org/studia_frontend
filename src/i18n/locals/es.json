@@ -566,6 +566,7 @@
                         "no_description": "No hay descripción",
                         "no_content": "No hay contenido",
                         "no_task": "No hay tarea para revisar",
+                        "no_evaluable_tasks": "No hay tareas evaluables",
                         "text": "Complétalo o no podrás crear un curso.",
                         "title": "La subsección está incompleta"
                     },

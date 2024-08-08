@@ -559,6 +559,7 @@
                         "rubric_empty": "Rubric is empty",
                         "no_description": "No description",
                         "no_content": "No content",
+                        "no_evaluable_tasks": "No evaluable tasks",
                         "no_task": "No task to review",
                         "text": "Complete it or you will not be able to create a course.",
                         "title": "Subsection is incomplete"

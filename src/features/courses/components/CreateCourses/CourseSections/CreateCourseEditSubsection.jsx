@@ -4,7 +4,7 @@ import { PeerReviewRubricModal } from './PeerReviewRubricModal';
 import dayjs from 'dayjs';
 import { motion } from "framer-motion";
 import { TableCategories } from './TableCategories';
-import { message, Button, DatePicker, Input, Switch, InputNumber, Select, Divider, Space } from 'antd';
+import { message, Button, DatePicker, Input, Switch, InputNumber, Select, Divider, Space, Empty } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { SubsectionContentModal } from './SubsectionContentModal';
 import { UploadFiles } from './UploadFiles';
@@ -13,7 +13,7 @@ import { PonderationWarning } from './PonderationWarning';
 import { debounce } from 'lodash';
 import { AutoAssesmentRubric } from './AutoAssesmentRubric';
 import { useTranslation } from 'react-i18next';
-
+import { sub } from 'date-fns';
 
 const { RangePicker } = DatePicker;
 
@@ -133,6 +133,12 @@ export const CreateCourseEditSubsection = ({
           }
           if (type === 'evaluable') {
             subsectionCopy.activity.evaluable = newValue;
+            subsectionCopy.activity.ponderation = 0;
+            sectionCopy.subsections.forEach((sub) => {
+              if (sub.activity?.task_to_review === subsectionCopy.id) {
+                sub.activity.task_to_review = null;
+              }
+            });
           }
           if (type === 'ponderation') {
             subsectionCopy.activity.ponderation = newValue;
@@ -279,7 +285,8 @@ export const CreateCourseEditSubsection = ({
                     }
                     style={{ width: '100%' }}
                     onChange={(task) => { handleSubsectionChange('peer_review', task) }}
-                    options={filteredSubsections.map((sub) => ({ label: sub.title, value: sub.id }))}
+                    notFoundContent={<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.no_evaluable_tasks")} />}
+                    options={filteredSubsections.filter((sub) => sub.activity?.evaluable === true).map((sub) => ({ label: sub.title, value: sub.id }))}
                   />
                   <label className='text-sm text-gray-500 ' htmlFor=''>
                     {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.pairs_or_individual")}
