@@ -92,6 +92,7 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
 
         setCreateCourseSectionsListCopy((prevSections) => {
             let updatedTask;
+            console.log('prevSections', prevSections)
 
             const newSections = prevSections.map((section) => {
                 updatedTask = {
@@ -222,8 +223,10 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                     }
                     return section;
                 });
+                localStorage.setItem('createCourseSectionsList', JSON.stringify(newSections));
                 return newSections;
             });
+            
             message.success('Task created successfully');
 
         } catch (error) {
