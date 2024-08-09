@@ -13,7 +13,6 @@ import { PonderationWarning } from './PonderationWarning';
 import { debounce } from 'lodash';
 import { AutoAssesmentRubric } from './AutoAssesmentRubric';
 import { useTranslation } from 'react-i18next';
-import { sub } from 'date-fns';
 
 const { RangePicker } = DatePicker;
 
@@ -185,7 +184,6 @@ export const CreateCourseEditSubsection = ({
       }
       const newTimeout = setTimeout(() => {
         handleSubsectionChange('title', newTitle);
-
       }, 350);
 
       setTypingTimeout(newTimeout);
