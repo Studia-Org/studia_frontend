@@ -27,7 +27,6 @@ const item = {
 
 
 export const QuestionnaireConfirmation = ({ questionnaire }) => {
-
     const { t } = useTranslation()
 
     const questionsPerPage = 3;

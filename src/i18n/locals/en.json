@@ -23,7 +23,7 @@
     },
     "HOME": {
         "title": "Welcome to the new era of Learning",
-        "subtitle": "Join the future of education with our user-friendly e-learning platform designed for the University of Barcelona.",
+        "subtitle": "Join the future of education with our user-friendly e-learning platform designed by a team from the University of Barcelona.",
         "button_enter": "Enter the classroom",
         "funded": "Funded by:"
     },
@@ -485,12 +485,14 @@
                 "task_files": "Task files",
                 "task_end_date": "Task end date",
                 "task_end_date_placeholder": "Select a date",
-                "task_categories": "Task categories",
+                "task_categories": "Task competences",
                 "task_categories_placeholder": "Select at least one category",
-                "task_categories_text": "Select the categories associated with this task that students will need to develop."
+                "task_categories_text": "Select the competences associated with this task that students will need to develop."
             },
             "EDIT_SECTION": {
                 "title": "Edit Section",
+                "create_text": "Edit the section and define all the elements of each item in the sequence, the content, title, deadlines, etc.",
+                "create_title": "You haven't defined the sequence yet",
                 "save_changes": "Save changes",
                 "course_sequence": "Course sequence",
                 "course_sequence_text": "Click on a subsection for editing the content.",
@@ -517,8 +519,8 @@
                     "individual": "Individual",
                     "groups": "Groups",
                     "students_per_group": "How many students per group?",
-                    "categories": "Categories",
-                    "categories_text": "Associate criteria of the categories you selected with the activity.",
+                    "categories": "competences",
+                    "categories_text": "Associate criteria of the competences you selected with the activity.",
                     "add_row": "Add row",
                     "criteria": "Criteria",
                     "check": "Check",
@@ -553,7 +555,7 @@
                     "autocorrect_text": "Check the correct answers to the questions, and the questionnaire will be automatically evaluated once the student submits it.",
                     "ERRORS_SUBSECTION": {
                         "date_missing": "Start and end date are missing",
-                        "categories_missing": "No categories",
+                        "categories_missing": "No competences",
                         "question_missing": "No questions",
                         "answer_questions": "Not all questions have correct answers",
                         "rubric_empty": "Rubric is empty",
@@ -761,6 +763,10 @@
                     "EARLY_FEEDBACK": {
                         "title": "Early Professor feedback and reflection",
                         "description": "The sequence is designed to revolve around the delivery of a task, allowing students to plan the task and receive feedback from the professor before the final delivery."
+                    },
+                    "THINK_ALOUD": {
+                        "title": "Think aloud",
+                        "description": "The think aloud is a strategy where you verbalize your thoughts while working on a problem or task. It helps students understand your reasoning process and learn effective problem-solving strategies."
                     },
                     "WIP": {
                         "title": "Work in progress",
