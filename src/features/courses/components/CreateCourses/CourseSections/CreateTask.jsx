@@ -248,7 +248,7 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
 
                         task[section.id] === undefined ?
                             <button onClick={() => createTaskButton()} className=' duration-150 text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5 text-center  items-center  '>
-                                {t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.create_task")}
+                                {t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.save_changes")}
                             </button>
                             :
                             <button onClick={() => saveChangesButton()} className=' duration-150 text-white bg-gray-800 hover:bg-gray-900 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-4 py-2.5 text-center  items-center  '>
