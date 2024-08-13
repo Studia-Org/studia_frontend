@@ -144,12 +144,14 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
       />
       <SelectProfessor setCourseBasicInfo={setCourseBasicInfo} courseBasicInfo={courseBasicInfo} />
       <div className='text-sm font-normal'>
-        <label htmlFor="message" className="block mt-8 mb-4 text-sm font-medium text-gray-900">
+        <label htmlFor="message" className="block mt-8 text-sm font-medium text-gray-900">
           {t("CREATE_COURSES.COURSE_INFO.course_tags")} *
         </label>
+        <p className='mt-2 mb-4 text-xs text-gray-600'>{t("CREATE_COURSES.COURSE_INFO.course_tags_text")}</p>
         <Select
           size='large'
           mode="tags"
+          placeholder={t("CREATE_COURSES.COURSE_INFO.course_tags_placeholder")}
           style={{
             width: '100%',
           }}

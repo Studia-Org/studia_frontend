@@ -464,6 +464,8 @@
     "CREATE_COURSES": {
         "principal_text": "Create new Course",
         "COURSE_INFO": {
+            "course_tags_text": "Add tags that represent the content of your course. For example, if your course is about mathematics, you can add tags like 'algebra', 'calculus', 'geometry', etc.",
+            "course_tags_placeholder": "Write a tag and press enter",
             "principal_text": "First, give us some information about the new course. This information will be visible to students.",
             "course_name": "Course name",
             "course_description": "Course description",

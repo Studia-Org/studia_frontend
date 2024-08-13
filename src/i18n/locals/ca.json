@@ -470,6 +470,8 @@
     "CREATE_COURSES": {
         "principal_text": "Crear un curs nou",
         "COURSE_INFO": {
+            "course_tags_text": "Afegeix etiquetes que representin el contingut del teu curs. Per exemple, si el teu curs és sobre matemàtiques, pots afegir etiquetes com 'àlgebra', 'càlcul', 'geometria', etc.",
+            "course_tags_placeholder": "Escriu una etiqueta i prem Enter",
             "principal_text": "Primer, omple la informació bàsica del curs. Aquesta informació serà visible per als estudiants.",
             "course_name": "Nom del curs",
             "course_description": "Descripció del curs",

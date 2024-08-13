@@ -470,6 +470,8 @@
     "CREATE_COURSES": {
         "principal_text": "Crear un curso nuevo",
         "COURSE_INFO": {
+            "course_tags_text": "Añade etiquetas que representen el contenido de tu curso. Por ejemplo, si tu curso es sobre matemáticas, puedes añadir etiquetas como 'álgebra', 'cálculo', 'geometría', etc.",
+            "course_tags_placeholder": "Escribe una etiqueta y presiona Enter",
             "principal_text": "Primero, llena la información básica del curso. Esta información será visible para los estudiantes.",
             "course_name": "Nombre del curso",
             "course_description": "Descripción del curso",
