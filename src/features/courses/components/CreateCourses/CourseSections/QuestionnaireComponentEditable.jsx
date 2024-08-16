@@ -13,6 +13,8 @@ import FormControl from '@mui/material/FormControl';
 import { PonderationWarning } from './PonderationWarning';
 import { QuestionnaireInfo } from './EditSubsection/QuestionnaireInfo';
 import { useTranslation } from 'react-i18next';
+import { ImportQuestionnaireInfo } from './EditSubsection/ImportQuestionnaireInfo';
+import { set } from 'date-fns';
 
 
 const { RangePicker } = DatePicker;
@@ -53,13 +55,16 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
     const [description, setDescription] = useState(subsection.questionnaire.attributes.description);
     const [editQuestionFlags, setEditQuestionFlags] = useState(Array(totalQuestions).fill(false));
     const [autocorrectTest, setAutocorrectTest] = useState(subsection.questionnaire.attributes.autocorrect);
+    const [embedCode, setEmbedCode] = useState(subsection.questionnaire.attributes?.Options?.embedCode)
 
     const isQuestionnaireEditable = subsection.questionnaire.attributes?.editable;
 
     useEffect(() => {
+
         setTitle(subsection.title)
         setDescription(subsection.questionnaire.attributes.description)
         setAutocorrectTest(subsection.questionnaire.attributes.autocorrect)
+        setEmbedCode(subsection.questionnaire.attributes?.Options?.embedCode)
     }, [subsection]);
 
     const handleEditQuestionClick = (index) => {
@@ -364,6 +369,79 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
         });
     };
 
+    const validateEmbedCode = (value) => {
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = value.trim();
+
+        const iframe = tempDiv.querySelector('iframe');
+
+
+        if (!iframe) {
+            return { isValid: false, messageError: "No se encontró un iframe en el embed code." };
+        }
+
+       
+        const src = iframe?.getAttribute('src');
+        console.log((!src.startsWith('https://forms.office.com/Pages/ResponsePage.aspx') || !src.startsWith('https://docs.google.com/forms/')))
+        if (!src || (!src.startsWith('https://forms.office.com/Pages/ResponsePage.aspx') && !src.startsWith('https://docs.google.com/forms/')) ) {
+            return { isValid: false, messageError: "El iframe no tiene un src válido." };
+        }
+
+
+        const width = iframe?.getAttribute('width');
+        const height = iframe?.getAttribute('height');
+        if (!width || !height || isNaN(parseInt(width)) || isNaN(parseInt(height))) {
+            return { isValid: false, messageError: "El iframe tiene dimensiones no válidas." };
+        }
+
+        iframe?.removeAttribute('style');
+        const sanitizedEmbedCode = iframe.outerHTML;
+
+
+        // Si todo es válido
+        return { isValid: true, messageError: "El embed code es válido.", sanitizedEmbedCode: sanitizedEmbedCode };
+    };
+
+    const handleChangeEmbedCode = (value) => {
+        const { isValid, messageError, sanitizedEmbedCode } = validateEmbedCode(value);
+
+        if (!isValid) {
+            setEmbedCode(undefined);
+            message.error(messageError);
+            return;
+        }
+
+        setCreateCourseSectionsList((courses) => {
+            return courses.map((course) => {
+                if (course.subsections) {
+                    return {
+                        ...course,
+                        subsections: course.subsections.map((sub) => {
+                            if (sub.id === subsection.id) {
+                                return {
+                                    ...sub,
+                                    questionnaire: {
+                                        ...sub.questionnaire,
+                                        attributes: {
+                                            ...sub.questionnaire.attributes,
+                                            Options:{
+                                                ...sub.questionnaire.attributes.Options,
+                                                embedCode: sanitizedEmbedCode
+                                            }
+                                        },
+                                    },
+                                    embedCode: sanitizedEmbedCode,
+                                };
+                            }
+                            return sub;
+                        }),
+                    };
+                }
+                return course;
+            });
+        });
+    }
+
     // Cambia el valor de el titulo de el questionario
     const handleChangeTitle = (value) => {
         setCreateCourseSectionsList((courses) => {
@@ -630,7 +708,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
 
     return (
         <div className="flex flex-col ">
-            <div className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1] p-8">
+            <div className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1] p-8 mb-10">
                 <div className="">
                     <div className='flex items-center'>
                         <Input className='px-1 mb-5 border border-[#d9d9d9] rounded-md text-3xl font-semibold text-black pl-3' placeholder="Title" value={title}
@@ -699,161 +777,179 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                         </div>
 
                     </div>
-                    <div className='mt-7'>
-                        <div className='flex items-center gap-3'>
-                            <label className='text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.questionnaire_type")} *</label>
-                            <QuestionnaireInfo />
-                        </div>
+                    {!embedCode &&
+                        <div className='mt-7'>
+                            <div className='flex items-center gap-3'>
+                                <label className='text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.questionnaire_type")} *</label>
+                                <QuestionnaireInfo />
+                            </div>
 
-                        <Select
-                            className='w-full mt-3'
-                            defaultValue="Stantard"
-                            onChange={(e) => {
-                                setCreateCourseSectionsList(prevSections => {
-                                    const updatedSections = prevSections.map(section => {
-                                        if (section.subsections) {
-                                            const updatedSubsections = section.subsections.map(sub => {
-                                                if (sub.id === subsection.id) {
-                                                    return {
-                                                        ...sub,
-                                                        questionnaire: {
-                                                            ...sub.questionnaire,
-                                                            attributes: {
-                                                                ...sub.questionnaire.attributes,
-                                                                type: e
+                            <Select
+                                className='w-full mt-3'
+                                defaultValue="Stantard"
+                                onChange={(e) => {
+                                    setCreateCourseSectionsList(prevSections => {
+                                        const updatedSections = prevSections.map(section => {
+                                            if (section.subsections) {
+                                                const updatedSubsections = section.subsections.map(sub => {
+                                                    if (sub.id === subsection.id) {
+                                                        return {
+                                                            ...sub,
+                                                            questionnaire: {
+                                                                ...sub.questionnaire,
+                                                                attributes: {
+                                                                    ...sub.questionnaire.attributes,
+                                                                    type: e
+                                                                }
                                                             }
-                                                        }
-                                                    };
-                                                }
-                                                return sub;
-                                            });
-                                            return {
-                                                ...section,
-                                                subsections: updatedSubsections
-                                            };
-                                        }
-                                        return section;
+                                                        };
+                                                    }
+                                                    return sub;
+                                                });
+                                                return {
+                                                    ...section,
+                                                    subsections: updatedSubsections
+                                                };
+                                            }
+                                            return section;
+                                        });
+                                        return updatedSections;
                                     });
-                                    return updatedSections;
-                                });
-                            }}
-                            value={subsection.questionnaire.attributes.type}
-                            options={[
-                                { value: 'standard', label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.standard") },
-                                { value: 'scaling', label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.scaling") },
-                            ]}
+                                }}
+                                value={subsection.questionnaire.attributes.type}
+                                options={[
+                                    { value: 'standard', label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.standard") },
+                                    { value: 'scaling', label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.scaling") },
+                                ]}
 
-                        />
-                    </div>
+                            />
+                        </div>}
                     <div className='mt-7'>
                         <label className='text-sm text-gray-500 mt-7 ' htmlFor="" >{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.description")}</label>
                         <div className='flex w-full mt-2'>
                             <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3' placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} onBlur={(e) => handleChangeDescription(e.target.value)} />
                         </div>
                     </div>
+                    <div className='mt-7'>
+                        <div className='flex items-center gap-2'>
+                            <label className='text-sm text-gray-500 ' htmlFor="" >Import questionnaire</label>
+                            <ImportQuestionnaireInfo />
+                        </div>
+                        <div className='flex w-full mt-2'>
+                            <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3' placeholder='<iframe ...' value={embedCode} onChange={(e) => setEmbedCode(e.target.value)} onBlur={(e) => handleChangeEmbedCode(e.target.value)} />
+                        </div>
+                    </div>
                 </div>
             </div>
-            <motion.ul
-                initial="hidden"
-                animate="visible"
-                variants={list}
-            >
-                <div className="mt-5 space-y-5 ">{renderQuestionsForPage()}</div>
-            </motion.ul>
-
             {
-                ((currentPage === totalPages || totalPages === 0) && isQuestionnaireEditable) &&
-                <div
-                    className='bg-white shadow-md rounded-md p-5 border-l-8 mt-5 flex flex-col justify-center border-[#6366f1]'
-                    variants={item}>
-                    <div className='flex items-center justify-between mb-5'>
-                        <p className="mb-4 font-medium">{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.add_question")}</p>
-                        <FormControl >
-                            <Select
-                                className='w-40'
-                                value={selectorValue}
-                                options={[
-                                    { value: 'open-ended', label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.text") },
-                                    { value: 'options', label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.Options") }
-                                ]}
-                                onChange={(e) => {
-                                    setSelectorValue(e)
-                                    if (e === 'options') {
-                                        setAddQuestionText(prevQuestionText => ({ ...prevQuestionText, options: [] }));
-                                    } else {
-                                        setAddQuestionText(prevQuestionText => ({ ...prevQuestionText, options: e }));
-                                    }
-                                }}
-                            >
-                            </Select>
-                        </FormControl>
-                    </div>
-                    <label className='mb-3 text-sm text-gray-500' htmlFor="" >{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.question")}</label>
-                    <TextArea
-                        value={addQuestionText.question}
-                        placeholder={t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.question_placeholder")}
-                        className='w-full'
-                        allowClear
-                        onChange={(e) => setAddQuestionText(prevQuestionText => ({ ...prevQuestionText, question: e.target.value }))}
-                        rows={3}
-                    />
+                !embedCode &&
+                (
+                    <>
+                        <motion.ul
+                            initial="hidden"
+                            animate="visible"
+                            variants={list}
+                        >
+                            <div className="mt-5 space-y-5 ">{renderQuestionsForPage()}</div>
+                        </motion.ul>
 
-                    {
-                        selectorValue === 'options' &&
-                        <>
-                            <label className='mt-5 mb-3 text-sm text-gray-500' htmlFor="" >{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.Options")}</label>
-                            <div className='flex flex-col'>
+                        {
+                            ((currentPage === totalPages || totalPages === 0) && isQuestionnaireEditable) &&
+                            <div
+                                className='bg-white shadow-md rounded-md p-5 border-l-8 mt-5 flex flex-col justify-center border-[#6366f1]'
+                                variants={item}>
+                                <div className='flex items-center justify-between mb-5'>
+                                    <p className="mb-4 font-medium">{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.add_question")}</p>
+                                    <FormControl >
+                                        <Select
+                                            className='w-40'
+                                            value={selectorValue}
+                                            options={[
+                                                { value: 'open-ended', label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.text") },
+                                                { value: 'options', label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.Options") }
+                                            ]}
+                                            onChange={(e) => {
+                                                setSelectorValue(e)
+                                                if (e === 'options') {
+                                                    setAddQuestionText(prevQuestionText => ({ ...prevQuestionText, options: [] }));
+                                                } else {
+                                                    setAddQuestionText(prevQuestionText => ({ ...prevQuestionText, options: e }));
+                                                }
+                                            }}
+                                        >
+                                        </Select>
+                                    </FormControl>
+                                </div>
+                                <label className='mb-3 text-sm text-gray-500' htmlFor="" >{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.question")}</label>
+                                <TextArea
+                                    value={addQuestionText.question}
+                                    placeholder={t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.question_placeholder")}
+                                    className='w-full'
+                                    allowClear
+                                    onChange={(e) => setAddQuestionText(prevQuestionText => ({ ...prevQuestionText, question: e.target.value }))}
+                                    rows={3}
+                                />
 
                                 {
-                                    addQuestionText?.options?.length > 0 ?
-                                        addQuestionText.options.map((option, index) => (
-                                            <RadioGroup className="mt-4 ml-5" name={`use-radio-group-${index}`} >
-                                                <MyFormControlLabel key={index} value={option} label={option} control={<Radio disabled readOnly />} />
-                                            </RadioGroup>
-                                        )) :
-                                        null
+                                    selectorValue === 'options' &&
+                                    <>
+                                        <label className='mt-5 mb-3 text-sm text-gray-500' htmlFor="" >{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.Options")}</label>
+                                        <div className='flex flex-col'>
+
+                                            {
+                                                addQuestionText?.options?.length > 0 ?
+                                                    addQuestionText.options.map((option, index) => (
+                                                        <RadioGroup className="mt-4 ml-5" name={`use-radio-group-${index}`} >
+                                                            <MyFormControlLabel key={index} value={option} label={option} control={<Radio disabled readOnly />} />
+                                                        </RadioGroup>
+                                                    )) :
+                                                    null
+
+                                            }
+                                            <div className='flex items-center mt-5'>
+                                                <Button onClick={() => addOptionToList()} className='flex items-center px-2 mr-3 font-medium h-9'>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
+                                                        <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
+                                                    </svg>
+                                                </Button>
+                                                <TextArea
+                                                    value={newOption}
+                                                    onChange={(e) => { setNewOption(e.target.value) }}
+                                                    className='w-full'
+                                                    rows={2}
+                                                />
+                                            </div>
+
+                                        </div>
+                                    </>
 
                                 }
-                                <div className='flex items-center mt-5'>
-                                    <Button onClick={() => addOptionToList()} className='flex items-center px-2 mr-3 font-medium h-9'>
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
-                                            <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
-                                        </svg>
-                                    </Button>
-                                    <TextArea
-                                        value={newOption}
-                                        onChange={(e) => { setNewOption(e.target.value) }}
-                                        className='w-full'
-                                        rows={2}
-                                    />
-                                </div>
 
+                                <button onClick={() => addQuestion()} className='ml-auto  mt-5 rounded-md bg-[#6366f1]  p-2 text-white'>
+                                    {t("CREATE_COURSES.COURSE_SECTIONS.create")}
+                                </button>
                             </div>
-                        </>
+                        }
 
-                    }
 
-                    <button onClick={() => addQuestion()} className='ml-auto  mt-5 rounded-md bg-[#6366f1]  p-2 text-white'>
-                        {t("CREATE_COURSES.COURSE_SECTIONS.create")}
-                    </button>
-                </div>
+                        <div className="flex items-center justify-between mt-5 mb-8 bg-white rounded-md shadow-md p-5 border-b-8 border-[#6366f1]">
+                            <button className='flex items-center mx-4 duration-200 hover:-translate-x-2 disabled:text-gray-300 disabled:translate-x-0' onClick={handlePrevPage} disabled={currentPage === 1}>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 mr-2">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75" />
+                                </svg>
+                                {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.previous")}
+                            </button>
+                            <button className='flex items-center mx-4 duration-200 hover:translate-x-2 disabled:text-gray-300 disabled:translate-x-0' onClick={handleNextPage} disabled={currentPage === totalPages}>
+                                {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.next")}
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-2">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+                                </svg>
+                            </button>
+                        </div>
+                    </>
+                )
             }
 
-
-            <div className="flex items-center justify-between mt-5 mb-8 bg-white rounded-md shadow-md p-5 border-b-8 border-[#6366f1]">
-                <button className='flex items-center mx-4 duration-200 hover:-translate-x-2 disabled:text-gray-300 disabled:translate-x-0' onClick={handlePrevPage} disabled={currentPage === 1}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 mr-2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75" />
-                    </svg>
-                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.previous")}
-                </button>
-                <button className='flex items-center mx-4 duration-200 hover:translate-x-2 disabled:text-gray-300 disabled:translate-x-0' onClick={handleNextPage} disabled={currentPage === totalPages}>
-                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.next")}
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
-                    </svg>
-                </button>
-            </div>
         </div>
     );
 }
