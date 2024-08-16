@@ -382,20 +382,18 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
 
        
         const src = iframe?.getAttribute('src');
-        console.log((!src.startsWith('https://forms.office.com/Pages/ResponsePage.aspx') || !src.startsWith('https://docs.google.com/forms/')))
         if (!src || (!src.startsWith('https://forms.office.com/Pages/ResponsePage.aspx') && !src.startsWith('https://docs.google.com/forms/')) ) {
             return { isValid: false, messageError: "El iframe no tiene un src válido." };
         }
 
 
-        const width = iframe?.getAttribute('width');
-        const height = iframe?.getAttribute('height');
-        if (!width || !height || isNaN(parseInt(width)) || isNaN(parseInt(height))) {
-            return { isValid: false, messageError: "El iframe tiene dimensiones no válidas." };
-        }
-
         iframe?.removeAttribute('style');
+        iframe?.removeAttribute('width');
+        iframe?.removeAttribute('height');
+        iframe?.removeAttribute('classname');
+        iframe?.setAttribute('class', 'mt-6 w-full h-full rounded-md');
         const sanitizedEmbedCode = iframe.outerHTML;
+        console.log(sanitizedEmbedCode)
 
 
         // Si todo es válido
