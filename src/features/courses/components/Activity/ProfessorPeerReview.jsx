@@ -1,25 +1,28 @@
 import React, { useState, useEffect } from 'react'
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { fetchCourseInformation } from '../../../../fetches/fetchCourseInformation'
 import { fetchPeerReviewAnswers } from '../../../../fetches/fetchPeerReviewAnswers';
 import { StudentRow } from './Components/PeerReview/StudentRow';
 import { GroupRows } from './Components/PeerReview/GroupRows.jsx';
-import { Button, Empty } from 'antd';
+import { Button, Empty, message } from 'antd';
 import generateExcelPeerReview from './utils/generateExcelPeerReview';
 import CreatePeers from './Components/PeerReview/CreatePeers';
 import { MoonLoader } from 'react-spinners';
 import { BreadcrumbCourse } from '../CoursesInside/BreadcrumbCourse.jsx';
 import { useTranslation } from 'react-i18next';
+
 export const ProfessorPeerReview = ({ activityData }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [courseContentInformation, setCourseContentInformation] = useState({});
   const [peerReviewAnswers, setPeerReviewAnswers] = useState([]);
   const [createPeerReview, setCreatePeerReview] = useState(false);
   const [studentGroups, setStudentGroups] = useState([])
+
   const peerReviewinGroups = activityData.activity?.data.attributes.groupActivity
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [deadline, setDeadline] = useState(activityData.activity?.data.attributes.deadline ? new Date(activityData.activity?.data.attributes.deadline) : null)
+  const [messageApi, contextHolder] = message.useMessage();
   const activityToReviewID = activityData.activity?.data.attributes.task_to_review?.data?.id
-  const navigate = useNavigate()
   const { courseId, activityId } = useParams()
   const { t } = useTranslation();
 
@@ -34,34 +37,48 @@ export const ProfessorPeerReview = ({ activityData }) => {
       student.attributes.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-
-  useEffect(() => {
-    async function fetchCourseData() {
-      setLoading(true)
-      const { courseInformation, students, professors } =
-        await fetchCourseInformation({ courseId });
-
+  async function fetchCourseData() {
+    try {
+      const passedDeadline = deadline ? new Date() > deadline : false;
+      if (!loading && passedDeadline === false) {
+        messageApi.open({
+          type: 'loading',
+          content: t("PEERREVIEW.updating_peer_reviews"),
+        });
+      }
+      const { courseInformation, students, professors } = await fetchCourseInformation({ courseId });
       setCourseContentInformation({ courseInformation, students, professors });
 
       if (peerReviewinGroups) {
-        const idAdded = []
-        const groups = students.data.flatMap((student) => {
-          return student.attributes.groups?.data.filter((group) => {
-            if (idAdded.includes(group.id)) return false
-            idAdded.push(group.id)
-            return group.attributes?.activity?.data?.id === activityToReviewID
+        const idAdded = [];
+        const groups = students.data.flatMap((student) =>
+          student.attributes.groups?.data.filter((group) => {
+            if (idAdded.includes(group.id)) return false;
+            idAdded.push(group.id);
+            return group.attributes?.activity?.data?.id === activityToReviewID;
           })
-        })
-
-        setStudentGroups(groups)
+        );
+        setStudentGroups(groups);
       }
-      const peerReviewAnswers =
-        await fetchPeerReviewAnswers(activityId);
-      setPeerReviewAnswers(peerReviewAnswers);
-      setLoading(false)
+      const peerReviewAnswersDATA = await fetchPeerReviewAnswers(activityId);
+      setPeerReviewAnswers(peerReviewAnswersDATA);
+    } catch (error) {
+      console.error('Error fetching course data:', error);
+    } finally {
+      setLoading(false);
+      messageApi.destroy();
     }
+  }
+
+  useEffect(() => {
     fetchCourseData();
-  }, []);
+    const interval = setInterval(() => {
+      const passedDeadline = deadline ? new Date() > deadline : false;
+      if (createPeerReview === false && passedDeadline === false) fetchCourseData();
+    }, 15000);
+    return () => clearInterval(interval);
+  }, [createPeerReview, loading, deadline]);
+
 
   function renderTableRows() {
     if (peerReviewinGroups) {
@@ -73,12 +90,10 @@ export const ProfessorPeerReview = ({ activityData }) => {
       )
     }
     return (
-      <>
-        {filteredStudents.map((student) => (
-          <StudentRow student={student} peerReviewAnswers={peerReviewAnswers} activityToReviewID={activityToReviewID}
-            activityTitle={activityData.activity?.data.attributes.title} key={student?.id} peerReviewinGroups={peerReviewinGroups} />
-        ))}
-      </>
+      filteredStudents.map((student) => (
+        <StudentRow student={student} peerReviewAnswers={peerReviewAnswers} activityToReviewID={activityToReviewID}
+          activityTitle={activityData.activity?.data.attributes.title} key={student?.id} peerReviewinGroups={peerReviewinGroups} />
+      ))
     );
   }
 
@@ -95,6 +110,7 @@ export const ProfessorPeerReview = ({ activityData }) => {
 
   return (
     <div className='h-full p-5 max-w-[100%] overflow-x-scroll'>
+      {contextHolder}
       <BreadcrumbCourse styles={'ml-5'} />
       <main className='mx-5'>
         <h2 className='mt-3 mb-2 text-lg font-medium'>{t("PEERREVIEW.peer_review")}</h2>

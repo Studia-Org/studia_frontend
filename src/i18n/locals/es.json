@@ -982,6 +982,7 @@
         "student_cannot_review_own_activity": "El estudiante no puede revisar su propia actividad",
         "cannot_drop_outside_list": "No puedes soltar al estudiante fuera de la lista",
         "peers_created_success": "Pares creados con éxito",
-        "error_creating_peers": "Error al crear los pares"
+        "error_creating_peers": "Error al crear los pares",
+        "updating_peer_reviews": "Actualizando revisiones por pares..."
     }
 }

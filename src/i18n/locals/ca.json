@@ -982,6 +982,7 @@
         "student_cannot_review_own_activity": "L'estudiant no pot revisar la seva pròpia activitat",
         "cannot_drop_outside_list": "No pots deixar l'estudiant fora de la llista",
         "peers_created_success": "Parells creats amb èxit",
-        "error_creating_peers": "Error en crear els parells"
+        "error_creating_peers": "Error en crear els parells",
+        "updating_peer_reviews": "Actualitzant les revisions per parells..."
     }
 }
