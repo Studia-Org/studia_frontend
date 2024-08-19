@@ -380,9 +380,9 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
             return { isValid: false, messageError: "No se encontró un iframe en el embed code." };
         }
 
-       
+
         const src = iframe?.getAttribute('src');
-        if (!src || (!src.startsWith('https://forms.office.com/Pages/ResponsePage.aspx') && !src.startsWith('https://docs.google.com/forms/')) ) {
+        if (!src || (!src.startsWith('https://forms.office.com/Pages/ResponsePage.aspx') && !src.startsWith('https://docs.google.com/forms/'))) {
             return { isValid: false, messageError: "El iframe no tiene un src válido." };
         }
 
@@ -390,8 +390,13 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
         iframe?.removeAttribute('style');
         iframe?.removeAttribute('width');
         iframe?.removeAttribute('height');
+        if(src.startsWith('https://forms.office.com/Pages/ResponsePage.aspx')){
+            iframe?.setAttribute('width', '400');
+            iframe?.setAttribute('height', '400');     
+        }
+        iframe?.setAttribute('class', 'mt-6 w-full rounded-md h-screen');      
         iframe?.removeAttribute('classname');
-        iframe?.setAttribute('class', 'mt-6 w-full h-full rounded-md');
+        
         const sanitizedEmbedCode = iframe.outerHTML;
         console.log(sanitizedEmbedCode)
 
@@ -422,7 +427,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                                         ...sub.questionnaire,
                                         attributes: {
                                             ...sub.questionnaire.attributes,
-                                            Options:{
+                                            Options: {
                                                 ...sub.questionnaire.attributes.Options,
                                                 embedCode: sanitizedEmbedCode
                                             }
