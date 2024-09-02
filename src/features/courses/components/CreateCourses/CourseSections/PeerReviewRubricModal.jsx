@@ -139,6 +139,34 @@ export const PeerReviewRubricModal = ({ isModalOpen, setIsModalOpen, rubricData,
     };
     const handleCancel = () => {
         document.body.style.overflow = 'auto'
+        setData(
+            rubricData != null && Object.keys(rubricData).length > 0 ? rubricDataConverter(rubricData) : [
+                {
+                    key: guidGenerator(),
+                    criteria: '',
+                    evaluation1: '',
+                    evaluation2: '',
+                    evaluation3: '',
+                    evaluation4: '',
+                },
+                {
+                    key: guidGenerator(),
+                    criteria: '',
+                    evaluation1: '',
+                    evaluation2: '',
+                    evaluation3: '',
+                    evaluation4: '',
+                },
+                {
+                    key: guidGenerator(),
+                    criteria: '',
+                    evaluation1: '',
+                    evaluation2: '',
+                    evaluation3: '',
+                    evaluation4: '',
+                },
+            ]
+        )
         setIsModalOpen(false);
     };
 
