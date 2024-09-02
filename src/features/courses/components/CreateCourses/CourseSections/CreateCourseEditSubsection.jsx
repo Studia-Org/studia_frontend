@@ -73,6 +73,7 @@ export const CreateCourseEditSubsection = ({
   }, [files])
 
   const handleSubsectionChange = (type, newValue) => {
+    console.log(type, newValue)
     setCreateCourseSectionsList((courses) => {
       const updatedCourses = courses.map((course) => {
         if (course.id === sectionId) {
@@ -503,8 +504,10 @@ export const CreateCourseEditSubsection = ({
             <div className='space-y-2 mt-7'>
               <label className='text-sm text-gray-500 mt-7 ' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.description")} *</label>
               <div className='flex w-full '>
-                <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3' placeholder={t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.description")} value={subsection.description}
-                  onChange={(e) => handleSubsectionChange('description', e.target.value)} />
+                <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3'
+                  placeholder={t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.description")}
+                  defaultValue={subsection.description}
+                  onChange={debounce((e) => handleSubsectionChange('description', e.target.value), 300)} />
               </div>
             </div>
             <div className='mt-3 mb-5 space-y-2'>
