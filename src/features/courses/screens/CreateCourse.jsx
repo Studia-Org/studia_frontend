@@ -13,6 +13,7 @@ const CreateCourse = () => {
     document.title = 'Create Course - Uptitude'
     const [createCourseOption, setCreateCourseOption] = useState(0);
     const [editCourseSectionFlag, setEditCourseSectionFlag] = useState(false)
+    const [subsectionErrors, setSubsectionErrors] = useState()
     const [sectionToEdit, setSectionToEdit] = useState({})
 
     const [createCourseSectionsListCopy, setCreateCourseSectionsListCopy] = useState(() => {
@@ -48,9 +49,9 @@ const CreateCourse = () => {
                 return <CreateCourseSections createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption}
                     setCreateCourseSectionsList={setCreateCourseSectionsList} createCourseSectionsList={createCourseSectionsList} setEditCourseSectionFlag={setEditCourseSectionFlag}
                     setSectionToEdit={setSectionToEdit} setCreateCourseSectionsListCopy={setCreateCourseSectionsListCopy}
-                    createCourseSectionsListCopy={createCourseSectionsListCopy} />
+                    createCourseSectionsListCopy={createCourseSectionsListCopy}/>
             case 2:
-                return <CreateConfirmation task={task} createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} createCourseSectionsList={createCourseSectionsList} evaluator={courseBasicInfo.evaluator} courseBasicInfo={courseBasicInfo} />
+                return <CreateConfirmation subsectionErrors={subsectionErrors} task={task} createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} createCourseSectionsList={createCourseSectionsList} evaluator={courseBasicInfo.evaluator} courseBasicInfo={courseBasicInfo} />
             default:
                 return <CreateCourseInfo createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} />
         }
@@ -65,7 +66,7 @@ const CreateCourse = () => {
                             <EditCreateCourseSection key={sectionToEdit.id} setEditCourseSectionFlag={setEditCourseSectionFlag}
                                 sectionToEdit={sectionToEdit} createCourseSectionsList={createCourseSectionsList} task={task} setTask={setTask}
                                 createCourseSectionsListCopy={createCourseSectionsListCopy} setCreateCourseSectionsListCopy={setCreateCourseSectionsListCopy}
-                                setCreateCourseSectionsList={setCreateCourseSectionsList} categories={categories} setCategories={setCategories} />
+                                setCreateCourseSectionsList={setCreateCourseSectionsList} categories={categories} setCategories={setCategories} setSubsectionErrors={setSubsectionErrors} />
                         </>
                         :
                         <>

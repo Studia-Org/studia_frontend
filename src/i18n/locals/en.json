@@ -259,7 +259,8 @@
         "file_removed_success": "File removed successfully",
         "file_removed_error": "Error removing file",
         "csv_error": "Not a valid email detected in the CSV file. Please check if file format is correct. Renaming the file to .csv may not work.",
-        "file_MB": "File size must be less than 10MB"
+        "file_MB": "File size must be less than 10MB",
+        "file_type": "Invalid file type."
     },
     "DRAGANDDROP": {
         "drag_drop": "Drag & Drop your files or <span class='filepond--label-action'>Browse</span>",
@@ -555,7 +556,7 @@
                     "autocorrect_text": "Check the correct answers to the questions, and the questionnaire will be automatically evaluated once the student submits it.",
                     "ERRORS_SUBSECTION": {
                         "date_missing": "Start and end date are missing",
-                        "categories_missing": "No competences",
+                        "categories_missing": "There are no criteria selected for the competences",
                         "question_missing": "No questions",
                         "answer_questions": "Not all questions have correct answers",
                         "rubric_empty": "Rubric is empty",

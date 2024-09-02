@@ -11,7 +11,7 @@ import { CreateTask } from './CreateTask';
 import { useTranslation } from 'react-i18next';
 
 export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdit, createCourseSectionsList, task, setTask,
-    createCourseSectionsListCopy, setCreateCourseSectionsListCopy, setCreateCourseSectionsList, categories, setCategories }) => {
+    createCourseSectionsListCopy, setCreateCourseSectionsListCopy, setCreateCourseSectionsList, categories, setCategories, setSubsectionErrors }) => {
     const [subsectionsToEdit, setSubsectionsToEdit] = useState((createCourseSectionsListCopy?.filter((section) => section.id === sectionToEdit.id)[0]))
     const [editSubsectionFlag, setEditSubsectionFlag] = useState(false)
     const [subsectionEditing, setSubsectionEditing] = useState()
@@ -123,10 +123,10 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
         }
     ];
 
-    const saveChanges = useCallback((autosave = false) => {
-        setCreateCourseSectionsList(createCourseSectionsListCopy);
-        localStorage.setItem('createCourseSectionsList', JSON.stringify(createCourseSectionsListCopy));
-        
+    const saveChanges = (autosave = false, createCourseSectionsListCopyTest) => {
+        setCreateCourseSectionsList(createCourseSectionsListCopyTest);
+        localStorage.setItem('createCourseSectionsList', JSON.stringify(createCourseSectionsListCopyTest));
+
         if (autosave) {
             messageApi
                 .open({
@@ -143,7 +143,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
             setEditSubsectionFlag(false);
             message.success('Changes saved successfully');
         }
-    }, []);
+    };
 
 
     useEffect(() => {
@@ -154,14 +154,14 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
     useEffect(() => {
         const autoSave = () => {
             if (thereIsChanges) {
-                saveChanges(true);
+                saveChanges(true, createCourseSectionsListCopy);
             }
         };
-        intervalRef.current = setInterval(autoSave, 10000); // 10 segundos
+        intervalRef.current = setInterval(autoSave, 30000); // 30 segundos
         return () => {
             clearInterval(intervalRef.current);
         };
-    }, [thereIsChanges, saveChanges]);
+    }, [thereIsChanges]);
 
     const handleDragEnd = (event) => {
         const { active, over } = event;
@@ -230,7 +230,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
 
     return (
         <div className='text-base font-normal'>
-             {contextHolder}
+            {contextHolder}
             <Tour open={open} onClose={() => {
                 setOpen(false)
                 document.body.style.overflow = 'auto'
@@ -271,7 +271,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
                                     <h2 className='text-xl font-medium '>{sectionToEdit.name}</h2>
                                     <Tag color="#108ee9">{t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.section")}</Tag>
                                 </div>
-                                <Button ref={ref4} disabled={!thereIsChanges} type='primary' onClick={() => saveChanges(false)} className='bg-[#1677ff] text-white '>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.save_changes")}</Button>
+                                <Button ref={ref4} disabled={!thereIsChanges} type='primary' onClick={() => saveChanges(false, createCourseSectionsListCopy)} className='bg-[#1677ff] text-white '>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.save_changes")}</Button>
                             </div>
                             <div ref={ref} className='p-5 mt-5 mb-5 text-base font-medium bg-white rounded-md shadow-md'>
                                 <div className='flex items-center'>
@@ -297,7 +297,9 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
                                                                 initial={{ opacity: 0, x: -50 }}
                                                                 animate={{ opacity: 1, x: 0 }}
                                                                 exit={{ opacity: 0, x: 50 }}>
-                                                                <CreateCourseSubsectionsList subsection={subsection} setCreateCourseSectionsList={setCreateCourseSectionsListCopy} sectionId={sectionToEdit.id} setEditSubsectionFlag={setEditSubsectionFlag} setSubsectionEditing={setSubsectionEditing} key={subsection.id} ref2={ref2} />
+                                                                <CreateCourseSubsectionsList setSubsectionErrors={setSubsectionErrors} subsection={subsection}
+                                                                    setCreateCourseSectionsList={setCreateCourseSectionsListCopy} sectionId={sectionToEdit.id}
+                                                                    setEditSubsectionFlag={setEditSubsectionFlag} setSubsectionEditing={setSubsectionEditing} key={subsection.id} ref2={ref2} />
                                                             </motion.li>
                                                         ))}
                                                     </ol>

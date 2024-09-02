@@ -376,7 +376,7 @@ export const CreateCourseEditSubsection = ({
                   <label className='text-sm text-gray-500' htmlFor=''>
                     {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.cover")}
                   </label>
-                  <UploadFiles fileList={landscape_photo} setFileList={setLandscape_photo} listType={'picture'} maxCount={1} />
+                  <UploadFiles fileList={landscape_photo} setFileList={setLandscape_photo} listType={'picture'} maxCount={1} accept={'.jpg,.jpeg,.png'} />
                   <div>
                     <label className='text-sm text-gray-500 ' htmlFor=''>
                       {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.pairs_or_individual")} *

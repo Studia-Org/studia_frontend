@@ -259,7 +259,8 @@
         "file_removed_success": "Archivo eliminado correctamente",
         "file_removed_error": "Error al eliminar el archivo",
         "csv_error": "No se detectó un correo electrónico válido en el archivo CSV. Por favor, verifica si el formato del archivo es correcto. Renombrar el archivo a .csv puede no funcionar.",
-        "file_MB": "El tamaño del archivo debe ser inferior a 10MB"
+        "file_MB": "El tamaño del archivo debe ser inferior a 10MB",
+        "file_type": "Tipo de archivo no válido."
     },
     "DRAGANDDROP": {
         "drag_drop": "Arrastra y suelta tus archivos o <span class='filepond--label-action'>Explorar</span>",
@@ -561,7 +562,7 @@
                     "autocorrect_text": "Verifique las respuestas correctas a las preguntas, y el cuestionario se evaluará automáticamente una vez que el estudiante lo envíe.",
                     "ERRORS_SUBSECTION": {
                         "date_missing": "Faltan la fecha de inicio y fin",
-                        "categories_missing": "No hay competencias",
+                        "categories_missing": "No hay criterios seleccionados para las competencias",
                         "question_missing": "No hay preguntas",
                         "answer_questions": "No todas las preguntas tienen respuestas correctas",
                         "rubric_empty": "La rúbrica está vacía",

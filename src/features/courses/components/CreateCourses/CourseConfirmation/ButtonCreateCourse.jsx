@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { m } from 'framer-motion';
 
 
-export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }) => {
+export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo, subsectionErrors }) => {
 
     const { t } = useTranslation()
 
@@ -59,6 +59,9 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
         })
         return false;
     };
+
+    console.log('courseBasicInfo', Object.keys(subsectionErrors).length)
+    const courseHasErrors = Object.keys(subsectionErrors).length > 0
 
     async function createCourse() {
 
