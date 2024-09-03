@@ -169,7 +169,6 @@ export const PeerReviewRubricModal = ({ isModalOpen, setIsModalOpen, rubricData,
         )
         setIsModalOpen(false);
     };
-
     const addRow = () => {
         const newData = {
             key: guidGenerator(),
@@ -201,7 +200,28 @@ export const PeerReviewRubricModal = ({ isModalOpen, setIsModalOpen, rubricData,
         })
         setData(newData)
     }
+    function handlePaste(event) {
+        event.preventDefault();
+        const clipboardData = event.clipboardData || window.clipboardData;
+        const pastedData = clipboardData.getData('Text');
+        processPastedData(pastedData);
+    };
 
+    function processPastedData(data) {
+        const rows = data.trim().split('\n');
+        const newTableData = rows.map((row) => {
+            const cells = row.split('\t');
+            return {
+                key: guidGenerator(),
+                criteria: cells[0] || '',
+                evaluation1: cells[1] || '',
+                evaluation2: cells[2] || '',
+                evaluation3: cells[3] || '',
+                evaluation4: cells[4] || '',
+            };
+        });
+        setData(newTableData);
+    };
     return (
         <Modal
             title={t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.peer_review_rubric")} maskClosable={false} destroyOnClose={true}
@@ -262,9 +282,18 @@ export const PeerReviewRubricModal = ({ isModalOpen, setIsModalOpen, rubricData,
                                 </tr>
                             )
                         })}
-
                     </tbody>
                 </table>
+                <section>
+                    <div
+                        contentEditable="true"
+                        onBeforeInput={(e) => { if (e.inputType !== 'insertFromPaste') e.preventDefault(); }}
+                        onPaste={handlePaste}
+                        className='my-3 min-h-[100px] p-4 border border-gray-300 rounded-md'
+                    >
+                        {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.you_can_copy_and_paste_rubric_from_word_excel")}
+                    </div>
+                </section>
             </Form>
         </Modal>
     )

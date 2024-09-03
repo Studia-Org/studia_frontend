@@ -528,6 +528,7 @@
                     "ponderation_good": "Ponderation sum 100",
                     "ponderation_error_text": "You will not be able to create a course, the ponderation of all subsections do not sum 100%, they do sum",
                     "peer_review_rubric": "Peer review rubric",
+                    "you_can_copy_and_paste_rubric_from_word_excel": "You can copy and paste the rubric from Word or Excel here",
                     "peer_review_rubric_text": "Edit rubric",
                     "peer_review_task": "Select the task for which the peer review will be conducted",
                     "students_review": "How many are going to review each other among the ",

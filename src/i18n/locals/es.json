@@ -534,6 +534,7 @@
                     "ponderation_good": "La ponderación suma 100",
                     "ponderation_error_text": "No podrás crear un curso, la ponderación de todas las subsecciones no suma 100%, sino",
                     "peer_review_rubric": "Rúbrica de revisión por pares",
+                    "you_can_copy_and_paste_rubric_from_word_excel": "Puedes copiar y pegar la rúbrica desde Word o Excel aquí",
                     "peer_review_rubric_text": "Editar rúbrica",
                     "peer_review_task": "Selecciona la tarea para la cual se realizará la revisión por pares",
                     "students_review": "¿Cuántos se van a revisar entre sí entre los ",

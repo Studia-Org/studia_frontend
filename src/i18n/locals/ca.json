@@ -534,6 +534,7 @@
                     "ponderation_good": "La ponderació suma 100",
                     "ponderation_error_text": "No podràs crear un curs, la ponderació de totes les subseccions no suma 100%, en canvi, suma",
                     "peer_review_rubric": "Rúbrica de revisió per parells",
+                    "you_can_copy_and_paste_rubric_from_word_excel": "Pots copiar i enganxar la rúbrica des de Word o Excel aquí",
                     "peer_review_rubric_text": "Editar rúbrica",
                     "peer_review_task": "Selecciona la tasca per a la qual es realitzarà la revisió per parells",
                     "students_review": "Quants es revisaran entre ells entre els ",
