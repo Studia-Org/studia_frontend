@@ -152,7 +152,10 @@ export const CheckSubsectionErrors = ({ subsection, setSubsectionErrors }) => {
 
         setSubsectionErrors(prevErrors => ({
             ...prevErrors,
-            [subsection.title]: newErrorsList.map(error => error.comment)
+            [subsection.id]: {
+                title: subsection.title,
+                errors: newErrorsList.map(error => error.comment)
+            }
         }));
         setErrorsList(newErrorsList);
     }

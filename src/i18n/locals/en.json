@@ -784,7 +784,9 @@
             "no_sections": "There are no sections yet"
         },
         "COURSE_VISUALIZATION": {
-            "generate_course": "Generate course"
+            "generate_course": "Generate course",
+            "principal_text": "The button will be enabled once you have completed all the sections and subsections. Ensure that you don't have any errors in the course sections.",
+            "errors": "Check errors"
         },
         "NAVIGATION": {
             "continue": "Continue",

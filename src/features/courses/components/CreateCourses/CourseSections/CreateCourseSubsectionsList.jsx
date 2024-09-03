@@ -3,6 +3,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Button, Popconfirm, message } from 'antd';
 import { CheckSubsectionErrors } from './CheckSubsectionErrors';
+import { set } from 'date-fns';
 
 export const CreateCourseSubsectionsList = ({
     subsection,
@@ -13,6 +14,7 @@ export const CreateCourseSubsectionsList = ({
     setSubsectionErrors,
 }) => {
     const deleteSubsection = () => {
+        setSubsectionErrors((prevErrors) =>  prevErrors.filter((error) => error.subsectionId !== subsection.id));
         setCreateCourseSectionsList((prevSections) =>
             prevSections.map((section) =>
                 section.id === sectionId
