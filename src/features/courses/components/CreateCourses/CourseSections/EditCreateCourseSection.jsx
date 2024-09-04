@@ -11,7 +11,7 @@ import { CreateTask } from './CreateTask';
 import { useTranslation } from 'react-i18next';
 
 export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdit, createCourseSectionsList, task, setTask,
-    createCourseSectionsListCopy, setCreateCourseSectionsListCopy, setCreateCourseSectionsList, categories, setCategories, setSubsectionErrors }) => {
+    createCourseSectionsListCopy, setCreateCourseSectionsListCopy, setCreateCourseSectionsList, categories, setCategories, setSubsectionErrors, subsectionErrors }) => {
     const [subsectionsToEdit, setSubsectionsToEdit] = useState((createCourseSectionsListCopy?.filter((section) => section.id === sectionToEdit.id)[0]))
     const [editSubsectionFlag, setEditSubsectionFlag] = useState(false)
     const [subsectionEditing, setSubsectionEditing] = useState()
@@ -298,6 +298,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
                                                                 animate={{ opacity: 1, x: 0 }}
                                                                 exit={{ opacity: 0, x: 50 }}>
                                                                 <CreateCourseSubsectionsList setSubsectionErrors={setSubsectionErrors} subsection={subsection}
+                                                                    subsectionErrors={subsectionErrors}
                                                                     setCreateCourseSectionsList={setCreateCourseSectionsListCopy} sectionId={sectionToEdit.id}
                                                                     setEditSubsectionFlag={setEditSubsectionFlag} setSubsectionEditing={setSubsectionEditing} key={subsection.id} ref2={ref2} />
                                                             </motion.li>

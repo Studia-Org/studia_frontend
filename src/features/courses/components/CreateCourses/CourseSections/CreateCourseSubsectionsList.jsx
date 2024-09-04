@@ -12,6 +12,7 @@ export const CreateCourseSubsectionsList = ({
     setEditSubsectionFlag,
     setSubsectionEditing,
     setSubsectionErrors,
+    subsectionErrors,
 }) => {
     const deleteSubsection = () => {
         setSubsectionErrors((prevErrors) =>  prevErrors.filter((error) => error.subsectionId !== subsection.id));
@@ -91,7 +92,7 @@ export const CreateCourseSubsectionsList = ({
                     <div className="flex flex-col justify-center ml-5">
                         <p className="">{subsection.title}</p>
                     </div>
-                    <CheckSubsectionErrors subsection={subsection} setSubsectionErrors={setSubsectionErrors} />
+                    <CheckSubsectionErrors subsection={subsection} setSubsectionErrors={setSubsectionErrors} subsectionErrors={subsectionErrors} />
                 </div>
 
                 <Popconfirm

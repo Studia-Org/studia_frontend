@@ -60,13 +60,12 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo, 
         return false;
     };
 
-    let courseHasErrors = true
-    if (subsectionErrors) {
-        courseHasErrors = Object?.keys(subsectionErrors)?.length > 0
+    let courseHasErrors = false; 
+    if (subsectionErrors && typeof subsectionErrors === 'object') {
+        courseHasErrors = Object.values(subsectionErrors).some(subsection =>
+            Array.isArray(subsection.errors) && subsection.errors.length > 0
+        );
     }
-
-    console.log('courseHasErrors', courseHasErrors)
-
 
     async function createCourse() {
 
@@ -78,7 +77,6 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo, 
             let forumIds = []
             const totalIterations = createCourseSectionsList.reduce((acc, section) => acc + section.subsections.length, 0)
             const createdActivities = {}
-            console.log('here', createCourseSectionsList)
             for (const section of createCourseSectionsList) {
                 let allSubsections = []
                 for (const subsection of section.subsections) {

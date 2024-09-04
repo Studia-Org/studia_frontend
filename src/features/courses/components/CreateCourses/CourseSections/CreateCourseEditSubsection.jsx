@@ -466,11 +466,6 @@ export const CreateCourseEditSubsection = ({
                 />
               </div>
             </div>
-            <div className='mt-7'>
-              <label className='block mr-3 text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.categories")} * </label>
-              <TableCategories categories={categories[sectionId]} setCreateCourseSectionsList={setCreateCourseSectionsList}
-                subsection={subsection} sectionID={sectionId} createCourseSectionsList={createCourseSectionsList} />
-            </div>
             <div className='flex items-center justify-between mt-7'>
               <div className='flex items-center'>
                 <label className='block mr-3 text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.evaluable")} * </label>
@@ -494,6 +489,11 @@ export const CreateCourseEditSubsection = ({
                   parser={(value) => value.replace('%', '')}
                 />
               </div>
+            </div>
+            <div className='mt-7'>
+              <label className='block mr-3 text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.categories")} * </label>
+              <TableCategories categories={categories[sectionId]} setCreateCourseSectionsList={setCreateCourseSectionsList}
+                subsection={subsection} sectionID={sectionId} createCourseSectionsList={createCourseSectionsList} />
             </div>
             <div className='space-y-2 mt-7'>
               <label className='text-sm text-gray-500 mt-7 ' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.description")} *</label>
