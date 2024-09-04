@@ -17,27 +17,27 @@ const CreateCourse = () => {
 
     const [createCourseSectionsListCopy, setCreateCourseSectionsListCopy] = useState(() => {
         const savedSections = localStorage.getItem('createCourseSectionsList');
-        return savedSections ? JSON.parse(savedSections) : [];
+        return savedSections && savedSections !== "undefined" ? JSON.parse(savedSections) : [];
     });
 
     const [createCourseSectionsList, setCreateCourseSectionsList] = useState(() => {
         const savedSections = localStorage.getItem('createCourseSectionsList');
-        return savedSections ? JSON.parse(savedSections) : [];
+        return savedSections && savedSections !== "undefined" ? JSON.parse(savedSections) : [];
     });
 
     const [courseBasicInfo, setCourseBasicInfo] = useState(() => {
         const savedInfo = localStorage.getItem('courseBasicInfo');
-        return savedInfo ? JSON.parse(savedInfo) : { tags: [] };
+        return savedInfo && savedInfo !== "undefined" ? JSON.parse(savedInfo) : { tags: [] };
     });
 
     const [categories, setCategories] = useState(() => {
         const savedCategories = localStorage.getItem('categories');
-        return savedCategories ? JSON.parse(savedCategories) : {};
+        return savedCategories && savedCategories !== "undefined" ? JSON.parse(savedCategories) : {};
     });
 
     const [task, setTask] = useState(() => {
         const savedTask = localStorage.getItem('task');
-        return savedTask ? JSON.parse(savedTask) : {};
+        return savedTask && savedTask !== "undefined" ? JSON.parse(savedTask) : {};
     });
 
     function RenderCreateCourse() {

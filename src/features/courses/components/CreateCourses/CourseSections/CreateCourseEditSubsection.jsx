@@ -73,7 +73,6 @@ export const CreateCourseEditSubsection = ({
   }, [files])
 
   const handleSubsectionChange = (type, newValue) => {
-    console.log(type, newValue)
     setCreateCourseSectionsList((courses) => {
       const updatedCourses = courses.map((course) => {
         if (course.id === sectionId) {
@@ -114,18 +113,28 @@ export const CreateCourseEditSubsection = ({
               subsectionCopy.activity.usersToPair = +newValue;
               break;
             case 'group':
-              subsectionCopy.activity.groupActivity = newValue;
-              if (!newValue) {
-                subsectionCopy.activity.numberOfStudentsperGroup = 1;
-                setNumberOfStudentsperGroup(1);
-              } else if (numberOfStudentsperGroup === 1) {
-                setNumberOfStudentsperGroup(2);
-                if (subsectionCopy.activity.numberOfStudentsperGroup === 1) subsectionCopy.activity.numberOfStudentsperGroup = 2;
-              }
+              sectionCopy.subsections.forEach((sub) => {
+                if (sub.type === 'peerReview') return
+                if (sub.type === 'task') {
+                  sub.activity.groupActivity = newValue;
+                  if (!newValue) {
+                    sub.activity.numberOfStudentsperGroup = 1;
+                    setNumberOfStudentsperGroup(1);
+                  } else if (numberOfStudentsperGroup === 1) {
+                    sub.activity.numberOfStudentsperGroup = 2;
+                    setNumberOfStudentsperGroup(2);
+                  }
+                }
+              });
               setIsGroup(newValue);
               break;
             case 'numberOfStudentsperGroup':
-              subsectionCopy.activity.numberOfStudentsperGroup = +newValue;
+              sectionCopy.subsections.forEach((sub) => {
+                if (sub.type === 'peerReview') return
+                if (sub.type === 'task') {
+                  sub.activity.numberOfStudentsperGroup = +newValue;
+                }
+              });
               setNumberOfStudentsperGroup(+newValue);
               break;
             default:
