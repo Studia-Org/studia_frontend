@@ -8,6 +8,7 @@ import { message, Select, Tag, Input, DatePicker } from 'antd';
 import { ACTIVITY_CATEGORIES } from '../../../../../constant';
 import { ca } from 'date-fns/locale';
 import { useTranslation } from 'react-i18next';
+import { set } from 'date-fns';
 
 export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList, setEditTaskFlag, setCreateCourseSectionsListCopy, categories, setCategories }) => {
     const [content, setContent] = useState();
@@ -15,8 +16,19 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
     const [deadline, setDeadline] = useState();
     const [categoriesInside, setCategoriesInside] = useState();
     const [files, setFiles] = useState([]);
+    const [isGroup, setIsGroup] = useState(false);
+    const [numberOfStudentsperGroup, setNumberOfStudentsperGroup] = useState(1);
 
     const { t } = useTranslation();
+
+    const handleChangeGroup = (value) => {
+        if(value){
+            setIsGroup(true);
+        }else{
+            setIsGroup(false);
+            setNumberOfStudentsperGroup(1);
+        }
+    }
 
     useEffect(() => {
         if (task[section.id]) {
@@ -25,6 +37,8 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
             setDeadline(task[section.id].deadline);
             setFiles(task[section.id].files.map(file => (file)));
             setCategoriesInside(categories[section.id]);
+            setIsGroup(task[section.id].groupActivity);
+            setNumberOfStudentsperGroup(task[section.id].numberOfStudentsperGroup);
         }
     }, [])
 
@@ -54,6 +68,8 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                     ponderation: section.task.ponderation,
                     type: section.task.type,
                     order: section.task.order,
+                    numberOfStudentsperGroup: numberOfStudentsperGroup,
+                    groupActivity: isGroup,
                 };
                 if (section?.task) {
                     setTask((prevTask) => {
@@ -82,6 +98,8 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                             subsection.activity.title = `${subsection.title}: ${updatedTask.title}`;
                             subsection.activity.deadline = updatedTask.deadline;;
                             subsection.activity.files = updatedTask.files;
+                            subsection.activity.numberOfStudentsperGroup = updatedTask.numberOfStudentsperGroup;
+                            subsection.activity.groupActivity = updatedTask.groupActivity;
                         }
                     });
                 }
@@ -106,6 +124,8 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                     ponderation: section.task.ponderation,
                     type: section.task.type,
                     order: section.task.order,
+                    numberOfStudentsperGroup: numberOfStudentsperGroup,
+                    groupActivity: isGroup,
                 };
 
                 if (section?.task) {
@@ -135,6 +155,8 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                             subsection.activity.title = `${subsection.title}`;
                             subsection.activity.deadline = updatedTask.deadline;
                             subsection.activity.files = updatedTask.files;
+                            subsection.activity.numberOfStudentsperGroup = updatedTask.numberOfStudentsperGroup;
+                            subsection.activity.groupActivity = updatedTask.groupActivity;
                         }
                     });
                 }
@@ -171,6 +193,8 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                 files: files.map(file => file),
                 order: 5,
                 evaluable: true,
+                numberOfStudentsperGroup: numberOfStudentsperGroup,
+                groupActivity: isGroup,
             }
             const newTask = {
                 [section.id]: {
@@ -184,6 +208,8 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                     files: files.map(file => file),
                     order: 5,
                     evaluable: true,
+                    numberOfStudentsperGroup: numberOfStudentsperGroup,
+                    groupActivity: isGroup,
                 },
             }
             setTask(prevTask => {
@@ -226,7 +252,7 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                 localStorage.setItem('createCourseSectionsList', JSON.stringify(newSections));
                 return newSections;
             });
-            
+
             message.success('Task created successfully');
 
         } catch (error) {
@@ -234,6 +260,8 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
         }
 
     }
+
+    console.log('categoriesInside', isGroup)
     return (
         <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -292,7 +320,7 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                     />
                 </div>
                 <div className='flex mt-5 mb-32'>
-                    <div className='w-1/2 pr-2 mr-8 space-y-2'>
+                    <div className='w-1/2 pr-2 mr-8 space-y-4'>
                         <label className='text-sm' htmlFor="">{t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.task_categories")} *</label>
                         <p className='text-xs text-gray-500'>{t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.task_categories_text")}</p>
                         <Select
@@ -306,6 +334,38 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                             onChange={(value) => setCategoriesInside(value)}
                             options={Object.keys(ACTIVITY_CATEGORIES).map(key => ({ label: t(`OBJECTIVES_CONSTANT.${key}`), value: key }))}
                         />
+                        <hr className='' />
+                        <div className=''>
+                            <label className='text-sm ' htmlFor=''>
+                                {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.pairs_or_individual")} *
+                            </label>
+                            <Select
+                                value={isGroup}
+                                style={{ width: '100%', marginTop: '5px' }}
+                                onChange={(number) => { handleChangeGroup(number) }}
+                                options={
+                                    [
+                                        { label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.individual"), value: false },
+                                        { label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.groups"), value: true }
+                                    ]
+                                }
+                            />
+                            {
+                                isGroup && (
+                                    <div className='mt-4'>
+                                        <label className='text-sm ' htmlFor=''>
+                                            {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.students_per_group")} *
+                                        </label>
+                                        <Select
+                                            defaultValue={numberOfStudentsperGroup}
+                                            style={{ width: '100%', marginTop: '5px' }}
+                                            onChange={(number) => { setNumberOfStudentsperGroup(number) }}
+                                            options={[{ label: '2', value: 2 }, { label: '3', value: 3 }, { label: '4', value: 4 }, { label: '5', value: 5 }]}
+                                        />
+                                    </div>
+                                )
+                            }
+                        </div>
                     </div>
                     <div className='flex-auto w-1/2 pr-2 space-y-2'>
                         <label className='text-sm' htmlFor="">{t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.task_files")}</label>

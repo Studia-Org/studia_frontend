@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import draw2 from '../../../assets/draw2.png'
 import { CreateCourseBreadcrumb } from '../components/CreateCourses/CreateCourseBreadcrumb';
@@ -17,8 +17,8 @@ const CreateCourse = () => {
         const savedErrors = localStorage.getItem('subsectionErrors');
         return savedErrors ? JSON.parse(savedErrors) : null;
     }
-
     )
+
     const [sectionToEdit, setSectionToEdit] = useState({})
 
     const [createCourseSectionsListCopy, setCreateCourseSectionsListCopy] = useState(() => {
@@ -45,6 +45,28 @@ const CreateCourse = () => {
         const savedTask = localStorage.getItem('task');
         return savedTask ? JSON.parse(savedTask) : {};
     });
+
+
+    // eliminar los errores de las subsections que no existen en el createCourseSectionsListCopy
+    useEffect(() => {
+        const validSubsectionIds = new Set();
+        createCourseSectionsListCopy.forEach(section => {
+            section.subsections.forEach(subsection => {
+                validSubsectionIds.add(subsection.id);
+            });
+        });
+
+        setSubsectionErrors(prevErrors => {
+            const filteredErrors = {};
+            Object.keys(prevErrors).forEach(id => {
+                if (validSubsectionIds.has(id)) {
+                    filteredErrors[id] = prevErrors[id];
+                }
+            });
+            return filteredErrors;
+        });
+
+    }, [createCourseSectionsListCopy])
 
     function RenderCreateCourse() {
         switch (createCourseOption) {

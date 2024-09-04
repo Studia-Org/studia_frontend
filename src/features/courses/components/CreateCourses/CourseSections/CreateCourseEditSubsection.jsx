@@ -377,36 +377,7 @@ export const CreateCourseEditSubsection = ({
                     {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.cover")}
                   </label>
                   <UploadFiles fileList={landscape_photo} setFileList={setLandscape_photo} listType={'picture'} maxCount={1} accept={'.jpg,.jpeg,.png'} />
-                  <div>
-                    <label className='text-sm text-gray-500 ' htmlFor=''>
-                      {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.pairs_or_individual")} *
 
-                    </label>
-                    <Select
-                      defaultValue={isGroup}
-                      key={subsection.id + "grouptask"}
-                      style={{ width: '100%', marginTop: '5px' }}
-                      onChange={(number) => { handleSubsectionChange('group', number) }}
-                      options={[{ label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.individual"), value: false },
-                      { label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.groups"), value: true }]}
-                    />
-                    {
-                      isGroup && (
-                        <div className='mt-4'>
-                          <label className='text-sm text-gray-500 ' htmlFor=''>
-                            {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.students_per_group")} *
-                          </label>
-                          <Select
-                            key={subsection.id + "numberofstudents"}
-                            defaultValue={numberOfStudentsperGroup}
-                            style={{ width: '100%', marginTop: '5px' }}
-                            onChange={(number) => { handleSubsectionChange('numberOfStudentsperGroup', number) }}
-                            options={[{ label: '2', value: 2 }, { label: '3', value: 3 }, { label: '4', value: 4 }, { label: '5', value: 5 }]}
-                          />
-                        </div>
-                      )
-                    }
-                  </div>
                 </div>
 
               )
