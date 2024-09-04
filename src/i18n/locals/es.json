@@ -259,7 +259,8 @@
         "file_removed_success": "Archivo eliminado correctamente",
         "file_removed_error": "Error al eliminar el archivo",
         "csv_error": "No se detectó un correo electrónico válido en el archivo CSV. Por favor, verifica si el formato del archivo es correcto. Renombrar el archivo a .csv puede no funcionar.",
-        "file_MB": "El tamaño del archivo debe ser inferior a 10MB"
+        "file_MB": "El tamaño del archivo debe ser inferior a 10MB",
+        "file_type": "Tipo de archivo no válido."
     },
     "DRAGANDDROP": {
         "drag_drop": "Arrastra y suelta tus archivos o <span class='filepond--label-action'>Explorar</span>",
@@ -564,7 +565,7 @@
                     "write_evaluation": "Hitos para obtener la evaluación...",
                     "ERRORS_SUBSECTION": {
                         "date_missing": "Faltan la fecha de inicio y fin",
-                        "categories_missing": "No hay competencias",
+                        "categories_missing": "No hay criterios seleccionados para las competencias",
                         "question_missing": "No hay preguntas",
                         "answer_questions": "No todas las preguntas tienen respuestas correctas",
                         "rubric_empty": "La rúbrica está vacía",
@@ -796,7 +797,9 @@
             "no_sections": "Aún no hay secciones"
         },
         "COURSE_VISUALIZATION": {
-            "generate_course": "Crear curso"
+            "generate_course": "Crear curso",
+            "principal_text": "El botón se habilitará una vez que hayas completado todas las secciones y subsecciones del curso. Asegúrate de no tener ningún error en el curso antes de continuar.",
+            "errors": "Mostrar errores"
         },
         "NAVIGATION": {
             "continue": "Continuar",

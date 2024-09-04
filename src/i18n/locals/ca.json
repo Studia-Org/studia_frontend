@@ -259,7 +259,8 @@
         "file_removed_success": "Fitxer eliminat amb èxit",
         "file_removed_error": "Error en eliminar el fitxer",
         "csv_error": "No s'ha detectat cap correu electrònic vàlid al fitxer CSV. Si us plau, verifica si el format del fitxer és correcte. Renombrar el fitxer a .csv pot no funcionar.",
-        "file_MB": "La mida del fitxer ha de ser inferior a 10MB"
+        "file_MB": "La mida del fitxer ha de ser inferior a 10MB",
+        "file_type": "Tipus d'arxiu no vàlid."
     },
     "DRAGANDDROP": {
         "drag_drop": "Arrossega i deixa anar els teus arxius o <span class='filepond--label-action'>Explorar</span>",
@@ -564,7 +565,7 @@
                     "write_evaluation": "Fites per obtenir l'avaluació...",
                     "ERRORS_SUBSECTION": {
                         "date_missing": "Falten la data d'inici i final",
-                        "categories_missing": "No hi ha competències",
+                        "categories_missing": "No hi ha criteris seleccionats per a les competències",
                         "question_missing": "No hi ha preguntes",
                         "answer_questions": "No totes les preguntes tenen respostes correctes",
                         "rubric_empty": "La rúbrica està buida",
@@ -796,7 +797,10 @@
             "no_sections": "Encara no hi ha seccions"
         },
         "COURSE_VISUALIZATION": {
-            "generate_course": "Crear curs"
+            "generate_course": "Crear curs",
+            "principal_text": "El botó s'habilitarà una vegada que hagis completat totes les seccions i subseccions del curs. Assegura't de no tenir cap error en el curs abans de continuar.",
+            "errors": "Mostrar errors"
+
         },
         "NAVIGATION": {
             "continue": "Continuar",
