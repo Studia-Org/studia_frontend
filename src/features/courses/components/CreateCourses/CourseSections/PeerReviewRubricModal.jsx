@@ -78,17 +78,17 @@ export const PeerReviewRubricModal = ({ isModalOpen, setIsModalOpen, rubricData,
         const finalJson = {}
         if (evaluationMethod === 'numeric') {
             finalJson['Criteria'] = [
-                "8-10",
-                "5-8",
-                "3-5",
-                "1-3"
+                "10-8",
+                "8-5",
+                "5-3",
+                "2-0"
             ]
         } else {
             finalJson['Criteria'] = [
-                "Excellent",
-                "Great",
-                "Needs Improvement",
-                "Unsatisfactory"
+                t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.excellent"),
+                t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.great"),
+                t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.needs_improvement"),
+                t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.unsatisfactory")
             ]
         }
         const isEmpty = data.some((item) => item.criteria === '' || item.evaluation1 === '' || item.evaluation2 === '' || item.evaluation3 === '' || item.evaluation4 === '')
