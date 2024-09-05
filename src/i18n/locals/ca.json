@@ -259,7 +259,8 @@
         "file_removed_success": "Fitxer eliminat amb èxit",
         "file_removed_error": "Error en eliminar el fitxer",
         "csv_error": "No s'ha detectat cap correu electrònic vàlid al fitxer CSV. Si us plau, verifica si el format del fitxer és correcte. Renombrar el fitxer a .csv pot no funcionar.",
-        "file_MB": "La mida del fitxer ha de ser inferior a 10MB"
+        "file_MB": "La mida del fitxer ha de ser inferior a 10MB",
+        "file_type": "Tipus d'arxiu no vàlid."
     },
     "DRAGANDDROP": {
         "drag_drop": "Arrossega i deixa anar els teus arxius o <span class='filepond--label-action'>Explorar</span>",
@@ -536,12 +537,13 @@
                     "ponderation_good": "La ponderació suma 100",
                     "ponderation_error_text": "No podràs crear un curs, la ponderació de totes les subseccions no suma 100%, en canvi, suma",
                     "peer_review_rubric": "Rúbrica de revisió per parells",
+                    "you_can_copy_and_paste_rubric_from_word_excel": "Pots copiar i enganxar la rúbrica des de Word o Excel aquí",
                     "peer_review_rubric_text": "Editar rúbrica",
                     "peer_review_task": "Selecciona la tasca per a la qual es realitzarà la revisió per parells",
                     "students_review": "Quants es revisaran entre ells entre els ",
                     "students_grade": "Quin percentatge de la qualificació donada per l'estudiant s'aplicarà a la qualificació final?",
-                    "switch_text": "Canviar a text",
-                    "switch_numeric": "Canviar a numèric",
+                    "switch_text": "Canviar a evaluació per categories",
+                    "switch_numeric": "Canviar a evaluació numèrica",
                     "unsatisfactory": "Insatisfactori",
                     "needs_improvement": "Necessita millora",
                     "great": "Genial",
@@ -559,17 +561,23 @@
                     "select_task": "Selecciona la tasca",
                     "autocorrect": "Autocorrecció",
                     "autocorrect_text": "Verifica les respostes correctes a les preguntes, i el qüestionari s'avaluarà automàticament una vegada que l'estudiant el lliuri.",
+                    "write_criteria": "Criteri a evaluar...",
+                    "write_evaluation": "Fites per obtenir l'avaluació...",
                     "ERRORS_SUBSECTION": {
                         "date_missing": "Falten la data d'inici i final",
-                        "categories_missing": "No hi ha competències",
+                        "categories_missing": "No hi ha criteris seleccionats per a les competències",
                         "question_missing": "No hi ha preguntes",
                         "answer_questions": "No totes les preguntes tenen respostes correctes",
                         "rubric_empty": "La rúbrica està buida",
+                        "some_fields_rubric_empty": "Alguns camps de la rúbrica estan buits",
                         "no_description": "No hi ha descripció",
                         "no_content": "No hi ha contingut",
                         "no_task": "No hi ha tasca per revisar",
+                        "no_evaluable_tasks": "No hi ha tasques avaluables",
                         "text": "Completa-ho o no podràs crear un curs.",
-                        "title": "La subsecció està incompleta"
+                        "title": "La subsecció està incompleta",
+                        "at_least_1_row": "És necessari com a mínim una fila",
+                        "duplicate_criteria": "No es pot tenir criteris duplicats"
                     },
                     "SELF_ASSESSMENT": {
                         "title": "Rúbrica d'autoavaluació",
@@ -789,7 +797,10 @@
             "no_sections": "Encara no hi ha seccions"
         },
         "COURSE_VISUALIZATION": {
-            "generate_course": "Crear curs"
+            "generate_course": "Crear curs",
+            "principal_text": "El botó s'habilitarà una vegada que hagis completat totes les seccions i subseccions del curs. Assegura't de no tenir cap error en el curs abans de continuar.",
+            "errors": "Mostrar errors"
+
         },
         "NAVIGATION": {
             "continue": "Continuar",
@@ -982,6 +993,7 @@
         "student_cannot_review_own_activity": "L'estudiant no pot revisar la seva pròpia activitat",
         "cannot_drop_outside_list": "No pots deixar l'estudiant fora de la llista",
         "peers_created_success": "Parells creats amb èxit",
-        "error_creating_peers": "Error en crear els parells"
+        "error_creating_peers": "Error en crear els parells",
+        "updating_peer_reviews": "Actualitzant les revisions per parells..."
     }
 }

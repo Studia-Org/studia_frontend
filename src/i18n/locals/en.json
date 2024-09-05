@@ -259,7 +259,8 @@
         "file_removed_success": "File removed successfully",
         "file_removed_error": "Error removing file",
         "csv_error": "Not a valid email detected in the CSV file. Please check if file format is correct. Renaming the file to .csv may not work.",
-        "file_MB": "File size must be less than 10MB"
+        "file_MB": "File size must be less than 10MB",
+        "file_type": "Invalid file type."
     },
     "DRAGANDDROP": {
         "drag_drop": "Drag & Drop your files or <span class='filepond--label-action'>Browse</span>",
@@ -530,12 +531,13 @@
                     "ponderation_good": "Ponderation sum 100",
                     "ponderation_error_text": "You will not be able to create a course, the ponderation of all subsections do not sum 100%, they do sum",
                     "peer_review_rubric": "Peer review rubric",
+                    "you_can_copy_and_paste_rubric_from_word_excel": "You can copy and paste the rubric from Word or Excel here",
                     "peer_review_rubric_text": "Edit rubric",
                     "peer_review_task": "Select the task for which the peer review will be conducted",
                     "students_review": "How many are going to review each other among the ",
                     "students_grade": "What percentage of the grade given by the student will be applied to the final grade?",
-                    "switch_text": "Switch to text",
-                    "switch_numeric": "Switch to numeric",
+                    "switch_text": "Switch to category evaluation",
+                    "switch_numeric": "Switch to numerical evaluation",
                     "unsatisfactory": "Unsatisfactory",
                     "needs_improvement": "Needs improvement",
                     "great": "Great",
@@ -553,17 +555,23 @@
                     "select_task": "Select a task",
                     "autocorrect": "Autocorrect",
                     "autocorrect_text": "Check the correct answers to the questions, and the questionnaire will be automatically evaluated once the student submits it.",
+                    "write_criteria": "Criteria to evaluate...",
+                    "write_evaluation": "Milestones to get evaluation...",
                     "ERRORS_SUBSECTION": {
                         "date_missing": "Start and end date are missing",
-                        "categories_missing": "No competences",
+                        "categories_missing": "There are no criteria selected for the competences",
                         "question_missing": "No questions",
                         "answer_questions": "Not all questions have correct answers",
                         "rubric_empty": "Rubric is empty",
+                        "some_fields_rubric_empty": "Some fields in the rubric are empty",
                         "no_description": "No description",
                         "no_content": "No content",
+                        "no_evaluable_tasks": "No evaluable tasks",
                         "no_task": "No task to review",
                         "text": "Complete it or you will not be able to create a course.",
-                        "title": "Subsection is incomplete"
+                        "title": "Subsection is incomplete",
+                        "at_least_1_row": "At least one row is required",
+                        "duplicate_criteria": "Duplicate criterias are not allowed"
                     },
                     "SELF_ASSESSMENT": {
                         "title": "Self-assessment Rubric",
@@ -783,7 +791,9 @@
             "no_sections": "There are no sections yet"
         },
         "COURSE_VISUALIZATION": {
-            "generate_course": "Generate course"
+            "generate_course": "Generate course",
+            "principal_text": "The button will be enabled once you have completed all the sections and subsections. Ensure that you don't have any errors in the course sections.",
+            "errors": "Check errors"
         },
         "NAVIGATION": {
             "continue": "Continue",
@@ -1033,6 +1043,7 @@
         "student_cannot_review_own_activity": "Student can't review his own activity",
         "cannot_drop_outside_list": "You can't drop the student outside the list",
         "peers_created_success": "Peers created successfully",
-        "error_creating_peers": "Error creating peers"
+        "error_creating_peers": "Error creating peers",
+        "updating_peer_reviews": "Updating peer reviews..."
     }
 }

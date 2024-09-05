@@ -259,7 +259,8 @@
         "file_removed_success": "Archivo eliminado correctamente",
         "file_removed_error": "Error al eliminar el archivo",
         "csv_error": "No se detectó un correo electrónico válido en el archivo CSV. Por favor, verifica si el formato del archivo es correcto. Renombrar el archivo a .csv puede no funcionar.",
-        "file_MB": "El tamaño del archivo debe ser inferior a 10MB"
+        "file_MB": "El tamaño del archivo debe ser inferior a 10MB",
+        "file_type": "Tipo de archivo no válido."
     },
     "DRAGANDDROP": {
         "drag_drop": "Arrastra y suelta tus archivos o <span class='filepond--label-action'>Explorar</span>",
@@ -536,12 +537,13 @@
                     "ponderation_good": "La ponderación suma 100",
                     "ponderation_error_text": "No podrás crear un curso, la ponderación de todas las subsecciones no suma 100%, sino",
                     "peer_review_rubric": "Rúbrica de revisión por pares",
+                    "you_can_copy_and_paste_rubric_from_word_excel": "Puedes copiar y pegar la rúbrica desde Word o Excel aquí",
                     "peer_review_rubric_text": "Editar rúbrica",
                     "peer_review_task": "Selecciona la tarea para la cual se realizará la revisión por pares",
                     "students_review": "¿Cuántos se van a revisar entre sí entre los ",
                     "students_grade": "¿Qué porcentaje de la calificación dada por el estudiante se aplicará a la calificación final?",
-                    "switch_text": "Cambiar a texto",
-                    "switch_numeric": "Cambiar a numérico",
+                    "switch_text": "Cambiar a evaluación por categorías",
+                    "switch_numeric": "Cambiar a evaluación numérica",
                     "unsatisfactory": "Insatisfactorio",
                     "needs_improvement": "Necesita mejora",
                     "great": "Genial",
@@ -559,17 +561,23 @@
                     "select_task": "Selecciona la tarea",
                     "autocorrect": "Autocorrección",
                     "autocorrect_text": "Verifique las respuestas correctas a las preguntas, y el cuestionario se evaluará automáticamente una vez que el estudiante lo envíe.",
+                    "write_criteria": "Criterio a evaluar...",
+                    "write_evaluation": "Hitos para obtener la evaluación...",
                     "ERRORS_SUBSECTION": {
                         "date_missing": "Faltan la fecha de inicio y fin",
-                        "categories_missing": "No hay competencias",
+                        "categories_missing": "No hay criterios seleccionados para las competencias",
                         "question_missing": "No hay preguntas",
                         "answer_questions": "No todas las preguntas tienen respuestas correctas",
                         "rubric_empty": "La rúbrica está vacía",
+                        "some_fields_rubric_empty": "Algunos campos de la rúbrica están vacíos",
                         "no_description": "No hay descripción",
                         "no_content": "No hay contenido",
                         "no_task": "No hay tarea para revisar",
+                        "no_evaluable_tasks": "No hay tareas evaluables",
                         "text": "Complétalo o no podrás crear un curso.",
-                        "title": "La subsección está incompleta"
+                        "title": "La subsección está incompleta",
+                        "at_least_1_row": "Al menos una fila es necesaria",
+                        "duplicate_criteria": "No se pueden tener criterios duplicados"
                     },
                     "SELF_ASSESSMENT": {
                         "title": "Rúbrica de autoevaluación",
@@ -789,7 +797,9 @@
             "no_sections": "Aún no hay secciones"
         },
         "COURSE_VISUALIZATION": {
-            "generate_course": "Crear curso"
+            "generate_course": "Crear curso",
+            "principal_text": "El botón se habilitará una vez que hayas completado todas las secciones y subsecciones del curso. Asegúrate de no tener ningún error en el curso antes de continuar.",
+            "errors": "Mostrar errores"
         },
         "NAVIGATION": {
             "continue": "Continuar",
@@ -982,6 +992,7 @@
         "student_cannot_review_own_activity": "El estudiante no puede revisar su propia actividad",
         "cannot_drop_outside_list": "No puedes soltar al estudiante fuera de la lista",
         "peers_created_success": "Pares creados con éxito",
-        "error_creating_peers": "Error al crear los pares"
+        "error_creating_peers": "Error al crear los pares",
+        "updating_peer_reviews": "Actualizando revisiones por pares..."
     }
 }

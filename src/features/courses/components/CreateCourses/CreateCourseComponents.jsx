@@ -175,7 +175,7 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
 }
 
 export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption, createCourseSectionsList, setCreateCourseSectionsList, setEditCourseSectionFlag,
-  setSectionToEdit, setCreateCourseSectionsListCopy, createCourseSectionsListCopy }) => {
+  setSectionToEdit, setCreateCourseSectionsListCopy, createCourseSectionsListCopy, setSubsectionErrors }) => {
   const [sectionName, setSectionName] = useState('');
   const [addSectionFlag, setAddSectionFlag] = useState(true);
 
@@ -257,7 +257,7 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
                   items={createCourseSectionsList}
                   strategy={verticalListSortingStrategy}>
                   {createCourseSectionsList.map((section) => (
-                    <CreateCourseSectionsList section={section} deleteSection={deleteSection} setEditCourseSectionFlag={setEditCourseSectionFlag} setSectionToEdit={setSectionToEdit} key={section.id} />
+                    <CreateCourseSectionsList section={section} deleteSection={deleteSection} setEditCourseSectionFlag={setEditCourseSectionFlag} setSectionToEdit={setSectionToEdit} key={section.id} setSubsectionErrors={setSubsectionErrors}/>
                   ))}
                 </SortableContext>
               </DndContext>
@@ -277,7 +277,7 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
   )
 }
 
-export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption, createCourseSectionsList, evaluator, courseBasicInfo, task }) => {
+export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption, createCourseSectionsList, evaluator, courseBasicInfo, task, subsectionErrors }) => {
   const { t } = useTranslation();
   const [sectionContentSelector, setSectionContentSelector] = useState('course');
   const [visibilityTask, setVisibilityTask] = useState(false);
@@ -308,7 +308,7 @@ export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption, 
             />
           </div>
           <div style={{ width: '45rem' }} className='flex flex-col items-center ml-auto '>
-            <ButtonCreateCourse createCourseSectionsList={createCourseSectionsList} courseBasicInfo={courseBasicInfo} />
+            <ButtonCreateCourse createCourseSectionsList={createCourseSectionsList} courseBasicInfo={courseBasicInfo} subsectionErrors={subsectionErrors}/>
             <div className='w-full'>
               <AccordionCourse
                 createCourseSectionsList={createCourseSectionsList}

@@ -4,7 +4,7 @@ import { PeerReviewRubricModal } from './PeerReviewRubricModal';
 import dayjs from 'dayjs';
 import { motion } from "framer-motion";
 import { TableCategories } from './TableCategories';
-import { message, Button, DatePicker, Input, Switch, InputNumber, Select, Divider, Space } from 'antd';
+import { message, Button, DatePicker, Input, Switch, InputNumber, Select, Divider, Space, Empty } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { SubsectionContentModal } from './SubsectionContentModal';
 import { UploadFiles } from './UploadFiles';
@@ -13,7 +13,6 @@ import { PonderationWarning } from './PonderationWarning';
 import { debounce } from 'lodash';
 import { AutoAssesmentRubric } from './AutoAssesmentRubric';
 import { useTranslation } from 'react-i18next';
-
 
 const { RangePicker } = DatePicker;
 
@@ -114,18 +113,28 @@ export const CreateCourseEditSubsection = ({
               subsectionCopy.activity.usersToPair = +newValue;
               break;
             case 'group':
-              subsectionCopy.activity.groupActivity = newValue;
-              if (!newValue) {
-                subsectionCopy.activity.numberOfStudentsperGroup = 1;
-                setNumberOfStudentsperGroup(1);
-              } else if (numberOfStudentsperGroup === 1) {
-                setNumberOfStudentsperGroup(2);
-                if (subsectionCopy.activity.numberOfStudentsperGroup === 1) subsectionCopy.activity.numberOfStudentsperGroup = 2;
-              }
+              sectionCopy.subsections.forEach((sub) => {
+                if (sub.type === 'peerReview') return
+                if (sub.type === 'task') {
+                  sub.activity.groupActivity = newValue;
+                  if (!newValue) {
+                    sub.activity.numberOfStudentsperGroup = 1;
+                    setNumberOfStudentsperGroup(1);
+                  } else if (numberOfStudentsperGroup === 1) {
+                    sub.activity.numberOfStudentsperGroup = 2;
+                    setNumberOfStudentsperGroup(2);
+                  }
+                }
+              });
               setIsGroup(newValue);
               break;
             case 'numberOfStudentsperGroup':
-              subsectionCopy.activity.numberOfStudentsperGroup = +newValue;
+              sectionCopy.subsections.forEach((sub) => {
+                if (sub.type === 'peerReview') return
+                if (sub.type === 'task') {
+                  sub.activity.numberOfStudentsperGroup = +newValue;
+                }
+              });
               setNumberOfStudentsperGroup(+newValue);
               break;
             default:
@@ -133,6 +142,12 @@ export const CreateCourseEditSubsection = ({
           }
           if (type === 'evaluable') {
             subsectionCopy.activity.evaluable = newValue;
+            subsectionCopy.activity.ponderation = 0;
+            sectionCopy.subsections.forEach((sub) => {
+              if (sub.activity?.task_to_review === subsectionCopy.id) {
+                sub.activity.task_to_review = null;
+              }
+            });
           }
           if (type === 'ponderation') {
             subsectionCopy.activity.ponderation = newValue;
@@ -179,7 +194,6 @@ export const CreateCourseEditSubsection = ({
       }
       const newTimeout = setTimeout(() => {
         handleSubsectionChange('title', newTitle);
-
       }, 350);
 
       setTypingTimeout(newTimeout);
@@ -279,7 +293,8 @@ export const CreateCourseEditSubsection = ({
                     }
                     style={{ width: '100%' }}
                     onChange={(task) => { handleSubsectionChange('peer_review', task) }}
-                    options={filteredSubsections.map((sub) => ({ label: sub.title, value: sub.id }))}
+                    notFoundContent={<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.no_evaluable_tasks")} />}
+                    options={filteredSubsections.filter((sub) => sub.activity?.evaluable === true).map((sub) => ({ label: sub.title, value: sub.id }))}
                   />
                   <label className='text-sm text-gray-500 ' htmlFor=''>
                     {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.pairs_or_individual")}
@@ -376,37 +391,8 @@ export const CreateCourseEditSubsection = ({
                   <label className='text-sm text-gray-500' htmlFor=''>
                     {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.cover")}
                   </label>
-                  <UploadFiles fileList={landscape_photo} setFileList={setLandscape_photo} listType={'picture'} maxCount={1} />
-                  <div>
-                    <label className='text-sm text-gray-500 ' htmlFor=''>
-                      {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.pairs_or_individual")} *
+                  <UploadFiles fileList={landscape_photo} setFileList={setLandscape_photo} listType={'picture'} maxCount={1} accept={'.jpg,.jpeg,.png'} />
 
-                    </label>
-                    <Select
-                      defaultValue={isGroup}
-                      key={subsection.id + "grouptask"}
-                      style={{ width: '100%', marginTop: '5px' }}
-                      onChange={(number) => { handleSubsectionChange('group', number) }}
-                      options={[{ label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.individual"), value: false },
-                      { label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.groups"), value: true }]}
-                    />
-                    {
-                      isGroup && (
-                        <div className='mt-4'>
-                          <label className='text-sm text-gray-500 ' htmlFor=''>
-                            {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.students_per_group")} *
-                          </label>
-                          <Select
-                            key={subsection.id + "numberofstudents"}
-                            defaultValue={numberOfStudentsperGroup}
-                            style={{ width: '100%', marginTop: '5px' }}
-                            onChange={(number) => { handleSubsectionChange('numberOfStudentsperGroup', number) }}
-                            options={[{ label: '2', value: 2 }, { label: '3', value: 3 }, { label: '4', value: 4 }, { label: '5', value: 5 }]}
-                          />
-                        </div>
-                      )
-                    }
-                  </div>
                 </div>
 
               )
@@ -466,11 +452,6 @@ export const CreateCourseEditSubsection = ({
                 />
               </div>
             </div>
-            <div className='mt-7'>
-              <label className='block mr-3 text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.categories")} * </label>
-              <TableCategories categories={categories[sectionId]} setCreateCourseSectionsList={setCreateCourseSectionsList}
-                subsection={subsection} sectionID={sectionId} createCourseSectionsList={createCourseSectionsList} />
-            </div>
             <div className='flex items-center justify-between mt-7'>
               <div className='flex items-center'>
                 <label className='block mr-3 text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.evaluable")} * </label>
@@ -495,11 +476,18 @@ export const CreateCourseEditSubsection = ({
                 />
               </div>
             </div>
+            <div className='mt-7'>
+              <label className='block mr-3 text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.categories")} * </label>
+              <TableCategories categories={categories[sectionId]} setCreateCourseSectionsList={setCreateCourseSectionsList}
+                subsection={subsection} sectionID={sectionId} createCourseSectionsList={createCourseSectionsList} />
+            </div>
             <div className='space-y-2 mt-7'>
               <label className='text-sm text-gray-500 mt-7 ' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.description")} *</label>
               <div className='flex w-full '>
-                <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3' placeholder={t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.description")} value={subsection.description}
-                  onChange={(e) => handleSubsectionChange('description', e.target.value)} />
+                <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3'
+                  placeholder={t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.description")}
+                  defaultValue={subsection.description}
+                  onChange={debounce((e) => handleSubsectionChange('description', e.target.value), 300)} />
               </div>
             </div>
             <div className='mt-3 mb-5 space-y-2'>

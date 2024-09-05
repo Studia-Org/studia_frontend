@@ -7,6 +7,7 @@ import TextField from '@mui/material/TextField';
 import Radio from '@mui/material/Radio';
 import { ScaleQuestionnaireForm } from '../../CoursesInside/Questionnaire/ScaleQuestionnaireForm';
 import { useTranslation } from 'react-i18next';
+import { MicrosoftQuestionnaire } from '../../CoursesInside/Questionnaire/MicrosoftQuestionnaire';
 
 const list = {
     visible: { opacity: 1 },
@@ -27,6 +28,7 @@ const item = {
 
 
 export const QuestionnaireConfirmation = ({ questionnaire }) => {
+    const hasEmbedCode = questionnaire?.attributes?.Options?.embedCode;
     const { t } = useTranslation()
 
     const questionsPerPage = 3;
@@ -143,27 +145,36 @@ export const QuestionnaireConfirmation = ({ questionnaire }) => {
                     <p className="mt-7">{questionnaire.attributes.description}</p>
                 </div>
             </div>
-            <motion.ul
-                initial="hidden"
-                animate="visible"
-                variants={list}
-            >
-                <div className="mt-5 space-y-5 ">{renderQuestionsForPage()}</div>
-            </motion.ul>
-            <div className="flex items-center justify-between mt-5 mb-8 bg-white rounded-md shadow-md p-5 border-b-8 border-[#6366f1]">
-                <button className='flex items-center mx-4 duration-200 hover:-translate-x-2 disabled:text-gray-300 disabled:translate-x-0' onClick={handlePrevPage} disabled={currentPage === 1}>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 mr-2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75" />
-                    </svg>
-                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.previous")}
-                </button>
-                <button className='flex items-center mx-4 duration-200 hover:translate-x-2 disabled:text-gray-300 disabled:translate-x-0' onClick={handleNextPage} disabled={currentPage === totalPages}>
-                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.next")}
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-2">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
-                    </svg>
-                </button>
-            </div>
+            {
+                !hasEmbedCode ? (
+                    <>
+                        <motion.ul
+                            initial="hidden"
+                            animate="visible"
+                            variants={list}
+                        >
+                            <div className="mt-5 space-y-5 ">{renderQuestionsForPage()}</div>
+                        </motion.ul>
+                        <div className="flex items-center justify-between mt-5 mb-8 bg-white rounded-md shadow-md p-5 border-b-8 border-[#6366f1]">
+                            <button className='flex items-center mx-4 duration-200 hover:-translate-x-2 disabled:text-gray-300 disabled:translate-x-0' onClick={handlePrevPage} disabled={currentPage === 1}>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 mr-2">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75" />
+                                </svg>
+                                {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.previous")}
+                            </button>
+                            <button className='flex items-center mx-4 duration-200 hover:translate-x-2 disabled:text-gray-300 disabled:translate-x-0' onClick={handleNextPage} disabled={currentPage === totalPages}>
+                                {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.next")}
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-2">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+                                </svg>
+                            </button>
+                        </div>
+                    </>
+                ) :
+                    <>
+                        <MicrosoftQuestionnaire embedCode={questionnaire.attributes.Options.embedCode} />
+                    </>
+            }
         </div>
     );
 }

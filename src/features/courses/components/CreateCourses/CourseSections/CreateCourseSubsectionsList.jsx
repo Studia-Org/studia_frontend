@@ -3,6 +3,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Button, Popconfirm, message } from 'antd';
 import { CheckSubsectionErrors } from './CheckSubsectionErrors';
+import { set } from 'date-fns';
 
 export const CreateCourseSubsectionsList = ({
     subsection,
@@ -10,8 +11,25 @@ export const CreateCourseSubsectionsList = ({
     sectionId,
     setEditSubsectionFlag,
     setSubsectionEditing,
+    setSubsectionErrors,
+    subsectionErrors,
 }) => {
     const deleteSubsection = () => {
+        setSubsectionErrors((prevErrors) => {
+            if (typeof prevErrors !== 'object' || prevErrors === null) {
+                console.error("prevErrors no es un objeto válido:", prevErrors);
+                return {};
+            }
+
+            const updatedErrors = Object.entries(prevErrors)
+                .filter(([key]) => key !== subsection.id)
+                .reduce((obj, [key, value]) => {
+                    obj[key] = value;
+                    return obj;
+                }, {});
+
+            return updatedErrors;
+        });
         setCreateCourseSectionsList((prevSections) =>
             prevSections.map((section) =>
                 section.id === sectionId
@@ -88,7 +106,7 @@ export const CreateCourseSubsectionsList = ({
                     <div className="flex flex-col justify-center ml-5">
                         <p className="">{subsection.title}</p>
                     </div>
-                    <CheckSubsectionErrors subsection={subsection} />
+                    <CheckSubsectionErrors subsection={subsection} setSubsectionErrors={setSubsectionErrors} subsectionErrors={subsectionErrors} />
                 </div>
 
                 <Popconfirm

@@ -451,7 +451,8 @@ export const SequenceDevelopNoMSLQForum = ({ setCreateCourseSectionsList, sectio
 }
 
 export const PerformancePage = ({ setCreateCourseSectionsList, sectionToEdit, context, sectionTask }) => {
-    const { SRLOQuestionnaireData, PlannificationQuestionnaireData, EmptyQuestionnaireData } = QuestionnaireData();
+    console.log(sectionTask);
+    const { EmptyQuestionnaireData } = QuestionnaireData();
     const { t } = useTranslation();
 
     return (

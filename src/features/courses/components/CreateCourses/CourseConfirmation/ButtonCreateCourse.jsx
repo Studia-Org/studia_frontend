@@ -1,20 +1,20 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
-import { message } from 'antd';
+import { Button, message } from 'antd';
 import { getToken } from '../../../../../helpers';
 import { API } from '../../../../../constant';
 import LoadingBar from 'react-top-loading-bar'
 import { BeatLoader } from 'react-spinners';
 import { useTranslation } from 'react-i18next';
-import { m } from 'framer-motion';
+import { ShowSectionErrors } from './ShowSectionErrors';
 
 
-export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }) => {
-
+export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo, subsectionErrors }) => {
     const { t } = useTranslation()
 
     const [isLoading, setIsLoading] = useState(false);
     const [progress, setProgress] = useState(0);
+    const [isModalOpen, setIsModalOpen] = useState(false)
     const navigate = useNavigate();
 
     function emptyLocalStorage() {
@@ -60,6 +60,13 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
         return false;
     };
 
+    let courseHasErrors = false; 
+    if (subsectionErrors && typeof subsectionErrors === 'object') {
+        courseHasErrors = Object.values(subsectionErrors).some(subsection =>
+            Array.isArray(subsection.errors) && subsection.errors.length > 0
+        );
+    }
+
     async function createCourse() {
 
         try {
@@ -70,7 +77,6 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
             let forumIds = []
             const totalIterations = createCourseSectionsList.reduce((acc, section) => acc + section.subsections.length, 0)
             const createdActivities = {}
-            console.log('here', createCourseSectionsList)
             for (const section of createCourseSectionsList) {
                 let allSubsections = []
                 for (const subsection of section.subsections) {
@@ -397,7 +403,9 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
     return (
         <>
             <LoadingBar color='#6366f1' height={4} progress={progress} onLoaderFinished={() => setProgress(0)} shadow={true} />
-            <button onClick={createCourse} disabled={isLoading} className={`flex justify-center items-center mb-5 text-lg font-medium  bg-gradient-to-r from-[#657DE9] to-[#6E66D6] ${!isLoading ? 'hover:from-pink-500 hover:to-purple-600 hover:scale-110 hover:brightness-110' : ''}  text-white py-3 px-6 rounded-lg shadow-lg transform transition-all duration-500 ease-in-out  hover:animate-pulse active:scale-100`}>
+            <button onClick={createCourse} disabled={isLoading || courseHasErrors}
+                className={`flex justify-center items-center mb-5 text-lg font-medium py-3 px-6 rounded-lg shadow-lg transition-all duration-500 ease-in-out 
+                ${isLoading || courseHasErrors ? 'bg-gray-400 cursor-not-allowed' : 'bg-gradient-to-r from-[#657DE9] to-[#6E66D6] hover:from-pink-500 hover:to-purple-600 hover:scale-110 hover:brightness-110 hover:animate-pulse active:scale-100 text-white'}`}>
                 {
                     isLoading ?
                         <BeatLoader color='#FFFFFF' size={15} className='mr-2' />
@@ -408,6 +416,18 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo }
                 }
                 {t("CREATE_COURSES.COURSE_VISUALIZATION.generate_course")}
             </button>
+            {courseHasErrors &&
+                <div className='flex items-center gap-2 mb-5'>
+                    <p className='p-2 text-xs font-normal text-gray-500 border rounded bg-gray-50'>{t("CREATE_COURSES.COURSE_VISUALIZATION.principal_text")}</p>
+                    <Button onClick={() => setIsModalOpen(true)} className='flex items-center justify-center h-full gap-2 text-center bg-gray-50'>
+                        {t("CREATE_COURSES.COURSE_VISUALIZATION.errors")}
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
+                            <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495ZM10 5a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 10 5Zm0 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clipRule="evenodd" />
+                        </svg>
+                    </Button>
+                    <ShowSectionErrors subsectionErrors={subsectionErrors} setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />
+                </div>}
+
         </>
 
     )
