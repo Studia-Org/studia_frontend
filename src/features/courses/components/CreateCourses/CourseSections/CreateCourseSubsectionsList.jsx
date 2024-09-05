@@ -15,7 +15,21 @@ export const CreateCourseSubsectionsList = ({
     subsectionErrors,
 }) => {
     const deleteSubsection = () => {
-        setSubsectionErrors((prevErrors) =>  prevErrors.filter((error) => error.subsectionId !== subsection.id));
+        setSubsectionErrors((prevErrors) => {
+            if (typeof prevErrors !== 'object' || prevErrors === null) {
+                console.error("prevErrors no es un objeto válido:", prevErrors);
+                return {};
+            }
+
+            const updatedErrors = Object.entries(prevErrors)
+                .filter(([key]) => key !== subsection.id)
+                .reduce((obj, [key, value]) => {
+                    obj[key] = value;
+                    return obj;
+                }, {});
+
+            return updatedErrors;
+        });
         setCreateCourseSectionsList((prevSections) =>
             prevSections.map((section) =>
                 section.id === sectionId

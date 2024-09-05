@@ -23,7 +23,7 @@ export default class DemoComponent extends Component {
                     <button key={course.id} onClick={() => navigate(`${course.id}`)}
                         className='max-w-full transform hover:scale-105 duration-150 shadow-md border border-gray-200 m-2
                              bg-white rounded-md flex justify-end items-center relative font-normal text-base p-5 h-[10rem] w-[25rem] text-right'>
-                        <img className='object-cover w-24 top-0 left-0 h-[10rem] absolute rounded-l-lg ' src={course.cover.data.attributes.url} alt="" />
+                        <img className='object-cover w-24 top-0 left-0 h-[10rem] absolute rounded-l-lg ' src={course.cover?.data?.attributes?.url} alt="" />
                         <div className='flex flex-col w-3/4'>
                             <p className='font-semibold '>{course.title}</p>
                             <div className='flex items-center mt-3 ml-auto '>

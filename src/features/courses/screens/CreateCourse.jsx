@@ -56,16 +56,22 @@ const CreateCourse = () => {
             });
         });
 
-        setSubsectionErrors(prevErrors => {
+        setSubsectionErrors((prevErrors) => {
+            // Asegúrate de que prevErrors sea un objeto válido, si no, inicia como un objeto vacío
+            if (!prevErrors || typeof prevErrors !== 'object') {
+                console.error("prevErrors no es un objeto válido:", prevErrors);
+                prevErrors = {};
+            }
+
             const filteredErrors = {};
-            Object.keys(prevErrors).forEach(id => {
+            Object.keys(prevErrors).forEach((id) => {
                 if (validSubsectionIds.has(id)) {
                     filteredErrors[id] = prevErrors[id];
                 }
             });
+
             return filteredErrors;
         });
-
     }, [createCourseSectionsListCopy])
 
     function RenderCreateCourse() {
