@@ -802,7 +802,11 @@
             "cancel": "Cancel",
             "course_info": "Course info",
             "course_sections": "Course sections",
-            "course_visualization": "Course visualization"
+            "course_visualization": "Course visualization",
+            "section_created_successfully": "Section created successfully"
+        },
+        "ERROR": {
+            "section_must_have_title": "Section must have a title"
         }
     },
     "QUESTIONNAIRE": {

@@ -808,7 +808,11 @@
             "cancel": "Cancelar",
             "course_info": "Información del curso",
             "course_sections": "Secciones del curso",
-            "course_visualization": "Visualización del curso"
+            "course_visualization": "Visualización del curso",
+            "section_created_successfully": "Sección creada correctamente"
+        },
+        "ERROR": {
+            "section_must_have_title": "La sección debe tener un título"
         }
     },
     "CALENDAR": {
