@@ -192,6 +192,10 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
   }
 
   function createSection() {
+    if(sectionName === '') {
+      message.error("Please complete the field")
+      return
+    }
     const newSection = {
       id: Math.random().toString(16).slice(2),
       name: sectionName,
