@@ -60,7 +60,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo, 
         return false;
     };
 
-    let courseHasErrors = false; 
+    let courseHasErrors = false;
     if (subsectionErrors && typeof subsectionErrors === 'object') {
         courseHasErrors = Object.values(subsectionErrors).some(subsection =>
             Array.isArray(subsection.errors) && subsection.errors.length > 0
@@ -235,19 +235,25 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo, 
                 let filesdata2 = null
                 const newFormData = new FormData();
 
-                if (section?.task?.files.length > 0) {
-                    for (const file of section.task.files) {
-                        newFormData.append('files', file.originFileObj);
+                try {
+                    if (section?.task?.files.length > 0) {
+                        for (const file of section.task.files) {
+                            newFormData.append('files', file.originFileObj);
+                        }
+                        const uploadFiles = await fetch(`${API}/upload`, {
+                            method: 'POST',
+                            headers: {
+                                Authorization: `Bearer ${getToken()}`
+                            },
+                            body: newFormData,
+                        });
+                        filesdata2 = await uploadFiles.json();
                     }
-                    const uploadFiles = await fetch(`${API}/upload`, {
-                        method: 'POST',
-                        headers: {
-                            Authorization: `Bearer ${getToken()}`
-                        },
-                        body: newFormData,
-                    });
-                    filesdata2 = await uploadFiles.json();
+                } catch (error) {
+                    message.error('Error uploading files');
                 }
+
+
                 const activity = {
                     title: section.task.title,
                     deadline: new Date(section.task.deadline).toISOString(),
@@ -346,6 +352,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo, 
             const formData = new FormData();
             formData.append('files', courseBasicInfo.cover[0].originFileObj);
             try {
+
                 const coverUpload = await fetch(`${API}/upload/`, {
                     method: 'POST',
                     headers: {
