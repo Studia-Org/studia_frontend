@@ -84,7 +84,6 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
                 };
             });
 
-            console.log('newSections', newSections);
 
             newSections.forEach((section) => {
                 if (section.subsections && section.subsections.length > 0) {
@@ -258,7 +257,6 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
 
     }
 
-    console.log('categoriesInside', isGroup)
     return (
         <motion.div
             initial={{ opacity: 0, x: -20 }}
