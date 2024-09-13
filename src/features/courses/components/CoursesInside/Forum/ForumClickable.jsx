@@ -3,11 +3,13 @@ import { FiChevronRight, FiCornerDownLeft } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 export const ForumClickable = ({ posts, setForumFlag, setVisible, setParticipantsFlag, setSettingsFlag }) => {
   const { t } = useTranslation();
+
   function renderPostsLogic(posts) {
     if (posts.length === 1) {
       return renderPostsInside(posts[0]);
     } else if (posts.length > 1) {
-      const firstTwoPosts = posts.slice(0, 1);
+      const firstTwoPosts =  posts.slice(-2);
+      console.log(firstTwoPosts);
       return firstTwoPosts.map((post) => renderPostsInside(post));
     } else {
       return (
