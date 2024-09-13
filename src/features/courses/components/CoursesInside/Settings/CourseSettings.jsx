@@ -64,7 +64,7 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
         }
     }
     const deleteCourse = async () => {
-        const token = process.env.REACT_APP_ADMIN_TOKEN;
+        const token = getToken()
         setLoadingDelete(true)
         try {
             courseData.sections.data.forEach(async (section) => {
