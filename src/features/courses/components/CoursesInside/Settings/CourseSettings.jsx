@@ -313,14 +313,14 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
                         type="button"
                         className="px-4 text-sm font-medium bg-white border border-gray-300 rounded-md shadow-sm text-blue-gray-900 hover:bg-blue-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     >
-                        {t("COMMON.save_changes")}
+                        {t("COMMON.cancel")}
                     </Button>
                     <Button
                         loading={loading}
                         onClick={() => saveChanges()}
                         className="inline-flex justify-center px-4 ml-3 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     >
-                        {t("COMMON.cancel")}
+                        {t("COMMON.save_changes")}
                     </Button>
                 </div>
             </div>

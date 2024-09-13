@@ -41,8 +41,11 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
   const totalPages = Math.ceil(totalQuestions / questionsPerPage);
   const { minutes, seconds, stopTimer } = useTimer({ testCompleted: questionnaireAnswerData.length > 0 || user.role_str !== 'student' });
   const [editedQuestions, setEditedQuestions] = useState({});
+  const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
   const { subsectionSelected } = useCourseContext();
+
+  const isQuestionnaireImported = questionnaire.attributes.Options?.embedCode !== undefined;
 
   const handleInputChange = (question, absoluteIndex) => {
     setEditedQuestions((prev) => ({ ...prev, [absoluteIndex]: { question: question.question, options: question.options } }));
@@ -170,6 +173,43 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
     return (correctas / Object.keys(respuestasCorrectas).length) * 10;
   }
 
+  const completeSubsection = async () => {
+    try {
+      setLoading(true);
+      const newObject = {
+        subsections_completed: [
+          ...user.subsections_completed.map(subsection => ({ id: subsection.id })),
+          { id: subsectionID }
+        ]
+      };
+      const response = await fetch(`${API}/users/${user.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${getToken()}`,
+        },
+        body: JSON.stringify(newObject)
+      });
+      if (response.ok) {
+        Swal.fire(
+          'Completed!',
+          'The questionnaire has been completed',
+          'success'
+        ).then(() => {
+          window.location.reload();
+        })
+      } else {
+        message.error('Error completing the questionnaire:', response.statusText);
+      }
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      console.error(error)
+      message.error('Error completing the questionnaire:', error);
+
+    }
+  }
+
 
 
   const handleSubmission = async () => {
@@ -184,7 +224,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
               answer: groupValues[questionIndex],
               question: questionnaire.attributes.Options.questionnaire.questions[questionIndex].question
             })),
-            language : questionnaire.attributes.Options.questionnaire.language
+            language: questionnaire.attributes.Options.questionnaire.language
           };
           const hour = Math.floor(minutes / 60) < 10 ? "0" + Math.floor(minutes / 60) : Math.floor(minutes / 60)
           const minutesLeft = minutes % 60;
@@ -296,7 +336,6 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
     }
   }
 
-
   const renderQuestionsForPage = () => {
     const startIdx = (currentPage - 1) * questionsPerPage;
     const endIdx = Math.min(startIdx + questionsPerPage, totalQuestions);
@@ -306,7 +345,8 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
       return (
         <ScaleQuestionnaireForm questions={questionsForPage} groupValues={groupValues} setGroupValues={setGroupValues} currentPage={currentPage} questionnaireAnswerData={answersData} userResponses={userResponses} />
       )
-    } else {
+    }
+    else {
       return questionsForPage
         .filter((question) => question !== undefined && question !== null)
         .map((question, index) => {
@@ -468,7 +508,7 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
         setQuestionnaireAnswerData={setQuestionnaireAnswerData} downloadQuestionnaires={downloadQuestionnaires} loadingQuestionnaires={loadingData}
       />
       {
-        user?.role_str === 'student' || ((questionnaireAnswerData.length > 0 && user?.role_str !== 'student') || enableEdit === true) ?
+        !isQuestionnaireImported && (user?.role_str === 'student' || ((questionnaireAnswerData.length > 0 && user?.role_str !== 'student') || enableEdit === true)) ?
           <>
             {
               (enableEdit === false && user.role_str !== 'student') && (
@@ -536,17 +576,33 @@ export const QuestionnaireComponent = ({ questionnaire, answers, subsectionID, e
           :
           <>
             {
-              loadingData ?
-                <div className='flex items-center justify-center p-5 bg-white rounded-md shadow-md'>
-                  <MoonLoader color="#363cd6" />
-                </div>
+              isQuestionnaireImported ?
+                <>
+                  {
+                    user.role_str === 'student' && (
+                      <>
+                        <Button disabled={user.subsections_completed.some((subsection) => subsection.id === subsectionID)} loading={loading} type='primary' onClick={() => completeSubsection()} className='mt-5'>
+                          Mark questionnaire as completed
+                        </Button>
+                        <p className='mt-2 text-xs text-gray-600'>For completing this section you will need to press the button whenever you ended answering the questionnaire. </p>
+                      </>
+                    )
+                  }
+                  <div className='mb-10' dangerouslySetInnerHTML={{ __html: questionnaire.attributes.Options.embedCode }} />
+
+                </>
                 :
-                userResponses.length > 0 ?
-                  <UserQuestionnaireAnswerTable userResponses={userResponses} setQuestionnaireAnswerData={setQuestionnaireAnswerData} />
-                  :
-                  <div className='py-5 mt-5 bg-white rounded-md shadow-md'>
-                    <Empty description='There are no user responses to this questionnaire.' />
+                loadingData ?
+                  <div className='flex items-center justify-center p-5 bg-white rounded-md shadow-md'>
+                    <MoonLoader color="#363cd6" />
                   </div>
+                  :
+                  userResponses.length > 0 ?
+                    <UserQuestionnaireAnswerTable userResponses={userResponses} setQuestionnaireAnswerData={setQuestionnaireAnswerData} />
+                    :
+                    <div className='py-5 mt-5 bg-white rounded-md shadow-md'>
+                      <Empty description='There are no user responses to this questionnaire.' />
+                    </div>
             }
           </>
       }

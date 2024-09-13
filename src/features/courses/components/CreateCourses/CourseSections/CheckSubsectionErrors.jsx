@@ -52,7 +52,7 @@ export const CheckSubsectionErrors = ({ subsection, setSubsectionErrors, subsect
                     newErrorsList.push({ svg: dangerSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.categories_missing") });
                     setColor('text-red-500')
                 }
-                if (subsection.questionnaire.attributes.Options.questionnaire.questions.length === 0) {
+                if (subsection.questionnaire.attributes.Options.questionnaire.questions.length === 0 && !subsection.questionnaire.attributes.Options.embedCode) {
                     newErrorsList.push({ svg: dangerSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.question_missing") });
                     setColor('text-red-500')
                 }
