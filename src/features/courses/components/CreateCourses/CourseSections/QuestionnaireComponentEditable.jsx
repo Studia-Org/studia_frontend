@@ -382,7 +382,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
 
 
         const src = iframe?.getAttribute('src');
-        if (!src || (!src.startsWith('https://forms.office.com/Pages/ResponsePage.aspx') && !src.startsWith('https://docs.google.com/forms/'))) {
+        if (!src || (!src.startsWith('https://forms.office.com') && !src.startsWith('https://docs.google.com/forms/'))) {
             return { isValid: false, messageError: "El iframe no tiene un src válido." };
         }
 
