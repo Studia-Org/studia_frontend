@@ -150,9 +150,11 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo, 
                         let filesData = null
                         if (subsection.files.length > 0) {
                             for (const file of subsection.files) {
+                                console.log(file.originFileObj)
                                 formData.append('files', file.originFileObj);
                             }
-                            const response = await fetch(`${API}/upload`, {
+                            
+                            const response = await fetch(`${API}/upload/`, {
                                 method: 'POST',
                                 headers: {
                                     Authorization: `Bearer ${getToken()}`
@@ -202,7 +204,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo, 
                             questionnaire: null,
                             activity: dataActivity.data.id,
                             users: null,
-                            files: filesData?.map((file) => file.id),
+                            files: Array.isArray(filesData) ? filesData.map((file) => file.id) : null,
                             content: subsection.content,
                         }
 
@@ -237,7 +239,8 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo, 
 
                 try {
                     if (section?.task?.files.length > 0) {
-                        for (const file of section.task.files) {
+                        for (const file of section.task.files) {            
+                            console.log(file.originFileObj)
                             newFormData.append('files', file.originFileObj);
                         }
                         const uploadFiles = await fetch(`${API}/upload`, {
@@ -247,6 +250,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo, 
                             },
                             body: newFormData,
                         });
+                        
                         filesdata2 = await uploadFiles.json();
                     }
                 } catch (error) {
@@ -259,7 +263,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo, 
                     deadline: new Date(section.task.deadline).toISOString(),
                     ponderation: 0,
                     type: section.task.type,
-                    file: filesdata2?.map((file) => file.id),
+                    file: Array.isArray(filesdata2) ? filesdata2.map((file) => file.id) : null,
                     description: section.task.description,
                     order: 5,
                     evaluable: section.task.evaluable,
@@ -351,8 +355,8 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo, 
             }
             const formData = new FormData();
             formData.append('files', courseBasicInfo.cover[0].originFileObj);
+            console.log(courseBasicInfo.cover[0].originFileObj)
             try {
-
                 const coverUpload = await fetch(`${API}/upload/`, {
                     method: 'POST',
                     headers: {
@@ -361,6 +365,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo, 
                     body: formData,
                 });
                 const data = await coverUpload.json();
+                console.log(data)
                 newCourse.cover = data[0].id;
             } catch (error) {
                 setIsLoading(false)
@@ -398,6 +403,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo, 
             navigate(`/app/courses/`)
         }
         catch (e) {
+            console.error(e)
             setIsLoading(false)
             setProgress(100)
             message.error(e.message)

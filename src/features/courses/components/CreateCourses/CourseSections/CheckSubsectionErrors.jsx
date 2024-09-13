@@ -66,12 +66,11 @@ export const CheckSubsectionErrors = ({ subsection, setSubsectionErrors, subsect
                 break;
 
             case 'selfAssessment':
-                console.log(subsection.activity?.SelfAssesmentRubrica)
                 if (!subsection.start_date && !subsection.end_date) {
                     newErrorsList.push({ svg: dangerSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.date_missing") });
                     setColor('text-red-500')
                 }
-                if (!subsection.activity?.SelfAssesmentRubrica?.length || subsection.activity?.SelfAssesmentRubrica.length < 2) {
+                if (!subsection.activity?.SelfAssesmentRubrica?.length || subsection.activity?.SelfAssesmentRubrica.length < 1) {
                     newErrorsList.push({ svg: dangerSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.rubric_empty") });
                     setColor('text-red-500')
                 }
