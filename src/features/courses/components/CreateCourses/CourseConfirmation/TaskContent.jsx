@@ -3,6 +3,7 @@ import ReactMarkdown from 'react-markdown'
 import { Empty } from 'antd'
 import { motion } from "framer-motion";
 import { PeerReviewVisualization } from './PeerReviewVisualization';
+import SelfAssesmentVisualization from './SelfAssesmentVisualization.jsx';
 import { useTranslation } from 'react-i18next';
 
 export const TaskContent = ({ setVisibilityTask, task, evaluator }) => {
@@ -100,10 +101,24 @@ export const TaskContent = ({ setVisibilityTask, task, evaluator }) => {
                 </motion.div>
             </div >
         )
-    } else {
+    } else if (task.type === 'peerReview') {
         return (
             <PeerReviewVisualization activity={task} />
         )
     }
+    else if (task.type === "selfAssessment") {
+        return (
+            <SelfAssesmentVisualization activity={task} />
+        )
+    }
+    else {
+        return (
+            <div>
+                <h1>Task can not be visualized</h1>
+            </div>
+        )
+    }
+
+
 
 }
