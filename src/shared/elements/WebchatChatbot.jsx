@@ -39,7 +39,7 @@ export const WebchatChatbot = () => {
                 type="button"
                 data-dial-toggle="speed-dial-menu-dropdown"
                 aria-controls="speed-dial-menu-dropdown"
-                className="fixed right-10 bottom-12 items-center justify-center ml-auto w-[3.2rem] h-[3.2rem] text-white transition !bg-[#3c3c3c] rounded-full shadow-xl hover:!bg-[#4f4f4f] duration-100 hover-scale active-scale"
+                className="fixed right-4 bottom-4 items-center justify-center ml-auto w-[3.2rem] h-[3.2rem] text-white transition !bg-[#3c3c3c] rounded-full shadow-xl hover:!bg-[#4f4f4f] duration-100 hover-scale active-scale"
                 onClick={showDrawer}
             >
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 mx-auto">
