@@ -110,6 +110,9 @@
         "Creative and entrepreneurial capacity": "Capacidad creativa y emprendedora",
         "Sustainability": "Sostenibilidad",
         "Communicative ability": "Capacidad comunicativa",
+        "Citizenship competence": "Competencia ciudadana",
+        "Digital competence": "Competencia digital",
+        "Entrepreneurial competence": "Competencia emprendedora",
         "linked_objectives": "¡Esta tarea está vinculada con tus objetivos!",
         "CRITERIA": {
             "Ethical commitment": {
@@ -146,6 +149,29 @@
                 "criteria": [
                     "Capacidad para comprender y expresarse oralmente y por escrito en catalán y español y en otro idioma, utilizando el lenguaje especializado en la disciplina",
                     "Capacidad para buscar, usar e integrar información"
+                ]
+            },
+            "Citizenship competence": {
+                "criteria": [
+                    "Analizar y comprender ideas relativas a la dimensión social y ciudadana de la propia identidad, así como los hechos sociales, históricos y normativos que la determinan, demostrando respeto por las normas, empatía, equidad y espíritu constructivo en la interacción con los demás en diferentes contextos socioinstitucionales.",
+                    "Analizar y asumir con fundamento los principios y valores de integración europea, del ordenamiento jurídico del Estado español y de Cataluña, y de los derechos humanos, participando en actividades comunitarias, en la toma de decisiones o la resolución de conflictos, con actitud democrática, respeto por la diversidad y compromiso con el bienestar global y la cohesión social.",
+                    "Analizar y comprender problemas éticos y sociales en ámbitos como la igualdad de género, evidenciando los valores propios y ajenos, y actuar responsablemente, con juicios para afrontar narrativas con una mirada no androcéntrica y etnocentrista, respetuosa de las diferencias y contraria a todas las formas de opresión y violencia.",
+                    "Interpretar las relaciones sistemáticas de interdependencia, ecodependencia e interconexión entre actuaciones locales y globales, adoptando conscientemente un estilo de vida sostenible y ecosocialmente responsable."
+                ]
+            },
+            "Digital competence": {
+                "criteria": [
+                    "Realizar búsquedas avanzadas en Internet atendiendo criterios de validez, calidad, actualidad y fiabilidad, seleccionándolas de manera crítica y archivándolas para recuperar, referenciar y reutilizar dichas búsquedas, respetando la propiedad intelectual.",
+                    "Gestionar y utilizar el propio entorno personal digital de aprendizaje permanente para construir nuevos conocimientos y crear contenidos digitales.",
+                    "Participar, colaborar e interactuar utilizando herramientas o plataformas virtuales para comunicarse, trabajar de manera colaborativa y compartir contenidos, datos e información, gestionando las acciones propias de manera responsable.",
+                    "Desarrollar aplicaciones informáticas sencillas y soluciones tecnológicas creativas y sostenibles para resolver problemas concretos o responder a retos planteados."
+                ]
+            },
+            "Entrepreneurial competence": {
+                "criteria": [
+                    "Analizar necesidades y oportunidades, y afrontar retos con sentido crítico, equilibrando su sostenibilidad y valorando su impacto en el entorno, para presentar ideas y soluciones innovadoras, éticas y sostenibles, orientadas a crear valor en el ámbito personal, social, cultural o económico.",
+                    "Evaluar las fortalezas y debilidades propias, utilizando estrategias de autoconocimiento y autoeficacia, comprendiendo los distintos funcionamientos de la economía y las finanzas y aplicando conocimientos económicos y financieros en actuaciones concretas.",
+                    "Desarrollar el proceso de creación de ideas valiosas o soluciones y proyectos innovadores sostenibles, reconociendo el valor del fracaso y los errores para mejorar propuestas y crear prototipos de valor innovador."
                 ]
             }
         }
@@ -323,6 +349,18 @@
         "COMMUNICATIVE_ABILITY": {
             "title": "Capacidad comunicativa",
             "description": "Antes de completar este objetivo, reflexiona sobre las siguientes preguntas: ¿Eres capaz de entender y expresarte oralmente y por escrito en catalán y español y en otro idioma, utilizando el lenguaje especializado en la disciplina? ¿Eres capaz de buscar, utilizar e integrar información?"
+        },
+        "CITIZENSHIP_COMPETENCE": {
+            "title": "Competencia ciudadana",
+            "description": "Antes de completar este objetivo, reflexiona sobre las siguientes preguntas: ¿Eres capaz de analizar y comprender ideas relativas a la dimensión social y ciudadana de tu propia identidad, así como los hechos sociales, históricos y normativos que la determinan? ¿Sabes actuar de manera responsable, demostrando respeto, empatía y espíritu constructivo en la interacción con los demás en diferentes contextos socioinstitucionales?"
+        },
+        "DIGITAL_COMPETENCE": {
+            "title": "Competencia digital",
+            "description": "Antes de completar este objetivo, reflexiona sobre las siguientes preguntas: ¿Eres capaz de realizar búsquedas avanzadas en Internet atendiendo criterios de validez, calidad y fiabilidad? ¿Sabes gestionar y utilizar tu propio entorno personal digital de aprendizaje para crear contenidos digitales y resolver retos con soluciones creativas y sostenibles?"
+        },
+        "ENTREPRENEURIAL_COMPETENCE": {
+            "title": "Competencia emprendedora",
+            "description": "Antes de completar este objetivo, reflexiona sobre las siguientes preguntas: ¿Sabes analizar necesidades y oportunidades, y evaluar la sostenibilidad de soluciones en tu vida personal, social o profesional? ¿Eres capaz de desarrollar proyectos innovadores, reconociendo el valor del fracaso y aprendiendo de los errores?"
         }
     },
     "COURSEINSIDE": {
