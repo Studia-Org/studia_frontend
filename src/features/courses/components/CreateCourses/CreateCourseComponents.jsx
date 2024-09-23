@@ -14,6 +14,7 @@ import { ButtonCreateCourse } from './CourseConfirmation/ButtonCreateCourse';
 import SelectProfessor from './CourseInfo/SelectProfessor';
 import { useTranslation } from 'react-i18next';
 import { UploadFiles } from './CourseSections/UploadFiles';
+import { CreateTags } from './CourseInfo/CreateTags';
 
 const variants = {
   hidden: { opacity: 0, y: 20 },
@@ -103,6 +104,7 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
       return newInfo;
     });
   };
+  console.log(courseBasicInfo)
 
   useEffect(() => {
     const saveFilesToLocalStorage = async () => {
@@ -144,18 +146,13 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
       />
       <SelectProfessor setCourseBasicInfo={setCourseBasicInfo} courseBasicInfo={courseBasicInfo} />
       <div className='text-sm font-normal'>
-        <label htmlFor="message" className="block mt-8 mb-4 text-sm font-medium text-gray-900">
+        <label htmlFor="message" className="block mt-8 mb-1 text-sm font-medium text-gray-900">
           {t("CREATE_COURSES.COURSE_INFO.course_tags")} *
         </label>
-        <Select
-          size='large'
-          mode="tags"
-          style={{
-            width: '100%',
-          }}
-          value={courseBasicInfo.tags}
-          onChange={(e) => handleChange('tags', e)}
-        />
+        <label htmlFor="message" className="block mb-4 text-xs font-medium text-gray-500">
+          {t("CREATE_COURSES.COURSE_INFO.course_tags_description")}
+        </label>
+        <CreateTags courseBasicInfoTags={courseBasicInfo?.tags} setCourseBasicInfo={setCourseBasicInfo} />
       </div>
 
       <div className='flex justify-between mt-8'>
@@ -257,7 +254,7 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
                   items={createCourseSectionsList}
                   strategy={verticalListSortingStrategy}>
                   {createCourseSectionsList.map((section) => (
-                    <CreateCourseSectionsList section={section} deleteSection={deleteSection} setEditCourseSectionFlag={setEditCourseSectionFlag} setSectionToEdit={setSectionToEdit} key={section.id} setSubsectionErrors={setSubsectionErrors}/>
+                    <CreateCourseSectionsList section={section} deleteSection={deleteSection} setEditCourseSectionFlag={setEditCourseSectionFlag} setSectionToEdit={setSectionToEdit} key={section.id} setSubsectionErrors={setSubsectionErrors} />
                   ))}
                 </SortableContext>
               </DndContext>
@@ -308,7 +305,7 @@ export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption, 
             />
           </div>
           <div style={{ width: '45rem' }} className='flex flex-col items-center ml-auto '>
-            <ButtonCreateCourse createCourseSectionsList={createCourseSectionsList} courseBasicInfo={courseBasicInfo} subsectionErrors={subsectionErrors}/>
+            <ButtonCreateCourse createCourseSectionsList={createCourseSectionsList} courseBasicInfo={courseBasicInfo} subsectionErrors={subsectionErrors} />
             <div className='w-full'>
               <AccordionCourse
                 createCourseSectionsList={createCourseSectionsList}

@@ -468,8 +468,9 @@
             "principal_text": "First, give us some information about the new course. This information will be visible to students.",
             "course_name": "Course name",
             "course_description": "Course description",
-            "course_evaluator": "Evaluator",
+            "course_evaluator": "Professor",
             "course_tags": "Tags",
+            "course_tags_description": "Add tags to help students find your course, it can be a topic, a subject, or a keyword.",
             "course_cover": "Course cover"
         },
         "COURSE_SECTIONS": {

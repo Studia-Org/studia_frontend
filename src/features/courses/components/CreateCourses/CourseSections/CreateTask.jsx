@@ -179,7 +179,7 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
 
     function createTaskButton() {
         try {
-            if (!title || !content || !deadline || categoriesInside.length === 0 || categoriesInside.length === undefined) {
+            if (!title || !content || !deadline || categoriesInside?.length === 0 || categoriesInside?.length === undefined) {
                 throw new Error('Please complete all required fields.');
             }
             const activity = {

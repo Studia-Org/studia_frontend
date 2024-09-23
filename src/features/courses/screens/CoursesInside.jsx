@@ -350,7 +350,7 @@ const CourseInside = () => {
     return true;
   });
 
-  if (courseHasNotStarted) {
+  if (courseHasNotStarted && user.role_str === 'student') {
     return (
       <div className='flex items-center justify-center w-full h-full rounded-tl-3xl bg-[#e7eaf886]'>
         <div className='flex items-center justify-center w-full h-full '>

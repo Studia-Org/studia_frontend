@@ -55,13 +55,6 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
                 </>
             ),
             nextButtonProps: { className: 'bg-[#1677ff] text-white' },
-            cover: (
-                <img
-                    alt="tour.png"
-                    className='h-[30rem] w-[20rem]'
-                    src="https://ai2-s2-public.s3.amazonaws.com/figures/2017-08-08/4df364487abcf2f6ef82eca6dc413767432cd25d/17-Figure2.2-1.png"
-                />
-            ),
             target: null,
         },
         {
@@ -231,7 +224,11 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
     return (
         <div className='text-base font-normal'>
             {contextHolder}
-            <Tour open={open} onClose={() => {
+            <Tour open={open} className=''
+            onFinish={() => {
+                setOpen(false)
+                document.body.style.overflow = 'auto'
+            }} onClose={() => {
                 setOpen(false)
                 document.body.style.overflow = 'auto'
             }} steps={steps} nextButtonProps={{ style: { backgroundColor: 'blue' } }} />

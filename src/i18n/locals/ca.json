@@ -474,8 +474,9 @@
             "principal_text": "Primer, omple la informació bàsica del curs. Aquesta informació serà visible per als estudiants.",
             "course_name": "Nom del curs",
             "course_description": "Descripció del curs",
-            "course_evaluator": "Avaluador",
+            "course_evaluator": "Professor",
             "course_tags": "Etiquetes",
+            "course_tags_description": "Afegeix etiquetes per ajudar els estudiants a trobar el vostre curs, pot ser un tema, una assignatura o una paraula clau.",
             "course_cover": "Portada del curs"
         },
         "COURSE_SECTIONS": {
