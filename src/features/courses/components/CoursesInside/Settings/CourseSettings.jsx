@@ -25,19 +25,18 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
     const [selectedEvaluator, setSelectedEvaluator] = useState()
     const [loading, setLoading] = useState(false)
     const [loadingDelete, setLoadingDelete] = useState(false)
-    const [coverChanged, setCoverChanged] = useState(courseData.cover.data.attributes.url[0])
+    const [coverChanged, setCoverChanged] = useState(courseData?.cover?.data?.attributes?.url[0])
     let { courseId } = useParams();
+
     const fetchUsers = async () => {
         const getAllUsers = await fetch(`${API}/users?populate=*`)
         const data = await getAllUsers.json();
         setStudents(data)
         setEvaluators(data.filter(item => item?.role_str === 'admin' || item?.role_str === 'professor'))
     }
-
     useEffect(() => {
         fetchUsers()
     }, [])
-
 
     function addStudentButton(student) {
         if (courseData.students.data.find(item => item.id === student.id)) {
@@ -52,7 +51,6 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
         }
 
     }
-
     function addEvaluatorButton(evaluator) {
         if (courseData.evaluators.data.find(item => item.id === evaluator.id)) {
             message.error('Evaluator already added')
@@ -65,11 +63,8 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
             }))
         }
     }
-
-
-
     const deleteCourse = async () => {
-        const token = process.env.REACT_APP_ADMIN_TOKEN;
+        const token = getToken()
         setLoadingDelete(true)
         try {
             courseData.sections.data.forEach(async (section) => {
@@ -117,6 +112,7 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
             message.error(error)
         }
     }
+
     const saveChanges = async () => {
         setLoading(true)
         if (courseData.cover.data.attributes.url.length === 0) {
@@ -132,8 +128,8 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
                 evaluators: courseData.evaluators.data.map(item => item.id)
             }
 
-            if (coverChanged.name !== courseData.cover.data.attributes.url[0].name
-                || coverChanged.size !== courseData.cover.data.attributes.url[0].size) {
+            if (!coverChanged || coverChanged?.name !== courseData.cover.data.attributes.url[0].name
+                || coverChanged?.size !== courseData.cover.data.attributes.url[0].size) {
                 const formData = new FormData();
                 formData.append('files', courseData.cover.data.attributes.url[0]);
                 const uploadCover = await fetch(`${API}/upload`, {
@@ -175,7 +171,6 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
             setLoading(false)
         }
     }
-
     function deleteStudent(student) {
         setCourseData(prevState => ({
             ...prevState,
@@ -184,7 +179,6 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
             }
         }))
     }
-
     function deleteEvaluator(evaluator) {
         setCourseData(prevState => ({
             ...prevState,
@@ -263,7 +257,7 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
                             {t("COURSEINSIDE.SETTINGS.course_cover")}
                         </label>
                         <FilePond
-                            files={courseData?.cover?.data?.attributes.url}
+                            files={courseData?.cover?.data?.attributes?.url}
                             allowMultiple={false}
                             onupdatefiles={(fileItems) => {
                                 setCourseData(prevState => ({
@@ -310,8 +304,9 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
                 <div className="flex items-center justify-end pt-8">
                     <Button
                         onClick={() => setSettingsFlag(false)}
+                        disabled={loading}
                         type="button"
-                        className="px-4 text-sm font-medium bg-white border border-gray-300 rounded-md shadow-sm text-blue-gray-900 hover:bg-blue-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        className="px-4 text-sm font-medium bg-white border border-gray-300 rounded-md shadow-sm disabled:bg-gray-300 disabled:text-gray-400 disabled:cursor-not-allowed text-blue-gray-900 hover:bg-blue-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                     >
                         {t("COMMON.cancel")}
                     </Button>

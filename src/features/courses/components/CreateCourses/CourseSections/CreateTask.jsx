@@ -22,9 +22,9 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
     const { t } = useTranslation();
 
     const handleChangeGroup = (value) => {
-        if(value){
+        if (value) {
             setIsGroup(true);
-        }else{
+        } else {
             setIsGroup(false);
             setNumberOfStudentsperGroup(1);
         }
@@ -58,33 +58,32 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
             let updatedTask;
             const newSections = prevSections.map((section) => {
                 updatedTask = {
-                    id: section.task.id,
+                    id: section.task?.id || task[section.id].id,
                     title: title,
                     description: content,
                     deadline: deadline,
                     evaluable: true,
                     categories: [],
                     files: files.map((file) => file),
-                    ponderation: section.task.ponderation,
-                    type: section.task.type,
-                    order: section.task.order,
+                    ponderation: section.task?.ponderation || task[section.id].ponderation,
+                    type: section.task?.type || task[section.id]?.type,
+                    order: section.task?.order || task[section.id]?.order,
                     numberOfStudentsperGroup: numberOfStudentsperGroup,
                     groupActivity: isGroup,
                 };
-                if (section?.task) {
-                    setTask((prevTask) => {
-                        const newTask = { ...prevTask, [section.id]: updatedTask };
-                        localStorage.setItem('task', JSON.stringify(newTask));
-                        return newTask;
-                    });
 
-                    return {
-                        ...section,
-                        task: updatedTask,
-                    };
-                }
-                return section;
+                setTask((prevTask) => {
+                    const newTask = { ...prevTask, [section.id]: updatedTask };
+                    localStorage.setItem('task', JSON.stringify(newTask));
+                    return newTask;
+                });
+
+                return {
+                    ...section,
+                    task: updatedTask,
+                };
             });
+
 
             newSections.forEach((section) => {
                 if (section.subsections && section.subsections.length > 0) {
@@ -110,37 +109,34 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
 
         setCreateCourseSectionsListCopy((prevSections) => {
             let updatedTask;
-            console.log('prevSections', prevSections)
 
             const newSections = prevSections.map((section) => {
                 updatedTask = {
-                    id: section.task.id,
+                    id: section.task?.id || task[section.id].id,
                     title: title,
                     description: content,
                     deadline: deadline,
                     evaluable: true,
                     categories: categories,
                     files: files.map((file) => file),
-                    ponderation: section.task.ponderation,
-                    type: section.task.type,
-                    order: section.task.order,
+                    ponderation: section.task?.ponderation || task[section.id].ponderation,
+                    type: section.task?.type || task[section.id]?.type,
+                    order: section.task?.order || task[section.id]?.order,
                     numberOfStudentsperGroup: numberOfStudentsperGroup,
                     groupActivity: isGroup,
                 };
 
-                if (section?.task) {
-                    setTask((prevTask) => {
-                        const newTask = { ...prevTask, [section.id]: updatedTask };
-                        localStorage.setItem('task', JSON.stringify(newTask));
-                        return newTask;
-                    });
 
-                    return {
-                        ...section,
-                        task: updatedTask,
-                    };
-                }
-                return section;
+                setTask((prevTask) => {
+                    const newTask = { ...prevTask, [section.id]: updatedTask };
+                    localStorage.setItem('task', JSON.stringify(newTask));
+                    return newTask;
+                });
+
+                return {
+                    ...section,
+                    task: updatedTask,
+                };
             });
 
             newSections.forEach((section) => {
@@ -261,7 +257,6 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
 
     }
 
-    console.log('categoriesInside', isGroup)
     return (
         <motion.div
             initial={{ opacity: 0, x: -20 }}

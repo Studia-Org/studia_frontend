@@ -97,7 +97,6 @@ export const Questionnaire = ({ setState, setSelfAssesmentData, setQualification
         }
     }
 
-    console.log(questionnaireAnswers)
 
     return (
         <div className="flex flex-col mt-5">

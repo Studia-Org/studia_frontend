@@ -117,7 +117,8 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
     ];
 
     const saveChanges = (autosave = false, createCourseSectionsListCopyTest) => {
-        setCreateCourseSectionsList(createCourseSectionsListCopyTest);
+        const copyObject = JSON.parse(JSON.stringify(createCourseSectionsListCopyTest));
+        setCreateCourseSectionsList(copyObject);
         localStorage.setItem('createCourseSectionsList', JSON.stringify(createCourseSectionsListCopyTest));
 
         if (autosave) {
@@ -142,7 +143,8 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
     useEffect(() => {
         setSubsectionsToEdit((createCourseSectionsListCopy.filter((section) => section.id === sectionToEdit.id)[0]))
         setThereIsChanges(JSON.stringify(createCourseSectionsListCopy) !== JSON.stringify(createCourseSectionsList))
-    }, [createCourseSectionsListCopy])
+
+    }, [createCourseSectionsListCopy, createCourseSectionsList])
 
     useEffect(() => {
         const autoSave = () => {

@@ -9,8 +9,8 @@ export const Header = ({ questionnaire }) => {
     const locales = { ca, es }
     const local = locales[i18n.language] || enUS;
     return (
-        <div className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1] mb-5">
-            <div className="flex flex-col w-full my-7 mx-7">
+        <header className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1] mb-5">
+            <div className="flex flex-col w-full p-7">
                 <div className='flex items-center w-full '>
                     <div className='flex items-center w-full gap-3'>
                         <p className="text-3xl font-semibold text-black">{questionnaire.attributes.Title}</p>
@@ -21,6 +21,6 @@ export const Header = ({ questionnaire }) => {
                     <p>{questionnaire.attributes.description}</p>
                 </div>
             </div>
-        </div>
+        </header>
     )
 }

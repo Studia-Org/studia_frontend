@@ -110,6 +110,9 @@
         "Creative and entrepreneurial capacity": "Capacitat creativa i emprenedora",
         "Sustainability": "Sostenibilitat",
         "Communicative ability": "Capacitat comunicativa",
+        "Citizenship competence": "Competència ciutadana",
+        "Digital competence": "Competència digital",
+        "Entrepreneurial competence": "Competència emprenedora",
         "linked_objectives": "Aquesta tasca està vinculada amb els teus objectius!",
         "CRITERIA": {
             "Ethical commitment": {
@@ -146,6 +149,29 @@
                 "criteria": [
                     "Capacitat per comprendre i expressar-se oralment i per escrit en català i espanyol i en un altre idioma, utilitzant el llenguatge especialitzat en la disciplina",
                     "Capacitat per cercar, usar i integrar informació"
+                ]
+            },
+            "Citizenship competence": {
+                "criteria": [
+                    "Analitzar i comprendre idees relatives a la dimensió social i ciutadana de la seva pròpia identitat, així com els fets socials, històrics i normatius que la determinen, demostrant respecte per les normes, empatia, equitat i esperit constructiu en la interacció amb els altres en diferents contexts socioinstitucionals.",
+                    "Analitzar i assumir amb fonament els principis i valors d'integració europea, de l'ordenament jurídic de l'Estat espanyol i de Catalunya, i dels drets humans, participant en activitats comunitàries, en la presa de decisions o la resolució de conflictes, amb actitud democràtica, respecte per la diversitat, i compromís amb el benestar global i la cohesió social.",
+                    "Analitzar i comprendre problemes ètics i socials en àmbits com la igualtat de gènere, evidenciant els valors propis i aliens, i actuar responsablement amb judicis per afrontar narratives amb una mirada no androcèntrica i etnocentrista, respectuosa amb les diferències i contrària a totes les formes d'opressió i violència.",
+                    "Interpretar les relacions sistemàtiques d'interdependència, ecodependència i interconnexió entre actuacions locals i globals, adoptant conscientment un estil de vida sostenible i ecosocialment responsable."
+                ]
+            },
+            "Digital competence": {
+                "criteria": [
+                    "Fer cerques avançades a Internet atenent criteris de validesa, qualitat, actualitat i fiabilitat, seleccionant-les de manera crítica i arxivant-les per recuperar, referenciar i reutilitzar aquestes cerques, respectant la propietat intel·lectual.",
+                    "Gestionar i utilitzar el propi entorn personal digital d'aprenentatge permanent per construir nous coneixements i crear continguts digitals.",
+                    "Participar, col·laborar i interactuar utilitzant eines o plataformes virtuals per comunicar-se, treballar de manera col·laborativa i compartir continguts, dades i informació, gestionant les accions pròpies de manera responsable.",
+                    "Desenvolupar aplicacions informàtiques senzilles i solucions tecnològiques creatives i sostenibles per resoldre problemes concrets o donar resposta a reptes plantejats."
+                ]
+            },
+            "Entrepreneurial competence": {
+                "criteria": [
+                    "Analitzar necessitats i oportunitats, i afrontar reptes amb sentit crític, fent balanç de la seva sostenibilitat i valorant l'impacte en l'entorn, per presentar idees i solucions innovadores, ètiques i sostenibles, orientades a crear valor en l'àmbit personal, social, cultural o econòmic.",
+                    "Avaluar les fortaleses i debilitats pròpies, utilitzant estratègies d'autoconeixement i d'autoefficàcia, comprenent els diferents funcionaments de l'economia i les finances i aplicant coneixements econòmics i financers en actuacions concretes.",
+                    "Desenvolupar el procés de creació d'idees valuoses o solucions i projectes innovadors sostenibles, reconeixent el valor del fracàs i dels errors per millorar les propostes i crear prototips de valor innovador."
                 ]
             }
         }
@@ -323,6 +349,18 @@
         "COMMUNICATIVE_ABILITY": {
             "title": "Capacitat comunicativa",
             "description": "Abans de completar aquest objectiu, reflexiona sobre les següents preguntes: Ets capaç d'entendre i expressar-te oralment i per escrit en català i espanyol i en un altre idioma, utilitzant el llenguatge especialitzat en la disciplina? Ets capaç de cercar, utilitzar i integrar informació?"
+        },
+        "CITIZENSHIP_COMPETENCE": {
+            "title": "Competència ciutadana",
+            "description": "Abans de completar aquest objectiu, reflexiona sobre les següents preguntes: Ets capaç d'analitzar i comprendre idees relatives a la dimensió social i ciutadana de la teva pròpia identitat, així com els fets socials, històrics i normatius que la determinen? Saps actuar de manera responsable, demostrant respecte, empatia i esperit constructiu en la interacció amb els altres en diferents contexts socioinstitucionals?"
+        },
+        "DIGITAL_COMPETENCE": {
+            "title": "Competència digital",
+            "description": "Abans de completar aquest objectiu, reflexiona sobre les següents preguntes: Ets capaç de fer cerques avançades a Internet atenent criteris de validesa, qualitat i fiabilitat? Saps gestionar i utilitzar el teu propi entorn personal digital d'aprenentatge per crear continguts digitals i resoldre reptes amb solucions creatives i sostenibles?"
+        },
+        "ENTREPRENEURIAL_COMPETENCE": {
+            "title": "Competència emprenedora",
+            "description": "Abans de completar aquest objectiu, reflexiona sobre les següents preguntes: Saps analitzar necessitats i oportunitats, i avaluar la sostenibilitat de solucions en la teva vida personal, social o professional? Ets capaç de desenvolupar projectes innovadors, reconeixent el valor del fracàs i aprenent dels errors?"
         }
     },
     "COURSEINSIDE": {
@@ -801,7 +839,6 @@
             "generate_course": "Crear curs",
             "principal_text": "El botó s'habilitarà una vegada que hagis completat totes les seccions i subseccions del curs. Assegura't de no tenir cap error en el curs abans de continuar.",
             "errors": "Mostrar errors"
-
         },
         "NAVIGATION": {
             "continue": "Continuar",
@@ -810,7 +847,11 @@
             "cancel": "Cancel·lar",
             "course_info": "Informació del curs",
             "course_sections": "Seccions del curs",
-            "course_visualization": "Visualització del curs"
+            "course_visualization": "Visualització del curs",
+            "section_created_successfully": "Secció creada correctament"
+        },
+        "ERROR": {
+            "section_must_have_title": "La secció ha de tenir un títol"
         }
     },
     "CALENDAR": {

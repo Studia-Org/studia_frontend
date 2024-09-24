@@ -93,16 +93,16 @@ export const PeerReviewRubricModal = ({ isModalOpen, setIsModalOpen, rubricData,
         }
         const isEmpty = data.some((item) => item.criteria === '' || item.evaluation1 === '' || item.evaluation2 === '' || item.evaluation3 === '' || item.evaluation4 === '')
         const duplicatedCriteria = data.some((item, index) => data.findIndex((item2) => item2.criteria === item.criteria) !== index)
+        if (isEmpty) {
+            message.error(t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.some_fields_rubric_empty"))
+            return
+        }
 
         if (duplicatedCriteria) {
             message.error(t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.duplicate_criteria"))
             return
         }
 
-        if (isEmpty) {
-            message.error(t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.some_fields_rubric_empty"))
-            return
-        }
         data.forEach((item) => {
             if (item.criteria === '' || item.evaluation1 === '' || item.evaluation2 === '' || item.evaluation3 === '' || item.evaluation4 === '') {
                 return

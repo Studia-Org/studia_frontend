@@ -15,27 +15,27 @@ export const RubricAutoAssesment = ({ activityData, setState, qualificationId, s
 
     const columns = [
         {
-            title: '',
+            title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.criteria"),
             dataIndex: 'criteria',
             rowScope: 'row',
         },
         {
-            title: t("SELFASSESTMENT.bad"),
+            title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.excellent"),
             dataIndex: 'evaluation1',
 
         },
         {
-            title: t("SELFASSESTMENT.regular"),
+            title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.great"),
             dataIndex: 'evaluation2',
 
         },
         {
-            title: t("SELFASSESTMENT.good"),
+            title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.needs_improvement"),
             dataIndex: 'evaluation3',
 
         },
         {
-            title: t("SELFASSESTMENT.very_good"),
+            title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.unsatisfactory"),
             dataIndex: 'evaluation4',
 
         },
@@ -112,12 +112,14 @@ export const RubricAutoAssesment = ({ activityData, setState, qualificationId, s
             <div className='p-6 mt-5 bg-white border rounded-md'>
                 <p className='mb-1 text-xs'>{t("SELFASSESTMENT.add_your_comments")}</p>
                 <TextArea rows={5} value={comments} onChange={(e) => setComments(e.target.value)} />
-                <div className='mt-5'>
-                    <p className='mb-1 text-xs'>{t("SELFASSESTMENT.evaluate_1_10")}</p>
-                    <InputNumber min={1} max={10} value={grade} onChange={setGrade} />
-                </div>
+                <section className='flex items-center justify-between'>
+                    <div className='mt-5'>
+                        <p className='mb-1 text-xs'>{t("SELFASSESTMENT.evaluate_1_10")}</p>
+                        <InputNumber min={1} max={10} value={grade} onChange={setGrade} />
+                    </div>
+                    <Button loading={loading} className='self-end' type='primary' onClick={handleSubmit} >{t("COMMON.submit")}</Button>
+                </section>
             </div>
-            <Button loading={loading} className='my-4' type='primary' onClick={handleSubmit} >{t("COMMON.submit")}</Button>
         </>
 
     )

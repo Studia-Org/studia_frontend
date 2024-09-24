@@ -189,6 +189,10 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
   }
 
   function createSection() {
+    if (sectionName === '') {
+      message.error(t("CREATE_COURSES.ERROR.section_must_have_title"))
+      return
+    }
     const newSection = {
       id: Math.random().toString(16).slice(2),
       name: sectionName,
@@ -200,7 +204,7 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
     setSectionName('')
     setEditCourseSectionFlag(true)
     setSectionToEdit(newSection)
-    message.success("Section created successfully")
+    message.success(t("CREATE_COURSES.NAVIGATION.section_created_successfully"))
   }
 
   function deleteSection(section) {
@@ -232,14 +236,14 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
         {
           !addSectionFlag &&
           <div>
-            <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 mt-5">{t("CREATE_COURSES.COURSE_SECTIONS.section_name")}</label>
+            <label for="base-input" class="block mb-2 text-sm font-medium text-gray-900 mt-5">{t("CREATE_COURSES.COURSE_SECTIONS.section_name")} *</label>
             <input type="text" value={sectionName}
               onChange={(e) => setSectionName(e.target.value)}
               id="base-input"
               className="bg-gray-50 border border-gray-300 text-gray-900 font-normal text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 " />
             <button
               onClick={() => createSection()}
-              className='p-2 mt-4 text-sm text-white bg-gray-800 rounded-md '>
+              className='p-2 mt-4 text-sm text-white bg-gray-800 rounded-md'>
               {t("CREATE_COURSES.COURSE_SECTIONS.create")}
             </button>
           </div>
