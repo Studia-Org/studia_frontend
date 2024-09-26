@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 export const SubsectionItems = ({ setCreateCourseSectionsList, sectionToEdit, context, ref3, sectionTask }) => {
     const [currentPage, setCurrentPage] = useState('first');
     const [currentPageSequence, setCurrentPageSequence] = useState(0);
-    const [addItemsOrPreMade, setAddItemsOrPreMade] = useState(context === 'coursesInside' ? 'addItems' : 'preMade');
+    const [addItemsOrPreMade, setAddItemsOrPreMade] = useState(context === 'coursesInside' && sectionToEdit?.attributes?.subsections?.data?.length !== 0 ? 'addItems' : 'preMade');
 
     const { t } = useTranslation()
 
