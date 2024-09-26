@@ -4,6 +4,7 @@ import { ForumInside } from './ForumInside';
 import { useAuthContext } from "../../../../../context/AuthContext";
 import { ForumAddThread } from './ForumAddThread';
 import { useTranslation } from 'react-i18next';
+import { use } from 'i18next';
 const { TabPane } = Tabs;
 
 
@@ -13,6 +14,8 @@ export const ForumComponent = ({ allForums, setAllForums, courseData }) => {
   const [showModal, setShowModal] = useState(false);
   const [activeKey, setActiveKey] = useState(null);
   const { user } = useAuthContext();
+
+  useEffect(() => { window.scrollTo(0, 0) }, [])
 
   const handleTabChange = (key) => {
     setActiveKey(key);
@@ -77,7 +80,7 @@ export const ForumComponent = ({ allForums, setAllForums, courseData }) => {
 
 
     if (activeKey === null) {
-      setActiveKey(allForums[0].id.toString());
+      if (allForums.length > 0) setActiveKey(allForums[0].id.toString());
     }
   }, [allForums, courseData, showModal, activeKey]);
 

@@ -35,6 +35,7 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
         setEvaluators(data.filter(item => item?.role_str === 'admin' || item?.role_str === 'professor'))
     }
     useEffect(() => {
+        window.scrollTo(0, 0)
         fetchUsers()
     }, [])
 
