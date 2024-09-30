@@ -27,6 +27,8 @@ import { UploadFiles } from '../CreateCourses/CourseSections/UploadFiles.jsx';
 import { BreadcrumbCourse } from '../CoursesInside/BreadcrumbCourse.jsx';
 import { useCourseContext } from '../../../../context/CourseContext.js';
 import { useTranslation } from 'react-i18next';
+import { ProfessorThinkAloud } from './Components/ActivityTask/ProfessorThinkAloud.jsx';
+import { create } from 'filepond';
 registerPlugin(FilePondPluginFileValidateSize);
 registerPlugin(FilePondPluginImagePreview);
 
@@ -391,6 +393,7 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
     }
     else message.error(t("ACTIVITY.smth_wrong"));
   }
+
   function DeleteButton({ id }) {
     return (
       <Popconfirm
@@ -522,61 +525,64 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
             </div>
           }
           {
-            createGroups ?
-              <CreateGroups activityId={activityId} activityData={activityData} courseId={courseId} />
-              :
-              <>
-                {
-                  (user.role_str === 'professor' || user.role_str === 'admin') &&
-                  <div className='flex items-center ml-auto'>
-                    <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} />
-                  </div>
-                }
-                {
-                  evaluated &&
-                  <section>
-                    <p className='mt-5 mb-1 text-xs text-gray-400'>{t("ACTIVITY.comments")}</p>
-                    <hr />
-                    {
-                      activityData.comments === null || activityData.comments === '' ?
-                        <p className='mt-3'>{t("ACTIVITY.no_comments")}</p>
-                        :
-                        <p className='mt-3'>{activityData.comments}</p>
-                    }
-
-                  </section>
-                }
-                {
-                  !enableEdit || user.role_str === 'student' ?
-                    <TaskFiles files={activityFiles} />
-                    :
-                    <section className="!max-h-fit">
-                      <p className='mt-8 mb-1 text-xs text-gray-600'>{t("ACTIVITY.task_files")}</p>
-                      <hr className='mb-3' />
-                      <UploadFiles fileList={filesTask} setFileList={setFilesTask} listType={'picture'} maxCount={10} />
-                      <p className='mt-1 text-xs text-right text-gray-500 '>{t("ACTIVITY.remember_upload")}</p>
-                    </section>
-                }
-                <p className='mt-5 mb-1 text-xs text-gray-600'>{t("ACTIVITY.task_description")}</p>
-                <hr />
-                <div className='my-3 text-gray-600 ml-5 max-w-[calc(100vw-1.25rem)] box-content mt-5 '>
+            user.role_str === 'professor' && isThinkAloud ?
+              <ProfessorThinkAloud activityData={activityData} />
+              : createGroups ?
+                <CreateGroups activityId={activityId} activityData={activityData} courseId={courseId} />
+                :
+                <>
                   {
-                    !enableEdit ?
-                      <div className='prose max-w-none'>
-                        <ReactMarkdown>{activityData.activity.data.attributes.description}</ReactMarkdown>
-                      </div>
-                      :
-                      <div className="flex flex-col">
-                        <MDEditor height="30rem" className='mt-2 mb-8' data-color-mode='light' onChange={setSubsectionContent} value={subsectionContent} />
-                        <Button onClick={() => saveChanges()} type="primary" loading={loading}
-                          className="inline-flex justify-center px-4 ml-auto text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                          {t("COMMON.save_changes")}
-                        </Button>
-                      </div>
+                    (user.role_str === 'professor' || user.role_str === 'admin') &&
+                    <div className='flex items-center ml-auto'>
+                      <SwitchEdit enableEdit={enableEdit} setEnableEdit={setEnableEdit} />
+                    </div>
                   }
-                </div>
-              </>
+                  {
+                    evaluated &&
+                    <section>
+                      <p className='mt-5 mb-1 text-xs text-gray-400'>{t("ACTIVITY.comments")}</p>
+                      <hr />
+                      {
+                        activityData.comments === null || activityData.comments === '' ?
+                          <p className='mt-3'>{t("ACTIVITY.no_comments")}</p>
+                          :
+                          <p className='mt-3'>{activityData.comments}</p>
+                      }
+
+                    </section>
+                  }
+                  {
+                    !enableEdit || user.role_str === 'student' ?
+                      <TaskFiles files={activityFiles} />
+                      :
+                      <section className="!max-h-fit">
+                        <p className='mt-8 mb-1 text-xs text-gray-600'>{t("ACTIVITY.task_files")}</p>
+                        <hr className='mb-3' />
+                        <UploadFiles fileList={filesTask} setFileList={setFilesTask} listType={'picture'} maxCount={10} />
+                        <p className='mt-1 text-xs text-right text-gray-500 '>{t("ACTIVITY.remember_upload")}</p>
+                      </section>
+                  }
+                  <p className='mt-5 mb-1 text-xs text-gray-600'>{t("ACTIVITY.task_description")}</p>
+                  <hr />
+                  <div className='my-3 text-gray-600 ml-5 max-w-[calc(100vw-1.25rem)] box-content mt-5 '>
+                    {
+                      !enableEdit ?
+                        <div className='prose max-w-none'>
+                          <ReactMarkdown>{activityData.activity.data.attributes.description}</ReactMarkdown>
+                        </div>
+                        :
+                        <div className="flex flex-col">
+                          <MDEditor height="30rem" className='mt-2 mb-8' data-color-mode='light' onChange={setSubsectionContent} value={subsectionContent} />
+                          <Button onClick={() => saveChanges()} type="primary" loading={loading}
+                            className="inline-flex justify-center px-4 ml-auto text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            {t("COMMON.save_changes")}
+                          </Button>
+                        </div>
+                    }
+                  </div>
+                </>
           }
+
         </div>
         {
           (user.role_str === 'professor' || user.role_str === 'admin') && !createGroups ?
@@ -631,8 +637,19 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
                       <hr className='mx-10 mt-5' />
                       {
                         uploadMode === 'record' ?
-                          <RecordAudio audioFile={audioFile} setAudioFile={setAudioFile} passedDeadline={passedDeadline} idQualification={idQualification}
-                            setUserQualification={setUserQualification} />
+                          <>
+                            <RecordAudio audioFile={audioFile} setAudioFile={setAudioFile} passedDeadline={passedDeadline} idQualification={idQualification}
+                              setUserQualification={setUserQualification} />
+                            <Button
+                              loading={uploadLoading}
+                              disabled={uploadLoading || (passedDeadline || evaluated)}
+                              id='submit-button-activity'
+                              onClick={() => { sendData() }}
+                              className="flex mb-5 ml-auto mr-5" type='primary'>
+                              {t("ACTIVITY.submit_files")}
+                            </Button>
+                          </>
+
                           :
                           <div className='m-5'>
                             <UploadFiles fileList={fileList} setFileList={setFileList} listType={'picture'} maxCount={1} disabled={passedDeadline || evaluated} />

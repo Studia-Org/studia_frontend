@@ -388,7 +388,8 @@
             "participants": "Participantes",
             "participants_title": "Edita el número de estudiantes y evaluadores para este curso.",
             "column1_student_email": "Columna 1: Correo electrónico del estudiante",
-            "import_from_csv": "Importar {{type}} desde CSV"
+            "import_from_csv": "Importar {{type}} desde CSV",
+            "reminder_add": "Recuerda clicar al botón añadir y luego guardar los cambios para que se apliquen correctamente."
         },
         "FORUM": {
             "forum": "Foro",
@@ -427,7 +428,7 @@
             "placeholder_search": "Buscar un estudiante"
         },
         "SUB_SETTINGS": {
-            "complete_uncomplete_subsection": "Completar / Descompletar subsección",
+            "complete_uncomplete_subsection": "Modificar acceso subsección",
             "date": "Fecha de inicio y finalización de la subsección",
             "back_to_settings": "Volver a la configuración",
             "complete_students": "Completar subsección",

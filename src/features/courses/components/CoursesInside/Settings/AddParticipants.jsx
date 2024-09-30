@@ -64,6 +64,7 @@ export const AddParticipants = ({ participants, addedParticipants, addParticipan
                         </label>
                         <label className='block ml-auto text-sm font-medium text-gray-700'>{translatedType}: {addedParticipants?.length}</label>
                     </div>
+                    <p className='text-xs text-gray-600'>{t("COURSEINSIDE.SETTINGS.reminder_add")}</p>
 
 
                     <div className="flex items-center">

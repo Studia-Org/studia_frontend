@@ -388,7 +388,8 @@
             "participants": "Participants",
             "participants_title": "Edita el nombre d'estudiants i avaluadors per aquest curs.",
             "column1_student_email": "Columna 1: Correu electrònic de l'estudiant",
-            "import_from_csv": "Importar {{type}} des de CSV"
+            "import_from_csv": "Importar {{type}} des de CSV",
+            "reminder_add": "Recorda clicar al botó afegir i després guardar els canvis per a que s'apliquin correctament."
         },
         "FORUM": {
             "forum": "Fòrum",
@@ -427,7 +428,7 @@
             "placeholder_search": "Cerca un estudiant"
         },
         "SUB_SETTINGS": {
-            "complete_uncomplete_subsection": "Completar / Descompletar subsecció",
+            "complete_uncomplete_subsection": "Modificar accès susbecció",
             "date": "Data de inici i final de la subsecció",
             "back_to_settings": "Tornar a la configuració",
             "complete_students": "Completar subsecció",

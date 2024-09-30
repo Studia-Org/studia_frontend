@@ -50,7 +50,7 @@ const Activity = () => {
       if (!user) return;
 
       const activityData = await fetch(
-        `${API}/activities/${activityId}?populate=qualifications,evaluators.profile_photo,section,task_to_review,subsection.section.course.sections.subsections,selfAssesmentAnswer.user,BeingReviewedBy,file`, {
+        `${API}/activities/${activityId}?populate=qualifications.file,qualifications.user,qualievaluators.profile_photo,section,task_to_review,subsection.section.course.sections.subsections,selfAssesmentAnswer.user,BeingReviewedBy,file`, {
         headers: {
           Authorization: `${BEARER} ${getToken()}`
         }
@@ -85,6 +85,7 @@ const Activity = () => {
           `&populate[file][fields][0]=*` +
           `&populate[activity][populate][evaluators][fields][0]=*` +
           `&populate[activity][populate][file][fields][0]=*` +
+          
           `&populate[activity][populate][task_to_review][populate][peer_review_qualifications][fields][0]=*` +
           `&populate[activity][populate][subsection][populate][section][populate][course][populate][sections][populate][subsections][fields][0]=*` +
           `&filters[activity][id]=${activityId}` +

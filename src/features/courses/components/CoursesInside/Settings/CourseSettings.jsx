@@ -115,8 +115,9 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
 
     const saveChanges = async () => {
         setLoading(true)
-        if (courseData.cover.data.attributes.url.length === 0) {
+        if (!courseData?.cover?.data?.attributes?.url || courseData?.cover?.data?.attributes?.url?.length === 0) {
             message.error('Please upload a cover image')
+            setLoading(false)
             return;
         }
         try {
