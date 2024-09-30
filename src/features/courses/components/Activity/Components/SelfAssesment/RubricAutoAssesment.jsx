@@ -13,6 +13,19 @@ export const RubricAutoAssesment = ({ activityData, setState, qualificationId, s
     const { user } = useAuthContext()
     const { t } = useTranslation()
 
+    function checkIfWasClickedBefore(record, evaluation) {
+        let commentsText = comments.split("\n")
+        commentsText.some((comment) => {
+
+            const boolean = Object.values(record).find((value) => value === comment.replace(record.criteria + ": ", ""))
+            if (boolean) {
+                commentsText = commentsText.filter((commentArray) => commentArray !== comment)
+            }
+            return boolean
+        })
+        const needJump = commentsText.join() === "" ? "" : "\n"
+        setComments(commentsText.join("\n") + needJump + record.criteria + ": " + record[evaluation])
+    }
     const columns = [
         {
             title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.criteria"),
@@ -22,21 +35,45 @@ export const RubricAutoAssesment = ({ activityData, setState, qualificationId, s
         {
             title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.excellent"),
             dataIndex: 'evaluation1',
+            onCell: (record, rowIndex) => {
+                return {
+                    style: { cursor: 'pointer' },
+                    onClick: ((ev) => checkIfWasClickedBefore(record, 'evaluation1'))
+                };
+            }
 
         },
         {
             title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.great"),
             dataIndex: 'evaluation2',
+            onCell: (record, rowIndex) => {
+                return {
+                    style: { cursor: 'pointer' },
+                    onClick: ((ev) => checkIfWasClickedBefore(record, 'evaluation2'))
+                };
+            }
 
         },
         {
             title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.needs_improvement"),
             dataIndex: 'evaluation3',
+            onCell: (record, rowIndex) => {
+                return {
+                    style: { cursor: 'pointer' },
+                    onClick: ((ev) => checkIfWasClickedBefore(record, 'evaluation3'))
+                };
+            }
 
         },
         {
             title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.unsatisfactory"),
             dataIndex: 'evaluation4',
+            onCell: (record, rowIndex) => {
+                return {
+                    style: { cursor: 'pointer' },
+                    onClick: ((ev) => checkIfWasClickedBefore(record, 'evaluation4'))
+                };
+            }
 
         },
     ];
@@ -107,7 +144,9 @@ export const RubricAutoAssesment = ({ activityData, setState, qualificationId, s
         <>
             <h2 className='mt-5 text-lg font-medium'>{t("SELFASSESTMENT.rubric_autoevalution")}</h2>
             <p className='mt-3 mb-3 text-sm font-normal text-gray-500'>{t("SELFASSESTMENT.rubric_text")}</p>
-            <Table columns={columns} dataSource={activityData.activity.data.attributes.SelfAssesmentRubrica} pagination={false} className='border rounded-md' />
+            <Table
+
+                columns={columns} dataSource={activityData.activity.data.attributes.SelfAssesmentRubrica} pagination={false} className='border rounded-md' />
             <p className='my-3 text-sm font-normal text-gray-500'>{t("SELFASSESTMENT.rubric_text2")}</p>
             <div className='p-6 mt-5 bg-white border rounded-md'>
                 <p className='mb-1 text-xs'>{t("SELFASSESTMENT.add_your_comments")}</p>
