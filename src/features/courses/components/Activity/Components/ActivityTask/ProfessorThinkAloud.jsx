@@ -7,7 +7,6 @@ export const ProfessorThinkAloud = ({ activityData }) => {
     const { t } = useTranslation()
 
     const userWithAudio = activityData.activity.data.attributes.qualifications.data.map((qualification) => {
-        console.log(qualification.attributes)
         return {
             key: qualification.id,
             name: qualification.attributes.user.data.attributes.name,
