@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Popconfirm, message } from 'antd';
-import { SubsectionList } from './EditSection/SubsectionList';
 import { getToken } from '../../../../helpers';
 import { API } from '../../../../constant';
 import { DndContext, closestCenter } from '@dnd-kit/core';
@@ -8,6 +7,8 @@ import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-ki
 import { motion } from 'framer-motion';
 import { SubsectionItems } from '../CreateCourses/CourseSections/SubsectionItems';
 import { useCourseContext } from '../../../../context/CourseContext';
+import { SubsectionList } from './EditSection/SubsectionList';
+import { use } from 'i18next';
 
 
 export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdit }) => {
@@ -15,9 +16,9 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdi
     const [loading, setLoading] = useState(false);
     const [loadingDelete, setLoadingDelete] = useState(false);
     const [sectionToEditTemp, setSectionToEditTemp] = useState(sectionToEdit);
+    const { setCourse } = useCourseContext();
 
-    const { setCourse } = useCourseContext();  
-
+    useEffect(() => { window.scrollTo(0, 0); }, [])
     useEffect(() => {
         if (sectionToEditTemp !== sectionToEdit) {
             setDisabled(false);
@@ -103,7 +104,7 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdi
                 )
         );
         let newSubsectionTemp = []
-
+        const dictIdtoId = {};
         await Promise.all([
             // Eliminar subsections
             Promise.all(
@@ -166,12 +167,11 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdi
                     });
                     const responseSubsection = await newSubsection.json();
                     newSubsectionTemp.push(responseSubsection.data.id);
+                    dictIdtoId[subSection.id] = responseSubsection.data.id;
                 }
             })(),
         ]);
-
-
-        fetch(`${API}/sections/${sectionToEdit.id}`, {
+        const result = await fetch(`${API}/sections/${sectionToEdit.id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -185,21 +185,16 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdi
                 },
             }),
         })
-
-        setCourse((prev) => {
-            const updatedSections = prev.map((section) => {
-                if (section.id === sectionToEdit.id) {
-                    return sectionToEditTemp;
-                }
-                return section;
-            });
-            return updatedSections;
-        })
-        setSectionToEdit(sectionToEditTemp);
-
+        if (!result.ok) {
+            message.error('An error occurred while updating the section');
+            setLoading(false);
+            return;
+        }
         // Finalmente comprobamos si se ha cambiado el orden de las subsecciones, si es asi, se actualiza el estado de la seccion
         if (checkIfSectionHadReorder()) {
-            const subsectionListId = sectionToEditTemp.attributes.subsections.data.map((subsection) => subsection.id);
+            const subsectionListId = sectionToEditTemp.attributes.subsections.data.map((subsection) =>
+                dictIdtoId[subsection.id] || subsection.id
+            );
             await fetch(`${API}/sections/${sectionToEdit.id}`, {
                 method: 'PUT',
                 headers: {
@@ -216,13 +211,10 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdi
             })
         }
 
-        setEditSectionFlag(false);
+        setLoading(false);
         message.success('Changes saved');
         window.location.reload();
-        setLoading(false);
     }
-
-
     const deleteSection = async () => {
         //Debemos eliminar las subsections que estén relacionadas con la sección, tambien la actividad, el cuestionario y las qualifications de la activity
         setLoadingDelete(true);
@@ -376,6 +368,7 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdi
                                                         <SubsectionList key={subsection?.id}
                                                             subsection={subsection}
                                                             setSectionToEditTemp={setSectionToEditTemp}
+
                                                         />
                                                     </motion.li>
                                                 ))
@@ -391,7 +384,7 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdi
                     }
                     <p className='mt-8 text-xs font-normal text-gray-400'>Drag and drop to reorder the sequence</p>
                 </div>
-                <div className='-mr-7'>
+                <div className='w-1/2'>
                     <SubsectionItems setCreateCourseSectionsList={setSectionToEditTemp} sectionToEdit={sectionToEditTemp} context={'coursesInside'} />
                 </div>
             </div>

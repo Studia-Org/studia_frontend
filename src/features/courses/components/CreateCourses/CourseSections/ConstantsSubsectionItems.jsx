@@ -38,14 +38,19 @@ function createSubsection(subsectionName, fase, questionnaireData, setCreateCour
         };
 
         setCreateCourseSectionsList(prev => {
-            const updatedSectionToEdit = JSON.parse(JSON.stringify(prev));
-            updatedSectionToEdit.attributes.subsections.data.push(newSubsection);
-            const customSort = (a, b) => {
-                const faseOrder = { 'forethought': 1, 'performance': 2, 'self-reflection': 3 };
-                return faseOrder[a.attributes.fase] - faseOrder[b.attributes.fase];
-            };
-            updatedSectionToEdit.attributes.subsections.data = updatedSectionToEdit.attributes.subsections.data.sort(customSort);
-            return updatedSectionToEdit;
+            try {
+                const updatedSectionToEdit = JSON.parse(JSON.stringify(prev));
+                updatedSectionToEdit.attributes.subsections.data.push(newSubsection);
+                const customSort = (a, b) => {
+                    const faseOrder = { 'forethought': 1, 'performance': 2, 'self-reflection': 3 };
+                    return faseOrder[a.attributes.fase] - faseOrder[b.attributes.fase];
+                };
+                updatedSectionToEdit.attributes.subsections.data = updatedSectionToEdit.attributes.subsections.data.sort(customSort);
+                return updatedSectionToEdit;
+            } catch (error) {
+                console.error(error);
+                return prev;
+            }
         })
     } else {
         const newSubsection = {
@@ -187,10 +192,19 @@ function modifySequence(sequence, sectionTask) {
 function addSequence(modifiedSequence, setCreateCourseSectionsList, sectionToEdit, context) {
     //Primero eliminamos la secuencia actual
     setCreateCourseSectionsList(prevSections => {
-        return prevSections.map(section => {
+        let copyPrevSections = JSON.parse(JSON.stringify(prevSections));
+        if (context === 'coursesInside') {
+            copyPrevSections.attributes.subsections.data = []
+            return copyPrevSections;
+
+        }
+        return copyPrevSections.map(section => {
             if (section.id === sectionToEdit.id) {
                 const updatedSection = JSON.parse(JSON.stringify(section));
-                updatedSection.subsections = [];
+                if (context === 'coursesInside') {
+                    updatedSection.attributes.subsections.data = []
+                }
+                else updatedSection.subsections = [];
                 return updatedSection;
             }
             return section;
