@@ -77,7 +77,7 @@ export const ForumComponent = ({ allForums, setAllForums, courseData }) => {
 
 
     if (activeKey === null) {
-      setActiveKey(allForums[0].id.toString());
+      setActiveKey(allForums[0]?.id?.toString());
     }
   }, [allForums, courseData, showModal, activeKey]);
 
