@@ -50,7 +50,7 @@ const Activity = () => {
       if (!user) return;
 
       const activityData = await fetch(
-        `${API}/activities/${activityId}?populate=qualifications.file,qualifications.user,qualievaluators.profile_photo,section,task_to_review,subsection.section.course.sections.subsections,selfAssesmentAnswer.user,BeingReviewedBy,file`, {
+        `${API}/activities/${activityId}?populate=qualifications.file,qualifications.user.profile_photo,qualievaluators.profile_photo,section,task_to_review,subsection.section.course.sections.subsections,selfAssesmentAnswer.user,BeingReviewedBy,file`, {
         headers: {
           Authorization: `${BEARER} ${getToken()}`
         }

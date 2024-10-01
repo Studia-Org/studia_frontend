@@ -210,7 +210,8 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                         id="table-search-users"
                                         onChange={(e) => setSearchTerm(e.target.value)}
                                         class="block p-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 "
-                                        placeholder={t("QUALIFICATIONS.search_users")} />
+                                        placeholder={t("QUALIFICATIONS.search_users")}
+                                    />
                                 </div>
                                 <label className="relative inline-flex items-center ml-5 mr-auto cursor-pointer">
                                     <input
@@ -302,7 +303,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
                                             </th>
                                     }
                                     <th scope="col" class="px-6 py-3">
-                                        {t("QUALIFICATIONS.qualification")} 
+                                        {t("QUALIFICATIONS.qualification")}
                                     </th>
                                     <th scope="col" class="px-6 py-3 ">
                                         {t("QUALIFICATIONS.comments")}
