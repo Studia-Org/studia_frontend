@@ -2,14 +2,17 @@ import React from 'react'
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Button, Popconfirm, message } from 'antd';
+import { sub } from 'date-fns';
+import { da } from 'date-fns/locale';
 
 
-export const SubsectionList = ({ subsection, setSectionToEditTemp }) => {
+export const SubsectionList = ({ subsection, setSectionToEditTemp, setSubsectionEditing, editable = false, danger = false }) => {
 
     function deleteSubsection() {
         setSectionToEditTemp((prev) => {
 
             const updatedSubsections = prev.attributes.subsections.data.filter((sub) => sub?.id !== subsection?.id);
+            console.log(updatedSubsections);
             return {
                 ...prev,
                 attributes: {
@@ -49,8 +52,11 @@ export const SubsectionList = ({ subsection, setSectionToEditTemp }) => {
     return (
         <li
             onClick={() => {
-                // setEditSubsectionFlag(true);
-                // setSubsectionEditing(subsection);
+                if (!editable) {
+                    message.error('You can only edit new Peer Review Subsections');
+                    return
+                }
+                setSubsectionEditing(subsection);
             }}
             style={style}
             className="cursor-pointer mb-10 ml-8 mt-8 flex items-center min-h-[2rem] w-[35rem] relative mr-5">
@@ -80,6 +86,12 @@ export const SubsectionList = ({ subsection, setSectionToEditTemp }) => {
                     </div>
                     {/* <CheckSubsectionErrors subsection={subsection} setSubsectionErrors={setSubsectionErrors} subsectionErrors={subsectionErrors} /> */}
                 </div>
+                {danger &&
+                    <i className='flex justify-end flex-1'>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="min-h-[20px] min-w-[20px] max-h-[20px] max-w-[20px] text-red-500 ">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"></path></svg>
+                    </i>
+                }
                 <Popconfirm
                     title="Delete the subsection"
                     description="Are you sure to delete this subsection?"
