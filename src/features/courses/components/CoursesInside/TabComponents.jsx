@@ -13,6 +13,7 @@ import './participants.css'
 import { useCourseContext } from "../../../../context/CourseContext";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
+import { id } from "date-fns/locale";
 
 
 export const CourseContent = ({ setForumFlag, courseId, enableEdit, setEnableEdit, titleSubsection, backgroundPhotoSubsection }) => {
@@ -22,18 +23,23 @@ export const CourseContent = ({ setForumFlag, courseId, enableEdit, setEnableEdi
         course,
         sectionSelected,
         subsectionSelected,
+        idSectionSelected,
         setCourse,
-        setSectionSelected,
-        setSubsectionSelected,
     } = useCourseContext();
-
-    const section_ = course.sections.data.find(
-        (seccion) => seccion.attributes.title === sectionSelected
+    let section_ = course.sections.data.find(
+        (seccion) => seccion.id === idSectionSelected
     );
+    if (section_ == undefined) {
+        section_ = course.sections.data.find(
+            (seccion) => seccion.attributes.title === sectionSelected
+        );
+    }
     const subsection_ = section_?.attributes.subsections.data.find(
         (subseccion) =>
-            subseccion?.attributes.title === subsectionSelected?.attributes.title
+            subseccion?.id === subsectionSelected?.id
     );
+
+
     const [subsectionContent, setSubsectionContent] = useState(subsection_?.attributes?.content);
 
     useEffect(() => {

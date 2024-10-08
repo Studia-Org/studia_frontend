@@ -73,9 +73,6 @@ const CourseInside = () => {
   }, [])
 
 
-
-
-
   function handleLandscapePhotoChange(event) {
     setBackgroundPhotoSubsection(event.target.files[0]);
   }
@@ -210,13 +207,10 @@ const CourseInside = () => {
     if (course?.sections?.data?.length > 0 &&
       subsectionsCompleted.length > 0) {
       const firstSubsection = obtenerPrimeraSubseccion(course, subsectionsCompleted);
-      console.log(firstSubsection)
       if (new Date(firstSubsection.subseccion.attributes.startDate) > new Date()) {
         setCourseHasNotStarted(true);
       }
-      console.log(firstSubsection)
       if (firstSubsection) {
-        console.log(firstSubsection)
         if (firstSubsection?.subseccion?.attributes?.activity?.data?.attributes?.type === 'questionnaire') {
           setSectionSelected(firstSubsection?.cursoTitle);
           setSubsectionSelected(firstSubsection.subseccion);
@@ -266,13 +260,13 @@ const CourseInside = () => {
   }
 
   useEffect(() => {
-    if(new Date(courseBasicInformation.start_date) > new Date()){
+    if (new Date(courseBasicInformation.start_date) > new Date()) {
       setCourseHasNotStarted(true);
     }
-    if(new Date(subsectionSelected?.attributes?.start_date) > new Date()){
+    if (new Date(subsectionSelected?.attributes?.start_date) > new Date()) {
       setCourseHasNotStarted(true);
     }
-  },[subsectionSelected, course]);
+  }, [subsectionSelected, course]);
 
   useEffect(() => {
     if (subsectionSelected?.length && subsectionSelected?.length !== 0) {

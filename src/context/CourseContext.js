@@ -16,17 +16,19 @@ export const useCourseContext = () => useContext(CourseContext);
 export const CourseProvider = ({ children }) => {
     const [course, setCourse] = useState(undefined);
     const [sectionSelected, setSectionSelected] = useState(undefined);
+    const [idSectionSelected, setIdSectionSelected] = useState(undefined);
     const [subsectionSelected, setSubsectionSelected] = useState(undefined);
     const [activitySelected, setActivitySelected] = useState(undefined);
-
 
     return (
         <CourseContext.Provider
             value={{
                 course,
                 sectionSelected,
+                idSectionSelected,
                 subsectionSelected,
                 activitySelected,
+                setIdSectionSelected,
                 setCourse,
                 setSectionSelected,
                 setSubsectionSelected,

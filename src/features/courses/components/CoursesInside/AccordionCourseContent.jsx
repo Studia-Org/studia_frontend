@@ -32,9 +32,10 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFl
     setCourse,
     setSectionSelected,
     setSubsectionSelected,
+    setIdSectionSelected
   } = useCourseContext();
 
-  function handleSections(tituloSeccion, subsection) {
+  function handleSections(tituloSeccion, subsection, sectionId) {
     if (
       subsection.attributes.activity?.data?.attributes.type ===
       "questionnaire"
@@ -48,6 +49,7 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFl
     }
     setSubsectionSelected(subsection);
     setSectionSelected(tituloSeccion);
+    setIdSectionSelected(sectionId);
     setForumFlag(false);
     setParticipantsFlag(false);
     setSettingsFlag(false);
@@ -109,7 +111,8 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFl
     prevSubsectionFinished,
     isFirstSubsection,
     index,
-    prevTime
+    prevTime,
+    section
   ) {
     const selectedSubsection = subsection.id === subsectionSelected?.id;
     const dateToday = new Date();
@@ -117,11 +120,9 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFl
     const isBeforeStartDate = dateToday < startDate;
     const disableButton = isBeforeStartDate || (!isFirstSubsection && !prevSubsectionFinished);
     const startWhenFinished = prevTime > startDate;
-
     const handleClick = () => {
-      handleSections(titulo, subsection);
+      handleSections(titulo, subsection, section.id);
     };
-
     const buttonClassName = `flex items-center font-medium ${!disableButton ? 'text-gray-900 hover:translate-x-2' : 'text-gray-500'} line-clamp-2 w-full duration-200 text-left`;
 
     if (user?.role_str === 'professor' || user?.role_str === 'admin') {
@@ -132,7 +133,7 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFl
           </span>
           <div className='w-full'>
             <button
-              onClick={() => handleSections(titulo, subsection)}
+              onClick={() => handleSections(titulo, subsection, section?.id)}
               className="flex items-center w-3/4 mb-1 font-medium text-left text-gray-900 duration-200 line-clamp-2 hover:translate-x-2">
               {subsection.attributes.activity?.data?.attributes.type === 'questionnaire' ? subsection.attributes.questionnaire.data.attributes.Title : subsection.attributes.title}
 
@@ -281,7 +282,6 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFl
     if (!isFinite(percentageFinished)) {
       percentageFinished = 0;
     }
-
     return (
       <Collapse
         expandIcon={({ isActive }) => <CaretRightOutlined className='absolute top-0 bottom-0 right-5 ' rotate={isActive ? 90 : 0} />}
@@ -338,7 +338,7 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFl
                   if (sectionNumber === 1 && index === 0) {
                     isFirstSubsection = true;
                   }
-                  const content = RenderCourseInsideSectionContent(subsection, section.attributes.title, prevSubsectionFinished, isFirstSubsection, prevTime);
+                  const content = RenderCourseInsideSectionContent(subsection, section.attributes.title, prevSubsectionFinished, isFirstSubsection, index, prevTime, section);
                   const sub = subsectionsCompleted.find(subsectionTemp => subsectionTemp.id === subsection.id);
                   if (sub) prevSubsectionFinished = true;
                   prevTime = sub?.end_date
