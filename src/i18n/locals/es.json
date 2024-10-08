@@ -308,7 +308,8 @@
             "text_modal_complete_objective": "Marcar objetivo como completado",
             "text_modal_not_complete_objective": "Marcar objetivo como no completado",
             "complete_objetive_button": "Completar objetivo",
-            "not_complete_objetive_button": "Marcar como no completado"
+            "not_complete_objetive_button": "Marcar como no completado",
+            "objective_updated": "Objetivo actualizado correctamente"
         },
         "recent_courses": "Cursos recientes",
         "not_courses": "No hay cursos disponibles para ti",
@@ -504,7 +505,9 @@
             "when_activity_started": "Cuando la actividad haya comenzado, solo podrás actualizar los grupos",
             "students": "Estudiantes",
             "group": "Grupo"
-        }
+        },
+        "audio_deleted": "Audio eliminado correctamente",
+        "no_audio_to_delete": "No hay audio para eliminar"
     },
     "QUESTIONNAIRE": {
         "go_back_users": "Volver a los usuarios",

@@ -308,7 +308,8 @@
             "text_modal_complete_objective": "Marcar objectiu com a completat",
             "text_modal_not_complete_objective": "Marcar objectiu com a no completat",
             "complete_objetive_button": "Completar objectiu",
-            "not_complete_objetive_button": "Marcar com a no completat"
+            "not_complete_objetive_button": "Marcar com a no completat",
+            "objective_updated": "Objectiu actualitzat correctament"
         },
         "recent_courses": "Cursos recents",
         "not_courses": "No hi ha cursos disponibles per a tu",
@@ -504,7 +505,9 @@
             "when_activity_started": "Quan l'activitat hagi començat, només podràs actualitzar els grups",
             "students": "Estudiants",
             "group": "Grup"
-        }
+        },
+        "audio_deleted": "Àudio eliminat correctament",
+        "no_audio_to_delete": "No hi ha cap àudio per eliminar"
     },
     "QUESTIONNAIRE": {
         "go_back_users": "Tornar a la llista d'usuaris",

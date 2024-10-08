@@ -3,10 +3,10 @@ import { AudioRecorder } from 'react-audio-voice-recorder';
 import { Button, message } from 'antd';
 import { API } from '../../../../../../constant';
 import { getToken } from '../../../../../../helpers';
-
+import { useTranslation } from 'react-i18next';
 export const RecordAudio = ({ audioFile, setAudioFile, passedDeadline, idQualification, setUserQualification }) => {
     const [loading, setLoading] = useState(false);
-
+    const { t } = useTranslation();
     const addAudioElement = (blob) => {
         setAudioFile(blob);
     };
@@ -32,10 +32,10 @@ export const RecordAudio = ({ audioFile, setAudioFile, passedDeadline, idQualifi
                     Authorization: `Bearer ${getToken()}`,
                 }
             });
-            message.success('Audio deleted successfully');
+            message.success(t('ACTIVITY.audio_deleted'));
             setLoading(false);
         } else {
-            message.error('No audio to delete');
+            message.error(t("ACTIVITY.no_audio_to_delete"));
             setLoading(false);
         }
     }

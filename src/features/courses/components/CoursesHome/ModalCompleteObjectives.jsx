@@ -43,11 +43,11 @@ export const ModalCompleteObjectives = ({ isModalOpen, setIsModalOpen, setObject
             if (propsObjectives.completed === false) {
                 setConfettiExplode(true);
             }
-            message.success('Objective updated successfully');
+            message.success(t("COURSESHOME.objectives.objective_updated"));
             setLoading(false);
         } catch (error) {
             setLoading(false);
-            message.error('Error updating objective');
+            message.error(t("COMMON.error_try_again"));
         }
     };
 

@@ -308,7 +308,8 @@
             "text_modal_complete_objective": "Mark objective as complete",
             "text_modal_not_complete_objective": "Mark objective as incomplete",
             "complete_objetive_button": "Complete objective",
-            "not_complete_objetive_button": "Return as incomplete"
+            "not_complete_objetive_button": "Return as incomplete",
+            "objective_updated": "Objective updated successfully"
         },
         "recent_courses": "Recent courses",
         "not_courses": "There are no courses available for you",
@@ -504,7 +505,9 @@
             "when_activity_started": "When activty has started, you can only update groups",
             "students": "Students",
             "group": "Group"
-        }
+        },
+        "audio_deleted": "Audio deleted successfully",
+        "no_audio_to_delete": "There is no audio to delete"
     },
     "CREATE_COURSES": {
         "principal_text": "Create new Course",
