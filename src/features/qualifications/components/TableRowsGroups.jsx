@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 const { TextArea } = Input;
 
-export async function saveChangesButtonGroups(editedGrades, groups, selectedActivity, evaluator, students, setStudents) {
+export async function saveChangesButtonGroups(editedGrades, groups, selectedActivity, evaluator, students, setStudents, t) {
 
     const groupsCopy = [...groups];
     for (let groupId in editedGrades) {
@@ -88,7 +88,7 @@ export async function saveChangesButtonGroups(editedGrades, groups, selectedActi
 
     }
 
-    message.success('Changes saved successfully!');
+    message.success(t("ACTIVITY.changed_saved_success"));
 
 
 }

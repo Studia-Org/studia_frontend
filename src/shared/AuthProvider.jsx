@@ -20,7 +20,7 @@ const AuthProvider = ({ children }) => {
       });
       const data = await response.json();
       if (window.location.pathname === '/') {
-        navigate('/app/courses')
+        window.location.replace('/app/courses')
       }
       setAuthenticated(true);
       setUserData(data);

@@ -19,7 +19,9 @@
         "deadline": "Fecha límite",
         "add": "Añadir",
         "add_tag": "Añadir etiqueta",
-        "completed": "Completado"
+        "completed": "Completado",
+        "please_complete": "Por favor, completa todos los campos",
+        "error_try_again": "Error, por favor inténtalo de nuevo"
     },
     "HOME": {
         "title": "Bienvenido/a a la nueva era del aprendizaje",
@@ -39,7 +41,8 @@
         "register": "Registrarse",
         "connect_social": "o conecta con redes sociales",
         "contact_support": "Contactar con soporte:",
-        "sing_in_google": "Iniciar sesión con Google"
+        "sing_in_google": "Iniciar sesión con Google",
+        "success_login": "Sesión iniciada correctamente"
     },
     "REGISTER": {
         "fill_username": "Por favor, rellena el nombre de usuario",
@@ -72,15 +75,16 @@
             "subtitle": "¡Añade algo de personalización a tu perfil y establece tus metas!",
             "add_brief_description": "Añade una breve descripción sobre ti",
             "set_your_goals": "Establece tus metas",
-            "text_goals_1": "Aprender con un MOOC puede ser un desafío. Esta herramienta te ayuda a alcanzar tus metas. Aquí puedes (1) establecer activamente tu meta para este curso y (2) seleccionar indicadores para monitorear tu progreso hacia tu meta.",
+            "text_goals_1": "Algunos procesos formativos, especialmente si son autónomos, pueden convertirse en un desafío. Esta herramienta te ayuda a alcanzar tus metas. Aquí puedes (1) establecer activamente tu meta para este curso y (2) seleccionar indicadores para monitorear tu progreso hacia tu meta.",
             "text_goals_title": "¿Qué quieres lograr al final de este curso?",
             "text_goals_2": "Algunos ejemplos de una meta son aprender temas específicos cubiertos por el curso, completar el curso y obtener un certificado, completar todas las actividades del curso en un cierto período de tiempo, dedicar 3 horas semanales a este curso, etc.",
             "text_goals_title_2": "¿Cómo categorizarías tus objetivos?",
-            "text_goals_3": "Puedes seleccionar una o más categorías que mejor describan tus objetivos. Esto te ayudará a monitorear tu progreso y a alcanzar tus metas.",
+            "text_goals_3": "Puedes seleccionar una o más competencias que mejor describan tus objetivos. Esto te ayudará a monitorear tu progreso y a alcanzar tus metas.",
             "add": "Añadir",
             "create_user": "Crear usuario",
             "placeholder": "Introduzca tu objetivo aqui..."
-        }
+        },
+        "account_created": "Cuenta creada con éxito"
     },
     "PASSWORD_RECOVERY": {
         "password_not_match": "Las contraseñas no coinciden.",
@@ -447,6 +451,7 @@
         "no_files": "Debes subir mínimo un archivo",
         "smth_wrong": "Algo salió mal",
         "deleted_success": "Archivo eliminado correctamente",
+        "uploaded_success": "Archivo subido correctamente",
         "swal_change_files": {
             "title": "¡Advertencia!",
             "text": "Vas a cambiar los archivos que subiste antes, ¿estás seguro?",
@@ -505,7 +510,9 @@
         "go_back_users": "Volver a los usuarios",
         "download_all_answers": "Descargar todas las respuestas",
         "completed_in": "Completado en",
-        "completation_date": "Fecha de finalización"
+        "completation_date": "Fecha de finalización",
+        "please_answer_all": "Por favor, responde a todas las preguntas antes de continuar",
+        "questionnaire_submitted": "Cuestionario enviado correctamente"
     },
     "CREATE_COURSES": {
         "principal_text": "Crear un curso nuevo",

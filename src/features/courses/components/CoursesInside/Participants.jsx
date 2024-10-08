@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { List, Avatar, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../../../../context/AuthContext';
 import { useTranslation } from 'react-i18next';
+import { use } from 'i18next';
 
 export const Participants = ({ students }) => {
     const { t } = useTranslation()
@@ -12,7 +13,7 @@ export const Participants = ({ students }) => {
     const studentsFiltered = students.data.filter((student) => {
         return student.attributes.name.toLowerCase().includes(searchTerm.toLowerCase())
     })
-
+    useEffect(() => { window.scrollTo(0, 0) }, [])
 
     return (
         <div className=''>

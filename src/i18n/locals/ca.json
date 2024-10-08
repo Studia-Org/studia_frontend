@@ -19,7 +19,9 @@
         "deadline": "Data límit",
         "add": "Afegir",
         "add_tag": "Afegir etiqueta",
-        "completed": "Completat"
+        "completed": "Completat",
+        "please_complete": "Si us plau, completa tots els camps",
+        "error_try_again": "Hi ha hagut un error. Si us plau, torna-ho a intentar."
     },
     "HOME": {
         "title": "Benvingut/da a la nova era de l'aprenentatge",
@@ -39,7 +41,8 @@
         "register": "Registrar-se",
         "connect_social": "o connecta amb xarxes socials",
         "contact_support": "Contactar amb suport:",
-        "sing_in_google": "Iniciar sessió amb Google"
+        "sing_in_google": "Iniciar sessió amb Google",
+        "success_login": "Inici de sessió correcte"
     },
     "REGISTER": {
         "fill_username": "Si us plau, omple el nom d'usuari",
@@ -72,15 +75,16 @@
             "subtitle": "Afegeix una mica de personalització al teu perfil i estableix els teus objectius!",
             "add_brief_description": "Afegeix una breu descripció sobre tu",
             "set_your_goals": "Estableix els teus objectius",
-            "text_goals_1": "Aprendre amb un MOOC pot ser un desafiament. Aquesta eina et recolza per assolir els teus objectius. Aquí pots (1) establir activament el teu objectiu per a aquest curs i (2) seleccionar indicadors per monitoritzar el teu progrés cap al teu objectiu.",
+            "text_goals_1": "Alguns processos formatius, especialment si són autònoms, poden esdevenir un desafiament. Aquesta eina et recolza per assolir els teus objectius. Aquí pots (1) establir activament el teu objectiu per a aquest curs i (2) seleccionar indicadors per monitoritzar el teu progrés cap al teu objectiu.",
             "text_goals_title": "Què vols aconseguir al final d'aquest curs?",
             "text_goals_2": "Alguns exemples d'un objectiu són aprendre temes específics coberts pel curs, completar el curs i obtenir un certificat, completar totes les activitats del curs en un cert període de temps, dedicar 3 hores setmanals a aquest curs, etc.",
             "text_goals_title_2": "Com categoritzaries els teus objectius?",
-            "text_goals_3": "Pots seleccionar una o més categories que millor descriguin els teus objectius. Això t'ajudarà a monitoritzar el teu progrés i a assolir els teus objectius.",
+            "text_goals_3": "Pots seleccionar una o més competències que millor descriguin els teus objectius. Això t'ajudarà a monitoritzar el teu progrés i a assolir els teus objectius.",
             "add": "Afegir",
             "create_user": "Crear usuari",
             "placeholder": "Introdueix el teu objectiu aqui..."
-        }
+        },
+        "account_created": "Compte creat correctament"
     },
     "PASSWORD_RECOVERY": {
         "password_not_match": "Les contrasenyes no coincideixen.",
@@ -447,6 +451,7 @@
         "no_files": "Has de carregar mínim un fitxer",
         "smth_wrong": "Alguna cosa ha anat malament",
         "deleted_success": "Fitxer esborrat correctament",
+        "uploaded_success": "Fitxer carregat correctament",
         "swal_change_files": {
             "title": "Advertència!",
             "text": "Vas a canviar els fitxers carregats abans, estàs segur?",
@@ -505,7 +510,9 @@
         "go_back_users": "Tornar a la llista d'usuaris",
         "download_all_answers": "Descarregar totes les respostes",
         "completed_in": "Completat en",
-        "completation_date": "Data de completació"
+        "completation_date": "Data de completació",
+        "please_answer_all": "Si us plau, respon a totes les preguntes abans de continuar.",
+        "questionnaire_submitted": "Qüestionari enviat correctament"
     },
     "CREATE_COURSES": {
         "principal_text": "Crear un curs nou",

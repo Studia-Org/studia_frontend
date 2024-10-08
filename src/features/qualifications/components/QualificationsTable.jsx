@@ -96,7 +96,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
         setThereIsChanges(false);
         setIsEditChecked(false);
         setLoading(false)
-        message.success('Changes saved successfully!');
+        message.success(t("ACTIVITY.changed_saved_success"));
 
     };
 
@@ -254,7 +254,7 @@ export const QualificationsTable = ({ students, activities, setStudents, setUplo
 
                                             if (JSON.parse(selectedActivity).groupActivity) {
                                                 setLoading(true)
-                                                saveChangesButtonGroups(editedGrades, groups, selectedActivity, user, students, setStudents)
+                                                saveChangesButtonGroups(editedGrades, groups, selectedActivity, user, students, setStudents, t)
                                                 setThereIsChanges(false);
                                                 setIsEditChecked(false);
                                                 setLoading(false)

@@ -120,7 +120,7 @@ const Register = () => {
         await handleSetObjectives(data);
         setToken(data.jwt);
         setUser(data.user);
-        message.success("Account created successfully");
+        message.success(t("REGISTER.account_created"));
         setLoading(false);
         navigate("/app/courses");
       }

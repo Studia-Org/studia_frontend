@@ -135,7 +135,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
         } else {
             setThereIsChanges(false);
             setEditSubsectionFlag(false);
-            message.success('Changes saved successfully');
+            message.success(t("ACTIVITY.changed_saved_success"));
         }
     };
 

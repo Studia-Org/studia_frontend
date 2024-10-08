@@ -323,8 +323,8 @@ export const ActivityComponent = ({ activityData, idQualification, setUserQualif
           }
           Swal.fire({
             icon: 'success',
-            title: 'Success',
-            text: 'Files uploaded successfully',
+            title: t("COMMON.completed"),
+            text: t("ACTIVITY.uploaded_success"),
           }).then(async (re) => {
             const parsedResults = result.map((file) => {
               return {

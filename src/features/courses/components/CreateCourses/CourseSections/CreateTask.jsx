@@ -175,8 +175,8 @@ export const CreateTask = ({ task, setTask, section, setCreateCourseSectionsList
 
     function createTaskButton() {
         try {
-            if (!title || !content || !deadline || categoriesInside?.length === 0 || categoriesInside?.length === undefined) {
-                throw new Error('Please complete all required fields.');
+            if (!title || !content || !deadline || categoriesInside.length === 0 || categoriesInside.length === undefined) {
+                throw new Error(t("COMMON.please_complete"));
             }
             const activity = {
                 id: Math.random().toString(16).slice(2),
