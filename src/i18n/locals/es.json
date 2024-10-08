@@ -19,7 +19,9 @@
         "deadline": "Fecha límite",
         "add": "Añadir",
         "add_tag": "Añadir etiqueta",
-        "completed": "Completado"
+        "completed": "Completado",
+        "please_complete": "Por favor, completa todos los campos",
+        "error_try_again": "Error, por favor inténtalo de nuevo"
     },
     "HOME": {
         "title": "Bienvenido/a a la nueva era del aprendizaje",
@@ -39,7 +41,8 @@
         "register": "Registrarse",
         "connect_social": "o conecta con redes sociales",
         "contact_support": "Contactar con soporte:",
-        "sing_in_google": "Iniciar sesión con Google"
+        "sing_in_google": "Iniciar sesión con Google",
+        "success_login": "Sesión iniciada correctamente"
     },
     "REGISTER": {
         "fill_username": "Por favor, rellena el nombre de usuario",
@@ -80,7 +83,8 @@
             "add": "Añadir",
             "create_user": "Crear usuario",
             "placeholder": "Introduzca tu objetivo aqui..."
-        }
+        },
+        "account_created": "Cuenta creada con éxito"
     },
     "PASSWORD_RECOVERY": {
         "password_not_match": "Las contraseñas no coinciden.",
@@ -446,6 +450,7 @@
         "no_files": "Debes subir mínimo un archivo",
         "smth_wrong": "Algo salió mal",
         "deleted_success": "Archivo eliminado correctamente",
+        "uploaded_success": "Archivo subido correctamente",
         "swal_change_files": {
             "title": "¡Advertencia!",
             "text": "Vas a cambiar los archivos que subiste antes, ¿estás seguro?",
@@ -504,7 +509,9 @@
         "go_back_users": "Volver a los usuarios",
         "download_all_answers": "Descargar todas las respuestas",
         "completed_in": "Completado en",
-        "completation_date": "Fecha de finalización"
+        "completation_date": "Fecha de finalización",
+        "please_answer_all": "Por favor, responde a todas las preguntas antes de continuar",
+        "questionnaire_submitted": "Cuestionario enviado correctamente"
     },
     "CREATE_COURSES": {
         "principal_text": "Crear un curso nuevo",

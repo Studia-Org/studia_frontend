@@ -49,7 +49,7 @@ const Login = () => {
                 setUser(data.user);
                 Toast.fire({
                     icon: 'success',
-                    title: 'Signed in successfully'
+                    title: t("LOGIN.success_login"),
                 })
                 navigate("/app/courses");
             }

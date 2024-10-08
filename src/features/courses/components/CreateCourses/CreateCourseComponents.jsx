@@ -28,7 +28,7 @@ const CreateCourseButtons = (createCourseOption, setCreateCourseOption, visibili
   function handleContinue() {
     if (createCourseOption === 0) {
       if (courseBasicInfo.courseName === '' || courseBasicInfo.description === '' || courseBasicInfo.tags.length === 0 || !courseBasicInfo.cover || courseBasicInfo.cover.length === 0) {
-        message.error("Please complete all the fields")
+        message.error(t("COMMON.please_complete"))
       } else {
         setCreateCourseOption(createCourseOption + 1)
       }

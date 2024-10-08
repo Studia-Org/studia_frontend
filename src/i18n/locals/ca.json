@@ -19,7 +19,9 @@
         "deadline": "Data límit",
         "add": "Afegir",
         "add_tag": "Afegir etiqueta",
-        "completed": "Completat"
+        "completed": "Completat",
+        "please_complete": "Si us plau, completa tots els camps",
+        "error_try_again": "Hi ha hagut un error. Si us plau, torna-ho a intentar."
     },
     "HOME": {
         "title": "Benvingut/da a la nova era de l'aprenentatge",
@@ -39,7 +41,8 @@
         "register": "Registrar-se",
         "connect_social": "o connecta amb xarxes socials",
         "contact_support": "Contactar amb suport:",
-        "sing_in_google": "Iniciar sessió amb Google"
+        "sing_in_google": "Iniciar sessió amb Google",
+        "success_login": "Inici de sessió correcte"
     },
     "REGISTER": {
         "fill_username": "Si us plau, omple el nom d'usuari",
@@ -80,7 +83,8 @@
             "add": "Afegir",
             "create_user": "Crear usuari",
             "placeholder": "Introdueix el teu objectiu aqui..."
-        }
+        },
+        "account_created": "Compte creat correctament"
     },
     "PASSWORD_RECOVERY": {
         "password_not_match": "Les contrasenyes no coincideixen.",
@@ -446,6 +450,7 @@
         "no_files": "Has de carregar mínim un fitxer",
         "smth_wrong": "Alguna cosa ha anat malament",
         "deleted_success": "Fitxer esborrat correctament",
+        "uploaded_success": "Fitxer carregat correctament",
         "swal_change_files": {
             "title": "Advertència!",
             "text": "Vas a canviar els fitxers carregats abans, estàs segur?",
@@ -504,7 +509,9 @@
         "go_back_users": "Tornar a la llista d'usuaris",
         "download_all_answers": "Descarregar totes les respostes",
         "completed_in": "Completat en",
-        "completation_date": "Data de completació"
+        "completation_date": "Data de completació",
+        "please_answer_all": "Si us plau, respon a totes les preguntes abans de continuar.",
+        "questionnaire_submitted": "Qüestionari enviat correctament"
     },
     "CREATE_COURSES": {
         "principal_text": "Crear un curs nou",

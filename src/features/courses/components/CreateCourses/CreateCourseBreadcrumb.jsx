@@ -7,7 +7,7 @@ export const CreateCourseBreadcrumb = ({ createCourseOption, setCreateCourseOpti
 
     function handleContinue(n) {
         if (courseBasicInfo.courseName === '' || courseBasicInfo.description === '' || courseBasicInfo.tags.length === 0 || !courseBasicInfo.cover || courseBasicInfo.cover.length === 0) {
-            message.error("Please complete all the fields")
+            message.error(t("COMMON.please_complete"))
         } else {
             setCreateCourseOption(n)
         }

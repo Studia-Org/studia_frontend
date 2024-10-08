@@ -77,15 +77,15 @@ export const Questionnaire = ({ setState, setSelfAssesmentData, setQualification
                 setSendingData(false)
                 setState(1)
                 setSelfAssesmentData([response.data])
-                message.success('Questionnaire submitted successfully')
+                message.success(t('QUESTIONNAIRE.questionnaire_submitted'))
             } else {
                 setSendingData(false)
-                message.error('Please answer all questions before submitting')
+                message.error(t('QUESTIONNAIRE.please_answer_all'))
             }
         } catch (error) {
             setSendingData(false)
             console.log(error)
-            message.error('An error occurred. Please try again')
+            message.error(t("COMMON.error_try_again"))
         }
     }
 
