@@ -72,11 +72,11 @@
             "subtitle": "Add some personalization to your profile and set your goals!",
             "add_brief_description": "Add a brief description about yourself",
             "set_your_goals": "Set your goals",
-            "text_goals_1": "Learning with a MOOC can be challenging. This tool supports you to achieve your goals. Here you can (1) actively set your goal for this course and (2) select indicators to monitor your progress towards your goal.",
+            "text_goals_1": "Some training processes, especially if they are autonomous, can become a challenge. This tool supports you to achieve your goals. Here you can (1) actively set your goal for this course and (2) select indicators to monitor your progress towards your goal.",
             "text_goals_title": "What do you want to achieve by the end of this course?",
             "text_goals_2": "Some examples for a goal are learning specific topics covered by the course, completing the course and getting a certificate, completing all activities in the course in a certain timeframe, dedicating 3 hours weekly to this course, etc.",
             "text_goals_title_2": "How would you categorize your objectives ?",
-            "text_goals_3": "You can select one or more categories that best describe your objectives. This will help you to monitor your progress and help you to achieve your goals.",
+            "text_goals_3": "You can select one or more skills that best describe your objectives. This will help you to monitor your progress and help you to achieve your goals.",
             "add": "Add",
             "create_user": "Create user",
             "placeholder": "Enter your goal here..."
@@ -112,7 +112,7 @@
         "Communicative ability": "Communicative ability",
         "Citizenship competence": "Citizenship competence",
         "Digital competence": "Digital competence",
-        "Entrepreneurial competence": "Entrepreneurial competence",        
+        "Entrepreneurial competence": "Entrepreneurial competence",
         "linked_objectives": "This task is linked with your objectives!",
         "CRITERIA": {
             "Ethical commitment": {
