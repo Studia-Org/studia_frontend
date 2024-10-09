@@ -12,7 +12,7 @@ import '../../../styles/antdButtonStyles.css'
 import { PonderationWarning } from './PonderationWarning';
 import { debounce } from 'lodash';
 import { AutoAssesmentRubric } from './AutoAssesmentRubric';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 const { RangePicker } = DatePicker;
 
@@ -45,8 +45,11 @@ export const CreateCourseEditSubsection = ({
   const [typingTimeout, setTypingTimeout] = useState(null);
   if (subsection.activity?.groupActivity === undefined) subsection.activity.groupActivity = false;
   if (subsection.activity?.numberOfStudentsperGroup === undefined) subsection.activity.numberOfStudentsperGroup = 1;
-
   const { t } = useTranslation();
+  const textGroupsIndv = isGroup ? t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.groups").toLowerCase() :
+    t("ACTIVITY.create_groups.students").toLowerCase()
+
+  console.log(textGroupsIndv)
 
   useEffect(() => {
     const matchingSubsection = createCourseSectionsList
@@ -298,7 +301,8 @@ export const CreateCourseEditSubsection = ({
                   />
 
                   <label className='text-sm text-gray-500'>
-                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.students_review")}  {isGroup ? t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.groups").toLowerCase() : t("ACTIVITY.create_groups.students").toLowerCase()}   *
+                    <Trans i18nKey="CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.students_review"
+                      components={{ "students": textGroupsIndv }} />
                   </label>
                   <Select
                     defaultValue={subsection.activity.usersToPair || 1}
