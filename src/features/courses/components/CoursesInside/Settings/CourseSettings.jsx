@@ -31,7 +31,7 @@ export const CourseSettings = ({ setSettingsFlag, courseData, setCourseData }) =
     const fetchUsers = async () => {
         const getAllUsers = await fetch(`${API}/users?populate=*`)
         const data = await getAllUsers.json();
-        setStudents(data)
+        setStudents(data.filter(item => item?.role_str === 'student'))
         setEvaluators(data.filter(item => item?.role_str === 'admin' || item?.role_str === 'professor'))
     }
     useEffect(() => {
