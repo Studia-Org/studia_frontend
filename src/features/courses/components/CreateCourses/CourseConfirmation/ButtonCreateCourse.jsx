@@ -28,35 +28,36 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo, 
         if (!courseBasicInfo) {
             throw new Error("courseBasicInfo is missing");
         }
-        const requiredAttributes = ['courseName', 'description', 'cover', 'evaluator'];
+        const requiredAttributes = t('CREATE_COURSES.ERROR.required_attributes', { returnObjects: true });
         for (const attribute of requiredAttributes) {
             if (!courseBasicInfo[attribute]) {
-                throw new Error(`Missing '${attribute}' in the course info`);
+                throw new Error(t('CREATE_COURSES.ERROR.missingAttribute', { attribute }));
             }
         }
         return true;
     };
 
-    const isValidCourse = (course) => {
+
+    const isValidCourse = (course, t) => {
         if (!course) {
-            throw new Error("The course or subsections array is missing");
+            throw new Error(t('CREATE_COURSES.ERROR.courseOrSubsectionsMissing'));
         }
         course.forEach((section) => {
             if (!section.task) {
-                throw new Error(`Missing task in section ${section.name}`);
+                throw new Error(t('CREATE_COURSES.ERROR.missingTaskInSection', { sectionName: section.name }));
             }
             section.subsections.forEach((subsection) => {
                 if (!subsection.start_date || !subsection.end_date) {
-                    throw new Error(`Missing start_date or end_date in subsection ${subsection.title}`);
+                    throw new Error(t('CREATE_COURSES.ERROR.missingDates', { subsectionTitle: subsection.title }));
                 }
                 if (subsection.type === 'peerReview') {
                     const act = section.subsections.find((sub) => sub.id === subsection.activity.task_to_review)
                     if (!act) {
-                        throw new Error(`Missing task to review in subsection ${subsection.title}`);
+                        throw new Error(t('CREATE_COURSES.ERROR.missingTaskToReview', { subsectionTitle: subsection.title }));
                     }
                 }
-            })
-        })
+            });
+        });
         return false;
     };
 
@@ -153,7 +154,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo, 
                                 console.log(file.originFileObj)
                                 formData.append('files', file.originFileObj);
                             }
-                            
+
                             const response = await fetch(`${API}/upload/`, {
                                 method: 'POST',
                                 headers: {
@@ -239,7 +240,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo, 
 
                 try {
                     if (section?.task?.files.length > 0) {
-                        for (const file of section.task.files) {            
+                        for (const file of section.task.files) {
                             console.log(file.originFileObj)
                             newFormData.append('files', file.originFileObj);
                         }
@@ -250,7 +251,7 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo, 
                             },
                             body: newFormData,
                         });
-                        
+
                         filesdata2 = await uploadFiles.json();
                     }
                 } catch (error) {

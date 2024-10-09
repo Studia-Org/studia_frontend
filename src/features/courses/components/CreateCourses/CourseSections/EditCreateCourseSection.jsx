@@ -138,7 +138,12 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
             message.success(t("ACTIVITY.changed_saved_success"));
         }
     };
-
+    const deleteChanges = () => {
+        setCreateCourseSectionsListCopy(createCourseSectionsList);
+        setThereIsChanges(false);
+        setEditSubsectionFlag(false);
+        message.success(t("ACTIVITY.changes_discarded"));
+    }
 
     useEffect(() => {
         setSubsectionsToEdit((createCourseSectionsListCopy.filter((section) => section.id === sectionToEdit.id)[0]))
@@ -169,7 +174,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
                         const newIndex = sectionCopy.subsections.findIndex(c => c.id === over.id);
 
                         if (!isValidMove(sectionCopy.subsections, oldIndex, newIndex)) {
-                            message.error('Invalid move. Subsection needs to follow the course sequence order');
+                            message.error(t("CREATE_COURSES.ERROR.invalid_move_section_order"));
                         } else {
                             sectionCopy.subsections = arrayMove(sectionCopy.subsections, oldIndex, newIndex);
                             return sectionCopy;
@@ -227,13 +232,13 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
         <div className='text-base font-normal'>
             {contextHolder}
             <Tour open={open} className=''
-            onFinish={() => {
-                setOpen(false)
-                document.body.style.overflow = 'auto'
-            }} onClose={() => {
-                setOpen(false)
-                document.body.style.overflow = 'auto'
-            }} steps={steps} nextButtonProps={{ style: { backgroundColor: 'blue' } }} />
+                onFinish={() => {
+                    setOpen(false)
+                    document.body.style.overflow = 'auto'
+                }} onClose={() => {
+                    setOpen(false)
+                    document.body.style.overflow = 'auto'
+                }} steps={steps} nextButtonProps={{ style: { backgroundColor: 'blue' } }} />
             <button onClick={() => setEditCourseSectionFlag(false)} className='flex items-center duration-100 hover:-translate-x-1'>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                     <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
@@ -270,7 +275,10 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
                                     <h2 className='text-xl font-medium '>{sectionToEdit.name}</h2>
                                     <Tag color="#108ee9">{t("CREATE_COURSES.COURSE_SECTIONS.CREATE_TASK.section")}</Tag>
                                 </div>
-                                <Button ref={ref4} disabled={!thereIsChanges} type='primary' onClick={() => saveChanges(false, createCourseSectionsListCopy)} className='bg-[#1677ff] text-white '>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.save_changes")}</Button>
+                                <section className='flex gap-x-3'>
+                                    <Button ref={ref4} disabled={!thereIsChanges} danger onClick={() => deleteChanges()} >{t("COMMON.cancel")}</Button>
+                                    <Button ref={ref4} disabled={!thereIsChanges} type='primary' onClick={() => saveChanges(false, createCourseSectionsListCopy)} className='bg-[#1677ff] text-white '>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.save_changes")}</Button>
+                                </section>
                             </div>
                             <div ref={ref} className='p-5 mt-5 mb-5 text-base font-medium bg-white rounded-md shadow-md'>
                                 <div className='flex items-center'>

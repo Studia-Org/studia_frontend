@@ -453,6 +453,7 @@
         "smth_wrong": "Algo salió mal",
         "deleted_success": "Archivo eliminado correctamente",
         "uploaded_success": "Archivo subido correctamente",
+        "changes_discarded": "Cambios descartados",
         "swal_change_files": {
             "title": "¡Advertencia!",
             "text": "Vas a cambiar los archivos que subiste antes, ¿estás seguro?",
@@ -862,7 +863,20 @@
             "section_created_successfully": "Sección creada correctamente"
         },
         "ERROR": {
-            "section_must_have_title": "La sección debe tener un título"
+            "section_must_have_title": "La sección debe tener un título",
+            "invalid_move_section_order": "Movimiento no válido. La subsección debe seguir el orden de secuencia del curso.",
+            "courseBasicInfoMissing": "Falta información básica del curso",
+            "missingAttribute": "Falta '{attribute}' en la información del curso",
+            "courseOrSubsectionsMissing": "Falta el curso o las subsecciones",
+            "missingTaskInSection": "Falta la tarea en la sección {sectionName}",
+            "missingDates": "Faltan la fecha de comienzo o la fecha de fin en la subsección {subsectionTitle}",
+            "missingTaskToReview": "Falta la tarea a revisar en la subsección {subsectionTitle}",
+            "required_attributes": [
+                "Nombre del Curso",
+                "Descripción",
+                "Portada",
+                "Profesor"
+            ]
         }
     },
     "CALENDAR": {

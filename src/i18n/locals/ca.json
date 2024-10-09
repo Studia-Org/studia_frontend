@@ -453,6 +453,7 @@
         "smth_wrong": "Alguna cosa ha anat malament",
         "deleted_success": "Fitxer esborrat correctament",
         "uploaded_success": "Fitxer carregat correctament",
+        "changes_discarded": "Canvis descartats",
         "swal_change_files": {
             "title": "Advertència!",
             "text": "Vas a canviar els fitxers carregats abans, estàs segur?",
@@ -862,7 +863,20 @@
             "section_created_successfully": "Secció creada correctament"
         },
         "ERROR": {
-            "section_must_have_title": "La secció ha de tenir un títol"
+            "section_must_have_title": "La secció ha de tenir un títol",
+            "invalid_move_section_order": "Moviment no vàlid. La subsecció ha de seguir l'ordre de la seqüència del curs",
+            "courseBasicInfoMissing": "Falta informació bàsica del curs",
+            "missingAttribute": "Falta '{attribute}' a la informació del curs",
+            "courseOrSubsectionsMissing": "Falta el curs o les subseccions",
+            "missingTaskInSection": "Falta la tasca a la secció {sectionName}",
+            "missingDates": "Falten la data de començament o la data fí a la subsecció {subsectionTitle}",
+            "missingTaskToReview": "Falta la tasca a revisar a la subsecció {subsectionTitle}",
+            "required_attributes": [
+                "Nom del Curs",
+                "Descripció",
+                "Portada",
+                "Professor"
+            ]
         }
     },
     "CALENDAR": {

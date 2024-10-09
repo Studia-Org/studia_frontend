@@ -453,6 +453,7 @@
         "smth_wrong": "Something went wrong",
         "deleted_success": "File deleted successfully",
         "uploaded_success": "File uploaded successfully",
+        "changes_discarded": "Changes discarded",
         "swal_change_files": {
             "title": "Warning!",
             "text": "You are going to change the files you uploaded before, are you sure?",
@@ -854,7 +855,20 @@
             "section_created_successfully": "Section created successfully"
         },
         "ERROR": {
-            "section_must_have_title": "Section must have a title"
+            "section_must_have_title": "Section must have a title",
+            "invalid_move_section_order": "Invalid move. Subsection needs to follow the course sequence order.",
+            "courseBasicInfoMissing": "Course basic info is missing",
+            "missingAttribute": "Missing '{attribute}' in the course info",
+            "courseOrSubsectionsMissing": "The course or subsections is missing",
+            "missingTaskInSection": "Missing task in section {sectionName}",
+            "missingDates": "Missing start date or end date in subsection {subsectionTitle}",
+            "missingTaskToReview": "Missing task to review in subsection {subsectionTitle}",
+            "required_attributes": [
+                "Course name",
+                "Description",
+                "Cover",
+                "Professor"
+            ]
         }
     },
     "QUESTIONNAIRE": {
