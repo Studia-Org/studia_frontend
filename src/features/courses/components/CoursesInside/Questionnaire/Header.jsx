@@ -112,21 +112,24 @@ export const Header = ({ enableEdit, questionnaire, questionnaireAnswerData, com
 
     return (
         <div className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1] mb-2">
-            <div className="flex flex-col w-full p-7">
-                <div className='flex items-center w-full gap-x-2 '>
+            <div className="flex flex-col flex-wrap w-full p-7">
+                <div className='flex flex-wrap items-center w-full gap-x-2 '>
                     {enableEdit ? (
                         <Input value={titleEdit} className='w-full text-3xl font-semibold rounded-md mr-14' onChange={(e) => setTitleEdit(e.target.value)} />
                     ) : (
-                        <div className='flex items-center justify-between w-full gap-3'>
+                        <div className='flex flex-wrap items-center justify-between w-full gap-3'>
                             <p className="text-3xl font-semibold text-black">{titleEditFinal}</p>
-                            {new Date(deadlineFinal) instanceof Date && !isNaN(new Date(deadlineFinal)) && <Badge color="#6366f1" count={formatDate(new Date(deadlineFinal), "EEE MMM dd yyyy", { locale: local })} />}
+                            <section className='flex flex-wrap items-center justify-end gap-2'>
+                                {new Date(deadlineFinal) instanceof Date && !isNaN(new Date(deadlineFinal)) && <Badge color="#6366f1" count={formatDate(new Date(deadlineFinal), "EEE MMM dd yyyy", { locale: local })} />}
+                                {(questionnaireAnswerData.length > 0 && user?.role_str === 'student') && (
+                                    <div className='flex items-center justify-end'>
+                                        <Chip label={t("COMMON.completed")} color="success" />
+                                    </div>
+                                )}
+                            </section>
                         </div>
                     )}
-                    {(questionnaireAnswerData.length > 0 && user?.role_str === 'student') && (
-                        <div className='flex items-center justify-end'>
-                            <Chip label={t("COMMON.completed")} color="success" />
-                        </div>
-                    )}
+
                 </div>
                 <div className='flex justify-between mt-7'>
                     {enableEdit ? (
