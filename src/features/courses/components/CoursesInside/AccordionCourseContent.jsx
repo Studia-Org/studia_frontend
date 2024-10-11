@@ -364,6 +364,7 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFl
           sectionNumber={sectionNumber + index}
         />
       ))}
+      {/* Creating new subection is not allowed for now 
       {
         (user?.role_str === 'professor' || user?.role_str === 'admin') &&
         <Accordion allowMultiple >
@@ -396,7 +397,7 @@ export const AccordionCourseContent = ({ setVisible, whisper, styles, setForumFl
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
-      }
+      } */}
     </div>
   );
 };

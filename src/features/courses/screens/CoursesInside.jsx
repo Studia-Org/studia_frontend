@@ -189,7 +189,7 @@ const CourseInside = () => {
   const fetchCourseInformation = async () => {
     try {
       const response = await fetch(
-        `${API}/courses/${courseId}?populate=sections.subsections.activity.qualifications,cover,sections.subsections.paragraphs,sections.subsections.files,students.profile_photo,professor.profile_photo,evaluators.profile_photo,sections.subsections.landscape_photo,sections.subsections.questionnaire`
+        `${API}/courses/${courseId}?populate=sections.subsections.activity.qualifications,sections.subsections.activity.task_to_review,cover,sections.subsections.paragraphs,sections.subsections.files,students.profile_photo,professor.profile_photo,evaluators.profile_photo,sections.subsections.landscape_photo,sections.subsections.questionnaire`
       );
       const data = await response.json();
       document.title = `${data?.data?.attributes.title} - Uptitude`

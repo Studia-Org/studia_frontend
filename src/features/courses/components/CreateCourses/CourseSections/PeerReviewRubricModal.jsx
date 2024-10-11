@@ -34,7 +34,7 @@ function guidGenerator() {
     return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
 }
 
-export const PeerReviewRubricModal = ({ isModalOpen, setIsModalOpen, rubricData, setSubsectionEditing, setCreateCourseSectionsList, subsectionEditing }) => {
+export const PeerReviewRubricModal = ({ isModalOpen, setIsModalOpen, rubricData, setSubsectionEditing, setCreateCourseSectionsList, subsectionEditing, context }) => {
 
     const [form] = Form.useForm();
     const [data, setData] = useState(rubricData != null && Object.keys(rubricData).length > 0 ? rubricDataConverter(rubricData) : [
@@ -111,30 +111,41 @@ export const PeerReviewRubricModal = ({ isModalOpen, setIsModalOpen, rubricData,
             }
         })
         document.body.style.overflow = 'auto'
-        setSubsectionEditing((subsection) => {
-            const sectionCopy = { ...subsection };
-            sectionCopy.activity.PeerReviewRubrica = finalJson;
-            return sectionCopy;
-        })
-        setCreateCourseSectionsList((prevSections) => {
-            return prevSections.map((section) => {
-                return {
-                    ...section,
-                    subsections: section.subsections.map((sub) => {
-                        if (sub.id === subsectionEditing.id) {
-                            return {
-                                ...sub,
-                                activity: {
-                                    ...sub.activity,
-                                    PeerReviewRubrica: finalJson
+        if (context === 'edit') {
+
+            setSubsectionEditing((subsection) => {
+                console.log(subsection)
+                const sectionCopy = { ...subsection };
+                sectionCopy.attributes.activity.PeerReviewRubrica = finalJson;
+                return sectionCopy;
+            })
+        }
+        else {
+            setSubsectionEditing((subsection) => {
+                const sectionCopy = { ...subsection };
+                sectionCopy.activity.PeerReviewRubrica = finalJson;
+                return sectionCopy;
+            })
+            setCreateCourseSectionsList((prevSections) => {
+                return prevSections.map((section) => {
+                    return {
+                        ...section,
+                        subsections: section.subsections.map((sub) => {
+                            if (sub.id === subsectionEditing.id) {
+                                return {
+                                    ...sub,
+                                    activity: {
+                                        ...sub.activity,
+                                        PeerReviewRubrica: finalJson
+                                    }
                                 }
                             }
-                        }
-                        return sub
-                    })
-                }
+                            return sub
+                        })
+                    }
+                })
             })
-        })
+        }
         setIsModalOpen(false);
     };
     const handleCancel = () => {
