@@ -26,7 +26,8 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdi
     const [name, setName] = useState('');
     const inputRef = React.useRef();
     const { t } = useTranslation();
-
+    const filteredSubsections = sectionToEditTemp?.attributes?.subsections?.data?.filter((sub) => sub?.attributes?.activity?.data?.attributes?.type?.toLowerCase() === 'task' ||
+        sub?.attributes?.type?.toLowerCase() === 'task')
     const { setCourse } = useCourseContext();
 
     useEffect(() => {
@@ -64,9 +65,6 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdi
             </div>
         )
     }
-    const filteredSubsections = sectionToEditTemp?.attributes?.subsections?.data?.filter((sub) => sub?.attributes?.activity?.data?.attributes?.type?.toLowerCase() === 'task' ||
-        sub?.attributes?.type?.toLowerCase() === 'task')
-
     const isValidMove = (subsections, oldIndex, newIndex) => {
         const movedSubsection = subsections[oldIndex].attributes;
         if (newIndex < 0 || newIndex >= subsections.length) {
@@ -123,12 +121,12 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdi
             message.error(error.message);
         }
     }
-
     const checkIfSectionHadReorder = () => {
         return sectionToEdit.attributes.subsections.data.some(
             (subsection, index) => subsection.id !== sectionToEditTemp.attributes.subsections.data[index].id
         );
     }
+
 
     const saveChanges = async () => {
         setLoading(true);
@@ -284,13 +282,10 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdi
             })
         }
 
-        setEditSectionFlag(false);
         message.success('Changes saved');
         window.location.reload();
         setLoading(false);
     }
-
-
     const deleteSection = async () => {
         //Debemos eliminar las subsections que estén relacionadas con la sección, tambien la actividad, el cuestionario y las qualifications de la activity
         setLoadingDelete(true);
@@ -384,6 +379,7 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdi
             const sub = filteredSubsections.find((sub) => sub.id === value)
             const id = sub?.attributes?.activity?.data?.id || sub?.id
             copySubsection.attributes.activity.task_to_review = id;
+
             setEditSubsection(copySubsection);
         }
         if (key === 'group') {
@@ -419,6 +415,7 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdi
         const index = sectionToEditTemp.attributes.subsections.data.findIndex((sub) => sub.id === subsectionToEdit.id);
         const newSubsections = [...sectionToEditTemp.attributes.subsections.data];
         newSubsections[index] = subsectionToEdit;
+
         setSectionToEditTemp((prev) => {
             return {
                 ...prev,
@@ -433,6 +430,7 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdi
         setEditSubsection(null);
 
     }
+
     return (
         <>
             <button className='flex items-center mt-5 text-sm duration-150 hover:-translate-x-1 ' onClick={() => { setEditSectionFlag(false); setSectionToEdit(null) }}>
@@ -503,8 +501,9 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdi
                                                             setSubsectionEditing={setEditSubsection}
                                                             editable={subsection.attributes.activity?.type === 'peerReview'}
                                                             danger={subsection.attributes.activity?.type === 'peerReview' &&
-                                                                (subsectionToEdit?.attributes?.activity?.PeerReviewRubrica == null || Object.keys(subsectionToEdit?.attributes?.activity?.PeerReviewRubrica).length === 0
-                                                                    || subsectionToEdit?.attributes?.activity?.task_to_review == null
+                                                                (subsection?.attributes?.activity?.PeerReviewRubrica == null ||
+                                                                    Object.keys(subsection?.attributes?.activity?.PeerReviewRubrica).length === 0
+                                                                    || subsection?.attributes?.activity?.task_to_review == null
                                                                 )}
                                                         />
                                                     </motion.li>
@@ -557,7 +556,14 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdi
                                     style={{ width: '100%' }}
                                     onChange={(task) => { handleSubsectionChange('peer_review', task) }}
                                     notFoundContent={<Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description={t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.no_evaluable_tasks")} />}
-                                    options={filteredSubsections.map((sub) => ({ label: sub?.attributes?.activity?.title || sub?.attributes?.activity?.data?.attributes?.title, value: sub.id }))}
+                                    options={
+                                        //only take tasks that are not not reviewing
+                                        filteredSubsections.filter((sub) => sub?.attributes?.activity?.data?.attributes?.BeingReviewedBy === null ||
+                                            (sub?.attributes?.activity?.type === 'task'))
+                                            .map((sub) => ({ label: sub?.attributes?.activity?.title || sub?.attributes?.activity?.data?.attributes?.title, value: sub.id }))
+
+
+                                    }
                                 />
                                 <label className='text-sm text-gray-500 ' htmlFor=''>
                                     {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.pairs_or_individual")}
@@ -571,7 +577,9 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdi
                                 />
 
                                 <label className='text-sm text-gray-500'>
-                                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.students_review")}  {isGroup ? t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.groups").toLowerCase() : t("ACTIVITY.create_groups.students").toLowerCase()}   *
+                                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.students_review",
+                                        { students: isGroup ? t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.groups").toLowerCase() : t("ACTIVITY.create_groups.students").toLowerCase() })}
+                                    *
                                 </label>
                                 <Select
                                     defaultValue={subsectionToEdit?.activity?.usersToPair || 1}

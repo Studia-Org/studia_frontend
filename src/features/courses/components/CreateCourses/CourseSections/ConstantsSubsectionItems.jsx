@@ -2,6 +2,7 @@ import QuestionnaireData from './QuestionnaireData';
 import { PeerReviewData, ForumData, ThinkAloudData, SelfAssessmentData } from './ActivityData';
 import React from 'react'
 import { useTranslation } from 'react-i18next';
+import { message } from 'antd';
 
 function createSubsection(subsectionName, fase, questionnaireData, setCreateCourseSectionsList, sectionToEdit, type, context, activityData) {
     const id = crypto.randomUUID();
@@ -9,7 +10,18 @@ function createSubsection(subsectionName, fase, questionnaireData, setCreateCour
         if (activityData?.id) {
             delete activityData.id
         }
-
+        if (type === 'peerReview') {
+            let peerReviews = 0;
+            sectionToEdit.attributes.subsections.data.forEach(subsection => {
+                if (subsection.attributes.type === 'peerReview') {
+                    peerReviews++;
+                }
+            });
+            if (peerReviews >= 1) {
+                message.error('You can only add one Peer Review subsection per edit');
+                return;
+            }
+        }
         const newSubsection = {
             id: id,
             attributes: {

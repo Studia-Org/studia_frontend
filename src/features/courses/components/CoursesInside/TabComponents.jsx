@@ -448,7 +448,7 @@ export const SubsectionsSettings = ({ course, courseSection, courseSubsection, s
             body: JSON.stringify({
                 data: {
                     start_date: dateString[0],
-                    end_date: dateString[1],
+                    deadline: dateString[1],
 
                 }
             })
@@ -481,7 +481,8 @@ export const SubsectionsSettings = ({ course, courseSection, courseSubsection, s
             <article className="flex flex-col items-center bg-white border border-[#DADADA] gap-y-5 rounded-md p-5 mt-4 ">
                 <h3 className="text-lg font-medium ">{t("COURSEINSIDE.SUB_SETTINGS.date")}</h3>
                 <RangePicker
-                    value={[dayjs(dateSubsection[0]), dayjs(dateSubsection[1])]}
+                    value={!dayjs(dateSubsection[0]).isValid() || !dayjs(dateSubsection[1]).isValid() ? undefined :
+                        [dayjs(dateSubsection[0]), dayjs(dateSubsection[1])]}
                     showTime
                     className="w-full"
                     clearIcon={null}
