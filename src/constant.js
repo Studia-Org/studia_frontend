@@ -54,7 +54,8 @@ export const ACTIVITY_CATEGORIES = {
             "Analyze and assume, based on principles and values, the values of European integration, the legal order of the Spanish state and Catalonia, and human rights, participating in community activities, decision-making, and conflict resolution, with a democratic attitude, respect for diversity, and commitment to global welfare and social cohesion.",
             "Analyze and understand ethical and social problems in areas such as gender equality, demonstrating one's own values and those of others, acting responsibly with judgments to address narratives with a non-androcentric and ethnocentric perspective, respectful of differences and opposed to all forms of oppression and violence.",
             "Interpret systematic relations of interdependence, eco-dependence, and interconnection between local and global actions, consciously and motivatedly adopting a sustainable and eco-socially responsible lifestyle."
-        ]
+        ],
+        ESO: true
     },
     "Digital competence": {
         color: "indigo",
@@ -63,7 +64,8 @@ export const ACTIVITY_CATEGORIES = {
             "Manage and use one's own digital personal learning environment to build new knowledge and create digital content.",
             "Participate, collaborate, and interact using tools or virtual platforms to communicate, work collaboratively, and share content, data, and information, managing one's actions responsibly.",
             "Develop simple software applications and creative and sustainable technological solutions to solve specific problems or respond to proposed challenges."
-        ]
+        ],
+        ESO: true
     },
     "Entrepreneurial competence": {
         color: "pink",
@@ -71,6 +73,7 @@ export const ACTIVITY_CATEGORIES = {
             "Analyze needs and opportunities, and tackle challenges with critical thinking, weighing their sustainability and assessing the impact on the environment, to present innovative, ethical, and sustainable ideas and solutions aimed at creating value in personal, social, cultural, or economic areas.",
             "Evaluate one's strengths and weaknesses, using self-awareness and self-efficacy strategies, understanding the different operations of the economy and finance, and applying economic and financial knowledge in specific actions.",
             "Develop the process of creating valuable ideas or solutions and sustainable innovative projects, recognizing the value of failure and errors to improve proposals and create innovative value prototypes."
-        ]
+        ],
+        ESO: true
     }
 };

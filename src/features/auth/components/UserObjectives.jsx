@@ -101,8 +101,9 @@ export const UserObjectives = ({ setPageSelector, description, onChange, registe
                                 {t("REGISTER.objectives_register.text_goals_3")}
                             </p>
                             <div className='flex flex-wrap gap-2 pt-4 pl-1'>
-                                {Object.keys(ACTIVITY_CATEGORIES).map((objective, index) =>
-                                    <div className='relative ms-1' key={index}>
+                                {Object.keys(ACTIVITY_CATEGORIES).map((objective, index) => {
+                                    if (ACTIVITY_CATEGORIES[objective].ESO) return null
+                                    return <div className='relative ms-1' key={index}>
                                         <motion.button
                                             onClick={() => { handleClickObjective(objective) }}
                                             className={`relative z-10 bg-${ACTIVITY_CATEGORIES[objective].color}-100 text-${ACTIVITY_CATEGORIES[objective].color}-500 hover:bg-${ACTIVITY_CATEGORIES[objective].color}-200` +
@@ -115,7 +116,26 @@ export const UserObjectives = ({ setPageSelector, description, onChange, registe
                                 inset-0 top-1 left-1 bg-${ACTIVITY_CATEGORIES[objective].color}-500 rounded-lg w-[calc(100%-8px)] h-[calc(100%-8px)]`} ></div>
 
                                     </div>
+                                }
+                                )}
+                            </div>
+                            <div className='flex flex-wrap gap-2 pt-4 pl-1'>
+                                {Object.keys(ACTIVITY_CATEGORIES).map((objective, index) => {
+                                    if (!ACTIVITY_CATEGORIES[objective].ESO) return null
+                                    return <div className='relative ms-1' key={index}>
+                                        <motion.button
+                                            onClick={() => { handleClickObjective(objective) }}
+                                            className={`relative z-10 bg-${ACTIVITY_CATEGORIES[objective].color}-100 text-${ACTIVITY_CATEGORIES[objective].color}-500 hover:bg-${ACTIVITY_CATEGORIES[objective].color}-200` +
+                                                ` hover:text-${ACTIVITY_CATEGORIES[objective].color}-600 text-sm border-[1px] border-${ACTIVITY_CATEGORIES[objective].color}-500 rounded-lg p-2 m-1`}
+                                            animate={{ opacity: [0, 1], y: [-10, 0] }}
+                                            transition={{ delay: index * 0.025 }}>
+                                            ESO - {t(`OBJECTIVES_CONSTANT.${objective}`)}
+                                        </motion.button>
+                                        <div className={`absolute ${user_objectives.includes(objective) ? "blur" : ""} 
+                                inset-0 top-1 left-1 bg-${ACTIVITY_CATEGORIES[objective].color}-500 rounded-lg w-[calc(100%-8px)] h-[calc(100%-8px)]`} ></div>
 
+                                    </div>
+                                }
                                 )}
                             </div>
                         </section>
