@@ -10,17 +10,19 @@ import { message, Button, Tag, Tour } from 'antd';
 import { CreateTask } from './CreateTask';
 import { useTranslation } from 'react-i18next';
 
-export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdit, createCourseSectionsList, task, setTask,
+export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdit, createCourseSectionsList, task, setTask, subsectionToEditError = null, setSubsectionToEditError,
     createCourseSectionsListCopy, setCreateCourseSectionsListCopy, setCreateCourseSectionsList, categories, setCategories, setSubsectionErrors, subsectionErrors }) => {
     const [subsectionsToEdit, setSubsectionsToEdit] = useState((createCourseSectionsListCopy?.filter((section) => section.id === sectionToEdit.id)[0]))
-    const [editSubsectionFlag, setEditSubsectionFlag] = useState(false)
-    const [subsectionEditing, setSubsectionEditing] = useState()
+
+    const [editSubsectionFlag, setEditSubsectionFlag] = useState(subsectionToEditError ? true : false)
+    const [subsectionEditing, setSubsectionEditing] = useState(
+        subsectionToEditError ? subsectionsToEdit.subsections.find((subsection) => subsection.id === subsectionToEditError) : null
+    )
     const [thereIsChanges, setThereIsChanges] = useState(false)
     const [editTaskFlag, setEditTaskFlag] = useState(false)
     const [messageApi, contextHolder] = message.useMessage();
 
     const intervalRef = useRef(null);
-
 
     const { t } = useTranslation();
 
@@ -239,7 +241,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
                     setOpen(false)
                     document.body.style.overflow = 'auto'
                 }} steps={steps} nextButtonProps={{ style: { backgroundColor: 'blue' } }} />
-            <button onClick={() => setEditCourseSectionFlag(false)} className='flex items-center duration-100 hover:-translate-x-1'>
+            <button onClick={() => { setEditCourseSectionFlag(false); setSubsectionToEditError(null) }} className='flex items-center duration-100 hover:-translate-x-1'>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
                     <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
                 </svg>
@@ -283,7 +285,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
                             <div ref={ref} className='p-5 mt-5 mb-5 text-base font-medium bg-white rounded-md shadow-md'>
                                 <div className='flex items-center'>
                                     <h3 className=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.course_sequence")}</h3>
-                                    <Button ref={ref0} className='ml-auto' onClick={() => setEditTaskFlag(true)}>
+                                    <Button ref={ref0} className='ml-auto' onClick={() => { setEditTaskFlag(true); setSubsectionToEditError(null) }}>
                                         {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.edit_task")}
                                     </Button>
                                 </div>
@@ -306,7 +308,7 @@ export const EditCreateCourseSection = ({ setEditCourseSectionFlag, sectionToEdi
                                                                 exit={{ opacity: 0, x: 50 }}>
                                                                 <CreateCourseSubsectionsList setSubsectionErrors={setSubsectionErrors} subsection={subsection}
                                                                     subsectionErrors={subsectionErrors}
-                                                                    setCreateCourseSectionsList={setCreateCourseSectionsListCopy} sectionId={sectionToEdit.id}
+                                                                    setCreateCourseSectionsList={setCreateCourseSectionsListCopy} sectionId={sectionToEdit.id} section={sectionToEdit}
                                                                     setEditSubsectionFlag={setEditSubsectionFlag} setSubsectionEditing={setSubsectionEditing} key={subsection.id} ref2={ref2} />
                                                             </motion.li>
                                                         ))}

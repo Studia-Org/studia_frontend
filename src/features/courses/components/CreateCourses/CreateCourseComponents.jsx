@@ -104,7 +104,6 @@ export const CreateCourseInfo = ({ createCourseOption, setCreateCourseOption, se
       return newInfo;
     });
   };
-  console.log(courseBasicInfo)
 
   useEffect(() => {
     const saveFilesToLocalStorage = async () => {
@@ -258,7 +257,9 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
                   items={createCourseSectionsList}
                   strategy={verticalListSortingStrategy}>
                   {createCourseSectionsList.map((section) => (
-                    <CreateCourseSectionsList section={section} deleteSection={deleteSection} setEditCourseSectionFlag={setEditCourseSectionFlag} setSectionToEdit={setSectionToEdit} key={section.id} setSubsectionErrors={setSubsectionErrors} />
+                    <CreateCourseSectionsList section={section}
+                      deleteSection={deleteSection} setEditCourseSectionFlag={setEditCourseSectionFlag}
+                      setSectionToEdit={setSectionToEdit} key={section.id} setSubsectionErrors={setSubsectionErrors} />
                   ))}
                 </SortableContext>
               </DndContext>
@@ -278,13 +279,12 @@ export const CreateCourseSections = ({ createCourseOption, setCreateCourseOption
   )
 }
 
-export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption, createCourseSectionsList, evaluator, courseBasicInfo, task, subsectionErrors }) => {
+export const CreateConfirmation = ({ setSubsectionToEditError, setEditCourseSectionFlag, setSectionToEdit, createCourseOption, setCreateCourseOption, createCourseSectionsList, evaluator, courseBasicInfo, task, subsectionErrors }) => {
   const { t } = useTranslation();
   const [sectionContentSelector, setSectionContentSelector] = useState('course');
   const [visibilityTask, setVisibilityTask] = useState(false);
   const [selectedSubsection, setSelectedSubsection] = useState(createCourseSectionsList[0]?.subsections[0]);
   const [sectionId, setSectionId] = useState(createCourseSectionsList[0]?.id);
-
   useEffect(() => {
     createCourseSectionsList.forEach((section) => {
       const subsection = section.subsections.find((subsection) => subsection.id === sectionContentSelector);
@@ -309,7 +309,15 @@ export const CreateConfirmation = ({ createCourseOption, setCreateCourseOption, 
             />
           </div>
           <div style={{ width: '45rem' }} className='flex flex-col items-center ml-auto '>
-            <ButtonCreateCourse createCourseSectionsList={createCourseSectionsList} courseBasicInfo={courseBasicInfo} subsectionErrors={subsectionErrors} />
+            <ButtonCreateCourse
+              setSubsectionToEditError={setSubsectionToEditError}
+              setEditCourseSectionFlag={setEditCourseSectionFlag}
+              createCourseSectionsList={createCourseSectionsList}
+              courseBasicInfo={courseBasicInfo}
+              setCreateCourseOption={setCreateCourseOption}
+              subsectionErrors={subsectionErrors}
+              setSectionToEdit={setSectionToEdit}
+            />
             <div className='w-full'>
               <AccordionCourse
                 createCourseSectionsList={createCourseSectionsList}

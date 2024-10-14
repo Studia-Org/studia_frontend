@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { ShowSectionErrors } from './ShowSectionErrors';
 
 
-export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo, subsectionErrors }) => {
+export const ButtonCreateCourse = ({ setSubsectionToEditError, setSectionToEdit, createCourseSectionsList, courseBasicInfo, subsectionErrors, setCreateCourseOption, setEditCourseSectionFlag }) => {
     const { t } = useTranslation()
 
     const [isLoading, setIsLoading] = useState(false);
@@ -439,7 +439,9 @@ export const ButtonCreateCourse = ({ createCourseSectionsList, courseBasicInfo, 
                             <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495ZM10 5a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 10 5Zm0 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clipRule="evenodd" />
                         </svg>
                     </Button>
-                    <ShowSectionErrors subsectionErrors={subsectionErrors} setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />
+                    <ShowSectionErrors setSectionToEdit={setSectionToEdit} setEditCourseSectionFlag={setEditCourseSectionFlag} setSubsectionToEditError={setSubsectionToEditError}
+                        setCreateCourseOption={setCreateCourseOption} subsectionErrors={subsectionErrors}
+                        setIsModalOpen={setIsModalOpen} isModalOpen={isModalOpen} />
                 </div>}
 
         </>

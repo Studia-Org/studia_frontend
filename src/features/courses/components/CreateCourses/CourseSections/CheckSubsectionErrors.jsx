@@ -2,7 +2,7 @@ import { Popover, List, Typography } from 'antd'
 import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
-export const CheckSubsectionErrors = ({ subsection, setSubsectionErrors, subsectionErrors }) => {
+export const CheckSubsectionErrors = ({ subsection, section, setSubsectionErrors, subsectionErrors }) => {
     const [color, setColor] = useState('text-yellow-400')
     const [errorsList, setErrorsList] = useState([])
 
@@ -147,11 +147,11 @@ export const CheckSubsectionErrors = ({ subsection, setSubsectionErrors, subsect
             default:
                 break;
         }
-
         setSubsectionErrors(prevErrors => ({
             ...prevErrors,
             [subsection.id]: {
                 title: subsection.title,
+                section: section,
                 errors: newErrorsList
                     .filter(error => error.svg === dangerSvg)
                     .map(error => error.comment)

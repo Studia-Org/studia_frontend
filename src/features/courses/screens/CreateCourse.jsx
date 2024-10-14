@@ -18,14 +18,12 @@ const CreateCourse = () => {
         return savedErrors ? JSON.parse(savedErrors) : null;
     }
     )
-
     const [sectionToEdit, setSectionToEdit] = useState({})
-
+    const [subsectionToEditError, setSubsectionToEditError] = useState(null)
     const [createCourseSectionsListCopy, setCreateCourseSectionsListCopy] = useState(() => {
         const savedSections = localStorage.getItem('createCourseSectionsList');
         return savedSections && savedSections !== "undefined" ? JSON.parse(savedSections) : [];
     });
-
     const [createCourseSectionsList, setCreateCourseSectionsList] = useState(() => {
         const savedSections = localStorage.getItem('createCourseSectionsList');
         return savedSections && savedSections !== "undefined" ? JSON.parse(savedSections) : [];
@@ -73,18 +71,18 @@ const CreateCourse = () => {
             return filteredErrors;
         });
     }, [createCourseSectionsListCopy])
-
     function RenderCreateCourse() {
         switch (createCourseOption) {
             case 0:
                 return <CreateCourseInfo createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} setCourseBasicInfo={setCourseBasicInfo} courseBasicInfo={courseBasicInfo} />
             case 1:
                 return <CreateCourseSections createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption}
-                    setCreateCourseSectionsList={setCreateCourseSectionsList} createCourseSectionsList={createCourseSectionsList} setEditCourseSectionFlag={setEditCourseSectionFlag}
+                    setCreateCourseSectionsList={setCreateCourseSectionsList} createCourseSectionsList={createCourseSectionsList}
+                    setEditCourseSectionFlag={setEditCourseSectionFlag}
                     setSectionToEdit={setSectionToEdit} setCreateCourseSectionsListCopy={setCreateCourseSectionsListCopy}
                     createCourseSectionsListCopy={createCourseSectionsListCopy} />
             case 2:
-                return <CreateConfirmation subsectionErrors={subsectionErrors} task={task} createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} createCourseSectionsList={createCourseSectionsList} evaluator={courseBasicInfo.evaluator} courseBasicInfo={courseBasicInfo} />
+                return <CreateConfirmation setSubsectionToEditError={setSubsectionToEditError} setSectionToEdit={setSectionToEdit} setEditCourseSectionFlag={setEditCourseSectionFlag} subsectionErrors={subsectionErrors} task={task} createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} createCourseSectionsList={createCourseSectionsList} evaluator={courseBasicInfo.evaluator} courseBasicInfo={courseBasicInfo} />
             default:
                 return <CreateCourseInfo createCourseOption={createCourseOption} setCreateCourseOption={setCreateCourseOption} />
         }
@@ -97,6 +95,7 @@ const CreateCourse = () => {
                     editCourseSectionFlag ?
                         <>
                             <EditCreateCourseSection key={sectionToEdit.id} setEditCourseSectionFlag={setEditCourseSectionFlag}
+                                setSubsectionToEditError={setSubsectionToEditError} subsectionToEditError={subsectionToEditError}
                                 sectionToEdit={sectionToEdit} createCourseSectionsList={createCourseSectionsList} task={task} setTask={setTask}
                                 createCourseSectionsListCopy={createCourseSectionsListCopy} setCreateCourseSectionsListCopy={setCreateCourseSectionsListCopy}
                                 setCreateCourseSectionsList={setCreateCourseSectionsList} categories={categories} setCategories={setCategories} setSubsectionErrors={setSubsectionErrors}
