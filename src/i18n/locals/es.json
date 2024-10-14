@@ -567,6 +567,7 @@
                     "title": "Título",
                     "description": "Descripción",
                     "files": "Archivos (máximo 5)",
+                    "edit_questions": "Editar preguntas",
                     "date": "Fecha de la subsección",
                     "date_placeholder_start": "Fecha de inicio",
                     "date_placeholder_end": "Fecha de finalización",

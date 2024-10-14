@@ -567,6 +567,7 @@
                     "title": "Títol",
                     "description": "Descripció",
                     "files": "Arxius (màxim 5)",
+                    "edit_questions": "Editar preguntes",
                     "date": "Data de la subsecció",
                     "date_placeholder_start": "Data d'inici",
                     "date_placeholder_end": "Data de finalització",

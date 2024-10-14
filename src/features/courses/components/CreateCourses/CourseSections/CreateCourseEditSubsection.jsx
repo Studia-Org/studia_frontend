@@ -49,8 +49,6 @@ export const CreateCourseEditSubsection = ({
   const textGroupsIndv = isGroup ? t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.groups").toLowerCase() :
     t("ACTIVITY.create_groups.students").toLowerCase()
 
-  console.log(textGroupsIndv)
-
   useEffect(() => {
     const matchingSubsection = createCourseSectionsList
       .flatMap((section) => section.subsections)

@@ -7,7 +7,7 @@ import RadioGroup, { useRadioGroup } from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
 import Radio from '@mui/material/Radio';
 import { TableCategories } from './TableCategories';
-import { message, DatePicker, Input, Switch, InputNumber, Button, Tooltip, Select } from 'antd';
+import { message, DatePicker, Input, Switch, InputNumber, Button, Tooltip, Select, Modal } from 'antd';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import { PonderationWarning } from './PonderationWarning';
@@ -15,6 +15,7 @@ import { QuestionnaireInfo } from './EditSubsection/QuestionnaireInfo';
 import { useTranslation } from 'react-i18next';
 import { ImportQuestionnaireInfo } from './EditSubsection/ImportQuestionnaireInfo';
 import { set } from 'date-fns';
+import { Footer } from 'flowbite-react';
 
 
 const { RangePicker } = DatePicker;
@@ -56,11 +57,24 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
     const [editQuestionFlags, setEditQuestionFlags] = useState(Array(totalQuestions).fill(false));
     const [autocorrectTest, setAutocorrectTest] = useState(subsection.questionnaire.attributes.autocorrect);
     const [embedCode, setEmbedCode] = useState(subsection.questionnaire.attributes?.Options?.embedCode)
-
+    const [isModalVisible, setIsModalVisible] = useState(false);
     const isQuestionnaireEditable = subsection.questionnaire.attributes?.editable;
+    const [loading, setLoading] = useState(false);
+
+    const simulateLoading = () => {
+        setLoading(true);
+
+        setTimeout(() => {
+            setIsModalVisible(true)
+        }, 500);
+
+        setTimeout(() => {
+            setLoading(false);
+        }, 1000);
+
+    }
 
     useEffect(() => {
-
         setTitle(subsection.title)
         setDescription(subsection.questionnaire.attributes.description)
         setAutocorrectTest(subsection.questionnaire.attributes.autocorrect)
@@ -72,7 +86,6 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
         newFlags[index] = !newFlags[index];
         setEditQuestionFlags(newFlags);
     };
-
 
     const StyledFormControlLabel = styled((props) => <FormControlLabel {...props} />)(
         ({ theme, checked }) => ({
@@ -128,11 +141,14 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
             return updatedSections;
         })
     }
+    useEffect(() => {
+        const modal = document.getElementsByClassName('ant-modal-body')[0];
+        if (modal) modal.scrollTo({ top: 0, behavior: 'smooth' });
+    }, [currentPage])
 
     const handleNextPage = () => {
         setCurrentPage((prevPage) => prevPage + 1);
     };
-
     const handlePrevPage = () => {
         setCurrentPage((prevPage) => prevPage - 1);
     };
@@ -338,8 +354,6 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
         });
     }
 
-
-
     const handleChangeDescription = (value) => {
         setCreateCourseSectionsList((courses) => {
             return courses.map((course) => {
@@ -390,13 +404,13 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
         iframe?.removeAttribute('style');
         iframe?.removeAttribute('width');
         iframe?.removeAttribute('height');
-        if(src.startsWith('https://forms.office.com/Pages/ResponsePage.aspx')){
+        if (src.startsWith('https://forms.office.com/Pages/ResponsePage.aspx')) {
             iframe?.setAttribute('width', '400');
-            iframe?.setAttribute('height', '400');     
+            iframe?.setAttribute('height', '400');
         }
-        iframe?.setAttribute('class', 'mt-6 w-full rounded-md h-screen');      
+        iframe?.setAttribute('class', 'mt-6 w-full rounded-md h-screen');
         iframe?.removeAttribute('classname');
-        
+
         const sanitizedEmbedCode = iframe.outerHTML;
         console.log(sanitizedEmbedCode)
 
@@ -445,7 +459,6 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
         });
     }
 
-    // Cambia el valor de el titulo de el questionario
     const handleChangeTitle = (value) => {
         setCreateCourseSectionsList((courses) => {
             return courses.map((course) => {
@@ -482,9 +495,6 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
             });
         });
     };
-
-
-
 
     function deleteQuestion(index) {
         setCreateCourseSectionsList(prevSections => {
@@ -710,249 +720,251 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
     }
 
     return (
-        <div className="flex flex-col ">
-            <div className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1] p-8 mb-10">
-                <div className="">
-                    <div className='flex items-center'>
-                        <Input className='px-1 mb-5 border border-[#d9d9d9] rounded-md text-3xl font-semibold text-black pl-3' placeholder="Title" value={title}
-                            onChange={(e) => setTitle(e.target.value)} onBlur={(e) => handleChangeTitle(e.target.value)} />
-                    </div>
-                </div>
-                <div className='space-y-4 bg-white rounded-md '>
-                    <label className='text-sm text-gray-500' htmlFor="" > {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.date")} *</label>
-                    <RangePicker
-                        placeholder={
-                            [
-                                t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.date_placeholder_start"),
-                                t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.date_placeholder_end")
-                            ]
-                        }
-                        className='w-full py-4'
-                        showTime={{
-                            format: 'HH:mm',
-                        }}
-                        format="YYYY-MM-DD HH:mm"
-                        value={subsection.start_date ? [dayjs(subsection.start_date), dayjs(subsection.end_date)] : null}
-                        onChange={onChangeDate}
-                    />
-                    <div className='mt-7'>
-                        <label className='block mr-3 text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.categories")} * </label>
-                        <TableCategories categories={categories[sectionId]} setCreateCourseSectionsList={setCreateCourseSectionsList}
-                            subsection={subsection} sectionID={sectionId} createCourseSectionsList={createCourseSectionsList} />
-                    </div>
-                    <div className='flex items-center justify-between'>
-                        <div className='flex items-center'>
-                            <label className='block mr-3 text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.evaluable")} * </label>
-                            <Switch checked={subsection.activity?.evaluable} onChange={(e) => handleSwitchChange(e)} className='bg-gray-300' />
+        <>
+            <Modal id="modal_questionnaire" centered bodyStyle={{ height: '80vh', display: 'flex', flexDirection: 'column', overflow: "scroll" }}
+                width={"50vw"} open={isModalVisible} onOk={() => setIsModalVisible(false)} closable={false} okText={t("COMMON.save_changes")}
+                cancelButtonProps={{ style: { display: 'none' } }}>
+                <motion.ul
+                    initial="hidden"
+                    animate="visible"
+                    variants={list}
+                >
+                    <div className="mt-5 space-y-5 ">{renderQuestionsForPage()}</div>
+                </motion.ul>
+                {
+                    ((currentPage === totalPages || totalPages === 0) && isQuestionnaireEditable) &&
+                    <div
+                        className='bg-white shadow-md rounded-md p-5 border-l-8 mt-5 flex flex-col justify-center border-[#6366f1]'
+                        variants={item}>
+                        <div className='flex items-center justify-between mb-5'>
+                            <p className="mb-4 font-medium">{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.add_question")}</p>
+                            <FormControl >
+                                <Select
+                                    className='w-40'
+                                    value={selectorValue}
+                                    options={[
+                                        { value: 'open-ended', label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.text") },
+                                        { value: 'options', label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.Options") }
+                                    ]}
+                                    onChange={(e) => {
+                                        setSelectorValue(e)
+                                        if (e === 'options') {
+                                            setAddQuestionText(prevQuestionText => ({ ...prevQuestionText, options: [] }));
+                                        } else {
+                                            setAddQuestionText(prevQuestionText => ({ ...prevQuestionText, options: e }));
+                                        }
+                                    }}
+                                >
+                                </Select>
+                            </FormControl>
                         </div>
-                        {
-                            subsection.activity?.evaluable && (
-                                <div className='flex items-center'>
-                                    <Tooltip title={t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.autocorrect_text")}>
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 mr-2">
-                                            <path fillRule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a.75.75 0 0 0 0 1.5h.253a.25.25 0 0 1 .244.304l-.459 2.066A1.75 1.75 0 0 0 10.747 15H11a.75.75 0 0 0 0-1.5h-.253a.25.25 0 0 1-.244-.304l.459-2.066A1.75 1.75 0 0 0 9.253 9H9Z" clipRule="evenodd" />
-                                        </svg>
-                                    </Tooltip>
+                        <label className='mb-3 text-sm text-gray-500' htmlFor="" >{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.question")}</label>
+                        <TextArea
+                            value={addQuestionText.question}
+                            placeholder={t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.question_placeholder")}
+                            className='w-full'
+                            allowClear
+                            onChange={(e) => setAddQuestionText(prevQuestionText => ({ ...prevQuestionText, question: e.target.value }))}
+                            rows={3}
+                        />
 
-                                    <label className='block mr-3 text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.autocorrect")} * </label>
-                                    <Switch checked={autocorrectTest} onChange={(e) => handleChangeAutocorrect(e)} className='bg-gray-300' />
+                        {
+                            selectorValue === 'options' &&
+                            <>
+                                <label className='mt-5 mb-3 text-sm text-gray-500' htmlFor="" >{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.Options")}</label>
+                                <div className='flex flex-col'>
+
+                                    {
+                                        addQuestionText?.options?.length > 0 ?
+                                            addQuestionText.options.map((option, index) => (
+                                                <RadioGroup className="mt-4 ml-5" name={`use-radio-group-${index}`} >
+                                                    <MyFormControlLabel key={index} value={option} label={option} control={<Radio disabled readOnly />} />
+                                                </RadioGroup>
+                                            )) :
+                                            null
+
+                                    }
+                                    <div className='flex items-center mt-5'>
+                                        <Button onClick={() => addOptionToList()} className='flex items-center px-2 mr-3 font-medium h-9'>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
+                                                <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
+                                            </svg>
+                                        </Button>
+                                        <TextArea
+                                            value={newOption}
+                                            onChange={(e) => { setNewOption(e.target.value) }}
+                                            className='w-full'
+                                            rows={2}
+                                        />
+                                    </div>
+
                                 </div>
-                            )
+                            </>
+
                         }
 
-                        <div className='flex items-center gap-4'>
+                        <button onClick={() => addQuestion()} className='ml-auto  mt-5 rounded-md bg-[#6366f1]  p-2 text-white'>
+                            {t("CREATE_COURSES.COURSE_SECTIONS.create")}
+                        </button>
+                    </div>
+                }
+                <footer style={{ marginTop: 'auto' }} >
+                    <div className="flex h-fit items-center justify-between mt-5 mb-8 bg-white rounded-md shadow-md p-5 border-b-8 border-[#6366f1]">
+                        <button className='flex items-center mx-4 duration-200 hover:-translate-x-2 disabled:text-gray-300 disabled:translate-x-0' onClick={handlePrevPage} disabled={currentPage === 1}>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 mr-2">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75" />
+                            </svg>
+                            {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.previous")}
+                        </button>
+                        <button className='flex items-center mx-4 duration-200 hover:translate-x-2 disabled:text-gray-300 disabled:translate-x-0' onClick={handleNextPage} disabled={currentPage === totalPages}>
+                            {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.next")}
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-2">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
+                            </svg>
+                        </button>
+                    </div>
+                </footer>
+            </Modal>
+            <div className="flex flex-col ">
+                <div className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1] p-8 mb-10">
+                    <div className="">
+                        <div className='flex items-center'>
+                            <Input className='px-1 mb-5 border border-[#d9d9d9] rounded-md text-3xl font-semibold text-black pl-3' placeholder="Title" value={title}
+                                onChange={(e) => setTitle(e.target.value)} onBlur={(e) => handleChangeTitle(e.target.value)} />
+                        </div>
+                    </div>
+                    <div className='space-y-4 bg-white rounded-md '>
+                        <label className='text-sm text-gray-500' htmlFor="" > {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.date")} *</label>
+                        <RangePicker
+                            placeholder={
+                                [
+                                    t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.date_placeholder_start"),
+                                    t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.date_placeholder_end")
+                                ]
+                            }
+                            className='w-full py-4'
+                            showTime={{
+                                format: 'HH:mm',
+                            }}
+                            format="YYYY-MM-DD HH:mm"
+                            value={subsection.start_date ? [dayjs(subsection.start_date), dayjs(subsection.end_date)] : null}
+                            onChange={onChangeDate}
+                        />
+                        <div className='mt-7'>
+                            <label className='block mr-3 text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.categories")} * </label>
+                            <TableCategories categories={categories[sectionId]} setCreateCourseSectionsList={setCreateCourseSectionsList}
+                                subsection={subsection} sectionID={sectionId} createCourseSectionsList={createCourseSectionsList} />
+                        </div>
+                        <div className='flex items-center justify-between'>
+                            <div className='flex items-center'>
+                                <label className='block mr-3 text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.evaluable")} * </label>
+                                <Switch checked={subsection.activity?.evaluable} onChange={(e) => handleSwitchChange(e)} className='bg-gray-300' />
+                            </div>
                             {
                                 subsection.activity?.evaluable && (
-                                    <PonderationWarning createCourseSectionsList={createCourseSectionsList} sectionID={sectionId} />
+                                    <div className='flex items-center'>
+                                        <Tooltip title={t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.autocorrect_text")}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 mr-2">
+                                                <path fillRule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a.75.75 0 0 0 0 1.5h.253a.25.25 0 0 1 .244.304l-.459 2.066A1.75 1.75 0 0 0 10.747 15H11a.75.75 0 0 0 0-1.5h-.253a.25.25 0 0 1-.244-.304l.459-2.066A1.75 1.75 0 0 0 9.253 9H9Z" clipRule="evenodd" />
+                                            </svg>
+                                        </Tooltip>
+
+                                        <label className='block mr-3 text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.autocorrect")} * </label>
+                                        <Switch checked={autocorrectTest} onChange={(e) => handleChangeAutocorrect(e)} className='bg-gray-300' />
+                                    </div>
                                 )
                             }
-                            <label className='text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ponderation")} *</label>
-                            <InputNumber
-                                disabled={!subsection.activity?.evaluable}
-                                defaultValue={0}
-                                onChange={(e) => handlePonderationChange(e)}
-                                value={subsection.activity?.evaluable ? subsection.activity?.ponderation : 0}
-                                min={0}
-                                max={100}
-                                formatter={(value) => `${value}%`}
-                                parser={(value) => value.replace('%', '')}
-                            />
-                        </div>
 
-                    </div>
-                    {!embedCode &&
-                        <div className='mt-7'>
-                            <div className='flex items-center gap-3'>
-                                <label className='text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.questionnaire_type")} *</label>
-                                <QuestionnaireInfo />
+                            <div className='flex items-center gap-4'>
+                                {
+                                    subsection.activity?.evaluable && (
+                                        <PonderationWarning createCourseSectionsList={createCourseSectionsList} sectionID={sectionId} />
+                                    )
+                                }
+                                <label className='text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ponderation")} *</label>
+                                <InputNumber
+                                    disabled={!subsection.activity?.evaluable}
+                                    defaultValue={0}
+                                    onChange={(e) => handlePonderationChange(e)}
+                                    value={subsection.activity?.evaluable ? subsection.activity?.ponderation : 0}
+                                    min={0}
+                                    max={100}
+                                    formatter={(value) => `${value}%`}
+                                    parser={(value) => value.replace('%', '')}
+                                />
                             </div>
 
-                            <Select
-                                className='w-full mt-3'
-                                defaultValue="Stantard"
-                                onChange={(e) => {
-                                    setCreateCourseSectionsList(prevSections => {
-                                        const updatedSections = prevSections.map(section => {
-                                            if (section.subsections) {
-                                                const updatedSubsections = section.subsections.map(sub => {
-                                                    if (sub.id === subsection.id) {
-                                                        return {
-                                                            ...sub,
-                                                            questionnaire: {
-                                                                ...sub.questionnaire,
-                                                                attributes: {
-                                                                    ...sub.questionnaire.attributes,
-                                                                    type: e
-                                                                }
-                                                            }
-                                                        };
-                                                    }
-                                                    return sub;
-                                                });
-                                                return {
-                                                    ...section,
-                                                    subsections: updatedSubsections
-                                                };
-                                            }
-                                            return section;
-                                        });
-                                        return updatedSections;
-                                    });
-                                }}
-                                value={subsection.questionnaire.attributes.type}
-                                options={[
-                                    { value: 'standard', label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.standard") },
-                                    { value: 'scaling', label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.scaling") },
-                                ]}
+                        </div>
+                        {!embedCode &&
+                            <div className='mt-7'>
+                                <div className='flex items-center gap-3'>
+                                    <label className='text-sm text-gray-500' htmlFor=''>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.questionnaire_type")} *</label>
+                                    <QuestionnaireInfo />
+                                </div>
 
-                            />
-                        </div>}
-                    <div className='mt-7'>
-                        <label className='text-sm text-gray-500 mt-7 ' htmlFor="" >{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.description")}</label>
-                        <div className='flex w-full mt-2'>
-                            <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3' placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} onBlur={(e) => handleChangeDescription(e.target.value)} />
+                                <Select
+                                    className='w-full mt-3'
+                                    defaultValue="Stantard"
+                                    onChange={(e) => {
+                                        setCreateCourseSectionsList(prevSections => {
+                                            const updatedSections = prevSections.map(section => {
+                                                if (section.subsections) {
+                                                    const updatedSubsections = section.subsections.map(sub => {
+                                                        if (sub.id === subsection.id) {
+                                                            return {
+                                                                ...sub,
+                                                                questionnaire: {
+                                                                    ...sub.questionnaire,
+                                                                    attributes: {
+                                                                        ...sub.questionnaire.attributes,
+                                                                        type: e
+                                                                    }
+                                                                }
+                                                            };
+                                                        }
+                                                        return sub;
+                                                    });
+                                                    return {
+                                                        ...section,
+                                                        subsections: updatedSubsections
+                                                    };
+                                                }
+                                                return section;
+                                            });
+                                            return updatedSections;
+                                        });
+                                    }}
+                                    value={subsection.questionnaire.attributes.type}
+                                    options={[
+                                        { value: 'standard', label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.standard") },
+                                        { value: 'scaling', label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.scaling") },
+                                    ]}
+
+                                />
+                            </div>}
+                        <div className='mt-7'>
+                            <label className='text-sm text-gray-500 mt-7 ' htmlFor="" >{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.description")}</label>
+                            <div className='flex w-full mt-2'>
+                                <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3' placeholder="Description" value={description} onChange={(e) => setDescription(e.target.value)} onBlur={(e) => handleChangeDescription(e.target.value)} />
+                            </div>
                         </div>
-                    </div>
-                    <div className='mt-7'>
-                        <div className='flex items-center gap-2'>
-                            <label className='text-sm text-gray-500 ' htmlFor="" >Import questionnaire</label>
-                            <ImportQuestionnaireInfo />
-                        </div>
-                        <div className='flex w-full mt-2'>
-                            <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3' placeholder='<iframe ...' value={embedCode} onChange={(e) => setEmbedCode(e.target.value)} onBlur={(e) => handleChangeEmbedCode(e.target.value)} />
+                        <div className='mt-7'>
+                            <div className='flex items-center gap-2'>
+                                <label className='text-sm text-gray-500 ' htmlFor="" >Import questionnaire</label>
+                                <ImportQuestionnaireInfo />
+                            </div>
+                            <div className='flex w-full mt-2'>
+                                <Input className='px-1 py-3 border border-[#d9d9d9] rounded-md text-sm pl-3' placeholder='<iframe ...' value={embedCode} onChange={(e) => setEmbedCode(e.target.value)} onBlur={(e) => handleChangeEmbedCode(e.target.value)} />
+                            </div>
                         </div>
                     </div>
                 </div>
+                {!embedCode &&
+                    <Button loading={loading} onClick={() => { simulateLoading(); }} type="primary" className='flex items-center justify-center w-full p-2 rounded-md'>
+                        {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.edit_questions")}
+                    </Button>
+                }
             </div>
-            {
-                !embedCode &&
-                (
-                    <>
-                        <motion.ul
-                            initial="hidden"
-                            animate="visible"
-                            variants={list}
-                        >
-                            <div className="mt-5 space-y-5 ">{renderQuestionsForPage()}</div>
-                        </motion.ul>
-
-                        {
-                            ((currentPage === totalPages || totalPages === 0) && isQuestionnaireEditable) &&
-                            <div
-                                className='bg-white shadow-md rounded-md p-5 border-l-8 mt-5 flex flex-col justify-center border-[#6366f1]'
-                                variants={item}>
-                                <div className='flex items-center justify-between mb-5'>
-                                    <p className="mb-4 font-medium">{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.add_question")}</p>
-                                    <FormControl >
-                                        <Select
-                                            className='w-40'
-                                            value={selectorValue}
-                                            options={[
-                                                { value: 'open-ended', label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.text") },
-                                                { value: 'options', label: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.Options") }
-                                            ]}
-                                            onChange={(e) => {
-                                                setSelectorValue(e)
-                                                if (e === 'options') {
-                                                    setAddQuestionText(prevQuestionText => ({ ...prevQuestionText, options: [] }));
-                                                } else {
-                                                    setAddQuestionText(prevQuestionText => ({ ...prevQuestionText, options: e }));
-                                                }
-                                            }}
-                                        >
-                                        </Select>
-                                    </FormControl>
-                                </div>
-                                <label className='mb-3 text-sm text-gray-500' htmlFor="" >{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.question")}</label>
-                                <TextArea
-                                    value={addQuestionText.question}
-                                    placeholder={t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.question_placeholder")}
-                                    className='w-full'
-                                    allowClear
-                                    onChange={(e) => setAddQuestionText(prevQuestionText => ({ ...prevQuestionText, question: e.target.value }))}
-                                    rows={3}
-                                />
-
-                                {
-                                    selectorValue === 'options' &&
-                                    <>
-                                        <label className='mt-5 mb-3 text-sm text-gray-500' htmlFor="" >{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.Options")}</label>
-                                        <div className='flex flex-col'>
-
-                                            {
-                                                addQuestionText?.options?.length > 0 ?
-                                                    addQuestionText.options.map((option, index) => (
-                                                        <RadioGroup className="mt-4 ml-5" name={`use-radio-group-${index}`} >
-                                                            <MyFormControlLabel key={index} value={option} label={option} control={<Radio disabled readOnly />} />
-                                                        </RadioGroup>
-                                                    )) :
-                                                    null
-
-                                            }
-                                            <div className='flex items-center mt-5'>
-                                                <Button onClick={() => addOptionToList()} className='flex items-center px-2 mr-3 font-medium h-9'>
-                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-full h-full">
-                                                        <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
-                                                    </svg>
-                                                </Button>
-                                                <TextArea
-                                                    value={newOption}
-                                                    onChange={(e) => { setNewOption(e.target.value) }}
-                                                    className='w-full'
-                                                    rows={2}
-                                                />
-                                            </div>
-
-                                        </div>
-                                    </>
-
-                                }
-
-                                <button onClick={() => addQuestion()} className='ml-auto  mt-5 rounded-md bg-[#6366f1]  p-2 text-white'>
-                                    {t("CREATE_COURSES.COURSE_SECTIONS.create")}
-                                </button>
-                            </div>
-                        }
-
-
-                        <div className="flex items-center justify-between mt-5 mb-8 bg-white rounded-md shadow-md p-5 border-b-8 border-[#6366f1]">
-                            <button className='flex items-center mx-4 duration-200 hover:-translate-x-2 disabled:text-gray-300 disabled:translate-x-0' onClick={handlePrevPage} disabled={currentPage === 1}>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 mr-2">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75" />
-                                </svg>
-                                {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.previous")}
-                            </button>
-                            <button className='flex items-center mx-4 duration-200 hover:translate-x-2 disabled:text-gray-300 disabled:translate-x-0' onClick={handleNextPage} disabled={currentPage === totalPages}>
-                                {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.next")}
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-2">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" />
-                                </svg>
-                            </button>
-                        </div>
-                    </>
-                )
-            }
-
-        </div>
+        </>
     );
 }
