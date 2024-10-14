@@ -638,6 +638,14 @@
                             "title": "Planning Questionnaire",
                             "description": "A planning questionnaire is a valuable tool for gathering essential information to create effective plans. This questionnaire helps individuals or teams define goals, identify resources, and establish a roadmap for successful execution."
                         },
+                        "RUBRIC_ANALYSIS": {
+                            "title": "Rubric Analysis",
+                            "description": "Rubric analysis is a valuable tool for evaluating the quality and effectiveness of rubrics used in evaluating assignments and projects. This analysis helps identify areas for improvement, set goals, and develop an action plan for continuous improvement."
+                        },
+                        "PROFESSOR_FEEDBACK_REFELCTION": {
+                            "title": "Professor feedback and reflection",
+                            "description": "Teacher feedback and reflection are valuable tools for improving student learning and performance. This activity helps identify areas of strength and weakness, set goals, and develop an action plan for improvement continuous."
+                        },
                         "SRL_O_QUESTIONNAIRE": {
                             "title": "SRL-O Self-regulation Questionnaire",
                             "description": "The Self-regulation for learning online (SRL-O) questionnaire measures the frequency and quality of learning strategies when applied to online or blended or hybrid environments."

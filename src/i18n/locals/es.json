@@ -646,6 +646,14 @@
                             "title": "Cuestionario de Planificación",
                             "description": "Un cuestionario de planificación es una herramienta valiosa para recopilar información esencial para crear planes efectivos. Este cuestionario ayuda a individuos o equipos a definir metas, identificar recursos y establecer una hoja de ruta para una ejecución exitosa."
                         },
+                        "RUBRIC_ANALYSIS": {
+                            "title": "Análisis de Rúbrica",
+                            "description": "El análisis de rúbrica es una herramienta valiosa para evaluar la calidad y la eficacia de las rúbricas utilizadas en la evaluación de tareas y proyectos. Este análisis ayuda a identificar áreas de mejora, establecer metas y desarrollar un plan de acción para la mejora continua."
+                        },
+                        "PROFESSOR_FEEDBACK_REFELCTION": {
+                            "title": "Retroalimentación del profesor y reflexión",
+                            "description": "La retroalimentación del profesor y la reflexión son herramientas valiosas para mejorar el aprendizaje y el rendimiento de los estudiantes. Esta actividad ayuda a identificar áreas de fortaleza y debilidad, establecer metas y desarrollar un plan de acción para la mejora continua."
+                        },
                         "SRL_O_QUESTIONNAIRE": {
                             "title": "Cuestionario de Autorregulación SRL-O",
                             "description": "El cuestionario de Autorregulación para el aprendizaje en línea (SRL-O) mide la frecuencia y la calidad de las estrategias de aprendizaje cuando se aplican a entornos en línea, mixtos o híbridos."

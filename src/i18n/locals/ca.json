@@ -646,6 +646,14 @@
                             "title": "Qüestionari de Planificació",
                             "description": "Un qüestionari de planificació és una eina valuosa per recopilar informació essencial per crear plans efectius. Aquest qüestionari ajuda a individus o equips a definir metes, identificar recursos i establir una fulla de ruta per a una execució reeixida."
                         },
+                        "RUBRIC_ANALYSIS": {
+                            "title": "Anàlisi de Rúbrica",
+                            "description": "L'anàlisi de rúbrica és una eina valuosa per avaluar la qualitat i l'eficàcia de les rúbriques utilitzades en l'avaluació de tasques i projectes. Aquesta anàlisi ajuda a identificar àrees de millora, establir metes i desenvolupar un pla d'acció per a la millora contínua."
+                        },
+                        "PROFESSOR_FEEDBACK_REFELCTION": {
+                            "title": "Retroalimentació del professor i reflexió",
+                            "description": "La retroalimentació del professor i la reflexió són eines valuoses per millorar l'aprenentatge i el rendiment dels estudiants. Aquesta activitat ajuda a identificar àrees de fortalesa i feblesa, establir metes i desenvolupar un pla d'acció per a la millora contínua."
+                        },
                         "SRL_O_QUESTIONNAIRE": {
                             "title": "Qüestionari d'Autorregulació SRL-O",
                             "description": "El qüestionari d'Autorregulació per a l'aprenentatge en línia (SRL-O) mesura la freqüència i la qualitat de les estratègies d'aprenentatge quan s'apliquen a entorns en línia, mixtos o híbrids."
