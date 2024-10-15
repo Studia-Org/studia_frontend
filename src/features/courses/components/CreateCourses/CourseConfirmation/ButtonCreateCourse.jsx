@@ -433,7 +433,7 @@ export const ButtonCreateCourse = ({ setSubsectionToEditError, setSectionToEdit,
             {courseHasErrors &&
                 <div className='flex items-center gap-2 mb-5'>
                     <p className='p-2 text-xs font-normal text-gray-500 border rounded bg-gray-50'>{t("CREATE_COURSES.COURSE_VISUALIZATION.principal_text")}</p>
-                    <Button onClick={() => setIsModalOpen(true)} className='flex items-center justify-center h-full gap-2 text-center bg-gray-50'>
+                    <Button danger onClick={() => setIsModalOpen(true)} className='flex items-center justify-center h-full gap-2 text-center bg-red-50 '>
                         {t("CREATE_COURSES.COURSE_VISUALIZATION.errors")}
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                             <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495ZM10 5a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 10 5Zm0 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" clipRule="evenodd" />
