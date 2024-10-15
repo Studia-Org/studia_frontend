@@ -858,7 +858,7 @@
         },
         "COURSE_VISUALIZATION": {
             "generate_course": "Crear curs",
-            "principal_text": "El botó s'habilitarà una vegada que hagis completat totes les seccions i subseccions del curs. Assegura't de no tenir cap error en el curs abans de continuar.",
+            "principal_text": "Es podrà crear el curs una vegada que hagis completat totes les seccions i subseccions del curs. Assegura't de no tenir cap error en el curs abans de continuar.",
             "errors": "Mostrar errors"
         },
         "NAVIGATION": {

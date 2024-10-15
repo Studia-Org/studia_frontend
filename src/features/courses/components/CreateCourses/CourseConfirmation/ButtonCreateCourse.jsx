@@ -69,7 +69,10 @@ export const ButtonCreateCourse = ({ setSubsectionToEditError, setSectionToEdit,
     }
 
     async function createCourse() {
-
+        if (courseHasErrors) {
+            setIsModalOpen(true)
+            return
+        }
         try {
             isValidCourseBasicInfo(courseBasicInfo)
             isValidCourse(createCourseSectionsList)
@@ -417,9 +420,9 @@ export const ButtonCreateCourse = ({ setSubsectionToEditError, setSectionToEdit,
     return (
         <>
             <LoadingBar color='#6366f1' height={4} progress={progress} onLoaderFinished={() => setProgress(0)} shadow={true} />
-            <button onClick={createCourse} disabled={isLoading || courseHasErrors}
+            <button onClick={createCourse} disabled={isLoading}
                 className={`flex justify-center items-center mb-5 text-lg font-medium py-3 px-6 rounded-lg shadow-lg transition-all duration-500 ease-in-out 
-                ${isLoading || courseHasErrors ? 'bg-gray-400 cursor-not-allowed' : 'bg-gradient-to-r from-[#657DE9] to-[#6E66D6] hover:from-pink-500 hover:to-purple-600 hover:scale-110 hover:brightness-110 hover:animate-pulse active:scale-100 text-white'}`}>
+                ${isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-gradient-to-r from-[#657DE9] to-[#6E66D6] hover:from-pink-500 hover:to-purple-600 hover:scale-110 hover:brightness-110 hover:animate-pulse active:scale-100 text-white'}`}>
                 {
                     isLoading ?
                         <BeatLoader color='#FFFFFF' size={15} className='mr-2' />

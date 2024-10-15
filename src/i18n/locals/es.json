@@ -858,7 +858,7 @@
         },
         "COURSE_VISUALIZATION": {
             "generate_course": "Crear curso",
-            "principal_text": "El botón se habilitará una vez que hayas completado todas las secciones y subsecciones del curso. Asegúrate de no tener ningún error en el curso antes de continuar.",
+            "principal_text": "Podràs crear el curso una vez que hayas completado todas las secciones y subsecciones del curso. Asegúrate de no tener ningún error en el curso antes de continuar.",
             "errors": "Mostrar errores"
         },
         "NAVIGATION": {
