@@ -21,7 +21,8 @@
         "add_tag": "Afegir etiqueta",
         "completed": "Completat",
         "please_complete": "Si us plau, completa tots els camps",
-        "error_try_again": "Hi ha hagut un error. Si us plau, torna-ho a intentar."
+        "error_try_again": "Hi ha hagut un error. Si us plau, torna-ho a intentar.",
+        "close": "Tancar"
     },
     "HOME": {
         "title": "Benvingut/da a la nova era de l'aprenentatge",
@@ -568,6 +569,7 @@
                     "description": "Descripció",
                     "files": "Arxius (màxim 5)",
                     "edit_questions": "Editar preguntes",
+                    "view_questions": "Veure preguntes",
                     "date": "Data de la subsecció",
                     "date_placeholder_start": "Data d'inici",
                     "date_placeholder_end": "Data de finalització",
@@ -701,7 +703,7 @@
                         },
                         "FEEDBACK_REFLECTION_QUESTIONNAIRE": {
                             "title": "Qüestionari de Feedback i Reflexió",
-                            "description": "El qüestionari de feedback i reflexió és una eina valuosa per recopilar informació sobre l'eficàcia de les tasques i activitats, així com per identificar àrees d'aprenentatge i millora. Aquest qüestionari ajuda a individus o equips a reflexionar sobre el seu aprenentatge i a identificar accions per millorar."
+                            "description": "Avaluació de la competència d'aprendre a aprendre mitjançant les fases del model cíclic de Zimmerman."
                         },
                         "QUESTIONNAIRE_DATA": {
                             "EMPTY": {
@@ -807,6 +809,56 @@
                                     "QUESTION_40": "Quan estudio en línia, intento relacionar el contingut amb el que ja sé.",
                                     "QUESTION_41": "Quan aprenc el contingut en línia, intento desenvolupar les meves pròpies idees sobre això.",
                                     "QUESTION_42": "Intento millorar la meva comprensió fent treball addicional més enllà del contingut principal (per exemple, fent activitats addicionals de resolució de problemes o lectures addicionals)."
+                                }
+                            },
+                            "SELF_REFLECTIONDATA": {
+                                "title": "Questionari d'Auto-reflexió",
+                                "description": "Avaluació de la competència d'aprendre a aprendre mitjançant les fases del model cíclic de Zimmerman.",
+                                "QUESTIONS": {
+                                    "QUESTION_1": "Analitzar les característiques de la tasca o activitat: què s'ha de fer, quins objectius/resultats s'esperen i amb quins criteris s'avalua el seu assoliment.",
+                                    "QUESTION_2": "Analitzar el valor que té la tasca o activitat per a mi i a partir d'això determinar el grau de motivació i l'esforç que significa; planificar els passos a seguir en funció del nivell de perfecció que vull aconseguir o els resultats que desitjo assolir.",
+                                    "QUESTION_3": "Observar el que estic fent i comparar-ho amb algun model o referència externa de qualitat.",
+                                    "QUESTION_4": "Focalitzar i mantenir la concentració i l'interès en la realització de la tasca mitjançant l'ús d'estratègies metacognitives i motivacionals.",
+                                    "QUESTION_5": "Avaluar la realització de la tasca o activitat.",
+                                    "QUESTION_6": "Reaccionar emocional i cognitivament davant les valoracions respecte dels èxits i fracassos de la tasca o activitat realitzada i de la seva transferència a aprenentatges futurs."
+                                },
+                                "OPTIONS": {
+                                    "QUESTION_1": [
+                                        "He formulat els meus propis objectius d'aprenentatge, integrant-los als de la tasca o activitat. He estat capaç d'establir una planificació estratègica tenint en compte els procediments i recursos més adequats, juntament amb totes les característiques de la tasca o activitat. Tot això m'ha permès executar amb èxit i eficàcia la tasca/activitat dins del període establert.",
+                                        "He ponderat i prioritzat els diferents objectius de la tasca o activitat tenint en compte la seva dificultat, el temps de realització, els criteris d'avaluació i el nivell d'assoliment al qual volia arribar. He realitzat una primera planificació amb els procediments i els recursos que considerava adequats.",
+                                        "He tingut dificultats puntuals, però en general he entès què havia de fer en la tasca o activitat. He estat capaç d'identificar els criteris d'avaluació a partir dels quals seria avaluat/ada. He estat capaç de definir el nivell d'assoliment al qual volia arribar, fent una primera proposta d'objectius, però no he estat capaç de concretar una planificació adequada.",
+                                        "He tingut moltes dificultats a l'hora d'entendre què havia de fer en la tasca o activitat; m'ha resultat difícil identificar els meus propis objectius i el nivell d'assoliment al qual volia arribar. No he tingut present la majoria dels criteris d'avaluació, per la qual cosa no he realitzat una planificació tendent a complir-los."
+                                    ],
+                                    "QUESTION_2": [
+                                        "A partir dels objectius establerts amb relació a la realització de la tasca o activitat, he estat capaç d'identificar quines capacitats tinc per poder assolir els objectius amb èxit. He tingut altes expectatives i he estat capaç de motivar-me per poder-ho fer de forma planificada, amb total eficàcia i superant les limitacions.",
+                                        "A partir dels objectius establerts en relació amb la realització de la tasca o activitat, he estat capaç d'identificar la majoria de les meves capacitats per poder assolir els objectius amb èxit. He tingut altes expectatives, però m'ha costat una mica saber com motivar-me i planificar-me per poder-ho fer amb eficàcia.",
+                                        "A partir dels objectius establerts en relació amb la realització de la tasca o activitat, he identificat vagament les capacitats que tinc per poder assolir-los amb èxit. Tenia certes expectatives, però m'ha costat acabar de veure com motivar-me per poder-ho fer amb eficàcia.",
+                                        "A partir dels objectius establerts en relació amb la realització de la tasca o activitat, he tingut moltes dificultats per identificar quines capacitats tinc per poder assolir-los amb èxit. He tingut baixes expectatives i poc interès a analitzar les meves limitacions i possibilitats."
+                                    ],
+                                    "QUESTION_3": [
+                                        "He observat i comparat amb detall les semblances i diferències entre el que estava fent i algun model o referència externa de qualitat. He justificat de manera fonamentada la major part de punts forts i punts febles del que he realitzat. He reflexionat i implementat les accions d'adequació i/o millora que considerava més pertinents.",
+                                        "He observat i comparat amb detall semblances i diferències entre el que estava fent i algun model expert o referència externa de qualitat. He justificat punts forts i punts febles del que he realitzat. He estat capaç d'identificar accions de millora que considerava pertinents.",
+                                        "He observat i comparat de manera general el que estava fent amb algun model o referència externa de qualitat i he detectat alguns aspectes que havia de millorar.",
+                                        "He observat i he pogut descriure el que estava fent, però no vaig ser capaç d'establir comparacions amb models o referències externes de qualitat. No he estat capaç de senyalar possibles accions de millora."
+                                    ],
+                                    "QUESTION_4": [
+                                        "He utilitzat mitjans i estratègies per a l'aprenentatge molt diverses (sol·licitar ajuda, crear mapes o imatges mentals, tècniques d'estudi, gestió del temps i de l'ambient de treball, etc.) que m'han permès focalitzar-me en la tasca i mantenir la concentració i l'interès durant tot el procés.",
+                                        "He utilitzat mitjans i estratègies diverses per a l'aprenentatge (sol·licitar ajuda, crear mapes o imatges mentals, tècniques d'estudi, gestió del temps i de l'ambient de treball, etc.) per mantenir la concentració i l'interès durant la major part del procés.",
+                                        "He utilitzat alguns mitjans i estratègies (sol·licitar ajuda, crear mapes o imatges mentals, tècniques d'estudi, gestió del temps i de l'ambient de treball, etc.) però van ser poc adequades al context i a les característiques de la tasca, i això no m'ha permès focalitzar la concentració i l'interès en alguns moments del procés d'execució de la tasca.",
+                                        "He utilitzat molt poques estratègies per a l'aprenentatge (sol·licitar ajuda, crear mapes o imatges mentals, tècniques d'estudi, gestió del temps i de l'ambient de treball, etc.). Se m'han presentat dificultats per focalitzar-me en la tasca i per mantenir la concentració i l'interès."
+                                    ],
+                                    "QUESTION_5": [
+                                        "He reflexionat i valorat l'eficàcia del procés d'aprenentatge seguit de manera molt clara i molt ben argumentada, a partir dels criteris de qualitat i del nivell d'expectatives que m'havia fixat, i ho he fet identificant de manera crítica i fonamentada les causes de l'èxit o el fracàs.",
+                                        "He reflexionat i elaborat judicis sobre allò que vaig fer de manera clara i argumentada, tenint en compte els criteris de qualitat i el nivell d'expectatives que m'havia fixat inicialment, i identificant alguna de les causes de l'èxit o el fracàs.",
+                                        "He reflexionat i valorat superficialment el que vaig fer, tenint en compte els criteris de qualitat i el nivell d'expectatives que m'havia fixat inicialment, però no he aconseguit identificar clarament a què s'ha degut l'èxit o el fracàs. No he estat capaç d'identificar a què s'ha degut l'èxit o el fracàs.",
+                                        "He mirat el que vaig fer, però no he reflexionat ni he realitzat una valoració fonamentada tenint en compte els criteris de qualitat i els objectius/resultats esperats."
+                                    ],
+                                    "QUESTION_6": [
+                                        "He analitzat els resultats de la tasca o activitat des del punt de vista de la satisfacció; valorant els èxits i fracassos com oportunitats per millorar. He identificat clarament les estratègies que hauria d'implementar per millorar ara i en aprenentatges futurs.",
+                                        "He analitzat els resultats de la tasca o activitat realitzada des del punt de vista de la satisfacció; valorant els èxits i fracassos com oportunitats per millorar. He identificat algunes de les estratègies que hauria d'implementar en el futur.",
+                                        "He analitzat els resultats de la tasca o activitat realitzada des del punt de vista de la satisfacció; valorant els meus èxits i fracassos com oportunitats per millorar, però no he aconseguit identificar les estratègies que hauria d'implementar en el futur.",
+                                        "He tingut dificultats per analitzar els resultats de la tasca o activitat realitzada des del punt de vista de la satisfacció, i per entendre els èxits i fracassos com oportunitats per millorar en el futur."
+                                    ]
                                 }
                             },
                             "GENERAL_OPTIONS": {

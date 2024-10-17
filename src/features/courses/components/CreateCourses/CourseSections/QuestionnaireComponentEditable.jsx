@@ -8,15 +8,12 @@ import TextField from '@mui/material/TextField';
 import Radio from '@mui/material/Radio';
 import { TableCategories } from './TableCategories';
 import { message, DatePicker, Input, Switch, InputNumber, Button, Tooltip, Select, Modal } from 'antd';
-import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import { PonderationWarning } from './PonderationWarning';
 import { QuestionnaireInfo } from './EditSubsection/QuestionnaireInfo';
 import { useTranslation } from 'react-i18next';
 import { ImportQuestionnaireInfo } from './EditSubsection/ImportQuestionnaireInfo';
-import { set } from 'date-fns';
-import { Footer } from 'flowbite-react';
-
+;
 
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
@@ -44,6 +41,7 @@ const item = {
 export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSectionsList, createCourseSectionsList, sectionId, categories }) => {
 
     const { t } = useTranslation();
+    console.log('QuestionnaireComponentEditable')
 
     const questionsPerPage = 3;
     const [currentPage, setCurrentPage] = useState(1);
@@ -722,7 +720,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
     return (
         <>
             <Modal id="modal_questionnaire" centered bodyStyle={{ height: '80vh', display: 'flex', flexDirection: 'column', overflow: "scroll" }}
-                width={"50vw"} open={isModalVisible} onOk={() => setIsModalVisible(false)} closable={false} okText={t("COMMON.save_changes")}
+                width={"50vw"} open={isModalVisible} onOk={() => setIsModalVisible(false)} closable={false} okText={isQuestionnaireEditable ? t("COMMON.save_changes") : t("COMMON.close")}
                 cancelButtonProps={{ style: { display: 'none' } }}>
                 <motion.ul
                     initial="hidden"
@@ -766,6 +764,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                             allowClear
                             onChange={(e) => setAddQuestionText(prevQuestionText => ({ ...prevQuestionText, question: e.target.value }))}
                             rows={3}
+
                         />
 
                         {
@@ -795,6 +794,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                                             onChange={(e) => { setNewOption(e.target.value) }}
                                             className='w-full'
                                             rows={2}
+
                                         />
                                     </div>
 
@@ -961,7 +961,10 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                 </div>
                 {!embedCode &&
                     <Button loading={loading} onClick={() => { simulateLoading(); }} type="primary" className='flex items-center justify-center w-full p-2 rounded-md'>
-                        {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.edit_questions")}
+
+                        {isQuestionnaireEditable ? t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.edit_questions") :
+                            t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.view_questions")
+                        }
                     </Button>
                 }
             </div>

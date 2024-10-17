@@ -135,7 +135,7 @@ export const CourseContent = ({ setForumFlag, courseId, enableEdit, setEnableEdi
             <TaskComponentCard task={subsection_?.attributes.activity?.data} context={'coursesInside'} courseId={courseId} setForumFlag={setForumFlag} />
             <p className='mb-1 text-xs font-normal text-gray-400'>{t("COURSEINSIDE.course_content")}</p>
             <hr className='mb-5' />
-            <div className='mb-12 prose max-w-none'>
+            <div className='mb-12 prose break-words max-w-none '>
                 {
                     !enableEdit
                         ?

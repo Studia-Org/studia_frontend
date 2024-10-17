@@ -21,7 +21,8 @@
         "add_tag": "Añadir etiqueta",
         "completed": "Completado",
         "please_complete": "Por favor, completa todos los campos",
-        "error_try_again": "Error, por favor inténtalo de nuevo"
+        "error_try_again": "Error, por favor inténtalo de nuevo",
+        "close": "Cerrar"
     },
     "HOME": {
         "title": "Bienvenido/a a la nueva era del aprendizaje",
@@ -568,6 +569,7 @@
                     "description": "Descripción",
                     "files": "Archivos (máximo 5)",
                     "edit_questions": "Editar preguntas",
+                    "view_questions": "Ver preguntas",
                     "date": "Fecha de la subsección",
                     "date_placeholder_start": "Fecha de inicio",
                     "date_placeholder_end": "Fecha de finalización",
@@ -701,7 +703,7 @@
                         },
                         "FEEDBACK_REFLECTION_QUESTIONNAIRE": {
                             "title": "Cuestionario de Feedback y Reflexión",
-                            "description": "El cuestionario de feedback y reflexión es una herramienta valiosa para recopilar información esencial para mejorar el rendimiento y la calidad del trabajo. Este cuestionario ayuda a individuos o equipos a identificar áreas de mejora, establecer metas y desarrollar un plan de acción para la mejora continua."
+                            "description": "Evaluación de la competencia de aprender a aprender mediante las fases del modelo cíclico de Zimmerman."
                         },
                         "QUESTIONNAIRE_DATA": {
                             "EMPTY": {
@@ -809,267 +811,317 @@
                                     "QUESTION_42": "Trato de mejorar mi comprensión haciendo trabajo adicional más allá del contenido principal (por ejemplo, haciendo actividades adicionales de resolución de problemas o lecturas adicionales)."
                                 }
                             },
-                            "GENERAL_OPTIONS": {
-                                "options": [
-                                    "Totalmente en desacuerdo",
-                                    "En desacuerdo",
-                                    "Algo en desacuerdo",
-                                    "Neutral",
-                                    "Algo de acuerdo",
-                                    "De acuerdo",
-                                    "Totalmente de acuerdo"
-                                ]
+                            "SELF_REFLECTIONDATA": {
+                                "title": "Cuestionario de Autoereflexión",
+                                "description": "Evaluación de la competencia de aprender a aprender mediante las fases del modelo cíclico de Zimmerman.",
+                                "QUESTIONS": {
+                                    "QUESTION_1": "Analizar las características de la tarea o actividad: qué se debe hacer, qué objetivos / resultados se esperan y con qué criterios se evalúa su logro.",
+                                    "QUESTION_2": "Analizar el valor que tiene la tarea o actividad para mí y a partir de esto determinar el grado de motivación y el esfuerzo que significa; planificar los pasos a seguir en función del nivel de perfección que quiero conseguir o los resultados que deseo alcanzar. ",
+                                    "QUESTION_3": "Observar lo que estoy haciendo y compararlo con algún modelo o referencia externa de calidad. ",
+                                    "QUESTION_4": "Focalizar y mantener la concentración y el interés en la realización de la tarea mediante el uso de estrategias metacognitivas y motivacionales. ",
+                                    "QUESTION_5": "Evaluar la realización de la tarea o actividad. ",
+                                    "QUESTION_6": "Reaccionar emocional y cognitivamente ante las valoraciones respecto de los éxitos y fracasos de la tarea o actividad realizada y de su transferencia a aprendizajes futuros. "
+                                },
+                                "OPTIONS": {
+                                    "QUESTION_1": [
+                                        "He formulado mis propios objetivos de aprendizaje, integrándolos a los de la tarea o actividad. He sido capaz de establecer una planificación estratégica teniendo en cuenta los procedimientos y recursos más adecuados, junto con todas las características de la tarea o actividad. Todo esto me ha permitido ejecutar con éxito y eficacia la tarea/actividad dentro del periodo establecido.",
+                                        "He ponderado y priorizado los diferentes objetivos de la tarea o actividad teniendo en cuenta su dificultad, el tiempo de realización, los criterios de evaluación y el nivel de logro al que quería llegar. He realizado una primera planificación con los procedimientos y los recursos que consideraba adecuados. ",
+                                        "He tenido dificultades puntuales, pero en general entendí que debía hacer en la tarea o actividad. He sido capaz de identificar los criterios de evaluación a partir de los cuales iba sería evaluado/ a. He sido capaz de definir el nivel de logro al que quería llegar, haciendo una primera propuesta de objetivos, pero no he sido capaz de concretar una planificación adecuada. ",
+                                        "He tenido muchas dificultades a la hora de entender qué debía hacer en la tarea o actividad; me ha resultado difícil identificar mis propios objetivos y el nivel de logro al que quería llegar. No he tenido presente la mayoría de los criterios de evaluación, por lo que no he realizado una planificación tendente a cumplirlos. "
+                                    ],
+                                    "QUESTION_2": [
+                                        "A partir de los objetivos establecidos con relación a la realización de la tarea o actividad, he sido capaz de identificar qué capacidades tengo para poder alcanzar los objetivos con éxito. He tenido altas expectativas y he sido capaz de motivarme para poder hacerlo de forma planificada, con total eficacia y superando las limitaciones. ",
+                                        "A partir de los objetivos establecidos en relación con la realización de la tarea o actividad, he sido capaz de identificar la mayoría mis capacidades para poder alcanzar los objetivos con éxito. He tenido altas expectativas, pero me ha costado un poco saber cómo motivarme y planificarme para poder hacerlo con eficacia.",
+                                        "A partir de los objetivos establecidos en relación con la realización de la tarea o actividad, he identificado vagamente las capacidades que tengo para poder alcanzarlos con éxito. Tenía ciertas expectativas, pero me ha costado terminar de ver cómo motivarme para poder hacerlo con eficacia.",
+                                        "A partir de los objetivos establecidos en relación con la realización de la tarea o actividad, he tenido muchas dificultades para identificar cuáles qué capacidades tengo para poder alcanzarlos con éxito. He tenido bajas expectativas y poco interés en analizar mis limitaciones y posibilidades."
+                                    ],
+                                    "QUESTION_3": [
+                                        "He observado y comparado con detalle las semejanzas y diferencias entre lo que estaba haciendo y algún modelo o referencia externa de calidad. He justificado de manera fundamentada la mayor parte de puntos fuertes y puntos débiles de lo que he realizado. He reflexionado e implementado las acciones de adecuación y/o mejora que consideraba más pertinentes.",
+                                        "He observado y comparado con detalle semejanzas y diferencias entre lo que estaba haciendo y algún modelo experto o referencia externa de calidad. He justificado puntos fuertes y puntos débiles de lo que he realizado. He sido capaz de identificar acciones de mejora que consideraba pertinentes.",
+                                        "He observado y comparado de manera general lo que estaba haciendo con algún modelo o referencia externa de calidad y he detectado algunos aspectos que debía mejorar.",
+                                        "He observado y he podido describir lo que estaba haciendo, pero no fui capaz de establecer comparaciones con modelos o referencias externas de calidad. No he sido capaz de señalar posibles acciones de mejora."
+                                    ],
+                                    "QUESTION_4": [
+                                        "He utilizado medios y estrategias para el aprendizaje muy diversas (solicitar ayuda, crear mapas o imágenes mentales, técnicas de estudio, gestión del tiempo y del ambiente de trabajo, etc.) que me permitieron focalizarme en la tarea y mantener la concentración y el interés durante todo el proceso.",
+                                        "He utilizado medios y estrategias diversas para el aprendizaje (solicitar ayuda, crear mapas o imágenes mentales, técnicas de estudio, gestión del tiempo y del ambiente de trabajo, etc.) para mantener la concentración y el interés durante la mayor parte del proceso.",
+                                        "He utilizado algunos medios y estrategias (solicitar ayuda, crear mapas o imágenes mentales, técnicas de estudio, gestión del tiempo y del ambiente de trabajo, etc.) pero fueron poco adecuadas al contexto y a las características de la tarea, y esto no me ha permitido focalizar la concentración y el interés en algunos momentos del proceso de ejecución de la tarea.",
+                                        "He utilizado muy pocas estrategias para el aprendizaje (solicitar ayuda, crear mapas o imágenes mentales, técnicas de estudio, gestión del tiempo y del ambiente de trabajo, etc.). Se me han presentado dificultades para focalizarme en la tarea y para mantener la concentración y el interés."
+                                    ],
+                                    "QUESTION_5": [
+                                        "He reflexionado y valorado la eficacia del proceso de aprendizaje seguido de manera muy clara y muy bien argumentada, a partir de los criterios de calidad y del nivel de expectativas que me había fijado, y lo he hecho identificando de manera crítica y fundamentada las causas del éxito o el fracaso.",
+                                        "He reflexionado y elaborado juicios sobre aquello que hice de manera clara y argumentada, teniendo en cuenta los criterios de calidad y el nivel de expectativas que me había fijado inicialmente, e identificando alguna de las causas del éxito o el fracaso.",
+                                        "He reflexionado y valorado superficialmente lo que hice, teniendo en cuenta los criterios de calidad y el nivel de expectativas que me había fijado inicialmente, pero no he logrado identificar claramente a qué se ha debido el éxito o el fracaso. No he sido capaz de identificar a qué se ha debido el éxito o el fracaso.",
+                                        "He mirado lo que hice, pero no he reflexionado ni he realizado una valoración fundamentada teniendo en cuenta los criterios de calidad y los objetivos/resultados esperados."
+                                    ],
+                                    "QUESTION_6": [
+                                        "He analizado los resultados de la tarea o actividad desde el punto de vista de la satisfacción; valorando los éxitos y fracasos como oportunidades para mejorar. He identificado claramente las estrategias que debería implementar para mejorar ahora y en aprendizajes futuros.",
+                                        "He analizado los resultados de la tarea o actividad realizada desde el punto de vista de la satisfacción; valorando los éxitos y fracasos como oportunidades para mejorar. He identificado algunas de las estrategias que debería implementar en el futuro.",
+                                        "He analizado los resultados de la tarea o actividad realizada desde el punto de vista de la satisfacción; valorando mis logros y fracasos como oportunidades para mejorar, pero no he logrado identificar las estrategias que debería implementar en el futuro.",
+                                        "He tenido dificultades para analizar los resultados de la tarea o actividad realizada desde el punto de vista de la satisfacción, y para entender los logros y fracasos como oportunidades para mejorar en el futuro."
+                                    ]
+                                },
+                                "GENERAL_OPTIONS": {
+                                    "options": [
+                                        "Totalmente en desacuerdo",
+                                        "En desacuerdo",
+                                        "Algo en desacuerdo",
+                                        "Neutral",
+                                        "Algo de acuerdo",
+                                        "De acuerdo",
+                                        "Totalmente de acuerdo"
+                                    ]
+                                }
                             }
+                        },
+                        "CONTINUOUS_FEEDBACK": {
+                            "title": "Feedback continuo",
+                            "description": "La secuencia está diseñada para girar en torno a la entrega de una tarea, permitiendo a los estudiantes planificar la tarea y mejorarla progresivamente con feedback de otros estudiantes."
+                        },
+                        "FORUM_FEEDBACK": {
+                            "title": "Desarrollar una tarea con feedback del foro",
+                            "description": "La secuencia está diseñada para girar en torno a la entrega de una tarea, con la posibilidad de recibir feedback de otros estudiantes a través del foro."
+                        },
+                        "CONTINUOUS_FEEDBACK_2": {
+                            "title": "Feedback continuo",
+                            "description": "La secuencia está diseñada para girar en torno a la entrega de una tarea, permitiendo a los estudiantes planificar la tarea y mejorarla progresivamente con feedback de otros estudiantes con un sistema de entrega más continuo."
+                        },
+                        "EARLY_FEEDBACK": {
+                            "title": "Feedback inicial del profesor y reflexión",
+                            "description": "La secuencia está diseñada para girar en torno a la entrega de una tarea, permitiendo a los estudiantes planificar la tarea y recibir feedback del profesor antes de la entrega final."
+                        },
+                        "THINK_ALOUD": {
+                            "title": "Think aloud",
+                            "description": "El think aloud es una estrategia en la que verbalizas tus pensamientos mientras trabajas en un problema o tarea. Ayuda a los estudiantes a entender tu proceso"
+                        },
+                        "WIP": {
+                            "title": "Trabajo en progreso",
+                            "description": "Trabajo en progreso."
                         }
-                    },
-                    "CONTINUOUS_FEEDBACK": {
-                        "title": "Feedback continuo",
-                        "description": "La secuencia está diseñada para girar en torno a la entrega de una tarea, permitiendo a los estudiantes planificar la tarea y mejorarla progresivamente con feedback de otros estudiantes."
-                    },
-                    "FORUM_FEEDBACK": {
-                        "title": "Desarrollar una tarea con feedback del foro",
-                        "description": "La secuencia está diseñada para girar en torno a la entrega de una tarea, con la posibilidad de recibir feedback de otros estudiantes a través del foro."
-                    },
-                    "CONTINUOUS_FEEDBACK_2": {
-                        "title": "Feedback continuo",
-                        "description": "La secuencia está diseñada para girar en torno a la entrega de una tarea, permitiendo a los estudiantes planificar la tarea y mejorarla progresivamente con feedback de otros estudiantes con un sistema de entrega más continuo."
-                    },
-                    "EARLY_FEEDBACK": {
-                        "title": "Feedback inicial del profesor y reflexión",
-                        "description": "La secuencia está diseñada para girar en torno a la entrega de una tarea, permitiendo a los estudiantes planificar la tarea y recibir feedback del profesor antes de la entrega final."
-                    },
-                    "THINK_ALOUD": {
-                        "title": "Think aloud",
-                        "description": "El think aloud es una estrategia en la que verbalizas tus pensamientos mientras trabajas en un problema o tarea. Ayuda a los estudiantes a entender tu proceso"
-                    },
-                    "WIP": {
-                        "title": "Trabajo en progreso",
-                        "description": "Trabajo en progreso."
                     }
-                }
+                },
+                "section_name": "Título de la sección",
+                "create": "Crear",
+                "principal_text": "Es hora de construir tu curso, ¡construye las secciones y define la secuencia! 🚀",
+                "add_section": "Añadir sección",
+                "title": "Secciones del curso",
+                "draganddrop": "Arrastra y suelta para reordenar tus secciones",
+                "no_sections": "Aún no hay secciones"
             },
-            "section_name": "Título de la sección",
-            "create": "Crear",
-            "principal_text": "Es hora de construir tu curso, ¡construye las secciones y define la secuencia! 🚀",
-            "add_section": "Añadir sección",
-            "title": "Secciones del curso",
-            "draganddrop": "Arrastra y suelta para reordenar tus secciones",
-            "no_sections": "Aún no hay secciones"
+            "COURSE_VISUALIZATION": {
+                "generate_course": "Crear curso",
+                "principal_text": "Podràs crear el curso una vez que hayas completado todas las secciones y subsecciones del curso. Asegúrate de no tener ningún error en el curso antes de continuar.",
+                "errors": "Mostrar errores"
+            },
+            "NAVIGATION": {
+                "continue": "Continuar",
+                "confirm": "Confirmar",
+                "back": "Atrás",
+                "cancel": "Cancelar",
+                "course_info": "Información del curso",
+                "course_sections": "Secciones del curso",
+                "course_visualization": "Visualización del curso",
+                "section_created_successfully": "Sección creada correctamente"
+            },
+            "ERROR": {
+                "section_must_have_title": "La sección debe tener un título",
+                "invalid_move_section_order": "Movimiento no válido. La subsección debe seguir el orden de secuencia del curso.",
+                "courseBasicInfoMissing": "Falta información básica del curso",
+                "missingAttribute": "Falta '{{attribute}}' en la información del curso",
+                "courseOrSubsectionsMissing": "Falta el curso o las subsecciones",
+                "missingTaskInSection": "Falta la tarea en la sección {{sectionName}}",
+                "missingDates": "Faltan la fecha de comienzo o la fecha de fin en la subsección {{subsectionTitle}}",
+                "missingTaskToReview": "Falta la tarea a revisar en la subsección {{subsectionTitle}}",
+                "required_attributes": [
+                    "Nombre del Curso",
+                    "Descripción",
+                    "Portada",
+                    "Profesor"
+                ]
+            }
         },
-        "COURSE_VISUALIZATION": {
-            "generate_course": "Crear curso",
-            "principal_text": "Podràs crear el curso una vez que hayas completado todas las secciones y subsecciones del curso. Asegúrate de no tener ningún error en el curso antes de continuar.",
-            "errors": "Mostrar errores"
+        "CALENDAR": {
+            "event_added": "Evento agregado correctamente",
+            "event_deleted": "Evento eliminado correctamente",
+            "error_fetching_events": "Error al obtener los eventos",
+            "export_calendar": "Exportar calendario",
+            "add_event": "Agregar evento",
+            "event_title": "Título del evento",
+            "date": "Fecha",
+            "there_are_no_events": "No hay eventos"
         },
-        "NAVIGATION": {
-            "continue": "Continuar",
-            "confirm": "Confirmar",
-            "back": "Atrás",
-            "cancel": "Cancelar",
-            "course_info": "Información del curso",
-            "course_sections": "Secciones del curso",
-            "course_visualization": "Visualización del curso",
-            "section_created_successfully": "Sección creada correctamente"
-        },
-        "ERROR": {
-            "section_must_have_title": "La sección debe tener un título",
-            "invalid_move_section_order": "Movimiento no válido. La subsección debe seguir el orden de secuencia del curso.",
-            "courseBasicInfoMissing": "Falta información básica del curso",
-            "missingAttribute": "Falta '{{attribute}}' en la información del curso",
-            "courseOrSubsectionsMissing": "Falta el curso o las subsecciones",
-            "missingTaskInSection": "Falta la tarea en la sección {{sectionName}}",
-            "missingDates": "Faltan la fecha de comienzo o la fecha de fin en la subsección {{subsectionTitle}}",
-            "missingTaskToReview": "Falta la tarea a revisar en la subsección {{subsectionTitle}}",
-            "required_attributes": [
-                "Nombre del Curso",
-                "Descripción",
-                "Portada",
-                "Profesor"
+        "TIMELINE": {
+            "days_week": [
+                "Dom",
+                "Lun",
+                "Mar",
+                "Mir",
+                "Jue",
+                "Vie",
+                "Sáb"
             ]
+        },
+        "QUALIFICATIONS": {
+            "not_qualifications": "No hay calificaciones disponibles para ti",
+            "not_qualifications_explore": "Explora otras áreas de la plataforma o vuelve más tarde para ver nuevas opciones de calificaciones.",
+            "qualifications": "Calificaciones",
+            "qualification": "Calificación",
+            "search_users": "Buscar usuarios",
+            "attention": "Atención",
+            "peerreview_deadline": "La fecha límite para la revisión por pares es el",
+            "comments": "Comentarios",
+            "professor_qualification": "Calificación del profesor",
+            "files": "Archivos",
+            "last_modification": "Última modificación",
+            "groups": "Grupos",
+            "name": "Nombre",
+            "professor_students_ponderation": "Ponderación Profesor - Estudiantes",
+            "edit_qualifications": "Editar calificaciones",
+            "upload_qualifications": "Subir calificaciones",
+            "questionnaire_completed": "Cuestionario completado",
+            "average_grade": "Nota media recibida",
+            "at": "a las",
+            "write_comment": "Escribe un comentario",
+            "files_delivered_by": "Archivos entregados por {{student}} en la actividad {{activity}}",
+            "no_files_delivered": "No se han entregado archivos",
+            "no_grade": "Sin calificaciónes",
+            "csv_configuration": "Configuración del CSV",
+            "csv_configuration_text": "Configura el archivo CSV y selecciona la actividad deseada.",
+            "visualization": "Visualización",
+            "visualization_text": "Visualiza los datos a subir antes de confirmar.",
+            "confirmation": "Confirmación",
+            "confirmation_text": "Crea las nuevas entradas de calificación.",
+            "first_text_upload": "Primero de todo, selecciona la actividad para subir las notas",
+            "download_template_csv": "Descargar plantilla CSV con los estudiantes",
+            "now_introduce_columns": "Ahora, introduce la relación en las columnas y filas de tu hoja de cálculo CSV",
+            "placeholder_columns_student": "Columna y fila del estudiante, ej: B2-B22",
+            "placeholder_columns_grade": "Columna y fila de la calificación, ej: D2-D22",
+            "placeholder_columns_comments": "Columna y fila de los comentarios, ej: F2-F22",
+            "placeholder_columns_peer": "Columna y fila de las medias de revisión entre pares, ej: F2-F22",
+            "peerReviewGroup": {
+                "instruction": "Para el ejemplo siguiente, seleccionaríamos; A2-A8 (en el caso del estudiante), B2-B8 (en el caso de la calificación), C2-C8 (en el caso del comentario) y D2-D8 (Calificación de la revisión entre pares):",
+                "note": "Cuando aparece ' - ' en 'Calificación media de la revisión entre pares' significa que la revisión entre pares no se evaluó numéricamente y solo se tendrá en cuenta la calificación del profesor."
+            },
+            "group": {
+                "instruction": "Para el ejemplo siguiente, seleccionaríamos; A2-A8 (en el caso del estudiante), B2-B8 (en el caso de la calificación), C2-C8 (en el caso del comentario):"
+            },
+            "peerReview": {
+                "instruction": "Para el ejemplo siguiente, seleccionaríamos; A2-A6 (en el caso del estudiante), B2-B6 (en el caso de la calificación), C2-C6 (en el caso del comentario) y D2-D6 (Calificación de la revisión entre pares):"
+            },
+            "standard": {
+                "instruction": "Para el ejemplo siguiente, seleccionaríamos; B2-B22 (en el caso del estudiante), D2-D22 (en el caso de la calificación), F2-F22 (en el caso del comentario):"
+            },
+            "finally_csv": "Finalmente, cargue el archivo de hoja de cálculo CSV (separado por comas o puntos y comas).",
+            "students_no_enrolled": "Los estudiantes que no están inscritos en el curso no aparecerán aquí.",
+            "please_wait": "Por favor espere hasta que el sistema haya creado todas las calificaciones, no tomará más de un minuto.",
+            "creating_qualifications": "Creando calificaciones...",
+            "qualifications_created": "Calificaciones creadas correctamente",
+            "error_creating_qualifications": "Error al crear las calificaciones",
+            "file_must_be_csv": "El archivo debe ser un archivo CSV o una hoja de cálculo",
+            "input_columns_must_be": "Las columnas de entrada deben tener formato de rango de Excel, por ejemplo, B2-B22",
+            "input_columns_must_be_filled": "Debes completar todos los campos",
+            "no_data": "No hay datos para visualizar",
+            "peer_review_did_not_finish": "La revisión por pares no finalizó",
+            "student_missing": "El estudiante {{name}} no tiene calificaciones o comentarios. Por favor verifique los datos.",
+            "select_activity": "Selecciona una actividad"
+        },
+        "DASHBOARD": {
+            "average_course_grade": "Calificación promedio del curso",
+            "average_course_marks": "Calificaciones promedio del curso",
+            "students_average": "Promedio de estudiantes",
+            "check_students": "Comprueba cómo estás progresando en el curso.",
+            "your_grade": "Tu calificación",
+            "average_course": "Nota promedio del curso",
+            "average_student": "Nota promedio del estudiante",
+            "your_mark": "Tu nota",
+            "activity_average": "Promedio de actividad",
+            "activities_average": "Promedio de las actividades",
+            "compare_activity": "Compara el promedio de todas las actividades.",
+            "course_dashboard": "Panel de Control del Curso",
+            "explore_performance_metrics": "Explora tus métricas de rendimiento y haz un seguimiento de tu progreso a lo largo del curso.",
+            "objective_progress": "Progreso de los objetivos",
+            "check_progress": "Verifica cómo estás progresando en los objetivos del curso.",
+            "creative_capacity": "Capacidad creativa y emprendedora",
+            "teamwork": "Trabajo en equipo",
+            "qualifications_distribution": "Distribución de calificaciones",
+            "distribution_based_on_activities": "Distribución de las calificaciones basadas en las actividades del curso.",
+            "questionnaire_time_min": "Tiempo del cuestionario (min)",
+            "compare_time": "Compara el tiempo que dedicaste a los cuestionarios con otros estudiantes.",
+            "average_time_spent": "Tiempo medio dedicado",
+            "your_time_spent": "Tu tiempo dedicado",
+            "participation_forums": "Participación en foros",
+            "measure_engagement": "Mide la participación en las discusiones del foro.",
+            "total_posts": "Total de publicaciones",
+            "total_answers": "Total de respuestas",
+            "your_posts": "Tus publicaciones",
+            "your_answers": "Tus respuestas",
+            "posts_forum": "Publicaciones en el foro",
+            "replies_forum": "Respuestas en el foro",
+            "go_back_dashboard": "Volver al panel de control",
+            "no_data": "No hay datos para visualizar"
+        },
+        "SELFASSESTMENT": {
+            "self_assessment": "Autoevaluación",
+            "self_assessment_text_prof": "Vea cómo sus estudiantes se han evaluado a sí mismos.",
+            "select_another_student": "Selecciona otro estudiante",
+            "bad": "Mal",
+            "regular": "Regular",
+            "good": "Bien",
+            "very_good": "Excelente",
+            "your_evaluación_submitted": "Su evaluación ha sido enviada",
+            "rubric_autoevalution": "Rúbrica y Autoevaluación",
+            "rubric_text": "Lea detenidamente los criterios descritos en la rúbrica. Tómese un tiempo para reflexionar sobre su proyecto y evaluar qué tan bien cumple con cada uno de los criterios descritos.",
+            "rubric_text2": "Ahora que has revisado la rúbrica, úsala para autoevaluar tu proyecto. Considera cada criterio cuidadosamente y evalúa qué tan bien tu proyecto cumple con los requisitos. Después de reflexionar sobre estos aspectos, asigna una calificación a tu proyecto.",
+            "add_your_comments": "Agrega tus comentarios sobre tu proyecto.",
+            "evaluate_1_10": "Evalúa tu proyecto con una puntuación del 1 al 10."
+        },
+        "PEERREVIEW": {
+            "no_partner_assigned": "No se te ha asignado un compañero para evaluar",
+            "maybe_not_here": "Quizás no deberías estar aquí aún ;)",
+            "contact_teacher": "Si no es el caso, por favor contacta a tu profesor",
+            "peer_review": "Revisión por pares",
+            "feedback": "Comentarios de la revisión por pares",
+            "no_feedback": "Tu socio no te dio una reseña :(",
+            "change_user": "Cambiar de usuario",
+            "evaluate": "Evaluar",
+            "users_to_review": "Tienes que revisar a {{usersToPairAdapted}} compañeros para finalizar la actividad",
+            "left_to_review": "Compañeros por revisar",
+            "task_evaluación_criteria": "Criterios de evaluación de la actividad",
+            "criteria": "Criterios",
+            "correct": "Corrige la entrega del Grupo {{name}}",
+            "correct_individual": "Corrige la entrega de {{name}}",
+            "files_to_review": "Archivos a corregir",
+            "update_feedback": "Actualizar comentarios",
+            "go_to_rubric": "Ir a la rúbrica",
+            "feedback_sent": "Tus comentarios han sido enviados",
+            "no_feedback_sent": "Tus comentarios no han sido enviados, inténtalo de nuevo más tarde",
+            "review_prof_text1": "En esta sección podrás ver las evaluaciones que los estudiantes han dado a sus compañeros.",
+            "review_prof_text2": "Los pares se crearán automáticamente si no los creas manualmente",
+            "qualificacion_received": "Calificación recibida",
+            "qualificacion_given": "Calificación otorgada",
+            "peer_review_answers": "Respuestas de la revisión por pares",
+            "create_peers_manually": "Crear pares manualmente",
+            "download_all": "Descargar todo",
+            "create_peers": "Crear pares",
+            "update_peers": "Actualizar pares",
+            "back_to_peer_review": "Volver a la revisión por pares",
+            "peer_review_text": "La revisión por pares fue diseñada para que cada estudiante revise <bold>{{number}} actividades</bold>",
+            "assing_students": "Asigna a los estudiantes que revisen cada actividad",
+            "create_peers_auto": "Crear pares automáticamente",
+            "students_who_dont_delivered": "Hay alumnos que no han entregado la actividad",
+            "groups_who_dont_delivered": "Hay grupos que no han entregado la actividad",
+            "no_students_to_review": "No hay estudiantes para revisar",
+            "no_students_have_delivered": "No hay estudiantes que hayan entregado la actividad",
+            "activity_done": "Actividad realizada por:",
+            "groups_who_review": "Grupos que van a revisar la actividad:",
+            "users_who_review": "Usuarios que van a revisar la actividad:",
+            "group_exists_in_destination": "El grupo ya existe en este grupo",
+            "group_cannot_review_own_activity": "El grupo no puede revisar su propia actividad",
+            "student_exists_in_destination": "El estudiante ya existe en este grupo",
+            "student_cannot_review_own_activity": "El estudiante no puede revisar su propia actividad",
+            "cannot_drop_outside_list": "No puedes soltar al estudiante fuera de la lista",
+            "peers_created_success": "Pares creados con éxito",
+            "error_creating_peers": "Error al crear los pares",
+            "updating_peer_reviews": "Actualizando revisiones por pares..."
         }
-    },
-    "CALENDAR": {
-        "event_added": "Evento agregado correctamente",
-        "event_deleted": "Evento eliminado correctamente",
-        "error_fetching_events": "Error al obtener los eventos",
-        "export_calendar": "Exportar calendario",
-        "add_event": "Agregar evento",
-        "event_title": "Título del evento",
-        "date": "Fecha",
-        "there_are_no_events": "No hay eventos"
-    },
-    "TIMELINE": {
-        "days_week": [
-            "Dom",
-            "Lun",
-            "Mar",
-            "Mir",
-            "Jue",
-            "Vie",
-            "Sáb"
-        ]
-    },
-    "QUALIFICATIONS": {
-        "not_qualifications": "No hay calificaciones disponibles para ti",
-        "not_qualifications_explore": "Explora otras áreas de la plataforma o vuelve más tarde para ver nuevas opciones de calificaciones.",
-        "qualifications": "Calificaciones",
-        "qualification": "Calificación",
-        "search_users": "Buscar usuarios",
-        "attention": "Atención",
-        "peerreview_deadline": "La fecha límite para la revisión por pares es el",
-        "comments": "Comentarios",
-        "professor_qualification": "Calificación del profesor",
-        "files": "Archivos",
-        "last_modification": "Última modificación",
-        "groups": "Grupos",
-        "name": "Nombre",
-        "professor_students_ponderation": "Ponderación Profesor - Estudiantes",
-        "edit_qualifications": "Editar calificaciones",
-        "upload_qualifications": "Subir calificaciones",
-        "questionnaire_completed": "Cuestionario completado",
-        "average_grade": "Nota media recibida",
-        "at": "a las",
-        "write_comment": "Escribe un comentario",
-        "files_delivered_by": "Archivos entregados por {{student}} en la actividad {{activity}}",
-        "no_files_delivered": "No se han entregado archivos",
-        "no_grade": "Sin calificaciónes",
-        "csv_configuration": "Configuración del CSV",
-        "csv_configuration_text": "Configura el archivo CSV y selecciona la actividad deseada.",
-        "visualization": "Visualización",
-        "visualization_text": "Visualiza los datos a subir antes de confirmar.",
-        "confirmation": "Confirmación",
-        "confirmation_text": "Crea las nuevas entradas de calificación.",
-        "first_text_upload": "Primero de todo, selecciona la actividad para subir las notas",
-        "download_template_csv": "Descargar plantilla CSV con los estudiantes",
-        "now_introduce_columns": "Ahora, introduce la relación en las columnas y filas de tu hoja de cálculo CSV",
-        "placeholder_columns_student": "Columna y fila del estudiante, ej: B2-B22",
-        "placeholder_columns_grade": "Columna y fila de la calificación, ej: D2-D22",
-        "placeholder_columns_comments": "Columna y fila de los comentarios, ej: F2-F22",
-        "placeholder_columns_peer": "Columna y fila de las medias de revisión entre pares, ej: F2-F22",
-        "peerReviewGroup": {
-            "instruction": "Para el ejemplo siguiente, seleccionaríamos; A2-A8 (en el caso del estudiante), B2-B8 (en el caso de la calificación), C2-C8 (en el caso del comentario) y D2-D8 (Calificación de la revisión entre pares):",
-            "note": "Cuando aparece ' - ' en 'Calificación media de la revisión entre pares' significa que la revisión entre pares no se evaluó numéricamente y solo se tendrá en cuenta la calificación del profesor."
-        },
-        "group": {
-            "instruction": "Para el ejemplo siguiente, seleccionaríamos; A2-A8 (en el caso del estudiante), B2-B8 (en el caso de la calificación), C2-C8 (en el caso del comentario):"
-        },
-        "peerReview": {
-            "instruction": "Para el ejemplo siguiente, seleccionaríamos; A2-A6 (en el caso del estudiante), B2-B6 (en el caso de la calificación), C2-C6 (en el caso del comentario) y D2-D6 (Calificación de la revisión entre pares):"
-        },
-        "standard": {
-            "instruction": "Para el ejemplo siguiente, seleccionaríamos; B2-B22 (en el caso del estudiante), D2-D22 (en el caso de la calificación), F2-F22 (en el caso del comentario):"
-        },
-        "finally_csv": "Finalmente, cargue el archivo de hoja de cálculo CSV (separado por comas o puntos y comas).",
-        "students_no_enrolled": "Los estudiantes que no están inscritos en el curso no aparecerán aquí.",
-        "please_wait": "Por favor espere hasta que el sistema haya creado todas las calificaciones, no tomará más de un minuto.",
-        "creating_qualifications": "Creando calificaciones...",
-        "qualifications_created": "Calificaciones creadas correctamente",
-        "error_creating_qualifications": "Error al crear las calificaciones",
-        "file_must_be_csv": "El archivo debe ser un archivo CSV o una hoja de cálculo",
-        "input_columns_must_be": "Las columnas de entrada deben tener formato de rango de Excel, por ejemplo, B2-B22",
-        "input_columns_must_be_filled": "Debes completar todos los campos",
-        "no_data": "No hay datos para visualizar",
-        "peer_review_did_not_finish": "La revisión por pares no finalizó",
-        "student_missing": "El estudiante {{name}} no tiene calificaciones o comentarios. Por favor verifique los datos.",
-        "select_activity": "Selecciona una actividad"
-    },
-    "DASHBOARD": {
-        "average_course_grade": "Calificación promedio del curso",
-        "average_course_marks": "Calificaciones promedio del curso",
-        "students_average": "Promedio de estudiantes",
-        "check_students": "Comprueba cómo estás progresando en el curso.",
-        "your_grade": "Tu calificación",
-        "average_course": "Nota promedio del curso",
-        "average_student": "Nota promedio del estudiante",
-        "your_mark": "Tu nota",
-        "activity_average": "Promedio de actividad",
-        "activities_average": "Promedio de las actividades",
-        "compare_activity": "Compara el promedio de todas las actividades.",
-        "course_dashboard": "Panel de Control del Curso",
-        "explore_performance_metrics": "Explora tus métricas de rendimiento y haz un seguimiento de tu progreso a lo largo del curso.",
-        "objective_progress": "Progreso de los objetivos",
-        "check_progress": "Verifica cómo estás progresando en los objetivos del curso.",
-        "creative_capacity": "Capacidad creativa y emprendedora",
-        "teamwork": "Trabajo en equipo",
-        "qualifications_distribution": "Distribución de calificaciones",
-        "distribution_based_on_activities": "Distribución de las calificaciones basadas en las actividades del curso.",
-        "questionnaire_time_min": "Tiempo del cuestionario (min)",
-        "compare_time": "Compara el tiempo que dedicaste a los cuestionarios con otros estudiantes.",
-        "average_time_spent": "Tiempo medio dedicado",
-        "your_time_spent": "Tu tiempo dedicado",
-        "participation_forums": "Participación en foros",
-        "measure_engagement": "Mide la participación en las discusiones del foro.",
-        "total_posts": "Total de publicaciones",
-        "total_answers": "Total de respuestas",
-        "your_posts": "Tus publicaciones",
-        "your_answers": "Tus respuestas",
-        "posts_forum": "Publicaciones en el foro",
-        "replies_forum": "Respuestas en el foro",
-        "go_back_dashboard": "Volver al panel de control",
-        "no_data": "No hay datos para visualizar"
-    },
-    "SELFASSESTMENT": {
-        "self_assessment": "Autoevaluación",
-        "self_assessment_text_prof": "Vea cómo sus estudiantes se han evaluado a sí mismos.",
-        "select_another_student": "Selecciona otro estudiante",
-        "bad": "Mal",
-        "regular": "Regular",
-        "good": "Bien",
-        "very_good": "Excelente",
-        "your_evaluación_submitted": "Su evaluación ha sido enviada",
-        "rubric_autoevalution": "Rúbrica y Autoevaluación",
-        "rubric_text": "Lea detenidamente los criterios descritos en la rúbrica. Tómese un tiempo para reflexionar sobre su proyecto y evaluar qué tan bien cumple con cada uno de los criterios descritos.",
-        "rubric_text2": "Ahora que has revisado la rúbrica, úsala para autoevaluar tu proyecto. Considera cada criterio cuidadosamente y evalúa qué tan bien tu proyecto cumple con los requisitos. Después de reflexionar sobre estos aspectos, asigna una calificación a tu proyecto.",
-        "add_your_comments": "Agrega tus comentarios sobre tu proyecto.",
-        "evaluate_1_10": "Evalúa tu proyecto con una puntuación del 1 al 10."
-    },
-    "PEERREVIEW": {
-        "no_partner_assigned": "No se te ha asignado un compañero para evaluar",
-        "maybe_not_here": "Quizás no deberías estar aquí aún ;)",
-        "contact_teacher": "Si no es el caso, por favor contacta a tu profesor",
-        "peer_review": "Revisión por pares",
-        "feedback": "Comentarios de la revisión por pares",
-        "no_feedback": "Tu socio no te dio una reseña :(",
-        "change_user": "Cambiar de usuario",
-        "evaluate": "Evaluar",
-        "users_to_review": "Tienes que revisar a {{usersToPairAdapted}} compañeros para finalizar la actividad",
-        "left_to_review": "Compañeros por revisar",
-        "task_evaluación_criteria": "Criterios de evaluación de la actividad",
-        "criteria": "Criterios",
-        "correct": "Corrige la entrega del Grupo {{name}}",
-        "correct_individual": "Corrige la entrega de {{name}}",
-        "files_to_review": "Archivos a corregir",
-        "update_feedback": "Actualizar comentarios",
-        "go_to_rubric": "Ir a la rúbrica",
-        "feedback_sent": "Tus comentarios han sido enviados",
-        "no_feedback_sent": "Tus comentarios no han sido enviados, inténtalo de nuevo más tarde",
-        "review_prof_text1": "En esta sección podrás ver las evaluaciones que los estudiantes han dado a sus compañeros.",
-        "review_prof_text2": "Los pares se crearán automáticamente si no los creas manualmente",
-        "qualificacion_received": "Calificación recibida",
-        "qualificacion_given": "Calificación otorgada",
-        "peer_review_answers": "Respuestas de la revisión por pares",
-        "create_peers_manually": "Crear pares manualmente",
-        "download_all": "Descargar todo",
-        "create_peers": "Crear pares",
-        "update_peers": "Actualizar pares",
-        "back_to_peer_review": "Volver a la revisión por pares",
-        "peer_review_text": "La revisión por pares fue diseñada para que cada estudiante revise <bold>{{number}} actividades</bold>",
-        "assing_students": "Asigna a los estudiantes que revisen cada actividad",
-        "create_peers_auto": "Crear pares automáticamente",
-        "students_who_dont_delivered": "Hay alumnos que no han entregado la actividad",
-        "groups_who_dont_delivered": "Hay grupos que no han entregado la actividad",
-        "no_students_to_review": "No hay estudiantes para revisar",
-        "no_students_have_delivered": "No hay estudiantes que hayan entregado la actividad",
-        "activity_done": "Actividad realizada por:",
-        "groups_who_review": "Grupos que van a revisar la actividad:",
-        "users_who_review": "Usuarios que van a revisar la actividad:",
-        "group_exists_in_destination": "El grupo ya existe en este grupo",
-        "group_cannot_review_own_activity": "El grupo no puede revisar su propia actividad",
-        "student_exists_in_destination": "El estudiante ya existe en este grupo",
-        "student_cannot_review_own_activity": "El estudiante no puede revisar su propia actividad",
-        "cannot_drop_outside_list": "No puedes soltar al estudiante fuera de la lista",
-        "peers_created_success": "Pares creados con éxito",
-        "error_creating_peers": "Error al crear los pares",
-        "updating_peer_reviews": "Actualizando revisiones por pares..."
     }
 }

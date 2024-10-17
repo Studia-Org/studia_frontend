@@ -10,7 +10,7 @@ const QuestionnaireData = () => {
             description: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SRLO.description"),
             autocorrect: false,
             editable: false,
-            language: i18n.language, 
+            language: i18n.language,
             type: "scaling",
             Options: {
                 questionnaire: {
@@ -196,6 +196,54 @@ const QuestionnaireData = () => {
             }
         }
     }
+    const SELF_REFLECTIONDATA = {
+        attributes: {
+            Title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SELF_REFLECTIONDATA.title"),
+            description: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SELF_REFLECTIONDATA.description"),
+            autocorrect: false,
+            editable: false,
+            language: i18n.language,
+            type: "standard",
+
+            Options: {
+                questionnaire: {
+                    editable: false,
+                    type: "Empty",
+                    title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SELF_REFLECTIONDATA.title"),
+                    description: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SELF_REFLECTIONDATA.description"),
+                    questions: [
+                        {
+                            question: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SELF_REFLECTIONDATA.QUESTIONS.QUESTION_1"),
+                            options: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SELF_REFLECTIONDATA.OPTIONS.QUESTION_1", { returnObjects: true })
+                        },
+                        {
+                            question: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SELF_REFLECTIONDATA.QUESTIONS.QUESTION_2"),
+                            options: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SELF_REFLECTIONDATA.OPTIONS.QUESTION_2", { returnObjects: true })
+                        },
+                        {
+                            question: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SELF_REFLECTIONDATA.QUESTIONS.QUESTION_3"),
+                            options: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SELF_REFLECTIONDATA.OPTIONS.QUESTION_3", { returnObjects: true })
+                        },
+                        {
+                            question: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SELF_REFLECTIONDATA.QUESTIONS.QUESTION_4"),
+                            options: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SELF_REFLECTIONDATA.OPTIONS.QUESTION_4", { returnObjects: true })
+                        },
+                        {
+                            question: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SELF_REFLECTIONDATA.QUESTIONS.QUESTION_5"),
+                            options: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SELF_REFLECTIONDATA.OPTIONS.QUESTION_5", { returnObjects: true })
+                        },
+                        {
+                            question: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SELF_REFLECTIONDATA.QUESTIONS.QUESTION_6"),
+                            options: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SELF_REFLECTIONDATA.OPTIONS.QUESTION_6", { returnObjects: true })
+                        }
+
+                    ],
+                    correctAnswers: {},
+
+                }
+            }
+        }
+    };
 
     const EmptyQuestionnaireData = {
         attributes: {
@@ -203,7 +251,7 @@ const QuestionnaireData = () => {
             description: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.EMPTY.description"),
             autocorrect: false,
             editable: true,
-            language: i18n.language, 
+            language: i18n.language,
             type: "standard",
             Options: {
                 questionnaire: {
@@ -232,7 +280,7 @@ const QuestionnaireData = () => {
                     title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.PLANNING.title"),
                     description: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.PLANNING.description"),
                     editable: true,
-                    language: i18n.language, 
+                    language: i18n.language,
                     type: "Plannification",
                     questions:
                         [
@@ -273,7 +321,7 @@ const QuestionnaireData = () => {
             description: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.QUESTIONNAIRE_DATA.SELF_ASSESSMENT.description"),
             autocorrect: false,
             editable: true,
-            language: i18n.language, 
+            language: i18n.language,
             type: "standard",
             Options: {
                 questionnaire: {
@@ -383,7 +431,8 @@ const QuestionnaireData = () => {
         SRLOQuestionnaireData,
         EmptyQuestionnaireData,
         PlannificationQuestionnaireData,
-        SelfAssesmentData
+        SelfAssesmentData,
+        SELF_REFLECTIONDATA
     };
 }
 

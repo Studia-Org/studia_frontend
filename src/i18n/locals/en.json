@@ -21,7 +21,8 @@
         "add_tag": "Add a tag",
         "completed": "Completed",
         "please_complete": "Please complete all fields",
-        "error_try_again": "An error occurred. Please try again."
+        "error_try_again": "An error occurred. Please try again.",
+        "close": "Close"
     },
     "HOME": {
         "title": "Welcome to the new era of Learning",
@@ -560,6 +561,7 @@
                     "description": "Description",
                     "files": "Files (max 5)",
                     "edit_questions": "Edit questions",
+                    "view_questions": "View questions",
                     "date": "Subsection date",
                     "date_placeholder_start": "Start date",
                     "date_placeholder_end": "End date",
@@ -693,7 +695,7 @@
                         },
                         "FEEDBACK_REFLECTION_QUESTIONNAIRE": {
                             "title": "Feedback and Reflection Questionnaire",
-                            "description": "Feedback and reflection questionnaire."
+                            "description": "Evaluation of the competence to learn to learn through the phases of Zimmerman’s cyclical model."
                         },
                         "QUESTIONNAIRE_DATA": {
                             "EMPTY": {
@@ -799,6 +801,56 @@
                                     "QUESTION_40": "When studying online, I try and relate the content to what I already know.",
                                     "QUESTION_41": "When learning the online content, I try and develop my own ideas about it.",
                                     "QUESTION_42": "I try and improve my understanding by doing additional work beyond the core content (e.g., doing extra problem-solving activities or extra readings)."
+                                }
+                            },
+                            "SELF_REFLECTIONDATA": {
+                                "title": "Self-Reflection Questionnaire",
+                                "description": "Evaluation of the competence to learn to learn through the phases of Zimmerman’s cyclical model.",
+                                "QUESTIONS": {
+                                    "QUESTION_1": "Analyze the characteristics of the task or activity: what needs to be done, what objectives/results are expected, and what criteria are used to evaluate their achievement.",
+                                    "QUESTION_2": "Analyze the value of the task or activity for me and based on this determine the level of motivation and effort it means; plan the steps to follow according to the level of perfection I want to achieve or the results I wish to attain.",
+                                    "QUESTION_3": "Observe what I am doing and compare it with an external quality model or reference.",
+                                    "QUESTION_4": "Focus and maintain concentration and interest in carrying out the task using metacognitive and motivational strategies.",
+                                    "QUESTION_5": "Evaluate the execution of the task or activity.",
+                                    "QUESTION_6": "React emotionally and cognitively to the evaluations regarding the successes and failures of the task or activity performed and their transfer to future learning."
+                                },
+                                "OPTIONS": {
+                                    "QUESTION_1": [
+                                        "I have formulated my own learning objectives, integrating them with those of the task or activity. I have been able to establish a strategic plan considering the most suitable procedures and resources, along with all the characteristics of the task or activity. All of this has allowed me to successfully and effectively execute the task/activity within the established period.",
+                                        "I have weighed and prioritized the different objectives of the task or activity, considering their difficulty, the time required, the evaluation criteria, and the level of achievement I wanted to reach. I have made an initial plan with the procedures and resources that I considered appropriate.",
+                                        "I have had specific difficulties, but in general, I understood what I needed to do in the task or activity. I have been able to identify the evaluation criteria based on which I would be assessed. I have been able to define the level of achievement I wanted to reach, making an initial proposal of objectives, but I have not been able to concretize an adequate plan.",
+                                        "I have had many difficulties in understanding what I needed to do in the task or activity; I found it difficult to identify my own objectives and the level of achievement I wanted to reach. I did not keep most of the evaluation criteria in mind, so I did not make a plan aimed at fulfilling them."
+                                    ],
+                                    "QUESTION_2": [
+                                        "Based on the objectives established regarding the task or activity, I have been able to identify what capabilities I have to achieve the objectives successfully. I have had high expectations and have been able to motivate myself to do it in a planned way, with total effectiveness and overcoming limitations.",
+                                        "Based on the objectives established regarding the task or activity, I have been able to identify most of my capabilities to achieve the objectives successfully. I have had high expectations, but it has been somewhat difficult for me to know how to motivate myself and plan to do it effectively.",
+                                        "Based on the objectives established regarding the task or activity, I have vaguely identified the capabilities I have to achieve them successfully. I had certain expectations, but it has been difficult for me to fully see how to motivate myself to do it effectively.",
+                                        "Based on the objectives established regarding the task or activity, I have had many difficulties in identifying what capabilities I have to achieve them successfully. I have had low expectations and little interest in analyzing my limitations and possibilities."
+                                    ],
+                                    "QUESTION_3": [
+                                        "I have observed and compared in detail the similarities and differences between what I was doing and some external quality model or reference. I have justified most of the strengths and weaknesses of what I have done in a reasoned manner. I have reflected and implemented the adequacy and/or improvement actions that I considered most pertinent.",
+                                        "I have observed and compared in detail the similarities and differences between what I was doing and some expert model or external quality reference. I have justified strengths and weaknesses of what I have done. I have been able to identify improvement actions that I considered pertinent.",
+                                        "I have observed and compared generally what I was doing with some model or external quality reference and have detected some aspects that I needed to improve.",
+                                        "I have observed and been able to describe what I was doing, but I was not able to make comparisons with models or external quality references. I have not been able to point out possible improvement actions."
+                                    ],
+                                    "QUESTION_4": [
+                                        "I have used very diverse means and strategies for learning (asking for help, creating maps or mental images, study techniques, time and environment management, etc.) that allowed me to focus on the task and maintain concentration and interest throughout the process.",
+                                        "I have used various means and strategies for learning (asking for help, creating maps or mental images, study techniques, time and environment management, etc.) to maintain concentration and interest for most of the process.",
+                                        "I have used some means and strategies (asking for help, creating maps or mental images, study techniques, time and environment management, etc.) but they were not well suited to the context and characteristics of the task, which did not allow me to focus my concentration and interest at some points in the task execution process.",
+                                        "I have used very few strategies for learning (asking for help, creating maps or mental images, study techniques, time and environment management, etc.). I have encountered difficulties in focusing on the task and maintaining concentration and interest."
+                                    ],
+                                    "QUESTION_5": [
+                                        "I have reflected and assessed the effectiveness of the learning process followed very clearly and well-argued, based on the quality criteria and the level of expectations I had set, and I have done so by critically and reasoned identifying the causes of success or failure.",
+                                        "I have reflected and made judgments about what I did in a clear and reasoned manner, taking into account the quality criteria and the level of expectations I had initially set, and identifying some of the causes of success or failure.",
+                                        "I have reflected and superficially assessed what I did, taking into account the quality criteria and the level of expectations I had initially set, but I have not been able to clearly identify what caused the success or failure. I have not been able to identify what caused the success or failure.",
+                                        "I have looked at what I did, but I have not reflected or made a reasoned assessment considering the quality criteria and the expected objectives/results."
+                                    ],
+                                    "QUESTION_6": [
+                                        "I have analyzed the results of the task or activity from the perspective of satisfaction; valuing successes and failures as opportunities for improvement. I have clearly identified the strategies I should implement to improve now and in future learnings.",
+                                        "I have analyzed the results of the task or activity carried out from the perspective of satisfaction; valuing successes and failures as opportunities for improvement. I have identified some of the strategies I should implement in the future.",
+                                        "I have analyzed the results of the task or activity carried out from the perspective of satisfaction; valuing my achievements and failures as opportunities for improvement, but I have not been able to identify the strategies I should implement in the future.",
+                                        "I have had difficulties analyzing the results of the task or activity carried out from the perspective of satisfaction, and understanding successes and failures as opportunities for improvement in the future."
+                                    ]
                                 }
                             },
                             "GENERAL_OPTIONS": {

@@ -29,8 +29,17 @@ export const ButtonCreateCourse = ({ setSubsectionToEditError, setSectionToEdit,
             throw new Error("courseBasicInfo is missing");
         }
         const requiredAttributes = t('CREATE_COURSES.ERROR.required_attributes', { returnObjects: true });
+        const keys = [
+            'courseName',
+            'description',
+            'cover',
+            'evaluator'
+        ]
+        let itr = 0
         for (const attribute of requiredAttributes) {
-            if (!courseBasicInfo[attribute]) {
+            const key = keys[itr]
+            itr++
+            if (!courseBasicInfo[key]) {
                 throw new Error(t('CREATE_COURSES.ERROR.missingAttribute', { attribute }));
             }
         }
@@ -74,6 +83,7 @@ export const ButtonCreateCourse = ({ setSubsectionToEditError, setSectionToEdit,
             return
         }
         try {
+            console.log(courseBasicInfo)
             isValidCourseBasicInfo(courseBasicInfo)
             isValidCourse(createCourseSectionsList)
             setIsLoading(true)
