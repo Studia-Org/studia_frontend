@@ -960,7 +960,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                     </div>
                 </div>
                 {!embedCode &&
-                    <Button loading={loading} onClick={() => { simulateLoading(); }} type="primary" className='flex items-center justify-center w-full p-2 rounded-md'>
+                    <Button loading={loading} onClick={() => { simulateLoading(); }} type="primary" className='flex items-center justify-center w-full p-2 mb-2 rounded-md'>
 
                         {isQuestionnaireEditable ? t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.edit_questions") :
                             t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.view_questions")
