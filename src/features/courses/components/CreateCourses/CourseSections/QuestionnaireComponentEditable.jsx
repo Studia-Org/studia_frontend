@@ -826,7 +826,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                 </footer>
             </Modal>
             <div className="flex flex-col ">
-                <div className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1] p-8 mb-10">
+                <div className="bg-white rounded-md shadow-md border-t-[14px] border-[#6366f1] p-8 mb-5">
                     <div className="">
                         <div className='flex items-center'>
                             <Input className='px-1 mb-5 border border-[#d9d9d9] rounded-md text-3xl font-semibold text-black pl-3' placeholder="Title" value={title}
@@ -960,7 +960,7 @@ export const QuestionnaireComponentEditable = ({ subsection, setCreateCourseSect
                     </div>
                 </div>
                 {!embedCode &&
-                    <Button loading={loading} onClick={() => { simulateLoading(); }} type="primary" className='flex items-center justify-center w-full p-2 mb-2 rounded-md'>
+                    <Button loading={loading} onClick={() => { simulateLoading(); }} type="primary" className='flex items-center justify-center w-full p-2 mb-5 rounded-md'>
 
                         {isQuestionnaireEditable ? t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.edit_questions") :
                             t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.view_questions")
