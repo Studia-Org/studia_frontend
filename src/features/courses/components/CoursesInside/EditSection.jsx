@@ -11,6 +11,7 @@ import { useCourseContext } from '../../../../context/CourseContext';
 import { PeerReviewRubricModal } from '../CreateCourses/CourseSections/PeerReviewRubricModal';
 import { useTranslation } from 'react-i18next';
 import { PlusOutlined } from '@ant-design/icons';
+import { sub } from 'date-fns';
 
 
 export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdit }) => {
@@ -123,7 +124,7 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdi
     }
     const checkIfSectionHadReorder = () => {
         return sectionToEdit.attributes.subsections.data.some(
-            (subsection, index) => subsection.id !== sectionToEditTemp.attributes.subsections.data[index].id
+            (subsection, index) => subsection?.id !== sectionToEditTemp.attributes.subsections.data[index].id
         );
     }
 
@@ -144,7 +145,7 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdi
                 )
         );
         let newSubsectionTemp = []
-
+        const listsubsections = {}
         await Promise.all([
             // Eliminar subsections
             Promise.all(
@@ -160,13 +161,15 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdi
                             },
                         });
                     }
-                    if (subSection.attributes.questionnaire) {
+                    if (subSection.attributes.questionnaire && subSection.attributes.questionnaire.data !== null) {
                         await fetch(`${API}/questionnaires/${subSection.attributes.questionnaire.data.id}`, {
                             method: 'DELETE',
                             headers: {
                                 'Content-Type': 'application/json',
                                 Authorization: `Bearer ${getToken()}`,
                             },
+                        }).catch((error) => {
+                            message.error('An error occurred while deleting the questionnaire');
                         });
                     }
                 }),
@@ -177,6 +180,8 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdi
                             'Content-Type': 'application/json',
                             Authorization: `Bearer ${getToken()}`,
                         },
+                    }).catch((error) => {
+                        message.error('An error occurred while deleting the subsection');
                     });
                 })
             ),
@@ -232,6 +237,7 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdi
                     });
                     const responseSubsection = await newSubsection.json();
                     newSubsectionTemp.push(responseSubsection.data.id);
+                    listsubsections[subSection.id] = responseSubsection.data.id
                 }
             })(),
         ]);
@@ -252,20 +258,25 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdi
             }),
         })
 
-        setCourse((prev) => {
-            const updatedSections = prev.map((section) => {
-                if (section.id === sectionToEdit.id) {
-                    return sectionToEditTemp;
-                }
-                return section;
-            });
-            return updatedSections;
-        })
-        setSectionToEdit(sectionToEditTemp);
-
         // Finalmente comprobamos si se ha cambiado el orden de las subsecciones, si es asi, se actualiza el estado de la seccion
         if (checkIfSectionHadReorder()) {
-            const subsectionListId = sectionToEditTemp.attributes.subsections.data.map((subsection) => subsection.id);
+            const subsectionListId = sectionToEditTemp.attributes.subsections.data.map((subsection) => {
+                return listsubsections[subsection?.id] || subsection.id
+            });
+            await fetch(`${API}/sections/${sectionToEdit.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${getToken()}`,
+                },
+                body: JSON.stringify({
+                    data: {
+                        subsections: {
+                            connect: []
+                        }
+                    },
+                }),
+            })
             await fetch(`${API}/sections/${sectionToEdit.id}`, {
                 method: 'PUT',
                 headers: {
@@ -282,9 +293,11 @@ export const EditSection = ({ setEditSectionFlag, sectionToEdit, setSectionToEdi
             })
         }
 
-        message.success('Changes saved');
-        window.location.reload();
         setLoading(false);
+        message.success('Changes saved');
+        setTimeout(() => {
+            window.location.reload();
+        }, 500);
     }
     const deleteSection = async () => {
         //Debemos eliminar las subsections que estén relacionadas con la sección, tambien la actividad, el cuestionario y las qualifications de la activity
