@@ -1,5 +1,5 @@
 import QuestionnaireData from './QuestionnaireData';
-import { PeerReviewData, ForumData, ThinkAloudData, SelfAssessmentData } from './ActivityData';
+import { PeerReviewData, ForumData, ThinkAloudData, SelfAssessmentData, RelfectionData } from './ActivityData';
 import React from 'react'
 import { useTranslation } from 'react-i18next';
 import { message } from 'antd';
@@ -257,7 +257,7 @@ export const SequenceDevelop = ({ setCreateCourseSectionsList, sectionToEdit, se
 }
 
 export const SequenceDevelopEducation1 = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask, context }) => {
-    const { SRLOQuestionnaireData, PlannificationQuestionnaireData, EmptyQuestionnaireData, SELF_REFLECTIONDATA } = QuestionnaireData();
+    const { SRLOQuestionnaireData, PlannificationQuestionnaireData, EmptyQuestionnaireData } = QuestionnaireData();
     const { t } = useTranslation();
     const sequence = [
         { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_STATEMENT.title"), iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
@@ -269,7 +269,7 @@ export const SequenceDevelopEducation1 = ({ setCreateCourseSectionsList, section
         { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_IMPLEMENTATION.title"), iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
         { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_DELIVERY.title"), iconColor: '#f59e0b', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
         { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.PEER_REVIEW.title"), iconColor: '#f59e0b', iconPath: svgSwitcher('peerReview'), fase: 'performance', questionnaireData: null, type: 'peerReview', activityData: PeerReviewData },
-        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.FEEDBACK_REFLECTION_QUESTIONNAIRE.title"), iconColor: '#dc2626', iconPath: svgSwitcher('questionnaireNormal'), fase: 'self-reflection', questionnaireData: SELF_REFLECTIONDATA, type: 'questionnaire', activityData: null },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.FEEDBACK_REFLECTION_QUESTIONNAIRE.title"), iconColor: '#dc2626', iconPath: svgSwitcher('questionnaireNormal'), fase: 'self-reflection', questionnaireData: null, type: 'reflection', activityData: RelfectionData },
         { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.FINAL_DELIVERY.title"), iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
     ];
 
@@ -343,7 +343,7 @@ export const SequenceDevelopEducation2 = ({ setCreateCourseSectionsList, section
 
 
 export const SequenceFeedUP = ({ setCreateCourseSectionsList, sectionToEdit, sectionTask, context }) => {
-    const { PlannificationQuestionnaireData, SELF_REFLECTIONDATA } = QuestionnaireData();
+    const { PlannificationQuestionnaireData } = QuestionnaireData();
     const { t } = useTranslation();
     const sequence = [
         { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_STATEMENT.title"), iconColor: '#15803d', iconPath: svgSwitcher('taskStatement'), fase: 'forethought', questionnaireData: null, type: 'task', activityData: sectionTask },
@@ -352,7 +352,7 @@ export const SequenceFeedUP = ({ setCreateCourseSectionsList, sectionToEdit, sec
         { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.TASK_IMPLEMENTATION.title"), iconColor: '#f59e0b', iconPath: svgSwitcher('taskImplementation'), fase: 'performance', questionnaireData: null, type: 'task', activityData: sectionTask },
         { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.PLANNING_QUESTIONNAIRE.title"), iconColor: '#dc2626', iconPath: svgSwitcher('questionnaireNormal'), fase: 'self-reflection', questionnaireData: PlannificationQuestionnaireData, type: 'questionnaire', activityData: null },
         { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.FINAL_DELIVERY.title"), iconColor: '#dc2626', iconPath: svgSwitcher('taskFinalDelivery'), fase: 'self-reflection', questionnaireData: null, type: 'task', activityData: sectionTask },
-        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.FEEDBACK_REFLECTION_QUESTIONNAIRE.title"), iconColor: '#dc2626', iconPath: svgSwitcher('questionnaireNormal'), fase: 'self-reflection', questionnaireData: SELF_REFLECTIONDATA, type: 'questionnaire', activityData: null },
+        { title: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.FEEDBACK_REFLECTION_QUESTIONNAIRE.title"), iconColor: '#dc2626', iconPath: svgSwitcher('questionnaireNormal'), fase: 'self-reflection', questionnaireData: null, type: 'reflection', activityData: RelfectionData },
     ];
 
     const modifiedSequence = modifySequence(sequence, sectionTask);
@@ -738,7 +738,7 @@ export const ForethoughtPage = ({ setCreateCourseSectionsList, sectionToEdit, co
 
 export const SelfReflectionPage = ({ setCreateCourseSectionsList, sectionToEdit, context, sectionTask }) => {
     const { t } = useTranslation();
-    const { SRLOQuestionnaireData, PlannificationQuestionnaireData, EmptyQuestionnaireData, SELF_REFLECTIONDATA } = QuestionnaireData();
+    const { SRLOQuestionnaireData, PlannificationQuestionnaireData, EmptyQuestionnaireData } = QuestionnaireData();
 
     return (
         <>
@@ -835,7 +835,7 @@ export const SelfReflectionPage = ({ setCreateCourseSectionsList, sectionToEdit,
                     <p className='text-base font-normal'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.FEEDBACK_REFLECTION_QUESTIONNAIRE.title")}</p>
                     <p className='text-sm font-normal text-gray-500'>{t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.FEEDBACK_REFLECTION_QUESTIONNAIRE.description")}</p>
                 </div>
-                <button onClick={() => createSubsection(t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.FEEDBACK_REFLECTION_QUESTIONNAIRE.title"), 'self-reflection', SELF_REFLECTIONDATA, setCreateCourseSectionsList, sectionToEdit, 'questionnaire', context, null)} className='pl-3 mx-3 ml-auto'>
+                <button onClick={() => createSubsection(t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.SEQUENCES.ELEMENTS.FEEDBACK_REFLECTION_QUESTIONNAIRE.title"), 'self-reflection', null, setCreateCourseSectionsList, sectionToEdit, 'reflection', context, RelfectionData)} className='pl-3 mx-3 ml-auto'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-6 h-6 text-[#45406f]">
                         <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clipRule="evenodd" />
                     </svg>

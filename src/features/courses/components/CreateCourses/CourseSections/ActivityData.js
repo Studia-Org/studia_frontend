@@ -11,7 +11,10 @@ export const PeerReviewData = {
     order: null,
     evaluable: false,
 }
-
+export const RelfectionData = {
+    id: Math.random().toString(16).slice(2),
+    type: 'reflection',
+}
 export const ForumData = {
     id: Math.random().toString(16).slice(2),
     title: 'Forum',

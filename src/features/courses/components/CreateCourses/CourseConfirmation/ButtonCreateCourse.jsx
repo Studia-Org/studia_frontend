@@ -83,7 +83,6 @@ export const ButtonCreateCourse = ({ setSubsectionToEditError, setSectionToEdit,
             return
         }
         try {
-            console.log(courseBasicInfo)
             isValidCourseBasicInfo(courseBasicInfo)
             isValidCourse(createCourseSectionsList)
             setIsLoading(true)

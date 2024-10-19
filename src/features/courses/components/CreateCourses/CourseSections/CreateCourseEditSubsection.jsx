@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { QuestionnaireComponentEditable } from './QuestionnaireComponentEditable';
-import { PeerReviewRubricModal } from './PeerReviewRubricModal';
+import { PeerReviewRubricModal, ViewRubricModal } from './PeerReviewRubricModal';
 import dayjs from 'dayjs';
 import { motion } from "framer-motion";
 import { TableCategories } from './TableCategories';
@@ -13,6 +13,7 @@ import { PonderationWarning } from './PonderationWarning';
 import { debounce } from 'lodash';
 import { AutoAssesmentRubric } from './AutoAssesmentRubric';
 import { Trans, useTranslation } from 'react-i18next';
+import QuestionnaireData from './QuestionnaireData';
 
 const { RangePicker } = DatePicker;
 
@@ -48,6 +49,8 @@ export const CreateCourseEditSubsection = ({
   const { t } = useTranslation();
   const textGroupsIndv = isGroup ? t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.groups").toLowerCase() :
     t("ACTIVITY.create_groups.students").toLowerCase()
+
+  const { SELF_REFLECTIONDATA } = QuestionnaireData();
 
   useEffect(() => {
     const matchingSubsection = createCourseSectionsList
@@ -203,7 +206,7 @@ export const CreateCourseEditSubsection = ({
         return 'blue-500';
     }
   }
-
+  console.log(subsection)
   return (
     <motion.div
       key={subsection.id}
@@ -249,7 +252,16 @@ export const CreateCourseEditSubsection = ({
                 handleTitleChange(e.target.value)
               }} defaultValue={subsection.title} />
             {
-
+              subsection?.type === 'reflection' && (
+                <ViewRubricModal
+                  isModalOpen={isModalOpen}
+                  setIsModalOpen={setIsModalOpen}
+                  rubricData={SELF_REFLECTIONDATA}
+                  noEditability={true}
+                />
+              )
+            }
+            {
               subsection?.type === 'peerReview' && (
                 <div className='flex flex-col justify-center mb-5 space-y-2'>
                   <PeerReviewRubricModal

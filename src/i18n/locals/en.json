@@ -585,6 +585,8 @@
                     "peer_review_rubric": "Peer review rubric",
                     "you_can_copy_and_paste_rubric_from_word_excel": "You can copy and paste the rubric from Word or Excel here",
                     "peer_review_rubric_text": "Edit rubric",
+                    "view_rubric": "View rubric",
+                    "view_rubric_reflection": "View rubric and reflection",
                     "peer_review_task": "Select the task for which the peer review will be conducted",
                     "students_review": "How many {{students}} review each activity?",
                     "students_grade": "What percentage of the grade given by the student will be applied to the final grade?",
@@ -694,7 +696,7 @@
                             "description": "The forum debate is a discussion forum where students can share their opinions, ask questions, and engage in debates on a specific topic. It is an excellent way to encourage critical thinking, collaboration, and communication skills."
                         },
                         "FEEDBACK_REFLECTION_QUESTIONNAIRE": {
-                            "title": "Feedback and Reflection Questionnaire",
+                            "title": "Feedback and Reflection rubric",
                             "description": "Evaluation of the competence to learn to learn through the phases of Zimmerman’s cyclical model."
                         },
                         "QUESTIONNAIRE_DATA": {
@@ -1125,6 +1127,21 @@
         "rubric_text2": "Now that you have reviewed the rubric, use it to self-evaluate your project. Consider each criterion carefully and assess how well your project fulfills the requirements. After reflecting on these aspects, assign a grade to your project.",
         "add_your_comments": "Add your comments about your project.",
         "evaluate_1_10": "Evaluate your project with a score from 1 to 10."
+    },
+    "SELFREFLECTION": {
+        "explanation_text": "Read and click on the rubric to self-assess yourself. When you have finished your self-assessment, click 'Submit'.",
+        "planning": {
+            "greater_than_5": "It seems that you have a good planning ability. This surely helps you a lot in completing your tasks.",
+            "less_than_5": "It seems that planning is not your strong suit. If you set your own goals and plan strategically, anticipating the obstacles you may encounter and the resources you will need, you can surely face your challenges and tasks better."
+        },
+        "execution": {
+            "greater_than_5": "It seems that you have a good ability to adjust your work based on the information you receive and to rethink your planning. Congratulations!",
+            "less_than_5": "It seems that you have some difficulty with execution. Having study techniques and strategies can help you make the most of your effort. Don't forget to compare what you're doing with references or examples and adjust what you had planned to redirect your work."
+        },
+        "self_reflection": {
+            "greater_than_5": "It seems that your self-reflection ability is good! Great! Only by analyzing what we did well and why, and what we did not do well and why, can we optimize our learning process.",
+            "less_than_5": "It seems that your self-reflection ability can be improved. Always try to keep the established quality criteria in mind, as well as your own goals, so you don't stray off course. Occasionally question how you are doing and whether you have time to review tasks already completed or implement the strategies you find most successful. You can apply this reflection to future learning processes."
+        }
     },
     "PEERREVIEW": {
         "no_partner_assigned": "You have not been assigned a partner to evaluate",

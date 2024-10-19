@@ -87,6 +87,7 @@ export const CheckSubsectionErrors = ({ subsection, section, setSubsectionErrors
                 break;
             case 'thinkAloud':
             case 'task':
+            case 'reflection':
                 if (!subsection.start_date && !subsection.end_date) {
                     newErrorsList.push({ svg: dangerSvg, comment: t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.ERRORS_SUBSECTION.date_missing") });
                     setColor('text-red-500')

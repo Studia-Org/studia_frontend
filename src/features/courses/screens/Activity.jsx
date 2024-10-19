@@ -6,6 +6,7 @@ import { API, BEARER } from "../../../constant";
 import { useAuthContext } from "../../../context/AuthContext";
 import { getToken } from "../../../helpers.js";
 import { SelfAssesmentComponent } from "../components/Activity/SelfAssesmentComponent.jsx";
+import ReflectionRubricComponent from "../components/Activity/ReflectionRubricComponent.jsx";
 import { MoonLoader } from "react-spinners";
 import { useCourseContext } from "../../../context/CourseContext.js";
 import { SideBarButton } from "../components/Activity/Components/SideBarButton.jsx";
@@ -85,7 +86,7 @@ const Activity = () => {
           `&populate[file][fields][0]=*` +
           `&populate[activity][populate][evaluators][fields][0]=*` +
           `&populate[activity][populate][file][fields][0]=*` +
-          
+
           `&populate[activity][populate][task_to_review][populate][peer_review_qualifications][fields][0]=*` +
           `&populate[activity][populate][subsection][populate][section][populate][course][populate][sections][populate][subsections][fields][0]=*` +
           `&filters[activity][id]=${activityId}` +
@@ -145,6 +146,8 @@ const Activity = () => {
         return <PeerReviewComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} />;
       case "selfAssessment":
         return <SelfAssesmentComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} idSubsection={userQualification.idSubsection || userQualification.activity.idSubsection} />;
+      case "reflection":
+        return <ReflectionRubricComponent activityData={userQualification.activity} idQualification={userQualification.idQualification} />;
       default:
         return <ActivityComponent activityData={userQualification.activity} idQualification={userQualification.idQualification}
           setUserQualification={setUserQualification} userQualification={userQualification} subsectionsCompleted={subsectionsCompleted} />;

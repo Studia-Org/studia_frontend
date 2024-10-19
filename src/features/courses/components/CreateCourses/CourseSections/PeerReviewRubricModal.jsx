@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Form, Input, InputNumber, Popconfirm, Table, Typography, Modal, Button, Empty, message } from 'antd';
 import './Rubric.css'
 import { useTranslation } from 'react-i18next';
+import QuestionnaireData from './QuestionnaireData';
 
 
 
@@ -34,7 +35,8 @@ function guidGenerator() {
     return (S4() + S4() + "-" + S4() + "-" + S4() + "-" + S4() + "-" + S4() + S4() + S4());
 }
 
-export const PeerReviewRubricModal = ({ isModalOpen, setIsModalOpen, rubricData, setSubsectionEditing, setCreateCourseSectionsList, subsectionEditing, context }) => {
+export const PeerReviewRubricModal = ({ isModalOpen, setIsModalOpen, rubricData, setSubsectionEditing,
+    setCreateCourseSectionsList, subsectionEditing, context, noEditability = false }) => {
 
     const [form] = Form.useForm();
     const [data, setData] = useState(rubricData != null && Object.keys(rubricData).length > 0 ? rubricDataConverter(rubricData) : [
@@ -307,5 +309,57 @@ export const PeerReviewRubricModal = ({ isModalOpen, setIsModalOpen, rubricData,
                 </section>
             </Form>
         </Modal>
+    )
+}
+
+export const ViewRubricModal = ({ isModalOpen, setIsModalOpen, rubricData }) => {
+    const { t } = useTranslation();
+    const data = rubricData.data
+    const criteria = rubricData.criteria
+
+    return (
+        <div className='flex flex-col justify-center mb-5 space-y-2'>
+            <label className='text-sm text-gray-500 '>
+                {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.view_rubric_reflection")} *
+            </label>
+            <Button onClick={() => {
+                setIsModalOpen(true);
+            }}>
+                {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.view_rubric")}
+            </Button>
+            <Modal
+                maskClosable={false} destroyOnClose={true} bodyStyle={{ maxHeight: '80vh', overflowY: 'auto' }}
+                open={isModalOpen} onOk={() => setIsModalOpen(false)} centered width={"90vw"} okText={t("COMMON.close")}
+                okButtonProps={{ className: 'bg-blue-500' }} cancelButtonProps={{ style: { display: "none" } }}>
+                <div className='overflow-x-auto'>
+                    <table className='w-full border-separate border-spacing-0'>
+                        <thead>
+                            <tr className='h-16 text-left bg-[#e5e7eb]'>
+                                <th className='w-[18%] border-[#fafafa] border px-2 font-medium rounded-tl-md'>
+                                    {t("CREATE_COURSES.COURSE_SECTIONS.EDIT_SECTION.EDIT_SUBSECTION.criteria")}
+                                </th>
+                                {criteria.map((criterion, i) => (
+                                    <th key={i} className='w-[18%] border-[#fafafa] border px-2 font-medium'>
+                                        {criterion}
+                                    </th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {data.map((item, index) => (
+                                <tr className='h-16 transition-all duration-75 hover:bg-slate-200' key={index} >
+                                    <td className='w-[18%] border border-[#fafafa] px-2'>{item.question}</td>
+                                    {item.options.map((option, optIndex) => (
+                                        <td key={optIndex} className='w-[18%] border border-[#fafafa] p-2'>
+                                            {option}
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </Modal>
+        </div>
     )
 }

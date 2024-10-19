@@ -593,6 +593,8 @@
                     "peer_review_rubric": "Rúbrica de revisión por pares",
                     "you_can_copy_and_paste_rubric_from_word_excel": "Puedes copiar y pegar la rúbrica desde Word o Excel aquí",
                     "peer_review_rubric_text": "Editar rúbrica",
+                    "view_rubric": "Ver rúbrica",
+                    "view_rubric_reflection": "Ver rúbrica de reflexión",
                     "peer_review_task": "Selecciona la tarea para la cual se realizará la revisión por pares",
                     "students_review": "¿Cuántos {{students}} revisan cada actividad?",
                     "students_grade": "¿Qué porcentaje de la calificación dada por el estudiante se aplicará a la calificación final?",
@@ -702,7 +704,7 @@
                             "description": "El foro de debate es un foro de discusión donde los estudiantes pueden compartir sus opiniones, hacer preguntas y participar en debates sobre un tema específico. Es una excelente manera de fomentar el pensamiento crítico, la colaboración y las habilidades de comunicación."
                         },
                         "FEEDBACK_REFLECTION_QUESTIONNAIRE": {
-                            "title": "Cuestionario de Feedback y Reflexión",
+                            "title": "Rúbrica de Feedback y Reflexión",
                             "description": "Evaluación de la competencia de aprender a aprender mediante las fases del modelo cíclico de Zimmerman."
                         },
                         "QUESTIONNAIRE_DATA": {
@@ -1089,6 +1091,21 @@
         "rubric_text2": "Ahora que has revisado la rúbrica, úsala para autoevaluar tu proyecto. Considera cada criterio cuidadosamente y evalúa qué tan bien tu proyecto cumple con los requisitos. Después de reflexionar sobre estos aspectos, asigna una calificación a tu proyecto.",
         "add_your_comments": "Agrega tus comentarios sobre tu proyecto.",
         "evaluate_1_10": "Evalúa tu proyecto con una puntuación del 1 al 10."
+    },
+    "SELFREFLECTION": {
+        "explanation_text": "Lee y haz clic sobre la rúbrica para autoevaluarte. Cuando hayas terminado tu autoevaluación, haz clic en 'Enviar'.",
+        "planning": {
+            "greater_than_5": "Parece que posees una buena capacidad de planificación. Seguro que esto te ayuda mucho en la realización de las tareas.",
+            "less_than_5": "Parece que la planificación no es tu fuerte. Si fijas tus propios objetivos y te planificas estratégicamente, anticipando los obstáculos que puedes tener y los recursos que vas a necesitar, seguro que puedes enfrentar mejor tus retos y tareas."
+        },
+        "execution": {
+            "greater_than_5": "Parece que posees una buena capacidad de ir ajustando tu trabajo en base a las informaciones que vas recibiendo y replanteando tu planificación. Enhorabuena!",
+            "less_than_5": "Parece que tienes alguna dificultad con la ejecución. Disponer de técnicas y estrategias de estudio puede ayudarte a rentabilizar tu esfuerzo. No olvides ir comparando lo que haces con referencias o ejemplos e ir ajustando lo que habías previsto para ir redireccionando tu trabajo."
+        },
+        "self_reflection": {
+            "greater_than_5": "Parece que tu capacidad de autorreflexión es buena! Estupendo! Solo a partir de analizar qué hemos hecho bien y porqué y qué no hemos hecho bien y porqué, podremos optimizar nuestro proceso de aprendizaje.",
+            "less_than_5": "Parece que tu capacidad de autorreflexión es mejorable. Intenta tener presente siempre los criterios de calidad fijados, así como tus propios objetivos para no desviarte. Cuestiónate, de vez en cuando, cómo lo estás haciendo y si no estás a tiempo de revisar tareas ya realizadas o de implementar las estrategias que ves que te resultan más exitosas, puedes aplicar esta reflexión a futuros procesos de aprendizaje."
+        }
     },
     "PEERREVIEW": {
         "no_partner_assigned": "No se te ha asignado un compañero para evaluar",

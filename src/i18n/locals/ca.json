@@ -593,6 +593,8 @@
                     "peer_review_rubric": "Rúbrica de revisió per parells",
                     "you_can_copy_and_paste_rubric_from_word_excel": "Pots copiar i enganxar la rúbrica des de Word o Excel aquí",
                     "peer_review_rubric_text": "Editar rúbrica",
+                    "view_rubric": "Veure rúbrica",
+                    "view_rubric_reflection": "Veure rúbrica de reflexió",
                     "peer_review_task": "Selecciona la tasca per a la qual es realitzarà la revisió per parells",
                     "students_review": "Quants {{students}} revisaran cada activitat?",
                     "students_grade": "Quin percentatge de la qualificació donada per l'estudiant s'aplicarà a la qualificació final?",
@@ -702,7 +704,7 @@
                             "description": "El fòrum de debat és un fòrum de discussió on els estudiants poden compartir les seves opinions, fer preguntes i participar en debats sobre un tema específic. És una excel·lent manera de fomentar el pensament crític, la col·laboració i les habilitats comunicatives."
                         },
                         "FEEDBACK_REFLECTION_QUESTIONNAIRE": {
-                            "title": "Qüestionari de Feedback i Reflexió",
+                            "title": "Rúbrica de Feedback i Reflexió",
                             "description": "Avaluació de la competència d'aprendre a aprendre mitjançant les fases del model cíclic de Zimmerman."
                         },
                         "QUESTIONNAIRE_DATA": {
@@ -1075,6 +1077,21 @@
         "rubric_text2": "Ara que ja heu revisat la rúbrica, feu-ne servir per autoavaluar el vostre projecte. Considereu cada criteri amb cura i avalueu fins a quin punt el vostre projecte compleix els requisits. Després de reflexionar sobre aquests aspectes, assigneu una nota al vostre projecte.",
         "add_your_comments": "Afegiu els vostres comentaris sobre el vostre projecte.",
         "evaluate_1_10": "Avalua el teu projecte amb una puntuació d'1 a 10."
+    },
+    "SELFREFLECTION": {
+        "explanation_text": "Llegeix i fes clic sobre la rúbrica per a autoavaluar-te. Quan hagis acabat la teva autoavaluació, fes clic a 'Enviar'.",
+        "planning": {
+            "greater_than_5": "Sembla que tens una bona capacitat de planificació. Segur que això t'ajuda molt en la realització de les tasques.",
+            "less_than_5": "Sembla que la planificació no és el teu fort. Si fixes els teus propis objectius i et planifiques estratègicament, anticipant els obstacles que pots tenir i els recursos que necessitaràs, segur que podràs afrontar millor els teus reptes i tasques."
+        },
+        "execution": {
+            "greater_than_5": "Sembla que tens una bona capacitat per ajustar la teva feina en funció de les informacions que vas rebent i replantejant la teva planificació. Enhorabona!",
+            "less_than_5": "Sembla que tens alguna dificultat amb l'execució. Disposar de tècniques i estratègies d'estudi pot ajudar-te a rendibilitzar el teu esforç. No oblidis comparar el que fas amb referències o exemples i ajustar el que havies previst per redireccionar el teu treball."
+        },
+        "self_reflection": {
+            "greater_than_5": "Sembla que la teva capacitat d'auto-reflexió és bona! Estupendo! Només a partir d'analitzar què hem fet bé i per què i què no hem fet bé i per què, podrem optimitzar el nostre procés d'aprenentatge.",
+            "less_than_5": "Sembla que la teva capacitat d'auto-reflexió és millorable. Intenta tenir present sempre els criteris de qualitat fixats, així com els teus propis objectius, per no desviar-te. Pregunta't de tant en tant com ho estàs fent i si no estàs a temps de revisar tasques ja realitzades o d'implementar les estratègies que veus que et resulten més exitoses. Pots aplicar aquesta reflexió a futurs processos d'aprenentatge."
+        }
     },
     "PEERREVIEW": {
         "no_partner_assigned": "No se t'ha assignat un company per avaluar",
